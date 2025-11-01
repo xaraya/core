@@ -773,7 +773,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         $displayvalues = [];
         $properties = $this->getProperties($args);
         foreach ($properties as $property) {
-            $label = \xarVarPrep::forDisplay($property->label);
+            $label = $this->prep()->text($property->label);
             $displayvalues[$label] = $property->showOutput();
         }
         return $displayvalues;

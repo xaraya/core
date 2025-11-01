@@ -98,22 +98,22 @@ class ThemesinfoMethod extends MethodClass
             }
         }
 
-        $data['themename']            = \xarVarPrep::forDisplay($info['name']);
-        $data['themedescr']           = \xarVarPrep::forDisplay($info['description']);
-        //$data['themedispname']        = \xarVarPrep::forDisplay($themeinfo['displayname']);
+        $data['themename']            = $this->prep()->text($info['name']);
+        $data['themedescr']           = $this->prep()->text($info['description']);
+        //$data['themedispname']        = $this->prep()->text($themeinfo['displayname']);
         $data['themelisturl']         = $this->ctl()->getModuleURL('themes', 'admin', 'view');
 
-        $data['themedir']             = \xarVarPrep::forDisplay($info['directory']);
-        $data['themeclass']           = \xarVarPrep::forDisplay($info['class']);
-        $data['themever']             = \xarVarPrep::forDisplay($info['version']);
+        $data['themedir']             = $this->prep()->text($info['directory']);
+        $data['themeclass']           = $this->prep()->text($info['class']);
+        $data['themever']             = $this->prep()->text($info['version']);
         $data['themestate']           = $info['state'];
-        $data['themeauthor']          = preg_replace('/,/', '<br />', \xarVarPrep::forDisplay($info['author']));
+        $data['themeauthor']          = preg_replace('/,/', '<br />', $this->prep()->text($info['author']));
         if (!empty($info['dependency'])) {
             $dependency             = $this->ml('Working on it...');
         } else {
             $dependency             = $this->ml('None');
         }
-        $data['themedependency']      = \xarVarPrep::forDisplay($dependency);
+        $data['themedependency']      = $this->prep()->text($dependency);
 
         return $data;
     }

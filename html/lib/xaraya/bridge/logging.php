@@ -37,6 +37,15 @@ class LoggerBridge extends AbstractLogger implements LoggerInterface
         LogLevel::DEBUG     => xarLog::LEVEL_DEBUG,      // 'debug'
     ];
     private string $prefix = '';
+    protected $xarLog = null;
+
+    protected function getLogger()
+    {
+        if (!isset($this->xarLog)) {
+            $this->xarLog = xar::log();
+        }
+        return $this->xarLog;
+    }
 
     public function __construct(string $prefix = '')
     {
@@ -58,7 +67,7 @@ class LoggerBridge extends AbstractLogger implements LoggerInterface
      */
     public function log($level, string|\Stringable $message, array $context = []): void
     {
-        xar::log()->message($this->interpolate($message, $context), $this->mapping[$level] ?? xarLog::LEVEL_INFO);
+        $this->getLogger()->message($this->interpolate($message, $context), $this->mapping[$level] ?? xarLog::LEVEL_INFO);
     }
 
     /**

@@ -38,7 +38,7 @@ class ServiceFactory
     public static array $sharedServices = [
         // public services
         'ctl', 'log', 'mls', 'var', 'cache', 'config', 'session', 'db',
-        'req', 'mem',
+        'req', 'mem', 'prep',
         // internal helpers
         'modules.vars', 'modules.user', 'modules.item', 'modules.info', 'modules.exec', 'modules.hooks', 'modules.alias',
     ];
@@ -78,6 +78,7 @@ class ServiceFactory
             'session' => self::getSessionService($parent),
             'user' => self::getUserService($parent),
             'db' => self::getDatabaseService($parent),
+            'prep' => self::getWrapperService($parent, \xarVarPrep::class),
             // internal modules helpers
             'modules.vars' => self::getModuleVarsHelper($parent),
             'modules.user' => self::getModuleUserVarsHelper($parent),
@@ -254,6 +255,12 @@ class ServiceFactory
     {
         self::log(__METHOD__, $parent);
         return DatabaseService::create($parent);
+    }
+
+    public static function getWrapperService(object|string|null $parent = null, $className = null, $instance = null): ServiceInterface
+    {
+        self::log(__METHOD__, $parent);
+        return WrapperService::create($parent, $className, $instance);
     }
 
     public static function getModuleVarsHelper(ServicesInterface $parent): ServiceInterface

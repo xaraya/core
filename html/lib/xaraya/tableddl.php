@@ -681,10 +681,11 @@ class xarXMLInstaller extends xarObject
         // The last element is empty: remove it
         array_pop($queries);
 
+        $log = xar::log();
         // Execute each of the queries
         $dbconn = xar::db()->getConn();
         foreach ($queries as $q) {
-            xar::log()->info('Executing SQL: ' . $q);
+            $log->info('Executing SQL: ' . $q);
             $dbconn->Execute($q);
         }
         return true;

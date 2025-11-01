@@ -45,7 +45,7 @@
                 </div>
                 <div class="xar-col">
                     <a href="#xarController::URL('roles','user','email',['id'=>$userid])#">
-                        Send an Email to #xarVarPrep::forDisplay(xarUser::getVar('name', $userid))#
+                        Send an Email to #xarVarPrep::text(xarUser::getVar('name', $userid))#
                     </a>
                 </div>
             </div>

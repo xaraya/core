@@ -405,7 +405,7 @@ class xarMod extends xarObject implements IxarMod
         $modInfo['state'] = (int) $modInfo['state'];
 
         // Shortcut for os prepared directory
-        $modInfo['osdirectory'] = xarVarPrep::forOS($modInfo['directory']);
+        $modInfo['osdirectory'] = xarVarPrep::path($modInfo['directory']);
 
         switch ($type) {
             case 'module':
@@ -550,7 +550,7 @@ class xarMod extends xarObject implements IxarMod
         $modBaseInfo['displaydescription'] = self::getDisplayDescription($directory, $type);
         // Shortcut for os prepared directory
         // TODO: <marco> get rid of it since useless
-        $modBaseInfo['osdirectory'] = xarVarPrep::forOS($directory);
+        $modBaseInfo['osdirectory'] = xarVarPrep::path($directory);
         if ($type == 'theme') {
             try {
                 $modBaseInfo['configuration'] = unserialize($configuration);
@@ -752,9 +752,9 @@ class xarMod extends xarObject implements IxarMod
             if (empty($modBaseInfo)) {
                 return;
             } // throw back
-            $modDir = xarVarPrep::forOS($modBaseInfo['directory']);
+            $modDir = xarVarPrep::path($modBaseInfo['directory']);
         } else {
-            $modDir = xarVarPrep::forOS($modDir);
+            $modDir = xarVarPrep::path($modDir);
         }
 
         // For base and modules, which don't have a xartables - CHECKME: why not again ?

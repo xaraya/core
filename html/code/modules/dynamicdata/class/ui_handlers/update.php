@@ -121,7 +121,7 @@ class UpdateHandler extends DefaultHandler
         }
 
         $title = $this->mls()->translate('Modify #(1)', $this->object->label);
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+        $this->tpl()->setPageTitle($this->prep()->text($title));
 
         // call item modify hooks for this item
         $this->object->callHooks('modify');

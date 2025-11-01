@@ -123,7 +123,7 @@ class ConfigurationProperty extends TextAreaProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return xarVarPrep::forDisplay($item[$this->name]);
+        // return $this->prep()->text($item[$this->name]);
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             return serialize($item[$this->name]);
         }

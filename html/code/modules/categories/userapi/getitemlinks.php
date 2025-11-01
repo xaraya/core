@@ -52,8 +52,8 @@ class GetitemlinksMethod extends MethodClass
                 'main',
                 ['catid' => $itemid]
             ),
-                'title' => \xarVarPrep::forDisplay($catlist[$itemid]['name']),
-                'label' => \xarVarPrep::forDisplay($catlist[$itemid]['description'])];
+                'title' => $this->prep()->text($catlist[$itemid]['name']),
+                'label' => $this->prep()->text($catlist[$itemid]['description'])];
         }
         return $itemlinks;
     }

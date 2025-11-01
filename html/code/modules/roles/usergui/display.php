@@ -100,7 +100,7 @@ class DisplayMethod extends MethodClass
             );
             $data['hooks'] = $this->mod()->callHooks('item', 'display', $id, $item);
 
-            $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($data['name']));
+            $this->tpl()->setPageTitle($this->prep()->text($data['name']));
         } else {
             $data['id'] = $id;
             $data['uname'] = '';

@@ -89,7 +89,7 @@ class DisplayMethod extends MethodClass
         $hooks = $this->mod()->notifyHooks('ItemDisplay', $item);
         $data['hooks'] = $hooks;
         $data['object'] = $role;
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($data['name']));
+        $this->tpl()->setPageTitle($this->prep()->text($data['name']));
         return $data;
     }
 }

@@ -126,7 +126,7 @@ class StatsHandler extends DefaultHandler
             $stats['report'] = 'Default Report';
         }
         // prepare for output now
-        $stats['report'] = \xarVarPrep::forDisplay($stats['report']);
+        $stats['report'] = $this->prep()->text($stats['report']);
 
         if (!isset($this->object)) {
             // set context if available in handler
@@ -147,7 +147,7 @@ class StatsHandler extends DefaultHandler
         assert($this->object instanceof DataObjectList);
 
         $title = $this->mls()->translate('Statistics for #(1)', $this->object->label);
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+        $this->tpl()->setPageTitle($this->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
             $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);
@@ -344,7 +344,7 @@ class StatsHandler extends DefaultHandler
             $report['report'] = 'Default Report';
         }
         // prepare for output now
-        $report['report'] = \xarVarPrep::forDisplay($report['report']);
+        $report['report'] = $this->prep()->text($report['report']);
 
         if (!isset($this->object)) {
             // set context if available in handler
@@ -365,7 +365,7 @@ class StatsHandler extends DefaultHandler
         assert($this->object instanceof DataObjectList);
 
         $title = $this->mls()->translate('Report for #(1)', $this->object->label);
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+        $this->tpl()->setPageTitle($this->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
             $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);

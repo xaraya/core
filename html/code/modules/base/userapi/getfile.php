@@ -129,7 +129,7 @@ class GetfileMethod extends MethodClass
                     $path = $vardir;
                 }
                 if (!$islocal) {
-                    $path .= '/' . \xarVarPrep::forOS($info['host']);
+                    $path .= '/' . $this->prep()->path($info['host']);
                 }
                 if (!is_dir($path)) {
                     mkdir($path);
@@ -146,7 +146,7 @@ class GetfileMethod extends MethodClass
                         if ($part === '') {
                             continue;
                         }
-                        $path .= '/' . \xarVarPrep::forOS($part);
+                        $path .= '/' . $this->prep()->path($part);
                         if (!is_dir($path)) {
                             mkdir($path);
                         }
@@ -157,7 +157,7 @@ class GetfileMethod extends MethodClass
                 }
                 $file = $path . '/' . $filename;
                 if (!empty($info['query'])) {
-                    $file .= '_' . \xarVarPrep::forOS($info['query']);
+                    $file .= '_' . $this->prep()->path($info['query']);
                 }
             }
             $expire = time() - $refresh;

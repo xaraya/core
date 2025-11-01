@@ -34,8 +34,8 @@
  * passthru:... - pass the remainder of the parameters on to further validation, which could
  * alias: val:... be any string validation type (e-mail, strings with min/max lengths, etc).
  *                Alias for passthru is 'val'.
- * html         - prep for HTML - xarVarPrep::htmlDisplay()
- * display      - prep for display - xarVarPrep::forDisplay()
+ * html         - prep for HTML - xarVarPrep::html()
+ * display      - prep for display - xarVarPrep::text()
  * store        - prep for store (uses the default database connection for escaping quotes)
  * field:name   - name of the form field; if a validation error occurs, an error message will
  *                be generated, with the field name quoted.
@@ -97,9 +97,9 @@ class PreValidation extends ValueValidations
                         break;
                     case 'lower': $subject = strtolower($subject);
                         break;
-                    case 'html': $subject = xarVarPrep::htmlDisplay($subject);
+                    case 'html': $subject = xarVarPrep::html($subject);
                         break;
-                    case 'display': $subject = xarVarPrep::forDisplay($subject);
+                    case 'display': $subject = xarVarPrep::text($subject);
                         break;
                     case 'store':
                     case 'sql':

@@ -82,7 +82,7 @@ class DisplayHandler extends DefaultHandler
         assert($this->object instanceof DataObject);
 
         $title = $this->mls()->translate('Display #(1)', $this->object->label);
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+        $this->tpl()->setPageTitle($this->prep()->text($title));
 
         if (!empty($this->args['itemid'])) {
             if (!$this->object->checkAccess('display')) {

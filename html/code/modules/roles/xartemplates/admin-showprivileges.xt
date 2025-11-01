@@ -43,7 +43,7 @@
         <!-- Show the general tab list for roles -->
         <fieldset>
           <legend>
-                Privileges inherited by #xarVarPrep::forDisplay($pname)#:
+                Privileges inherited by #xarVarPrep::text($pname)#:
           </legend>
             <xar:if condition="count($inherited) eq 0">
                 <p>No privileges inherited.</p>
@@ -95,7 +95,7 @@
             </xar:if>
         </fieldset>
         <fieldset>
-            <legend>Privileges assigned to #xarVarPrep::forDisplay($pname)#:</legend>
+            <legend>Privileges assigned to #xarVarPrep::text($pname)#:</legend>
             <xar:if condition="count($privileges) eq 0">
                 <p>No privileges assigned.</p>
             <xar:else />
@@ -151,7 +151,7 @@
                     <div class="xar-col">
                         <xar:var name="label">Select the Privilege to add</xar:var>
                         <label for="privid" title="#$label#" class="xar-form-label">
-                            Assign a Privilege to #$itemtypename# '#xarVarPrep::forDisplay($pname)#'
+                            Assign a Privilege to #$itemtypename# '#xarVarPrep::text($pname)#'
                         </label>
                     </div>
                     <div class="xar-col">

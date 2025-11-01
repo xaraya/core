@@ -14,7 +14,7 @@
                     <tr class="xar-norm-outline xar-padding-endsthick xar-align-left">
                         <td>
                             <a href="#xarController::URL('privileges','admin','modifyrealm',['id'=>$loop->item['id']])#">
-                                #xarVarPrep::forDisplay($loop:item['name'])#
+                                #xarVarPrep::text($loop:item['name'])#
                             </a>
                         </td>
                         <td class="xar-align-center">

@@ -118,7 +118,7 @@ class TextBoxProperty extends DataProperty
         }
 
         // Prepare for templating
-        $data['value']    = isset($data['value']) ? xarVarPrep::forDisplay($data['value']) : xarVarPrep::forDisplay($this->getValue());
+        $data['value']    = isset($data['value']) ? $this->prep()->text($data['value']) : $this->prep()->text($this->getValue());
         if (!isset($data['onfocus'])) {
             $data['onfocus']   = null;
         }

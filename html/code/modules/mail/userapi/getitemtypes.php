@@ -63,8 +63,8 @@ class GetitemtypesMethod extends MethodClass
             }
             // Should we skip the "internal" mail objects (i.e. the queue-definition)?
             // if ($object['objectid'] == $qdefObjectInfo['objectid'] ) continue;
-            $itemtypes[$object['itemtype']] = ['label' => \xarVarPrep::forDisplay($object['label']),
-                'title' => \xarVarPrep::forDisplay($this->ml('View #(1)', $object['label'])),
+            $itemtypes[$object['itemtype']] = ['label' => $this->prep()->text($object['label']),
+                'title' => $this->prep()->text($this->ml('View #(1)', $object['label'])),
                 'url'   => $this->ctl()->getModuleURL('mail', 'user', 'view', ['itemtype' => $object['itemtype']]),
                 'info'  => $object,
             ];

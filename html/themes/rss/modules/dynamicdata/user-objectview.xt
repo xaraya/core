@@ -5,7 +5,7 @@
         <xar:element name="#$itemname#">
             <xar:foreach in="$fields" key="$name" value="$value">
                 <xar:element name="#$properties.$name:name#">
-                #xarVarPrep::forDisplay($value)#</xar:element>
+                #xarVarPrep::text($value)#</xar:element>
             </xar:foreach>
         </xar:element>
     </xar:foreach>

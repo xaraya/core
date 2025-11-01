@@ -195,16 +195,16 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
 
     public function xar_prep_display(...$args)
     {
-        return xarVarPrep::forDisplay(...$args);
+        return xarVarPrep::text(...$args);
     }
 
     public function xar_prep_html(...$args)
     {
-        return xarVarPrep::htmlDisplay(...$args);
+        return xarVarPrep::html(...$args);
     }
 
     public function xar_prep_email(...$args)
     {
-        return xarVarPrep::emailDisplay(...$args);
+        return xarVarPrep::email(...$args);
     }
 }

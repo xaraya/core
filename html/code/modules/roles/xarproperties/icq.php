@@ -75,7 +75,7 @@ class ICQProperty extends TextBoxProperty
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'http://wwp.icq.com/scripts/search.dll?to=' . xarVarPrep::forDisplay($data['value']);
+            $data['link'] = 'http://wwp.icq.com/scripts/search.dll?to=' . $this->prep()->text($data['value']);
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
@@ -107,10 +107,10 @@ class ICQProperty extends TextBoxProperty
             //The data is there for anyone that wants to use the vars themselves in the template.
             $link = '<script type="text/javascript"><!--
 if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
-    document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to=' . xarVarPrep::forDisplay($value) . '"><img src="' . xarVarPrep::forDisplay($data['image']) . '" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
+    document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to=' . $this->prep()->text($value) . '"><img src="' . $this->prep()->text($data['image']) . '" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
 else
-    document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to=' . xarVarPrep::forDisplay($value) . '"><img src="' . xarVarPrep::forDisplay($data['image']) . '" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/' . xarVarPrep::forDisplay($value) . '#pager"><img src="http://web.icq.com/whitepages/online?icq=' . xarVarPrep::forDisplay($value) . '&amp;img=5" width="18" height="18" alt=""/></a>\');
-//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to=' . xarVarPrep::forDisplay($value) . '"><img src="' . xarVarPrep::forDisplay($data['image']) . '" alt="ICQ Number" title="ICQ Number" border="0"/></a></noscript>';
+    document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to=' . $this->prep()->text($value) . '"><img src="' . $this->prep()->text($data['image']) . '" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/' . $this->prep()->text($value) . '#pager"><img src="http://web.icq.com/whitepages/online?icq=' . $this->prep()->text($value) . '&amp;img=5" width="18" height="18" alt=""/></a>\');
+//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to=' . $this->prep()->text($value) . '"><img src="' . $this->prep()->text($data['image']) . '" alt="ICQ Number" title="ICQ Number" border="0"/></a></noscript>';
 
         }
 

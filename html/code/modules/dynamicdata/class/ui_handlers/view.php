@@ -89,7 +89,7 @@ class ViewHandler extends DefaultHandler
         assert($this->object instanceof DataObjectList);
 
         $title = $this->mls()->translate('View #(1)', $this->object->label);
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+        $this->tpl()->setPageTitle($this->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
             $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);

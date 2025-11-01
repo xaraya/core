@@ -35,12 +35,12 @@
                             <select name="blockname" id="blockname">
                                 <xar:loop name="$type_list">
                                     <xar:if condition="$loop:item.name eq $blockname">
-                                        <option value="#xarVarPrep::forDisplay($loop:item.name)#"
+                                        <option value="#xarVarPrep::text($loop:item.name)#"
                                         selected="selected">
-                                        #xarVarPrep::forDisplay($loop:item.name)#</option>
+                                        #xarVarPrep::text($loop:item.name)#</option>
                                         <xar:else />
-                                        <option value="#xarVarPrep::forDisplay($loop:item.name)#">
-                                        #xarVarPrep::forDisplay($loop:item.name)#</option>
+                                        <option value="#xarVarPrep::text($loop:item.name)#">
+                                        #xarVarPrep::text($loop:item.name)#</option>
                                     </xar:if>
                                 </xar:loop>
                             </select>

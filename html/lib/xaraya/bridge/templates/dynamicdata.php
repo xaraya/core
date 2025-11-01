@@ -162,7 +162,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         // If we have an object, throw out its label
         if (!empty($args['object'])) {
             $object = $args['object'];
-            return xarVarPrep::forDisplay($object->label);
+            return xarVarPrep::text($object->label);
         }
         // We have a property
         if (!empty($args['property'])) {

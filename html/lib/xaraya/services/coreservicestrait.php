@@ -67,6 +67,7 @@ interface CoreServicesInterface extends ContextInterface
     public function session(): SessionInterface;
     public function user(?int $userId = null): UserInterface;
     public function db(): DatabaseInterface;
+    public function prep(): WrapperInterface;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
      * @return void|never
@@ -338,9 +339,9 @@ trait CoreServicesTrait
      * - find() - xarVar::NOT_REQUIRED = Find optional variable by name: set the value if there is one, and validate the variable
      * - update() - xarVar::DONT_REUSE = Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
      * - fetch() - original xarVar::fetch() with different order of params than above
-     * - validate()
-     * - prep()
-     * - prepHTML()
+     * - validate() - or use $this->prep()->validate() instead
+     * - prep() - @deprecated use $this->prep()->text() instead
+     * - prepHTML() - @deprecated use $this->prep()->html() instead
      * - ...
      *
      */
@@ -573,6 +574,21 @@ trait CoreServicesTrait
     public function db(): DatabaseInterface
     {
         return $this->getStaticServices()->db();
+    }
+
+    /**
+     * Access xarVarPrep::* methods (text, html, ...)
+     *
+     * Available methods:
+     * - text()
+     * - html()
+     * - email()
+     * - path()
+     * - validate()
+     */
+    public function prep(): WrapperInterface
+    {
+        return $this->getStaticServices()->prep();
     }
 
     /**

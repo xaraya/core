@@ -127,8 +127,8 @@ trait ItemLinksTrait
             $itemtypes[$objectinfo['itemtype']] = [
                 'objectid' => $objectinfo['objectid'],
                 'name'     => $objectinfo['name'],
-                'label'    => \xarVarPrep::forDisplay($objectinfo['label']),
-                'title'    => \xarVarPrep::forDisplay($this->mls()->translate('View #(1)', $objectinfo['label'])),
+                'label'    => $this->prep()->text($objectinfo['label']),
+                'title'    => $this->prep()->text($this->mls()->translate('View #(1)', $objectinfo['label'])),
                 'url'      => $url,
             ];
         }

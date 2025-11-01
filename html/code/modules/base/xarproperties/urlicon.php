@@ -43,7 +43,7 @@ class URLIconProperty extends URLProperty
         }
 
         if (!empty($data['value']) && $data['value'] != 'http://' && empty($data['link'])) {
-            $data['link'] = xarVarPrep::forDisplay($data['value']);
+            $data['link'] = $this->prep()->text($data['value']);
         }
         if (empty($data['icon'])) {
             /* We don't have a validated icon to display, use favicon */

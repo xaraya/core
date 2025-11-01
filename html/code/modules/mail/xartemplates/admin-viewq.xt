@@ -19,12 +19,12 @@
                     <table class="xar-table">
                         <tr>
                             <td>Mail ID</td>
-                            <td>#xarVarPrep::forDisplay($id)#</td>
+                            <td>#xarVarPrep::text($id)#</td>
                         </tr>
                         <tr>
                             <td>From</td>
-                            <td>#xarVarPrep::forDisplay($mail['fromname'])#
-                            &lt;#xarVarPrep::forDisplay($mail['from'])#&gt;</td>
+                            <td>#xarVarPrep::text($mail['fromname'])#
+                            &lt;#xarVarPrep::text($mail['from'])#&gt;</td>
                         </tr>
                         <tr>
                             <td>To</td>
@@ -32,22 +32,22 @@
                                 <xar:if condition="!empty($mail['recipients'])">
                                     <xar:foreach in="$mail['recipients']" key="$k" value="$v">
                                         <xar:if condition="!is_numeric($k)">
-                                        #xarVarPrep::forDisplay($k)#</xar:if>
+                                        #xarVarPrep::text($k)#</xar:if>
                                         <xar:if condition="!is_numeric($v)">
-                                        #xarVarPrep::forDisplay($v)#</xar:if>
+                                        #xarVarPrep::text($v)#</xar:if>
                                         <br />
                                     </xar:foreach>
                                 <xar:elseif condition="!empty($mail['info'])"/>
                                     <xar:if condition="!empty($mail['name'])">
-                                        #xarVarPrep::forDisplay($mail['name'])#
+                                        #xarVarPrep::text($mail['name'])#
                                     </xar:if>
-                                    &lt;#xarVarPrep::forDisplay($mail['info'])#&gt;
+                                    &lt;#xarVarPrep::text($mail['info'])#&gt;
                                 </xar:if>
                             </td>
                         </tr>
                         <tr>
                             <td>Subject</td>
-                            <td>#xarVarPrep::forDisplay($mail['subject'])#</td>
+                            <td>#xarVarPrep::text($mail['subject'])#</td>
                         </tr>
                         <tr>
                             <td>Queued</td>

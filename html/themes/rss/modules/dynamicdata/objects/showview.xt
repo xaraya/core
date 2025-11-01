@@ -25,8 +25,8 @@
         </xar:if>
         <!-- uncomment these if you want to eg use a property value as a description
         <content:format rdf:resource="http://www.w3.org/1999/xhtml" />
-        <content:encoded><![CDATA[ #xarVarPrep::htmlDisplay($fields['description'])# ]]></content:encoded>
-        <description>#xarVarPrep::forDisplay($fields['description'])#</description>
+        <content:encoded><![CDATA[ #xarVarPrep::html($fields['description'])# ]]></content:encoded>
+        <description>#xarVarPrep::text($fields['description'])#</description>
         -->
     </item>
     </xar:foreach>

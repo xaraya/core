@@ -239,7 +239,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
         } elseif ($this->ctl()->withXMLURLs()) {
             // regular url, prepped for xml display if necessary
-            $decoded_url = \xarVarPrep::forDisplay($url);
+            $decoded_url = $this->prep()->text($url);
         }
 
         // pass details of decode to calling function,

@@ -18,12 +18,10 @@ namespace Xaraya\Services;
 
 use xarVar;
 use xarVarPrep;
-use ValueValidations;
 use sys;
 use EmptyParameterException;
 use ValidationExceptions;
 use VariableValidationException;
-use Exception;
 
 sys::import('xaraya.services.servicetrait');
 
@@ -42,15 +40,14 @@ interface VariablesInterface extends ServiceInterface
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param mixed $defaultValue the default value (default null)
      * @param integer $flags bitmask which modify the behaviour of function (default xarVar::GET_OR_POST)
-     * @param integer $prep will prep the value with xarVarPrep::forDisplay, xarVarPrep::htmlDisplay, or dbconn->qstr()
+     * @param integer $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
      * @return true
      */
-    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): true;
+    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVarPrep::NOTHING): true;
 
     /**
      * Get required variable by name: set the value if there is one, and validate the variable or throw excception
      *
-     * @uses xarVar::fetch()
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (required here)
@@ -117,7 +114,7 @@ interface VariablesInterface extends ServiceInterface
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::forDisplay() instead
+     * @deprecated 2.8.4 use $this->prep()->text() instead
      */
     public function prep(...$args);
 
@@ -126,7 +123,7 @@ interface VariablesInterface extends ServiceInterface
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::htmlDisplay() instead
+     * @deprecated 2.8.4 use $this->prep()->html() instead
      */
     public function prepHTML(...$args);
 
@@ -135,7 +132,7 @@ interface VariablesInterface extends ServiceInterface
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::emailDisplay() instead
+     * @deprecated 2.8.4 use $this->prep()->email() instead
      */
     public function prepEmail(...$args);
 
@@ -144,7 +141,7 @@ interface VariablesInterface extends ServiceInterface
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::forOS() instead
+     * @deprecated 2.8.4 use $this->prep()->path() instead
      */
     public function prepPath(...$args);
 
@@ -171,9 +168,52 @@ trait VariablesTrait
 {
     use ServiceTrait;
 
+    protected bool $initialized = false;
+
+    /**
+     * Initialise the variable handling options
+     *
+     * Sets up allowable html and htmlentities options
+     *
+     * @param array<string, mixed> $config
+     * @todo revisit naming of config_vars table
+    **/
+    public function init(array $config = []): bool
+    {
+        if (empty($config) && $this->initialized) {
+            return true;
+        }
+        $db = $this->getParent()->db();
+        // Configuration init needs to be done first
+        $tables = [
+            'config_vars' => $db->getPrefix() . '_module_vars',
+        ];
+
+        $db->importTables($tables);
+
+        // Initialise the variable cache
+        xarVarPrep::init($config);
+
+        $this->initialized = true;
+        return true;
+    }
+
     /**
      * Fetch variable by name, with validation, variable, defaultValue, flags and prep
      *
+     * 1st try to use the variable provided, if this is not set (Or the xarVar::DONT_REUSE flag is used)
+     * then try to get the variable from the input (POST/GET methods for now)
+     *
+     * Then tries to validate the variable thru xarVarPrep::validate.
+     *
+     * See xarVarPrep::validate for details about nature of $validation.
+     * After the call the $value parameter passed by reference is set to the variable value converted to the proper type
+     * according to the validation applied.
+     *
+     * The $defaultValue provides a default value that is returned when the variable is not present or doesn't validate
+     * correctly.
+     *
+     * The $flag parameter is a bitmask between the following constants:
      * xarVar::GET_OR_POST  - fetch from GET or POST variables
      * xarVar::GET_ONLY     - fetch from GET variables only
      * xarVar::POST_ONLY    - fetch from POST variables only
@@ -181,16 +221,31 @@ trait VariablesTrait
      * xarVar::DONT_REUSE   - if there is an existing value, do not reuse it
      * xarVar::DONT_SET     - if there is an existing value, use it
      *
-     * @uses xarVar::fetch()
+     * You can force to get the variable only from GET parameters or POST parameters by setting the $flag parameter
+     * to one of xarVar::GET_ONLY or xarVar::POST_ONLY.
+     *
+     * You can force xar::var()->fetch not to reuse the variable by setting
+     * the $flag parameter to xarVar::DON_REUSE.
+     *
+     * By default $flag is xarVar::GET_OR_POST which means that xar::var()->fetch will lookup both GET and POST parameters and
+     * that if the variable is not present or doesn't validate correctly an exception will be raised.
+     *
+     * The $prep flag will prepare $value by passing it to one of the following:
+     *   xarVarPrep::NOTHING:    no prep (default)
+     *   xarVarPrep::TEXT:       xarVarPrep::text($value)
+     *   xarVarPrep::HTML:       xarVarPrep::html($value)
+     *   xarVarPrep::STORE:      dbconn->qstr($value)
+     *   xarVarPrep::TRIM:       trim($value)
+     *
      * @param string $name the variable name
      * @param string $validation the validation to be performed
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param mixed $defaultValue the default value (default null)
      * @param integer $flags bitmask which modify the behaviour of function (default xarVar::GET_OR_POST)
-     * @param integer $prep will prep the value with xarVarPrep::forDisplay, xarVarPrep::htmlDisplay, or dbconn->qstr()
+     * @param integer $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
      * @return true
      */
-    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): true
+    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVarPrep::NOTHING): true
     {
         assert(is_int($flags));
         assert(empty($name) || preg_match("/^[a-zA-Z0-9_\[\]\"\x7f-\xff][a-zA-Z0-9_\[\]\"\x7f-\xff]*$/", $name));
@@ -239,20 +294,20 @@ trait VariablesTrait
             }
         } else {
             // Value is ok, handle preparation of that value
-            if ($prep & xarVar::PREP_FOR_DISPLAY) {
-                $variable = xarVarPrep::forDisplay($variable);
+            if ($prep & xarVarPrep::TEXT) {
+                $variable = xarVarPrep::text($variable);
             }
-            if ($prep & xarVar::PREP_FOR_HTML) {
-                $variable = xarVarPrep::htmlDisplay($variable);
+            if ($prep & xarVarPrep::HTML) {
+                $variable = xarVarPrep::html($variable);
             }
 
             // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
-            if ($prep & xarVar::PREP_FOR_STORE) {
+            if ($prep & xarVarPrep::STORE) {
                 $dbconn = $this->getParent()->db()->getConn();
                 $variable = $dbconn->qstr($variable);
             }
 
-            if ($prep & xarVar::PREP_TRIM) {
+            if ($prep & xarVarPrep::TRIM) {
                 $variable = trim($variable);
             }
         }
@@ -268,9 +323,8 @@ trait VariablesTrait
      * $this->var()->get($name, $variable, $validation, $defaultValue=null)
      * ```
      * with flags = xarVar::GET_OR_POST - the variable must be in GET or POST
-     * and prep = xarVar::PREP_FOR_NOTHING
+     * and prep = xarVarPrep::NOTHING
      *
-     * @uses xarVar::fetch()
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (required here)
@@ -290,9 +344,8 @@ trait VariablesTrait
      * $this->var()->check($name, $variable, $validation='isset', $defaultValue=null)
      * ```
      * with flags = xarVar::DONT_SET     - if there is an existing value, use it
-     * and prep = xarVar::PREP_FOR_NOTHING
+     * and prep = xarVarPrep::NOTHING
      *
-     * @uses xarVar::fetch()
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
@@ -315,7 +368,7 @@ trait VariablesTrait
         }
         return true;
         // Note: this should be restricted to gui methods
-        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_SET, xarVar::PREP_FOR_NOTHING);
+        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_SET, xarVarPrep::NOTHING);
     }
 
     /**
@@ -326,9 +379,8 @@ trait VariablesTrait
      * $this->var()->find($name, $variable, $validation='isset', $defaultValue=null)
      * ```
      * with flags = xarVar::NOT_REQUIRED - allow the variable to be empty/not set, dont raise exception if it is
-     * and prep = xarVar::PREP_FOR_NOTHING
+     * and prep = xarVarPrep::NOTHING
      *
-     * @uses xarVar::fetch()
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
@@ -339,7 +391,7 @@ trait VariablesTrait
     {
         return $this->check($name, $variable, $validation, $defaultValue);
         // Note: this should be restricted to gui methods
-        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_NOTHING);
+        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::NOT_REQUIRED, xarVarPrep::NOTHING);
     }
 
     /**
@@ -349,9 +401,8 @@ trait VariablesTrait
      * $this->var()->update($name, $variable, $validation='isset', $defaultValue=null)
      * ```
      * with flags = xarVar::DONT_REUSE   - if there is an existing value, do not reuse it
-     * and prep = xarVar::PREP_FOR_NOTHING
+     * and prep = xarVarPrep::NOTHING
      *
-     * @uses xarVar::fetch()
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
@@ -374,7 +425,7 @@ trait VariablesTrait
         }
         return true;
         // Note: this should be restricted to gui methods
-        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_REUSE, xarVar::PREP_FOR_NOTHING);
+        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_REUSE, xarVarPrep::NOTHING);
     }
 
     /**
@@ -462,11 +513,11 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::forDisplay() instead
+     * @deprecated 2.8.4 use xarVarPrep::text() instead
      */
     public function prep(...$args)
     {
-        return xarVarPrep::forDisplay(...$args);
+        return xarVarPrep::text(...$args);
     }
 
     /**
@@ -474,11 +525,11 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::htmlDisplay() instead
+     * @deprecated 2.8.4 use xarVarPrep::html() instead
      */
     public function prepHTML(...$args)
     {
-        return xarVarPrep::htmlDisplay(...$args);
+        return xarVarPrep::html(...$args);
     }
 
     /**
@@ -486,11 +537,11 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::emailDisplay() instead
+     * @deprecated 2.8.4 use xarVarPrep::email() instead
      */
     public function prepEmail(...$args)
     {
-        return xarVarPrep::emailDisplay(...$args);
+        return xarVarPrep::email(...$args);
     }
 
     /**
@@ -498,11 +549,11 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::forOS() instead
+     * @deprecated 2.8.4 use xarVarPrep::path() instead
      */
     public function prepPath(...$args)
     {
-        return xarVarPrep::forOS(...$args);
+        return xarVarPrep::path(...$args);
     }
 
     /** @deprecated 2.8.4 use xar::mem()->has() instead */
@@ -560,9 +611,9 @@ trait VariablesTrait
  * - find() - xarVar::NOT_REQUIRED = Find optional variable by name: set the value if there is one, and validate the variable
  * - update() - xarVar::DONT_REUSE = Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
  * - fetch() - original xarVar::fetch() with different order of params than above
- * - validate()
- * - prep()
- * - prepHTML()
+ * - validate() - or use $this->prep()->validate() instead
+ * - prep() - @deprecated use $this->prep()->text() instead
+ * - prepHTML() - @deprecated use $this->prep()->html() instead
  * - ...
  *
  */

@@ -629,7 +629,7 @@ class xarEvents extends xarObject implements ixarEvents
                 }
                 // check function exists
                 if (!function_exists($func)) {
-                    // see xarMod::callFunc() - pass modType . funcType as modType here for module classes
+                    // see xar::mod()->callFunc() - pass modType . funcType as modType here for module classes
                     $type = ($area != 'gui') ? $type : $type . $area;
                     // old-style module_type_func() hook function called via module class
                     $callable = $xar->mod()->getModuleClassMethod($module, $type, $filename, 'api');

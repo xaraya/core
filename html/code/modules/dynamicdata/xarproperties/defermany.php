@@ -312,7 +312,7 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return xarVarPrep::forDisplay($item[$this->name]);
+        // return $this->prep()->text($item[$this->name]);
         // @checkme set the targetLoader to null to avoid retrieving the propname values first - see export_items
         $data = $this->getDeferredData(['value' => $item[$this->name] ?? null, '_itemid' => $itemid]);
         $item[$this->name] = $data['value'];

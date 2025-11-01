@@ -70,7 +70,7 @@ class ParseuserhomeMethod extends MethodClass
                         }
                         $url = $this->ctl()->getModuleURL($url[0], $url[1], $url[2]);
                         if (isset($sections[1])) {
-                            $url .= \xarVarPrep::forDisplay($sections[1]);
+                            $url .= $this->prep()->text($sections[1]);
                         }
                         break;
                     }
@@ -142,7 +142,7 @@ class ParseuserhomeMethod extends MethodClass
                     }
                     // BUG 2023: Make sure manual URLs are prepped for XML, consistent with $this->ctl()->getModuleURL()
                     if ($this->ctl()->withXMLURLs()) {
-                        $url = \xarVarPrep::forDisplay($url);
+                        $url = $this->prep()->text($url);
                     }
             }
         }

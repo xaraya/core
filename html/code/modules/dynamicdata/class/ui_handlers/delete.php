@@ -109,7 +109,7 @@ class DeleteHandler extends DefaultHandler
         }
 
         $title = $this->mls()->translate('Delete #(1)', $this->object->label);
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+        $this->tpl()->setPageTitle($this->prep()->text($title));
 
         // add data to original method args
         $data = array_replace($args, [

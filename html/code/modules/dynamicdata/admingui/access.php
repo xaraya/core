@@ -244,7 +244,7 @@ class AccessMethod extends MethodClass
                     'group' => $group,
                     'prop'  => $filter[0],
                     'match' => $filter[1],
-                    'value' => \xarVarPrep::forDisplay($filter[2]),
+                    'value' => $this->prep()->text($filter[2]),
                     'level' => '',
                 ]);
             }

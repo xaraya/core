@@ -282,9 +282,9 @@ trait WithStaticServices
      * - find() - xarVar::NOT_REQUIRED = Find optional variable by name: set the value if there is one, and validate the variable
      * - update() - xarVar::DONT_REUSE = Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
      * - fetch() - original xarVar::fetch() with different order of params than above
-     * - validate()
-     * - prep()
-     * - prepHTML()
+     * - validate() - or use $this->prep()->validate() instead
+     * - prep() - @deprecated use $this->prep()->text() instead
+     * - prepHTML() - @deprecated use $this->prep()->html() instead
      * - ...
      *
      */
@@ -517,6 +517,21 @@ trait WithStaticServices
     public static function db(): DatabaseInterface
     {
         return self::getServicesClass()->db();
+    }
+
+    /**
+     * Access xarVarPrep::* methods (text, html, ...)
+     *
+     * Available methods:
+     * - text()
+     * - html()
+     * - email()
+     * - path()
+     * - validate()
+     */
+    public static function prep(): WrapperInterface
+    {
+        return self::getServicesClass()->prep();
     }
 
     /**

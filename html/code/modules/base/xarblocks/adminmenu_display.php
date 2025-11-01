@@ -56,7 +56,7 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
                     if (!isset($mod['category']) or $mod['category'] == '0') {
                         $mod['category'] = $this->ml('Unknown');
                     }
-                    $cat = \xarVarPrep::forDisplay($mod['category']);
+                    $cat = $this->prep()->text($mod['category']);
                     // add module link to category
                     $categories[$cat][$modname] = $link;
                     break;

@@ -1209,7 +1209,7 @@ class xarJSLib extends xarObject
         $this->name = $name;
         $this->displayname = ucfirst($this->name);
         $this->description = $xar->ml('#(1) JS Library', $this->displayname);
-        $this->osdirectory = \xarVarPrep::forOS($this->name);
+        $this->osdirectory = $xar->prep()->path($this->name);
     }
     /**
      * Rebuild the entire cache of meta data for this lib

@@ -95,7 +95,7 @@ function xarMain()
 
     // Default Page Title
     $SiteSlogan = $xar->mod('themes')->getVar('SiteSlogan');
-    $xar->tpl()->setPageTitle(xarVarPrep::forDisplay($SiteSlogan));
+    $xar->tpl()->setPageTitle($xar->prep()->text($SiteSlogan));
     $xar->log()->notice('The page title is set: ' . $xar->tpl()->getPageTitle());
 
     // Check the Installation
@@ -107,7 +107,7 @@ function xarMain()
     // Theme Override
     $xar->var()->find('theme', $themeName, 'str:1:');
     if (!empty($themeName)) {
-        $themeName = xarVarPrep::forOS($themeName);
+        $themeName = $xar->prep()->path($themeName);
         if (xarTheme::isAvailable($themeName)) {
             $xar->tpl()->setThemeName($themeName);
             $xar->mem()->set('Themes.name', 'CurrentTheme', $themeName);
@@ -116,7 +116,7 @@ function xarMain()
     } elseif ($xar->user()->isLoggedIn() && $request->getType() == 'admin') {
         $themeName = $xar->mod('themes')->getVar('admin_theme');
         if (!empty($themeName) && xarTheme::isAvailable($themeName)) {
-            $themeName = xarVarPrep::forOS($themeName);
+            $themeName = $xar->prep()->path($themeName);
             $xar->tpl()->setThemeName(strtolower($themeName));
             $xar->mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
@@ -131,7 +131,7 @@ function xarMain()
         // check we have a valid theme
         if (!empty($themeName) && xarTheme::isAvailable($themeName)
             && !empty($user_themes) && in_array($themeName, $user_themes)) {
-            $themeName = xarVarPrep::forOS($themeName);
+            $themeName = $xar->prep()->path($themeName);
             $xar->tpl()->setThemeName(strtolower($themeName));
             $xar->mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
@@ -181,7 +181,7 @@ function xarMain()
         // User override for the page template
         $xar->var()->find('pageName', $pageName, 'str:1:');
         if (!empty($pageName)) {
-            $pageName = xarVarPrep::forDisplay($pageName);
+            $pageName = $xar->prep()->text($pageName);
             $xar->tpl()->setPageTemplateName($pageName);
         }
         $xar->log()->notice('The page template is set: ' . $xar->tpl()->getPageTemplateName());

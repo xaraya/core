@@ -107,7 +107,7 @@ class FileUploadProperty extends DataProperty
             $uname = 'user';
             $id = $this->user()->getId();
             // Note: we add the userid just to make sure it's unique e.g. when filtering
-            // out unwanted characters through xarVarPrep::forOS, or if the database makes
+            // out unwanted characters through $this->prep()->path, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
             $udir = $uname . '_' . $id;
             $this->initialization_basedirectory = preg_replace('/\{user\}/', $udir, $this->initialization_basedirectory);
@@ -116,7 +116,7 @@ class FileUploadProperty extends DataProperty
             $uname = 'user';
             $id = $this->user()->getId();
             // Note: we add the userid just to make sure it's unique e.g. when filtering
-            // out unwanted characters through xarVarPrep::forOS, or if the database makes
+            // out unwanted characters through $this->prep()->path, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
             $udir = $uname . '_' . $id;
             $this->initialization_importdirectory = preg_replace('/\{user\}/', $udir, $this->initialization_importdirectory);

@@ -82,7 +82,7 @@
                         <label for="subject" title="#$label#" class="xar-form-label">Subject:</label>
                     </div>
                     <div class="xar-col">
-                        <input type="text" name="subject" id="subject" value="#xarVarPrep::forDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                        <input type="text" name="subject" id="subject" value="#xarVarPrep::text($subject)#" maxlength="150" class="xar-form-textxlong"/>
                     </div>
                 </div>
                 <div class="xar-row">
@@ -91,7 +91,7 @@
                         <label for="message" title="#$label#" class="xar-form-label">Message:</label>
                     </div>
                     <div class="xar-col">
-                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrep::forDisplay($message)#</textarea>
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrep::text($message)#</textarea>
                     </div>
                 </div>
                 <p>

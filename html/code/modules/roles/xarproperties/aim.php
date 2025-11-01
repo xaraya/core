@@ -74,7 +74,7 @@ class AIMProperty extends TextBoxProperty
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'aim:goim?screenname=' . xarVarPrep::forDisplay($data['value']) . '&message=' . $this->ml('Hello+Are+you+there?');
+            $data['link'] = 'aim:goim?screenname=' . $this->prep()->text($data['value']) . '&message=' . $this->ml('Hello+Are+you+there?');
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
@@ -91,7 +91,7 @@ class AIMProperty extends TextBoxProperty
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
         }
-        $data['value'] = xarVarPrep::forDisplay($data['value']);
+        $data['value'] = $this->prep()->text($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {

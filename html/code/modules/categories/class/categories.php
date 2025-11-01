@@ -246,6 +246,16 @@ class CategoryTreeNode extends TreeNode
  */
 class CategoryTree extends Tree
 {
+    protected $xarMod = null;
+
+    protected function mod()
+    {
+        if (!isset($this->xarMod)) {
+            $this->xarMod = xar::mod();
+        }
+        return $this->xarMod;
+    }
+
     /**
      * @param CategoryTreeNode $node
      */
@@ -254,7 +264,7 @@ class CategoryTree extends Tree
         if ($node->id != null) {
             $node->cid = $node->id;
         }
-        $data = xar::mod()->apiFunc(
+        $data = $this->mod()->apiFunc(
             'categories',
             'user',
             'getcat',

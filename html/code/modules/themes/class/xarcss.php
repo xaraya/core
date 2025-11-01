@@ -434,7 +434,7 @@ class xarCSS extends xarObject
         $tag = [
             'method'     => $method,
             'scope'      => $scope,
-            'base'       => !empty($base) ? \xarVarPrep::forOS($base) : xarCSS::CSSCOMMONBASE,
+            'base'       => !empty($base) ? $xar->prep()->path($base) : xarCSS::CSSCOMMONBASE,
             'file'       => !empty($file) ? $file : xarCSS::CSSCOMMONFILE,
             'fileext'    => !empty($fileext) ? $fileext : xarCSS::CSSCOMMONFILEEXT,
             'type'       => !empty($type) ? $type : xarCSS::CSSTYPETEXT,
@@ -449,7 +449,7 @@ class xarCSS extends xarObject
             'property'   => '',
             'block'      => '',
             'url'        => '',
-            'alternatedir' => !empty($alternatedir) ? \xarVarPrep::forOS($alternatedir) : '',
+            'alternatedir' => !empty($alternatedir) ? $xar->prep()->path($alternatedir) : '',
         ];
 
         // Local or remote absolute url, just include it and return
@@ -515,7 +515,7 @@ class xarCSS extends xarObject
             case 'block':
                 if (!empty($block)) {
                     $tag['block'] = $block;
-                    $block = \xarVarPrep::forOS($block);
+                    $block = $xar->prep()->path($block);
                     // themes/theme/blocks/block/style
                     $paths[] = $themeDir . '/blocks/' . $block . '/' . $tag['base'] . '/' . $fileName;
                     // themes/common/blocks/block/style
@@ -560,7 +560,7 @@ class xarCSS extends xarObject
                 break;
             case 'property':
                 $tag['property'] = $property;
-                $property = \xarVarPrep::forOS($property);
+                $property = $xar->prep()->path($property);
                 // themes/theme/properties/property/style
 
                 $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
@@ -967,7 +967,7 @@ class xarCSSLib extends xarObject
         $this->name = $name;
         $this->displayname = ucfirst($this->name);
         $this->description = $xar->ml('#(1) CSS Framework', $this->displayname);
-        $this->osdirectory = \xarVarPrep::forOS($this->name);
+        $this->osdirectory = $xar->prep()->path($this->name);
     }
 
     /**

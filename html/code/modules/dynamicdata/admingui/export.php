@@ -162,7 +162,7 @@ class ExportMethod extends MethodClass
 
         if (!empty($tofile) && !empty($ext)) {
             $varDir = sys::varpath();
-            $outfile = $varDir . '/uploads/' . \xarVarPrep::forOS($myobject->name) . $ext . '.' . $this->mls()->formatDate('%Y%m%d%H%M%S', time()) . '.' . $format;
+            $outfile = $varDir . '/uploads/' . $this->prep()->path($myobject->name) . $ext . '.' . $this->mls()->formatDate('%Y%m%d%H%M%S', time()) . '.' . $format;
             $fp = @fopen($outfile, 'w');
             if (!$fp) {
                 $data['xml'] = $this->ml('Unable to open file #(1)', $outfile);
@@ -178,7 +178,7 @@ class ExportMethod extends MethodClass
         }
 
         $data['objectid'] = $objectid;
-        $data['xml'] = \xarVarPrep::forDisplay($xml);
+        $data['xml'] = $this->prep()->text($xml);
         $data['format'] = $format;
 
         $this->tpl()->setPageTemplateName('admin');

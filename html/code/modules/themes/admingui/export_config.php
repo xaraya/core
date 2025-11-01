@@ -56,7 +56,7 @@ class ExportConfigMethod extends MethodClass
                             // don't replace anything in the serialized value
                             $xml .= "    <$name>" . $value;
                         } else {
-                            $xml .= "    <$name>" . \xarVarPrep::forDisplay($value);
+                            $xml .= "    <$name>" . $this->prep()->text($value);
                         }
                     } else {
                         $xml .= "    <$name>";

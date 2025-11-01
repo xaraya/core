@@ -239,8 +239,9 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
         } else {
             $context = $this->getContext();
         }
-        xar::var()->check('method', $args['method']);
-        xar::var()->check('itemid', $args['itemid']);
+        $xar = xar::getServicesClass();
+        $xar->var()->check('method', $args['method']);
+        $xar->var()->check('itemid', $args['itemid']);
 
         // default method is 'view' without itemid, or 'display' with an itemid
         if (empty($args['method'])) {

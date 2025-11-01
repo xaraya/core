@@ -918,7 +918,7 @@ class xarTwigTpl extends xarTpl
             return $mem->get('Templates.Twig', $cachename);
         }
         if (!empty($tplBase)) {
-            $tplType = \xarVarPrep::forOS($tplBase);
+            $tplType = xar::prep()->path($tplBase);
         }
 
         // @todo define this in theme config

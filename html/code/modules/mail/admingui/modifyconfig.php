@@ -50,7 +50,7 @@ class ModifyconfigMethod extends MethodClass
         // Redirect address - ensure it's set
         $address = trim($this->mod()->getVar('redirectaddress') ?? '');
         if (isset($address) && !empty($address)) {
-            $data['redirectaddress'] = \xarVarPrep::forDisplay($address);
+            $data['redirectaddress'] = $this->prep()->text($address);
         } else {
             $data['redirectaddress'] = '';
         }

@@ -75,7 +75,7 @@ class GetitemlinksMethod extends MethodClass
                         continue;
                     }
                     $label = $types[$itemid]['module'] . '/' . $types[$itemid]['type'];
-                    $itemlinks[$itemid] = ['label' => \xarVarPrep::forDisplay($label),
+                    $itemlinks[$itemid] = ['label' => $this->prep()->text($label),
                         'title' => $this->ml('Modify Block Type'),
                         'url'   => $showurl ? $this->ctl()->getModuleURL(
                             'blocks',
@@ -99,7 +99,7 @@ class GetitemlinksMethod extends MethodClass
                     foreach ($itemids as $itemid) {
                         if (!isset($groups[$itemid])) continue;
                         $label = $groups[$itemid]['name'];
-                        $itemlinks[$itemid] = array('label' => \xarVarPrep::forDisplay($label),
+                        $itemlinks[$itemid] = array('label' => $this->prep()->text($label),
                                                     'title' => $this->ml('View Block Group'),
                                                     'url'   => $showurl ? $this->ctl()->getModuleURL('blocks', 'admin', 'view_groups',
                                                                                     array('id' => $itemid)) : '');
@@ -121,7 +121,7 @@ class GetitemlinksMethod extends MethodClass
                         continue;
                     }
                     $label = $instances[$itemid]['name'];
-                    $itemlinks[$itemid] = ['label' => \xarVarPrep::forDisplay($label),
+                    $itemlinks[$itemid] = ['label' => $this->prep()->text($label),
                         'title' => $this->ml('Modify Block Instance'),
                         'url'   => $showurl ? $this->ctl()->getModuleURL(
                             'blocks',

@@ -585,7 +585,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
 
         // If this is set, pass only allowed HTML tags
         if ($this->display_striptags) {
-            $data['value']    = \xarVarPrep::htmlDisplay($data['value']);
+            $data['value']    = $this->prep()->html($data['value']);
         }
 
         // TODO: does this hurt when it is an array?
@@ -646,7 +646,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             $data['id']   = $data['name'];
         }
 
-        $data['label'] = isset($data['label']) ? \xarVarPrep::forDisplay($data['label']) : \xarVarPrep::forDisplay($this->label);
+        $data['label'] = isset($data['label']) ? $this->prep()->text($data['label']) : $this->prep()->text($this->label);
         // Allow 0 as a fieldprefix
         if (!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
             $data['fieldprefix'] = $this->_fieldprefix;
@@ -812,11 +812,11 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if (is_array($data['value'])) {
             $temp = [];
             foreach ($data['value'] as $key => $tmp) {
-                $temp[$key] = (!is_array($tmp)) ? \xarVarPrep::forDisplay($tmp) : $tmp;
+                $temp[$key] = (!is_array($tmp)) ? $this->prep()->text($tmp) : $tmp;
             }
             $data['value'] = $temp;
         } else {
-            $data['value'] = \xarVarPrep::forDisplay($data['value']);
+            $data['value'] = $this->prep()->text($data['value']);
         }
 
         $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->invalid;
@@ -1251,7 +1251,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             return serialize($item[$this->name]);
         }
-        return \xarVarPrep::forDisplay($item[$this->name] ?? '');
+        return $this->prep()->text($item[$this->name] ?? '');
     }
 
     /** @return bool */

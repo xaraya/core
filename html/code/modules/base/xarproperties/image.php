@@ -127,7 +127,7 @@ class ImageProperty extends TextBoxProperty
         }
         $data['basedirectory'] = $data['basedir'] ?? $this->initialization_basedirectory;
         $data['extensions'] ??= $this->validation_file_extensions;
-        $data['value']    = isset($data['value']) ? xarVarPrep::forDisplay($data['value']) : xarVarPrep::forDisplay($this->value);
+        $data['value']    = isset($data['value']) ? $this->prep()->text($data['value']) : $this->prep()->text($this->value);
 
         return parent::showInput($data);
     }

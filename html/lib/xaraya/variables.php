@@ -104,10 +104,11 @@ class xarVar extends xarObject
     public const DONT_SET         = 128;
     public const DONT_REUSE       = 256;
 
+    /** @deprecated 2.8.4 use xarVarPrep::* instead */
     public const PREP_FOR_NOTHING = 0;
     public const PREP_FOR_DISPLAY = 1;
     public const PREP_FOR_HTML    = 2;
-    public const PREP_FOR_STORE   = 4;
+    public const PREP_FOR_STORE   = 16;
     public const PREP_TRIM        = 8;
 
     protected static bool $initialized = false;
@@ -141,30 +142,14 @@ class xarVar extends xarObject
      *
      * @param array<mixed> $args
      * @return boolean
-     * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
      * @todo revisit naming of config_vars table
     **/
     public static function init(array $args = [])
     {
-        if (empty($args) && self::$initialized) {
-            return true;
-        }
         // static cache for migration
         self::$memService = null;
         self::$varService = null;
-        $xar = xar::getServicesClass();
-        // Configuration init needs to be done first
-        $tables = ['config_vars' => $xar->db()->getPrefix() . '_module_vars'];
-
-        $xar->db()->importTables($tables);
-
-        // Initialise the variable cache
-        sys::import('xaraya.variables.config');
-        xarVarPrep::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);
-        xarVarPrep::$fixHTMLEntities = $xar->config()->getVar('Site.Core.FixHTMLEntities', true);
-
-        self::$initialized = true;
-        return true;
+        return self::var()->init($args);
     }
 
     /**
@@ -202,49 +187,13 @@ class xarVar extends xarObject
     /**
      * Fetches the $name variable from input variables and validates it by applying the $validation rules.
      *
-     * 1st try to use the variable provided, if this is not set (Or the xarVar::DONT_REUSE flag is used)
-     * then try to get the variable from the input (POST/GET methods for now)
-     *
-     * Then tries to validate the variable thru xarVarPrep::validate.
-     *
-     * See xarVarPrep::validate for details about nature of $validation.
-     * After the call the $value parameter passed by reference is set to the variable value converted to the proper type
-     * according to the validation applied.
-     *
-     * The $defaultValue provides a default value that is returned when the variable is not present or doesn't validate
-     * correctly.
-     *
-     * The $flag parameter is a bitmask between the following constants:
-     * xarVar::GET_OR_POST  - fetch from GET or POST variables
-     * xarVar::GET_ONLY     - fetch from GET variables only
-     * xarVar::POST_ONLY    - fetch from POST variables only
-     * xarVar::NOT_REQUIRED - allow the variable to be empty/not set, dont raise exception if it is
-     * xarVar::DONT_REUSE   - if there is an existing value, do not reuse it
-     * xarVar::DONT_SET     - if there is an existing value, use it
-     *
-     * You can force to get the variable only from GET parameters or POST parameters by setting the $flag parameter
-     * to one of xarVar::GET_ONLY or xarVar::POST_ONLY.
-     *
-     * You can force xarVar::fetch not to reuse the variable by setting
-     * the $flag parameter to xarVar::DON_REUSE.
-     *
-     * By default $flag is xarVar::GET_OR_POST which means tha xarVar::fetch will lookup both GET and POST parameters and
-     * that if the variable is not present or doesn't validate correctly an exception will be raised.
-     *
-     * The $prep flag will prepare $value by passing it to one of the following:
-     *   xarVar::PREP_FOR_NOTHING:    no prep (default)
-     *   xarVar::PREP_FOR_DISPLAY:    xarVarPrep::forDisplay($value)
-     *   xarVar::PREP_FOR_HTML:       xarVarPrep::htmlDisplay($value)
-     *   xarVar::PREP_FOR_STORE:      dbconn->qstr($value)
-     *   xarVar::PREP_TRIM:           trim($value)
-     *
      *
      * @param string $name the variable name
      * @param string $validation the validation to be performed
      * @param mixed $value contains the converted value of fetched variable
      * @param mixed $defaultValue the default value
      * @param integer $flags bitmask which modify the behaviour of function
-     * @param integer $prep will prep the value with xarVarPrep::forDisplay, xarVarPrep::htmlDisplay, or dbconn->qstr()
+     * @param integer $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
      * @throws EmptyParameterException
      * @throws VariableValidationException
      * @return true
@@ -252,52 +201,13 @@ class xarVar extends xarObject
      * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
      * @todo  re-evaluate the prepping, prepforstore is deprecated for example, prep for display and prep for html are partially exclusive
     **/
-    public static function fetch($name, $validation, &$value, $defaultValue = null, $flags = self::GET_OR_POST, $prep = self::PREP_FOR_NOTHING)
+    public static function fetch($name, $validation, &$value, $defaultValue = null, $flags = self::GET_OR_POST, $prep = xarVarPrep::NOTHING)
     {
         return self::var()->fetch($name, $validation, $value, $defaultValue, $flags, $prep);
     }
 
     /**
      * Validates a variable performing the $validation test type on $subject.
-     *
-     * The $validation parameter could be a string, in this case the
-     * supported validation types are very basilar, they are the following:
-     *
-     * 'id' matches a positive integer (0 excluded)
-     *
-     * 'int:<min val>:<max val>' matches an integer between <min val> and <max val> (included), if <min val>
-     *                           is not present no lower bound check is performed, the same applies to <max val>
-     *
-     * 'float:<min val>:<max val>' matches a floating point number between <min val> and <max val> (included), if <min val>
-     *                             is not present no lower bound check is performed, the same applies to <max val>
-     *
-     * 'bool' matches a string that can be 'true' or 'false'
-     *
-     * 'str:<min len>:<max len>' matches a string which has a lenght between <min len> and <max len>, if <min len>
-     *                           is omitted no control is done on mininum lenght, the same applies to <max len>
-     *
-     * 'html:<level>' validates the subject by searching unallowed html tags, allowed tags are defined by specifying <level>
-     *                that could be one of restricted, basic, enhanced, admin. This last level is not configurable and allows
-     *                every tag
-     *
-     * 'array:<min elements>:<max elements>' validates if the subject is an array with the minimum and maximum
-     *                                       of elements specified
-     *
-     * 'list' validates if the subject is a list
-     * 'list: *other validation*' validates if the subject is an array, and if every element of the array
-     *                            validates in the *other validation*
-     *                          Example: xarVarPrep::validate('list:str:1:20', $strings_array);
-     *
-     * 'enum' validates if the subject is any of the parameters
-     *                  Example: xarVarPrep::validate('enum:apple:orange:strawberry', $options);
-     *
-     * After the validation is performed, $convValue (passed by reference) is assigned to $subject converted the proper type.
-     * Please note that conversions from string to integer or float are done by using the PHP built-in cast conversions,
-     * refer to this page for the details:
-     * http://www.php.net/manual/en/language.types.string.html#language.types.string.conversion
-     *
-     * The $validation parameter can be any of the implemented functions in html/modules/variable/validations/
-     *
      *
      * @param mixed $validation the validation to be performed
      * @param string $subject the subject on which the validation must be performed, will be where the validated value will be returned
@@ -345,39 +255,30 @@ class xarVar extends xarObject
     public static function prepForDisplay(...$args)
     {
         // pass along the function arguments as is
-        return xarVarPrep::forDisplay(...$args);
+        return xarVarPrep::text(...$args);
     }
 
     public static function prepHTMLDisplay(...$args)
     {
         // pass along the function arguments as is
-        return xarVarPrep::htmlDisplay(...$args);
+        return xarVarPrep::html(...$args);
     }
 
     public static function prepEmailDisplay(...$args)
     {
         // pass along the function arguments as is
-        return xarVarPrep::emailDisplay(...$args);
+        return xarVarPrep::email(...$args);
     }
 
     public static function prepForOS(...$args)
     {
         // pass along the function arguments as is
-        return xarVarPrep::forOS(...$args);
+        return xarVarPrep::path(...$args);
     }
 }
 
 /*
     ---------------------------------------------------------------------
-    @todo LOOK AT  THIS, IT SEEMS ABANDONED, except for the transform of entities from named to numeric
-    Everything below should be remade, working thru xarVarEscape or xarVarTransform
-    * xarVarCleanFromInput
-    * xarVarCleanUntrusted
-    should disappear, there is nothing to prevent from input, that's not the way to add security.
-
-    They produce a false feeling of security... Handy for stopping script kids, but the holes
-    are still there, just harder to find.
-
     * xarVarPrep* -- the rest, only one of them is needed usually, maybe one to
          - escape XML
          - another to escape HTML.
@@ -393,12 +294,80 @@ class xarVar extends xarObject
 
 class xarVarPrep
 {
+    public const NOTHING = 0;
+    public const TEXT    = 1;
+    public const HTML    = 2;
+    public const PATH    = 4;
+    public const TRIM    = 8;
+    public const STORE   = 16;
+
     public static $allowableHTML = [];
     public static $fixHTMLEntities = true;
+    protected static bool $initialized = false;
 
+    /**
+     * Initialise the variable prep options
+     *
+     * Sets up allowable html and htmlentities options
+     *
+     * @param array<mixed> $args
+     * @return boolean
+     * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
+    **/
+    public static function init(array $args = [])
+    {
+        if (empty($args) && self::$initialized) {
+            return true;
+        }
+        $xar = xar::getServicesClass();
+
+        self::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);
+        self::$fixHTMLEntities = $xar->config()->getVar('Site.Core.FixHTMLEntities', true);
+
+        self::$initialized = true;
+        return true;
+    }
 
     /**
      * Validates a variable performing the $validation test type on $variable.
+     *
+     * The $validation parameter could be a string, in this case the
+     * supported validation types are very basilar, they are the following:
+     *
+     * 'id' matches a positive integer (0 excluded)
+     *
+     * 'int:<min val>:<max val>' matches an integer between <min val> and <max val> (included), if <min val>
+     *                           is not present no lower bound check is performed, the same applies to <max val>
+     *
+     * 'float:<min val>:<max val>' matches a floating point number between <min val> and <max val> (included), if <min val>
+     *                             is not present no lower bound check is performed, the same applies to <max val>
+     *
+     * 'bool' matches a string that can be 'true' or 'false'
+     *
+     * 'str:<min len>:<max len>' matches a string which has a lenght between <min len> and <max len>, if <min len>
+     *                           is omitted no control is done on mininum lenght, the same applies to <max len>
+     *
+     * 'html:<level>' validates the subject by searching unallowed html tags, allowed tags are defined by specifying <level>
+     *                that could be one of restricted, basic, enhanced, admin. This last level is not configurable and allows
+     *                every tag
+     *
+     * 'array:<min elements>:<max elements>' validates if the subject is an array with the minimum and maximum
+     *                                       of elements specified
+     *
+     * 'list' validates if the subject is a list
+     * 'list: *other validation*' validates if the subject is an array, and if every element of the array
+     *                            validates in the *other validation*
+     *                          Example: xarVarPrep::validate('list:str:1:20', $strings_array);
+     *
+     * 'enum' validates if the subject is any of the parameters
+     *                  Example: xarVarPrep::validate('enum:apple:orange:strawberry', $options);
+     *
+     * After the validation is performed, $convValue (passed by reference) is assigned to $subject converted the proper type.
+     * Please note that conversions from string to integer or float are done by using the PHP built-in cast conversions,
+     * refer to this page for the details:
+     * http://www.php.net/manual/en/language.types.string.html#language.types.string.conversion
+     *
+     * The $validation parameter can be any of the implemented functions in html/modules/variable/validations/
      *
      * @param mixed $validation the validation to be performed
      * @param mixed $variable the subject on which the validation must be performed, will be where the validated value will be returned
@@ -450,7 +419,7 @@ class xarVarPrep
      * @return mixed prepared variable if only one variable passed
      * in, otherwise an array of prepared variables
      */
-    public static function forDisplay(...$args)
+    public static function text(...$args)
     {
         $resarray = [];
         $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
@@ -493,7 +462,7 @@ class xarVarPrep
      * @return mixed prepared variable if only one variable passed
      * in, otherwise an array of prepared variables
      */
-    public static function htmlDisplay(...$args)
+    public static function html(...$args)
     {
         // <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
         static $allowedtags = null;
@@ -547,7 +516,7 @@ class xarVarPrep
             */
             $var = preg_replace_callback(
                 '/\022([^\024]*)\024/',
-                [self::class, 'htmlDisplayCallback'],
+                [self::class, 'htmlCallback'],
                 $var
             );
 
@@ -568,7 +537,7 @@ class xarVarPrep
         }
     }
 
-    public static function htmlDisplayCallback($matches)
+    public static function htmlCallback($matches)
     {
         return '<' . strtr(
             $matches[1],
@@ -592,7 +561,7 @@ class xarVarPrep
      * in, otherwise an array of prepared variables
      * @todo this looks like something for the mail module or an EmailAddress class somewhere
      */
-    public static function emailDisplay(...$args)
+    public static function email(...$args)
     {
         /*
             // This search and replace finds the text 'x@y' and replaces
@@ -643,7 +612,7 @@ class xarVarPrep
      * @todo this puts responsibility on callee to know how things work, and gets a mangled name back, not very nice
      * @todo make it have 1 return type
      */
-    public static function forOS(...$args)
+    public static function path(...$args)
     {
         static $special_characters = [':'  => ' ',  // c:\foo\bar
             '/'  => ' ',  // /etc/passwd
@@ -669,36 +638,36 @@ class xarVarPrep
 
 /**
  * Ready user output
- * @deprecated 2.8.4 use xarVarPrep::forDisplay() instead
+ * @deprecated 2.8.4 use xarVarPrep::text() instead
  */
 function xarVarPrepForDisplay(...$args)
 {
-    return xarVarPrep::forDisplay(...$args);
+    return xarVarPrep::text(...$args);
 }
 
 /**
  * Ready HTML output
- * @deprecated 2.8.4 use xarVarPrep::htmlDisplay() instead
+ * @deprecated 2.8.4 use xarVarPrep::html() instead
  */
 function xarVarPrepHTMLDisplay(...$args)
 {
-    return xarVarPrep::htmlDisplay(...$args);
+    return xarVarPrep::html(...$args);
 }
 
 /**
  * Ready obfuscated e-mail output
- * @deprecated 2.8.4 use xarVarPrep::emailDisplay() instead
+ * @deprecated 2.8.4 use xarVarPrep::email() instead
  */
 function xarVarPrepEmailDisplay(...$args)
 {
-    return xarVarPrep::emailDisplay(...$args);
+    return xarVarPrep::email(...$args);
 }
 
 /**
  * Ready operating system output
- * @deprecated 2.8.4 use xarVarPrep::forOS() instead
+ * @deprecated 2.8.4 use xarVarPrep::path() instead
  */
 function xarVarPrepForOS(...$args)
 {
-    return xarVarPrep::forOS(...$args);
+    return xarVarPrep::path(...$args);
 }

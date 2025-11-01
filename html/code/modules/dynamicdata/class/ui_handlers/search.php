@@ -134,7 +134,7 @@ class SearchHandler extends DefaultHandler
         assert($this->object instanceof DataObject);
 
         $title = $this->mls()->translate('Search #(1)', $this->object->label);
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+        $this->tpl()->setPageTitle($this->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
             $msg = $this->mls()->translate('Search #(1) is forbidden', $this->object->label);
@@ -210,7 +210,7 @@ class SearchHandler extends DefaultHandler
 
         // prepare for output
         if (isset($search['q']) && $search['q'] !== '') {
-            $search['q'] = \xarVarPrep::forDisplay($search['q']);
+            $search['q'] = $this->prep()->text($search['q']);
         }
         $search['options'] = ['like'  => '',
             'start' => 'starts with',
@@ -287,7 +287,7 @@ class SearchHandler extends DefaultHandler
         assert($this->object instanceof DataObject);
 
         $title = $this->mls()->translate('Query #(1)', $this->object->label);
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+        $this->tpl()->setPageTitle($this->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
             $msg = $this->mls()->translate('Query #(1) is forbidden', $this->object->label);
@@ -382,7 +382,7 @@ class SearchHandler extends DefaultHandler
         foreach (array_keys($query['field']) as $field) {
             if (isset($query['field'][$field]) && $query['field'][$field] !== '') {
                 if (!is_array($query['field'][$field])) {
-                    $query['field'][$field] = \xarVarPrep::forDisplay($query['field'][$field]);
+                    $query['field'][$field] = $this->prep()->text($query['field'][$field]);
                 }
             }
         }

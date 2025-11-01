@@ -415,7 +415,7 @@ class MigrateMethod extends MethodClass
             }
             if (!empty($test)) {
                 // put test results in debug string
-                $data['debug'] = \xarVarPrep::forDisplay($result);
+                $data['debug'] = $this->prep()->text($result);
             } elseif (!empty($confirm)) {
                 // return and load the same map again
                 $url = $this->mod()->getURL(

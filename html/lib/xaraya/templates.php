@@ -593,13 +593,13 @@ class xarTpl extends xarObject
     {
         $xar = xar::getServicesClass();
         // prep input
-        $package = xarVarPrep::forOS($package);
-        $tplBase = xarVarPrep::forOS($tplBase);
+        $package = xarVarPrep::path($package);
+        $tplBase = xarVarPrep::path($tplBase);
         if (!empty($tplName)) {
-            $tplName = xarVarPrep::forOS($tplName);
+            $tplName = xarVarPrep::path($tplName);
         }
         if (!empty($tplPart)) {
-            $tplPart = strtr(trim(xarVarPrep::forOS($tplPart)), " ", "/");
+            $tplPart = strtr(trim(xarVarPrep::path($tplPart)), " ", "/");
         }
         $canTemplateName = strtr($tplName ?? "", "-", "/");
         $canonical = ($canTemplateName == $tplName) ? false : true;
@@ -748,10 +748,10 @@ class xarTpl extends xarObject
             }
         }
         $xar = xar::getServicesClass();
-        $modName = xarVarPrep::forOS($modName);
-        $objectName = xarVarPrep::forOS($objectName);
-        $tplType = xarVarPrep::forOS($tplType);
-        $tplBase   = empty($tplBase) ? $tplType : xarVarPrep::forOS($tplBase);
+        $modName = xarVarPrep::path($modName);
+        $objectName = xarVarPrep::path($objectName);
+        $tplType = xarVarPrep::path($tplType);
+        $tplBase   = empty($tplBase) ? $tplType : xarVarPrep::path($tplBase);
         $cachename = "$modName:$objectName:$tplType:$tplBase:objects";
 
         // cache frequently-used sourcefilenames for DD elements
@@ -797,10 +797,10 @@ class xarTpl extends xarObject
             }
         }
         $xar = xar::getServicesClass();
-        $modName = xarVarPrep::forOS($modName);
-        $propertyName = xarVarPrep::forOS($propertyName);
-        $tplType = xarVarPrep::forOS($tplType);
-        $tplBase   = empty($tplBase) ? $tplType : xarVarPrep::forOS($tplBase);
+        $modName = xarVarPrep::path($modName);
+        $propertyName = xarVarPrep::path($propertyName);
+        $tplType = xarVarPrep::path($tplType);
+        $tplBase   = empty($tplBase) ? $tplType : xarVarPrep::path($tplBase);
         $cachename = "$modName:$propertyName:$tplType:$tplBase:properties";
 
         // cache frequently-used sourcefilenames for DD elements
@@ -906,7 +906,7 @@ class xarTpl extends xarObject
             case 'theme':
                 // optional theme images to look in passed as third param
                 if (!empty($package)) {
-                    $package = xarVarPrep::forOS($package);
+                    $package = xarVarPrep::path($package);
                     $paths[] = self::getThemeDir($package) . '/images/' . $fileName;
                 }
                 // current theme images
@@ -926,7 +926,7 @@ class xarTpl extends xarObject
                     }
                     $modOsDir = $modBaseInfo['osdirectory'];
                 } else {
-                    $modOsDir = xarVarPrep::forOS($package);
+                    $modOsDir = xarVarPrep::path($package);
                 }
                 // handle legacy calls to base module images moved to common/images or themename/images
                 // @todo remove this when all modules are passing correct params
@@ -949,7 +949,7 @@ class xarTpl extends xarObject
                 if (empty($package)) {
                     return null;
                 }
-                $package = xarVarPrep::forOS($package);
+                $package = xarVarPrep::path($package);
                 // current theme property images
                 $paths[] = self::getThemeDir() . '/properties/' . $package . '/images/' . $fileName;
                 // common property images
@@ -963,7 +963,7 @@ class xarTpl extends xarObject
                 if (empty($package)) {
                     return null;
                 }
-                $package = xarVarPrep::forOS($package);
+                $package = xarVarPrep::path($package);
                 // current theme block images
                 $paths[] = self::getThemeDir() . '/blocks/' . $package . '/images/' . $fileName;
                 // common block images
@@ -1036,7 +1036,7 @@ class xarTpl extends xarObject
             case 'theme':
                 // optional theme files to look in passed as third param
                 if (!empty($package)) {
-                    $package = xarVarPrep::forOS($package);
+                    $package = xarVarPrep::path($package);
                     $paths[] = self::getThemeDir($package) . '/' . $fileName;
                 }
                 // current theme files
@@ -1056,7 +1056,7 @@ class xarTpl extends xarObject
                     }
                     $modOsDir = $modBaseInfo['osdirectory'];
                 } else {
-                    $modOsDir = xarVarPrep::forOS($package);
+                    $modOsDir = xarVarPrep::path($package);
                 }
                 // code/modules/{module}/{file}
                 $paths[] = sys::code() . 'modules/' . $modOsDir . '/' . $fileName;
@@ -1065,7 +1065,7 @@ class xarTpl extends xarObject
                 if (empty($package)) {
                     return null;
                 }
-                $package = xarVarPrep::forOS($package);
+                $package = xarVarPrep::path($package);
                 // code/properties/{property}/{file}
                 $paths[] = sys::code() . 'properties/' . $package . '/' . $fileName;
                 break;
@@ -1073,7 +1073,7 @@ class xarTpl extends xarObject
                 if (empty($package)) {
                     return null;
                 }
-                $package = xarVarPrep::forOS($package);
+                $package = xarVarPrep::path($package);
                 // code/blocks/{block}/{file}
                 $paths[] = sys::code() . 'blocks/' . $package . '/' . $fileName;
                 break;

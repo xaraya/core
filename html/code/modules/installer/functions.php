@@ -162,7 +162,7 @@ class xarInstall extends xarObject
         sys::autoload();
 
         // Load the module files
-        $modOsType = xarVarPrep::forOS($modType);
+        $modOsType = xarVarPrep::path($modType);
         $modOsDir = 'installer';
 
         $osfile = sys::code() . "modules/$modOsDir/xar$modOsType/$func.php";

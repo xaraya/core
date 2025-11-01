@@ -99,7 +99,7 @@ class ImportMethod extends MethodClass
             $dupexists = !empty($info);
             if ($dupexists) {
                 $msg = 'Duplicate definition for #(1) #(2)';
-                $vars = ['block',\xarVarPrep::forDisplay($args['name'])];
+                $vars = ['block',$this->prep()->text($args['name'])];
                 throw new DuplicateException(null, $args['name']);
             }
 

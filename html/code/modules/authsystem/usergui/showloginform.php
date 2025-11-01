@@ -43,7 +43,7 @@ class ShowloginformMethod extends MethodClass
                 $redirecturl = $this->ctl()->getBaseURL();
             }
         }
-        $redirecturl = \xarVarPrep::htmlDisplay($redirecturl);
+        $redirecturl = $this->prep()->html($redirecturl);
         $truecurrenturl = $this->ctl()->getCurrentURL([], false);
         $urldata = $this->mod()->apiFunc('roles', 'user', 'parseuserhome', ['url' => $redirecturl,'truecurrenturl' => $truecurrenturl]);
         $data['redirecturl'] = $urldata['redirecturl'];

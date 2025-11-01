@@ -110,7 +110,7 @@ class CreateHandler extends DefaultHandler
         }
 
         $title = $this->mls()->translate('New #(1)', $this->object->label);
-        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+        $this->tpl()->setPageTitle($this->prep()->text($title));
 
         // call item new hooks for this item
         $this->object->callHooks('new');

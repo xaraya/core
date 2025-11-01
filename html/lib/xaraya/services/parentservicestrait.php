@@ -278,9 +278,9 @@ trait ParentServicesTrait
      * - find() - xarVar::NOT_REQUIRED = Find optional variable by name: set the value if there is one, and validate the variable
      * - update() - xarVar::DONT_REUSE = Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
      * - fetch() - original xarVar::fetch() with different order of params than above
-     * - validate()
-     * - prep()
-     * - prepHTML()
+     * - validate() - or use $this->prep()->validate() instead
+     * - prep() - @deprecated use $this->prep()->text() instead
+     * - prepHTML() - @deprecated use $this->prep()->html() instead
      * - ...
      *
      */
@@ -513,6 +513,21 @@ trait ParentServicesTrait
     public function db(): DatabaseInterface
     {
         return $this->getParent()->db();
+    }
+
+    /**
+     * Access xarVarPrep::* methods (text, html, ...)
+     *
+     * Available methods:
+     * - text()
+     * - html()
+     * - email()
+     * - path()
+     * - validate()
+     */
+    public function prep(): WrapperInterface
+    {
+        return $this->getParent()->prep();
     }
 
     /**

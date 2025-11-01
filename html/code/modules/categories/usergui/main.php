@@ -82,7 +82,7 @@ class MainMethod extends MethodClass
 
         // set the page title to the current category
         if (!empty($title)) {
-            $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
+            $this->tpl()->setPageTitle($this->prep()->text($title));
         }
 
         $children = $userapi->getchildren(['cid' => $catid]);
