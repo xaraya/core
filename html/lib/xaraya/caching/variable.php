@@ -17,6 +17,7 @@
 
 /**
  * Variable caching in cache storage to keep values for longer than the current HTTP request
+ * @deprecated 2.8.5 use xar::cache()() instead
  */
 class xarVariableCache extends xarObject
 {

@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.3
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -20,7 +20,6 @@ use Xaraya\Context\Context;
 use Xaraya\Requests\RequestInterface as RequestFacade;
 use Xaraya\Sessions\SessionInterface as SessionFacade;
 use xarCore;
-use xarVarPrep;
 
 /**
  * Core Services for static classes (WIP)
@@ -37,8 +36,6 @@ class StaticServicesClass extends ServicesClass
     protected $requestInstance = null;
     /** @var ?SessionFacade */
     protected $sessionInstance = null;
-    /** @var ?MemoryInterface */
-    protected $memoryInstance = null;
     /** @var array<string, ServiceInterface> */
     public array $serviceCache = [];
 
@@ -129,28 +126,6 @@ class StaticServicesClass extends ServicesClass
     public function setSessionInstance($instance)
     {
         $this->sessionInstance = $instance;
-    }
-
-    /**
-     * @return MemoryInterface
-     * @todo use mem service instead
-     */
-    public function getMemoryInstance()
-    {
-        if (!isset($this->memoryInstance)) {
-            $this->memoryInstance = ServiceFactory::createServicePrototype('mem', $this);
-        }
-        return $this->memoryInstance;
-    }
-
-    /**
-     * @param ?MemoryInterface $instance
-     * @return void
-     * @todo use mem service instead
-     */
-    public function setMemoryInstance($instance)
-    {
-        $this->memoryInstance = $instance;
     }
 
     /**
@@ -445,6 +420,16 @@ class StaticServicesClass extends ServicesClass
     public function prep(): WrapperInterface
     {
         return $this->getServicePrototype('prep');
+    }
+
+    public function events(): WrapperInterface
+    {
+        return $this->getServicePrototype('events');
+    }
+
+    public function hooks(): WrapperInterface
+    {
+        return $this->getServicePrototype('hooks');
     }
 
     /**

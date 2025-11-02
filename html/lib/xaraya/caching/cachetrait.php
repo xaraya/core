@@ -54,8 +54,8 @@
 
 namespace Xaraya\Caching;
 
-use xarCache;
-use xarVariableCache;
+use Xaraya\Services\CachingService;
+use Xaraya\Services\xar;
 
 /**
  * For documentation purposes only - available via CacheTrait
@@ -150,6 +150,16 @@ trait CacheTrait
     public static bool $enableCache = false;  // activate with self::enableCache(true)
     public static string $_cacheScope = 'CacheTrait';
     public static ?string $_cacheKey = null;
+    protected static ?CachingService $_cacheService = null;
+
+    protected static function _cache(): CachingService
+    {
+        if (!isset(self::$_cacheService)) {
+            $xar = xar::getServicesClass();
+            self::$_cacheService = $xar->cache();
+        }
+        return self::$_cacheService;
+    }
 
     /**
      * Get or set enableCache
@@ -175,10 +185,10 @@ trait CacheTrait
         }
         static::$_cacheScope = $cacheScope;
         // @checkme what to do with unknown cache scopes? Exception, deny or allow by default?
-        $settings = xarVariableCache::getCacheSettings();
+        $settings = self::_cache()->variableCache->getCacheSettings();
         if (!isset($settings[$cacheScope])) {
             //throw new BadParameterException($cacheScope, 'Unknown cache scope: "#(1)"');
-            xarVariableCache::$cacheSettings[$cacheScope] = $allow;
+            self::_cache()->variableCache->cacheSettings[$cacheScope] = $allow;
         }
     }
 
@@ -193,7 +203,7 @@ trait CacheTrait
             return null;
         }
         if (!empty($id)) {
-            static::$_cacheKey = xarCache::getVariableKey(static::$_cacheScope, $id);
+            static::$_cacheKey = self::_cache()->getVariableKey(static::$_cacheScope, $id);
         }
         return static::$_cacheKey;
     }
@@ -233,7 +243,7 @@ trait CacheTrait
         if (!static::$enableCache || empty($cacheKey)) {
             return false;
         }
-        return xarVariableCache::isCached($cacheKey);
+        return self::_cache()->hasVariable($cacheKey);
     }
 
     /**
@@ -246,7 +256,7 @@ trait CacheTrait
         if (!static::$enableCache || empty($cacheKey)) {
             return null;
         }
-        return xarVariableCache::getCached($cacheKey);
+        return self::_cache()->getVariable($cacheKey);
     }
 
     /**
@@ -261,7 +271,7 @@ trait CacheTrait
         if (!static::$enableCache || empty($cacheKey)) {
             return;
         }
-        xarVariableCache::setCached($cacheKey, $value, $expire);
+        self::_cache()->setVariable($cacheKey, $value, $expire);
     }
 
     /**
@@ -274,7 +284,7 @@ trait CacheTrait
         if (!static::$enableCache || empty($cacheKey)) {
             return;
         }
-        xarVariableCache::delCached($cacheKey);
+        self::_cache()->delVariable($cacheKey);
     }
 
     /**
@@ -287,7 +297,7 @@ trait CacheTrait
         if (!static::$enableCache || empty($cacheKey)) {
             return null;
         }
-        return xarVariableCache::keyCached($cacheKey);
+        return self::_cache()->keyVariable($cacheKey);
     }
 
     /**

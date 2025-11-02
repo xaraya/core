@@ -15,6 +15,9 @@
  * @author jsb
 **/
 
+/**
+ * @deprecated 2.8.5 use xar::cache()() instead
+ */
 class xarBlockCache extends xarObject
 {
     public static int $cacheTime      = 7200;

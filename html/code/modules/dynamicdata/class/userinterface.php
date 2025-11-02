@@ -240,6 +240,8 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
             $context = $this->getContext();
         }
         $xar = xar::getServicesClass();
+        // Set module name in Services Class for templates
+        $xar->setModName('object');
         $xar->var()->check('method', $args['method']);
         $xar->var()->check('itemid', $args['itemid']);
 

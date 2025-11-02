@@ -15,6 +15,9 @@
  * @author jsb
  */
 
+/**
+ * @deprecated 2.8.5 use xar::cache()() instead
+ */
 class xarOutputCache extends xarObject
 {
     public static string $cacheDir             = 'var/cache/output';

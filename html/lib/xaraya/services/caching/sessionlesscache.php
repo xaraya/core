@@ -3,34 +3,50 @@
 /**
  * Session-less page caching for first-time visitors
  *
- * @package core\caching
+ * @package core\services
  * @subpackage caching
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  *
- * @author mikespub
- * @author jsb
+ * @author mikespub <mikespub@xaraya.com>
 **/
 
+namespace Xaraya\Services\Caching;
+
+use Xaraya\Services\CachingService;
+use Xaraya\Services\ServiceClass;
+use xarAutoSessionCache;
+use xarCore;
+
 /**
- * @deprecated 2.8.5 use xar::cache()() instead
+ * Session-less page caching for first-time visitors
  */
-class xarSessionLessCache extends xarObject
+class SessionLessCache extends ServiceClass
 {
+    public const SLICE = 'caching.sessionless';
+
+    protected CachingService $cache;
+
     /**
-     * Check if this page is suitable for session-less page caching
-     *
-     * @return boolean true if the page is suitable for session-less caching, false if not
+     * Create service class for parent
      */
-    public static function checkCachingRules()
+    public function __construct(mixed $parent)
     {
+        $this->parent = $parent;
+        $this->cache = $parent->cache();
+    }
+
+    public function checkCachingRules()
+    {
+        $cacheCookie = $this->cache->outputCache->cacheCookie;
+        // --- LEGACY METHOD BODY ---
         // Note: still using $_SERVER here since xarServer is not initialized
         if (
             // we have no session id in a cookie or URL parameter
-            empty($_REQUEST[xarOutputCache::$cacheCookie])
+            empty($_REQUEST[$cacheCookie])
         // we're dealing with a GET OR a HEAD request
             && !empty($_SERVER['REQUEST_METHOD'])
             && ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD')
@@ -43,19 +59,14 @@ class xarSessionLessCache extends xarObject
         } else {
             return false;
         }
+        // --- END LEGACY METHOD BODY ---
     }
 
-    /**
-     * Check session-less page caching
-     *
-     * @param ?array<mixed> $sessionLessList
-     * @param int $autoCachePeriod
-     * @return void exit if session-less page caching finds a hit
-     */
-    public static function isCached($sessionLessList = null, $autoCachePeriod = 0)
+    public function isCached($sessionLessList = null, $autoCachePeriod = 0)
     {
+        // --- LEGACY METHOD BODY ---
         // Check if this page is suitable for session-less page caching
-        if (!(self::checkCachingRules())) {
+        if (!($this->checkCachingRules())) {
             return;
         }
 
@@ -63,7 +74,9 @@ class xarSessionLessCache extends xarObject
         if (empty($sessionLessList) || !is_array($sessionLessList)) {
             $sessionLessList = [];
         }
-        $cacheDir = xarOutputCache::getCacheDir();
+        $cacheDir = $this->cache->getOutputCacheDir();
+        $pageCache = $this->cache->pageCache;
+        $cacheTime = $pageCache->cacheTime;
 
         // the URL is already in the list for session-less page caching
         if (in_array('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], $sessionLessList)) {
@@ -73,21 +86,20 @@ class xarSessionLessCache extends xarObject
             // Note: we stick to filesystem for session-less caching
             if (file_exists($cache_file)
                 && filesize($cache_file) > 0
-                && (xarPageCache::$cacheTime == 0
-                 || filemtime($cache_file) > time() - xarPageCache::$cacheTime)) {
-                // CHECKME: set xarPageCache::$cacheCode for the ETag here or not ???
-                xarPageCache::$cacheCode = $cacheCode;
+                && ($cacheTime == 0
+                 || filemtime($cache_file) > time() - $cacheTime)) {
+                // CHECKME: set PageCache cacheCode for the ETag here or not ???
+                $pageCache->cacheCode = $cacheCode;
 
                 $modtime = filemtime($cache_file);
-                xarPageCache::sendHeaders($modtime);
+                $pageCache->sendHeaders($modtime);
                 // this may already exit if we have a 304 Not Modified
 
                 // send the content of the cache file to the browser
-                self::getCached($cache_file);
+                $this->getCached($cache_file);
 
-                // CHECKME: if we do this after xarPageCache::sendHeaders(), we'll never get the 304's logged for autocache
+                // CHECKME: if we do this after PageCache::sendHeaders(), we'll never get the 304's logged for autocache
                 if (file_exists($cacheDir . '/autocache.start')) {
-                    sys::import('xaraya.caching.output.autosession');
                     xarAutoSessionCache::logStatus('HIT', $autoCachePeriod, $cacheDir);
                 }
 
@@ -95,38 +107,33 @@ class xarSessionLessCache extends xarObject
                 xarCore::exit();
                 return;
             } else {
-                // tell xarPageCache::setCached() that we want to save another copy here
-                self::setCached();
+                // tell PageCache::setCached() that we want to save another copy here
+                $this->setCached();
                 // we'll continue with the core loading etc. here
             }
         }
         // we haven't found a cache hit for this URL
         if (file_exists($cacheDir . '/autocache.start')) {
-            sys::import('xaraya.caching.output.autosession');
             xarAutoSessionCache::logStatus('MISS', $autoCachePeriod, $cacheDir);
         }
+        // --- END LEGACY METHOD BODY ---
     }
 
-    /**
-     * Summary of getCached
-     * @param string $cache_file
-     * @return void
-     */
-    public static function getCached($cache_file)
+    public function getCached($cache_file)
     {
+        // --- LEGACY METHOD BODY ---
         // send the content of the cache file to the browser
         @readfile($cache_file);
         // FIXME: separate cache cleaning for session-less caching if necessary
-        //xarCache_CleanCached('Page');
+        //$this->cache->pageCache->cacheStorage->cleanCached();
+        // --- END LEGACY METHOD BODY ---
     }
 
-    /**
-     * Summary of setCached
-     * @return void
-     */
-    public static function setCached()
+    public function setCached()
     {
-        // tell xarPageCache::setCached() that we want to save another copy here
-        xarPageCache::$cacheNoSession = 1;
+        // --- LEGACY METHOD BODY ---
+        // tell PageCache::setCached() that we want to save another copy here
+        $this->cache->pageCache->cacheNoSession = 1;
+        // --- END LEGACY METHOD BODY ---
     }
 }

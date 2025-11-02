@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -68,6 +68,8 @@ interface CoreServicesInterface extends ContextInterface
     public function user(?int $userId = null): UserInterface;
     public function db(): DatabaseInterface;
     public function prep(): WrapperInterface;
+    public function events(): WrapperInterface;
+    public function hooks(): WrapperInterface;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
      * @return void|never
@@ -589,6 +591,16 @@ trait CoreServicesTrait
     public function prep(): WrapperInterface
     {
         return $this->getStaticServices()->prep();
+    }
+
+    public function events(): WrapperInterface
+    {
+        return $this->getStaticServices()->events();
+    }
+
+    public function hooks(): WrapperInterface
+    {
+        return $this->getStaticServices()->hooks();
     }
 
     /**

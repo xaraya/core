@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -37,8 +37,9 @@ class ServiceFactory
     /** @var list<string> */
     public static array $sharedServices = [
         // public services
-        'ctl', 'log', 'mls', 'var', 'cache', 'config', 'session', 'db',
-        'req', 'mem', 'prep',
+        'ctl', 'log', 'mls', 'var', 'cache', 'config', 'session', 'db', 'req', 'mem',
+        // wrappers
+        'prep', 'events', 'hooks',
         // internal helpers
         'modules.vars', 'modules.user', 'modules.item', 'modules.info', 'modules.exec', 'modules.hooks', 'modules.alias',
     ];
@@ -78,7 +79,10 @@ class ServiceFactory
             'session' => self::getSessionService($parent),
             'user' => self::getUserService($parent),
             'db' => self::getDatabaseService($parent),
+            // wrappers for static core classes
             'prep' => self::getWrapperService($parent, \xarVarPrep::class),
+            'events' => self::getWrapperService($parent, \xarEvents::class),
+            'hooks' => self::getWrapperService($parent, \xarHooks::class),
             // internal modules helpers
             'modules.vars' => self::getModuleVarsHelper($parent),
             'modules.user' => self::getModuleUserVarsHelper($parent),
@@ -259,7 +263,7 @@ class ServiceFactory
 
     public static function getWrapperService(object|string|null $parent = null, $className = null, $instance = null): ServiceInterface
     {
-        self::log(__METHOD__, $parent);
+        self::log(__METHOD__ . "($className)", $parent);
         return WrapperService::create($parent, $className, $instance);
     }
 
@@ -308,6 +312,7 @@ class ServiceFactory
     protected static function log(string $method, object|string|null $parent = null): void
     {
         $level = xarLog::LEVEL_DEBUG;
+        $level = xarLog::LEVEL_INFO;
         if (!isset($parent)) {
             xarLog::message($method . ': starting service for <unknown>', $level);
         } elseif (is_string($parent)) {

@@ -513,7 +513,7 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::text() instead
+     * @deprecated 2.8.4 use $this->prep()->text() instead
      */
     public function prep(...$args)
     {
@@ -525,7 +525,7 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::html() instead
+     * @deprecated 2.8.4 use $this->prep()->html() instead
      */
     public function prepHTML(...$args)
     {
@@ -537,7 +537,7 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::email() instead
+     * @deprecated 2.8.4 use $this->prep()->email() instead
      */
     public function prepEmail(...$args)
     {
@@ -549,7 +549,7 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
-     * @deprecated 2.8.4 use xarVarPrep::path() instead
+     * @deprecated 2.8.4 use $this->prep()->path() instead
      */
     public function prepPath(...$args)
     {

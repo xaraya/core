@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -528,6 +528,16 @@ trait ParentServicesTrait
     public function prep(): WrapperInterface
     {
         return $this->getParent()->prep();
+    }
+
+    public function events(): WrapperInterface
+    {
+        return $this->getParent()->events();
+    }
+
+    public function hooks(): WrapperInterface
+    {
+        return $this->getParent()->hooks();
     }
 
     /**

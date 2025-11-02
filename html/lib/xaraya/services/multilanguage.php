@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -30,6 +30,18 @@ interface MultiLanguageInterface extends ServiceInterface
     public const SLICE = 'multilanguage';
 
     public const SINGLE_LANGUAGE_MODE = xarMLS::SINGLE_LANGUAGE_MODE;
+
+    /**
+     * Returns the site locale if running in SINGLE mode,
+     * returns the site default locale if running in BOXED or UNBOXED mode
+     */
+    public static function getSiteLocale(): string;
+
+    /**
+     * Returns an array of locales available in the site
+     * @return array<mixed> of locales
+     */
+    public static function listSiteLocales(): array;
 
     /**
      * Get the current locale or empty if not defined yet
@@ -131,6 +143,24 @@ interface MultiLanguageInterface extends ServiceInterface
 trait MultiLanguageTrait
 {
     use ServiceTrait;
+
+    /**
+     * Returns the site locale if running in SINGLE mode,
+     * returns the site default locale if running in BOXED or UNBOXED mode
+     */
+    public static function getSiteLocale(): string
+    {
+        return xarMLS::getSiteLocale();
+    }
+
+    /**
+     * Returns an array of locales available in the site
+     * @return array<mixed> of locales
+     */
+    public static function listSiteLocales(): array
+    {
+        return xarMLS::listSiteLocales();
+    }
 
     /**
      * Get the current locale or empty if not defined in xarUser::init() yet

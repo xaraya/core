@@ -14,6 +14,8 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
+use Xaraya\Services\xar;
+
 class xarResponse extends xarObject
 {
     public string $output;
@@ -46,7 +48,8 @@ class xarResponse extends xarObject
 
     public function getMediaType(): string
     {
-        $this->mediaType = $this->mediaType ?: 'text/html; charset=' . xarMLS::getCharsetFromLocale(xarMLS::getSiteLocale());
+        $mls = xar::getServicesClass()->mls();
+        $this->mediaType = $this->mediaType ?: 'text/html; charset=' . $mls->getCharsetFromLocale($mls->getSiteLocale());
         return $this->mediaType;
     }
 
@@ -82,18 +85,20 @@ class xarResponse extends xarObject
      */
     public static function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = null, $context = null)
     {
-        xarCache::noCache();
+        $xar = xar::getServicesClass();
+        $xar->setModName($modName);
+        $xar->cache()->noCache();
         if (!headers_sent()) {
             header('HTTP/1.0 404 Not Found');
         }
 
-        xarTpl::setPageTitle('404 Not Found');
+        $xar->tpl()->setPageTitle('404 Not Found');
 
         $tplData = [
             'msg' => $msg,
             'context' => $context,
         ];
-        return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
+        return $xar->tpl()->module($modName, $modType, $funcName, $tplData, $templateName);
     }
 
     /**
@@ -117,17 +122,19 @@ class xarResponse extends xarObject
      */
     public static function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = null, $context = null)
     {
-        xarCache::noCache();
+        $xar = xar::getServicesClass();
+        $xar->setModName($modName);
+        $xar->cache()->noCache();
         if (!headers_sent()) {
             header('HTTP/1.0 403 Forbidden');
         }
 
-        xarTpl::setPageTitle('403 Forbidden');
+        $xar->tpl()->setPageTitle('403 Forbidden');
 
         $tplData = [
             'msg' => $msg,
             'context' => $context,
         ];
-        return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
+        return $xar->tpl()->module($modName, $modType, $funcName, $tplData, $templateName);
     }
 }

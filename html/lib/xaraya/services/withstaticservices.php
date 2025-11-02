@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.3
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -532,6 +532,16 @@ trait WithStaticServices
     public static function prep(): WrapperInterface
     {
         return self::getServicesClass()->prep();
+    }
+
+    public static function events(): WrapperInterface
+    {
+        return self::getServicesClass()->events();
+    }
+
+    public static function hooks(): WrapperInterface
+    {
+        return self::getServicesClass()->hooks();
     }
 
     /**

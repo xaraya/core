@@ -116,7 +116,7 @@ class AuthToken
 
     /**
      * Summary of getTokenStorage
-     * @uses xarCache::getStorage()
+     * @uses xar::cache()->getStorage()
      * @return ixarCache_Storage
      */
     public static function getTokenStorage()

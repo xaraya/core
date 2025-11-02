@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Caching available via methods (TODO)
+ * Caching available via methods (WIP)
  *
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -17,12 +17,7 @@
 namespace Xaraya\Services;
 
 use ixarCache_Storage;
-use xarCache;
-use xarModuleCache;
-use xarBlockCache;
-use xarObjectCache;
-use xarPageCache;
-use xarVariableCache;
+use xarCache_Storage;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -53,7 +48,7 @@ interface CachingInterface extends ServiceInterface
     /**
      * Get the content of a cached page + output to browser
      */
-    public function sendPage(?string $cacheKey): bool|null;
+    public function sendPage(?string $cacheKey): ?bool;
 
     /**
      * Get the content of a cached page
@@ -186,6 +181,12 @@ interface CachingInterface extends ServiceInterface
     public function delVariable(?string $cacheKey): void;
 
     /**
+     * Get information about a cache key
+     * @return array<string, mixed>
+     */
+    public function keyVariable(?string $cacheKey): array;
+
+    /**
      * Flush a particular cache scope
      */
     public function flushVariables(string $cacheScope): void;
@@ -196,24 +197,24 @@ interface CachingInterface extends ServiceInterface
     public function noCache(): void;
 
     /**
-     * Keep track of some page title for caching - see xarTpl::setPageTitle()
+     * Keep track of some page title for caching - see xar::tpl()->setPageTitle()
      */
     public function setPageTitle(?string $title = null, ?string $module = null): void;
 
     /**
-     * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
+     * Keep track of some stylesheet for caching - see xar::mod()->apiFunc('themes','user','register')
      * @param array<string, mixed> $args
      */
     public function addStyle(array $args = []): void;
 
     /**
-     * Keep track of some javascript for caching - xarMod::apiFunc('themes','user','registerjs')
+     * Keep track of some javascript for caching - xar::mod()->apiFunc('themes','user','registerjs')
      * @param array<string, mixed> $args
      */
     public function addJavascript(array $args = []): void;
 
     /**
-     * Keep track of some meta tags for caching - xarMod::apiFunc('themes','user','registermeta')
+     * Keep track of some meta tags for caching - xar::mod()->apiFunc('themes','user','registermeta')
      * @param array<string, mixed> $args
      */
     public function addMeta(array $args = []): void;
@@ -244,23 +245,94 @@ trait CachingTrait
 {
     use ServiceTrait;
 
-    protected ?ixarCache_Storage $pageStorage = null;
-    protected ?ixarCache_Storage $moduleStorage = null;
-    protected ?ixarCache_Storage $blockStorage = null;
-    protected ?ixarCache_Storage $objectStorage = null;
-    protected ?ixarCache_Storage $variableStorage = null;
+    public string $cacheDir              = '';
+    public bool $outputCacheIsEnabled    = false;
+    public bool $coreCacheIsEnabled      = true;
+    public bool $templateCacheIsEnabled  = true; // currently unused, cfr. xaraya/templates.php
+    public bool $variableCacheIsEnabled  = false;
+    //public bool $queryCacheIsEnabled     = false;
+    public ?Caching\OutputCache $outputCache = null;
+    public ?Caching\PageCache $pageCache = null;
+    public ?Caching\ModuleCache $moduleCache = null;
+    public ?Caching\BlockCache $blockCache = null;
+    public ?Caching\ObjectCache $objectCache = null;
+    public ?Caching\VariableCache $variableCache = null;
+    protected bool $initialized = false;
+
+    /**
+     * Initialize service class
+     * @param array<string, mixed> $config
+     */
+    public function init(array $config = []): bool
+    {
+        // --- LEGACY METHOD BODY ---
+        if (empty($config) && $this->initialized) {
+            return true;
+        }
+        $cacheDir = $config['cacheDir'] ?? '';
+        if (empty($cacheDir) || !is_dir($cacheDir)) {
+            $cacheDir = sys::varpath() . '/cache';
+        }
+        $this->cacheDir = $cacheDir;
+
+        // Load the caching configuration
+        $config = $this->getConfig();
+
+        // Enable output caching
+        if (file_exists($this->cacheDir . '/output/cache.touch')) {
+            if (!empty($config)) {
+                // initialize the output cache
+                $this->outputCache = new Caching\OutputCache($this->getParent());
+                $this->outputCacheIsEnabled = $this->outputCache->init($config);
+                // Note : we may already exit here if session-less page caching is enabled
+            } else {
+                // if the config file is missing or empty, turn off output caching
+                @unlink($this->cacheDir . '/output/cache.touch');
+            }
+        }
+
+        // Enable core caching in memory
+        // $this->coreCacheIsEnabled = xarCoreCache::init($config);
+
+        // @todo check loading xar::mem() here in parallel (for now)
+        $this->coreCacheIsEnabled = $this->getParent()->mem()->init($config);
+
+        // Enable template caching ? Too early in the process here, cfr. xaraya/templates.php
+
+        // Enable variable caching (requires activating autoload for serialized objects et al.)
+        if (!empty($config['Variable.CacheIsEnabled'])) {
+            $this->variableCache = new Caching\VariableCache($this->getParent());
+            $this->variableCacheIsEnabled = $this->variableCache->init($config);
+        }
+        $this->initialized = true;
+        return true;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /**
+     * Get configuration
+     * @return array<string, mixed>
+     */
+    public function getConfig(): array
+    {
+        // --- LEGACY METHOD BODY ---
+        // load the caching configuration
+        $cachingConfiguration = [];
+        if (file_exists($this->cacheDir . '/config.caching.php')) {
+            @include($this->cacheDir . '/config.caching.php');
+        }
+        return $cachingConfiguration;
+        // --- END LEGACY METHOD BODY ---
+    }
 
     public function withOutput(): bool
     {
-        if (!empty($this->pageStorage) || !empty($this->moduleStorage) || !empty($this->blockStorage) || !empty($this->objectStorage)) {
-            return true;
-        }
-        return false;
+        return empty($this->outputCache) ? false : true;
     }
 
     public function withPages(): bool
     {
-        return empty($this->pageStorage) ? false : true;
+        return empty($this->pageCache) ? false : true;
     }
 
     /**
@@ -270,10 +342,11 @@ trait CachingTrait
      */
     public function getPageKey(?string $url = null): ?string
     {
-        if (empty($this->pageStorage)) {
+        // --- END LEGACY METHOD BODY ---
+        if (empty($this->pageCache)) {
             return null;
         }
-        return xarPageCache::getCacheKey($url);
+        return $this->pageCache->getCacheKey($url);
     }
 
     /**
@@ -284,25 +357,25 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return false;
         }
-        if (empty($this->pageStorage)) {
+        if (empty($this->pageCache)) {
             return false;
         }
-        return xarPageCache::isCached($cacheKey);
+        return $this->pageCache->isCached($cacheKey);
     }
 
     /**
      * Get the content of a cached page + output to browser
      */
-    public function sendPage(?string $cacheKey): bool|null
+    public function sendPage(?string $cacheKey): ?bool
     {
         if (empty($cacheKey)) {
             return false;
         }
-        if (empty($this->pageStorage)) {
+        if (empty($this->pageCache)) {
             return null;
         }
         $output = 1;
-        return xarPageCache::getCached($cacheKey, $output);
+        return $this->pageCache->getCached($cacheKey, $output);
     }
 
     /**
@@ -313,11 +386,11 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return '';
         }
-        if (empty($this->pageStorage)) {
+        if (empty($this->pageCache)) {
             return '';
         }
         $output = 0;
-        return xarPageCache::getCached($cacheKey, $output);
+        return $this->pageCache->getCached($cacheKey, $output);
     }
 
     /**
@@ -328,10 +401,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return;
         }
-        if (empty($this->pageStorage)) {
+        if (empty($this->pageCache)) {
             return;
         }
-        xarPageCache::setCached($cacheKey, $value);
+        $this->pageCache->setCached($cacheKey, $value);
     }
 
     /**
@@ -339,15 +412,15 @@ trait CachingTrait
      */
     public function flushPages(string $cacheScope): void
     {
-        if (empty($this->pageStorage)) {
+        if (empty($this->pageCache)) {
             return;
         }
-        xarPageCache::flushCached($cacheScope);
+        $this->pageCache->flushCached($cacheScope);
     }
 
     public function withModules(): bool
     {
-        return empty($this->moduleStorage) ? false : true;
+        return empty($this->moduleCache) ? false : true;
     }
 
     /**
@@ -357,13 +430,14 @@ trait CachingTrait
      */
     public function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): ?string
     {
+        // --- END LEGACY METHOD BODY ---
         if (empty($modName)) {
             return null;
         }
-        if (empty($this->moduleStorage)) {
+        if (empty($this->moduleCache)) {
             return null;
         }
-        return xarModuleCache::getCacheKey($modName, $modType, $funcName, $args);
+        return $this->moduleCache->getCacheKey($modName, $modType, $funcName, $args);
     }
 
     /**
@@ -374,10 +448,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return false;
         }
-        if (empty($this->moduleStorage)) {
+        if (empty($this->moduleCache)) {
             return false;
         }
-        return xarModuleCache::isCached($cacheKey);
+        return $this->moduleCache->isCached($cacheKey);
     }
 
     /**
@@ -388,10 +462,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return '';
         }
-        if (empty($this->moduleStorage)) {
+        if (empty($this->moduleCache)) {
             return '';
         }
-        return xarModuleCache::getCached($cacheKey);
+        return $this->moduleCache->getCached($cacheKey);
     }
 
     /**
@@ -402,10 +476,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return;
         }
-        if (empty($this->moduleStorage)) {
+        if (empty($this->moduleCache)) {
             return;
         }
-        xarModuleCache::setCached($cacheKey, $value);
+        $this->moduleCache->setCached($cacheKey, $value);
     }
 
     /**
@@ -413,15 +487,15 @@ trait CachingTrait
      */
     public function flushModules(string $cacheScope): void
     {
-        if (empty($this->moduleStorage)) {
+        if (empty($this->moduleCache)) {
             return;
         }
-        xarModuleCache::flushCached($cacheScope);
+        $this->moduleCache->flushCached($cacheScope);
     }
 
     public function withBlocks(): bool
     {
-        return empty($this->blockStorage) ? false : true;
+        return empty($this->blockCache) ? false : true;
     }
 
     /**
@@ -431,10 +505,10 @@ trait CachingTrait
      */
     public function getBlockKey(array $blockInfo = []): ?string
     {
-        if (empty($this->blockStorage)) {
+        if (empty($this->blockCache)) {
             return null;
         }
-        return xarBlockCache::getCacheKey($blockInfo);
+        return $this->blockCache->getCacheKey($blockInfo);
     }
 
     /**
@@ -445,10 +519,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return false;
         }
-        if (empty($this->blockStorage)) {
+        if (empty($this->blockCache)) {
             return false;
         }
-        return xarBlockCache::isCached($cacheKey);
+        return $this->blockCache->isCached($cacheKey);
     }
 
     /**
@@ -459,10 +533,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return '';
         }
-        if (empty($this->blockStorage)) {
+        if (empty($this->blockCache)) {
             return '';
         }
-        return xarBlockCache::getCached($cacheKey);
+        return $this->blockCache->getCached($cacheKey);
     }
 
     /**
@@ -473,10 +547,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return;
         }
-        if (empty($this->blockStorage)) {
+        if (empty($this->blockCache)) {
             return;
         }
-        xarBlockCache::setCached($cacheKey, $value);
+        $this->blockCache->setCached($cacheKey, $value);
     }
 
     /**
@@ -484,15 +558,15 @@ trait CachingTrait
      */
     public function flushBlocks(string $cacheScope): void
     {
-        if (empty($this->blockStorage)) {
+        if (empty($this->blockCache)) {
             return;
         }
-        xarBlockCache::flushCached($cacheScope);
+        $this->blockCache->flushCached($cacheScope);
     }
 
     public function withObjects(): bool
     {
-        return empty($this->objectStorage) ? false : true;
+        return empty($this->objectCache) ? false : true;
     }
 
     /**
@@ -505,10 +579,10 @@ trait CachingTrait
         if (empty($objectName)) {
             return null;
         }
-        if (empty($this->objectStorage)) {
+        if (empty($this->objectCache)) {
             return null;
         }
-        return xarObjectCache::getCacheKey($objectName, $methodName, $args);
+        return $this->objectCache->getCacheKey($objectName, $methodName, $args);
     }
 
     /**
@@ -519,10 +593,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return false;
         }
-        if (empty($this->objectStorage)) {
+        if (empty($this->objectCache)) {
             return false;
         }
-        return xarObjectCache::isCached($cacheKey);
+        return $this->objectCache->isCached($cacheKey);
     }
 
     /**
@@ -533,10 +607,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return '';
         }
-        if (empty($this->objectStorage)) {
+        if (empty($this->objectCache)) {
             return '';
         }
-        return xarObjectCache::getCached($cacheKey);
+        return $this->objectCache->getCached($cacheKey);
     }
 
     /**
@@ -547,10 +621,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return;
         }
-        if (empty($this->objectStorage)) {
+        if (empty($this->objectCache)) {
             return;
         }
-        xarObjectCache::setCached($cacheKey, $value);
+        $this->objectCache->setCached($cacheKey, $value);
     }
 
     /**
@@ -558,15 +632,15 @@ trait CachingTrait
      */
     public function flushObjects(string $cacheScope): void
     {
-        if (empty($this->objectStorage)) {
+        if (empty($this->objectCache)) {
             return;
         }
-        xarObjectCache::flushCached($cacheScope);
+        $this->objectCache->flushCached($cacheScope);
     }
 
     public function withVariables(): bool
     {
-        return empty($this->variableStorage) ? false : true;
+        return empty($this->variableCache) ? false : true;
     }
 
     /**
@@ -575,10 +649,18 @@ trait CachingTrait
      */
     public function getVariableKey(string $scope, string $name): ?string
     {
-        if (empty($this->variableStorage)) {
+        // --- LEGACY METHOD BODY ---
+        /**
+        if ($this->isVariableCacheEnabled()) {
+            return $this->variableCache->getCacheKey($scope, $name);
+        }
+        return null;
+         */
+        // --- END LEGACY METHOD BODY ---
+        if (empty($this->variableCache)) {
             return null;
         }
-        return xarVariableCache::getCacheKey($scope, $name);
+        return $this->variableCache->getCacheKey($scope, $name);
     }
 
     /**
@@ -589,10 +671,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return false;
         }
-        if (empty($this->variableStorage)) {
+        if (empty($this->variableCache)) {
             return false;
         }
-        return xarVariableCache::isCached($cacheKey);
+        return $this->variableCache->isCached($cacheKey);
     }
 
     /**
@@ -603,10 +685,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return '';
         }
-        if (empty($this->variableStorage)) {
+        if (empty($this->variableCache)) {
             return '';
         }
-        return xarVariableCache::getCached($cacheKey);
+        return $this->variableCache->getCached($cacheKey);
     }
 
     /**
@@ -617,10 +699,10 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return;
         }
-        if (empty($this->variableStorage)) {
+        if (empty($this->variableCache)) {
             return;
         }
-        xarVariableCache::setCached($cacheKey, $value);
+        $this->variableCache->setCached($cacheKey, $value);
     }
 
     /**
@@ -631,10 +713,25 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return;
         }
-        if (empty($this->variableStorage)) {
+        if (empty($this->variableCache)) {
             return;
         }
-        xarVariableCache::delCached($cacheKey);
+        $this->variableCache->delCached($cacheKey);
+    }
+
+    /**
+     * Get information about a cache key
+     * @return array<string, mixed>
+     */
+    public function keyVariable(?string $cacheKey): array
+    {
+        if (empty($cacheKey)) {
+            return [];
+        }
+        if (empty($this->variableCache)) {
+            return [];
+        }
+        return $this->variableCache->keyCached($cacheKey);
     }
 
     /**
@@ -642,10 +739,10 @@ trait CachingTrait
      */
     public function flushVariables(string $cacheScope): void
     {
-        if (empty($this->variableStorage)) {
+        if (empty($this->variableCache)) {
             return;
         }
-        xarVariableCache::flushCached($cacheScope);
+        $this->variableCache->flushCached($cacheScope);
     }
 
     /**
@@ -653,42 +750,115 @@ trait CachingTrait
      */
     public function noCache(): void
     {
-        xarCache::noCache();
+        // --- LEGACY METHOD BODY ---
+        if (empty($this->outputCache)) {
+            return;
+        }
+        if (!empty($this->pageCache)) {
+            // set the current cacheKey to null
+            $this->pageCache->cacheKey = null;
+            $this->getParent()->mem()->set('Page.Caching', 'nocache', true);
+        }
+        if (!empty($this->blockCache)) {
+            // set the current cacheKey to null
+            $this->blockCache->cacheKey = null;
+        }
+        if (!empty($this->moduleCache)) {
+            // set the current cacheKey to null
+            $this->moduleCache->cacheKey = null;
+        }
+        if (!empty($this->objectCache)) {
+            // set the current cacheKey to null
+            $this->objectCache->cacheKey = null;
+        }
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
-     * Keep track of some page title for caching - see xarTpl::setPageTitle()
+     * Keep track of some page title for caching - see xar::tpl()->setPageTitle()
      */
     public function setPageTitle(?string $title = null, ?string $module = null): void
     {
-        xarCache::setPageTitle($title, $module);
+        // --- LEGACY METHOD BODY ---
+        if (empty($this->outputCache)) {
+            return;
+        }
+        // TODO: refactor common code ?
+        if (!empty($this->moduleCache)) {
+            // set page title for module output
+            $this->moduleCache->setPageTitle($title, $module);
+        }
+        if (!empty($this->objectCache)) {
+            // set page title for object output
+            $this->objectCache->setPageTitle($title, $module);
+        }
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
-     * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
+     * Keep track of some stylesheet for caching - see xar::mod()->apiFunc('themes','user','register')
      * @param array<string, mixed> $args
      */
     public function addStyle(array $args = []): void
     {
-        xarCache::addStyle($args);
+        // --- LEGACY METHOD BODY ---
+        if (empty($this->outputCache)) {
+            return;
+        }
+        // TODO: refactor common code ?
+        if (!empty($this->moduleCache)) {
+            // add stylesheet for module output
+            $this->moduleCache->addStyle($args);
+        }
+        if (!empty($this->objectCache)) {
+            // add stylesheet for object output
+            $this->objectCache->addStyle($args);
+        }
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
-     * Keep track of some javascript for caching - xarMod::apiFunc('themes','user','registerjs')
+     * Keep track of some javascript for caching - xar::mod()->apiFunc('themes','user','registerjs')
      * @param array<string, mixed> $args
      */
     public function addJavascript(array $args = []): void
     {
-        xarCache::addJavaScript($args);
+        // --- LEGACY METHOD BODY ---
+        if (empty($this->outputCache)) {
+            return;
+        }
+        // TODO: refactor common code ?
+        if (!empty($this->moduleCache)) {
+            // add javascript for module output
+            $this->moduleCache->addJavaScript($args);
+        }
+        if (!empty($this->objectCache)) {
+            // add javascript for object output
+            $this->objectCache->addJavaScript($args);
+        }
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
-     * Keep track of some meta tags for caching - xarMod::apiFunc('themes','user','registermeta')
+     * Keep track of some meta tags for caching - xar::mod()->apiFunc('themes','user','registermeta')
      * @param array<string, mixed> $args
      */
     public function addMeta(array $args = []): void
     {
-        xarCache::addMeta($args);
+        // --- LEGACY METHOD BODY ---
+        if (empty($this->outputCache)) {
+            return;
+        }
+        // TODO: refactor common code ?
+        if (!empty($this->moduleCache)) {
+            // add javascript for module output
+            $this->moduleCache->addMeta($args);
+        }
+        if (!empty($this->objectCache)) {
+            // add javascript for object output
+            $this->objectCache->addMeta($args);
+        }
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -697,7 +867,9 @@ trait CachingTrait
      */
     public function getStorage(array $args = []): ixarCache_Storage
     {
-        return xarCache::getStorage($args);
+        // --- LEGACY METHOD BODY ---
+        return xarCache_Storage::getCacheStorage($args);
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -706,7 +878,37 @@ trait CachingTrait
      */
     public function getParents(?int $currentid = null): array
     {
-        return xarCache::getParents($currentid);
+        $mem = $this->getParent()->mem();
+        // --- LEGACY METHOD BODY ---
+        if (empty($currentid)) {
+            $currentid = $this->getParent()->session()->getUserId();
+        }
+        if ($mem->has('User.Variables.' . $currentid, 'parentlist')) {
+            return $mem->get('User.Variables.' . $currentid, 'parentlist');
+        }
+        $gidlist = [];
+        // load Database Service on demand here for caching
+        try {
+            // @todo do we want to call xarDatabase::init() here first?
+            $xarDB = $this->getParent()->db();
+        } catch (\Throwable $e) {
+            error_log('Unable to load database service in xarCache: ' . $e->getMessage());
+            $mem->set('User.Variables.' . $currentid, 'parentlist', $gidlist);
+            return $gidlist;
+        }
+        $rolemembers = $xarDB->getPrefix() . '_rolemembers';
+        $dbconn = $xarDB->getConn();
+        $query = "SELECT parent_id FROM $rolemembers WHERE role_id = ?";
+        $stmt   = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery([$currentid]);
+
+        while ($result->next()) {
+            $gidlist[] = $result->getInt(1);
+        }
+        $result->Close();
+        $mem->set('User.Variables.' . $currentid, 'parentlist', $gidlist);
+        return $gidlist;
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -715,7 +917,62 @@ trait CachingTrait
      */
     public function getOutputCacheDir(): string
     {
-        return xarCache::getOutputCacheDir();
+        // --- LEGACY METHOD BODY ---
+        // make sure xarOutputCache is initialized
+        if (!$this->outputCacheIsEnabled) {
+            // get the caching configuration
+            $config = $this->getConfig();
+            // initialize the output cache
+            $this->outputCache = new Caching\OutputCache($this->getParent());
+            //$this->outputCacheIsEnabled = $this->outputCache->init($config);
+            $this->outputCache->init($config);
+            // reset after output cache init()
+            $this->outputCacheIsEnabled = false;
+            // make sure we don't cache here
+            $this->noCache();
+        }
+        return $this->outputCache->getCacheDir();
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /**
+     * @deprecated 2.8.4 use $this->cache()->withOutput() etc.
+     */
+    public function isOutputCacheEnabled()
+    {
+        // --- LEGACY METHOD BODY ---
+        return $this->outputCacheIsEnabled;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /**
+     * @deprecated 2.8.4 not used
+     */
+    public function isCoreCacheEnabled()
+    {
+        // --- LEGACY METHOD BODY ---
+        return $this->coreCacheIsEnabled;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /**
+     * @deprecated 2.8.4 not used
+     */
+    public function isTemplateCacheEnabled()
+    {
+        // --- LEGACY METHOD BODY ---
+        return $this->templateCacheIsEnabled;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /**
+     * @deprecated 2.8.4 use $this->cache()->withVariables()
+     */
+    public function isVariableCacheEnabled()
+    {
+        // --- LEGACY METHOD BODY ---
+        return $this->variableCacheIsEnabled;
+        // --- END LEGACY METHOD BODY ---
     }
 }
 
@@ -757,21 +1014,6 @@ class CachingService implements CachingInterface
         $this->parent = $parent;
 
         // Get the caching configuration
-        // $config = xarCache::getConfig();
-
-        // Enable output caching if configured
-        if (xarCache::$outputCacheIsEnabled) {
-            // Note: we don't want to call xarOutputCache::init() here again
-            $this->pageStorage = xarPageCache::$cacheStorage;
-            $this->moduleStorage = xarModuleCache::$cacheStorage;
-            $this->blockStorage = xarBlockCache::$cacheStorage;
-            $this->objectStorage = xarObjectCache::$cacheStorage;
-        }
-
-        // Enable variable caching if configured
-        if (xarCache::$variableCacheIsEnabled) {
-            // Note: we don't want to call xarVariableCache::init() here again
-            $this->variableStorage = xarVariableCache::$cacheStorage;
-        }
+        // $config = $this->getConfig();
     }
 }

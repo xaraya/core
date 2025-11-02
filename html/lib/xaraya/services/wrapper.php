@@ -41,7 +41,7 @@ trait WrapperTrait
     public $callable;
 
     /**
-     * Create service class for parent with instance
+     * Create service class for parent with callable
      */
     public function __construct(mixed $parent, ?callable $callable = null)
     {
@@ -50,7 +50,7 @@ trait WrapperTrait
     }
 
     /**
-     * Magic call method on instance
+     * Magic call method with callable
      */
     public function __call($method, $args)
     {

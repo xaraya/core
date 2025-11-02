@@ -21,7 +21,6 @@ use DirectoryNotFoundException;
 use FilePickerProperty;
 use OrderSelectProperty;
 use Query;
-use xarCache;
 use xarCore;
 use xarLog;
 use xarSystemVars;
@@ -444,7 +443,7 @@ class ModifyconfigMethod extends MethodClass
      */
     public function modifyCaching(array $data)
     {
-        $data['cache_settings'] = xarCache::getConfig();
+        $data['cache_settings'] = $this->cache()->getConfig();
         if (empty($data['cache_settings']['Variable.CacheStorage'])) {
             $data['cache_settings']['Variable.CacheStorage'] = 'apcu';
         }

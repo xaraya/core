@@ -17,17 +17,20 @@
 
 use Xaraya\Services\xar;
 
+/**
+ * @see \Xaraya\Services\Caching\SessionLessCache::isCached()
+ */
 class xarAutoSessionCache extends xarObject
 {
     /**
      * Log the HIT / MISS status of URLs requested by first-time visitors
      * @param string $status
      * @param int $autoCachePeriod
+     * @param ?string $cacheDir
      * @return void
      */
-    public static function logStatus($status = 'MISS', $autoCachePeriod = 0)
+    public static function logStatus($status = 'MISS', $autoCachePeriod = 0, $cacheDir = null)
     {
-        $xar = xar::getServicesClass();
         // Note: still using $_SERVER here since xarServer is not initialized
         if (!empty($_SERVER['REQUEST_METHOD'])
             && ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD')
@@ -40,7 +43,9 @@ class xarAutoSessionCache extends xarObject
             $addr = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '-';
             //$ref = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-';
 
-            $cacheDir = $xar->cache()->getOutputCacheDir();
+            if (empty($cacheDir)) {
+                $cacheDir = xar::cache()->getOutputCacheDir();
+            }
             if (!empty($autoCachePeriod)
                 && filemtime($cacheDir . '/autocache.start') < time() - $autoCachePeriod) {
                 // re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
