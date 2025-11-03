@@ -38,9 +38,9 @@ function xarLoader()
      */
     sys::import('xaraya.context.factory');
     $context = ContextFactory::fromGlobals(__METHOD__);
-    // Set context for core services here first
+    // Set context for core services here first + return static services class
     sys::import('xaraya.services.xar');
-    xar::setServicesContext($context);
+    $xar = xar::setServicesContext($context);
 
     /**
      * Set up caching
@@ -49,7 +49,7 @@ function xarLoader()
      */
     sys::import('xaraya.caching');
     // Note: we may already exit here if session-less page caching is enabled
-    xarCache::init();
+    $xar->cache()->init();
 
     /**
      * Load the Xaraya core with context

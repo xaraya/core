@@ -17,7 +17,6 @@ use Xaraya\Sessions\VirtualSession;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
 use Xaraya\Services\xar;
-use xarSession;
 use sys;
 use RuntimeException;
 
@@ -214,8 +213,8 @@ class SessionContext implements ContextInterface, SessionInterface
     {
         $session = $this->getSession();
         if (empty($session)) {
-            // some default variables without session
-            return xarSession::getDefaultVar($name);
+            // @todo some default variables without session
+            return xar::session()->getDefaultVar($name);
         }
         if (array_key_exists($name, $session->vars)) {
             return $session->vars[$name];

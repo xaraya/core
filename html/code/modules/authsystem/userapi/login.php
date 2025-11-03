@@ -50,6 +50,6 @@ class LoginMethod extends MethodClass
             throw new BadParameterException(null, $this->ml('Wrong arguments to authsystem_userapi_login.'));
         }
 
-        return xarUser::logIn($uname, $pass, $rememberme, $this->getContext());
+        return $this->user()->logIn($uname, $pass, $rememberme);
     }
 }

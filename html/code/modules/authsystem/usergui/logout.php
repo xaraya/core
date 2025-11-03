@@ -51,7 +51,7 @@ class LogoutMethod extends MethodClass
         }
 
         // Log user out
-        if (!xarUser::logOut($this->getContext())) {
+        if (!$this->user()->logOut()) {
             throw new ForbiddenOperationException(['authsystem', 'logout'], $this->ml('Problem Logging Out.  Module #(1) Function #(2)'), $this->getContext());
         }
         $this->ctl()->redirect($redirecturl);

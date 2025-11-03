@@ -104,4 +104,5 @@ interface SessionInterface
      * @return bool
      */
     public function clear($spared = []);
+    public function setContext($context);
 }

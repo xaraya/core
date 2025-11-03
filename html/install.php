@@ -111,9 +111,9 @@ function xarInstallLoader()
      */
     sys::import('xaraya.context.factory');
     $context = ContextFactory::fromGlobals(__METHOD__);
-    // Set context for core services here first
+    // Set context for core services here first + return static services class
     sys::import('xaraya.services.xar');
-    xar::setServicesContext($context);
+    $xar = xar::setServicesContext($context);
 
     /**
      * Set up caching
@@ -166,8 +166,8 @@ function xarInstallLoader()
         'defaultModuleFunction'  => 'main',
         'generateXMLURLs'        => false,
     ];
-    xarServer::init($systemArgs, $context);
-    xarController::init($systemArgs);
+    $xar->req()->init($systemArgs);
+    $xar->ctl()->init($systemArgs);
 
     // Start BlockLayout Template Engine
     // This is probably the trickiest part, but we want the installer
@@ -187,7 +187,7 @@ function xarInstallLoader()
     // We set a utf locale intially, otherwise the combo box wont be filled correctly
     // for language names which include utf characters
     xarMLS::$mode = 'SINGLE';
-    xarVar::fetch('install_language', 'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
+    $xar->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
 
     // Construct an array of the available locale folders
     $locale_dir = sys::varpath() . '/locales/';

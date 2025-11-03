@@ -182,7 +182,7 @@ class SitelockMethod extends MethodClass
                     // Clear the active sessions
 
                     try {
-                        xarSession::clear(array_keys($spared));
+                        $this->session()->clear(array_keys($spared));
                     } catch (Exception $e) {
                         $msg = $this->ml('Could not clear sessions table');
                         throw new Exception($msg);

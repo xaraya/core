@@ -125,7 +125,7 @@ class xarServer extends xarObject
      */
     public static function newInstance($context = null)
     {
-        return self::req()->newInstance($context);
+        return self::req()->newInstance();
     }
 
     /**

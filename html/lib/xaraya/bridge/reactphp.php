@@ -1,7 +1,5 @@
 <?php
 
-use Xaraya\Context\ContextFactory;
-
 /**
  * Try out the combined request handler with ReactPHP (work in progress)
  *
@@ -20,21 +18,6 @@ if (php_sapi_name() !== 'cli') {
 }
 
 require_once dirname(__DIR__, 4) . '/vendor/autoload.php';
-// initialize bootstrap
-sys::init();
-xarCache::init();
-// try out request context class
-xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
-// try out session context class
-xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
-xarCore::xarInit(xarCore::SYSTEM_USER);
-// @checkme we need to set at least the $basurl here
-//xarServer::setBaseURL('https://owncloud.mikespub.net/test/');
-xarServer::setBaseURL('http://localhost:8080/');
-$serverVars = xarServer::getInstance()->getContext()['server'];
-var_dump($serverVars);
-// switch to web directory to find library database relative to code()
-chdir(sys::web());
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -53,6 +36,24 @@ use Xaraya\Services\xar;
 use Xaraya\Context\Context;
 
 use function React\Async\async;
+
+// initialize bootstrap
+sys::init();
+$xar = xar::getServicesClass();
+$xar->cache()->init();
+// try out request context class
+$xar->req()->setRequestClass(\Xaraya\Context\RequestContext::class);
+// try out session context class
+$xar->session()->setSessionClass(\Xaraya\Context\SessionContext::class);
+xarCore::xarInit(xarCore::SYSTEM_USER);
+// @checkme we need to set at least the $basurl here
+//xarServer::setBaseURL('https://owncloud.mikespub.net/test/');
+$xar->ctl()->setBaseURL('http://localhost:8080/');
+$serverVars = $xar->req()->getInstance()->getContext()['server'];
+var_dump($serverVars);
+// switch to web directory to find library database relative to code()
+chdir(sys::web());
+
 
 // use FiberServiceStorage here
 xar::setStorageClass(FiberServiceStorage::class);
@@ -78,8 +79,8 @@ $main = async(function (ServerRequestInterface $request) use ($combined, $files,
     $context['server']['REQUEST_URI'] = $requestUri;
     $context['server']['PATH_INFO'] = explode('?', $requestUri)[0];
     // This now uses FiberServiceStorage because we are inside a Fiber
-    xar::setServicesContext($context);
-    echo spl_object_id(xar::getServicesClass()) . "\n";
+    $xar = xar::setServicesContext($context);
+    echo spl_object_id($xar) . "\n";
 
     // 2. Define a simple middleware to wrap the final response if needed (e.g. for htmx)
     $wrapper = function (ServerRequestInterface $request, RequestHandlerInterface $next) use ($responseUtil): ResponseInterface {

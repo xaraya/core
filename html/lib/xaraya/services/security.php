@@ -101,8 +101,8 @@ trait SecurityTrait
     {
         // Note: this should be restricted to gui methods
         $modName ??= $this->getModName();
-        // --- LEGACY METHOD BODY ---
         $xar = $this->getParent();
+        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             $modName = $xar->req()->getRequest()->getModule();
         }
@@ -129,8 +129,8 @@ trait SecurityTrait
     {
         // Note: this should be restricted to gui methods
         $modName ??= $this->getModName();
-        // --- LEGACY METHOD BODY ---
         $xar = $this->getParent();
+        // --- LEGACY METHOD BODY ---
         // We don't need this check for AJAX calls
         if ($xar->req()->getRequest()->isAjax()) {
             return true;

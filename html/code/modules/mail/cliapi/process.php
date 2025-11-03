@@ -57,7 +57,7 @@ class ProcessMethod extends MethodClass
             echo "Usage: mail -u <user> -p <pass> [mailcontent]\n";
             return 1;
         }
-        if (!xarUser::logIn($user, $pass)) {
+        if (!$this->user()->logIn($user, $pass)) {
             echo "Authentication failed\n";
             return 1;
         }

@@ -169,7 +169,7 @@ class UsermenuMethod extends MethodClass
 
                             // Step 4
                             // Log the user out. This needs to happen last
-                            xarUser::logOut();
+                            $this->user()->logOut();
 
                             //Step 5
                             //Show a nice message for the person about email validation

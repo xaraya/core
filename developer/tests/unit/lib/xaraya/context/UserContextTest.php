@@ -119,7 +119,7 @@ final class UserContextTest extends TestCase
         $userId = $context->getUserId();
         $this->assertEquals($expected, $userId);
 
-        // expecting session in context here
+        // @todo expecting session in context here
         $expected = VirtualSession::class;
         $this->assertEquals($expected, $context->getSession()::class);
 

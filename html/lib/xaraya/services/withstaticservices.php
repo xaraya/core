@@ -96,9 +96,9 @@ trait WithStaticServices
      * Set context for core services
      * @param Context<string, mixed> $context
      */
-    public static function setServicesContext(Context $context): void
+    public static function setServicesContext(Context $context): StaticServicesClass
     {
-        self::getServicesClass($context);
+        return self::getServicesClass($context);
     }
 
     /**

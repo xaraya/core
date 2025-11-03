@@ -378,12 +378,12 @@ class CleanupMethod extends MethodClass
          * End SoloBlocks
         **/
 
-        xarUser::logOut();
+        $this->user()->logOut();
         // log in admin user
         $uname = $this->mod('roles')->getVar('lastuser');
         $pass = $this->mod('roles')->getVar('adminpass');
 
-        if (!xarUser::logIn($uname, $pass, 0)) {
+        if (!$this->user()->logIn($uname, $pass, 0)) {
             $msg = $this->ml('Cannot log in the default administrator. Check your setup.');
             throw new Exception($msg);
         }

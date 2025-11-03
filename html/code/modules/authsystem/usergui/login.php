@@ -81,7 +81,7 @@ class LoginMethod extends MethodClass
 
         // Scan authentication modules and set user state appropriately
         $extAuthentication = false;
-        foreach (xarUser::$authenticationModules as $authModName) {
+        foreach ($this->user()->getAuthModules() as $authModName) {
 
             switch (strtolower($authModName)) {
                 // Ooof, didn't realize we were doing this.  We really need a hook here.

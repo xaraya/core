@@ -3,7 +3,7 @@
 /**
  * @package core\sessions
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -11,11 +11,10 @@
 
 namespace Xaraya\Sessions;
 
+use Xaraya\Services\WithServicesClass;
 use xarCore;
 use xarEvents;
 use xarObject;
-use xarServer;
-use xarSession;
 use SessionHandlerInterface;
 use Exception;
 use BadParameterException;
@@ -59,6 +58,8 @@ interface iSessionHandler extends SessionHandlerInterface
  */
 class SessionHandler extends xarObject implements iSessionHandler, SessionInterface
 {
+    use WithServicesClass;
+
     public const PREFIX = 'XARSV';     // Reserved by us for our session vars
     public const COOKIE = 'XARAYASID'; // Our cookiename
     protected mixed $context = null;
@@ -172,8 +173,9 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             }
             ini_set('session.name', $args['cookieName']);
 
+            $xar = $this->getServicesClass();
             if (empty($args['cookiePath'])) {
-                $path = xarServer::getBaseURI();
+                $path = $xar->req()->getBaseURI();
                 if (empty($path)) {
                     $path = '/';
                 }
@@ -188,7 +190,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
                     $lifetime = 0;
                     // Referer check defaults to the current host for security level High
                     if (empty($args['refererCheck'])) {
-                        $host = xarServer::getVar('HTTP_HOST');
+                        $host = $xar->req()->getServerVar('HTTP_HOST');
                         $host = preg_replace('/:.*/', '', $host);
                         // this won't work for non-standard ports
                         //if (!xarCore::funcIsDisabled('ini_set')) ini_set('session.referer_check', "$host$path");
@@ -255,12 +257,13 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         $this->start();
         $sessionId = $this->id();
 
+        $xar = $this->getServicesClass();
         // Get  client IP addr, so we can register or continue a session
-        $forwarded = xarServer::getVar('HTTP_X_FORWARDED_FOR');
+        $forwarded = $xar->req()->getServerVar('HTTP_X_FORWARDED_FOR');
         if (!empty($forwarded)) {
             $ipAddress = preg_replace('/,.*/', '', $forwarded);
         } else {
-            $ipAddress = xarServer::getVar('REMOTE_ADDR') ?? '-';
+            $ipAddress = $xar->req()->getServerVar('REMOTE_ADDR') ?? '-';
         }
 
         // If it's new, register it, otherwise use the existing.
@@ -332,11 +335,12 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      */
     public function register(string $ipAddress): bool
     {
+        $xar = $this->getServicesClass();
         try {
             $this->db->begin();
             $query = "INSERT INTO $this->tbl (id, ip_addr, role_id, first_use, last_use)
                       VALUES (?,?,?,?,?)";
-            $bindvars = [$this->sessionId, $ipAddress, xarSession::getAnonId(), time(), time()];
+            $bindvars = [$this->sessionId, $ipAddress, $xar->session()->getAnonId(), time(), time()];
             $stmt = $this->db->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
             $this->db->commit();
@@ -394,17 +398,18 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         $stmt = $this->db->prepareStatement($query);
         $result = $stmt->executeQuery([$sessionId], $this->db()->getFetchNum());
 
+        $xar = $this->getServicesClass();
         if ($result->first()) {
             // Already have this session
             $this->isNew = false;
             [$XARSVid, $this->ipAddress, $lastused, $vars] = $result->getRow();
             // in case garbage collection didn't have the opportunity to do its job
-            if (!empty(xarSession::getSecurityLevel())
-                && xarSession::getSecurityLevel() == 'High') {
-                $timeoutSetting = xarSession::getTimeoutSetting();
+            if (!empty($xar->session()->getSecurityLevel())
+                && $xar->session()->getSecurityLevel() == 'High') {
+                $timeoutSetting = $xar->session()->getTimeoutSetting();
                 if ($lastused < $timeoutSetting) {
                     // force a reset of the userid (but use the same sessionid)
-                    $this->setUserInfo(xarSession::getAnonId(), 0);
+                    $this->setUserInfo($xar->session()->getAnonId(), 0);
                     $this->ipAddress = '';
                     $vars = '';
                 }
@@ -412,7 +417,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             // Keep track of when this session was last saved
             $this->saveTime($lastused);
         } else {
-            $_SESSION[self::PREFIX . 'role_id'] = xarSession::getAnonId();
+            $_SESSION[self::PREFIX . 'role_id'] = $xar->session()->getAnonId();
 
             $this->ipAddress = '';
             $vars = '';
@@ -481,9 +486,10 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      */
     public function gc($maxlifetime): int|false
     {
-        $timeoutSetting = xarSession::getTimeoutSetting();
+        $xar = $this->getServicesClass();
+        $timeoutSetting = $xar->session()->getTimeoutSetting();
         $bindvars = [];
-        switch (xarSession::getSecurityLevel()) {
+        switch ($xar->session()->getSecurityLevel()) {
             case 'Low':
                 // Low security - delete session info if user decided not to
                 //                remember themself
@@ -498,7 +504,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
                 $where = "(remember = ? AND last_use <  ?) OR first_use < ?";
                 $bindvars[] = false;
                 $bindvars[] = $timeoutSetting;
-                $bindvars[] = (time() - (xarSession::getDuration() * 86400));
+                $bindvars[] = (time() - ($xar->session()->getDuration() * 86400));
                 break;
             case 'High':
             default:
@@ -531,8 +537,9 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         if (isset($_SESSION[$var])) {
             return $_SESSION[$var];
         } elseif ($name == 'role_id') {
+            $xar = $this->getServicesClass();
             // mrb: why is this again?
-            $_SESSION[$var] = xarSession::getAnonId();
+            $_SESSION[$var] = $xar->session()->getAnonId();
             return $_SESSION[$var];
         }
     }

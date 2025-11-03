@@ -40,7 +40,7 @@ class Roles_LanguageBlock extends BasicBlock
             return;
         }
 
-        $current_locale = xarUser::getNavigationLocale();
+        $current_locale = $this->user()->getLocale();
 
         $site_locales = xarMLS::listSiteLocales();
 

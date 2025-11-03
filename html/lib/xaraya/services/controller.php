@@ -339,9 +339,10 @@ trait ControllerTrait
     /** @return array<string, mixed> */
     public function getConfig(): array
     {
+        $xar = $this->getParent();
         // --- LEGACY METHOD BODY ---
         $systemArgs = [
-            'enableShortURLsSupport' => $this->getParent()->config()->getVar('Site.Core.EnableShortURLsSupport'),
+            'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
             // @todo re-evaluate this default
             'generateXMLURLs'        => true,
         ];

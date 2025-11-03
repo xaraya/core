@@ -4,7 +4,7 @@
  * @package core\context
  * @subpackage context
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -14,8 +14,7 @@ namespace Xaraya\Context;
 
 use Xaraya\Authentication\AuthToken;
 use Xaraya\Authentication\RemoteUser;
-use xarSession;
-use xarUser;
+use Xaraya\Services\WithServicesClass;
 use xarSystemVars;
 use Exception;
 use sys;
@@ -28,6 +27,8 @@ sys::import('modules.authsystem.class.remoteuser');
  */
 class UserContext
 {
+    use WithServicesClass;
+
     /** @var Context<string, mixed> */
     protected Context $context;
 
@@ -124,13 +125,15 @@ class UserContext
         if (empty($sessionId)) {
             return null;
         }
+        $xar = $this->getServicesClass();
         // @todo replace with something that doesn't depend on PHP sessions
-        xarSession::init([], $this->context);
-        if (!xarUser::isLoggedIn()) {
+        $xar->session()->init([]);
+        // @todo create virtual session for anonymous user here too?
+        $xar->session()->getInstance()->setContext($this->context);
+        if (!$xar->user()->isLoggedIn()) {
             return null;
         }
-        xarSession::getInstance()->setContext($this->context);
-        return xarSession::getUserId();
+        return $xar->session()->getUserId();
     }
 
     /**
@@ -142,14 +145,15 @@ class UserContext
      */
     protected function initSession($sessionId, $userId)
     {
-        if (!empty(xarSession::getInstance())) {
+        $xar = $this->getServicesClass();
+        if (!empty($xar->session()->getInstance())) {
             throw new Exception('Session was already initialized');
         }
         sys::import('xaraya.sessions.context');
-        xarSession::setSessionClass(SessionContext::class);
-        xarSession::init([], $this->context);
+        $xar->session()->setSessionClass(SessionContext::class);
+        $xar->session()->init([]);
         $serverVars = $this->context['server'] ?? [];
         $ipAddress = $serverVars['REMOTE_ADDR'] ?? '-';
-        xarSession::getInstance()?->startSession($this->context, $sessionId, $userId, $ipAddress);
+        $xar->session()->getInstance()?->startSession($this->context, $sessionId, $userId, $ipAddress);
     }
 }

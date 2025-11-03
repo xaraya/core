@@ -35,15 +35,15 @@ function xarUpgradeLoader()
      */
     sys::import('xaraya.context.factory');
     $context = ContextFactory::fromGlobals(__METHOD__);
-    // Set context for core services here first
+    // Set context for core services here first + return static services class
     sys::import('xaraya.services.xar');
-    xar::setServicesContext($context);
+    $xar = xar::setServicesContext($context);
 
     /**
      * Set up caching
      */
     sys::import('xaraya.caching');
-    xarCache::init();
+    $xar->cache()->init();
 
     /**
      * Load the Xaraya core with context
@@ -99,7 +99,7 @@ class xarUpgrader
         $xar->setModName('installer');
 
         // Load the current request
-        xarController::getRequest();
+        $xar->req()->getRequest();
 
         // Make sure we see any errors
         error_reporting(E_ALL);

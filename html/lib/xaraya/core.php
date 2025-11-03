@@ -271,9 +271,9 @@ class xarCore extends xarObject
             sys::import('xaraya.context.factory');
             $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
         }
-        // Set context for core services here first
+        // Set context for core services here first + return static services class
         sys::import('xaraya.services.xar');
-        Xaraya\Services\xar::setServicesContext($context);
+        $xar = Xaraya\Services\xar::setServicesContext($context);
 
         /**
          * Start Database Connection Handling System
@@ -297,14 +297,14 @@ class xarCore extends xarObject
          */
         /* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
         sys::import('xaraya.caching');
-        xarCache::init();
+        $xar->cache()->init();
 
         // Check that the database was installed before we activate variable caching (we don't need to load it yet)
         if (xarSystemVars::get(sys::CONFIG, 'DB.Installation') != 3) {
-            xarCache::$variableCacheIsEnabled = false;
+            $xar->cache()->variableCache = null;
         }
 
-        if (xarCache::isVariableCacheEnabled()) {
+        if ($xar->cache()->withVariables()) {
             sys::import('xaraya.caching.variable');
         }
 
@@ -327,7 +327,7 @@ class xarCore extends xarObject
         if ($whatToLoad & self::SYSTEM_CONFIGURATION) {
             // Start Variables utilities
             sys::import('xaraya.variables');
-            xarVar::init();
+            $xar->var()->init();
             $whatToLoad ^= self::BIT_CONFIGURATION;
             // We're about done here - everything else requires configuration, at least to initialize them !?
         } else {
@@ -365,9 +365,9 @@ class xarCore extends xarObject
          *
          */
         sys::import('xaraya.server');
-        xarServer::init([], $context);
+        $xar->req()->init([]);
         sys::import('xaraya.mapper.main');
-        xarController::init();
+        $xar->ctl()->init();
 
         /**
          * Bring Multi Language System online
@@ -381,7 +381,7 @@ class xarCore extends xarObject
         // Testing of autoload + second-level cache storage - please do not use on live sites
             sys::import('xaraya.caching.storage');
             $cache = xarCache_Storage::getCacheStorage(array('storage' => 'apcu', 'type' => 'core'));
-            xar::mem()->setCacheStorage($cache);
+            $xar->mem()->setCacheStorage($cache);
         */
 
         /**
@@ -390,7 +390,7 @@ class xarCore extends xarObject
          * @todo <mfl> eventually remove the caching condition
          * @deprecated 2.8.3 always enabled now
          */
-        if (xarCache::isVariableCacheEnabled()) {
+        if ($xar->cache()->withVariables()) {
             // sys::autoload();
         }
 
@@ -417,7 +417,7 @@ class xarCore extends xarObject
 
         if ($whatToLoad & self::SYSTEM_SESSION) {
             sys::import('xaraya.sessions');
-            xarSession::init([], $context);
+            $xar->session()->init([]);
             $whatToLoad ^= self::BIT_SESSION;
             // We're about done here - everything else requires sessions !?
         } else {
@@ -434,7 +434,7 @@ class xarCore extends xarObject
             sys::import('xaraya.users');
             sys::import('xaraya.security');
             // Start User System
-            xarUser::init();
+            $xar->user()->init();
             $whatToLoad ^= self::BIT_USER;
             // We're about done here - everything else requires Users !?
         } else {

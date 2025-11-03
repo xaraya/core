@@ -20,11 +20,15 @@
 sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.handler');
 sys::import('xaraya.services.xar');
+use Xaraya\Services\SessionService;
 use Xaraya\Sessions\SessionInterface;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Sessions\SessionException;
 use Xaraya\Services\xar;
 
+/**
+ * @deprecated 2.8.5 use xar::session() instead
+ */
 class xarSession
 {
     /** @var ?int */
@@ -44,6 +48,16 @@ class xarSession
     /** @var array<string, mixed> */
     private static array $args = [];
     protected static bool $initialized = false;
+    protected static ?SessionService $sessionService = null;
+
+    protected static function session(): SessionService
+    {
+        if (!isset(self::$sessionService)) {
+            $xar = xar::getServicesClass();
+            self::$sessionService = $xar->session();
+        }
+        return self::$sessionService;
+    }
 
     /**
      * Initialise the Session Support (optional) - depends on the caller
@@ -54,32 +68,9 @@ class xarSession
      */
     public static function init(array $args = [], $context = null)
     {
-        if (empty($args)) {
-            if (empty($context) && !empty(self::$initialized)) {
-                return true;
-            }
-            $args = self::getConfig();
-        }
-        self::$securityLevel = $args['securityLevel'];
-        self::$duration = $args['duration'];
-        self::$inactivityTimeout = $args['inactivityTimeout'];
-        //self::$cookieName = $args['cookieName'];
-        //self::$cookiePath = $args['cookiePath'];
-        //self::$cookieDomain = $args['cookieDomain'];
-        //self::$refererCheck = $args['refererCheck'));
-        //self::sessionClass = $args['sessionClass'] ?? SessionHandler::class;
-        self::$args = $args;
-
-        self::$anonId = (int) xar::config()->getVar('Site.User.AnonymousUID', 5);
-
-        // Set up the session object with context
-        $session = self::newInstance($context);
-        self::setInstance($session);
-
-        // Initialize the session
-        $session->initialize();
-        self::$initialized = true;
-        return true;
+        // static cache for migration
+        self::$sessionService = null;
+        return self::session()->init($args);
     }
 
     /**
@@ -88,18 +79,7 @@ class xarSession
      */
     public static function getConfig()
     {
-        $xar = xar::getServicesClass();
-        $systemArgs = [
-            'securityLevel'     => $xar->config()->getVar('Site.Session.SecurityLevel'),
-            'duration'          => $xar->config()->getVar('Site.Session.Duration'),
-            'inactivityTimeout' => $xar->config()->getVar('Site.Session.InactivityTimeout'),
-            'cookieName'        => $xar->config()->getVar('Site.Session.CookieName'),
-            'cookiePath'        => $xar->config()->getVar('Site.Session.CookiePath'),
-            'cookieDomain'      => $xar->config()->getVar('Site.Session.CookieDomain'),
-            'refererCheck'      => $xar->config()->getVar('Site.Session.RefererCheck'),
-            //'sessionClass'      => $xar->config()->getVar('Site.Session.HandlerClass'),
-        ];
-        return $systemArgs;
+        return self::session()->getConfig();
     }
 
     /**
@@ -109,7 +89,7 @@ class xarSession
      */
     public static function setSessionClass($className)
     {
-        self::$sessionClass = $className;
+        self::session()->setSessionClass($className);
     }
 
     /**
@@ -118,13 +98,7 @@ class xarSession
      */
     public static function getInstance()
     {
-        // moved to static services class
-        $instance = xar::getServicesClass()->getSessionInstance();
-        if (!isset($instance)) {
-            // do *not* initialize session here - depends on the caller
-            //self::init(self::$args, xar::getServicesClass()->getContext());
-        }
-        return $instance;
+        return self::session()->getInstance();
     }
 
     /**
@@ -134,8 +108,7 @@ class xarSession
      */
     public static function setInstance($instance)
     {
-        // moved to static services class
-        xar::getServicesClass()->setSessionInstance($instance);
+        return self::session()->setInstance($instance);
     }
 
     /**
@@ -145,7 +118,7 @@ class xarSession
      */
     public static function newInstance($context = null)
     {
-        return new self::$sessionClass(self::$args, $context);
+        return self::session()->newInstance();
     }
 
     /**
@@ -155,11 +128,7 @@ class xarSession
      */
     public static function getId($id = null)
     {
-        $instance = self::getInstance();
-        if (!isset($instance)) {
-            return $id;
-        }
-        return $instance->getId($id);
+        return self::session()->getId($id);
     }
 
     /**
@@ -169,17 +138,7 @@ class xarSession
      */
     public static function getDefaultVar($name)
     {
-        // no session means anonymous user by default
-        if ($name == 'role_id') {
-            return self::$anonId;
-        }
-        // ignore templates and security try to get stuff in session
-        if ($name == 'navigationLocale') {
-            return xar::config()->getVar('Site.MLS.DefaultLocale');
-        } elseif ($name == 'privilegeset') {
-            return null;
-        }
-        throw new SessionException('Session was not initialized to get ' . $name);
+        return self::session()->getDefaultVar($name);
     }
 
     /**
@@ -190,11 +149,7 @@ class xarSession
      */
     public static function getVar($name)
     {
-        $instance = self::getInstance();
-        if (!isset($instance)) {
-            return self::getDefaultVar($name);
-        }
-        return $instance->getVar($name);
+        return self::session()->getVar($name);
     }
 
     /**
@@ -205,21 +160,7 @@ class xarSession
      */
     public static function setVar($name, $value)
     {
-        assert(!is_null($value));
-        // security checks : do not allow to set the id or mess with the session serialization
-        if ($name == 'role_id' || strpos($name, '|') !== false) {
-            return false;
-        }
-
-        $instance = self::getInstance();
-        if (!isset($instance)) {
-            // ignore templates and security try to save stuff in session
-            if ($name == 'navigationLocale' || $name == 'privilegeset') {
-                return false;
-            }
-            throw new SessionException('Session was not initialized to set ' . $name);
-        }
-        return $instance->setVar($name, $value);
+        return self::session()->setVar($name, $value);
     }
 
     /**
@@ -229,11 +170,7 @@ class xarSession
      */
     public static function delVar($name)
     {
-        if ($name == 'role_id') {
-            return false;
-        }
-
-        return self::getInstance()?->delVar($name) ?? false;
+        return self::session()->delVar($name);
     }
 
     /**
@@ -246,7 +183,7 @@ class xarSession
      */
     public static function setUserInfo($userId, $rememberSession)
     {
-        return self::getInstance()?->setUserInfo($userId, $rememberSession);
+        return self::session()->setUserInfo($userId, $rememberSession);
     }
 
     /**
@@ -256,7 +193,7 @@ class xarSession
      */
     public static function saveTime($lastused = 0)
     {
-        return self::getInstance()?->saveTime($lastused);
+        return self::session()->saveTime($lastused);
     }
 
     /**
@@ -265,8 +202,7 @@ class xarSession
      */
     public static function getUserId()
     {
-        // @todo see UserContext::getUserId() for userId without session
-        return self::getInstance()?->getUserId();
+        return self::session()->getUserId();
     }
 
     /**
@@ -275,7 +211,7 @@ class xarSession
      */
     public static function getAnonId()
     {
-        return self::$anonId;
+        return self::session()->getAnonId();
     }
 
     /**
@@ -284,7 +220,7 @@ class xarSession
      */
     public static function setAnonId($anonId)
     {
-        self::$anonId = $anonId;
+        return self::session()->setAnonId($anonId);
     }
 
     /**
@@ -293,7 +229,7 @@ class xarSession
      */
     public static function getSecurityLevel()
     {
-        return self::$securityLevel;
+        return self::session()->getSecurityLevel();
     }
 
     /**
@@ -302,8 +238,7 @@ class xarSession
      */
     public static function getTimeoutSetting()
     {
-        $timeoutSetting = time() - (self::$inactivityTimeout * 60);
-        return $timeoutSetting;
+        return self::session()->getTimeoutSetting();
     }
 
     /**
@@ -312,7 +247,7 @@ class xarSession
      */
     public static function getDuration()
     {
-        return self::$duration;
+        return self::session()->getDuration();
     }
 
     /**
@@ -322,6 +257,6 @@ class xarSession
      */
     public static function clear($spared = [])
     {
-        return self::getInstance()?->clear() ?? false;
+        return self::session()->clear();
     }
 }

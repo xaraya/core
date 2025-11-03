@@ -16,7 +16,6 @@
 
 namespace Xaraya\Services;
 
-use Xaraya\Context\Context;
 use Xaraya\Requests\RequestInterface as RequestFacade;
 use Xaraya\Requests\RequestHandler;
 use xarRequest;
@@ -38,7 +37,7 @@ interface RequestInterface extends ServiceInterface
     public function setConfig(array $config = []): void;
     public function getInstance(): RequestFacade;
     public function setInstance(RequestFacade $instance): void;
-    public function newInstance(?Context $context = null): RequestFacade;
+    public function newInstance(): RequestFacade;
     public function getRequest(mixed $url = null): xarRequest;
     public function setRequest(mixed $url = null): void;
     public function getModule(): string;
@@ -90,19 +89,19 @@ trait RequestTrait
     }
 
     /** @param array<string, mixed> $config */
-    public function init(array $config = [], ?Context $context = null): bool
+    public function init(array $config = []): bool
     {
         // --- LEGACY METHOD BODY ---
         if (empty($config)) {
-            if (empty($context) && !empty($this->initialized)) {
+            if (!empty($this->initialized)) {
                 return true;
             }
             $config = $this->getConfig();
         }
         $this->setConfig($config);
 
-        // Set up the request object with context
-        $request = $this->newInstance($context);
+        // Set up the request instance with current context
+        $request = $this->newInstance();
         $this->setInstance($request);
 
         // Initialize the request
@@ -120,9 +119,10 @@ trait RequestTrait
      */
     public function getConfig(): array
     {
+        $xar = $this->getParent();
         // --- LEGACY METHOD BODY ---
         $systemArgs = [
-            'enableShortURLsSupport' => $this->getParent()->config()->getVar('Site.Core.EnableShortURLsSupport'),
+            'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
             //'generateXMLURLs'        => true,
         ];
         return $systemArgs;
@@ -148,8 +148,8 @@ trait RequestTrait
         // moved to static services class
         $instance = $this->getParent()->getRequestInstance();
         if (!isset($instance)) {
-            // Set up the request object with context from static services class here
-            $instance = $this->newInstance($this->getContext());
+            // Set up the request instance with current context
+            $instance = $this->newInstance();
             $this->setInstance($instance);
             // Initialize the request
             $instance->initialize();
@@ -172,11 +172,11 @@ trait RequestTrait
     /**
      * Create new request class instance
      */
-    public function newInstance(?Context $context = null): RequestFacade
+    public function newInstance(): RequestFacade
     {
-        $context ??= $this->getContext();
+        // Set up the request instance with current context
         // --- LEGACY METHOD BODY ---
-        return new self::$requestClass($this->args, $context);
+        return new self::$requestClass($this->args, $this->getContext());
         // --- END LEGACY METHOD BODY ---
     }
 
@@ -469,14 +469,15 @@ trait RequestTrait
 
     public function getProtocol(): string
     {
+        $xar = $this->getParent();
         // --- LEGACY METHOD BODY ---
         try {
-            if ($this->getParent()->config()->getVar('Site.Core.EnableSecureServer')) {
+            if ($xar->config()->getVar('Site.Core.EnableSecureServer')) {
                 if (preg_match('/^http:/', $this->getServerVar('REQUEST_URI') ?? '')) {
                     return self::PROTOCOL_HTTP;
                 }
                 $serverport = $this->getServerVar('SERVER_PORT');
-                $protocol = ($serverport == $this->getParent()->config()->getVar('Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
+                $protocol = ($serverport == $xar->config()->getVar('Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
                 return $protocol;
             }
         } catch (Exception $e) {

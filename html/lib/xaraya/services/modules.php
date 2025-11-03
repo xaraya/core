@@ -159,14 +159,14 @@ trait ModulesTrait
     public function init(array $config = []): bool
     {
         // --- LEGACY METHOD BODY ---
-        if (empty($args)) {
+        if (empty($config)) {
             if ($this->initialized) {
                 return true;
             }
-            $args = $this->getConfig();
+            $config = $this->getConfig();
         }
-        $this->genShortUrls = $args['enableShortURLsSupport'];
-        $this->genXmlUrls   = $args['generateXMLURLs'];
+        $this->genShortUrls = $config['enableShortURLsSupport'];
+        $this->genXmlUrls   = $config['generateXMLURLs'];
 
         // Register the events for this subsystem
         // events are now registered during modules module init
@@ -196,8 +196,8 @@ trait ModulesTrait
      */
     public function getConfig(): array
     {
-        // --- LEGACY METHOD BODY ---
         $xar = $this->getParent();
+        // --- LEGACY METHOD BODY ---
         $systemArgs = [
             'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
             'generateXMLURLs'        => true,

@@ -65,7 +65,7 @@ class AuthenticateUserMethod extends MethodClass
         $result->close();
 
         // Confirm that passwords match
-        if (!xarUser::comparePasswords($pass, $realpass, $uname, substr($realpass, 0, 2))) {
+        if (!$this->user()->comparePasswords($pass, $realpass, $uname, substr($realpass, 0, 2))) {
             return xarUser::AUTH_FAILED;
         }
 

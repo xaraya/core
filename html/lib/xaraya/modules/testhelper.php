@@ -39,12 +39,12 @@ class TestHelper extends TestCase
 
         // create dummy context
         $context = static::createContext(['source' => __METHOD__]);
+        // set context for core services here first + return static services class
+        $xar = \Xaraya\Services\xar::setServicesContext($context);
         // use RequestContext as request handler
-        xarServer::setRequestClass(RequestContext::class);
+        $xar->req()->setRequestClass(RequestContext::class);
         // use SessionContext as session handler
-        xarSession::setSessionClass(SessionContext::class);
-        // set context for core services here first
-        \Xaraya\Services\xar::setServicesContext($context);
+        $xar->session()->setSessionClass(SessionContext::class);
 
         // initialize database - delay until caching fails
         xarDatabase::init();
@@ -53,11 +53,11 @@ class TestHelper extends TestCase
         // initialize modules
         xarMod::init();
         // initialize server
-        xarServer::init([], $context);
+        $xar->req()->init([]);
         // initialize session
-        xarSession::init([], $context);
+        $xar->session()->init([]);
         // initialize users
-        xarUser::init();
+        $xar->user()->init();
 
         // file paths are relative to html directory here
         static::$oldDir = (string) getcwd();
@@ -66,12 +66,13 @@ class TestHelper extends TestCase
 
     public static function tearDownAfterClass(): void
     {
+        $xar = \Xaraya\Services\xar::getServicesClass();
         // reset redirectTo callback in xarController
-        xarController::setCallback('redirectTo', null);
+        $xar->ctl()->setCallback('redirectTo', null);
         // use default request handler
-        xarServer::setRequestClass(RequestHandler::class);
+        $xar->req()->setRequestClass(RequestHandler::class);
         // use default session handler
-        xarSession::setSessionClass(SessionHandler::class);
+        $xar->session()->setSessionClass(SessionHandler::class);
 
         chdir(static::$oldDir);
     }

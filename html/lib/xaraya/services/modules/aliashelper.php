@@ -38,8 +38,8 @@ class AliasHelper extends ServiceClass
         if ($alias == 'object') {
             return $alias;
         }
-        $config = $this->getParent()->config();
-        $aliasesMap = $config->getVar('System.ModuleAliases');
+        $xar = $this->getParent();
+        $aliasesMap = $xar->config()->getVar('System.ModuleAliases');
         return (!empty($aliasesMap[$alias])) ? $aliasesMap[$alias] : $alias;
         // --- END LEGACY METHOD BODY ---
         // return xarModAlias::resolve($alias);
