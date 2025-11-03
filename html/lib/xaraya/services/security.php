@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -16,10 +16,9 @@
 
 namespace Xaraya\Services;
 
-use xarMod;
-use xarSec;
 use xarSecurity;
 use sys;
+use ForbiddenOperationException;
 
 sys::import('xaraya.services.servicetrait');
 
@@ -63,10 +62,11 @@ trait SecurityTrait
      */
     public function checkAccess(string $mask, string|int $action = '', ?string $modName = null): bool
     {
-        // if the mask is empty, use xarMod::checkAccess() - currently not used
+        // if the mask is empty, use xar::mod()->checkAccess() - currently not used
         if (empty($mask) && !empty($action) && is_string($action)) {
             $modName ??= $this->getModName();
-            return xarMod::checkAccess($modName, $action) ? true : false;
+            $xar = $this->getParent();
+            return $xar->mod()->checkAccess($modName, $action) ? true : false;
         }
         // @todo mainly legacy hook module - remove 2nd argument in call later?
         if (is_int($action) && $action === 0) {
@@ -99,19 +99,82 @@ trait SecurityTrait
      */
     public function genAuthKey(?string $modName = null): string
     {
-        $modName ??= $this->getModName();
         // Note: this should be restricted to gui methods
-        return xarSec::genAuthKey($modName);
+        $modName ??= $this->getModName();
+        // --- LEGACY METHOD BODY ---
+        $xar = $this->getParent();
+        if (empty($modName)) {
+            $modName = $xar->req()->getRequest()->getModule();
+        }
+
+        // Date gives extra security but leave it out for now
+        // $key = $xar->session()->getVar('rand') . $modName . date ('YmdGi');
+        $key = $xar->session()->getVar('rand') . strtolower($modName);
+
+        // Encrypt key
+        $authid = md5($key);
+
+        // Tell xarCache not to cache this page
+        $xar->cache()->noCache();
+
+        // Return encrypted key
+        return $authid;
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
      * Confirm authorisation key for this module
      */
-    public function confirmAuthKey(?string $modName = null, string $name = 'authid'): bool
+    public function confirmAuthKey(?string $modName = null, string $varName = 'authid', $catch = false): bool
     {
-        $modName ??= $this->getModName();
         // Note: this should be restricted to gui methods
-        return xarSec::confirmAuthKey($modName, $name);
+        $modName ??= $this->getModName();
+        // --- LEGACY METHOD BODY ---
+        $xar = $this->getParent();
+        // We don't need this check for AJAX calls
+        if ($xar->req()->getRequest()->isAjax()) {
+            return true;
+        }
+
+        if (empty($modName)) {
+            $modName = $xar->req()->getRequest()->getModule();
+        }
+        $authid = $xar->req()->getVar($varName);
+
+        // Regenerate static part of key
+        $partkey = $xar->session()->getVar('rand') . strtolower($modName);
+
+        // Not using time-sensitive keys for the moment
+        //    // Key life is 5 minutes, so search backwards and forwards 5
+        //    // minutes to see if there is a match anywhere
+        //    for ($i=-5; $i<=5; $i++) {
+        //        $testdate  = mktime(date('G'), date('i')+$i, 0, date('m') , date('d'), date('Y'));
+        //
+        //        $testauthid = md5($partkey . date('YmdGi', $testdate));
+        //        if ($testauthid == $authid) {
+        //            // Match
+        //
+        //            // We've used up the current random
+        //            // number, make up a new one
+        //            srand((double) microtime(true) * 1000000.0);
+        //            $xar->session()->setVar('rand', rand());
+        //
+        //            return true;
+        //        }
+        //    }
+        if ((md5($partkey)) == $authid) {
+            // Match - generate new random number for next key and leave happy
+            srand((float) microtime(true) * 1000000.0);
+            $xar->session()->setVar('rand', rand());
+            return true;
+        }
+        // Not found, assume invalid
+        if ($catch) {
+            throw new ForbiddenOperationException();
+        } else {
+            return false;
+        }
+        // --- END LEGACY METHOD BODY ---
     }
 }
 

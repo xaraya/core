@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -17,11 +17,10 @@
 namespace Xaraya\Services;
 
 use Xaraya\Modules\ModuleInterface;
-use xarMod;
-use xarModAlias;
-use xarController;
-use xarTpl;
+use xarRoles;
+use xarSecurity;
 use sys;
+use BadParameterException;
 use FunctionNotFoundException;
 
 sys::import('xaraya.services.servicetrait');
@@ -66,6 +65,7 @@ interface ModulesInterface extends ServiceInterface
     public function getBaseInfo(?string $modName = null): array;
     /** @return array<string, mixed> */
     public function getInfo(int $modRegId): array;
+    public function getNoCache(): bool;
     public function setNoCache(bool $noCache): void;
     /** @return array<string, mixed> */
     public function getTables(?string $modName = null): array;
@@ -99,6 +99,9 @@ trait ModulesTrait
 {
     use ServiceTrait;
 
+    public $genShortUrls = false;
+    public $genXmlUrls   = true;
+    protected bool $initialized = false;
     private ?Modules\VarsHelper $varsHelper = null;
     private ?Modules\UserVarsHelper $userVarsHelper = null;
     private ?Modules\ItemVarsHelper $itemVarsHelper = null;
@@ -125,13 +128,13 @@ trait ModulesTrait
         return $this->itemVarsHelper;
     }
 
-    private function getInfoHelper(): Modules\InfoHelper
+    public function getInfoHelper(): Modules\InfoHelper
     {
         $this->infoHelper ??= $this->getParent()->service('modules.info');
         return $this->infoHelper;
     }
 
-    private function getExecHelper(): Modules\ExecHelper
+    public function getExecHelper(): Modules\ExecHelper
     {
         $this->execHelper ??= $this->getParent()->service('modules.exec');
         return $this->execHelper;
@@ -147,6 +150,60 @@ trait ModulesTrait
     {
         $this->aliasHelper ??= $this->getParent()->service('modules.alias');
         return $this->aliasHelper;
+    }
+
+    /**
+     * Initialize service class
+     * @param array<string, mixed> $config
+     */
+    public function init(array $config = []): bool
+    {
+        // --- LEGACY METHOD BODY ---
+        if (empty($args)) {
+            if ($this->initialized) {
+                return true;
+            }
+            $args = $this->getConfig();
+        }
+        $this->genShortUrls = $args['enableShortURLsSupport'];
+        $this->genXmlUrls   = $args['generateXMLURLs'];
+
+        // Register the events for this subsystem
+        // events are now registered during modules module init
+        //xarEvents::register('ModLoad');
+        //xarEvents::register('ModAPILoad');
+
+        $xar = $this->getParent();
+        // Modules Support Tables
+        $prefix = $xar->db()->getPrefix();
+
+        // How we want it
+        $tables['modules']         = $prefix . '_modules';
+        $tables['module_vars']     = $prefix . '_module_vars';
+        $tables['module_itemvars'] = $prefix . '_module_itemvars';
+        $tables['hooks']           = $prefix . '_hooks';
+        $tables['themes']          = $prefix . '_themes';
+
+        $xar->db()->importTables($tables);
+        $this->initialized = true;
+        return true;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /**
+     * Get configuration
+     * @return array<string, mixed>
+     */
+    public function getConfig(): array
+    {
+        // --- LEGACY METHOD BODY ---
+        $xar = $this->getParent();
+        $systemArgs = [
+            'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
+            'generateXMLURLs'        => true,
+        ];
+        return $systemArgs;
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -254,7 +311,8 @@ trait ModulesTrait
     public function getURL(string $modType = 'user', string $funcName = 'main', array $args = [], ?string $modName = null): string
     {
         $modName ??= $this->getModName();
-        return xarController::URL($modName, $modType, $funcName, $args);
+        $xar = $this->getParent();
+        return $xar->ctl()->getModuleURL($modName, $modType, $funcName, $args);
     }
 
     /**
@@ -282,8 +340,11 @@ trait ModulesTrait
             $modType = substr($modType, 0, -3);
         }
 
+        /** @var ServicesInterface $xar */
+        $xar = $this->getParent();
+
         // Create the output.
-        return xarTpl::module(
+        return $xar->tpl()->module(
             $modName,
             $modType,
             $funcName,
@@ -309,6 +370,7 @@ trait ModulesTrait
 
     /**
      * Get module name for this module
+     * @todo align with xar::mod($modName)->getName() - move back to ModuleService?
      */
     public function getName(?int $regID = null): string
     {
@@ -381,11 +443,21 @@ trait ModulesTrait
     }
 
     /**
+     * Get noCache
+     */
+    public function getNoCache(): bool
+    {
+        return $this->getInfoHelper()->noCacheState;
+    }
+
+    /**
      * Set noCache
      */
     public function setNoCache(bool $noCache): void
     {
-        xarMod::setNoCache($noCache);
+        // --- LEGACY METHOD BODY ---
+        $this->getInfoHelper()->noCacheState = (bool) $noCache;
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -482,7 +554,7 @@ trait ModulesTrait
     public function getModule(?string $modName = null): ModuleInterface
     {
         $modName ??= $this->getModName();
-        return $this->getExecHelper()->getModule($modName, $this->getContext());
+        return $this->getExecHelper()->getModule($modName);
     }
 
     /**
@@ -497,7 +569,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, $callType, $this->getContext());
+        return $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, $callType);
     }
 
     /**
@@ -516,11 +588,11 @@ trait ModulesTrait
         if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
             $modType .= 'api';
         }
-        $callable = $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, 'api', $this->getContext());
+        $callable = $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, 'api');
         if (empty($callable)) {
             throw new FunctionNotFoundException($funcName);
         }
-        return $this->getExecHelper()->callMethod($callable, $args, $this->getContext());
+        return $this->getExecHelper()->callMethod($callable, $args);
     }
 
     /**
@@ -540,11 +612,11 @@ trait ModulesTrait
         //if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
         //    $modType .= 'gui';
         //}
-        $callable = $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, 'gui', $this->getContext());
+        $callable = $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, 'gui');
         if (empty($callable)) {
             throw new FunctionNotFoundException($funcName);
         }
-        return $this->getExecHelper()->callMethod($callable, $args, $this->getContext());
+        return $this->getExecHelper()->callMethod($callable, $args);
     }
 
     /**
@@ -600,6 +672,41 @@ trait ModulesTrait
         $info['module'] ??= $this->getModName();
         $info['itemtype'] ??= $this->getItemType();
         return $this->getHooksHelper()->notifyHooks($event, $info, $this->getContext());
+    }
+
+    protected function checkAccess($moduleName, $action, $roleid = null)
+    {
+        // --- LEGACY METHOD BODY ---
+        // TODO: get module variable with access config: groups, masks, levels or whatever
+
+        // TODO: check for access e.g. by group
+
+        // Fall back on mask-less security check with access levels corresponding to action
+
+        // default actions supported on modules
+        switch ($action) {
+            case 'admin':
+                $seclevel = xarSecurity::ACCESS_ADMIN;
+                break;
+
+                // CHECKME: any others we really use on module level (instead of object/item/block/... level) ?
+
+            case 'view':
+                $seclevel = xarSecurity::ACCESS_OVERVIEW;
+                break;
+
+            default:
+                throw new BadParameterException('action', "Supported actions on module level are 'view' and 'admin'");
+        }
+
+        if (!empty($roleid)) {
+            $role = xarRoles::get($roleid);
+            $rolename = $role->getName();
+            return xarSecurity::check('', 0, 'All', 'All', $moduleName, $rolename, 0, $seclevel);
+        } else {
+            return xarSecurity::check('', 0, 'All', 'All', $moduleName, '', 0, $seclevel);
+        }
+        // --- END LEGACY METHOD BODY ---
     }
 }
 

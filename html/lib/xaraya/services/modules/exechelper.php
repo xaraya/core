@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.3
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -16,12 +16,20 @@
 
 namespace Xaraya\Services\Modules;
 
-use Xaraya\Context\Context;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Modules\ModuleInterface;
 use Xaraya\Services\ServiceClass;
+use xarCore;
+use xarEvents;
 use xarMod;
+use xarClassMap;
+use sys;
+use EmptyParameterException;
 use FunctionNotFoundException;
+use ModuleNotActiveException;
+use ModuleNotFoundException;
+use Exception;
+use Throwable;
 
 /**
  * Modules Service Helper for Module Execution
@@ -30,49 +38,375 @@ class ExecHelper extends ServiceClass
 {
     public const SLICE = 'modules.exec';
 
-    /** @param array<string, mixed> $args */
-    public function apiFunc(string $modName, string $modType, string $funcName, array $args, ?Context $context = null): mixed
-    {
-        return xarMod::apiFunc($modName, $modType, $funcName, $args, $context);
-    }
-
-    public function apiLoad(string $modName, string $modType, ?Context $context = null): mixed
-    {
-        return xarMod::apiLoad($modName, $modType, xarMod::LOAD_ANYSTATE, $context);
-    }
+    /** @var array<string, object> */
+    private $moduleClasses = [];
 
     /** @param array<string, mixed> $args */
-    public function guiFunc(string $modName, string $modType, string $funcName, array $args, ?Context $context = null): mixed
+    public function apiFunc(string $modName, string $modType, string $funcName, array $args): mixed
     {
-        return xarMod::guiFunc($modName, $modType, $funcName, $args, $context);
+        // --- LEGACY METHOD BODY ---
+        if (empty($modName)) {
+            throw new EmptyParameterException('modName');
+        }
+        // @todo call module api class method directly if available
+        return $this->callfunc($modName, $modType, $funcName, $args, 'api');
+        // --- END LEGACY METHOD BODY ---
     }
 
-    public function load(string $modName, string $modType, ?Context $context = null): mixed
+    public function apiLoad(string $modName, string $modType): mixed
     {
-        return xarMod::load($modName, $modType, xarMod::LOAD_ONLYACTIVE, $context);
+        // --- LEGACY METHOD BODY ---
+        return $this->privateLoad($modName, $modType . 'api', xarMod::LOAD_ANYSTATE);
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /** @param array<string, mixed> $args */
+    public function guiFunc(string $modName, string $modType, string $funcName, array $args): mixed
+    {
+        // --- LEGACY METHOD BODY ---
+        if (empty($modName)) {
+            throw new EmptyParameterException('modName');
+        }
+        $xar = $this->getParent();
+
+        // Get a cache key for this module function if it's suitable for module caching
+        $cacheKey = $xar->cache()->getModuleKey($modName, $modType, $funcName, $args);
+
+        // Check if the module function is cached
+        if ($xar->cache()->hasModule($cacheKey)) {
+            // Return the cached module function output
+            return $xar->cache()->getModule($cacheKey);
+        }
+        $context = $this->getContext();
+        // Set module name and type in context if needed
+        $context['module'] ??= $modName;
+        $context['modtype'] ??= $modType;
+        // @todo call module gui class method directly if available
+        $tplData = $this->callFunc($modName, $modType, $funcName, $args, '');
+        // If we have a string of data, we assume someone else did xarTpl* for us
+        if (!is_array($tplData)) {
+            if (!isset($tplData)) {
+                $tplData = '';
+            }
+            // Set the output of the module function in cache
+            $xar->cache()->setModule($cacheKey, $tplData);
+            return $tplData;
+        }
+
+        // See if we have a special template to apply
+        $templateName = null;
+        if (isset($tplData['_bl_template'])) {
+            $templateName = $tplData['_bl_template'];
+        }
+
+        // @todo Pass along the context for xar::tpl()->module() if needed
+        $tplData['context'] ??= $this->getContext();
+
+        // Create the output.
+        $tplOutput = $xar->tpl()->module($modName, $modType, $funcName, $tplData, $templateName);
+
+        // Set the output of the module function in cache
+        $xar->cache()->setModule($cacheKey, $tplOutput);
+
+        return $tplOutput;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    public function load(string $modName, string $modType): mixed
+    {
+        // --- LEGACY METHOD BODY ---
+        return $this->privateLoad($modName, $modType, xarMod::LOAD_ONLYACTIVE);
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    protected function callFunc($modName, $modType, $funcName, $args, $funcType = '')
+    {
+        // --- LEGACY METHOD BODY ---
+        assert(($funcType == "api" || $funcType == ""));
+        $xar = $this->getParent();
+
+        // Build function name
+        $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
+        if (empty($modName) || empty($funcName)) {
+            // This is not a valid function syntax - CHECKME: also for api functions ?
+            if ($funcType == "api") {
+                throw new FunctionNotFoundException($modFunc);
+            } else {
+                return $xar->ctl()->notFound('Function not found');
+            }
+        }
+
+        $info = $xar->mod()->getInfoHelper();
+
+        // good thing this information is cached :)
+        $modBaseInfo = $info->getBaseInfo($modName);
+        if (empty($modBaseInfo)) {
+            // This is not a valid module - CHECKME: also for api functions ?
+            if ($funcType == "api") {
+                throw new FunctionNotFoundException($modFunc);
+            } else {
+                return $xar->ctl()->notFound('Function not found');
+            }
+        }
+
+        // Call function
+        $found = true;
+        $isLoaded = true;
+        $msg = '';
+        if (!function_exists($modFunc)) {
+            // attempt to load the module's api - this will load xaruserapi.php or xaruser.php etc. if they exist
+            if ($funcType == 'api') {
+                $this->apiLoad($modName, $modType);
+            } else {
+                try {
+                    $this->load($modName, $modType);
+                } catch (Exception $e) {
+                    return $xar->ctl()->notFound('Function not found');
+                }
+            }
+            $xar = $this->getParent();
+
+            $xar->log()->info("xarMod::callFunc: Calling $modFunc");
+
+            // let's check for that function again to be sure
+            if (!function_exists($modFunc)) {
+                // Q: who are we kidding with this? osdirectory == modName always, no?
+                $funcFile = sys::code() . 'modules/' . $modBaseInfo['osdirectory'] . '/xar' . $modType . $funcType . '/' . strtolower($funcName) . '.php';
+                if (!file_exists($funcFile)) {
+                    // @todo cache this if we ever get here again? Already cached internally for module class methods
+                    // Note: pass modType . funcType as modType here for module classes, and use funcType to identify the callType (api or not)
+                    $callable = $this->getModuleClassMethod($modName, $modType . $funcType, $funcName, $funcType);
+                    if (!empty($callable)) {
+                        // this expects an instance in $callable[0]
+                        if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
+                            $this->getContext()?->tracePath($callable[0]::class . '::' . $callable[1], $args);
+                            $callable[0]->setContext($this->getContext());
+                        }
+                        $funcResult = $callable($args);
+                        return $funcResult;
+                    }
+                    // Valid syntax, but the function doesn't exist
+                    if ($funcType == "api") {
+                        throw new FunctionNotFoundException($modFunc);
+                    } else {
+                        return $xar->ctl()->notFound('Function not found');
+                    }
+                } else {
+                    ob_start();
+                    $r = sys::import('modules.' . $modName . '.xar' . $modType . $funcType . '.' . strtolower($funcName));
+                    $error_msg = strip_tags(ob_get_contents());
+                    ob_end_clean();
+
+                    if (empty($r) || !$r) {
+                        $msg = "Could not load function file: [#(1)].\n\n Error Caught:\n #(2)";
+                        $params = [$funcFile, $error_msg];
+                        $isLoaded = false;
+                    }
+                    if (!function_exists($modFunc)) {
+                        $found = false;
+                    }
+                }
+            }
+
+            if ($found) {
+                // Load the translations file, only if we have loaded the API function for the first time here.
+                if ($xar->mls()->loadModuleTranslations($modName, $modType . $funcType, $funcName) === null) {
+                    return;
+                }
+            }
+        }
+
+        if (!$found) {
+            return $xar->ctl()->notFound('Function not found');
+        }
+        $this->getContext()?->tracePath(__METHOD__ . ': ' . $modFunc, $args);
+
+        $funcResult = $modFunc($args, $this->getContext());
+        return $funcResult;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    protected function privateLoad($modName, $modType, $flags = 0)
+    {
+        // --- LEGACY METHOD BODY ---
+        static $loadedModuleCache = [];
+        if (empty($modName)) {
+            throw new EmptyParameterException('modName');
+        }
+
+        // Make sure we access the cache with lower case key, return true when we already loaded
+        $cacheKey = strtolower($modName . $modType);
+        if (isset($loadedModuleCache[$cacheKey])) {
+            return true;
+        }
+        $xar = $this->getParent();
+
+        // Log it when it doesn't come from the cache
+        $xar->log()->debug("xarMod::load: Loading $modName:$modType");
+
+        $info = $xar->mod()->getInfoHelper();
+
+        $modBaseInfo = $info->getBaseInfo($modName);
+        // Not a valid module - throw exception
+        if (empty($modBaseInfo)) {
+            throw new ModuleNotFoundException($modName);
+        }
+
+        // Not a valid module state - throw exception
+        if ($modBaseInfo['state'] != xarMod::STATE_ACTIVE && !($flags & xarMod::LOAD_ANYSTATE)) {
+            throw new ModuleNotActiveException($modName);
+        }
+
+        // Not the correct version - throw exception unless we are upgrading
+        if (!$info->checkVersion($modName) && !$xar->mem()->get('Upgrade', 'upgrading') && $modName != 'modules') {
+            xarCore::exit('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
+            return false;
+        }
+
+        // Load the module files
+        $modDir = $modBaseInfo['directory'];
+        $fileName = sys::code() . 'modules/' . $modDir . '/xar' . $modType . '.php';
+
+        // Assume failure
+        if (file_exists($fileName)) {
+            sys::import('modules.' . $modDir . '.xar' . $modType);
+            $loadedModuleCache[$cacheKey] = true;
+        } elseif (is_dir(sys::code() . 'modules/' . $modDir . '/xar' . $modType)) {
+            // this is OK too - do nothing
+            $loadedModuleCache[$cacheKey] = true;
+        } else {
+            // Do we have a module class handling this modType
+            $instance = $this->getModule($modName);
+            // returns null for DefaultModule() = no suitable class type
+            $classType = $instance->getClassType($modType);
+            if (isset($classType)) {
+                // this is OK too - do nothing
+                $loadedModuleCache[$cacheKey] = true;
+            } else {
+                // this is (not really) OK too - do nothing
+                $loadedModuleCache[$cacheKey] = false;
+                $xar->log()->info("xarMod::load: Loading $modName:$modType FAILED");
+            }
+        }
+
+        // Load the module translations files (common functions, uncut functions etc.)
+        if ($xar->mls()->loadModuleTranslations($modName, '', $modType) === null) {
+            return;
+        }
+
+        $info = $xar->mod()->getInfoHelper();
+
+        // Load database info
+        $info->loadDbInfo($modName, $modDir);
+
+        // Module loaded successfully, trigger the proper event
+        if (preg_match('/(.*)?api$/', $modType)) {
+            xarEvents::notify('ModApiLoad', $modName, $this->getContext());
+        } else {
+            xarEvents::notify('ModLoad', $modName, $this->getContext());
+        }
+        return true;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    public function userapi($modName)
+    {
+        // --- LEGACY METHOD BODY ---
+        return $this->getModule($modName)->userapi();
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    public function usergui($modName)
+    {
+        // --- LEGACY METHOD BODY ---
+        return $this->getModule($modName)->usergui();
+        // --- END LEGACY METHOD BODY ---
     }
 
     public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string
     {
-        return xarMod::checkModuleFunction($tplmodule, $type, $func, $defaultmodule);
+        // --- LEGACY METHOD BODY ---
+        static $tplmodule_cache = [];
+
+        $key = "$tplmodule:$type:$func";
+        if (!isset($tplmodule_cache[$key])) {
+            $file = sys::code() . 'modules/' . $tplmodule . '/xar' . $type . '/' . $func . '.php';
+            if (file_exists($file)) {
+                $tplmodule_cache[$key] = $tplmodule;
+                return $tplmodule_cache[$key];
+            }
+            // Note: pass modType . funcType as modType here for module classes, and use callType (api or not)
+            if (str_ends_with($type, 'api')) {
+                $callType = 'api';
+            } else {
+                $callType = 'gui';
+                // make sure configure() adds 'type' as well as 'typegui' to call types
+                //$type .= 'gui';
+            }
+            // Note: component would use configure() with no context here
+            $callable = $this->getModuleClassMethod($tplmodule, $type, $func, $callType);
+            if (!empty($callable)) {
+                $tplmodule_cache[$key] = $tplmodule;
+            } else {
+                $tplmodule_cache[$key] = $defaultmodule;
+            }
+        }
+        return $tplmodule_cache[$key];
+        // --- END LEGACY METHOD BODY ---
     }
 
-    public function getModule(string $modName, ?Context $context = null): ModuleInterface
+    public function getModule(string $modName): ModuleInterface
     {
-        return xarMod::getModule($modName, $context);
+        // --- LEGACY METHOD BODY ---
+        if (!array_key_exists($modName, $this->moduleClasses)) {
+            $result = xarClassMap::findModuleClass($modName);
+            if (!empty($result) && class_exists($result['classname'])) {
+                $class = $result['classname'];
+                try {
+                    $this->moduleClasses[$modName] = new $class($modName, $this->getContext());
+                } catch (Throwable $e) {
+                    $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext());
+                    $xar = $this->getParent();
+                    $xar->log()->warning("xarMod::getModule: Error loading $class for module $modName");
+                }
+            } else {
+                $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext());
+            }
+        } else {
+            $this->moduleClasses[$modName]->setContext($this->getContext());
+        }
+        return $this->moduleClasses[$modName];
+        // --- END LEGACY METHOD BODY ---
     }
 
-    public function getModuleClassMethod(string $modName, string $modType, string $funcName, string $callType, ?Context $context = null): ?callable
+    public function getModuleClassMethod(string $modName, string $modType, string $funcName, string $callType): ?callable
     {
-        return xarMod::getModuleClassMethod($modName, $modType, $funcName, $callType, $context);
+        // --- LEGACY METHOD BODY ---
+        static $methods_cache = [];
+
+        $key = "$modName:$modType:$funcName:$callType";
+        if (!array_key_exists($key, $methods_cache)) {
+            $xar = $this->getParent();
+            $instance = $this->getModule($modName);
+            // returns null for DefaultModule() = no suitable class method
+            $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName, $callType);
+            if (!isset($methods_cache[$key])) {
+                $xar->log()->info("xarMod::getModuleClassMethod: Missing method for $key");
+            } else {
+                // Load the translations file, only if we have loaded the function for the first time here.
+                $xar->mls()->loadModuleTranslations($modName, $modType, $funcName);
+            }
+        }
+        return $methods_cache[$key];
+        // --- END LEGACY METHOD BODY ---
     }
 
     /** @param array<string, mixed> $args */
-    public function callMethod(callable $callable, array $args, ?Context $context = null): mixed
+    public function callMethod(callable $callable, array $args): mixed
     {
         // this expects an instance in $callable[0]
         if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
-            $callable[0]->setContext($context);
+            $callable[0]->setContext($this->getContext());
         }
         return $callable($args);
     }

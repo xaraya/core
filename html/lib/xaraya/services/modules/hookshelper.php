@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.3
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -32,7 +32,9 @@ class HooksHelper extends ServiceClass
      */
     public function isHooked(string $hookModName, string $callerModName, ?int $callerItemType = null): bool
     {
+        // --- LEGACY METHOD BODY ---
         return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -42,7 +44,6 @@ class HooksHelper extends ServiceClass
      */
     public function callHooks(string $scope, string $action, mixed $itemid, mixed $extraInfo = null, string $callerModName = '', ?int $callerItemType = null): mixed
     {
-        //return xarModHooks::call($scope, $action, $itemid, $extraInfo, $this->getModName(), $this->getItemType(), $this->getContext());
         // scope and action are concatenated to form the name of the hook event
         $event = ucfirst($scope) . ucfirst($action);
         $extraInfo ??= [];
@@ -66,5 +67,29 @@ class HooksHelper extends ServiceClass
         // @todo check if we'll have context here
         $context ??= $this->getContext();
         return xarHooks::notify($event, $info, $context);
+    }
+
+    public function getList($callerModName, $hookScope, $hookAction, $callerItemType = '')
+    {
+        // --- LEGACY METHOD BODY ---
+        $event = ucfirst($hookScope) . ucfirst($hookAction);
+        return xarHooks::getSubjectObservers($callerModName, $event, $callerItemType);
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    public function register($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
+    {
+        // --- LEGACY METHOD BODY ---
+        $event = ucfirst($hookScope) . ucfirst($hookAction);
+        return xarHooks::registerObserver($event, $hookModName, $hookArea, $hookModType, $hookModFunc);
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    public function unregister($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
+    {
+        // --- LEGACY METHOD BODY ---
+        $event = ucfirst($hookScope) . ucfirst($hookAction);
+        return xarHooks::unregisterObserver($event, $hookModName);
+        // --- END LEGACY METHOD BODY ---
     }
 }
