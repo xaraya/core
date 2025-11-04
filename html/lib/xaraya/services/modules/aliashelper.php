@@ -58,7 +58,7 @@ class AliasHelper extends ServiceClass
         // return xarModAlias::set($alias, $modName);
     }
 
-    public function delete($alias, $modName): mixed
+    public function remove($alias, $modName): mixed
     {
         // --- LEGACY METHOD BODY ---
         $mod = $this->getParent()->mod();

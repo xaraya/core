@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use DuplicateException;
+use ixarTheme;
 use xarTheme;
 use sys;
 use Xaraya\Modules\InstallerTool;
@@ -125,14 +126,14 @@ class RegenerateMethod extends MethodClass
                 $result = $dbconn->Execute($sql, $bindvars);
 
                 $set = $adminapi->setstate(['regid' => $themeInfo['regid'],
-                    'state' => xarTheme::STATE_UNINITIALISED]);
+                    'state' => ixarTheme::STATE_UNINITIALISED]);
                 if (!isset($set)) {
                     return;
                 }
             } else {
                 // BEGIN bugfix (561802) - cmgrote
-                if ($dbThemes[$name]['version'] != $themeInfo['version'] && $dbThemes[$name]['state'] != xarTheme::STATE_UNINITIALISED) {
-                    $set = $adminapi->setstate(['regid' => $dbThemes[$name]['regid'], 'state' => xarTheme::STATE_UPGRADED]);
+                if ($dbThemes[$name]['version'] != $themeInfo['version'] && $dbThemes[$name]['state'] != ixarTheme::STATE_UNINITIALISED) {
+                    $set = $adminapi->setstate(['regid' => $dbThemes[$name]['regid'], 'state' => ixarTheme::STATE_UPGRADED]);
                     assert(isset($set));
                 }
             }

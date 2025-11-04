@@ -13,6 +13,7 @@ namespace Xaraya\Modules\Themes\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -45,7 +46,7 @@ class GetitemsMethod extends MethodClass
         $adminapi = $this->adminapi();
 
         if (!isset($state)) {
-            $state = xarTheme::STATE_ACTIVE;
+            $state = ixarTheme::STATE_ACTIVE;
         }
 
         if (!isset($class)) {
@@ -83,15 +84,15 @@ class GetitemsMethod extends MethodClass
             $bindvars[] = $regid;
         }
 
-        if ($state != xarTheme::STATE_ANY) {
-            if ($state != xarTheme::STATE_INSTALLED) {
+        if ($state != ixarTheme::STATE_ANY) {
+            if ($state != ixarTheme::STATE_INSTALLED) {
                 $where[] = 'themes.state = ?';
                 $bindvars[] = $state;
             } else {
                 $where[] = 'themes.state != ? AND themes.state < ? AND themes.state != ?';
-                $bindvars[] = xarTheme::STATE_UNINITIALISED;
-                $bindvars[] = xarTheme::STATE_MISSING_FROM_INACTIVE;
-                $bindvars[] = xarTheme::STATE_MISSING_FROM_UNINITIALISED;
+                $bindvars[] = ixarTheme::STATE_UNINITIALISED;
+                $bindvars[] = ixarTheme::STATE_MISSING_FROM_INACTIVE;
+                $bindvars[] = ixarTheme::STATE_MISSING_FROM_UNINITIALISED;
             }
         }
 
@@ -152,17 +153,17 @@ class GetitemsMethod extends MethodClass
                     $item = array_merge($fileinfo, $item);
                     $this->mem()->set('Theme.Infos', $item['regid'], $item);
                     switch ($item['state']) {
-                        case xarTheme::STATE_MISSING_FROM_UNINITIALISED:
-                            $item['state'] = xarTheme::STATE_UNINITIALISED;
+                        case ixarTheme::STATE_MISSING_FROM_UNINITIALISED:
+                            $item['state'] = ixarTheme::STATE_UNINITIALISED;
                             break;
-                        case xarTheme::STATE_MISSING_FROM_INACTIVE:
-                            $item['state'] = xarTheme::STATE_INACTIVE;
+                        case ixarTheme::STATE_MISSING_FROM_INACTIVE:
+                            $item['state'] = ixarTheme::STATE_INACTIVE;
                             break;
-                        case xarTheme::STATE_MISSING_FROM_ACTIVE:
-                            $item['state'] = xarTheme::STATE_ACTIVE;
+                        case ixarTheme::STATE_MISSING_FROM_ACTIVE:
+                            $item['state'] = ixarTheme::STATE_ACTIVE;
                             break;
-                        case xarTheme::STATE_MISSING_FROM_UPGRADED:
-                            $item['state'] = xarTheme::STATE_UPGRADED;
+                        case ixarTheme::STATE_MISSING_FROM_UPGRADED:
+                            $item['state'] = ixarTheme::STATE_UPGRADED;
                             break;
                     }
                 } else {
@@ -181,17 +182,17 @@ class GetitemsMethod extends MethodClass
                     // as per the patch by Garrett Hunter
                     // Credits: Garrett Hunter <Garrett.Hunter@Verizon.net>
                     switch ($item['state']) {
-                        case xarTheme::STATE_UNINITIALISED:
-                            $item['state'] = xarTheme::STATE_MISSING_FROM_UNINITIALISED;
+                        case ixarTheme::STATE_UNINITIALISED:
+                            $item['state'] = ixarTheme::STATE_MISSING_FROM_UNINITIALISED;
                             break;
-                        case xarTheme::STATE_INACTIVE:
-                            $item['state'] = xarTheme::STATE_MISSING_FROM_INACTIVE;
+                        case ixarTheme::STATE_INACTIVE:
+                            $item['state'] = ixarTheme::STATE_MISSING_FROM_INACTIVE;
                             break;
-                        case xarTheme::STATE_ACTIVE:
-                            $item['state'] = xarTheme::STATE_MISSING_FROM_ACTIVE;
+                        case ixarTheme::STATE_ACTIVE:
+                            $item['state'] = ixarTheme::STATE_MISSING_FROM_ACTIVE;
                             break;
-                        case xarTheme::STATE_UPGRADED:
-                            $item['state'] = xarTheme::STATE_MISSING_FROM_UPGRADED;
+                        case ixarTheme::STATE_UPGRADED:
+                            $item['state'] = ixarTheme::STATE_MISSING_FROM_UPGRADED;
                             break;
                     }
                     //$item['class'] = "";

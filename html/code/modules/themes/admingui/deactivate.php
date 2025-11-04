@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -73,7 +74,7 @@ class DeactivateMethod extends MethodClass
         $minfo = xarTheme::getInfo($id);
         $target = $minfo['name'];
         if (empty($return_url)) {
-            $return_url = $this->ctl()->getModuleURL('themes', 'admin', 'view', ['state' => xarTheme::STATE_ANY], null) . '#' . $target;
+            $return_url = $this->ctl()->getModuleURL('themes', 'admin', 'view', ['state' => ixarTheme::STATE_ANY], null) . '#' . $target;
         }
 
         // See if we have lost any modules since last generation
@@ -84,7 +85,7 @@ class DeactivateMethod extends MethodClass
         }
 
         // deactivate
-        $deactivated = $adminapi->setstate(['regid' => $id,'state' => xarTheme::STATE_INACTIVE]);
+        $deactivated = $adminapi->setstate(['regid' => $id,'state' => ixarTheme::STATE_INACTIVE]);
 
         // Hmmm, I wonder if the target adding is considered a hack
         // it certainly depends on the implementation of xarController::URL

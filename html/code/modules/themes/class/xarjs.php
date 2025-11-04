@@ -17,6 +17,7 @@ sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 use Xaraya\Services\WithServicesClass;
 // use ixarMod;
+// use ixarTheme;
 
 /**
  * Base JS Class
@@ -238,7 +239,7 @@ class xarJS extends xarObject
         $xar = $this->getServicesClass();
         // now find all libs in the filesystem
         // we want to look in all active themes
-        $filter = ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE];
+        $filter = ['Class' => 2, 'State' => ixarTheme::STATE_ACTIVE];
         $themes = $xar->mod()->apiFunc('themes', 'admin', 'getlist', $filter);
         // we want to look in all active modules
         $modules = $xar->mod()->apiFunc(
@@ -1230,7 +1231,7 @@ class xarJSLib extends xarObject
             'themes',
             'admin',
             'getlist',
-            ['filter' => ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE]]
+            ['filter' => ['Class' => 2, 'State' => ixarTheme::STATE_ACTIVE]]
         );
         // we want to look in all active modules
         $modules = $xar->mod()->apiFunc(

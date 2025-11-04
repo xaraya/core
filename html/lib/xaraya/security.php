@@ -4,7 +4,7 @@
  *
  * @package core\security
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -45,6 +45,7 @@ use Xaraya\Services\xar;
  * Move public static functions to class
  *
  * @package core\security
+ * @deprecated 2.8.5 use xar::sec() instead
  */
 class xarSec extends xarObject
 {
@@ -65,23 +66,7 @@ class xarSec extends xarObject
      */
     public static function genAuthKey($modName = null)
     {
-        $xar = xar::getServicesClass();
-        if (empty($modName)) {
-            $modName = $xar->ctl()->getRequest()->getModule();
-        }
-
-        // Date gives extra security but leave it out for now
-        // $key = $xar->session()->getVar('rand') . $modName . date ('YmdGi');
-        $key = $xar->session()->getVar('rand') . strtolower($modName);
-
-        // Encrypt key
-        $authid = md5($key);
-
-        // Tell xarCache not to cache this page
-        xarCache::noCache();
-
-        // Return encrypted key
-        return $authid;
+        return xar::sec()->genAuthKey($modName);
     }
 
     /**
@@ -91,56 +76,13 @@ class xarSec extends xarObject
      * this function
      *
      * @param ?string $modName
-     * @param string $authIdVarName
+     * @param string $varName
      * @return boolean $catch true if the key is valid, false if it is not
      * @throws ForbiddenOperationException
      * @todo bring back possibility of time authorized keys
      */
-    public static function confirmAuthKey($modName = null, $authIdVarName = 'authid', $catch = false)
+    public static function confirmAuthKey($modName = null, $varName = 'authid', $catch = false)
     {
-        $xar = xar::getServicesClass();
-        // We don't need this check for AJAX calls
-        if ($xar->ctl()->getRequest()->isAjax()) {
-            return true;
-        }
-
-        if (!isset($modName)) {
-            $modName = $xar->ctl()->getRequest()->getModule();
-        }
-        $authid = xarController::getVar($authIdVarName);
-
-        // Regenerate static part of key
-        $partkey = $xar->session()->getVar('rand') . strtolower($modName);
-
-        // Not using time-sensitive keys for the moment
-        //    // Key life is 5 minutes, so search backwards and forwards 5
-        //    // minutes to see if there is a match anywhere
-        //    for ($i=-5; $i<=5; $i++) {
-        //        $testdate  = mktime(date('G'), date('i')+$i, 0, date('m') , date('d'), date('Y'));
-        //
-        //        $testauthid = md5($partkey . date('YmdGi', $testdate));
-        //        if ($testauthid == $authid) {
-        //            // Match
-        //
-        //            // We've used up the current random
-        //            // number, make up a new one
-        //            srand((double) microtime(true) * 1000000.0);
-        //            $xar->session()->setVar('rand', rand());
-        //
-        //            return true;
-        //        }
-        //    }
-        if ((md5($partkey)) == $authid) {
-            // Match - generate new random number for next key and leave happy
-            srand((float) microtime(true) * 1000000.0);
-            $xar->session()->setVar('rand', rand());
-            return true;
-        }
-        // Not found, assume invalid
-        if ($catch) {
-            throw new ForbiddenOperationException();
-        } else {
-            return false;
-        }
+        return xar::sec()->confirmAuthKey($modName, $varName, $catch);
     }
 }

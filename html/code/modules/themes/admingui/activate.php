@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -73,7 +74,7 @@ class ActivateMethod extends MethodClass
         // set the target location (anchor) to go to within the page
         $target = $minfo['name'];
         if (empty($return_url)) {
-            $return_url = $this->ctl()->getModuleURL('themes', 'admin', 'view', ['state' => xarTheme::STATE_ANY], null) . '#' . $target;
+            $return_url = $this->ctl()->getModuleURL('themes', 'admin', 'view', ['state' => ixarTheme::STATE_ANY], null) . '#' . $target;
         }
         $this->ctl()->redirect($return_url);
         return true;

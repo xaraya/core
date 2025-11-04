@@ -15,6 +15,7 @@
 
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+// use ixarTheme;
 
 /**
  * Class to model registration information for a property
@@ -63,7 +64,7 @@ class ThemeInitialization extends xarObject
                 // Clear the cache
                 self::ClearCache();
 
-                $activeThemes = $xar->mod()->apiFunc('themes', 'admin', 'getlist', ['filter' => ['State' => xarTheme::STATE_ACTIVE]]);
+                $activeThemes = $xar->mod()->apiFunc('themes', 'admin', 'getlist', ['filter' => ['State' => ixarTheme::STATE_ACTIVE]]);
                 assert(!empty($activeThemes)); // this should never happen
 
                 foreach ($activeThemes as $themeInfo) {

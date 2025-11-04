@@ -5,7 +5,7 @@
  *
  * @package core\themes
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -15,6 +15,9 @@
 */
 
 sys::import('xaraya.variables.theme');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\Modules\InfoHelper;
+use Xaraya\Services\xar;
 
 // Themes
 class ThemeNotFoundException extends NotFoundExceptions
@@ -22,10 +25,7 @@ class ThemeNotFoundException extends NotFoundExceptions
     protected $message = 'A theme is missing, the theme name could not be determined in the current context';
 }
 
-/**
- * Theme handling functions
- */
-class xarTheme extends xarObject
+interface ixarTheme
 {
     public const STATE_UNINITIALISED              = 1;
     public const STATE_INACTIVE                   = 2;
@@ -37,8 +37,25 @@ class xarTheme extends xarObject
     public const STATE_MISSING_FROM_INACTIVE      = 7;
     public const STATE_MISSING_FROM_ACTIVE        = 8;
     public const STATE_MISSING_FROM_UPGRADED      = 9;
+}
 
+/**
+ * Theme handling functions
+ */
+class xarTheme extends xarObject implements ixarTheme
+{
     public static $noCacheState = false;
+    protected static ?InfoHelper $infoService = null;
+
+    protected static function info(): InfoHelper
+    {
+        if (!isset(self::$infoService)) {
+            $infoService = xar::getServicesClass()->service('modules.info');
+            assert($infoService instanceof InfoHelper);
+            self::$infoService = $infoService;
+        }
+        return self::$infoService;
+    }
 
     /**
      * Gets theme registry ID given its name
@@ -49,7 +66,7 @@ class xarTheme extends xarObject
             throw new EmptyParameterException('themeName');
         }
 
-        $themeBaseInfo = xarMod::getBaseInfo($themeName, 'theme');
+        $themeBaseInfo = self::info()->getBaseInfo($themeName, 'theme');
         if (empty($themeBaseInfo)) {
             return;
         } // throw back
@@ -62,7 +79,7 @@ class xarTheme extends xarObject
      */
     public static function getRegID($themeName)
     {
-        return xarMod::getRegID($themeName, 'theme');
+        return self::info()->getRegID($themeName, 'theme');
     }
 
     /**
@@ -70,7 +87,7 @@ class xarTheme extends xarObject
      */
     public static function getInfo($regId)
     {
-        return xarMod::getInfo($regId, $type = 'theme');
+        return self::info()->getInfo($regId, 'theme');
     }
 
     /**
@@ -78,7 +95,7 @@ class xarTheme extends xarObject
      */
     public static function isAvailable($themeName)
     {
-        return xarMod::isAvailable($themeName, $type = 'theme');
+        return self::info()->isAvailable($themeName, 'theme');
     }
 
     /**
@@ -86,7 +103,7 @@ class xarTheme extends xarObject
      */
     public static function getFileInfo($themeOsDir)
     {
-        return xarMod::getFileInfo($themeOsDir, $type = 'theme');
+        return self::info()->getFileInfo($themeOsDir, 'theme');
     }
 
     /**
@@ -94,7 +111,12 @@ class xarTheme extends xarObject
      */
     public static function getBaseInfo($themeName)
     {
-        return xarMod::getBaseInfo($themeName, $type = 'theme');
+        return self::info()->getBaseInfo($themeName, 'theme');
+    }
+
+    public static function getNoCache()
+    {
+        return self::$noCacheState;
     }
 
     /**
@@ -105,18 +127,5 @@ class xarTheme extends xarObject
     public static function setNoCache($noCache)
     {
         self::$noCacheState = (bool) $noCache;
-    }
-
-    /**
-     * Get all theme variables for a particular theme
-     * @deprecated 2.4.1 not supported
-     */
-    public static function getVarsByTheme($themeName)
-    {
-        // TODO: we would need to return all mod item vars here where:
-        // mod  = themes
-        // item = the theme
-        // For now, return the vars of the themes module
-        return xarModVars::preload('themes');
     }
 }

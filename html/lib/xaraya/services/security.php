@@ -47,7 +47,7 @@ interface SecurityInterface extends ServiceInterface
     /**
      * Confirm authorisation key by name for this module
      */
-    public function confirmAuthKey(?string $modName = null, string $name = 'authid'): bool;
+    public function confirmAuthKey(?string $modName = null, string $name = 'authid', $catch = false): bool;
 }
 
 /**

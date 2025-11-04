@@ -17,6 +17,8 @@
 namespace Xaraya\Services;
 
 use Xaraya\Modules\ModuleInterface;
+use Xaraya\Modules\UserApiInterface;
+use Xaraya\Modules\UserGuiInterface;
 use xarRoles;
 use xarSecurity;
 use sys;
@@ -62,6 +64,8 @@ interface ModulesInterface extends ServiceInterface
     /** @return array<string, mixed> */
     public function getFileInfo(?string $modName = null): array;
     /** @return array<string, mixed> */
+    public function parseFileInfo($version, $name = ''): array;
+    /** @return array<string, mixed> */
     public function getBaseInfo(?string $modName = null): array;
     /** @return array<string, mixed> */
     public function getInfo(int $modRegId): array;
@@ -77,6 +81,8 @@ interface ModulesInterface extends ServiceInterface
     public function guiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     public function load(?string $modName = null, ?string $modType = null): mixed;
     public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed;
+    public function userapi(?string $modName = null): UserApiInterface|null;
+    public function usergui(?string $modName = null): UserGuiInterface|null;
     public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string;
     public function getModule(?string $modName = null): ModuleInterface;
     public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): ?callable;
@@ -85,10 +91,13 @@ interface ModulesInterface extends ServiceInterface
     /** @param array<string, mixed> $args */
     public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     public function resolveAlias(string $name): string;
+    public function setAlias(string $alias, string $modName): mixed;
+    public function removeAlias(string $alias, string $modName): mixed;
     public function isHooked(string $hookModName, ?string $callerModName = null, ?int $callerItemType = null): bool;
     public function callHooks(string $scope, string $action, mixed $itemid, mixed $extraInfo = null, ?string $callerModName = null, ?int $callerItemType = null): mixed;
     /** @param array<string, mixed> $info */
     public function notifyHooks(string $event, array $info = []): mixed;
+    public function checkAccess(?string $modName = null, string $action = '', ?int $roleid = null): bool;
     public function setCurrentModName(string $modName): void;
 }
 
@@ -424,6 +433,14 @@ trait ModulesTrait
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function parseFileInfo($version, $name = ''): array
+    {
+        return $this->getInfoHelper()->parseFileInfo($version, $name);
+    }
+
+    /**
      * Get base information on module
      * @return array<string, mixed>
      */
@@ -534,6 +551,18 @@ trait ModulesTrait
         return $this->getInfoHelper()->loadDbInfo($modName, $modDir);
     }
 
+    public function userapi(?string $modName = null): UserApiInterface|null
+    {
+        $modName ??= $this->getModName();
+        return $this->getModule($modName)->userapi();
+    }
+
+    public function usergui(?string $modName = null): UserGuiInterface|null
+    {
+        $modName ??= $this->getModName();
+        return $this->getModule($modName)->usergui();
+    }
+
     /**
      * Check if a particular module function exists, or default back to 'dynamicdata'
      * @param string $tplmodule optional module where the templates reside
@@ -630,6 +659,16 @@ trait ModulesTrait
         return $this->getAliasHelper()->resolve($name);
     }
 
+    public function setAlias(string $alias, string $modName): mixed
+    {
+        return $this->getAliasHelper()->set($alias, $modName);
+    }
+
+    public function removeAlias(string $alias, string $modName): mixed
+    {
+        return $this->getAliasHelper()->remove($alias, $modName);
+    }
+
     /**
      * See if a hook module (observer) is attached (hooked) to specific module (subject) (+ itemtype)
      */
@@ -674,8 +713,9 @@ trait ModulesTrait
         return $this->getHooksHelper()->notifyHooks($event, $info, $this->getContext());
     }
 
-    protected function checkAccess($moduleName, $action, $roleid = null)
+    public function checkAccess(?string $modName = null, string $action = '', ?int $roleid = null): bool
     {
+        $modName ??= $this->getModName();
         // --- LEGACY METHOD BODY ---
         // TODO: get module variable with access config: groups, masks, levels or whatever
 
@@ -702,9 +742,9 @@ trait ModulesTrait
         if (!empty($roleid)) {
             $role = xarRoles::get($roleid);
             $rolename = $role->getName();
-            return xarSecurity::check('', 0, 'All', 'All', $moduleName, $rolename, 0, $seclevel);
+            return xarSecurity::check('', 0, 'All', 'All', $modName, $rolename, 0, $seclevel);
         } else {
-            return xarSecurity::check('', 0, 'All', 'All', $moduleName, '', 0, $seclevel);
+            return xarSecurity::check('', 0, 'All', 'All', $modName, '', 0, $seclevel);
         }
         // --- END LEGACY METHOD BODY ---
     }

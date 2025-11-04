@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use BadParameterException;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -88,7 +89,7 @@ class GetthemelistMethod extends MethodClass
         if (isset($filter['State'])) {
             $get['state'] = $filter['State'];
         } else {
-            $get['state'] = xarTheme::STATE_ACTIVE;
+            $get['state'] = ixarTheme::STATE_ACTIVE;
         }
 
         return $adminapi->getitems($get);

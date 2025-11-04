@@ -59,6 +59,9 @@ final class UserApiTest extends TestHelper
         $module->setContext(null);
 
         $context = $this->createContext(['source' => __METHOD__]);
+        // set context for core services here first + return static services class
+        xar::setServicesContext($context);
+
         $userapi = xarMod::userapi('dynamicdata');
         $userapi->setContext($context);
 
@@ -84,6 +87,9 @@ final class UserApiTest extends TestHelper
     public function testUserApiTestCall(): void
     {
         $context = $this->createContext(['source' => __METHOD__]);
+        // set context for core services here first + return static services class
+        xar::setServicesContext($context);
+
         $userapi = xarMod::userapi('dynamicdata');
         $userapi->setContext($context);
 
@@ -157,6 +163,9 @@ final class UserApiTest extends TestHelper
         $this->assertTrue(is_callable($callable));
 
         $context = $this->createContext(['source' => __METHOD__]);
+        // set context for core services here first + return static services class
+        xar::setServicesContext($context);
+
         $args = ['hello' => 'world'];
         $expected = array_merge($args, [
             'context' => $context,
@@ -194,6 +203,9 @@ final class UserApiTest extends TestHelper
     public function testModuleService(): void
     {
         $context = $this->createContext(['source' => __METHOD__]);
+        // set context for core services here first + return static services class
+        xar::setServicesContext($context);
+
         $userapi = xarMod::userapi('dynamicdata');
         $userapi->setContext($context);
 

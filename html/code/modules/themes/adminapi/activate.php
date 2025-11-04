@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -56,7 +57,7 @@ class ActivateMethod extends MethodClass
 
         // Update state of theme
         $res = $adminapi->setstate(['regid' => $regid,
-            'state' => xarTheme::STATE_ACTIVE]);
+            'state' => ixarTheme::STATE_ACTIVE]);
 
         return true;
     }

@@ -43,7 +43,7 @@ class CountitemsMethod extends MethodClass
         extract($args);
 
         if (!isset($state)) {
-            $state = xarTheme::STATE_ACTIVE;
+            $state = ixarTheme::STATE_ACTIVE;
         }
 
         if (!isset($class)) {
@@ -58,15 +58,15 @@ class CountitemsMethod extends MethodClass
         $where = [];
         $bindvars = [];
 
-        if ($state != xarTheme::STATE_ANY) {
-            if ($state != xarTheme::STATE_INSTALLED) {
+        if ($state != ixarTheme::STATE_ANY) {
+            if ($state != ixarTheme::STATE_INSTALLED) {
                 $where[] = 'themes.state = ?';
                 $bindvars[] = $state;
             } else {
                 $where[] = 'themes.state != ? AND themes.state < ? AND themes.state != ?';
-                $bindvars[] = xarTheme::STATE_UNINITIALISED;
-                $bindvars[] = xarTheme::STATE_MISSING_FROM_INACTIVE;
-                $bindvars[] = xarTheme::STATE_MISSING_FROM_UNINITIALISED;
+                $bindvars[] = ixarTheme::STATE_UNINITIALISED;
+                $bindvars[] = ixarTheme::STATE_MISSING_FROM_INACTIVE;
+                $bindvars[] = ixarTheme::STATE_MISSING_FROM_UNINITIALISED;
             }
         }
         if (isset($class) && $class != 3) {

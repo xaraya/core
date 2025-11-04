@@ -168,7 +168,7 @@ trait StaticFileBridgeTrait
      */
     public function buildStaticFilePath(string $source = 'default', ?string $folder = null, ?string $file = null, array $extra = [], string $prefix = ''): string
     {
-        // see xarTheme::image()
+        // see xar::tpl()->image()
         $uri = $prefix;
         // {prefix}/{source}/{folder}/{file} = file /code/modules/{dynamicdata}/{xartemplates}/{style/dd.css}
         // {prefix}/{source}/{folder}/{file} = file /themes/{default}/...

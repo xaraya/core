@@ -2,6 +2,7 @@
 
 /**
  * Modules Service Helper for Module Information
+ * Note: also used by xarTheme::* static methods
  *
  * @package core\services
  * @subpackage services
@@ -28,6 +29,7 @@ use IDNotFoundException;
 
 /**
  * Modules Service Helper for Module Information
+ * Note: also used by xarTheme::* static methods
  */
 class InfoHelper extends ServiceClass
 {
@@ -77,7 +79,7 @@ class InfoHelper extends ServiceClass
         //return (isset($ids['regid']) && !is_null($ids['regid'])) ? (int) $ids['regid'] : null;
         // --- END LEGACY METHOD BODY ---
         // avoid getting module id from $this->getRegID() here
-        $fileInfo = $this->getFileInfo($modName);
+        $fileInfo = $this->getFileInfo($modName, $type);
         return (int) ($fileInfo['regid'] ?? 0);
     }
 
@@ -201,7 +203,7 @@ class InfoHelper extends ServiceClass
             $checkNoState = $this->noCacheState;
         } else {
             $cacheCollection = 'Theme.BaseInfos';
-            $checkNoState = xarTheme::$noCacheState;
+            $checkNoState = xarTheme::getNoCache();
         }
 
         $xar = $this->getParent();
@@ -562,7 +564,7 @@ class InfoHelper extends ServiceClass
         // --- END LEGACY METHOD BODY ---
     }
 
-    protected function parseFileInfo($version, $name = '')
+    public function parseFileInfo($version, $name = '')
     {
         // --- LEGACY METHOD BODY ---
         // name and id are required, assert them, otherwise the module is invalid

@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -197,10 +198,10 @@ class ViewMethod extends MethodClass
                 'themesinfo',
                 ['id' => $theme['regid']]
             );
-            $return_url = $this->ctl()->getCurrentURL(['state' => $data['state'] != xarTheme::STATE_ANY ? xarTheme::STATE_ANY : null], false) . '#' . $theme['name'];
+            $return_url = $this->ctl()->getCurrentURL(['state' => $data['state'] != ixarTheme::STATE_ANY ? ixarTheme::STATE_ANY : null], false) . '#' . $theme['name'];
             $return_url = urlencode($return_url);
             switch ($theme['state']) {
-                case xarTheme::STATE_UNINITIALISED: // 1
+                case ixarTheme::STATE_UNINITIALISED: // 1
                     if ($theme['class'] != 4) {
                         $theme['init_url'] = $this->ctl()->getModuleURL(
                             'themes',
@@ -210,7 +211,7 @@ class ViewMethod extends MethodClass
                         );
                     }
                     break;
-                case xarTheme::STATE_INACTIVE: // 2
+                case ixarTheme::STATE_INACTIVE: // 2
                     $theme['activate_url'] = $this->ctl()->getModuleURL(
                         'themes',
                         'admin',
@@ -224,7 +225,7 @@ class ViewMethod extends MethodClass
                         ['id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url]
                     );
                     break;
-                case xarTheme::STATE_ACTIVE: // 3
+                case ixarTheme::STATE_ACTIVE: // 3
                     if ($theme['name'] != $data['user_theme'] && $theme['name'] != $data['admin_theme']) {
                         $theme['deactivate_url'] = $this->ctl()->getModuleURL(
                             'themes',
@@ -234,7 +235,7 @@ class ViewMethod extends MethodClass
                         );
                     }
                     break;
-                case xarTheme::STATE_UPGRADED: // 5
+                case ixarTheme::STATE_UPGRADED: // 5
                     $theme['upgrade_url'] = $this->ctl()->getModuleURL(
                         'themes',
                         'admin',
@@ -242,10 +243,10 @@ class ViewMethod extends MethodClass
                         ['id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url]
                     );
                     break;
-                case xarTheme::STATE_MISSING_FROM_UNINITIALISED: // 4
-                case xarTheme::STATE_MISSING_FROM_INACTIVE: // 7
-                case xarTheme::STATE_MISSING_FROM_ACTIVE: // 8
-                case xarTheme::STATE_MISSING_FROM_UPGRADED: // 9
+                case ixarTheme::STATE_MISSING_FROM_UNINITIALISED: // 4
+                case ixarTheme::STATE_MISSING_FROM_INACTIVE: // 7
+                case ixarTheme::STATE_MISSING_FROM_ACTIVE: // 8
+                case ixarTheme::STATE_MISSING_FROM_UPGRADED: // 9
                     $theme['remove_url'] = $this->ctl()->getModuleURL(
                         'themes',
                         'admin',
@@ -271,24 +272,24 @@ class ViewMethod extends MethodClass
         $data['authid'] = $authid;
 
         $data['states'] = [
-            xarTheme::STATE_ANY
-                => ['id' => xarTheme::STATE_ANY, 'name' => $this->ml('All')],
-            xarTheme::STATE_INSTALLED
-                => ['id' => xarTheme::STATE_INSTALLED, 'name' => $this->ml('Installed')],
-            xarTheme::STATE_ACTIVE
-                => ['id' => xarTheme::STATE_ACTIVE, 'name' => $this->ml('Active')],
-            xarTheme::STATE_INACTIVE
-                => ['id' => xarTheme::STATE_INACTIVE, 'name' => $this->ml('Inactive')],
-            xarTheme::STATE_UNINITIALISED
-                => ['id' => xarTheme::STATE_UNINITIALISED, 'name' => $this->ml('Uninitialized')],
-            xarTheme::STATE_MISSING_FROM_UNINITIALISED
-                => ['id' => xarTheme::STATE_MISSING_FROM_UNINITIALISED, 'name' => $this->ml('Missing (Not Inited)')],
-            xarTheme::STATE_MISSING_FROM_INACTIVE
-                => ['id' => xarTheme::STATE_MISSING_FROM_INACTIVE, 'name' => $this->ml('Missing (Inactive)')],
-            xarTheme::STATE_MISSING_FROM_ACTIVE
-                => ['id' => xarTheme::STATE_MISSING_FROM_ACTIVE, 'name' => $this->ml('Missing (Active)')],
-            xarTheme::STATE_MISSING_FROM_UPGRADED
-                => ['id' => xarTheme::STATE_MISSING_FROM_UPGRADED, 'name' => $this->ml('Missing (Upgraded)')],
+            ixarTheme::STATE_ANY
+                => ['id' => ixarTheme::STATE_ANY, 'name' => $this->ml('All')],
+            ixarTheme::STATE_INSTALLED
+                => ['id' => ixarTheme::STATE_INSTALLED, 'name' => $this->ml('Installed')],
+            ixarTheme::STATE_ACTIVE
+                => ['id' => ixarTheme::STATE_ACTIVE, 'name' => $this->ml('Active')],
+            ixarTheme::STATE_INACTIVE
+                => ['id' => ixarTheme::STATE_INACTIVE, 'name' => $this->ml('Inactive')],
+            ixarTheme::STATE_UNINITIALISED
+                => ['id' => ixarTheme::STATE_UNINITIALISED, 'name' => $this->ml('Uninitialized')],
+            ixarTheme::STATE_MISSING_FROM_UNINITIALISED
+                => ['id' => ixarTheme::STATE_MISSING_FROM_UNINITIALISED, 'name' => $this->ml('Missing (Not Inited)')],
+            ixarTheme::STATE_MISSING_FROM_INACTIVE
+                => ['id' => ixarTheme::STATE_MISSING_FROM_INACTIVE, 'name' => $this->ml('Missing (Inactive)')],
+            ixarTheme::STATE_MISSING_FROM_ACTIVE
+                => ['id' => ixarTheme::STATE_MISSING_FROM_ACTIVE, 'name' => $this->ml('Missing (Active)')],
+            ixarTheme::STATE_MISSING_FROM_UPGRADED
+                => ['id' => ixarTheme::STATE_MISSING_FROM_UPGRADED, 'name' => $this->ml('Missing (Upgraded)')],
         ];
 
         $data['classes'] = [
@@ -310,7 +311,7 @@ class ViewMethod extends MethodClass
         $this->mod()->setUserVar('selclass', $data['class']);
 
         $count = count($themes);
-        if ($data['state'] == xarTheme::STATE_ANY) {
+        if ($data['state'] == ixarTheme::STATE_ANY) {
             if ($data['class'] == 3) {
                 $searched = $this->ml('Showing #(1) themes', $count);
             } else {

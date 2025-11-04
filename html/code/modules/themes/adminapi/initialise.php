@@ -16,6 +16,7 @@ use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
 use Exception;
 use ThemeNotFoundException;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -63,7 +64,7 @@ class InitialiseMethod extends MethodClass
 
         // Update state of theme
         $set = $adminapi->setstate(['regid' => $regid,
-            'state' => xarTheme::STATE_INACTIVE]);
+            'state' => ixarTheme::STATE_INACTIVE]);
 
         if (!isset($set)) {
             throw new Exception('Could not set state of theme');

@@ -562,6 +562,7 @@ class xarHooks extends xarEvents
  * Hook operations for modules
  *
  * @package core\hooks
+ * @deprecated 2.8.5 use xar::hooks() or xar::mod()->*Hooks instead
  */
 class xarModHooks extends xarObject
 {

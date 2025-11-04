@@ -13,6 +13,7 @@ namespace Xaraya\Modules\Themes\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
+use ixarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -41,7 +42,7 @@ class SettingsMethod extends MethodClass
         // form parameters
         $this->var()->find('hidecore', $hidecore, 'str:1:', '0');
         $this->var()->find('selstyle', $selstyle, 'str:1:', 'plain');
-        $this->var()->find('selfilter', $selfilter, 'str:1:', 'xarTheme::STATE_ANY');
+        $this->var()->find('selfilter', $selfilter, 'str:1:', 'ixarTheme::STATE_ANY');
         $this->var()->find('selclass', $selclass, 'str:1:', 'all');
         $this->var()->find('regen', $regen, 'str:1:', false);
         $this->var()->find('useicons', $useicons, 'checkbox', false);

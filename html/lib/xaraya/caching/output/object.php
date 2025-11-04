@@ -19,7 +19,7 @@ sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
- * @deprecated 2.8.5 use xar::cache()() instead
+ * @deprecated 2.8.5 use xar::cache() instead
  */
 class xarObjectCache extends xarObject
 {

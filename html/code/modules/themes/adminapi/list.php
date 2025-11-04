@@ -13,6 +13,7 @@ namespace Xaraya\Modules\Themes\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -42,7 +43,7 @@ class ListMethod extends MethodClass
         }
 
         // Obtain information
-        $themeList = $adminapi->GetThemeList(['filter'     => ['State' => xarTheme::STATE_ANY]]);
+        $themeList = $adminapi->GetThemeList(['filter'     => ['State' => ixarTheme::STATE_ANY]]);
         //throw back
         if (!isset($themeList)) {
             return;

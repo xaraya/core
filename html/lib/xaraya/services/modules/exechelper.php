@@ -309,14 +309,14 @@ class ExecHelper extends ServiceClass
         // --- END LEGACY METHOD BODY ---
     }
 
-    public function userapi($modName)
+    public function userapi(string $modName)
     {
         // --- LEGACY METHOD BODY ---
         return $this->getModule($modName)->userapi();
         // --- END LEGACY METHOD BODY ---
     }
 
-    public function usergui($modName)
+    public function usergui(string $modName)
     {
         // --- LEGACY METHOD BODY ---
         return $this->getModule($modName)->usergui();

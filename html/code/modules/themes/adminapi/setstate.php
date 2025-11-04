@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -74,35 +75,35 @@ class SetstateMethod extends MethodClass
         $oldState = $themeInfo['state'];
 
         switch ($state) {
-            case xarTheme::STATE_UNINITIALISED:
+            case ixarTheme::STATE_UNINITIALISED:
                 // Are we always good here?
-                if ($oldState == xarTheme::STATE_MISSING_FROM_UNINITIALISED) {
+                if ($oldState == ixarTheme::STATE_MISSING_FROM_UNINITIALISED) {
                     break;
                 }
-                if ($oldState != xarTheme::STATE_INACTIVE) {
+                if ($oldState != ixarTheme::STATE_INACTIVE) {
                     break;
                 }
                 break;
-            case xarTheme::STATE_INACTIVE:
-                if (($oldState != xarTheme::STATE_UNINITIALISED)
-                    && ($oldState != xarTheme::STATE_ACTIVE)
-                    && ($oldState != xarTheme::STATE_MISSING_FROM_INACTIVE)
-                    && ($oldState != xarTheme::STATE_UPGRADED)) {
+            case ixarTheme::STATE_INACTIVE:
+                if (($oldState != ixarTheme::STATE_UNINITIALISED)
+                    && ($oldState != ixarTheme::STATE_ACTIVE)
+                    && ($oldState != ixarTheme::STATE_MISSING_FROM_INACTIVE)
+                    && ($oldState != ixarTheme::STATE_UPGRADED)) {
                     $this->session()->setVar('errormsg', $this->ml('Invalid theme state transition'));
                     return false;
                 }
                 break;
-            case xarTheme::STATE_ACTIVE:
-                if (($oldState != xarTheme::STATE_INACTIVE)
-                    && ($oldState != xarTheme::STATE_MISSING_FROM_ACTIVE)) {
+            case ixarTheme::STATE_ACTIVE:
+                if (($oldState != ixarTheme::STATE_INACTIVE)
+                    && ($oldState != ixarTheme::STATE_MISSING_FROM_ACTIVE)) {
                     $this->session()->setVar('errormsg', $this->ml('Invalid theme state transition'));
                     return false;
                 }
                 break;
-            case xarTheme::STATE_UPGRADED:
-                if (($oldState != xarTheme::STATE_INACTIVE)
-                    && ($oldState != xarTheme::STATE_ACTIVE)
-                    && $oldState != xarTheme::STATE_MISSING_FROM_UPGRADED) {
+            case ixarTheme::STATE_UPGRADED:
+                if (($oldState != ixarTheme::STATE_INACTIVE)
+                    && ($oldState != ixarTheme::STATE_ACTIVE)
+                    && $oldState != ixarTheme::STATE_MISSING_FROM_UPGRADED) {
                     $this->session()->setVar('errormsg', $this->ml('Invalid theme state transition'));
                     return false;
                 }

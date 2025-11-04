@@ -45,13 +45,14 @@ interface ixarBlock
  * *
  * @package core\blocks
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  *
  * @author Paul Rosania
  * @author Chris Powis
+ * @deprecated 2.8.5 use xar::block() instead
  */
 class xarBlock extends xarObject implements ixarBlock
 {

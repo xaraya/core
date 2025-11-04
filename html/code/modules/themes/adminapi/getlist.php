@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use BadParameterException;
+use ixarTheme;
 use xarTheme;
 use sys;
 
@@ -44,11 +45,11 @@ class GetlistMethod extends MethodClass
      * The same thing is applied to the AdminCapable property.
      * Permitted values for Class and Category are the ones defined in the proper
      * RFC.
-     * Permitted values for State are xarTheme::STATE_ANY, xarTheme::STATE_UNINITIALISED,
-     * xarTheme::STATE_INACTIVE, xarTheme::STATE_ACTIVE, XARTHEME_STATE_MISSING,
-     * xarTheme::STATE_UPGRADED.
-     * The xarTheme::STATE_ANY means that any state is valid.
-     * The default value of State is xarTheme::STATE_ACTIVE.
+     * Permitted values for State are ixarTheme::STATE_ANY, ixarTheme::STATE_UNINITIALISED,
+     * ixarTheme::STATE_INACTIVE, ixarTheme::STATE_ACTIVE, XARTHEME_STATE_MISSING,
+     * ixarTheme::STATE_UPGRADED.
+     * The ixarTheme::STATE_ANY means that any state is valid.
+     * The default value of State is ixarTheme::STATE_ACTIVE.
      * For other criteria there's no default value.
      * The orderBy parameter specifies the order by which is sorted the result
      * array, can be one of name, regid, class, category or a combination of them,
@@ -77,7 +78,7 @@ class GetlistMethod extends MethodClass
         // this function is identical to getthemelist
         // the only difference is default state here is any instead of active
         if (!isset($filter['State'])) {
-            $filter['State'] = xarTheme::STATE_ANY;
+            $filter['State'] = ixarTheme::STATE_ANY;
         }
 
         $get = [
