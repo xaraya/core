@@ -128,7 +128,7 @@ abstract class xarMLS__ReferencesBackend extends xarObject implements ITranslati
     //abstract function loadContext($ctxType, $ctxName);
     //abstract function getContextNames($ctxType);
 
-    public function bindDomain($dnType = xarMLS::DNTYPE_CORE, $dnName = 'xaraya')
+    public function bindDomain($dnType = ixarMLS::DNTYPE_CORE, $dnName = 'xaraya')
     {
         // only bind each domain once (?)
         //if (isset($this->domaincache["$dnType.$dnName"])) {

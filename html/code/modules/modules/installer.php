@@ -17,7 +17,7 @@ use Xaraya\Modules\InstallerClass;
 use Exception;
 use xarEvents;
 use xarHooks;
-use xarMod;
+use ixarMod;
 use xarSystemVars;
 use xarTableDDL;
 use xarXMLInstaller;
@@ -136,7 +136,7 @@ class Installer extends InstallerClass
             $this->mod()->setVar('selstyle', 'plain');
         }
         if (empty($selfilter)) {
-            $this->mod()->setVar('selfilter', xarMod::STATE_ANY);
+            $this->mod()->setVar('selfilter', ixarMod::STATE_ANY);
         }
         if (empty($selsort)) {
             $this->mod()->setVar('selsort', 'nameasc');

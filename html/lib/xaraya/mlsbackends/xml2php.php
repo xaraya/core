@@ -75,7 +75,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         self::$PHPBackend_keyEntries = [];
     }
 
-    public function bindDomain($domainType = xarMLS::DNTYPE_CORE, $domainName = 'xaraya')
+    public function bindDomain($domainType = ixarMLS::DNTYPE_CORE, $domainName = 'xaraya')
     {
         $bindResult = parent::bindDomain($domainType, $domainName);
 
@@ -98,10 +98,10 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 
         // The core and objects don't have a domain name in the file path, the other do
         switch ($domainType) {
-            case xarMLS::DNTYPE_THEME:
-            case xarMLS::DNTYPE_MODULE:
-            case xarMLS::DNTYPE_PROPERTY:
-            case xarMLS::DNTYPE_BLOCK:
+            case ixarMLS::DNTYPE_THEME:
+            case ixarMLS::DNTYPE_MODULE:
+            case ixarMLS::DNTYPE_PROPERTY:
+            case ixarMLS::DNTYPE_BLOCK:
                 $this->basePHPDir .= $domainName . "/";
                 $this->baseXMLDir = $domainName . "/";
                 break;
@@ -132,7 +132,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         // MLS -> xar::mod()->getBaseInfo -> xarDisplayableName -> xar::mod()->getFileInfo -> MLS
         // We don't use and don't translate KEYS files now,
         // but I will recheck this code in the menus clone
-        // if ($dnType == xarMLS::DNTYPE_MODULE) {
+        // if ($dnType == ixarMLS::DNTYPE_MODULE) {
         //     $this->loadKEYS($dnName);
         // }
 
@@ -315,7 +315,7 @@ class PHPBackendGenerator extends xarObject
         xarMLS::mkdirr($core_dir);
     }
 
-    public function bindDomain($domainType = xarMLS::DNTYPE_CORE, $domainName = 'xaraya')
+    public function bindDomain($domainType = ixarMLS::DNTYPE_CORE, $domainName = 'xaraya')
     {
         $varDir = sys::varpath();
         $locales_dir = "$varDir/locales";
@@ -339,10 +339,10 @@ class PHPBackendGenerator extends xarObject
 
         // The core and objects don't have a domain name in the file path, the other do
         switch ($domainType) {
-            case xarMLS::DNTYPE_THEME:
-            case xarMLS::DNTYPE_MODULE:
-            case xarMLS::DNTYPE_PROPERTY:
-            case xarMLS::DNTYPE_BLOCK:
+            case ixarMLS::DNTYPE_THEME:
+            case ixarMLS::DNTYPE_MODULE:
+            case ixarMLS::DNTYPE_PROPERTY:
+            case ixarMLS::DNTYPE_BLOCK:
                 $this->baseDir .= $domainName . "/";
                 $this->baseXMLDir = $domainName . "/";
                 if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) {

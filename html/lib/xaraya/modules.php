@@ -11,7 +11,7 @@
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.8.1
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -66,14 +66,7 @@ sys::import('xaraya.variables.moduser');
  *
  * @todo this is very likely to change, it was created as baseline for refactoring
  */
-interface IxarMod {}
-
-/**
- * Preliminary class to model xarMod interface
- *
- * @package core\modules
- */
-class xarMod extends xarObject implements IxarMod
+interface ixarMod
 {
     public const LOAD_UNDEFINED                   = 0;
     public const LOAD_ONLYACTIVE                  = 1;
@@ -92,7 +85,15 @@ class xarMod extends xarObject implements IxarMod
     public const STATE_ERROR_INACTIVE             = 11;
     public const STATE_ERROR_ACTIVE               = 12;
     public const STATE_ERROR_UPGRADED             = 13;
+}
 
+/**
+ * Preliminary class to model xarMod interface
+ *
+ * @package core\modules
+ */
+class xarMod extends xarObject implements ixarMod
+{
     public static $genShortUrls = false;
     public static $genXmlUrls   = true;
     public static $noCacheState = false;

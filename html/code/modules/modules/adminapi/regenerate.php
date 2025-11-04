@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Modules\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use DuplicateException;
-use xarMod;
+use ixarMod;
 use xarVersion;
 use sys;
 
@@ -120,7 +120,7 @@ class RegenerateMethod extends MethodClass
                 $set = $adminapi->setstate(
                     [
                         'regid' => $modinfo['regid'],
-                        'state' => xarMod::STATE_UNINITIALISED,
+                        'state' => ixarMod::STATE_UNINITIALISED,
                     ]
                 );
                 if (!isset($set)) {
@@ -148,14 +148,14 @@ class RegenerateMethod extends MethodClass
                             $adminapi->upgrade(
                                 [
                                     'regid' => $modinfo['regid'],
-                                    'state' => xarMod::STATE_INACTIVE,
+                                    'state' => ixarMod::STATE_INACTIVE,
                                 ]
                             );
 
                             $adminapi->activate(
                                 [
                                     'regid' => $modinfo['regid'],
-                                    'state' => xarMod::STATE_ACTIVE,
+                                    'state' => ixarMod::STATE_ACTIVE,
                                 ]
                             );
                         }
@@ -163,9 +163,9 @@ class RegenerateMethod extends MethodClass
                         // Automatically update the module version for uninstalled modules or
                         // where the version number is equivalent (but could be a different format)
                         // or if the module is a core module.
-                        if ($dbModules[$name]['state'] == xarMod::STATE_UNINITIALISED
-                            || $dbModules[$name]['state'] == xarMod::STATE_MISSING_FROM_UNINITIALISED
-                            || $dbModules[$name]['state'] == xarMod::STATE_ERROR_UNINITIALISED
+                        if ($dbModules[$name]['state'] == ixarMod::STATE_UNINITIALISED
+                            || $dbModules[$name]['state'] == ixarMod::STATE_MISSING_FROM_UNINITIALISED
+                            || $dbModules[$name]['state'] == ixarMod::STATE_ERROR_UNINITIALISED
                             || $vercompare == 0 || $is_core) {
 
                             // First we check if this module belongs to class Core or not
@@ -178,11 +178,11 @@ class RegenerateMethod extends MethodClass
                                 // Get module ID
                                 $regId = $modinfo['regid'];
 
-                                $newstate = xarMod::STATE_INACTIVE;
+                                $newstate = ixarMod::STATE_INACTIVE;
                                 $adminapi->upgrade([    'regid'    => $regId,
                                     'state'    => $newstate]);
 
-                                $newstate = xarMod::STATE_ACTIVE;
+                                $newstate = ixarMod::STATE_ACTIVE;
                                 $adminapi->activate([    'regid'    => $regId,
                                     'state'    => $newstate]);
                             }
@@ -195,7 +195,7 @@ class RegenerateMethod extends MethodClass
                             $set = $adminapi->setstate(
                                 [
                                     'regid' => $modinfo['regid'],
-                                    'state' => xarMod::STATE_UPGRADED,
+                                    'state' => ixarMod::STATE_UPGRADED,
                                 ]
                             );
 
@@ -212,10 +212,10 @@ class RegenerateMethod extends MethodClass
                         // than the db version.
 
                         // Check if error state is already set
-                        if (($dbModules[$name]['state'] == xarMod::STATE_ERROR_UNINITIALISED)
-                            || ($dbModules[$name]['state'] == xarMod::STATE_ERROR_INACTIVE)
-                            || ($dbModules[$name]['state'] == xarMod::STATE_ERROR_ACTIVE)
-                            || ($dbModules[$name]['state'] == xarMod::STATE_ERROR_UPGRADED)) {
+                        if (($dbModules[$name]['state'] == ixarMod::STATE_ERROR_UNINITIALISED)
+                            || ($dbModules[$name]['state'] == ixarMod::STATE_ERROR_INACTIVE)
+                            || ($dbModules[$name]['state'] == ixarMod::STATE_ERROR_ACTIVE)
+                            || ($dbModules[$name]['state'] == ixarMod::STATE_ERROR_UPGRADED)) {
                             // Continue to next module
                             continue;
                         }
@@ -226,22 +226,22 @@ class RegenerateMethod extends MethodClass
                         //}
 
                         // Set error state
-                        $modstate = xarMod::STATE_ANY;
+                        $modstate = ixarMod::STATE_ANY;
                         switch ($dbModules[$name]['state']) {
-                            case xarMod::STATE_UNINITIALISED:
-                                $modstate = xarMod::STATE_ERROR_UNINITIALISED;
+                            case ixarMod::STATE_UNINITIALISED:
+                                $modstate = ixarMod::STATE_ERROR_UNINITIALISED;
                                 break;
-                            case xarMod::STATE_INACTIVE:
-                                $modstate = xarMod::STATE_ERROR_INACTIVE;
+                            case ixarMod::STATE_INACTIVE:
+                                $modstate = ixarMod::STATE_ERROR_INACTIVE;
                                 break;
-                            case xarMod::STATE_ACTIVE:
-                                $modstate = xarMod::STATE_ERROR_ACTIVE;
+                            case ixarMod::STATE_ACTIVE:
+                                $modstate = ixarMod::STATE_ERROR_ACTIVE;
                                 break;
-                            case xarMod::STATE_UPGRADED:
-                                $modstate = xarMod::STATE_ERROR_UPGRADED;
+                            case ixarMod::STATE_UPGRADED:
+                                $modstate = ixarMod::STATE_ERROR_UPGRADED;
                                 break;
                         }
-                        if ($modstate != xarMod::STATE_ANY) {
+                        if ($modstate != ixarMod::STATE_ANY) {
                             $set = $adminapi->setstate(
                                 [
                                     'regid' => $dbModules[$name]['regid'],
@@ -259,26 +259,26 @@ class RegenerateMethod extends MethodClass
                 }
 
                 // From here on we have something in the file system or the db
-                $newstate = xarMod::STATE_ANY;
+                $newstate = ixarMod::STATE_ANY;
                 switch ($dbModules[$name]['state']) {
-                    case xarMod::STATE_MISSING_FROM_UNINITIALISED:
-                    case xarMod::STATE_ERROR_UNINITIALISED:
-                        $newstate = xarMod::STATE_UNINITIALISED;
+                    case ixarMod::STATE_MISSING_FROM_UNINITIALISED:
+                    case ixarMod::STATE_ERROR_UNINITIALISED:
+                        $newstate = ixarMod::STATE_UNINITIALISED;
                         break;
-                    case xarMod::STATE_MISSING_FROM_INACTIVE:
-                    case xarMod::STATE_ERROR_INACTIVE:
-                        $newstate = xarMod::STATE_INACTIVE;
+                    case ixarMod::STATE_MISSING_FROM_INACTIVE:
+                    case ixarMod::STATE_ERROR_INACTIVE:
+                        $newstate = ixarMod::STATE_INACTIVE;
                         break;
-                    case xarMod::STATE_MISSING_FROM_ACTIVE:
-                    case xarMod::STATE_ERROR_ACTIVE:
-                        $newstate = xarMod::STATE_ACTIVE;
+                    case ixarMod::STATE_MISSING_FROM_ACTIVE:
+                    case ixarMod::STATE_ERROR_ACTIVE:
+                        $newstate = ixarMod::STATE_ACTIVE;
                         break;
-                    case xarMod::STATE_MISSING_FROM_UPGRADED:
-                    case xarMod::STATE_ERROR_UPGRADED:
-                        $newstate = xarMod::STATE_UPGRADED;
+                    case ixarMod::STATE_MISSING_FROM_UPGRADED:
+                    case ixarMod::STATE_ERROR_UPGRADED:
+                        $newstate = ixarMod::STATE_UPGRADED;
                         break;
                 }
-                if ($newstate != xarMod::STATE_ANY) {
+                if ($newstate != ixarMod::STATE_ANY) {
                     $set = $adminapi->setstate(
                         [
                             'regid' => $dbModules[$name]['regid'],

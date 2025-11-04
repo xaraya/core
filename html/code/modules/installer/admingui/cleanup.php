@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Installer\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use Exception;
+use ixarBlock;
 use xarBlock;
 use xarTpl;
 use xarUser;
@@ -116,7 +117,7 @@ class CleanupMethod extends MethodClass
                         'type_id' => $group_type['type_id'],
                         'name' => $name,
                         'title' => '',
-                        'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                        'state' => ixarBlock::BLOCK_STATE_VISIBLE,
                         'content' => $content,
                     ]
                 )) {
@@ -150,7 +151,7 @@ class CleanupMethod extends MethodClass
                     'type_id' => $menu_type['type_id'],
                     'name' => 'mainmenu',
                     'title' => 'Main Menu',
-                    'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                    'state' => ixarBlock::BLOCK_STATE_VISIBLE,
                     'content' => $menu_block->storeContent(),
                 ]
             )) {
@@ -202,7 +203,7 @@ class CleanupMethod extends MethodClass
                     'type_id' => $login_type['type_id'],
                     'name' => 'login',
                     'title' => 'Login',
-                    'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                    'state' => ixarBlock::BLOCK_STATE_VISIBLE,
                     'content' => $login_block->storeContent(),
                 ]
             )) {
@@ -253,7 +254,7 @@ class CleanupMethod extends MethodClass
                 [
                     'type_id' => $meta_type['type_id'],
                     'name' => 'meta',
-                    'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                    'state' => ixarBlock::BLOCK_STATE_VISIBLE,
                     'content' => $meta_block->storeContent(),
                 ]
             )) {
@@ -305,7 +306,7 @@ class CleanupMethod extends MethodClass
                     'type_id' => $adminmenu_type['type_id'],
                     'name' => 'adminpanel',
                     'title' => 'Admin',
-                    'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                    'state' => ixarBlock::BLOCK_STATE_VISIBLE,
                     'content' => $adminmenu_block->storeContent(),
                 ]
             )) {
@@ -341,7 +342,7 @@ class CleanupMethod extends MethodClass
                     'type_id' => $reminder_type['type_id'],
                     'name' => 'reminder',
                     'title' => 'Reminder',
-                    'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                    'state' => ixarBlock::BLOCK_STATE_VISIBLE,
                     'content' => $reminder_content,
                 ]
             )) {

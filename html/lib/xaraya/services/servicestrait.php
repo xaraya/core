@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -45,11 +45,6 @@ interface ServicesInterface extends CoreServicesInterface
     public function getModType(): string;
 
     /**
-     * Get block type from here - override if needed
-     */
-    public function getBlockType(): string;
-
-    /**
      * Get data object or objectlist - override if needed
      */
     public function getObject(): DataObjectList|DataObject|null;
@@ -76,9 +71,9 @@ interface ServicesInterface extends CoreServicesInterface
  * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
  * - $this->tpl() = xarTpl::* Templating (module, setPageTitle, ...)
  * - $this->var() = xarVar::* Variables (fetch, check, ...)
- * - $this->block() = xarBlock*::* Blocks (template, ...)
+ * - $this->block() = xarBlock*::* Blocks (render, ...)
  * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
- * - $this->prop() = DataProperty*::* with context (getProperty, template, ...)
+ * - $this->prop() = DataProperty*::* with context (getProperty, getPropertyTypes, ...)
  * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
  * - $this->config() = xarConfigVars::* Config (getVar, setVar, ...)
  * - $this->system() = xarSystemVars::* System (getVar, setVar, ...)
@@ -116,14 +111,6 @@ trait ServicesTrait
     public function getModType(): string
     {
         return $this->moduleType;
-    }
-
-    /**
-     * @todo Get block type from here - override if needed
-     */
-    public function getBlockType(): string
-    {
-        return 'TODO';
     }
 
     /**

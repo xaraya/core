@@ -5,7 +5,7 @@
  * @package core\blocks
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
- * @version 2.6.1
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -63,6 +63,7 @@ trait BlockServicesTrait
 
     /**
      * Get block type from block class
+     * @deprecated 2.8.1 only used for block()->template() which was removed
      */
     public function getBlockType(): string
     {

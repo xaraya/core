@@ -13,7 +13,7 @@ namespace Xaraya\Modules\Modules\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -78,14 +78,14 @@ class CheckversionMethod extends MethodClass
                     // Get module ID
                     $regId = $modInfo['regid'];
                     switch ($modInfo['state']) {
-                        case xarMod::STATE_UNINITIALISED:
+                        case ixarMod::STATE_UNINITIALISED:
                             break;
-                        case xarMod::STATE_INACTIVE || xarMod::STATE_ACTIVE || xarMod::STATE_UPGRADED:
-                            $newstate = xarMod::STATE_INACTIVE;
+                        case ixarMod::STATE_INACTIVE || ixarMod::STATE_ACTIVE || ixarMod::STATE_UPGRADED:
+                            $newstate = ixarMod::STATE_INACTIVE;
                             $adminapi->upgrade([    'regid'    => $regId,
                                 'state'    => $newstate]);
 
-                            $newstate = xarMod::STATE_ACTIVE;
+                            $newstate = ixarMod::STATE_ACTIVE;
                             $adminapi->activate([    'regid'    => $regId,
                                 'state'    => $newstate]);
                             break;
@@ -106,16 +106,16 @@ class CheckversionMethod extends MethodClass
                     // Get module ID
                     $regId = $modInfo['regid'];
                     switch ($modInfo['state']) {
-                        case xarMod::STATE_UNINITIALISED:
+                        case ixarMod::STATE_UNINITIALISED:
                             break;
-                        case xarMod::STATE_INACTIVE:
-                            $newstate = xarMod::STATE_UPGRADED;
+                        case ixarMod::STATE_INACTIVE:
+                            $newstate = ixarMod::STATE_UPGRADED;
                             break;
-                        case xarMod::STATE_ACTIVE:
-                            $newstate = xarMod::STATE_UPGRADED;
+                        case ixarMod::STATE_ACTIVE:
+                            $newstate = ixarMod::STATE_UPGRADED;
                             break;
-                        case xarMod::STATE_UPGRADED:
-                            $newstate = xarMod::STATE_UPGRADED;
+                        case ixarMod::STATE_UPGRADED:
+                            $newstate = ixarMod::STATE_UPGRADED;
                             break;
                     }
                     if (isset($newstate)) {

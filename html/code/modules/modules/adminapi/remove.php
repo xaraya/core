@@ -16,8 +16,7 @@ use Xaraya\Modules\Modules\AdminApi;
 use Exception;
 use xarEvents;
 use xarMasks;
-use xarMod;
-use xarModVars;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -63,10 +62,10 @@ class RemoveMethod extends MethodClass
         // Make the whole thing atomic
 
         // If the files have been removed, the module will now also be removed from the db
-        if ($modinfo['state'] == xarMod::STATE_MISSING_FROM_UNINITIALISED
-            || $modinfo['state'] == xarMod::STATE_MISSING_FROM_INACTIVE
-            || $modinfo['state'] == xarMod::STATE_MISSING_FROM_ACTIVE
-            || $modinfo['state'] == xarMod::STATE_MISSING_FROM_UPGRADED) {
+        if ($modinfo['state'] == ixarMod::STATE_MISSING_FROM_UNINITIALISED
+            || $modinfo['state'] == ixarMod::STATE_MISSING_FROM_INACTIVE
+            || $modinfo['state'] == ixarMod::STATE_MISSING_FROM_ACTIVE
+            || $modinfo['state'] == ixarMod::STATE_MISSING_FROM_UPGRADED) {
 
             // All cleanup needs to happen before a module entry is removed
             xarEvents::notify('ModRemove', $modinfo['name'], $this->getContext());
@@ -95,7 +94,7 @@ class RemoveMethod extends MethodClass
             //xar::mod($modinfo['name'])->flushVars();
 
             // Update state of module
-            $adminapi->setstate(['regid' => $regid,'state' => xarMod::STATE_UNINITIALISED]);
+            $adminapi->setstate(['regid' => $regid,'state' => ixarMod::STATE_UNINITIALISED]);
         }
 
         // Delete any masks still around

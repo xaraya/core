@@ -60,7 +60,7 @@ function sql_230_07()
             $category = $name != 'blockgroup' ? 'block' : 'group';
             $types[$id] = [
                 'id' => $id, 'name' => $name, 'module_id' => $module_id, 'info' => $info, 'module' => $module,
-                'state' => xarBlock::TYPE_STATE_ACTIVE,'category' => $category, 'object' => $object,
+                'state' => ixarBlock::TYPE_STATE_ACTIVE,'category' => $category, 'object' => $object,
             ];
         }
         $result->close();
@@ -156,7 +156,7 @@ function sql_230_07()
                 'size' => 'tiny',
                 'unsigned' => true,
                 'null' => false,
-                'default' => xarBlock::TYPE_STATE_ACTIVE,
+                'default' => ixarBlock::TYPE_STATE_ACTIVE,
             ],
             'type' => [
                 'type' => 'varchar',
@@ -217,7 +217,7 @@ function sql_230_07()
                 'size' => 'tiny',
                 'unsigned' => true,
                 'null' => false,
-                'default' => xarBlock::BLOCK_STATE_VISIBLE,
+                'default' => ixarBlock::BLOCK_STATE_VISIBLE,
             ],
             'name' => [
                 'type' => 'varchar',

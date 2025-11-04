@@ -15,7 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
 use Exception;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -65,7 +65,7 @@ class UpgradeMethod extends MethodClass
 
         // Update state of module
         $res = $adminapi->setstate(['regid' => $regid,
-            'state' => xarMod::STATE_INACTIVE]);
+            'state' => ixarMod::STATE_INACTIVE]);
         if (!isset($res)) {
             return;
         }

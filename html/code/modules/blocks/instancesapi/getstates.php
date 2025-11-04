@@ -13,6 +13,7 @@ namespace Xaraya\Modules\Blocks\InstancesApi;
 
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\InstancesApi;
+use ixarBlock;
 use xarBlock;
 use sys;
 
@@ -36,12 +37,12 @@ class GetstatesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         return [
-            xarBlock::BLOCK_STATE_INACTIVE
-                => ['id' => xarBlock::BLOCK_STATE_INACTIVE, 'name' => $this->ml('Inactive')],
-            xarBlock::BLOCK_STATE_HIDDEN
-                => ['id' => xarBlock::BLOCK_STATE_HIDDEN, 'name' => $this->ml('Hidden')],
-            xarBlock::BLOCK_STATE_VISIBLE
-                => ['id' => xarBlock::BLOCK_STATE_VISIBLE, 'name' => $this->ml('Visible')],
+            ixarBlock::BLOCK_STATE_INACTIVE
+                => ['id' => ixarBlock::BLOCK_STATE_INACTIVE, 'name' => $this->ml('Inactive')],
+            ixarBlock::BLOCK_STATE_HIDDEN
+                => ['id' => ixarBlock::BLOCK_STATE_HIDDEN, 'name' => $this->ml('Hidden')],
+            ixarBlock::BLOCK_STATE_VISIBLE
+                => ['id' => ixarBlock::BLOCK_STATE_VISIBLE, 'name' => $this->ml('Visible')],
         ];
     }
 }

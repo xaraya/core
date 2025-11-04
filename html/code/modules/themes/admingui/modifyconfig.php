@@ -17,7 +17,7 @@ use Xaraya\Modules\Themes\AdminApi;
 use FilePickerProperty;
 use Query;
 use RelativeDirectoryIterator;
-use xarMod;
+use ixarMod;
 use xarTpl;
 use sys;
 
@@ -73,7 +73,7 @@ class ModifyconfigMethod extends MethodClass
         //    $this->var()->find('dashtemplate', $data['dashtemplate'], 'str:1:', trim($this->mod()->getVar('dashtemplate')));
 
         $this->var()->find('selsort', $data['selsort'], 'str:1:', 'plain');
-        $this->var()->find('selfilter', $data['selfilter'], 'int', xarMod::STATE_ANY);
+        $this->var()->find('selfilter', $data['selfilter'], 'int', ixarMod::STATE_ANY);
         $this->var()->check('hidecore', $data['hidecore'], 'checkbox', false);
         $this->var()->find('selstyle', $data['selstyle'], 'str:1:', 'plain');
 

@@ -15,7 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
 use Exception;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -80,7 +80,7 @@ class UpgradeMethod extends MethodClass
             $installer->verifydependency($id);
             $minfo = $this->mod()->getInfo($id);
             //Bail if we've lost our module
-            if ($minfo['state'] != xarMod::STATE_MISSING_FROM_UPGRADED) {
+            if ($minfo['state'] != ixarMod::STATE_MISSING_FROM_UPGRADED) {
                 // Upgrade module
                 $upgraded = $adminapi->upgrade(['regid' => $id]);
             }

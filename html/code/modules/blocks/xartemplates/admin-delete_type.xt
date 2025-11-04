@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:if condition="$type['type_state'] eq xarBlock::TYPE_STATE_MISSING or $type['type_state'] eq xarBlock::TYPE_STATE_MOD_UNAVAILABLE">
+        <xar:if condition="$type['type_state'] eq ixarBlock::TYPE_STATE_MISSING or $type['type_state'] eq ixarBlock::TYPE_STATE_MOD_UNAVAILABLE">
             <h2>Delete Block Type</h2>
             <form method="post" action="#xarController::URL('blocks', 'admin', 'delete_type')#">
                 <fieldset>
@@ -39,7 +39,7 @@
                     <div class="xar-row">
                         <div class="xar-col">Status</div>
                         <div class="xar-col">
-                            <xar:if condition="$type['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                            <xar:if condition="$type['type_state'] ne ixarBlock::TYPE_STATE_ACTIVE">
                                 <a href="#xarServer::getCurrentURL(['tab' => 'status'])#">#$type_states[$type['type_state']]['name']#        </a>
                             <xar:else/>
                         #$type_states[$type['type_state']]['name']#
@@ -107,7 +107,7 @@
                 <div class="xar-row">
                     <div class="xar-col">Status</div>
                     <div class="xar-col">
-                        <xar:if condition="$type['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                        <xar:if condition="$type['type_state'] ne ixarBlock::TYPE_STATE_ACTIVE">
                             <a href="#xarServer::getCurrentURL(['tab' => 'status'])#">#$type_states[$type['type_state']]['name']#    </a>
                         <xar:else/>
                         #$type_states[$type['type_state']]['name']#

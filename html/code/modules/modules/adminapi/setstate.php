@@ -15,7 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
 use Exception;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -77,41 +77,41 @@ class SetstateMethod extends MethodClass
         }
         // Check valid state transition
         switch ($state) {
-            case xarMod::STATE_UNINITIALISED:
+            case ixarMod::STATE_UNINITIALISED:
                 // So, we're basically good all the time here?
-                if (($oldState == xarMod::STATE_MISSING_FROM_UNINITIALISED)
-                    || ($oldState == xarMod::STATE_ERROR_UNINITIALISED)) {
+                if (($oldState == ixarMod::STATE_MISSING_FROM_UNINITIALISED)
+                    || ($oldState == ixarMod::STATE_ERROR_UNINITIALISED)) {
                     break;
                 }
 
-                if ($oldState != xarMod::STATE_INACTIVE) {
+                if ($oldState != ixarMod::STATE_INACTIVE) {
                     // New Module
                     break;
                 }
                 break;
-            case xarMod::STATE_INACTIVE:
-                if (($oldState != xarMod::STATE_UNINITIALISED)
-                    && ($oldState != xarMod::STATE_ACTIVE)
-                    && ($oldState != xarMod::STATE_MISSING_FROM_INACTIVE)
-                    && ($oldState != xarMod::STATE_ERROR_INACTIVE)
-                    && ($oldState != xarMod::STATE_UPGRADED)) {
+            case ixarMod::STATE_INACTIVE:
+                if (($oldState != ixarMod::STATE_UNINITIALISED)
+                    && ($oldState != ixarMod::STATE_ACTIVE)
+                    && ($oldState != ixarMod::STATE_MISSING_FROM_INACTIVE)
+                    && ($oldState != ixarMod::STATE_ERROR_INACTIVE)
+                    && ($oldState != ixarMod::STATE_UPGRADED)) {
                     $this->session()->setVar('errormsg', $this->ml('Invalid module state transition'));
                     return false;
                 }
                 break;
-            case xarMod::STATE_ACTIVE:
-                if (($oldState != xarMod::STATE_INACTIVE)
-                    && ($oldState != xarMod::STATE_ERROR_ACTIVE)
-                    && ($oldState != xarMod::STATE_MISSING_FROM_ACTIVE)) {
+            case ixarMod::STATE_ACTIVE:
+                if (($oldState != ixarMod::STATE_INACTIVE)
+                    && ($oldState != ixarMod::STATE_ERROR_ACTIVE)
+                    && ($oldState != ixarMod::STATE_MISSING_FROM_ACTIVE)) {
                     $this->session()->setVar('errormsg', $this->ml('Invalid module state transition'));
                     throw new Exception("Setting from $oldState to $state for module $regid failed");
                 }
                 break;
-            case xarMod::STATE_UPGRADED:
-                if (($oldState != xarMod::STATE_INACTIVE)
-                    && ($oldState != xarMod::STATE_ACTIVE)
-                    && ($oldState != xarMod::STATE_ERROR_UPGRADED)
-                    && ($oldState != xarMod::STATE_MISSING_FROM_UPGRADED)) {
+            case ixarMod::STATE_UPGRADED:
+                if (($oldState != ixarMod::STATE_INACTIVE)
+                    && ($oldState != ixarMod::STATE_ACTIVE)
+                    && ($oldState != ixarMod::STATE_ERROR_UPGRADED)
+                    && ($oldState != ixarMod::STATE_MISSING_FROM_UPGRADED)) {
                     $this->session()->setVar('errormsg', $this->ml('Invalid module state transition'));
                     return false;
                 }

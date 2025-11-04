@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Modules\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use BadParameterException;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -45,11 +45,11 @@ class GetlistMethod extends MethodClass
      * The same thing is applied to the AdminCapable property.
      * Permitted values for Class and Category are the ones defined in RFC 13.
      *
-     * Permitted values for State are xarMod::STATE_ANY, xarMod::STATE_UNINITIALISED,
-     * xarMod::STATE_INACTIVE, xarMod::STATE_ACTIVE, XARMOD_STATE_MISSING,
-     * xarMod::STATE_UPGRADED, xarMod::STATE_INSTALLED
-     * The xarMod::STATE_ANY means that any state is valid.
-     * The default value of State is xarMod::STATE_ACTIVE.
+     * Permitted values for State are ixarMod::STATE_ANY, ixarMod::STATE_UNINITIALISED,
+     * ixarMod::STATE_INACTIVE, ixarMod::STATE_ACTIVE, XARMOD_STATE_MISSING,
+     * ixarMod::STATE_UPGRADED, ixarMod::STATE_INSTALLED
+     * The ixarMod::STATE_ANY means that any state is valid.
+     * The default value of State is ixarMod::STATE_ACTIVE.
      * For other criteria there's no default value.
      * The orderBy parameter specifies the order by which is sorted the result
      * array, can be one of name, regid, class, category or a combination of them,
@@ -126,7 +126,7 @@ class GetlistMethod extends MethodClass
         if (isset($filter['State'])) {
             $get['state'] = $filter['State'];
         } else {
-            $get['state'] = xarMod::STATE_ACTIVE;
+            $get['state'] = ixarMod::STATE_ACTIVE;
         }
 
         $result = $adminapi->getitems($get);

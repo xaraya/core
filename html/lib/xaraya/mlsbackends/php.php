@@ -65,7 +65,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
         self::$PHPBackend_keyEntries = [];
     }
 
-    public function bindDomain($dnType = xarMLS::DNTYPE_CORE, $dnName = 'xaraya')
+    public function bindDomain($dnType = ixarMLS::DNTYPE_CORE, $dnName = 'xaraya')
     {
         if (parent::bindDomain($dnType, $dnName)) {
             return true;
@@ -74,7 +74,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
         // MLS -> xar::mod()->getBaseInfo -> xarDisplayableName -> xar::mod()->getFileInfo -> MLS
         // We don't use and don't translate KEYS files now,
         // but I will recheck this code in the menus clone
-        //        if ($dnType == xarMLS::DNTYPE_MODULE) {
+        //        if ($dnType == ixarMLS::DNTYPE_MODULE) {
         //            $this->loadKEYS($dnName);
         //        }
         return false;

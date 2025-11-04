@@ -13,6 +13,7 @@ namespace Xaraya\Modules\Blocks\TypesApi;
 
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\TypesApi;
+use ixarBlock;
 use xarBlock;
 use sys;
 
@@ -37,14 +38,14 @@ class GetstatesMethod extends MethodClass
     {
 
         return [
-            xarBlock::TYPE_STATE_ACTIVE
-                => ['id' => xarBlock::TYPE_STATE_ACTIVE, 'name' => $this->ml('Active')],
-            xarBlock::TYPE_STATE_MISSING
-                => ['id' => xarBlock::TYPE_STATE_MISSING, 'name' => $this->ml('Missing')],
-            xarBlock::TYPE_STATE_ERROR
-                => ['id' => xarBlock::TYPE_STATE_ERROR, 'name' => $this->ml('Error')],
-            xarBlock::TYPE_STATE_MOD_UNAVAILABLE
-                => ['id' => xarBlock::TYPE_STATE_MOD_UNAVAILABLE, 'name' => $this->ml('Unavailable')],
+            ixarBlock::TYPE_STATE_ACTIVE
+                => ['id' => ixarBlock::TYPE_STATE_ACTIVE, 'name' => $this->ml('Active')],
+            ixarBlock::TYPE_STATE_MISSING
+                => ['id' => ixarBlock::TYPE_STATE_MISSING, 'name' => $this->ml('Missing')],
+            ixarBlock::TYPE_STATE_ERROR
+                => ['id' => ixarBlock::TYPE_STATE_ERROR, 'name' => $this->ml('Error')],
+            ixarBlock::TYPE_STATE_MOD_UNAVAILABLE
+                => ['id' => ixarBlock::TYPE_STATE_MOD_UNAVAILABLE, 'name' => $this->ml('Unavailable')],
         ];
 
     }

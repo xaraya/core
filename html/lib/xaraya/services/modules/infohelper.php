@@ -18,7 +18,7 @@ namespace Xaraya\Services\Modules;
 
 use Xaraya\Services\ServiceClass;
 use xarClassMap;
-use xarMod;
+use ixarMod;
 use xarTheme;
 use sys;
 use Exception;
@@ -270,7 +270,7 @@ class InfoHelper extends ServiceClass
 
         // This needed?
         if (empty($modBaseInfo['state'])) {
-            $modBaseInfo['state'] = xarMod::STATE_UNINITIALISED;
+            $modBaseInfo['state'] = ixarMod::STATE_UNINITIALISED;
         }
         $xar->mem()->set($cacheCollection, $name, $modBaseInfo);
 
@@ -381,13 +381,13 @@ class InfoHelper extends ServiceClass
             case 'module':
             default:
                 if (!isset($modInfo['state'])) {
-                    $modInfo['state'] = xarMod::STATE_MISSING_FROM_UNINITIALISED;
+                    $modInfo['state'] = ixarMod::STATE_MISSING_FROM_UNINITIALISED;
                 } //return; // throw back
                 $modFileInfo = $this->getFileInfo($modInfo['osdirectory']);
                 break;
             case 'theme':
                 if (!isset($modInfo['state'])) {
-                    $modInfo['state'] = xarMod::STATE_MISSING_FROM_UNINITIALISED;
+                    $modInfo['state'] = ixarMod::STATE_MISSING_FROM_UNINITIALISED;
                 }
                 $modFileInfo = $this->getFileInfo($modInfo['osdirectory'], $type = 'theme');
                 break;
@@ -538,7 +538,7 @@ class InfoHelper extends ServiceClass
             $modState = $modBaseInfo['state'];
             $modAvailableCache[$modBaseInfo['name']] = false;
 
-            if ($modState == xarMod::STATE_ACTIVE) {
+            if ($modState == ixarMod::STATE_ACTIVE) {
                 $modAvailableCache[$modBaseInfo['name']] = true;
             }
         }

@@ -16,6 +16,7 @@
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 use Xaraya\Services\WithServicesClass;
+// use ixarMod;
 
 /**
  * Base JS Class
@@ -244,7 +245,7 @@ class xarJS extends xarObject
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
+            ['filter' => ['State' => ixarMod::STATE_ACTIVE]]
         );
         // we want to look in all properties
         $properties = $xar->mod()->apiFunc('dynamicdata', 'user', 'getproptypes');
@@ -1236,7 +1237,7 @@ class xarJSLib extends xarObject
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
+            ['filter' => ['State' => ixarMod::STATE_ACTIVE]]
         );
         // we want to look in all properties
         $properties = $xar->mod()->apiFunc('dynamicdata', 'user', 'getproptypes');

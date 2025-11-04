@@ -17,6 +17,7 @@ use Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\InstancesApi;
 use EmptyParameterException;
 use IDNotFoundException;
+use ixarBlock;
 use xarBlock;
 use sys;
 

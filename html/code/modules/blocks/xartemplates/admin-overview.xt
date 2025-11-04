@@ -234,11 +234,11 @@
                     <li><strong>Title</strong> - String, title of the block (optional), maximum length 255 characters</li>
                     <li><strong>Default State</strong> - Int, state of module (required), options are
                     <ul>
-                        <li><strong>Hidden</strong> #xarBlock::BLOCK_STATE_HIDDEN#, the block display function will be executed but the block will not be displayed.</li>
+                        <li><strong>Hidden</strong> #ixarBlock::BLOCK_STATE_HIDDEN#, the block display function will be executed but the block will not be displayed.</li>
                         <xar:comment><!--
-                        <li><strong>Inactive</strong> #xarBlock::BLOCK_STATE_INACTIVE#, the block is disabled.</li>
+                        <li><strong>Inactive</strong> #ixarBlock::BLOCK_STATE_INACTIVE#, the block is disabled.</li>
                         --></xar:comment>
-                        <li><strong>Visible</strong> #xarBlock::BLOCK_STATE_VISIBLE#, the block will be displayed.</li>
+                        <li><strong>Visible</strong> #ixarBlock::BLOCK_STATE_VISIBLE#, the block will be displayed.</li>
                     </ul>
                     </li>
                     <li><strong>Block Expiration</strong> string, set a time when block should stop being displayed (optional). Expects a string indicating the length of time to display the block for (from now) in the format <code>ddd:hh:mm:ss</code>. Once set the display shows the length of time left before the block expires, or a message that the block has expired. Setting to 0 means the block never expires (default).</li>

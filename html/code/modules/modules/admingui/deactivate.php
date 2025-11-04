@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -108,7 +108,7 @@ class DeactivateMethod extends MethodClass
         }
 
         //Bail if we've lost our module
-        if ($minfo['state'] != xarMod::STATE_MISSING_FROM_ACTIVE) {
+        if ($minfo['state'] != ixarMod::STATE_MISSING_FROM_ACTIVE) {
             //Deactivate with dependents, first dependents
             //then the module itself
             if (!$installer->deactivatewithdependents($id)) {

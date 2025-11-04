@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Modules\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use Query;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -44,7 +44,7 @@ class CountitemsMethod extends MethodClass
 
         // Set some defaults
         if (!isset($state)) {
-            $state = xarMod::STATE_ACTIVE;
+            $state = ixarMod::STATE_ACTIVE;
         }
         if (!isset($include_core)) {
             $include_core = true;
@@ -70,13 +70,13 @@ class CountitemsMethod extends MethodClass
             $q->eq('id', $systemid);
         }
 
-        if ($state != xarMod::STATE_ANY) {
-            if ($state != xarMod::STATE_INSTALLED) {
+        if ($state != ixarMod::STATE_ANY) {
+            if ($state != ixarMod::STATE_INSTALLED) {
                 $q->eq('state', $state);
             } else {
-                $q->ne('state', xarMod::STATE_UNINITIALISED);
-                $q->lt('state', xarMod::STATE_MISSING_FROM_INACTIVE);
-                $q->ne('state', xarMod::STATE_MISSING_FROM_UNINITIALISED);
+                $q->ne('state', ixarMod::STATE_UNINITIALISED);
+                $q->lt('state', ixarMod::STATE_MISSING_FROM_INACTIVE);
+                $q->ne('state', ixarMod::STATE_MISSING_FROM_UNINITIALISED);
             }
         }
 

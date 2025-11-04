@@ -488,7 +488,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return $this->getExecHelper()->apiFunc($modName, $modType, $funcName, $args, $this->getContext());
+        return $this->getExecHelper()->apiFunc($modName, $modType, $funcName, $args);
     }
 
     /**
@@ -498,7 +498,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return $this->getExecHelper()->apiLoad($modName, $modType, $this->getContext());
+        return $this->getExecHelper()->apiLoad($modName, $modType);
     }
 
     /**
@@ -509,7 +509,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return $this->getExecHelper()->guiFunc($modName, $modType, $funcName, $args, $this->getContext());
+        return $this->getExecHelper()->guiFunc($modName, $modType, $funcName, $args);
     }
 
     /**
@@ -519,7 +519,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return $this->getExecHelper()->load($modName, $modType, $this->getContext());
+        return $this->getExecHelper()->load($modName, $modType);
     }
 
     /**

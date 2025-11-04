@@ -14,6 +14,7 @@
 
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+// use ixarMod;
 
 /**
  * Class to model registration information for a property
@@ -270,7 +271,7 @@ class PropertyRegistration extends DataContainer
                     $objectid = $xar->mod()->apiFunc('dynamicdata', 'util', 'import', $data);
                 }
                 $xar->log()->notice('DynamicData: Looking for active modules');
-                $activeMods = $xar->mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_ACTIVE]]);
+                $activeMods = $xar->mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => ixarMod::STATE_ACTIVE]]);
                 assert(!empty($activeMods)); // this should never happen
                 $xar->log()->debug('DynamicData: There are ' . count($activeMods) . ' active modules');
 

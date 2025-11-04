@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.4
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -240,6 +240,38 @@ class StaticServicesClass extends ServicesClass
     public function var(): VariablesInterface
     {
         return $this->getServicePrototype('var');
+    }
+
+    /**
+     * Access xarBlock*::* Blocks methods (render, ...)
+     *
+     * Available methods:
+     * - render()
+     * - renderBlock()
+     * - renderGroup()
+     * - guiRequest()
+     * - apiRequest()
+     * - ...
+     *
+     */
+    public function block(): BlocksInterface
+    {
+        return $this->getServicePrototype('block');
+    }
+
+    /**
+     * Access DataProperty*::* methods with context (getProperty, getPropertyTypes, ...)
+     *
+     * Available methods:
+     * - getPropertyTypes()
+     * - getProperties()
+     * - getProperty()
+     * - ...
+     *
+     */
+    public function prop(): DataPropertyInterface
+    {
+        return $this->getServicePrototype('prop');
     }
 
     /**

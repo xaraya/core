@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\TypesApi;
 use DirectoryIterator;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('modules.blocks.method');
@@ -58,7 +58,7 @@ class GetfilesMethod extends MethodClass
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
+            ['filter' => ['State' => ixarMod::STATE_ACTIVE]]
         );
         $modpath = sys::code() . 'modules/';
         foreach ($modules as $modinfo) {

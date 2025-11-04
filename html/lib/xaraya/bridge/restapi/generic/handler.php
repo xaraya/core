@@ -107,7 +107,7 @@ class GenericAPIHandler extends RestAPIHandler
         // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
         // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
         $userId = xar::mod()->apiFunc('authsystem', 'user', 'authenticate_user', $args['input']);
-        if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
+        if (empty($userId) || $userId == xar::user()::AUTH_FAILED) {
             if (!headers_sent()) {
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
                 header('WWW-Authenticate: Token realm="Xaraya Site Login"');

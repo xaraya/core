@@ -19,6 +19,7 @@
  * @author  Chris Powis <crisp@xaraya.com>
 */
 sys::import('modules.blocks.xarblocks.blockgroup');
+// use ixarBlock;
 
 class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iBlockGroup
 {
@@ -41,8 +42,8 @@ class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iB
             'getitems',
             [
                 'block_id' => $this->group_instances,
-                'type_state' => xarBlock::TYPE_STATE_ACTIVE,
-                'state' => [xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN],
+                'type_state' => ixarBlock::TYPE_STATE_ACTIVE,
+                'state' => [ixarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN],
             ]
         );
 

@@ -13,7 +13,7 @@ namespace Xaraya\Modules\Privileges\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
-use xarMod;
+use ixarMod;
 use xarPrivileges;
 use xarRoles;
 use sys;
@@ -45,7 +45,7 @@ class AssignprivilegesMethod extends MethodClass
         $this->var()->find('tab', $data['tab'], 'str:1:100', 'all');
         $this->var()->find('tabmodule', $tabmodule, 'str:1:100', 'All Modules');
 
-        $installed = $this->mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_INSTALLED]]);
+        $installed = $this->mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => ixarMod::STATE_INSTALLED]]);
         foreach ($installed as $module) {
             $moduletabs[$module['name']] = $module;
         }

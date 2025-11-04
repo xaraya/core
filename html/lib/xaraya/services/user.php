@@ -16,6 +16,7 @@
 
 namespace Xaraya\Services;
 
+use ixarUser;
 use xarEvents;
 use sys;
 use BadParameterException;
@@ -32,6 +33,9 @@ sys::import('xaraya.services.servicetrait');
 interface UserInterface extends ServiceInterface
 {
     public const SLICE = 'user2';
+    public const AUTH_FAILED = ixarUser::AUTH_FAILED;
+    public const AUTH_DENIED = ixarUser::AUTH_DENIED;
+    public const LAST_RESORT = ixarUser::LAST_RESORT;
 
     public function init(array $config = []): bool;
     public function getConfig(): array;
@@ -63,10 +67,6 @@ interface UserInterface extends ServiceInterface
 trait UserTrait
 {
     use ServiceTrait;
-
-    public const AUTH_FAILED = -1;
-    public const AUTH_DENIED = -2;
-    public const LAST_RESORT = -3;
 
     protected ?int $currentId = null;
     private $objectRef;

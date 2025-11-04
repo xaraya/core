@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -66,10 +66,10 @@ class ViewerrorMethod extends MethodClass
         // Get the module state and display appropriate template
         // for the error that was encountered with the module
         switch ($dbModule['state']) {
-            case xarMod::STATE_ERROR_UNINITIALISED:
-            case xarMod::STATE_ERROR_INACTIVE:
-            case xarMod::STATE_ERROR_ACTIVE:
-            case xarMod::STATE_ERROR_UPGRADED:
+            case ixarMod::STATE_ERROR_UNINITIALISED:
+            case ixarMod::STATE_ERROR_INACTIVE:
+            case ixarMod::STATE_ERROR_ACTIVE:
+            case ixarMod::STATE_ERROR_UPGRADED:
                 // Set template to 'update'
                 $template = 'errorupdate';
 

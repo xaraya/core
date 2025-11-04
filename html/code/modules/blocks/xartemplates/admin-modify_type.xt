@@ -40,7 +40,7 @@
             <div class="xar-row">
                 <div class="xar-col">Status</div>
                 <div class="xar-col">
-                    <xar:if condition="$type['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                    <xar:if condition="$type['type_state'] ne ixarBlock::TYPE_STATE_ACTIVE">
                         <a href="#xarServer::getCurrentURL(['tab' => 'status'])#">#$type_states[$type['type_state']]['name']#</a>
                     <xar:else/>
                         #$type_states[$type['type_state']]['name']#
@@ -178,7 +178,7 @@
                     <p class="xar-note">No help available for this block type</p>
                 </xar:if>
             <xar:elseif condition="$method eq 'status'"/>
-            <xar:if condition="$type['type_state'] eq xarBlock::TYPE_STATE_MISSING">
+            <xar:if condition="$type['type_state'] eq ixarBlock::TYPE_STATE_MISSING">
                 <h3>Block Type Missing</h3>
                 <p class="xar-error">
                     Block type file(s) not found or could not be loaded.
@@ -203,7 +203,7 @@
                     <p>Please notify the site administrator</p>
                 </xar:sec>
 
-            <xar:elseif condition="$type['type_state'] eq xarBlock::TYPE_STATE_ERROR"/>
+            <xar:elseif condition="$type['type_state'] eq ixarBlock::TYPE_STATE_ERROR"/>
                 <h3>Block Type Error</h3>
                 <p class="xar-error">
                     Block type could not be instantiated.
@@ -224,7 +224,7 @@
                 <xar:else/>
                     <p>Please notify the site administrator</p>
                 </xar:sec>
-            <xar:elseif condition="$type['type_state'] eq xarBlock::TYPE_STATE_MOD_UNAVAILABLE"/>
+            <xar:elseif condition="$type['type_state'] eq ixarBlock::TYPE_STATE_MOD_UNAVAILABLE"/>
                 <h3>Block Type Unavailable</h3>
                 <p class="xar-error">
                     Block type module unavailable.

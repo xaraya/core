@@ -5,7 +5,7 @@
  *
  * @package core\multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -29,6 +29,19 @@ sys::import('xaraya.mlsbackends.reference');
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
+interface ixarMLS
+{
+    public const SINGLE_LANGUAGE_MODE          = 'SINGLE';
+    public const BOXED_MULTI_LANGUAGE_MODE     = 'BOXED';
+    public const UNBOXED_MULTI_LANGUAGE_MODE   = 'UNBOXED';
+    public const DNTYPE_CORE       = 1;
+    public const DNTYPE_THEME      = 2;
+    public const DNTYPE_MODULE     = 3;
+    public const DNTYPE_PROPERTY   = 4;
+    public const DNTYPE_BLOCK      = 5;
+    public const DNTYPE_OBJECT     = 6;
+}
+
 /**
  * Multilanguage System Class
  *
@@ -40,18 +53,8 @@ use Xaraya\Services\xar;
  * @link http://www.xaraya.info
  *
 **/
-class xarMLS extends xarObject
+class xarMLS extends xarObject implements ixarMLS
 {
-    public const SINGLE_LANGUAGE_MODE          = 'SINGLE';
-    public const BOXED_MULTI_LANGUAGE_MODE     = 'BOXED';
-    public const UNBOXED_MULTI_LANGUAGE_MODE   = 'UNBOXED';
-    public const DNTYPE_CORE       = 1;
-    public const DNTYPE_THEME      = 2;
-    public const DNTYPE_MODULE     = 3;
-    public const DNTYPE_PROPERTY   = 4;
-    public const DNTYPE_BLOCK      = 5;
-    public const DNTYPE_OBJECT     = 6;
-
     public static $mode              = self::SINGLE_LANGUAGE_MODE;
     public static $backendName       = 'xml2php';
     public static $currentLocale     = '';
@@ -147,7 +150,7 @@ class xarMLS extends xarObject
      * Gets the current MLS mode
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return integer MLS Mode
+     * @return string MLS Mode
      */
     public static function getMode()
     {
@@ -175,7 +178,7 @@ class xarMLS extends xarObject
     public static function listSiteLocales()
     {
         $mode = self::getMode();
-        if ($mode == xarMLS::SINGLE_LANGUAGE_MODE) {
+        if ($mode == self::SINGLE_LANGUAGE_MODE) {
             return [self::$defaultLocale];
         } else {
             return self::$allowedLocales;
@@ -453,11 +456,11 @@ class xarMLS extends xarObject
 
         $mode = self::getMode();
         switch ($mode) {
-            case xarMLS::SINGLE_LANGUAGE_MODE:
+            case self::SINGLE_LANGUAGE_MODE:
                 $locale  = self::getSiteLocale();
                 break;
-            case xarMLS::UNBOXED_MULTI_LANGUAGE_MODE:
-            case xarMLS::BOXED_MULTI_LANGUAGE_MODE:
+            case self::UNBOXED_MULTI_LANGUAGE_MODE:
+            case self::BOXED_MULTI_LANGUAGE_MODE:
                 // check for locale availability
                 $siteLocales = self::listSiteLocales();
                 if (!in_array($locale, $siteLocales)) {
@@ -471,7 +474,7 @@ class xarMLS extends xarObject
         self::$currentLocale = $locale;
 
         $curCharset = self::getCharsetFromLocale($locale);
-        if ($mode == xarMLS::UNBOXED_MULTI_LANGUAGE_MODE) {
+        if ($mode == self::UNBOXED_MULTI_LANGUAGE_MODE) {
             assert($curCharset == "utf-8");
             // To be able to continue, we set the mode to BOXED
             if ($curCharset != "utf-8") {
@@ -485,7 +488,7 @@ class xarMLS extends xarObject
             }
         }
 
-        //if ($mode == xarMLS::BOXED_MULTI_LANGUAGE_MODE) {
+        //if ($mode == self::BOXED_MULTI_LANGUAGE_MODE) {
         //if (substr($curCharset, 0, 9) != 'iso-8859-' &&
         //$curCharset != 'windows-1251') {
         // Do not use mbstring for single byte charsets
@@ -510,7 +513,7 @@ class xarMLS extends xarObject
         }
 
         // Load core translations
-        self::_loadTranslations(xarMLS::DNTYPE_CORE, 'xaraya', 'core:', 'core');
+        self::_loadTranslations(self::DNTYPE_CORE, 'xaraya', 'core:', 'core');
         return true;
     }
 
@@ -554,7 +557,7 @@ class xarMLS extends xarObject
 
         if (self::$backend->bindDomain($domainType, $domainName)) {
             switch ($domainType) {
-                case xarMLS::DNTYPE_THEME:
+                case self::DNTYPE_THEME:
                     // Load common translations
                     if (!isset($loadedCommons[$domainName . 'theme'])) {
                         $loadedCommons[$domainName . 'theme'] = true;
@@ -563,7 +566,7 @@ class xarMLS extends xarObject
                         }
                     }
                     break;
-                case xarMLS::DNTYPE_MODULE:
+                case self::DNTYPE_MODULE:
                     // Handle in a special way the module type
                     // for which it's necessary to load common translations
                     if (!isset($loadedCommons[$domainName . 'module'])) {
@@ -576,7 +579,7 @@ class xarMLS extends xarObject
                         }
                     }
                     break;
-                case xarMLS::DNTYPE_PROPERTY:
+                case self::DNTYPE_PROPERTY:
                     // Load common translations
                     if (!isset($loadedCommons[$domainName . 'property'])) {
                         $loadedCommons[$domainName . 'property'] = true;
@@ -585,7 +588,7 @@ class xarMLS extends xarObject
                         }
                     }
                     break;
-                case xarMLS::DNTYPE_BLOCK:
+                case self::DNTYPE_BLOCK:
                     // Load common translations
                     if (!isset($loadedCommons[$domainName . 'block'])) {
                         $loadedCommons[$domainName . 'block'] = true;
@@ -594,7 +597,7 @@ class xarMLS extends xarObject
                         }
                     }
                     break;
-                case xarMLS::DNTYPE_OBJECT:
+                case self::DNTYPE_OBJECT:
                     // Load common translations
                     if (!isset($loadedCommons[$domainName . 'object'])) {
                         $loadedCommons[$domainName . 'object'] = true;
@@ -650,13 +653,13 @@ class xarMLS extends xarObject
         $domainType = $domainArray[0];
 
         // If this is a core file, get the translations and bail
-        if ($domainType == xarMLS::DNTYPE_CORE) {
-            $translations = self::_loadTranslations(xarMLS::DNTYPE_CORE, 'xaraya', 'core:', 'core');
+        if ($domainType == self::DNTYPE_CORE) {
+            $translations = self::_loadTranslations(self::DNTYPE_CORE, 'xaraya', 'core:', 'core');
             return $translations;
         }
 
         // Themes can override other domain types
-        if ($domainType == xarMLS::DNTYPE_THEME) {
+        if ($domainType == self::DNTYPE_THEME) {
             $possibleOverride = true;
         } else {
             $possibleOverride = false;
@@ -665,7 +668,7 @@ class xarMLS extends xarObject
         // Ok, based on possible overrides, we load internal only, or interal plus overrides
         $ok = false;
         if ($possibleOverride) {
-            $ok = self::_loadTranslations(xarMLS::DNTYPE_MODULE, $domainArray[1], $domainArray[2], $domainArray[3]);
+            $ok = self::_loadTranslations(self::DNTYPE_MODULE, $domainArray[1], $domainArray[2], $domainArray[3]);
         }
         // And load the determined stuff
         // @todo: should we check for success on *both*, where is the exception here? further up the tree?
@@ -676,7 +679,7 @@ class xarMLS extends xarObject
     public static function convertFromInput($var, $method)
     {
         // FIXME: <marco> Can we trust browsers?
-        if (self::getMode() == xarMLS::SINGLE_LANGUAGE_MODE
+        if (self::getMode() == self::SINGLE_LANGUAGE_MODE
             || !function_exists('mb_http_input')) {
             return $var;
         }
@@ -697,7 +700,7 @@ class xarMLS extends xarObject
     private static function xarMLS__convertFromCharset($var, $charset)
     {
         // FIXME: <marco> Can we trust browsers?
-        if (self::getMode() == xarMLS::SINGLE_LANGUAGE_MODE
+        if (self::getMode() == self::SINGLE_LANGUAGE_MODE
             || !function_exists('mb_convert_encoding')) {
             return $var;
         }
@@ -830,7 +833,7 @@ class xarMLS extends xarObject
                     $madeDir = mkdir($path, 0o700);
                     return $madeDir;
                 } catch (Exception $e) {
-                    $msg = xarMLS::translate("Could not create directory #(1). The directories under #(2) must be writeable by PHP.", $path, $next_path);
+                    $msg = self::translate("Could not create directory #(1). The directories under #(2) must be writeable by PHP.", $path, $next_path);
                     xar::log()->error($msg);
                     xarCore::exit($msg);
                     // throw new PermissionException?
@@ -893,14 +896,14 @@ class xarMLS extends xarObject
 class xarMLSContext extends xarObject
 {
     private static $domains = [
-        xarMLS::DNTYPE_CORE     => ['context_type_prefix' => 'xaraya',     'context_type_text' => 'core'],
-        xarMLS::DNTYPE_THEME    => ['context_type_prefix' => 'themes',     'context_type_text' => 'theme'],
-        xarMLS::DNTYPE_MODULE   => ['context_type_prefix' => 'modules',    'context_type_text' => 'module'],
-        xarMLS::DNTYPE_PROPERTY => ['context_type_prefix' => 'properties', 'context_type_text' => 'property'],
-        xarMLS::DNTYPE_BLOCK    => ['context_type_prefix' => 'blocks',     'context_type_text' => 'block'],
-        xarMLS::DNTYPE_OBJECT   => ['context_type_prefix' => 'objects',    'context_type_text' => 'object'],
+        ixarMLS::DNTYPE_CORE     => ['context_type_prefix' => 'xaraya',     'context_type_text' => 'core'],
+        ixarMLS::DNTYPE_THEME    => ['context_type_prefix' => 'themes',     'context_type_text' => 'theme'],
+        ixarMLS::DNTYPE_MODULE   => ['context_type_prefix' => 'modules',    'context_type_text' => 'module'],
+        ixarMLS::DNTYPE_PROPERTY => ['context_type_prefix' => 'properties', 'context_type_text' => 'property'],
+        ixarMLS::DNTYPE_BLOCK    => ['context_type_prefix' => 'blocks',     'context_type_text' => 'block'],
+        ixarMLS::DNTYPE_OBJECT   => ['context_type_prefix' => 'objects',    'context_type_text' => 'object'],
     ];
-    private static $current_domain_type = xarMLS::DNTYPE_CORE;
+    private static $current_domain_type = ixarMLS::DNTYPE_CORE;
 
     /**
      * Initializes the Context Class
@@ -913,7 +916,7 @@ class xarMLSContext extends xarObject
         return true;
     }
 
-    public static function setDomainType($domainType_id = xarMLS::DNTYPE_CORE)
+    public static function setDomainType($domainType_id = ixarMLS::DNTYPE_CORE)
     {
         self::$current_domain_type = $domainType_id;
     }
@@ -923,19 +926,19 @@ class xarMLSContext extends xarObject
         $domainType = 0;
         // @todo be able to handle standard files from other locations, e.g. from /vendor/ with composer
         if (strpos($path, sys::lib()) === 0) {
-            $domainType = xarMLS::DNTYPE_CORE;
+            $domainType = ixarMLS::DNTYPE_CORE;
             $path = substr($path, strlen(sys::lib()));
         } elseif (strpos($path, xarTpl::getBasedir()) === 0) {
-            $domainType = xarMLS::DNTYPE_THEME;
+            $domainType = ixarMLS::DNTYPE_THEME;
         } elseif (strpos($path, sys::code()) === 0) {
             // This is a module, property or block file
             $path = substr($path, strlen(sys::code()));
             if (strpos($path, 'modules') === 0) {
-                $domainType = xarMLS::DNTYPE_MODULE;
+                $domainType = ixarMLS::DNTYPE_MODULE;
             } elseif (strpos($path, 'properties') === 0) {
-                $domainType = xarMLS::DNTYPE_PROPERTY;
+                $domainType = ixarMLS::DNTYPE_PROPERTY;
             } elseif (strpos($path, 'blocks') === 0) {
-                $domainType = xarMLS::DNTYPE_BLOCK;
+                $domainType = ixarMLS::DNTYPE_BLOCK;
             }
         } else {
             // some non-standard file from another location, e.g. from var/processes for workflows

@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use ModuleNotFoundException;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -128,7 +128,7 @@ class InstallMethod extends MethodClass
         $minfo = $this->mod()->getInfo($id);
 
         //Bail if we've lost our module
-        if ($minfo['state'] != xarMod::STATE_MISSING_FROM_INACTIVE) {
+        if ($minfo['state'] != ixarMod::STATE_MISSING_FROM_INACTIVE) {
             //Installs with dependencies, first initialise the necessary dependencies
             //then the module itself
             $installer->installmodule($id);

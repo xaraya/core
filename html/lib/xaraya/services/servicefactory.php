@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.4
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -36,16 +36,23 @@ class ServiceFactory
      */
     /** @var list<string> */
     public static array $sharedServices = [
-        // public services
-        'ctl', 'log', 'mls', 'var', 'cache', 'config', 'session', 'db', 'req', 'mem',
-        // wrappers
+        // shared services
+        'ctl', 'log', 'mls', 'var', 'block', 'prop', 'cache', 'mem', 'req', 'config', 'system', 'session', 'db',
+        // parent-aware services = not shared
+        // 'sec', 'tpl', 'data',
+        // static wrappers
         'prep', 'events', 'hooks',
         // internal helpers
         'modules.vars', 'modules.user', 'modules.item', 'modules.info', 'modules.exec', 'modules.hooks', 'modules.alias',
+        // created directly = not via ServiceFactory
+        // 'caching.output', ...
     ];
     /** @var list<string> */
     public static array $argumentServices = [
+        // shared services with optional argument
         'user',
+        // parent-aware services with optional argument = not shared
+        // 'mod',
     ];
 
     /**

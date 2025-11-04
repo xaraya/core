@@ -16,7 +16,7 @@ namespace Xaraya\Modules\Themes;
 use Xaraya\Modules\InstallerClass;
 use Exception;
 use xarMasks;
-use xarMod;
+use ixarMod;
 use xarXMLInstaller;
 use sys;
 
@@ -60,7 +60,7 @@ class Installer extends InstallerClass
         }
         // TODO: this is themes, not mods
         if (empty($selfilter)) {
-            $selfilter = xarMod::STATE_ANY;
+            $selfilter = ixarMod::STATE_ANY;
         }
         if (empty($hidecore)) {
             $hidecore = 0;

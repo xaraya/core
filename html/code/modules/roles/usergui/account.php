@@ -16,7 +16,6 @@ use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
 use Exception;
 use xarRoles;
-use xarUser;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -66,7 +65,7 @@ class AccountMethod extends MethodClass
 
         $id = $this->user()->getId();
 
-        if ($id == xarUser::LAST_RESORT) {
+        if ($id == $this->user()::LAST_RESORT) {
             $message = $this->ml('You are logged in as the last resort administrator.');
         } else {
 

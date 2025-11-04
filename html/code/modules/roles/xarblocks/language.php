@@ -35,8 +35,8 @@ class Roles_LanguageBlock extends BasicBlock
      */
     public function display()
     {
-        // if (xarMLS::getMode() != xarMLS::BOXED_MULTI_LANGUAGE_MODE) {
-        if (xarMLS::getMode() == xarMLS::SINGLE_LANGUAGE_MODE) {
+        // if (xarMLS::getMode() != $this->mls()::BOXED_MULTI_LANGUAGE_MODE) {
+        if (xarMLS::getMode() == $this->mls()::SINGLE_LANGUAGE_MODE) {
             return;
         }
 

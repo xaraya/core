@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -19,7 +19,6 @@ namespace Xaraya\Services;
 use DataPropertyMaster;
 use DataProperty;
 use PropertyRegistration;
-use xarTpl;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -31,13 +30,6 @@ sys::import('modules.dynamicdata.class.objects.factory');
 interface DataPropertyInterface extends ServiceInterface
 {
     public const SLICE = 'dataproperty';
-
-    /**
-     * Render output with property template
-     * @param array<mixed> $tplData
-     * @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
-     */
-    public function template(string $tplType, array $tplData = []): string;
 
     /**
      * List all defined property types
@@ -72,34 +64,6 @@ interface DataPropertyInterface extends ServiceInterface
 trait DataPropertyTrait
 {
     use ServiceTrait;
-
-    /**
-     * Render output with property template
-     * @uses xarTpl::property()
-     * @param string $tplType
-     * @param array<mixed> $tplData
-     * @param ?string $tplBase
-     * @return string
-     * @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
-     */
-    public function template(string $tplType, array $tplData = [], ?string $tplBase = null): string
-    {
-        // Add standard template variables (module, itemtype and context)
-        // @todo $tplData = $this->prepare($tplData);
-        $tplData['context'] ??= $this->getContext();
-
-        $modName = $this->getModName();
-        $propertyName = $this->getPropertyTemplate();
-
-        // Create the output.
-        return xarTpl::property(
-            $modName,
-            $propertyName,
-            $tplType,
-            $tplData,
-            $tplBase
-        );
-    }
 
     /**
      * List all defined property types
@@ -142,39 +106,16 @@ trait DataPropertyTrait
 }
 
 /**
- * Access DataProperty*::* methods with context (getProperty, template, ...)
+ * Access DataProperty*::* methods with context (getProperty, getPropertyTypes, ...)
  *
  * Available methods:
- * - template() for current property - @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
  * - getPropertyTypes()
  * - getProperties()
  * - getProperty()
  * - ...
  *
- * Required methods in parent: @todo 2.8.x deprecate if no longer useful
- * - getModName() for prop()->template()
- * - getPropertyTemplate() for prop()->template()
- *
- * @todo do something with getParent()->getProperty() + simplify methods by name or propid?
- *
  */
 class DataPropertyService implements DataPropertyInterface
 {
     use DataPropertyTrait;
-
-    /**
-     * Get name of the module from parent getProperty()
-     */
-    public function getModName(): string
-    {
-        return $this->getParent()->getProperty()?->tplmodule ?? 'dynamicdata';
-    }
-
-    /**
-     * Get template name of the property from parent getProperty()
-     */
-    public function getPropertyTemplate(): string
-    {
-        return $this->getParent()->getProperty()?->template ?? 'base';
-    }
 }

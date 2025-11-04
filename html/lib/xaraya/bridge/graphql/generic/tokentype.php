@@ -127,7 +127,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
             // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
             // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
             $userId = xar::mod()->apiFunc('authsystem', 'user', 'authenticate_user', $args);
-            if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
+            if (empty($userId) || $userId == xar::user()::AUTH_FAILED) {
                 throw new Exception('Invalid username or password');
             }
             $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];

@@ -16,7 +16,7 @@ use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
 use Exception;
 use xarEvents;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -55,7 +55,7 @@ class ActivateMethod extends MethodClass
 
         $modInfo = $this->mod()->getInfo($regid);
 
-        if ($modInfo['state'] == xarMod::STATE_UNINITIALISED) {
+        if ($modInfo['state'] == ixarMod::STATE_UNINITIALISED) {
             throw new Exception("Calling activate function while module is uninitialised");
         }
         // Module activate function
@@ -67,7 +67,7 @@ class ActivateMethod extends MethodClass
 
         // Update state of module
         $res = $adminapi->setstate(['regid' => $regid,
-            'state' => xarMod::STATE_ACTIVE]);
+            'state' => ixarMod::STATE_ACTIVE]);
 
         // notify any observers that this module was activated
         // NOTE: the ModActivate event observer notifies ModuleActivate hooks

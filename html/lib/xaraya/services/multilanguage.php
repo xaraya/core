@@ -16,6 +16,7 @@
 
 namespace Xaraya\Services;
 
+use ixarMLS;
 use xarMLS;
 use xarLocale;
 use sys;
@@ -29,7 +30,7 @@ interface MultiLanguageInterface extends ServiceInterface
 {
     public const SLICE = 'multilanguage';
 
-    public const SINGLE_LANGUAGE_MODE = xarMLS::SINGLE_LANGUAGE_MODE;
+    public const SINGLE_LANGUAGE_MODE = ixarMLS::SINGLE_LANGUAGE_MODE;
 
     /**
      * Returns the site locale if running in SINGLE mode,
@@ -290,10 +291,10 @@ trait MultiLanguageTrait
      */
     public function loadModuleTranslations(string $modName, string $modType, string $funcName): bool
     {
-        //xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
-        //if (xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:' . $modType . $funcType, $funcName) === null) {
-        //if (xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:', $modType) === null) {
-        return xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:' . $modType, $funcName);
+        //xarMLS::_loadTranslations(ixarMLS::DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
+        //if (xarMLS::_loadTranslations(ixarMLS::DNTYPE_MODULE, $modName, 'modules:' . $modType . $funcType, $funcName) === null) {
+        //if (xarMLS::_loadTranslations(ixarMLS::DNTYPE_MODULE, $modName, 'modules:', $modType) === null) {
+        return xarMLS::_loadTranslations(ixarMLS::DNTYPE_MODULE, $modName, 'modules:' . $modType, $funcName);
     }
 
     /**
@@ -304,7 +305,7 @@ trait MultiLanguageTrait
      */
     public function loadObjectTranslations(string $objectName, string $propertyName): bool
     {
-        return xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $objectName, $propertyName);
+        return xarMLS::_loadTranslations(ixarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $objectName, $propertyName);
     }
 }
 

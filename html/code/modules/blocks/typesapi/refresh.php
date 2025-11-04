@@ -16,6 +16,7 @@ use Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\BlocksApi;
 use Exception;
 use FileNotFoundException;
+use ixarBlock;
 use xarBlock;
 use sys;
 
@@ -83,12 +84,12 @@ class RefreshMethod extends MethodClass
             $update = [];
             // if the block belongs to a module, check the module is active
             if (!empty($type['module']) && !$this->mod()->isAvailable($type['module'])) {
-                $state = xarBlock::TYPE_STATE_MOD_UNAVAILABLE;
+                $state = ixarBlock::TYPE_STATE_MOD_UNAVAILABLE;
             } else {
                 try {
                     // check the block can be instantiated
                     $block = $blocksapi->getblock($type);
-                    $state = xarBlock::TYPE_STATE_ACTIVE;
+                    $state = ixarBlock::TYPE_STATE_ACTIVE;
                     if ($block->type_category != $type['type_category']) {
                         $update['type_category'] = $block->type_category;
                     }
@@ -127,9 +128,9 @@ class RefreshMethod extends MethodClass
                     }
 
                 } catch (FileNotFoundException $e) {
-                    $state = xarBlock::TYPE_STATE_MISSING;
+                    $state = ixarBlock::TYPE_STATE_MISSING;
                 } catch (Exception $e) {
-                    $state = xarBlock::TYPE_STATE_ERROR;
+                    $state = ixarBlock::TYPE_STATE_ERROR;
                 }
 
             }

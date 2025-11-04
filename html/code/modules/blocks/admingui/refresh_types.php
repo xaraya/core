@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Blocks\AdminGui;
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\AdminGui;
 use Xaraya\Modules\Blocks\TypesApi;
+use ixarBlock;
 use xarBlock;
 use sys;
 
@@ -67,16 +68,16 @@ class RefreshTypesMethod extends MethodClass
                     $new[$type_id] = $type;
                 }
                 switch ($type['type_state']) {
-                    case xarBlock::TYPE_STATE_ACTIVE:
+                    case ixarBlock::TYPE_STATE_ACTIVE:
                         $activated[$type_id] = $type;
                         break;
-                    case xarBlock::TYPE_STATE_ERROR:
+                    case ixarBlock::TYPE_STATE_ERROR:
                         $error[$type_id] = $type;
                         break;
-                    case xarBlock::TYPE_STATE_MISSING:
+                    case ixarBlock::TYPE_STATE_MISSING:
                         $missing[$type_id] = $type;
                         break;
-                    case xarBlock::TYPE_STATE_MOD_UNAVAILABLE:
+                    case ixarBlock::TYPE_STATE_MOD_UNAVAILABLE:
                         $unavailable[$type_id] = $type;
                         break;
                 }

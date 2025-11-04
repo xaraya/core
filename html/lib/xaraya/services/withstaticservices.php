@@ -294,18 +294,15 @@ trait WithStaticServices
     }
 
     /**
-     * Access xarBlock*::* Blocks methods (template, ...)
+     * Access xarBlock*::* Blocks methods (render, ...)
      *
      * Available methods:
-     * - template() for current block type - @deprecated 2.8.1 use tpl()->block() in general with modName blockType
-     * - prepare() - @deprecated 2.8.1 only used in block()->template()
+     * - render()
+     * - renderBlock()
+     * - renderGroup()
      * - guiRequest()
      * - apiRequest()
      * - ...
-     *
-     * Required methods in parent:
-     * - getModName() for block()->template() and block()->prepare()
-     * - getBlockType() for block()->template()
      *
      */
     public static function block(): BlocksInterface
@@ -338,18 +335,13 @@ trait WithStaticServices
     }
 
     /**
-     * Access DataProperty*::* methods with context (getProperty, template, ...)
+     * Access DataProperty*::* methods with context (getProperty, getPropertyTypes, ...)
      *
      * Available methods:
-     * - template() for current property - @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
      * - getPropertyTypes()
      * - getProperties()
      * - getProperty()
      * - ...
-     *
-     * Required methods in parent:
-     * - getModName() for prop()->template()
-     * - getPropertyTemplate() for prop()->template()
      *
      */
     public static function prop(): DataPropertyInterface

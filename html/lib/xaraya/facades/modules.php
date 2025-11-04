@@ -21,7 +21,7 @@ namespace Xaraya\Facades;
 use Xaraya\Services\ModulesInterface;
 use Xaraya\Services\ServiceFactory;
 use Xaraya\Modules\ModuleInterface;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.services.modules');
@@ -34,7 +34,7 @@ sys::import('xaraya.services.servicefactory');
  */
 class xarMod3
 {
-    public const STATE_ACTIVE = xarMod::STATE_ACTIVE;
+    public const STATE_ACTIVE = ixarMod::STATE_ACTIVE;
 
     /** @var ?ModulesInterface */
     protected static $xarMod = null;         // Access modules service with instance methods

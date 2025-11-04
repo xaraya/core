@@ -43,9 +43,9 @@ interface ParentServicesInterface extends CoreServicesInterface
  * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
  * - $this->tpl() = xarTpl::* Templating (module, setPageTitle, ...)
  * - $this->var() = xarVar::* Variables (fetch, check, ...)
- * - $this->block() = xarBlock*::* Blocks (template, ...)
+ * - $this->block() = xarBlock*::* Blocks (render, ...)
  * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
- * - $this->prop() = DataProperty*::* with context (getProperty, template, ...)
+ * - $this->prop() = DataProperty*::* with context (getProperty, getPropertyTypes, ...)
  * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
  * - $this->config() = xarConfigVars::* Config (getVar, setVar, ...)
  * - $this->system() = xarSystemVars::* System (getVar, setVar, ...)
@@ -290,18 +290,15 @@ trait ParentServicesTrait
     }
 
     /**
-     * Access xarBlock*::* Blocks methods (template, ...)
+     * Access xarBlock*::* Blocks methods (render, ...)
      *
      * Available methods:
-     * - template() for current block type - @deprecated 2.8.1 use tpl()->block() in general with modName blockType
-     * - prepare() - @deprecated 2.8.1 only used in block()->template()
+     * - render()
+     * - renderBlock()
+     * - renderGroup()
      * - guiRequest()
      * - apiRequest()
      * - ...
-     *
-     * Required methods in parent:
-     * - getModName() for block()->template() and block()->prepare()
-     * - getBlockType() for block()->template()
      *
      */
     public function block(): BlocksInterface
@@ -334,18 +331,13 @@ trait ParentServicesTrait
     }
 
     /**
-     * Access DataProperty*::* methods with context (getProperty, template, ...)
+     * Access DataProperty*::* methods with context (getProperty, getPropertyTypes, ...)
      *
      * Available methods:
-     * - template() for current property - @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
      * - getPropertyTypes()
      * - getProperties()
      * - getProperty()
      * - ...
-     *
-     * Required methods in parent:
-     * - getModName() for prop()->template()
-     * - getPropertyTemplate() for prop()->template()
      *
      */
     public function prop(): DataPropertyInterface

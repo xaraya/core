@@ -16,6 +16,7 @@
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 use Xaraya\Services\WithServicesClass;
+// use ixarMod;
 
 /**
  * Base CSS class
@@ -237,7 +238,7 @@ class xarCSS extends xarObject
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
+            ['filter' => ['State' => ixarMod::STATE_ACTIVE]]
         );
         // we want to look in all active themes
         // we want to look in all active modules
@@ -990,7 +991,7 @@ class xarCSSLib extends xarObject
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
+            ['filter' => ['State' => ixarMod::STATE_ACTIVE]]
         );
         // set default paths and filenames
         $libName     = $this->name;

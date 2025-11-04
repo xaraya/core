@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -66,7 +66,7 @@ class InstallallMethod extends MethodClass
         $installer = InstallerTool::getInstance();
         foreach ($dbModules as $name => $info) {
             //Jump if already installed
-            if ($info['state'] == xarMod::STATE_INSTALLED) {
+            if ($info['state'] == ixarMod::STATE_INSTALLED) {
                 continue;
             }
             $dependencies = $installer->getalldependencies($info['regid']);
@@ -76,7 +76,7 @@ class InstallallMethod extends MethodClass
             } else {
                 if (!$installer->installmodule($info['regid'])) {
                     foreach ($dependencies['satisfiable'] as $key => $modInfo) {
-                        $dbModules[$modInfo['name']]['state'] = xarMod::STATE_INSTALLED;
+                        $dbModules[$modInfo['name']]['state'] = ixarMod::STATE_INSTALLED;
                     }
                 }
             }

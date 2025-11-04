@@ -23,6 +23,7 @@ use Exception;
 use FileNotFoundException;
 use FunctionNotFoundException;
 use IDNotFoundException;
+use ixarBlock;
 use xarBlock;
 use sys;
 

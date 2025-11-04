@@ -15,6 +15,7 @@ use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\TypesApi;
 use BadParameterException;
 use DuplicateException;
+use ixarBlock;
 use xarBlock;
 use sys;
 
@@ -69,7 +70,7 @@ class CreateitemMethod extends MethodClass
 
         // state is optional
         if (!isset($state)) {
-            $state = xarBlock::TYPE_STATE_ACTIVE;
+            $state = ixarBlock::TYPE_STATE_ACTIVE;
         }
         $states = $typesapi->getstates();
         if (!is_numeric($state) || !isset($states[$state])) {

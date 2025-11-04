@@ -27,7 +27,7 @@
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.6.1
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -212,14 +212,6 @@ trait MethodServicesTrait
     /**
      * Dummy method for ModuleServicesInterface extends ServicesInterface
      */
-    public function getBlockType(): string
-    {
-        return 'TODO';
-    }
-
-    /**
-     * Dummy method for ModuleServicesInterface extends ServicesInterface
-     */
     public function getObject(): null
     {
         return null;
@@ -260,9 +252,9 @@ trait MethodServicesTrait
  * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
  * - $this->tpl() = xarTpl::* Templating (module, setPageTitle, ...)
  * - $this->var() = xarVar::* Variables (fetch, check, ...)
- * - $this->block() = xarBlock*::* Blocks (template, ...)
+ * - $this->block() = xarBlock*::* Blocks (render, ...)
  * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
- * - $this->prop() = DataProperty*::* with context (getProperty, template, ...)
+ * - $this->prop() = DataProperty*::* with context (getProperty, getPropertyTypes, ...)
  * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
  * - $this->config() = xarConfigVars::* Config (getVar, setVar, ...)
  * - $this->system() = xarSystemVars::* System (getVar, setVar, ...)

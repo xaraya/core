@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Authsystem\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\UserApi;
-use xarUser;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -32,7 +31,7 @@ class AuthenticateUserMethod extends MethodClass
      * @param string[] $args Array of optional parameters<br/>
      * string   $args['uname'] user name of user<br/>
      * string   $args['pass'] password of user
-     * @return int Returns user id on successful authentication, xarUser::AUTH_FAILED otherwise
+     * @return int Returns user id on successful authentication, xar::user()::AUTH_FAILED otherwise
      * @see UserApi::authenticateUser()
      */
     public function __invoke(array $args = [])
@@ -58,7 +57,7 @@ class AuthenticateUserMethod extends MethodClass
 
         if (!$result->first()) {
             $result->close();
-            return xarUser::AUTH_FAILED;
+            return $this->user()::AUTH_FAILED;
         }
 
         [$id, $realpass] = $result->fields;
@@ -66,7 +65,7 @@ class AuthenticateUserMethod extends MethodClass
 
         // Confirm that passwords match
         if (!$this->user()->comparePasswords($pass, $realpass, $uname, substr($realpass, 0, 2))) {
-            return xarUser::AUTH_FAILED;
+            return $this->user()::AUTH_FAILED;
         }
 
         return $id;

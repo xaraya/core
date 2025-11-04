@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -69,6 +69,9 @@ interface TemplatingInterface extends ServiceInterface
     public function getPager(int $startNum, int $total, string $urltemplate, int $itemsPerPage = 10, int|array $blockOptions = [], string $template = 'default', string $tplmodule = 'base'): string;
 
     public function renderPage(string $mainModuleOutput, ?string $pageTemplate = null): string;
+
+    /** @param array<string, mixed> $blockInfo */
+    public function renderBlockBox(array $blockInfo, ?string $templateName = null): string;
 }
 
 /**
@@ -354,6 +357,22 @@ trait TemplatingTrait
     public function renderPage(string $mainModuleOutput, ?string $pageTemplate = null): string
     {
         return xarTpl::renderPage($mainModuleOutput, $pageTemplate, $this->getContext());
+    }
+
+    /**
+     * Render a block box
+     *
+     * @access public
+     * @param array<string, mixed> $blockInfo  Information on the block
+     * @param  ?string $templateName string
+     * @return string xarTpl::executeFromFile($sourceFileName, $blockInfo)
+     *
+     * @todo the search logic for the templates can perhaps use the private function?
+     * @todo implement common templates in cascade
+     */
+    public function renderBlockBox(array $blockInfo, ?string $templateName = null): string
+    {
+        return xarTpl::renderBlockBox($blockInfo, $templateName);
     }
 }
 

@@ -16,7 +16,7 @@ use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
 use Exception;
 use xarEvents;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -58,11 +58,11 @@ class DeactivateMethod extends MethodClass
 
         //Shouldnt we check first if the module is alredy ACTIVATED????
         //What should we do with UPGRADED STATE? What is it meant to?
-        //  if ($modInfo['state'] != xarMod::STATE_ACTIVE)
+        //  if ($modInfo['state'] != ixarMod::STATE_ACTIVE)
 
         // Module activate function
         // only run if the module is actually there. It may have been removed
-        if ($modInfo['state'] != xarMod::STATE_MISSING_FROM_ACTIVE) {
+        if ($modInfo['state'] != ixarMod::STATE_MISSING_FROM_ACTIVE) {
             if (!$adminapi->executeinitfunction(['regid'    => $regid,
                 'function' => 'deactivate'])) {
                 //Raise an Exception
@@ -71,7 +71,7 @@ class DeactivateMethod extends MethodClass
         }
         // Update state of module
         $res = $adminapi->setstate(['regid' => $regid,
-            'state' => xarMod::STATE_INACTIVE]);
+            'state' => ixarMod::STATE_INACTIVE]);
 
         // notify any observers that this module was deactivated
         // NOTE: the ModDeactivate event observer notifies ModuleDeactivate hooks

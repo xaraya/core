@@ -5,7 +5,7 @@
  * *
  * @package core\blocks
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -17,6 +17,7 @@
 sys::import("xaraya.context.context");
 sys::import('xaraya.services.xar');
 use Xaraya\Context\Context;
+use Xaraya\Services\BlocksService;
 use Xaraya\Services\xar;
 
 interface ixarBlock
@@ -55,6 +56,16 @@ interface ixarBlock
 class xarBlock extends xarObject implements ixarBlock
 {
     protected static bool $initialized = false;
+    protected static ?BlocksService $blockService = null;
+
+    protected static function block(): BlocksService
+    {
+        if (!isset(self::$blockService)) {
+            $xar = xar::getServicesClass();
+            self::$blockService = $xar->block();
+        }
+        return self::$blockService;
+    }
 
     private function __construct() {}
     /**
@@ -67,13 +78,9 @@ class xarBlock extends xarObject implements ixarBlock
      */
     public static function init(array $args = [])
     {
-        if (empty($args) && self::$initialized) {
-            return true;
-        }
-        // Blocks Support Tables
-        xar::mod()->loadDbInfo('blocks');
-        self::$initialized = true;
-        return true;
+        // static cache for migration
+        self::$blockService = null;
+        return self::block()->init($args);
     }
 
     /**
@@ -90,290 +97,14 @@ class xarBlock extends xarObject implements ixarBlock
      */
     public static function render(array $blockinfo = [], $context = null)
     {
-        $xar = xar::getServicesClass();
-        // Get a cache key for this block if it's suitable for block caching
-        $cacheKey = $xar->cache()->getBlockKey($blockinfo);
-
-        // Check if the block is cached
-        if ($xar->cache()->hasBlock($cacheKey)) {
-            // Return the cached block output
-            return $xar->cache()->getBlock($cacheKey);
-        }
-        if (!isset($context)) {
-            // $context = new Context(['source' => __METHOD__]);
-            // Use context from static services class here
-            $context = $xar->getContext();
-        }
-
-        try {
-            // get the block instance
-            $block = self::getObject($blockinfo, 'display', null, $context);
-            // set context if available in block render
-            $block->setContext($context);
-
-            // check if block expired already
-            $now = time();
-            if ($block->expire && $now > $block->expire) {
-                $xar->cache()->setBlock($cacheKey, '');
-                return '';
-            }
-            // checkAccess for display method
-            if (!$block->checkAccess('display')) {
-                $xar->cache()->setBlock($cacheKey, '');
-                if (isset($block->display_access) && $block->display_access['failure']) {
-                    // @TODO: render to an error/exception block?
-                    return xarTpl::module(
-                        'privileges',
-                        'user',
-                        'errors',
-                        ['layout' => 'no_block_privileges']
-                    );
-                }
-                return '';
-            }
-            // don't render hidden blocks
-            if ($block->state == self::BLOCK_STATE_HIDDEN) {
-                // just execute the display method and return an empty string
-                $block->display();
-                $xar->cache()->setBlock($cacheKey, '');
-                return '';
-            }
-            // render the block
-            $blockinfo['content'] = self::guiMethod($block, 'display');
-            // no content, ok, nothing to display
-            if (empty($blockinfo['content'])) {
-                $xar->cache()->setBlock($cacheKey, '');
-                return '';
-            }
-            // render to box template if necessary
-            if ($block->type_category == 'group') {
-                $boxOutput = $blockinfo['content'];
-            } else {
-                // title may have been over-ridden by the block setTitle() method
-                $blockinfo['title'] = $block->title;
-                $blockinfo['_bl_block_id']       = $block->block_id;
-                $blockinfo['_bl_block_name']     = $block->name;
-                $blockinfo['_bl_block_type']     = $block->type;
-                $blockinfo['_bl_block_type_id']  = $block->type_id;
-                $blockinfo['_bl_block_group']    = $block->group;
-                $blockinfo['_bl_block_group_id'] = $block->group_id;
-                // @todo: deprecate use of these
-                $blockinfo['group'] = $block->group;
-                $blockinfo['group_id'] = $block->group_id;
-                // Pass along the block context for xarTpl::renderBlockBox() if needed
-                $blockinfo['context'] ??= $block->getContext();
-                $boxOutput = xarTpl::renderBlockBox($blockinfo, $block->box_template);
-            }
-
-            // Set the output of the block in cache
-            $xar->cache()->setBlock($cacheKey, $boxOutput);
-
-            return $boxOutput;
-
-        } catch (Exception $e) {
-            if ((bool) $xar->mod('blocks')->getVar('noexceptions') || !$xar->user()->isDebugAdmin()) {
-                $xar->cache()->setBlock($cacheKey, '');
-                return '';
-            } else {
-                throw($e);
-            }
-        }
-
+        return self::block()->render($blockinfo);
     }
 
     public static function getObject(array $blockinfo = [], $interface = null, $method = null, $context = null)
     {
-        $invalid = [];
-        if (empty($blockinfo['type']) || !is_string($blockinfo['type'])) {
-            $invalid[] = 'type';
-        }
-        if (!empty($blockinfo['module']) && !is_string($blockinfo['module'])) {
-            $invalid[] = 'module';
-        }
-        if (isset($interface) && !is_string($interface)) {
-            $invalid[] = 'interface';
-        }
-        if (isset($method) && !is_string($method)) {
-            $invalid[] = 'method';
-        }
-        if (!empty($invalid)) {
-            $msg = 'Invalid #(1) for #(2) subsystem #(3) class method #(4)()';
-            $vars = [join(', ', $invalid), 'blocks', 'xarBlock', 'getObject'];
-            throw new BadParameterException($vars, $msg);
-        }
-
-        // use xarClassMap::findBlock() here
-        sys::import('xaraya.classmap');
-        $result = xarClassMap::findBlock($blockinfo['module'] ?? '', $blockinfo['type'], $interface);
-        if (!empty($result)) {
-            $classname = $result['classname'];
-            $filepath = $result['filepath'];
-            // require the file (raises error if file not found)
-            require_once($filepath);
-            // we need to set the actual $filepath here before constructing the object
-            $blockinfo['filepath'] = $filepath;
-
-            if (!class_exists($classname)) {
-                throw new ClassNotFoundException($classname);
-            }
-
-            if (!empty($method) && !method_exists($classname, $method)) {
-                throw new FunctionNotFoundException($classname . '::' . $method);
-            }
-
-            // Load the block language files
-            // What to do here? return doesnt seem right
-            if (!xarMLS::loadTranslations($filepath)) {
-                return;
-            }
-
-            $object = new $classname($blockinfo, $context);
-
-            return $object;
-        }
-
-        // @deprecated 2.7.0 remove old code
-        $key = !empty($blockinfo['module']) ? $blockinfo['module'] . ':' . $blockinfo['type'] : $blockinfo['type'];
-        throw new ClassNotFoundException($key);
-
-        // @checkme do we want to foresee anything special for other interfaces, or always let them go through the search process below?
-        // @checkme best would be to simply autoload the class, if we do know the actual $classname - otherwise we'll need $filepath too
-        if ((empty($interface) || $interface == 'display') && !empty($blockinfo['classname']) && strpos($blockinfo['classname'], '\\') !== false && !empty($blockinfo['filepath']) && file_exists($blockinfo['filepath'])) {
-            $classname = $blockinfo['classname'];
-            $filepath = $blockinfo['filepath'];
-            include_once $filepath;
-
-            if (!class_exists($classname)) {
-                throw new ClassNotFoundException($classname);
-            }
-
-            if (!empty($method) && !method_exists($classname, $method)) {
-                throw new FunctionNotFoundException($classname . '::' . $method);
-            }
-
-            // Load the block language files
-            // What to do here? return doesnt seem right
-            if (!xarMLS::loadTranslations($filepath)) {
-                return;
-            }
-
-            $object = new $classname($blockinfo);
-
-            return $object;
-        }
-
-        // $cls does not take into account possible namespace + it does not re-use what blocksapi getinfo() could give
-        if (empty($blockinfo['module'])) {
-            $baseclass = ucfirst($blockinfo['type']) . 'Block';
-            $basedp = "blocks";
-            $basepath = sys::code() . 'blocks';
-        } else {
-            $baseclass = ucfirst($blockinfo['module']) . '_' . ucfirst($blockinfo['type']) . 'Block';
-            $basedp = "modules.{$blockinfo['module']}.xarblocks";
-            $basepath = sys::code() . "modules/{$blockinfo['module']}/xarblocks";
-        }
-
-        $cls = [];
-        $dps = [];
-        $paths = [];
-        if (!empty($interface)) {
-            // blocks/type/type_interface.php | modules/module/xarblocks/type/type_interface.php
-            $cls[] = $baseclass . ucfirst($interface);
-            $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}_{$interface}.php";
-            $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}_{$interface}";
-            // blocks/type/interface.php | modules/module/xarblocks/type/interface.php
-            $cls[] = $baseclass . ucfirst($interface);
-            $paths[] = "{$basepath}/{$blockinfo['type']}/{$interface}.php";
-            $dps[] = "{$basedp}.{$blockinfo['type']}.{$interface}";
-            if (!empty($blockinfo['module'])) {
-                // modules/module/xarblocks/type_interface.php
-                $cls[] = $baseclass . ucfirst($interface);
-                $paths[] = "{$basepath}/{$blockinfo['type']}_{$interface}.php";
-                $dps[] = "{$basedp}.{$blockinfo['type']}_{$interface}";
-            }
-            if ($interface != 'display' && $interface != 'admin') {
-                // blocks/type/type_admin.php | modules/module/xarblocks/type/type_admin.php
-                $cls[] = $baseclass . 'Admin';
-                $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}_admin.php";
-                $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}_admin";
-                // blocks/type/admin.php | modules/module/xarblocks/type/admin.php
-                $cls[] = $baseclass . 'Admin';
-                $paths[] = "{$basepath}/{$blockinfo['type']}/admin.php";
-                $dps[] = "{$basedp}.{$blockinfo['type']}.admin";
-                if (!empty($blockinfo['module'])) {
-                    // modules/module/xarblocks/type_admin.php
-                    $cls[] = $baseclass . 'Admin';
-                    $paths[] = "{$basepath}/{$blockinfo['type']}_admin.php";
-                    $dps[] = "{$basedp}.{$blockinfo['type']}_admin";
-                }
-            }
-        }
-        // blocks/type/type.php | modules/module/xarblocks/type/type.php
-        $cls[] = $baseclass;
-        $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}.php";
-        $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}";
-        if (!empty($blockinfo['module'])) {
-            // modules/module/xarblocks/type.php
-            $cls[] = $baseclass;
-            $paths[] = "{$basepath}/{$blockinfo['type']}.php";
-            $dps[] = "{$basedp}.{$blockinfo['type']}";
-        }
-
-        $result = xarClassMap::findBlockByPath($paths);
-        if (!empty($result['filepath']) && !empty($result['found'])) {
-            $filepath = $result['filepath'];
-            // require the file (raises error if file not found)
-            require_once($filepath);
-            if (count($result['found']) > 1) {
-                // @todo which one do we pick here?
-            }
-            $classname = array_key_first($result['found']);
-            $blockinfo['filepath'] = $filepath;
-        } else {
-            // we try to get the actual $classname and $filepath here again - at least until after UPGRADE due to table change
-            $oldclasses = get_declared_classes();
-            foreach ($paths as $i => $filepath) {
-                if (!file_exists($filepath)) {
-                    continue;
-                }
-                sys::import($dps[$i]);
-                $newclasses = get_declared_classes();
-                $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
-                // assuming new classes in namespaces only have 1 class definition per file as they should...
-                if (count($diffclasses) > 0) {
-                    $classname = $diffclasses[0];
-                } else {
-                    $classname = $cls[$i];
-                }
-                // we need to set the actual $filepath here before constructing the object
-                $blockinfo['filepath'] = $filepath;
-                break;
-            }
-        }
-
-        if (empty($classname)) {
-            throw new FileNotFoundException($filepath);
-        }
-
-        if (!class_exists($classname)) {
-            throw new ClassNotFoundException($classname);
-        }
-
-        if (!empty($method) && !method_exists($classname, $method)) {
-            throw new FunctionNotFoundException($classname . '::' . $method);
-        }
-
-        // Load the block language files
-        // What to do here? return doesnt seem right
-        if (!xarMLS::loadTranslations($filepath)) {
-            return;
-        }
-
-        $object = new $classname($blockinfo);
-
-        return $object;
-
+        return self::block()->getObject($blockinfo, $interface, $method);
     }
+
     /**
      * Helper function used by block subsystem to call a block method suitabled for rendering
      *
@@ -386,58 +117,9 @@ class xarBlock extends xarObject implements ixarBlock
      */
     public static function guiMethod(iBlock $block, $method, $block_tpl = null)
     {
-        if (!method_exists($block, $method)) {
-            throw new FunctionNotFoundException($method);
-        }
-
-        $tplData = $block->$method();
-        if (is_array($tplData)) {
-            // handler for legacy block display methods returning tpl data in $content
-            // @todo remove when all module blocks are updated
-            if ($method == 'display' && isset($tplData['content'])) {
-                $tplData = $tplData['content'];
-            }
-            // inject blocklayout info
-            $tplData['_bl_block_id']       = $block->block_id;
-            $tplData['_bl_block_name']     = $block->name;
-            $tplData['_bl_block_type']     = $block->type;
-            $tplData['_bl_block_type_id']  = $block->type_id;
-            $tplData['_bl_block_group']    = $block->group;
-            $tplData['_bl_block_group_id'] = $block->group_id;
-
-            // Legacy (deprecated)
-            // @TODO: remove these once all block templates are using the _bl_ variables
-            $tplData['blockid'] = $tplData['bid'] = $block->block_id;
-            $tplData['blockname'] = $block->name;
-            $tplData['blocktypename'] = $block->type;
-            // The block may not be rendered as part of a group.
-            $tplData['blockgid'] = $block->group_id;
-            $tplData['blockgroupname'] = $tplData['group'] = $block->group;
-
-            if ($method != 'display') {
-                if (empty($block_tpl)) {
-                    $block_tpl = $method . '-' . $block->type;
-                }
-                $block->setTemplateBase($block_tpl);
-                $block->setBlockTemplate(null);
-            }
-            // Pass along the block context for xarTpl::block() if needed
-            $tplData['context'] ??= $block->getContext();
-            return xarTpl::block(
-                $block->module,
-                $block->type,
-                $tplData,
-                $block->block_template,
-                $block->template_base,
-                $block->tplmodule
-            );
-        } elseif (!empty($tplData) && is_string($tplData)) {
-            return $tplData;
-        } else {
-            return '';
-        }
-
+        return self::block()->guiMethod($block, $method, $block_tpl);
     }
+
     /**
      * Helper function used by block subsystem to check if a block explicitly declared a method
      *
@@ -450,28 +132,9 @@ class xarBlock extends xarObject implements ixarBlock
      */
     public static function hasMethod(iBlockType $block, $method, $strict = false)
     {
-        $hasMethod = method_exists($block, $method);
-        // if not strict or method not exist, return
-        if (!$strict || !$hasMethod) {
-            return $hasMethod;
-        }
-
-        // strict checks that this class and not one of its parents declared it
-        $refObject  = new ReflectionClass($block);
-        $baseClass = !empty($block->module)
-                     ? ucfirst($block->module) . '_' . ucfirst($block->type) . 'Block'
-                     : ucfirst($block->type) . 'Block';
-        if ($refObject->hasMethod($method)) {
-            $methodObject = $refObject->getMethod($method);
-            $hasMethod = (($methodObject->class === $refObject->getName())
-                           || (stripos($methodObject->class, $baseClass) === 0));
-        } else {
-            $hasMethod = false;
-        }
-        unset($refObject, $methodObject);
-
-        return $hasMethod;
+        return self::block()->hasMethod($block, $method, $strict);
     }
+
     /**
      * Renders a single block
      *
@@ -488,35 +151,9 @@ class xarBlock extends xarObject implements ixarBlock
      */
     public static function renderBlock(array $args = [], $context = null)
     {
-        // All the hard work is done in this function.
-        // It keeps the core code lighter when standalone blocks are not used.
-        if (isset($args['instance'])) {  // valid block instance states
-            $args['state'] = [self::BLOCK_STATE_VISIBLE, self::BLOCK_STATE_HIDDEN];
-        }
-        $xar = xar::getServicesClass();
-        $args['type_state'] = [self::TYPE_STATE_ACTIVE]; // valid block type states
-        if (!isset($context)) {
-            // $context = new Context(['source' => __METHOD__]);
-            // Use context from static services class here
-            $context = $xar->getContext();
-        }
-        // get block info
-        try {
-            $blockinfo = $xar->mod()->apiFunc('blocks', 'blocks', 'getinfo', $args);
-            return self::render($blockinfo, $context);
-        } catch (Exception $e) {
-            if ((bool) $xar->mod('blocks')->getVar('noexceptions') || !$xar->user()->isDebugAdmin()) {
-                // Get a cache key for this block if it's suitable for block caching
-                if (!empty($blockinfo)) {
-                    $cacheKey = $xar->cache()->getBlockKey($blockinfo);
-                    $xar->cache()->setBlock($cacheKey, '');
-                }
-                return '';
-            } else {
-                throw($e);
-            }
-        }
+        return self::block()->renderBlock($args);
     }
+
     /**
      * Renders a block group
      *
@@ -532,15 +169,7 @@ class xarBlock extends xarObject implements ixarBlock
      */
     public static function renderGroup($groupname, $template = null, $context = null)
     {
-        if (empty($groupname)) {
-            throw new EmptyParameterException('groupname');
-        }
-        if (!isset($context)) {
-            // $context = new Context(['source' => __METHOD__]);
-            // Use context from static services class here
-            $context = xar::getServicesClass()->getContext();
-        }
-        return self::renderBlock(['instance' => $groupname, 'box_template' => $template], $context);
+        return self::block()->renderGroup($groupname, $template);
     }
 
     /**
@@ -553,7 +182,6 @@ class xarBlock extends xarObject implements ixarBlock
      */
     public static function checkAccess(iBlock $block, $action, $roleid = null)
     {
-        // TODO: support $roleid there someday ?
-        return $block->checkAccess($action);
+        return self::block()->checkAccess($block, $action, $roleid);
     }
 }

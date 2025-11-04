@@ -44,17 +44,20 @@ class NotLoggedInException extends xarExceptions
  * ...
  */
 
+interface ixarUser
+{
+    public const AUTH_FAILED = -1;
+    public const AUTH_DENIED = -2;
+    public const LAST_RESORT = -3;
+}
+
 /**
  * User System
  * @package core\users
  * @deprecated 2.8.5 use xar::user() instead
  */
-class xarUser extends xarObject
+class xarUser extends xarObject implements ixarUser
 {
-    public const AUTH_FAILED = -1;
-    public const AUTH_DENIED = -2;
-    public const LAST_RESORT = -3;
-
     private static $objectRef;
     public static $authenticationModules;
     protected static bool $initialized = false;

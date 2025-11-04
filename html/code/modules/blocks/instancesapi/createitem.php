@@ -17,6 +17,7 @@ use Xaraya\Modules\Blocks\TypesApi;
 use BadParameterException;
 use DuplicateException;
 use IDNotFoundException;
+use ixarBlock;
 use xarBlock;
 use sys;
 
@@ -65,7 +66,7 @@ class CreateitemMethod extends MethodClass
         }
 
         if (!isset($state)) {
-            $state = xarBlock::BLOCK_STATE_VISIBLE;
+            $state = ixarBlock::BLOCK_STATE_VISIBLE;
         }
         $states = $instancesapi->getstates();
 

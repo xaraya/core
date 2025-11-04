@@ -16,6 +16,7 @@
  * @TODO: move all common menu functions here
 **/
 sys::import('xaraya.structures.containers.blocks.basicblock');
+// use ixarMod;
 
 abstract class MenuBlock extends BasicBlock implements iBlock
 {
@@ -44,7 +45,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
             'modules',
             'admin',
             'getlist',
-            ['filter' => [$typeCapable => true, 'State' => xarMod::STATE_ACTIVE]]
+            ['filter' => [$typeCapable => true, 'State' => ixarMod::STATE_ACTIVE]]
         );
         // get module aliases while we're here, we need those too
         $aliasMap = $this->config()->getVar('System.ModuleAliases');

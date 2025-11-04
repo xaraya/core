@@ -32,7 +32,7 @@
             <div class="xar-row">
                 <div class="xar-col">Status:</div>
                 <div class="xar-col">
-                    <xar:if condition="$block['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                    <xar:if condition="$block['type_state'] ne ixarBlock::TYPE_STATE_ACTIVE">
                         <a href="#xarServer::getCurrentURL(['interface' => 'display', 'block_method' => 'status'])#">#$type_states[$block['type_state']]['name']#</a>
                     <xar:else/>
                         #$instance_states[$block['state']]['name']#

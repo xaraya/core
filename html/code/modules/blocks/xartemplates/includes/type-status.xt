@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:if condition="$block['type_state'] eq xarBlock::TYPE_STATE_MISSING">
+    <xar:if condition="$block['type_state'] eq ixarBlock::TYPE_STATE_MISSING">
         <h3>Block Type Missing</h3>
         <p class="xar-error">
             Block type file(s) not found or could not be loaded.
@@ -24,7 +24,7 @@
             <p>Please notify the site administrator</p>
         </xar:sec>
 
-    <xar:elseif condition="$block['type_state'] eq xarBlock::TYPE_STATE_ERROR"/>
+    <xar:elseif condition="$block['type_state'] eq ixarBlock::TYPE_STATE_ERROR"/>
         <h3>Block Type Error</h3>
         <p class="xar-error">
             Block type could not be instantiated.
@@ -45,7 +45,7 @@
         <xar:else/>
             <p>Please notify the site administrator</p>
         </xar:sec>
-    <xar:elseif condition="$block['type_state'] eq xarBlock::TYPE_STATE_MOD_UNAVAILABLE"/>
+    <xar:elseif condition="$block['type_state'] eq ixarBlock::TYPE_STATE_MOD_UNAVAILABLE"/>
         <h3>Block Type Unavailable</h3>
         <p class="xar-error">
             Block type module unavailable.

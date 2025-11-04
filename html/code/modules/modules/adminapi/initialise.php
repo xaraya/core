@@ -17,7 +17,7 @@ use EmptyParameterException;
 use Exception;
 use ModuleNotFoundException;
 use xarEvents;
-use xarMod;
+use ixarMod;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -82,7 +82,7 @@ class InitialiseMethod extends MethodClass
 
         // Update state of module
         $set = $adminapi->setstate(['regid' => $regid,
-            'state' => xarMod::STATE_INACTIVE]);
+            'state' => ixarMod::STATE_INACTIVE]);
 
         // xar_debug($set);
         if (!isset($set)) {

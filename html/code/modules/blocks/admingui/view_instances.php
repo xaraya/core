@@ -15,6 +15,7 @@ use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\AdminGui;
 use Xaraya\Modules\Blocks\InstancesApi;
 use Xaraya\Modules\Blocks\TypesApi;
+use ixarBlock;
 use xarBlock;
 use sys;
 
@@ -398,7 +399,7 @@ class ViewInstancesMethod extends MethodClass
                     $item['add_link'] = [
                         'label' => $this->ml('Add'),
                         'title' => $this->ml('Create a new instance of this block type'),
-                        'url' => (!$access_property->check($access) || $item['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ? ''
+                        'url' => (!$access_property->check($access) || $item['type_state'] != ixarBlock::TYPE_STATE_ACTIVE) ? ''
                             : $this->ctl()->getModuleURL(
                                 'blocks',
                                 'admin',

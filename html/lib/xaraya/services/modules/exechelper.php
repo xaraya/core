@@ -21,7 +21,7 @@ use Xaraya\Modules\ModuleInterface;
 use Xaraya\Services\ServiceClass;
 use xarCore;
 use xarEvents;
-use xarMod;
+use ixarMod;
 use xarClassMap;
 use sys;
 use EmptyParameterException;
@@ -56,7 +56,7 @@ class ExecHelper extends ServiceClass
     public function apiLoad(string $modName, string $modType): mixed
     {
         // --- LEGACY METHOD BODY ---
-        return $this->privateLoad($modName, $modType . 'api', xarMod::LOAD_ANYSTATE);
+        return $this->privateLoad($modName, $modType . 'api', ixarMod::LOAD_ANYSTATE);
         // --- END LEGACY METHOD BODY ---
     }
 
@@ -115,7 +115,7 @@ class ExecHelper extends ServiceClass
     public function load(string $modName, string $modType): mixed
     {
         // --- LEGACY METHOD BODY ---
-        return $this->privateLoad($modName, $modType, xarMod::LOAD_ONLYACTIVE);
+        return $this->privateLoad($modName, $modType, ixarMod::LOAD_ONLYACTIVE);
         // --- END LEGACY METHOD BODY ---
     }
 
@@ -253,7 +253,7 @@ class ExecHelper extends ServiceClass
         }
 
         // Not a valid module state - throw exception
-        if ($modBaseInfo['state'] != xarMod::STATE_ACTIVE && !($flags & xarMod::LOAD_ANYSTATE)) {
+        if ($modBaseInfo['state'] != ixarMod::STATE_ACTIVE && !($flags & ixarMod::LOAD_ANYSTATE)) {
             throw new ModuleNotActiveException($modName);
         }
 

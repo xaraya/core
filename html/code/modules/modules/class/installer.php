@@ -18,7 +18,7 @@ namespace Xaraya\Modules;
 
 use Xaraya\Services\ServicesClass;
 use xarCore;
-use xarMod;
+use ixarMod;
 use xarVersion;
 use sys;
 use Stack;
@@ -102,13 +102,13 @@ class InstallerTool extends ServicesClass
                 $regId = $extInfo['regid'];
                 // Set state of module to 'missing'
                 switch ($extInfo['state']) {
-                    case xarMod::STATE_UNINITIALISED: $newstate = xarMod::STATE_MISSING_FROM_UNINITIALISED;
+                    case ixarMod::STATE_UNINITIALISED: $newstate = ixarMod::STATE_MISSING_FROM_UNINITIALISED;
                         break;
-                    case xarMod::STATE_INACTIVE:      $newstate = xarMod::STATE_MISSING_FROM_INACTIVE;
+                    case ixarMod::STATE_INACTIVE:      $newstate = ixarMod::STATE_MISSING_FROM_INACTIVE;
                         break;
-                    case xarMod::STATE_ACTIVE:        $newstate = xarMod::STATE_MISSING_FROM_ACTIVE;
+                    case ixarMod::STATE_ACTIVE:        $newstate = ixarMod::STATE_MISSING_FROM_ACTIVE;
                         break;
-                    case xarMod::STATE_UPGRADED:      $newstate = xarMod::STATE_MISSING_FROM_UPGRADED;
+                    case ixarMod::STATE_UPGRADED:      $newstate = ixarMod::STATE_MISSING_FROM_UPGRADED;
                         break;
                 }
                 if (isset($newstate)) {
@@ -147,7 +147,7 @@ class InstallerTool extends ServicesClass
 
         //Find the modules which are active (should upgraded be added too?)
         foreach ($this->databaseExtensions as $name => $dbInfo) {
-            if (($dbInfo['state'] != xarMod::STATE_MISSING_FROM_UNINITIALISED) && ($dbInfo['state'] < xarMod::STATE_MISSING_FROM_INACTIVE)) {
+            if (($dbInfo['state'] != ixarMod::STATE_MISSING_FROM_UNINITIALISED) && ($dbInfo['state'] < ixarMod::STATE_MISSING_FROM_INACTIVE)) {
                 $dbMods[$dbInfo['regid']] = $dbInfo;
             }
         }
@@ -340,11 +340,11 @@ class InstallerTool extends ServicesClass
             // So that we can present that nicely in the gui...
 
             switch ($extInfo['state']) {
-                case xarMod::STATE_ACTIVE:
-                case xarMod::STATE_UPGRADED:      $this->satisfied[$extInfo['regid']] = $extInfo;
+                case ixarMod::STATE_ACTIVE:
+                case ixarMod::STATE_UPGRADED:      $this->satisfied[$extInfo['regid']] = $extInfo;
                     break;
-                case xarMod::STATE_INACTIVE:
-                case xarMod::STATE_UNINITIALISED: $this->satisfiable[$extInfo['regid']] = $extInfo;
+                case ixarMod::STATE_INACTIVE:
+                case ixarMod::STATE_UNINITIALISED: $this->satisfiable[$extInfo['regid']] = $extInfo;
                     break;
                 default:                         $this->unsatisfiable[$extInfo['regid']] = $extInfo;
                     break;
@@ -388,7 +388,7 @@ class InstallerTool extends ServicesClass
             // Later on better have a full range of possibilities (adding missing and
             // unitialised). For that a good cleanup in the constant logic and
             // adding a proper array of module states would be nice...
-            if ($this->databaseExtensions[$name]['state'] == xarMod::STATE_UNINITIALISED) {
+            if ($this->databaseExtensions[$name]['state'] == ixarMod::STATE_UNINITIALISED) {
                 continue;
             }
 
@@ -429,10 +429,10 @@ class InstallerTool extends ServicesClass
 
         //TODO: Add version checks later on
         switch ($extInfo['state']) {
-            case xarMod::STATE_ACTIVE:
-            case xarMod::STATE_UPGRADED:  $this->active[$extInfo['regid']] = $extInfo;
+            case ixarMod::STATE_ACTIVE:
+            case ixarMod::STATE_UPGRADED:  $this->active[$extInfo['regid']] = $extInfo;
                 break;
-            case xarMod::STATE_INACTIVE:
+            case ixarMod::STATE_INACTIVE:
             default:                     $this->initialised[$extInfo['regid']] = $extInfo;
                 break;
         }
@@ -545,9 +545,9 @@ class InstallerTool extends ServicesClass
         }
 
         switch ($extInfo['state']) {
-            case xarMod::STATE_ACTIVE:
-            case xarMod::STATE_UPGRADED: return true;
-            case xarMod::STATE_INACTIVE: $initialised = true;
+            case ixarMod::STATE_ACTIVE:
+            case ixarMod::STATE_UPGRADED: return true;
+            case ixarMod::STATE_INACTIVE: $initialised = true;
                 break;
             default:                    $initialised = false;
                 break;
@@ -651,8 +651,8 @@ class InstallerTool extends ServicesClass
         }
 
 
-        if ($extInfo['state'] != xarMod::STATE_ACTIVE
-            && $extInfo['state'] != xarMod::STATE_UPGRADED) {
+        if ($extInfo['state'] != ixarMod::STATE_ACTIVE
+            && $extInfo['state'] != ixarMod::STATE_UPGRADED) {
             //We shouldnt be here
             //Throw Exception
             $msg = $this->ml('Module to be deactivated (#(1)) is not active nor upgraded', $extInfo['displayname']);

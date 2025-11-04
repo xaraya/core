@@ -160,7 +160,7 @@ class xarSecurity extends xarObject
 
         $xar->log()->info("xarSecurity::check: Testing user $userID against mask $mask");
 
-        if ($userID == xarUser::LAST_RESORT) {
+        if ($userID == $xar->user()::LAST_RESORT) {
             return true;
         }
 

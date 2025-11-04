@@ -49,6 +49,7 @@
 
 namespace Xaraya\Modules;
 
+use ixarMod;
 use xarMod;
 use sys;
 
@@ -79,6 +80,6 @@ trait UserApiTrait
     {
         $this->setModType('user');
         // any state here = default for api load
-        xarMod::apiLoad($this->getModName(), $this->getModType(), xarMod::LOAD_ANYSTATE, $this->getContext());
+        xarMod::apiLoad($this->getModName(), $this->getModType(), ixarMod::LOAD_ANYSTATE, $this->getContext());
     }
 }

@@ -21,6 +21,7 @@
 
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+// use ixarMod;
 
 class xarHooks extends xarEvents
 {
@@ -135,7 +136,7 @@ class xarHooks extends xarEvents
         $where[] = "eo.module_id = mo.regid";
         // only get observers of active modules
         $where[] = "mo.state = ?";
-        $bindvars[] = xarMod::STATE_ACTIVE;
+        $bindvars[] = ixarMod::STATE_ACTIVE;
 
         // This excludes observers of one or more modules in order to avoid duplication
         // The common case is hooking DD to some itemtype that is already a dataobject:

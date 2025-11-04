@@ -1,6 +1,7 @@
 <?php
 
 use Xaraya\Services\xar;
+// use ixarMod;
 
 /* This one exception depends on BL being inside Xaraya, try to correct this later */
 if (!class_exists('xarExceptions')) {
@@ -142,7 +143,7 @@ class XarayaCompiler extends xarBLCompiler
     private function getModuleTagPaths()
     {
         if (method_exists('xarMod', 'apiFunc') && empty(xar::mem()->get('installer', 'installing'))) {
-            $activeMods = xarMod::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_ACTIVE]]);
+            $activeMods = xarMod::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => ixarMod::STATE_ACTIVE]]);
         } else {
             return [];
         }

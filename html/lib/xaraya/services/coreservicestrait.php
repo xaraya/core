@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.4
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -353,23 +353,20 @@ trait CoreServicesTrait
     }
 
     /**
-     * Access xarBlock*::* Blocks methods (template, ...)
+     * Access xarBlock*::* Blocks methods (render, ...)
      *
      * Available methods:
-     * - template() for current block type - @deprecated 2.8.1 use tpl()->block() in general with modName blockType
-     * - prepare() - @deprecated 2.8.1 only used in block()->template()
+     * - render()
+     * - renderBlock()
+     * - renderGroup()
      * - guiRequest()
      * - apiRequest()
      * - ...
      *
-     * Required methods in parent:
-     * - getModName() for block()->template() and block()->prepare()
-     * - getBlockType() for block()->template()
-     *
      */
     public function block(): BlocksInterface
     {
-        return $this->service('block');
+        return $this->getStaticServices()->block();
     }
 
     /**
@@ -397,23 +394,18 @@ trait CoreServicesTrait
     }
 
     /**
-     * Access DataProperty*::* methods with context (getProperty, template, ...)
+     * Access DataProperty*::* methods with context (getProperty, getPropertyTypes, ...)
      *
      * Available methods:
-     * - template() for current property - @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
      * - getPropertyTypes()
      * - getProperties()
      * - getProperty()
      * - ...
      *
-     * Required methods in parent:
-     * - getModName() for prop()->template()
-     * - getPropertyTemplate() for prop()->template()
-     *
      */
     public function prop(): DataPropertyInterface
     {
-        return $this->service('prop');
+        return $this->getStaticServices()->prop();
     }
 
     /**

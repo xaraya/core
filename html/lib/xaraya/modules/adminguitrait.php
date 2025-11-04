@@ -37,6 +37,7 @@
 
 namespace Xaraya\Modules;
 
+use ixarMod;
 use xarMod;
 use sys;
 
@@ -67,6 +68,6 @@ trait AdminGuiTrait
     {
         $this->setModType('admin');
         // any state here = otherwise during module init(), any GUI hook functions registered will throw ModuleNotActiveException
-        xarMod::load($this->getModName(), $this->getModType(), xarMod::LOAD_ANYSTATE, $this->getContext());
+        xarMod::load($this->getModName(), $this->getModType(), ixarMod::LOAD_ANYSTATE, $this->getContext());
     }
 }

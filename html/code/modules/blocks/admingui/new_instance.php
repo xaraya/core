@@ -21,6 +21,7 @@ use BadParameterException;
 use DuplicateException;
 use Exception;
 use IDNotFoundException;
+use ixarBlock;
 use xarBlock;
 use sys;
 
@@ -87,7 +88,7 @@ class NewInstanceMethod extends MethodClass
                     // type may have been removed since last phase
                     $invalid['type_id'] = $this->ml('Block type id "#(1)" does not exist', $data['type_id']);
                 } else {
-                    if ($type['type_state'] != xarBlock::TYPE_STATE_ACTIVE) {
+                    if ($type['type_state'] != ixarBlock::TYPE_STATE_ACTIVE) {
                         // type state may have changed since last phase
                         $invalid['type_id'] = $this->ml('Selected block type for this instance is not active');
                     } elseif (!empty($type['type_info']['add_access'])) {
@@ -149,7 +150,7 @@ class NewInstanceMethod extends MethodClass
                 // get the list of registered block group types
                 $block_groups = $instancesapi->getitems([
                     'type_category' => 'group',
-                    'type_state' => xarBlock::TYPE_STATE_ACTIVE,
+                    'type_state' => ixarBlock::TYPE_STATE_ACTIVE,
                 ]);
             } else {
                 // redisplay type options with invalid message
@@ -279,7 +280,7 @@ class NewInstanceMethod extends MethodClass
             // populate block state options
             $data['instance_states'] = $instance_states;
             if (!isset($data['state'])) {
-                $data['state'] = xarBlock::BLOCK_STATE_VISIBLE;
+                $data['state'] = ixarBlock::BLOCK_STATE_VISIBLE;
             }
             // populate with defaults from type on first run
             if (!isset($data['box_template'])) {
@@ -306,7 +307,7 @@ class NewInstanceMethod extends MethodClass
                 return;
             }
             // get the list of active block types
-            $types = $typesapi->getitems(['type_state' => xarBlock::TYPE_STATE_ACTIVE]);
+            $types = $typesapi->getitems(['type_state' => ixarBlock::TYPE_STATE_ACTIVE]);
             // format types for dropdown
             $type_options = [];
             foreach ($types as $k => $type) {
