@@ -14,8 +14,6 @@ namespace Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserGui;
 use LocaleNotFoundException;
-use xarMLS;
-use xarUser;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -39,7 +37,7 @@ class ChangelanguageMethod extends MethodClass
         $this->var()->find('locale', $locale, 'str:1:', $this->mls()->getCurrentLocale());
         $this->var()->find('return_url', $return_url, 'str:1:', $this->req()->getServerVar('HTTP_REFERER'));
 
-        $locales = xarMLS::listSiteLocales();
+        $locales = $this->mls()->listSiteLocales();
         if (!isset($locales)) {
             return;
         } // throw back

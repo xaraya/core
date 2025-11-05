@@ -16,9 +16,6 @@ namespace Xaraya\Modules\Base;
 use Xaraya\Modules\InstallerClass;
 use Exception;
 use xarCore;
-use xarMod;
-use xarServer;
-use xarVar;
 use xarXMLInstaller;
 use sys;
 
@@ -57,7 +54,7 @@ class Installer extends InstallerClass
         // Start Configuration Unit
         sys::import('xaraya.variables');
         $systemArgs = [];
-        xarVar::init($systemArgs);
+        $this->var()->init($systemArgs);
 
         /****************************************************************
          * Set System Configuration Variables

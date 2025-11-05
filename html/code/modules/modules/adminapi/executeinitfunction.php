@@ -16,7 +16,6 @@ use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
 use Exception;
 use ModuleNotFoundException;
-use xarMod;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -24,7 +24,6 @@ use DataPropertyMaster;
 use TableObjectDescriptor;
 use BadParameterException;
 use Exception;
-use xarMod;
 use sys;
 
 sys::import('xaraya.database.databasetrait');

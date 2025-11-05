@@ -25,14 +25,14 @@ use Xaraya\Services\xar;
  * @package core\objects
  * @todo this is very likely to change, it was created as baseline for refactoring
  */
-interface IxarDDObject {}
+interface ixarDDObject {}
 
 /**
  * Preliminary class to model xarDDObject interface
  *
  * @package core\objects
  */
-class xarDDObject extends xarObject implements IxarDDObject
+class xarDDObject extends xarObject implements ixarDDObject
 {
     protected static bool $initialized = false;
 
@@ -86,135 +86,6 @@ class xarDDObject extends xarObject implements IxarDDObject
         sys::import('modules.dynamicdata.class.userinterface');
 
         $interface = new DataObjectUserInterface($args);
-        return $interface->handle($args, $context);
-    }
-
-    /**
-     * Call a dataobject class method directly - CHECKME: do we even want this here ???
-     *
-     * @param string $objectName registered name of object
-     * @param string $methodName specific method to run
-     * @param array<string, mixed> $args arguments to pass to the method
-     * @param mixed $roleid override the current user or null
-     * @param ?Context<string, mixed> $context optional context for the method call (default = none)
-     * @return mixed The output of the method, or false on failure
-     * @throws EmptyParameterException
-     * @deprecated 2.6.2 not used
-     */
-    public static function classMethod($objectName, $methodName = 'showDisplay', $args = [], $roleid = null, $context = null)
-    {
-        if (empty($objectName)) {
-            throw new EmptyParameterException('objectName');
-        }
-
-        // Pass the object name to the object class
-        $args['name'] = $objectName;
-        if (!isset($context)) {
-            // $context = new Context(['source' => __METHOD__]);
-            // Use context from static services class here
-            $context = xar::getServicesClass()->getContext();
-        }
-
-        sys::import('modules.dynamicdata.class.objects.factory');
-
-        switch (strtolower($methodName)) {
-            case 'countitems':
-                $objectlist = DataObjectFactory::getObjectList($args, $context);
-                if (!$objectlist->checkAccess('view', null, $roleid)) {
-                    return;
-                }
-                return $objectlist->countItems($args);
-
-            case 'getitems':
-                $objectlist = DataObjectFactory::getObjectList($args, $context);
-                if (!$objectlist->checkAccess('view', null, $roleid)) {
-                    return;
-                }
-                return $objectlist->getItems($args);
-
-            case 'showview':
-            case 'getviewvalues':
-                $objectlist = DataObjectFactory::getObjectList($args, $context);
-                if (!$objectlist->checkAccess('view', null, $roleid)) {
-                    return;
-                }
-                // get the items first
-                $objectlist->getItems($args);
-                return $objectlist->{$methodName}($args);
-
-                // CHECKME: what do we want to return here ?
-            case 'getitem':
-                $object = DataObjectFactory::getObject($args, $context);
-                if (!$object->checkAccess('display', $args['itemid'], $roleid)) {
-                    return;
-                }
-                // get the item first
-                if (!$object->getItem($args)) {
-                    return;
-                }
-                return $object->getFieldValues($args);
-
-            case 'getfieldvalues':
-            case 'getdisplayvalues':
-            case 'showform':
-            case 'showdisplay':
-                $object = DataObjectFactory::getObject($args, $context);
-                if (!$object->checkAccess('display', $args['itemid'], $roleid)) {
-                    return;
-                }
-                // get the item first
-                if (!$object->getItem($args)) {
-                    return;
-                }
-                return $object->{$methodName}($args);
-
-            case 'createitem':
-            case 'updateitem':
-            case 'deleteitem':
-            default:
-                $object = DataObjectFactory::getObject($args, $context);
-                if (!$object->checkAccess('delete', $args['itemid'], $roleid)) {
-                    return;
-                }
-                // get the item first
-                if (!empty($args['itemid']) && !$object->getItem($args)) {
-                    return;
-                }
-                return $object->{$methodName}($args);
-        }
-    }
-
-    /**
-     * Run a dataobject class method via simpleinterface - CHECKME: do we even want this here ???
-     *
-     * @param string $objectName registered name of object
-     * @param string $methodName specific method to run
-     * @param array<string, mixed> $args arguments to pass to the method
-     * @param ?Context<string, mixed> $context optional context for the method call (default = none)
-     * @return mixed The output of the method, or false on failure
-     * @throws EmptyParameterException
-     * @deprecated 2.6.2 not used
-     */
-    public static function simpleMethod($objectName, $methodName = 'showDisplay', $args = [], $context = null)
-    {
-        if (empty($objectName)) {
-            throw new EmptyParameterException('objectName');
-        }
-
-        // Pass the object name and method to the simpleinterface class
-        $args['name'] = $objectName;
-        $args['method'] = $methodName;
-        if (!isset($context)) {
-            // $context = new Context(['source' => __METHOD__]);
-            // Use context from static services class here
-            $context = xar::getServicesClass()->getContext();
-        }
-
-        sys::import('modules.dynamicdata.class.simpleinterface');
-
-        // use context if available in method
-        $interface = new SimpleObjectInterface($args, $context);
-
         return $interface->handle($args, $context);
     }
 

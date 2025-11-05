@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Authsystem\UserGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\UserGui;
 use ForbiddenOperationException;
-use xarUser;
 use sys;
 
 sys::import('xaraya.modules.method');

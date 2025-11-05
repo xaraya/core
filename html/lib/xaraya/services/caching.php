@@ -895,7 +895,7 @@ trait CachingTrait
      */
     public function getOutputCacheDir(): string
     {
-        // make sure xarOutputCache is initialized
+        // make sure OutputCache is initialized
         if (!$this->outputCacheIsEnabled) {
             // get the caching configuration
             $config = $this->getConfig();

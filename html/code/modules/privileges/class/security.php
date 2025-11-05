@@ -261,7 +261,7 @@ class xarSecurity extends xarObject
                 $mask->setRealm($xar->mod('themes')->getVar('default_theme'));
                 break;
             case "domain":
-                $host = xarServer::getHost();
+                $host = $xar->req()->getHost();
                 $parts = explode('.', $host);
                 if (count($parts) < 2) {
                     $mask->setRealm('All');
@@ -376,7 +376,7 @@ class xarSecurity extends xarObject
         // check if the exception needs to be caught here or not
 
         if ($catch && !$pass) {
-            $requrl = xarServer::getCurrentURL([], false);
+            $requrl = $xar->ctl()->getCurrentURL([], false);
             if (self::$exceptionredirect && !$xar->user()->isLoggedIn()) {
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login

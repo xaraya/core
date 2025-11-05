@@ -25,12 +25,6 @@ use Xaraya\Services\xar;
  */
 class xarCache extends xarObject
 {
-    public static bool $outputCacheIsEnabled    = false;
-    public static bool $coreCacheIsEnabled      = true;
-    public static bool $templateCacheIsEnabled  = true; // currently unused, cfr. xaraya/templates.php
-    public static bool $variableCacheIsEnabled  = false;
-    //public static bool $queryCacheIsEnabled     = false;
-    public static string $cacheDir                = '';
     protected static bool $initialized = false;
     protected static ?CachingService $cacheService = null;
 
@@ -75,7 +69,7 @@ class xarCache extends xarObject
      * Get a cache key for page output caching
      *
      * @param string $url optional url to be checked if not the current url
-     * @return mixed cacheKey to be used with xarPageCache::(is|get|set)Cached, or null if not applicable
+     * @return mixed cacheKey to be used with xar::cache()->(has|get|set)Page, or null if not applicable
      */
     public static function getPageKey($url = null)
     {
@@ -86,7 +80,7 @@ class xarCache extends xarObject
      * Get a cache key for block output caching
      *
      * @param array<string, mixed> $blockInfo block information
-     * @return mixed cacheKey to be used with xarBlockCache::(is|get|set)Cached, or null if not applicable
+     * @return mixed cacheKey to be used with xar::cache()->(has|get|set)Block, or null if not applicable
      */
     public static function getBlockKey($blockInfo)
     {
@@ -100,7 +94,7 @@ class xarCache extends xarObject
      * @param string $modType
      * @param string $funcName
      * @param array<string, mixed> $args optional parameters
-     * @return mixed cacheKey to be used with xarModuleCache::(is|get|set)Cached, or null if not applicable
+     * @return mixed cacheKey to be used with xar::cache()->(has|get|set)Module, or null if not applicable
      */
     public static function getModuleKey($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
@@ -113,7 +107,7 @@ class xarCache extends xarObject
      * @param string $objectName
      * @param string $methodName
      * @param array<string, mixed> $args optional parameters
-     * @return mixed cacheKey to be used with xarObjectCache::(is|get|set)Cached, or null if not applicable
+     * @return mixed cacheKey to be used with xar::cache()->(has|get|set)Object, or null if not applicable
      */
     public static function getObjectKey($objectName, $methodName = 'view', $args = [])
     {
@@ -125,7 +119,7 @@ class xarCache extends xarObject
      *
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param string $name  the name of the variable in that particular scope
-     * @return mixed cacheKey to be used with xarVariableCache::(is|get|set)Cached, or null if not applicable
+     * @return mixed cacheKey to be used with xar::cache()->(has|get|set)Variable, or null if not applicable
      */
     public static function getVariableKey($scope, $name)
     {
@@ -142,7 +136,7 @@ class xarCache extends xarObject
     }
 
     /**
-     * Keep track of some page title for caching - see xarTpl::setPageTitle()
+     * Keep track of some page title for caching - see xar::tpl()->setPageTitle()
      * @param ?string $title
      * @param ?string $module
      * @return void
@@ -153,7 +147,7 @@ class xarCache extends xarObject
     }
 
     /**
-     * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
+     * Keep track of some stylesheet for caching - see xar::mod()->apiFunc('themes','user','register')
      * @param array<string, mixed> $args
      * @return void
      */
@@ -163,7 +157,7 @@ class xarCache extends xarObject
     }
 
     /**
-     * Keep track of some javascript for caching - xarMod::apiFunc('themes','user','registerjs')
+     * Keep track of some javascript for caching - xar::mod()->apiFunc('themes','user','registerjs')
      * @param array<string, mixed> $args
      * @return void
      */
@@ -173,7 +167,7 @@ class xarCache extends xarObject
     }
 
     /**
-     * Keep track of some meta tags for caching - xarMod::apiFunc('themes','user','registermeta')
+     * Keep track of some meta tags for caching - xar::mod()->apiFunc('themes','user','registermeta')
      * @param array<string, mixed> $args
      * @return void
      */
@@ -230,15 +224,17 @@ class xarCache extends xarObject
     /**
      * Summary of isOutputCacheEnabled
      * @return bool
+     * @deprecated 2.8.4 not used
      */
     public static function isOutputCacheEnabled()
     {
-        return self::$outputCacheIsEnabled;
+        return self::cache()->isOutputCacheEnabled();
     }
 
     /**
      * Summary of isCoreCacheEnabled
      * @return bool
+     * @deprecated 2.8.4 not used
      */
     public static function isCoreCacheEnabled()
     {
@@ -248,6 +244,7 @@ class xarCache extends xarObject
     /**
      * Summary of isTemplateCacheEnabled
      * @return bool
+     * @deprecated 2.8.4 not used
      */
     public static function isTemplateCacheEnabled()
     {
@@ -257,6 +254,7 @@ class xarCache extends xarObject
     /**
      * Summary of isVariableCacheEnabled
      * @return bool
+     * @deprecated 2.8.4 not used
      */
     public static function isVariableCacheEnabled()
     {

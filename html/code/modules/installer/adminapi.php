@@ -17,8 +17,6 @@ use EmptyParameterException;
 use Exception;
 use FileNotFoundException;
 use FunctionNotFoundException;
-use xarMod;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.adminapi');

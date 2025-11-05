@@ -35,14 +35,14 @@ class Roles_LanguageBlock extends BasicBlock
      */
     public function display()
     {
-        // if (xarMLS::getMode() != $this->mls()::BOXED_MULTI_LANGUAGE_MODE) {
-        if (xarMLS::getMode() == $this->mls()::SINGLE_LANGUAGE_MODE) {
+        // if ($this->mls()->getMode() != ixarMLS::BOXED_MULTI_LANGUAGE_MODE) {
+        if ($this->mls()->getMode() == ixarMLS::SINGLE_LANGUAGE_MODE) {
             return;
         }
 
         $current_locale = $this->user()->getLocale();
 
-        $site_locales = xarMLS::listSiteLocales();
+        $site_locales = $this->mls()->listSiteLocales();
 
         asort($site_locales);
         if (count($site_locales) <= 1) {

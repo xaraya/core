@@ -16,9 +16,7 @@ namespace Xaraya\Bridge\RestAPI;
 
 use Xaraya\Authentication\AuthToken;
 use Xaraya\Services\xar;
-use xarMod;
 use xarRoles;
-use xarUser;
 use sys;
 use UnauthorizedOperationException;
 

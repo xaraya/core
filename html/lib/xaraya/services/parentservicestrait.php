@@ -279,8 +279,6 @@ trait ParentServicesTrait
      * - update() - xarVar::DONT_REUSE = Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
      * - fetch() - original xarVar::fetch() with different order of params than above
      * - validate() - or use $this->prep()->validate() instead
-     * - prep() - @deprecated use $this->prep()->text() instead
-     * - prepHTML() - @deprecated use $this->prep()->html() instead
      * - ...
      *
      */

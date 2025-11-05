@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Authsystem\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\UserApi;
 use BadParameterException;
-use xarUser;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -19,7 +19,6 @@ use DuplicateException;
 use Exception;
 use ForbiddenOperationException;
 use xarRoles;
-use xarUser;
 use sys;
 
 sys::import('xaraya.modules.method');

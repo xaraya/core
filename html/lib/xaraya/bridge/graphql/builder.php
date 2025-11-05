@@ -17,6 +17,7 @@ namespace Xaraya\Bridge\GraphQL;
 use Xaraya\Bridge\GraphQL\Types\GraphQLObjects;
 use Xaraya\Bridge\GraphQL\Types\GraphQLTypes;
 use Xaraya\Bridge\RestAPI\RestAPIBuilder;
+use Xaraya\Services\xar;
 use GraphQL\Type\Schema;
 use GraphQL\Type\SchemaConfig;
 use GraphQL\Language\Parser;
@@ -24,7 +25,6 @@ use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
 use GraphQL\Type\Definition\Type;
-use xarServer;
 use sys;
 
 /**
@@ -162,7 +162,7 @@ class GraphQLBuilder
 
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         $schema = $this->getSchema($extraTypes);
-        $content = '# GraphQL Endpoint: ' . xarServer::getBaseURL() . self::$endpoint . "\n";
+        $content = '# GraphQL Endpoint: ' . xar::ctl()->getBaseURL() . self::$endpoint . "\n";
         $content .= '# Generated: ' . date('c') . "\n";
         $content .= $this->printSchema($schema);
         file_put_contents($schemaFile, $content);

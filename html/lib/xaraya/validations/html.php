@@ -47,7 +47,7 @@ class HtmlValidation extends ValueValidations
             if (!isset($allowedTags[$tag])) {
                 $msg = 'Specified tag is not allowed';
                 throw new VariableValidationException(null, $msg);
-            } elseif (isset($match[2]) && $allowedTags[$tag] == xarVar::ALLOW_NO_ATTRIBS && trim($match[2]) != '') {
+            } elseif (isset($match[2]) && $allowedTags[$tag] == ixarVar::ALLOW_NO_ATTRIBS && trim($match[2]) != '') {
                 // We should check for on* attributes
                 // Attributes should be restricted too, shouldnt they?
                 $msg = 'Attributes are not allowed for tag "#(1)"';

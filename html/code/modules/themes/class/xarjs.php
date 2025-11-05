@@ -710,9 +710,9 @@ class xarJS extends xarObject
         // from here on we have source(s) to fetch
         $files = !is_array($src) ? explode(',', $src) : $src;
 
+        $server = $xar->req()->getHost();
         foreach ($files as $file) {
             // check if file is local...
-            $server = xarServer::getHost();
             if ($tag['type'] == "plugin") {
                 // Whatever the URL, just include it
                 $tag['url'] = $file;

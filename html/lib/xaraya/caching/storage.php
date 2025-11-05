@@ -14,9 +14,12 @@
 **/
 
 sys::import('xaraya.caching.interfaces');
+use Xaraya\Services\WithServicesClass;
 
 class xarCache_Storage extends xarObject
 {
+    use WithServicesClass;
+
     public string $storage    = '';        // filesystem, database, apcu or doctrine cache
     public string $cachedir   = 'var/cache/output';
     public string $type       = '';        // page, block, object, module, template, core, ...
@@ -462,15 +465,16 @@ class xarCache_Storage extends xarObject
      */
     public function logStatus($status = 'MISS', $key = '')
     {
-        if (empty($this->logfile) || empty(xarServer::getVar('HTTP_HOST'))
-            || empty(xarServer::getVar('REQUEST_URI')) || empty(xarServer::getVar('REMOTE_ADDR'))) {
+        $req = $this->getServicesClass()->req();
+        if (empty($this->logfile) || empty($req->getServerVar('HTTP_HOST'))
+            || empty($req->getServerVar('REQUEST_URI')) || empty($req->getServerVar('REMOTE_ADDR'))) {
             return;
         }
 
         $time = time();
-        $addr = !empty(xarServer::getVar('REMOTE_ADDR')) ? xarServer::getVar('REMOTE_ADDR') : '-';
-        $url = 'http://' . xarServer::getVar('HTTP_HOST') . xarServer::getVar('REQUEST_URI');
-        //$ref = !empty(xarServer::getVar('HTTP_REFERER')) ? xarServer::getVar('HTTP_REFERER') : '-';
+        $addr = $req->getServerVar('REMOTE_ADDR') ?? '-';
+        $url = 'http://' . $req->getServerVar('HTTP_HOST') . $req->getServerVar('REQUEST_URI');
+        //$ref = $req->getServerVar('HTTP_REFERER') ?? '-';
         $type = $this->type;
         $code = $this->code;
 

@@ -28,8 +28,6 @@ use Xaraya\Sessions\SessionHandler;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
 use Xaraya\Sessions\VirtualSession;
-use xarSession;
-use xarServer;
 use xarEvents;
 
 /**
@@ -292,11 +290,11 @@ class SessionMiddleware implements MiddlewareInterface
         if ($sendCookie && !empty($sessionId)) {
             $cookieString = $this->cookieName . '=' . $sessionId;
             $cookieString .= '; expires=' . gmdate('D, d M Y H:i:s T', intval($this->config['duration']) * 86400 + time());
-            $basePath = $this->config['cookiePath'] ?: xarServer::getBaseURI();
+            $basePath = $this->config['cookiePath'] ?: xar::req()->getBaseURI();
             if (!empty($basePath)) {
                 $cookieString .= '; path=' . $basePath;
             }
-            //$domain = $this->config['cookieDomain'] ?: xarServer::getHost();
+            //$domain = $this->config['cookieDomain'] ?: xar::req()->getHost();
             //if (!empty($domain)) {
             //    $cookieString .= '; domain=' . $domain;
             //}

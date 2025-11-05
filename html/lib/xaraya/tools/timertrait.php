@@ -48,7 +48,7 @@
 
 namespace Xaraya\Tools;
 
-use xarServer;
+use Xaraya\Services\xar;
 
 /**
  * For documentation purposes only - available via TimerTrait
@@ -93,7 +93,8 @@ trait TimerTrait
         }
         $now = microtime(true);
         if (empty(static::$_timerPrev)) {
-            static::$_timerPrev = !empty(xarServer::getVar('REQUEST_TIME_FLOAT')) ? (float) xarServer::getVar('REQUEST_TIME_FLOAT') : 0.0;
+            $start = xar::req()->getServerVar('REQUEST_TIME_FLOAT');
+            static::$_timerPrev = !empty($start) ? (float) $start : 0.0;
             static::$_timerKeep[] = ['request' => static::$_timerPrev];
         }
         static::$_timerKeep[] = [$label => round(($now - static::$_timerPrev) * self::$_timerMult, self::$_timerPrec)];
@@ -109,7 +110,8 @@ trait TimerTrait
         if (!static::$enableTimer) {
             return [];
         }
-        static::$_timerPrev = !empty(xarServer::getVar('REQUEST_TIME_FLOAT')) ? (float) xarServer::getVar('REQUEST_TIME_FLOAT') : 0.0;
+        $start = xar::req()->getServerVar('REQUEST_TIME_FLOAT');
+        static::$_timerPrev = !empty($start) ? (float) $start : 0.0;
         static::setTimer('elapsed');
         return static::$_timerKeep;
     }

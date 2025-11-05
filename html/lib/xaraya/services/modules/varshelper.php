@@ -17,7 +17,6 @@
 namespace Xaraya\Services\Modules;
 
 use Xaraya\Services\ServiceClass;
-use xarModVars;
 use EmptyParameterException;
 use SQLException;
 

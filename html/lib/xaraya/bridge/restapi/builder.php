@@ -17,7 +17,6 @@ namespace Xaraya\Bridge\RestAPI;
 use Xaraya\Authentication\AuthToken;
 use Xaraya\Services\xar;
 use xarObject;
-use xarMod;
 use sys;
 use DataObjectFactory;
 use DataPropertyMaster;

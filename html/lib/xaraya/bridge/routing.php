@@ -32,7 +32,6 @@ namespace Xaraya\Bridge\Routing;
 use Xaraya\Routing\Routing;
 use Xaraya\Routing\RouterInterface;
 // use some Xaraya classes
-use xarServer;
 use sys;
 use JsonException;
 
@@ -274,7 +273,9 @@ class RoutingBridge extends BasicBridge
                 echo $result;
             }
         } else {
-            if (!empty(xarServer::getVar('HTTP_ORIGIN'))) {
+            // from BasicBridgeTrait - WithServicesClass
+            $xar = $this->getServicesClass();
+            if (!empty($xar->req()->getServerVar('HTTP_ORIGIN'))) {
                 header('Access-Control-Allow-Origin: *');
             }
             header('Content-Type: application/json; charset=utf-8');

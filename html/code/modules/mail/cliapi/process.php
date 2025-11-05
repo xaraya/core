@@ -15,8 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\CliApi;
 use Xaraya\Modules\Mail\AdminApi;
 use xarMailParser;
-use xarModHooks;
-use xarUser;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -385,16 +385,6 @@ class xarCore extends xarObject
         */
 
         /**
-         * Assemble the autoload functions
-         *
-         * @todo <mfl> eventually remove the caching condition
-         * @deprecated 2.8.3 always enabled now
-         */
-        if ($xar->cache()->withVariables()) {
-            // sys::autoload();
-        }
-
-        /**
          * We've got basically all we want, start the interface
          * Start BlockLayout Template Engine
          *

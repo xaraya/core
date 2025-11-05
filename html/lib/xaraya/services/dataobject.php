@@ -21,8 +21,6 @@ use DataObjectFactory;
 use DataObject;
 use DataObjectList;
 use DataObjectLoader;
-use xarServer;
-use xarTpl;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -114,12 +112,14 @@ trait DataObjectTrait
     public function getURL(string $methodName = 'view', array $args = [], ?string $objectName = null): string
     {
         $objectName ??= $this->getObjectName();
-        return xarServer::getObjectURL($objectName, $methodName, $args);
+        /** @var ControllerInterface $ctl */
+        $ctl = $this->getParent()->ctl();
+        return $ctl->getObjectURL($objectName, $methodName, $args);
     }
 
     /**
      * Render output with object template
-     * @uses xarTpl::object()
+     * @uses xar::tpl()->object()
      * @param string $tplType
      * @param array<mixed> $tplData
      * @return string
@@ -133,8 +133,11 @@ trait DataObjectTrait
         $modName = $this->getModName();
         $objecTemplate = $this->getObjectTemplate();
 
+        /** @var TemplatingInterface $tpl */
+        $tpl = $this->getParent()->tpl();
+
         // Create the output.
-        return xarTpl::object(
+        return $tpl->object(
             $modName,
             $objecTemplate,
             $tplType,

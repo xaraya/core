@@ -48,7 +48,6 @@ use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Validator\Rules;
 use GraphQL\Validator\DocumentValidator;
 use xarObject;
-use xarServer;
 use sys;
 use Exception;
 use FunctionNotFoundException;
@@ -86,7 +85,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     public function __construct()
     {
         // use request context for query params etc.
-        xarServer::setRequestClass(RequestContext::class);
+        xar::req()->setRequestClass(RequestContext::class);
     }
 
     /**
@@ -406,8 +405,8 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
             $context = $this->getContext();
             // Assume context for core services is already set here
         }
-        // Initialize server - not really needed since xarServer::getInstance() is on demand
-        //xarServer::init([], $context);
+        // Initialize server - not really needed since xar::req()->getInstance() is on demand
+        //xar::req()->init();
         return $context;
     }
 

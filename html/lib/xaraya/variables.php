@@ -88,10 +88,9 @@ interface IxarVars
 class xarVars extends xarObject {}
 
 /**
- * @package core\variables
- * @deprecated 2.8.4 use xar::var() or xar::mem() instead
+ * Interface for variables service
  */
-class xarVar extends xarObject
+interface ixarVar
 {
     public const ALLOW_NO_ATTRIBS = 1;
     public const ALLOW            = 2;
@@ -103,7 +102,14 @@ class xarVar extends xarObject
     public const NOT_REQUIRED     = 64;
     public const DONT_SET         = 128;
     public const DONT_REUSE       = 256;
+}
 
+/**
+ * @package core\variables
+ * @deprecated 2.8.4 use xar::var() or xar::mem() instead
+ */
+class xarVar extends xarObject implements ixarVar
+{
     /** @deprecated 2.8.4 use xarVarPrep::* instead */
     public const PREP_FOR_NOTHING = 0;
     public const PREP_FOR_DISPLAY = 1;

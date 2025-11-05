@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use Exception;
 use xarLocale;
-use xarMLS;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -42,7 +41,7 @@ class Phase1Method extends MethodClass
         $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
 
         // Get the installed locales
-        $locales = xarMLS::listSiteLocales();
+        $locales = $this->mls()->listSiteLocales();
 
         // Construct the array for the selectbox (iso3code, string in own locale)
         if (!empty($locales)) {

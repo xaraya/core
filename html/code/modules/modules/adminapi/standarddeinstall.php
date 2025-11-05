@@ -16,7 +16,6 @@ use Xaraya\Modules\Modules\AdminApi;
 use DataObjectFactory;
 use Exception;
 use xarMasks;
-use xarModVars;
 use xarPrivileges;
 use xarRoles;
 use sys;

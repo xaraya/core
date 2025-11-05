@@ -22,7 +22,6 @@ use xarDatabase;
 use xarInst;
 use xarInstall;
 use xarTableDDL;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -324,7 +323,7 @@ class Phase5Method extends MethodClass
         // 2. Create some variables we'll need in installing modules
         sys::import('xaraya.variables');
         $a = [];
-        xarVar::init($a);
+        $this->var()->init($a);
         $this->config()->setVar('System.ModuleAliases', []);
         $this->config()->setVar('Site.MLS.DefaultLocale', $install_language);
         $this->config()->setVar('Site.BL.DocType', 'xhtml1-strict');
