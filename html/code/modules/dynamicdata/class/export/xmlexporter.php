@@ -45,6 +45,7 @@ class XmlExporter extends DataObjectExporter
         // get the list of properties for a Dynamic Object
         $object_properties = DataPropertyMaster::getProperties(['objectid' => 1]);
 
+        $prep = xar::prep();
         $xml .= '<object name="' . $objectdef->properties['name']->value . '">' . "\n";
         foreach (array_keys($object_properties) as $name) {
             if ($name == 'name' || !isset($objectdef->properties[$name]->value)) {
@@ -53,7 +54,7 @@ class XmlExporter extends DataObjectExporter
             if (is_array($objectdef->properties[$name]->value)) {
                 $xml .= "  <$name>\n";
                 foreach ($objectdef->$name as $field => $value) {
-                    $xml .= "    <$field>" . xar::prep()->text($value) . "</$field>\n";
+                    $xml .= "    <$field>" . $prep->text($value) . "</$field>\n";
                 }
                 $xml .= "  </$name>\n";
             } elseif (in_array($name, ['access', 'config', 'sources', 'relations', 'objects', 'category'])) {
@@ -62,7 +63,7 @@ class XmlExporter extends DataObjectExporter
                 $xml .= "  <$name>" . $value . "</$name>\n";
             } else {
                 $value = $objectdef->properties[$name]->value;
-                $xml .= "  <$name>" . xar::prep()->text($value) . "</$name>\n";
+                $xml .= "  <$name>" . $prep->text($value) . "</$name>\n";
             }
         }
         $xml = $this->addProperties($xml);
@@ -79,6 +80,7 @@ class XmlExporter extends DataObjectExporter
 
         $properties = DataPropertyMaster::getProperties(['objectid' => $this->objectid]);
 
+        $prep = xar::prep();
         $xml .= "  <properties>\n";
         foreach (array_keys($properties) as $name) {
             $xml .= '    <property name="' . $name . '">' . "\n";
@@ -89,16 +91,16 @@ class XmlExporter extends DataObjectExporter
                 $val = $properties[$name][$key];
                 if ($key == 'type') {
                     // replace numeric property type with text version
-                    $xml .= "      <$key>" . xar::prep()->text($this->proptypes[$val]['name']) . "</$key>\n";
+                    $xml .= "      <$key>" . $prep->text($this->proptypes[$val]['name']) . "</$key>\n";
                 } elseif ($key == 'source') {
                     // replace local table prefix with default xar_* one
                     $val = preg_replace("/^{$this->prefix}/", 'xar_', $val);
-                    $xml .= "      <$key>" . xar::prep()->text($val) . "</$key>\n";
+                    $xml .= "      <$key>" . $prep->text($val) . "</$key>\n";
                 } elseif ($key == 'configuration') {
                     // don't replace anything in the serialized value
                     $xml .= "      <$key>" . $val . "</$key>\n";
                 } else {
-                    $xml .= "      <$key>" . xar::prep()->text($val) . "</$key>\n";
+                    $xml .= "      <$key>" . $prep->text($val) . "</$key>\n";
                 }
             }
             $xml .= "    </property>\n";

@@ -527,9 +527,14 @@ trait ParentServicesTrait
         return $this->getParent()->events();
     }
 
-    public function hooks(): WrapperInterface
+    public function hooked(): WrapperInterface
     {
-        return $this->getParent()->hooks();
+        return $this->getParent()->hooked();
+    }
+
+    public function theme(): WrapperInterface
+    {
+        return $this->getParent()->theme();
     }
 
     /**

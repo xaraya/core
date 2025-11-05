@@ -17,7 +17,6 @@ use Xaraya\Modules\Blocks\BlocksApi;
 use EmptyParameterException;
 use Exception;
 use IDNotFoundException;
-use xarBlock;
 use sys;
 
 sys::import('modules.blocks.method');
@@ -70,7 +69,7 @@ class DeleteitemMethod extends MethodClass
             }
 
             // call block delete method if it has one
-            $result = xarBlock::hasMethod($block, 'delete', true) ? $block->delete() : true;
+            $result = $this->block()->hasMethod($block, 'delete', true) ? $block->delete() : true;
             if (!$result) {
                 return;
             }

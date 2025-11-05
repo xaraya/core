@@ -102,6 +102,7 @@ interface ixarEvents
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  *
+ * @see xar::events()
 **/
 class xarEvents extends xarObject implements ixarEvents
 {

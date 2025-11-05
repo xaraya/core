@@ -4,7 +4,7 @@
  * @package core\blocks
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
- * @version 2.6.1
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -132,10 +132,42 @@ abstract class BasicBlock extends BlockType implements iBlock
         // set context before calling parent constructor
         $this->setContext($context);
         parent::__construct($blockinfo);
+        // move runUpgrade() and init() to BasicBlock constructor - see iBlock interface
+        // check for upgrade and run if necessary
+        $this->runUpgrade();
+        // run any additional initialisation supplied by this block type
+        if ($this->block()->hasMethod($this, 'init', true)) {
+            $this->init();
+        }
     }
 
-    // this method is called by BlockType::__construct()
+    /**
+     * init
+     * @return void
+    **/
+    // NOTE: since the constructor cannot be overloaded, this method
+    // is called by the constructor to run any additional functions
+    // specific to this type immediately after the object is initialised
     public function init() {}
+
+    final protected function runUpgrade()
+    {
+        if ($this->xarversion != $this->type_version && $this->block()->hasMethod($this, 'upgrade', true)) {
+            if (!empty($this->type_version)) {
+                sys::import('xaraya.version');
+                if (xarVersion::compare($this->type_version, $this->xarversion, 3) >= 0) {
+                    // 1st version is bigger, can't downgrade blocks
+                    throw new Exception();
+                }
+            }
+            if (!$this->upgrade($this->type_version)) {
+                // upgrade failed
+                throw new Exception();
+            }
+        }
+        $this->type_version = $this->xarversion;
+        return true;
+    }
 
     // this method is called by xarBlock::render();
     public function display()

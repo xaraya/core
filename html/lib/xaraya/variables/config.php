@@ -23,6 +23,7 @@ use Xaraya\Services\ConfigService;
  * Class to handle configuration variables
  *
  * @todo if core was module 0 this could be a whole lot simpler by derivation (or if all config variables were moved to a module)
+ * @see xar::config()
  */
 class xarConfigVars extends xarVars implements IxarVars
 {

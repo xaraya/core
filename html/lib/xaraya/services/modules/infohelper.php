@@ -20,7 +20,6 @@ namespace Xaraya\Services\Modules;
 use Xaraya\Services\ServiceClass;
 use xarClassMap;
 use ixarMod;
-use xarTheme;
 use sys;
 use Exception;
 use BadParameterException;
@@ -35,7 +34,8 @@ class InfoHelper extends ServiceClass
 {
     public const SLICE = 'modules.info';
 
-    public $noCacheState = false;
+    public $noCacheMod = false;
+    public $noCacheTheme = false;
 
     /**
      * @todo align with xar::mod($modName)->getName() - move back to ModuleService?
@@ -122,7 +122,7 @@ class InfoHelper extends ServiceClass
         }
 
         $xar = $this->getParent();
-        if (empty($this->noCacheState) && $xar->mem()->has('Mod.getFileInfos', $modOsDir . " / " . $type)) {
+        if (empty($this->noCacheMod) && $xar->mem()->has('Mod.getFileInfos', $modOsDir . " / " . $type)) {
             return $xar->mem()->get('Mod.getFileInfos', $modOsDir . " / " . $type);
         }
         // Log it when it didnt came from cache
@@ -195,15 +195,15 @@ class InfoHelper extends ServiceClass
             throw new BadParameterException($type, 'The value of the "type" parameter must be "module" or "theme", it was "#(1)"');
         }
 
-        // The $this->noCacheState flag tells Xaraya *not*
+        // The $this->noCacheMod flag tells Xaraya *not*
         // to cache module (+state) where this would lead to problems
         // like in the installer for example.
         if ($type == 'module') {
             $cacheCollection = 'Mod.BaseInfos';
-            $checkNoState = $this->noCacheState;
+            $checkNoState = $this->noCacheMod;
         } else {
             $cacheCollection = 'Theme.BaseInfos';
-            $checkNoState = xarTheme::getNoCache();
+            $checkNoState = $this->noCacheTheme;
         }
 
         $xar = $this->getParent();
@@ -535,7 +535,7 @@ class InfoHelper extends ServiceClass
             return false;
         } // throw back
 
-        if (!empty($this->noCacheState) || !isset($modAvailableCache[$modBaseInfo['name']])) {
+        if (!empty($this->noCacheMod) || !isset($modAvailableCache[$modBaseInfo['name']])) {
             // We should be ok now, return the state of the module
             $modState = $modBaseInfo['state'];
             $modAvailableCache[$modBaseInfo['name']] = false;

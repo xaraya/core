@@ -531,9 +531,14 @@ trait WithStaticServices
         return self::getServicesClass()->events();
     }
 
-    public static function hooks(): WrapperInterface
+    public static function hooked(): WrapperInterface
     {
-        return self::getServicesClass()->hooks();
+        return self::getServicesClass()->hooked();
+    }
+
+    public static function theme(): WrapperInterface
+    {
+        return self::getServicesClass()->theme();
     }
 
     /**

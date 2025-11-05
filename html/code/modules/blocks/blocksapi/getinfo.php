@@ -16,7 +16,6 @@ use Xaraya\Modules\Blocks\BlocksApi;
 use BadParameterException;
 use DataNotFoundException;
 use EmptyParameterException;
-use xarBlock;
 use sys;
 
 sys::import('modules.blocks.method');

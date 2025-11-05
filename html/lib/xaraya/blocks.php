@@ -111,7 +111,7 @@ class xarBlock extends xarObject implements ixarBlock
      *
      * @author Chris Powis
      *
-     * @param  BasicBlock $block the block instance supplying the method
+     * @param  iBlock $block the block instance supplying the method
      * @param  string $method, name of the method to call
      * @return string output the block to show
      * @throws  FunctionNotFoundException
@@ -126,7 +126,7 @@ class xarBlock extends xarObject implements ixarBlock
      *
      * @author Chris Powis
      *
-     * @param  BlockType $block the block instance supplying the method
+     * @param  iBlockType $block the block instance supplying the method
      * @param  string $method, name of the method to check
      * @param  bool $strict, flag to indicate if the block must have declared the method
      * @return bool

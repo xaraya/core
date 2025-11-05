@@ -23,6 +23,9 @@ sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 // use ixarMod;
 
+/**
+ * @see xar::hooked()
+ */
 class xarHooks extends xarEvents
 {
     // unique event system itemtype ids for storage/retrieval/actioning in the event system
@@ -562,7 +565,7 @@ class xarHooks extends xarEvents
  * Hook operations for modules
  *
  * @package core\hooks
- * @deprecated 2.8.5 use xar::hooks() or xar::mod()->*Hooks instead
+ * @deprecated 2.8.5 use xar::hooked() or xar::mod()->*Hooks instead
  */
 class xarModHooks extends xarObject
 {

@@ -45,7 +45,7 @@ interface BlocksInterface extends ServiceInterface
     /** @param array<string, mixed> $blockinfo */
     public function getObject(array $blockinfo = [], ?string $interface = null, ?string $method = null): iBlock;
     public function guiMethod(iBlock $block, string $method, ?string $block_tpl = null): string;
-    public function hasMethod(iBlockType $block, string $method, bool $strict = false): bool;
+    public static function hasMethod(iBlockType $block, string $method, bool $strict = false): bool;
     /** @param array<mixed> $args */
     public function guiRequest(array $args): string;
     /**
@@ -344,7 +344,7 @@ trait BlocksTrait
         // --- END LEGACY METHOD BODY ---
     }
 
-    public function hasMethod(iBlockType $block, string $method, bool $strict = false): bool
+    public static function hasMethod(iBlockType $block, string $method, bool $strict = false): bool
     {
         // --- LEGACY METHOD BODY ---
         $hasMethod = method_exists($block, $method);

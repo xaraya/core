@@ -52,6 +52,7 @@ class JsonExporter extends DataObjectExporter
         // get the list of properties for a Dynamic Object
         $object_properties = DataPropertyMaster::getProperties(['objectid' => 1]);
 
+        $prep = xar::prep();
         $info['@name'] = $objectdef->properties['name']->value;
         foreach (array_keys($object_properties) as $name) {
             if ($name == 'name' || !isset($objectdef->properties[$name]->value)) {
@@ -60,7 +61,7 @@ class JsonExporter extends DataObjectExporter
             if (is_array($objectdef->properties[$name]->value)) {
                 $info[$name] = [];
                 foreach ($objectdef->$name as $field => $value) {
-                    $info[$name][$field] = xar::prep()->text($value);
+                    $info[$name][$field] = $prep->text($value);
                 }
             } elseif (in_array($name, ['access', 'config', 'sources', 'relations', 'objects', 'category'])) {
                 // don't replace anything in the serialized value
@@ -76,7 +77,7 @@ class JsonExporter extends DataObjectExporter
                 }
             } else {
                 $value = $objectdef->properties[$name]->value;
-                $info[$name] = xar::prep()->text($value);
+                $info[$name] = $prep->text($value);
             }
         }
         $info = $this->addProperties($info);
@@ -91,6 +92,7 @@ class JsonExporter extends DataObjectExporter
 
         $properties = DataPropertyMaster::getProperties(['objectid' => $this->objectid]);
 
+        $prep = xar::prep();
         $info['properties'] = [];
         foreach (array_keys($properties) as $name) {
             $propinfo = ['@name' => $name];
@@ -101,11 +103,11 @@ class JsonExporter extends DataObjectExporter
                 $val = $properties[$name][$key];
                 if ($key == 'type') {
                     // replace numeric property type with text version
-                    $propinfo[$key] = xar::prep()->text($this->proptypes[$val]['name']);
+                    $propinfo[$key] = $prep->text($this->proptypes[$val]['name']);
                 } elseif ($key == 'source') {
                     // replace local table prefix with default xar_* one
                     $val = preg_replace("/^{$this->prefix}/", 'xar_', $val);
-                    $propinfo[$key] = xar::prep()->text($val);
+                    $propinfo[$key] = $prep->text($val);
                 } elseif ($key == 'configuration') {
                     // don't replace anything in the serialized value
                     if (!empty($val)) {
@@ -118,7 +120,7 @@ class JsonExporter extends DataObjectExporter
                         $propinfo[$key] = $val;
                     }
                 } else {
-                    $propinfo[$key] = xar::prep()->text($val);
+                    $propinfo[$key] = $prep->text($val);
                 }
             }
             $info['properties'][] = $propinfo;

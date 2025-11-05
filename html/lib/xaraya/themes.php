@@ -41,6 +41,7 @@ interface ixarTheme
 
 /**
  * Theme handling functions
+ * @see xar::theme()
  */
 class xarTheme extends xarObject implements ixarTheme
 {
@@ -116,7 +117,7 @@ class xarTheme extends xarObject implements ixarTheme
 
     public static function getNoCache()
     {
-        return self::$noCacheState;
+        return self::info()->noCacheTheme;
     }
 
     /**
@@ -126,6 +127,6 @@ class xarTheme extends xarObject implements ixarTheme
      */
     public static function setNoCache($noCache)
     {
-        self::$noCacheState = (bool) $noCache;
+        self::info()->noCacheTheme = (bool) $noCache;
     }
 }

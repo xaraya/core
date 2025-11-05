@@ -18,7 +18,6 @@ use BadParameterException;
 use DuplicateException;
 use IDNotFoundException;
 use ixarBlock;
-use xarBlock;
 use sys;
 
 sys::import('modules.blocks.method');

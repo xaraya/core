@@ -92,6 +92,7 @@ interface ixarMod
  * Preliminary class to model xarMod interface
  *
  * @package core\modules
+ * @deprecated 2.8.5 use xar::mod() instead
  */
 class xarMod extends xarObject implements ixarMod
 {

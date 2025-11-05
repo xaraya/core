@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use Exception;
 use ixarBlock;
-use xarBlock;
-use xarTpl;
-use xarUser;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -47,7 +44,7 @@ class CleanupMethod extends MethodClass
             throw new Exception('Already installed');
         }
         $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
-        xarTpl::setThemeName('installer');
+        $this->tpl()->setThemeName('installer');
 
         $this->var()->find('remove', $remove, 'checkbox', false);
         $this->var()->find('rename', $rename, 'checkbox', false);

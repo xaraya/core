@@ -22,7 +22,6 @@ use DuplicateException;
 use Exception;
 use IDNotFoundException;
 use ixarBlock;
-use xarBlock;
 use sys;
 
 sys::import('modules.blocks.method');

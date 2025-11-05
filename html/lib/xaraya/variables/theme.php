@@ -28,6 +28,7 @@ interface IxarThemeVars
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
+ * @deprecated 2.4.1 not used
  */
 class xarThemeVars extends xarObject implements IxarThemeVars
 {

@@ -459,9 +459,14 @@ class StaticServicesClass extends ServicesClass
         return $this->getServicePrototype('events');
     }
 
-    public function hooks(): WrapperInterface
+    public function hooked(): WrapperInterface
     {
-        return $this->getServicePrototype('hooks');
+        return $this->getServicePrototype('hooked');
+    }
+
+    public function theme(): WrapperInterface
+    {
+        return $this->getServicePrototype('theme');
     }
 
     /**

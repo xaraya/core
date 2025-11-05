@@ -18,7 +18,6 @@ use Xaraya\Modules\Blocks\InstancesApi;
 use EmptyParameterException;
 use IDNotFoundException;
 use ixarBlock;
-use xarBlock;
 use sys;
 
 sys::import('modules.blocks.method');
@@ -75,8 +74,8 @@ class DeleteTypeMethod extends MethodClass
 
         $data = [];
 
-        if ($type['type_state'] == xarBlock::TYPE_STATE_MISSING
-            || $type['type_state'] == xarBlock::TYPE_STATE_MOD_UNAVAILABLE) {
+        if ($type['type_state'] == ixarBlock::TYPE_STATE_MISSING
+            || $type['type_state'] == ixarBlock::TYPE_STATE_MOD_UNAVAILABLE) {
 
             $this->var()->find(
                 'confirm',

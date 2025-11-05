@@ -41,7 +41,7 @@ class ServiceFactory
         // parent-aware services = not shared
         // 'sec', 'tpl', 'data',
         // static wrappers
-        'prep', 'events', 'hooks',
+        'prep', 'events', 'hooked', 'theme',
         // internal helpers
         'modules.vars', 'modules.user', 'modules.item', 'modules.info', 'modules.exec', 'modules.hooks', 'modules.alias',
         // created directly = not via ServiceFactory
@@ -89,7 +89,8 @@ class ServiceFactory
             // wrappers for static core classes
             'prep' => self::getWrapperService($parent, \xarVarPrep::class),
             'events' => self::getWrapperService($parent, \xarEvents::class),
-            'hooks' => self::getWrapperService($parent, \xarHooks::class),
+            'hooked' => self::getWrapperService($parent, \xarHooks::class),
+            'theme' => self::getWrapperService($parent, \xarTheme::class),
             // internal modules helpers
             'modules.vars' => self::getModuleVarsHelper($parent),
             'modules.user' => self::getModuleUserVarsHelper($parent),

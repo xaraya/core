@@ -69,7 +69,8 @@ interface CoreServicesInterface extends ContextInterface
     public function db(): DatabaseInterface;
     public function prep(): WrapperInterface;
     public function events(): WrapperInterface;
-    public function hooks(): WrapperInterface;
+    public function hooked(): WrapperInterface;
+    public function theme(): WrapperInterface;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
      * @return void|never
@@ -590,9 +591,14 @@ trait CoreServicesTrait
         return $this->getStaticServices()->events();
     }
 
-    public function hooks(): WrapperInterface
+    public function hooked(): WrapperInterface
     {
-        return $this->getStaticServices()->hooks();
+        return $this->getStaticServices()->hooked();
+    }
+
+    public function theme(): WrapperInterface
+    {
+        return $this->getStaticServices()->theme();
     }
 
     /**

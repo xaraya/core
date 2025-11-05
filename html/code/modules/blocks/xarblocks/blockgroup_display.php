@@ -43,7 +43,7 @@ class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iB
             [
                 'block_id' => $this->group_instances,
                 'type_state' => ixarBlock::TYPE_STATE_ACTIVE,
-                'state' => [ixarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN],
+                'state' => [ixarBlock::BLOCK_STATE_VISIBLE, ixarBlock::BLOCK_STATE_HIDDEN],
             ]
         );
 
@@ -80,7 +80,7 @@ class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iB
             $block_info['content']['box_template'] = $box_template;
             $block_info['content']['block_template'] = $block_template;
 
-            $output .= xarBlock::render($block_info, $this->getContext());
+            $output .= $this->block()->render($block_info);
         }
         if (empty($output)) {
             return;

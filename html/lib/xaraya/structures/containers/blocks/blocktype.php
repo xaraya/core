@@ -4,7 +4,7 @@
  * @package core\blocks
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -42,7 +42,7 @@ interface iBlockType
  * @package core\blocks
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.8.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -68,7 +68,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     // Block instance information, supplied by blocks subsystem (dbinfo)
     protected $block_id;
     protected $name;
-    protected $state = xarBlock::BLOCK_STATE_VISIBLE;
+    protected $state = ixarBlock::BLOCK_STATE_VISIBLE;
     // Block instance information, supplied by blocks subsystem (dbinfo, or over-ridden by blocktag)
     protected $title;
 
@@ -124,40 +124,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         $this->setConfiguration();
         // set content
         $this->setContent();
-        // check for upgrade and run if necessary
-        $this->runUpgrade();
-        // run any additional initialisation supplied by this block type
-        if (xarBlock::hasMethod($this, 'init', true)) {
-            $this->init();
-        }
-    }
-    /**
-     * init
-     * @return void
-    **/
-    // NOTE: since the constructor cannot be overloaded, this method
-    // is called by the constructor to run any additional functions
-    // specific to this type immediately after the object is initialised
-    public function init() {}
-
-
-    final protected function runUpgrade()
-    {
-        if ($this->xarversion != $this->type_version && xarBlock::hasMethod($this, 'upgrade', true)) {
-            if (!empty($this->type_version)) {
-                sys::import('xaraya.version');
-                if (xarVersion::compare($this->type_version, $this->xarversion, 3) >= 0) {
-                    // 1st version is bigger, can't downgrade blocks
-                    throw new Exception();
-                }
-            }
-            if (!$this->upgrade($this->type_version)) {
-                // upgrade failed
-                throw new Exception();
-            }
-        }
-        $this->type_version = $this->xarversion;
-        return true;
+        // move runUpgrade() and init() to BasicBlock constructor - see iBlock interface
     }
 
     final public function __get($p)
@@ -386,6 +353,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
             'group' => $access['group'],
             'level' => $access['level'],
         ];
+        /** @var AccessProperty $access_property */
         static $access_property;
         if (!isset($access_property)) {
             sys::import('modules.dynamicdata.class.properties.master');

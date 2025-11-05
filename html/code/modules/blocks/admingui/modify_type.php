@@ -21,7 +21,6 @@ use FileNotFoundException;
 use FunctionNotFoundException;
 use IDNotFoundException;
 use ixarBlock;
-use xarBlock;
 use sys;
 
 sys::import('modules.blocks.method');
@@ -103,7 +102,7 @@ class ModifyTypeMethod extends MethodClass
         );
 
         // show the status warning if the type isn't active
-        if ($type['type_state'] != xarBlock::TYPE_STATE_ACTIVE) {
+        if ($type['type_state'] != ixarBlock::TYPE_STATE_ACTIVE) {
             $interface = 'display';
             $method = 'status';
             $phase = 'display';
@@ -115,7 +114,7 @@ class ModifyTypeMethod extends MethodClass
                 }
             }
             // get the block object and load the interface
-            $block = xarBlock::getObject($type, $interface, null, $this->getContext());
+            $block = $this->block()->getObject($type, $interface, null, $this->getContext());
             // set context if available in gui function
             $block->setContext($this->getContext());
         }
@@ -136,18 +135,18 @@ class ModifyTypeMethod extends MethodClass
                     switch ($method) {
                         case 'config':
                             // if the block type supplied a validation method, use it
-                            if (xarBlock::hasMethod($block, 'configcheck', true)) {
+                            if ($this->block()->hasMethod($block, 'configcheck', true)) {
                                 $isvalid = $block->configcheck();
-                            } elseif (xarBlock::hasMethod($block, 'checkmodify', true)) {
+                            } elseif ($this->block()->hasMethod($block, 'checkmodify', true)) {
                                 $isvalid = $block->checkmodify();
                             } else {
                                 $isvalid = true;
                             }
                             // attempt to update the block type configuration
                             if ($isvalid) {
-                                if (xarBlock::hasMethod($block, 'configupdate', true)) {
+                                if ($this->block()->hasMethod($block, 'configupdate', true)) {
                                     $result = $block->configupdate();
-                                } elseif (xarBlock::hasMethod($block, 'update', true)) {
+                                } elseif ($this->block()->hasMethod($block, 'update', true)) {
                                     $result = $block->update();
                                 }
                                 if (isset($result) && $result == false) {
@@ -180,11 +179,11 @@ class ModifyTypeMethod extends MethodClass
                         default:
                             // block type supplied a custom config interface method
                             $check_method = $method . 'check';
-                            $isvalid = xarBlock::hasMethod($block, $check_method, true)
+                            $isvalid = $this->block()->hasMethod($block, $check_method, true)
                                 ? $block->$check_method() : true;
                             if ($isvalid) {
                                 $update_method = $method . 'update';
-                                if (xarBlock::hasMethod($block, $update_method, true)) {
+                                if ($this->block()->hasMethod($block, $update_method, true)) {
                                     $result = $block->$update_method();
                                     if (empty($result)) {
                                         $invalid['update'] = $this->ml('Failed updating block type configuration');
@@ -225,10 +224,10 @@ class ModifyTypeMethod extends MethodClass
 
                     // block type may supply additional caching configuration
                     $check_method = 'cachingcheck';
-                    $isvalid = xarBlock::hasMethod($block, $check_method, true) ? $block->$check_method() : true;
+                    $isvalid = $this->block()->hasMethod($block, $check_method, true) ? $block->$check_method() : true;
                     if ($isvalid) {
                         $update_method = 'cachingupdate';
-                        if (xarBlock::hasMethod($block, $update_method, true)) {
+                        if ($this->block()->hasMethod($block, $update_method, true)) {
                             $result = $block->$update_method();
                             if (empty($result)) {
                                 $invalid['update'] = $this->ml('Failed updating block type caching configuration');
@@ -261,10 +260,10 @@ class ModifyTypeMethod extends MethodClass
                 case 'access':
                     // block type may supply additional access configuration
                     $check_method = 'accesscheck';
-                    $isvalid = xarBlock::hasMethod($block, $check_method, true) ? $block->$check_method() : true;
+                    $isvalid = $this->block()->hasMethod($block, $check_method, true) ? $block->$check_method() : true;
                     if ($isvalid) {
                         $update_method = 'accessupdate';
-                        if (xarBlock::hasMethod($block, $update_method, true)) {
+                        if ($this->block()->hasMethod($block, $update_method, true)) {
                             $result = $block->$update_method();
                             if (empty($result)) {
                                 $invalid['update'] = $this->ml('Failed updating block type caching configuration');
@@ -298,10 +297,10 @@ class ModifyTypeMethod extends MethodClass
                     }
                     // block type may supply additional interfaces and methods
                     $check_method = $method . 'check';
-                    $isvalid = xarBlock::hasMethod($block, $check_method, true) ? $block->$check_method() : true;
+                    $isvalid = $this->block()->hasMethod($block, $check_method, true) ? $block->$check_method() : true;
                     if ($isvalid) {
                         $update_method = $method . 'update';
-                        if (xarBlock::hasMethod($block, $update_method, true)) {
+                        if ($this->block()->hasMethod($block, $update_method, true)) {
                             $result = $block->$update_method();
                             if (empty($result)) {
                                 $invalid['update'] = $this->ml('Failed updating block type caching configuration');
@@ -399,26 +398,26 @@ class ModifyTypeMethod extends MethodClass
                         $data['type_params'] = $type_params;
 
                         // show additional info if supplied by block type
-                        if (xarBlock::hasMethod($block, 'info', true)) {
-                            $data['type_output'] = xarBlock::guiMethod($block, 'info');
+                        if ($this->block()->hasMethod($block, 'info', true)) {
+                            $data['type_output'] = $this->block()->guiMethod($block, 'info');
                         }
 
                         break;
                     case 'preview':
                         // show using preview method if supplied by block type...
-                        if (xarBlock::hasMethod($block, 'preview', true)) {
-                            $data['type_output'] = xarBlock::guiMethod($block, 'preview');
+                        if ($this->block()->hasMethod($block, 'preview', true)) {
+                            $data['type_output'] = $this->block()->guiMethod($block, 'preview');
                         }
                         // or using display method otherwise...
                         else {
-                            $data['type_output'] = xarBlock::guiMethod($block, 'display');
+                            $data['type_output'] = $this->block()->guiMethod($block, 'display');
                         }
 
                         break;
                     case 'help':
                         // show help info if supplied by block type
-                        if (xarBlock::hasMethod($block, 'help', true)) {
-                            $data['type_output'] = xarBlock::guiMethod($block, 'help');
+                        if ($this->block()->hasMethod($block, 'help', true)) {
+                            $data['type_output'] = $this->block()->guiMethod($block, 'help');
                         }
                         break;
                     case 'status':
@@ -426,8 +425,8 @@ class ModifyTypeMethod extends MethodClass
                         break;
                     default:
                         // show custom info if supplied by block type
-                        if (xarBlock::hasMethod($block, $method, true)) {
-                            $data['type_output'] = xarBlock::guiMethod($block, $method);
+                        if ($this->block()->hasMethod($block, $method, true)) {
+                            $data['type_output'] = $this->block()->guiMethod($block, $method);
                         }
                         break;
                 }
@@ -439,10 +438,10 @@ class ModifyTypeMethod extends MethodClass
                 switch ($method) {
                     case 'config':
                         try {
-                            $data['type_output'] = xarBlock::guiMethod($block, 'configmodify', 'config-' . $block->type);
+                            $data['type_output'] = $this->block()->guiMethod($block, 'configmodify', 'config-' . $block->type);
                         } catch (FunctionNotFoundException $e) {
                             try {
-                                $data['type_output'] = xarBlock::guiMethod($block, 'modify');
+                                $data['type_output'] = $this->block()->guiMethod($block, 'modify');
                             } catch (FunctionNotFoundException $f) {
                                 $data['type_output'] = '';
                             } catch (FileNotFoundException $f) {
@@ -457,7 +456,7 @@ class ModifyTypeMethod extends MethodClass
                     default:
                         // show custom configuration supplied by block type
                         $modify_method = $method . 'modify';
-                        $data['type_output'] = xarBlock::guiMethod($block, $modify_method, $method . '-' . $block->type);
+                        $data['type_output'] = $this->block()->guiMethod($block, $modify_method, $method . '-' . $block->type);
                         break;
                 }
                 break;
@@ -473,15 +472,15 @@ class ModifyTypeMethod extends MethodClass
                     ['id' => 2, 'name' => $this->ml('All Users')],
                 ];
                 // show additional caching info if supplied by block type
-                if (xarBlock::hasMethod($block, 'cachingmodify', true)) {
-                    $data['type_output'] = xarBlock::guiMethod($block, 'cachingmodify', 'caching-' . $block->type);
+                if ($this->block()->hasMethod($block, 'cachingmodify', true)) {
+                    $data['type_output'] = $this->block()->guiMethod($block, 'cachingmodify', 'caching-' . $block->type);
                 }
 
                 break;
             case 'access':
                 // show additional access info if supplied by block type
-                if (xarBlock::hasMethod($block, 'accessmodify', true)) {
-                    $data['type_output'] = xarBlock::guiMethod($block, 'accessmodify', 'access-' . $block->type);
+                if ($this->block()->hasMethod($block, 'accessmodify', true)) {
+                    $data['type_output'] = $this->block()->guiMethod($block, 'accessmodify', 'access-' . $block->type);
                 }
                 break;
             default:
@@ -490,7 +489,7 @@ class ModifyTypeMethod extends MethodClass
                     $method = $interface;
                 }
                 $modify_method = $method . 'modify';
-                $data['type_output'] = xarBlock::guiMethod($block, $modify_method, $method . '-' . $block->type);
+                $data['type_output'] = $this->block()->guiMethod($block, $modify_method, $method . '-' . $block->type);
                 break;
         }
 

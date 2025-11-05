@@ -14,8 +14,6 @@ namespace Xaraya\Modules\Blocks\RestApi;
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\RestApi;
 use Exception;
-use xarBlock;
-use xarTpl;
 use sys;
 
 sys::import('modules.blocks.method');
@@ -36,11 +34,11 @@ class RenderMethod extends MethodClass
     public function __invoke($args = [])
     {
         // needed to initialize the template cache
-        xarTpl::init();
+        $this->tpl()->init();
         // not really needed here but why not?
-        xarBlock::init();
+        $this->block()->init();
         try {
-            $result = xarBlock::renderBlock($args, $this->getContext());
+            $result = $this->block()->renderBlock($args);
         } catch (Exception $e) {
             $result = "Exception: " . $e->getMessage();
         }

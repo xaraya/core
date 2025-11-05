@@ -464,7 +464,7 @@ trait ModulesTrait
      */
     public function getNoCache(): bool
     {
-        return $this->getInfoHelper()->noCacheState;
+        return $this->getInfoHelper()->noCacheMod;
     }
 
     /**
@@ -473,7 +473,7 @@ trait ModulesTrait
     public function setNoCache(bool $noCache): void
     {
         // --- LEGACY METHOD BODY ---
-        $this->getInfoHelper()->noCacheState = (bool) $noCache;
+        $this->getInfoHelper()->noCacheMod = (bool) $noCache;
         // --- END LEGACY METHOD BODY ---
     }
 
