@@ -13,12 +13,11 @@
 namespace Xaraya\Bridge\GraphQL\Types;
 
 use Xaraya\Bridge\GraphQL\GraphQLHandler;
+use Xaraya\Services\xar;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
-use xarMod;
 use xarRoles;
-use xarUser;
 use Exception;
 
 /**
@@ -118,8 +117,8 @@ class DummyType extends ObjectType
                     if (empty($userId)) {
                         return;
                     }
-                    xarMod::init();
-                    xarUser::init();
+                    xar::mod()->init();
+                    xar::user()->init();
                     $role = xarRoles::getRole($userId);
                     $fields = $role->getFieldValues();
                     return ['id' => $fields['id'], 'name' => $fields['name']];
@@ -133,7 +132,7 @@ class DummyType extends ObjectType
                     $context->tracePath(__CLASS__ . '::get_query_fields: resolve context');
                     $userId = GraphQLHandler::checkUser($context);
                     // return restricted version for non-site admin
-                    if (empty($userId) || !xarUser::isSiteAdmin($userId)) {
+                    if (empty($userId) || !xar::user($userId)->isSiteAdmin()) {
                         return ['userId' => $userId, 'error' => 'Restricted to site admin'];
                     }
                     return $context->getArrayCopy();

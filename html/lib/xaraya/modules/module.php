@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Handle module classes via xarMod::getModule()
+ * Handle module classes via xar::mod()->getModule()
  *
  * Usage:
  * ```
@@ -27,7 +27,7 @@
  * # xaruser/main.php or xaruser.php (migration)
  * function myfancymodule_user_main($args = [], $context = null) {
  *     // get module class instance first
- *     $module = xarMod::getModule('myfancymodule');
+ *     $module = xar::mod()->getModule('myfancymodule');
  *     $module->setContext($context);
  *     return $module->usergui()->main($args);
  *     // or get module gui directly
@@ -53,7 +53,7 @@ use sys;
 sys::import('xaraya.modules.moduletrait');
 
 /**
- * Handle module classes via xarMod::getModule()
+ * Handle module classes via xar::mod()->getModule()
  *
  * Module methods:
  * - ... all other module functions implemented here

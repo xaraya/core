@@ -26,11 +26,11 @@
  * # xaruserapi/get.php or xaruserapi.php (migration)
  * function myfancymodule_userapi_get($args = [], $context = null) {
  *     // get module class instance first
- *     //$module = xarMod::getModule('myfancymodule');
+ *     //$module = xar::mod()->getModule('myfancymodule');
  *     //$module->setContext($context);
  *     //return $module->userapi()->get($args);
  *     // or get module api directly
- *     $userapi = xarMod::userapi('myfancymodule');
+ *     $userapi = xar::mod()->userapi('myfancymodule');
  *     $userapi->setContext($context);
  *     return $userapi->get($args);
  * }
@@ -80,6 +80,6 @@ trait UserApiTrait
     {
         $this->setModType('user');
         // any state here = default for api load
-        xarMod::apiLoad($this->getModName(), $this->getModType(), ixarMod::LOAD_ANYSTATE, $this->getContext());
+        $this->mod()->apiLoad($this->getModName(), $this->getModType());
     }
 }

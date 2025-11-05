@@ -26,7 +26,7 @@ sys::import('xaraya.sessions.storage');
 sys::import('xaraya.context.contexttrait');
 
 /**
- * Session instance with context for use with xarSession::setInstance()
+ * Session instance with context for use with xar::session()->setInstance()
  *
  * This uses a virtual session object from context, to replace $_SESSION
  * and bypass the default (global) PHP session handling by SessionHandler()
@@ -87,7 +87,7 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function initialize()
     {
-        // always get storage here when xarSession::init() is called
+        // always get storage here when xar::session()->init() is called
         $this->getStorage();
         // start session based on cookie here
         return $this->start();
@@ -164,7 +164,7 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function getSession()
     {
-        // ok if we don't have a context or session here yet for non-standard entrypoint - see xarUser::init()
+        // ok if we don't have a context or session here yet for non-standard entrypoint - see xar::user()->init()
         return $this->getContext()?->getSession();
     }
 
@@ -220,7 +220,7 @@ class SessionContext implements ContextInterface, SessionInterface
             return $session->vars[$name];
         }
         if ($name == 'role_id') {
-            // @todo look up userId or return xarSession::getAnonId()
+            // @todo look up userId or return xar::session()->getAnonId()
             return $session->getUserId();
         }
         return null;

@@ -18,6 +18,7 @@
  *       datastores.
  */
 sys::import('xaraya.structures.sequences.adapters.array_sequence');
+use Xaraya\Services\xar;
 
 class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceAdapter
 {
@@ -56,7 +57,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
             'where'    => 'id = ' . $this->items[$position]['id']];
         // And get the data, we do this explicitly because the 'data' field might be very big
         // so it is not included in the items property for this object by default.
-        $item = xarMod::apiFunc('dynamicdata', 'user', 'getitems', $params);
+        $item = xar::mod()->apiFunc('dynamicdata', 'user', 'getitems', $params);
         $item = $item[$this->items[$position]['id']]['data'] ?? '';
         $item = unserialize(base64_decode($item));
         return $item;
@@ -163,7 +164,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
             'itemid'    => $itemid,
             'fields'    => [['name' => 'nextid','value' => $nextid]]];
 
-        $res = xarMod::apiFunc('dynamicdata', 'admin', 'update', $params);
+        $res = xar::mod()->apiFunc('dynamicdata', 'admin', 'update', $params);
         return $res;
     }
 }

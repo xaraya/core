@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -59,8 +58,8 @@ class InstallMethod extends MethodClass
             return;
         }
 
-        // Make xarTheme::getInfo not cache anything...
-        xarTheme::setNoCache(true);
+        // Make xar::theme()->getInfo not cache anything...
+        $this->theme()->setNoCache(true);
 
         $installer->installmodule($regid);
         return true;

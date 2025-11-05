@@ -241,7 +241,7 @@ class xarClassMap extends xarObject
      * Summary of findBlockByPath
      * @param array<string> $paths
      * @return array{filepath: string, found: array<string, string>}
-     * @see xarBlock::getObject()
+     * @see xar::block()->getObject()
      */
     public static function findBlockByPath(array $paths): ?array
     {
@@ -545,7 +545,7 @@ class xarClassMap extends xarObject
      * Summary of findModuleClass
      * @param string $modName
      * @return array{classname: string, filepath: string, module: string}|null
-     * @see \xarMod::getModule()
+     * @see \xar::mod()->getModule()
      */
     public static function findModuleClass(string $modName): ?array
     {

@@ -33,7 +33,7 @@ class GetblockMethod extends MethodClass
 
     /**
      * Gets an object from the blocks API
-     * @todo how is this different from xarBlock::getObject()?
+     * @todo how is this different from xar::block()->getObject()?
      * @author Chris Powis <crisp@xaraya.com>
      * @staticvar array $loaded Keeps track of clases that have been loaded
      * @param array<string,mixed> $args Parameter data array

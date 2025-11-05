@@ -112,7 +112,7 @@ class RemoveMethod extends MethodClass
         $this->prop()->importPropertyTypes(true);
 
         // Hmmm, I wonder if the target adding is considered a hack
-        // it certainly depends on the implementation of xarController::URL
+        // it certainly depends on the implementation of xar::ctl()->getModuleURL()
         //    $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', "list#$target"));
         $this->ctl()->redirect($return_url);
         // Never reached

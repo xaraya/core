@@ -33,9 +33,9 @@ xarCache::init();
 // initialize database
 xarDatabase::init();
 // initialize modules
-//xarMod::init();
+//xar::mod()->init();
 // initialize users
-//xarUser::init();
+//xar::user()->init();
 
 /**
 $rawInput = file_get_contents('php://input');

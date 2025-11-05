@@ -28,7 +28,7 @@ class DefaultModule implements ModuleInterface
     use ModuleTrait;
 
     /**
-     * @see \xarMod::privateLoad()
+     * @see \xar::mod()->privateLoad()
      */
     public function getClassType(string $modType): ?string
     {
@@ -37,7 +37,7 @@ class DefaultModule implements ModuleInterface
     }
 
     /**
-     * @see \xarMod::getModuleClassMethod()
+     * @see \xar::mod()->getModuleClassMethod()
      */
     public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): ?callable
     {

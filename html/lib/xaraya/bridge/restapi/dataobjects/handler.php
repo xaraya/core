@@ -196,7 +196,7 @@ class DataObjectAPIHandler extends RestAPIHandler
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown itemid for ' . $object);
         }
-        // @checkme this throws exception for userlist property when xarUser::init() is not called first
+        // @checkme this throws exception for userlist property when xar::user()->init() is not called first
         //$result = $objectitem->getFieldValues();
         // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
         $item = $objectitem->getFieldValues([], 1);

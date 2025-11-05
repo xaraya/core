@@ -1,5 +1,7 @@
 <?php
 
+use Xaraya\Services\xar;
+
 /**
  * Class for handling theme configuration options
  *
@@ -41,7 +43,7 @@ class Configurations extends xarObject
         if ($themeID == 0) {
             return false;
         }
-        $items = [xarTheme::getInfo($themeID)];
+        $items = [xar::theme()->getInfo($themeID)];
 
         $checked_files = [];
         foreach ($items as $item) {

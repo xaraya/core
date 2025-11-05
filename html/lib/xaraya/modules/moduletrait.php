@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Handle module classes via xarMod::getModule()
+ * Handle module classes via xar::mod()->getModule()
  *
  * Usage:
  * ```
@@ -19,7 +19,7 @@
  * # xaruser/main.php or xaruser.php (migration)
  * function myfancymodule_user_main($args = [], $context = null) {
  *     // get module class instance first
- *     $module = xarMod::getModule('myfancymodule');
+ *     $module = xar::mod()->getModule('myfancymodule');
  *     $module->setContext($context);
  *     return $module->usergui()->main($args);
  *     // or get module gui directly
@@ -79,15 +79,15 @@ interface ModuleInterface extends ContextInterface
 }
 
 /**
- * Trait to get module classes via xarMod::getModule()
+ * Trait to get module classes via xar::mod()->getModule()
  * @uses \sys::autoload()
- * @see \xarMod::getModule()
+ * @see \xar::mod()->getModule()
  */
 trait ModuleTrait
 {
     use ContextTrait;
 
-    protected string $moduleName;          // set in constructor by xarMod::getModule()
+    protected string $moduleName;          // set in constructor by xar::mod()->getModule()
 
     /** @var array<string, string> */
     protected array $classtypes = [];
@@ -207,9 +207,9 @@ trait ModuleTrait
         if (class_exists($className)) {
             $versionCall = new $className();
             $modversion = $versionCall();
-            return xarMod::parseFileInfo($modversion);
+            return xar::mod()->parseFileInfo($modversion);
         }
-        return xarMod::getFileInfo($this->getModName());
+        return xar::mod()->getFileInfo($this->getModName());
     }
 
     /**
@@ -314,7 +314,7 @@ trait ModuleTrait
     }
 
     /**
-     * @see \xarMod::privateLoad()
+     * @see \xar::mod()->privateLoad()
      */
     public function getClassType(string $modType): ?string
     {
@@ -332,7 +332,7 @@ trait ModuleTrait
     }
 
     /**
-     * @see \xarMod::getModuleClassMethod()
+     * @see \xar::mod()->getModuleClassMethod()
      */
     public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): ?callable
     {

@@ -42,7 +42,6 @@ class InfoHelper extends ServiceClass
      */
     public function getName(?int $regID = null): string
     {
-        // --- LEGACY METHOD BODY ---
         if (!isset($regID)) {
             $xar = $this->getParent();
             $modName = $xar->req()->getRequest()->getModule();
@@ -52,7 +51,6 @@ class InfoHelper extends ServiceClass
         }
         assert(!empty($modName));
         return $modName;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getID(string $modName): ?int
@@ -60,13 +58,11 @@ class InfoHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        // --- LEGACY METHOD BODY ---
         $ids = $this->getIds($modName);
         if (!isset($ids) || !isset($ids['systemid'])) {
             return null;
         }
         return (int) $ids['systemid'];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getRegID(string $modName, $type = 'module'): int
@@ -74,10 +70,8 @@ class InfoHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        // --- LEGACY METHOD BODY ---
         //$ids = $this->getIds($modName, $type);
         //return (isset($ids['regid']) && !is_null($ids['regid'])) ? (int) $ids['regid'] : null;
-        // --- END LEGACY METHOD BODY ---
         // avoid getting module id from $this->getRegID() here
         $fileInfo = $this->getFileInfo($modName, $type);
         return (int) ($fileInfo['regid'] ?? 0);
@@ -88,14 +82,12 @@ class InfoHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        // --- LEGACY METHOD BODY ---
         $modInfo = $this->getFileInfo($modName, $type);
         if (empty($modInfo['displayname'])) {
             $modInfo['displayname'] = $modName;
         }
         $xar = $this->getParent();
         return $xar->mls()->translate($modInfo['displayname']);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getDisplayDescription(string $modName, $type = 'module'): string
@@ -103,20 +95,17 @@ class InfoHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        // --- LEGACY METHOD BODY ---
         $modInfo = $this->getFileInfo($modName, $type);
         if (empty($modInfo['displaydescription'])) {
             $modInfo['displaydescription'] = $modName;
         }
         $xar = $this->getParent();
         return $xar->mls()->translate($modInfo['displaydescription']);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /** @return array<string, mixed> */
     public function getFileInfo(string $modOsDir, $type = 'module'): array
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modOsDir)) {
             throw new EmptyParameterException('modOsDir');
         }
@@ -126,7 +115,7 @@ class InfoHelper extends ServiceClass
             return $xar->mem()->get('Mod.getFileInfos', $modOsDir . " / " . $type);
         }
         // Log it when it didnt came from cache
-        $xar->log()->debug("xarMod::getFileInfo: Getting file info of '" . $modOsDir . "' (a " . $type . ")");
+        $xar->log()->debug("xar::mod()->getFileInfo: Getting file info of '" . $modOsDir . "' (a " . $type . ")");
 
 
         // TODO redo legacy support via type.
@@ -160,7 +149,7 @@ class InfoHelper extends ServiceClass
 
         if (!file_exists($fileName)) {
             // Don't raise an exception, it is too harsh, but log it tho (bug 295)
-            $xar->log()->warning("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir");
+            $xar->log()->warning("xar::mod()->getFileInfo: Could not find xarversion.php, skipping $modOsDir");
             // throw new FileNotFoundException($fileName);
             return [];
         }
@@ -180,13 +169,11 @@ class InfoHelper extends ServiceClass
         $version = array_merge($themeinfo, $modversion);
 
         return $this->parseFileInfo($version, $modOsDir . " / " . $type);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /** @return array<string, mixed> */
     public function getBaseInfo(string $modName, $type = 'module'): array
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
@@ -211,7 +198,7 @@ class InfoHelper extends ServiceClass
             return $xar->mem()->get($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
-        $xar->log()->debug("xarMod::getBaseInfo: Getting database info of '" . $modName . "' (a " . $type . ")");
+        $xar->log()->debug("xar::mod()->getBaseInfo: Getting database info of '" . $modName . "' (a " . $type . ")");
 
         $dbconn = $xar->db()->getConn();
         $tables = $xar->db()->getTables();
@@ -277,13 +264,11 @@ class InfoHelper extends ServiceClass
         $xar->mem()->set($cacheCollection, $name, $modBaseInfo);
 
         return $modBaseInfo;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /** @return array<string, mixed> */
     public function getInfo(int $modRegId, $type = 'module'): array
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modRegId)) {
             throw new EmptyParameterException('modRegid');
         }
@@ -304,7 +289,7 @@ class InfoHelper extends ServiceClass
                 throw new BadParameterException('module/theme type');
         }
         // Log it when it doesn't come from the cache
-        $xar->log()->debug("xarMod::getInfo: Getting database info of ID '" . $modRegId . "' (a " . $type . ")");
+        $xar->log()->debug("xar::mod()->getInfo: Getting database info of ID '" . $modRegId . "' (a " . $type . ")");
 
         $dbconn = $xar->db()->getConn();
         $tables = $xar->db()->getTables();
@@ -432,7 +417,6 @@ class InfoHelper extends ServiceClass
                 break;
         }
         return $modInfo;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /** @return array<string, mixed> */
@@ -466,7 +450,6 @@ class InfoHelper extends ServiceClass
         }
         // @checkme force this here
         $modDir ??= $modName;
-        // --- LEGACY METHOD BODY ---
         static $loadedDbInfoCache = [];
 
         if (empty($modName)) {
@@ -512,14 +495,12 @@ class InfoHelper extends ServiceClass
 
         $loadedDbInfoCache[$modName] = true;
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function isAvailable(string $modName, $type = 'module'): bool
     {
-        // --- LEGACY METHOD BODY ---
         // FIXME: there is no point to the cache here, since
-        // xarMod::getBaseInfo() caches module details anyway.
+        // xar::mod()->getBaseInfo() caches module details anyway.
         static $modAvailableCache = [];
 
         if (empty($modName)) {
@@ -545,12 +526,10 @@ class InfoHelper extends ServiceClass
             }
         }
         return $modAvailableCache[$modBaseInfo['name']];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getIds($modName, $type = 'module')
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
@@ -561,12 +540,10 @@ class InfoHelper extends ServiceClass
             return;
         } // throw back
         return ['systemid' => $modBaseInfo['systemid'], 'regid' => $modBaseInfo['regid']];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function parseFileInfo($version, $name = '')
     {
-        // --- LEGACY METHOD BODY ---
         // name and id are required, assert them, otherwise the module is invalid
         assert(isset($version["name"]) && isset($version["id"]));
         $fileInfo = [];
@@ -610,7 +587,6 @@ class InfoHelper extends ServiceClass
             $xar->mem()->set('Mod.getFileInfos', $name, $fileInfo);
         }
         return $fileInfo;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function checkVersion($modName)
@@ -618,7 +594,6 @@ class InfoHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        // --- LEGACY METHOD BODY ---
         $modInfo = $this->getInfo($this->getRegID($modName));
         if ((strpos($modInfo['class'], 'Core') !== false)) {
             return $modInfo['version'] == \xarCore::VERSION_NUM;
@@ -626,6 +601,5 @@ class InfoHelper extends ServiceClass
             // Add check for non core modules here
             return true;
         }
-        // --- END LEGACY METHOD BODY ---
     }
 }

@@ -32,7 +32,6 @@ class ItemVarsHelper extends VarsHelper
         if (is_null($itemid)) {
             return parent::get($modName, $varName);
         }
-        // --- LEGACY METHOD BODY ---
         if (empty($varName)) {
             throw new EmptyParameterException('name');
         }
@@ -78,8 +77,6 @@ class ItemVarsHelper extends VarsHelper
         }
         $result->close();
         return $value;
-        // --- END LEGACY METHOD BODY ---
-        // return xarModItemVars::get($modName, $varName, $itemid);
     }
 
     public function set(string $modName, string $varName, mixed $value, mixed $itemid = null): bool
@@ -88,7 +85,6 @@ class ItemVarsHelper extends VarsHelper
         if (is_null($itemid)) {
             return false;
         }
-        // --- LEGACY METHOD BODY ---
         assert(!is_null($value)); /* Not allowed to set a variable to NULL value */
         if (empty($varName)) {
             throw new EmptyParameterException('name');
@@ -135,8 +131,6 @@ class ItemVarsHelper extends VarsHelper
         $mem->set('ModItem.Variables.' . $modName, $cachename, $value);
 
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // return xarModItemVars::set($modName, $varName, $value, $itemid);
     }
 
     public function delete(string $modName, string $varName, mixed $itemid = null): bool
@@ -145,7 +139,6 @@ class ItemVarsHelper extends VarsHelper
         if (is_null($itemid)) {
             return false;
         }
-        // --- LEGACY METHOD BODY ---
         if (empty($varName)) {
             throw new EmptyParameterException('name');
         }
@@ -170,7 +163,5 @@ class ItemVarsHelper extends VarsHelper
         $cachename = $itemid . $varName;
         $mem->del('ModItem.Variables.' . $modName, $cachename);
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // return xarModItemVars::delete($modName, $varName, $itemid);
     }
 }

@@ -2,7 +2,7 @@
 
 The `xarMod` class is the main interface for modules in Xaraya core.
 
-Module functions are organised by type (gui or api) and name, and they are invoked via `xarMod::guiFunc()` or `xarMod::apiFunc()`. Typical types are user, userapi, admin and adminapi, but other types are used in various modules too.
+Module functions are organised by type (gui or api) and name, and they are invoked via `xar::mod()->guiFunc()` or `xar::mod()->apiFunc()`. Typical types are user, userapi, admin and adminapi, but other types are used in various modules too.
 
 ## Module Functions (traditional)
 
@@ -40,11 +40,11 @@ Module functions use a naming convention for the function type: '' for gui funct
 
 ## Module Methods (object-oriented)
 
-Newer modules can use class methods instead of procedural functions. They can be invoked via the traditional `xarMod::guiFunc()` or `xarMod::apiFunc()`, or by getting a *module class* via `xarMod::getModule()` and then using method calls to get the right component and method(s).
+Newer modules can use class methods instead of procedural functions. They can be invoked via the traditional `xar::mod()->guiFunc()` or `xar::mod()->apiFunc()`, or by getting a *module class* via `xar::mod()->getModule()` and then using method calls to get the right component and method(s).
 
 Each module has a central module handler class, and *component classes* per type with their own methods. 
-Short-hand methods like `xarMod::userapi()` and `xarMod::usergui()` are available to get common components by module.
-You can also get a callable to a module method directly via `xarMod::getModuleClassMethod()`.
+Short-hand methods like `xar::mod()->userapi()` and `xar::mod()->usergui()` are available to get common components by module.
+You can also get a callable to a module method directly via `xar::mod()->getModuleClassMethod()`.
 
 For smaller modules, methods can be combined in a single component class file by type:
 
@@ -78,7 +78,7 @@ html/code/modules/myfancymodule
   * get.php -> Xaraya\Modules\MyFancyModule\UserApi\GetMethod($args)
   * getall.php
 
-Module methods rely on component class interfaces for the function type: `GuiMethodsInterface` for gui methods and `ApiMethodsInterface` for api methods. Api methods cannot be called as gui functions via `xarMod::guiFunc()`.
+Module methods rely on component class interfaces for the function type: `GuiMethodsInterface` for gui methods and `ApiMethodsInterface` for api methods. Api methods cannot be called as gui functions via `xar::mod()->guiFunc()`.
 
 Note: the `$context` is handled by the class itself, and does not need to be passed to the method call here.
 
@@ -121,7 +121,7 @@ use sys;
 sys::import('xaraya.modules.module');
 
 /**
- * Get myfancymodule module classes via xarMod::getModule()
+ * Get myfancymodule module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

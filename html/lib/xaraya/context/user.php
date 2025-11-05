@@ -115,8 +115,8 @@ class UserContext
 
     /**
      * Summary of checkCookie
-     * @uses xarSession::init()
-     * @uses xarUser::isLoggedIn()
+     * @uses xar::session()->init()
+     * @uses xar::session()->getUserId()
      * @return int|null
      */
     protected function checkCookie()

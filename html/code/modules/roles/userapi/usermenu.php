@@ -148,8 +148,8 @@ class UsermenuMethod extends MethodClass
                         $url_parts = parse_url($home);
                         if (!$allowexternalurl) {
                             if ((preg_match("%^http://%", $home, $matches))
-                            && ($url_parts['host'] != $this->ctl()->getServerVar("SERVER_NAME"))
-                            && ($url_parts['host'] != $this->ctl()->getServerVar("HTTP_HOST"))) {
+                            && ($url_parts['host'] != $this->req()->getServerVar("SERVER_NAME"))
+                            && ($url_parts['host'] != $this->req()->getServerVar("HTTP_HOST"))) {
                                 $msg  = $this->ml('<span class="xar-alert">&#160;External URLs such as #(1) are not permitted as your home page.</span>', $home);
                                 $object->properties['userhome']->invalid .= $msg;
                                 $isvalid = false;

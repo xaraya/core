@@ -54,7 +54,6 @@ class VariableCache extends ServiceClass
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         $this->cacheTime = $config['Variable.TimeExpiration'] ?? 7200;
         $this->cacheSizeLimit = $config['Variable.SizeLimit'] ?? 2097152;
         $this->cacheScopes = $config['Variable.CacheScopes'] ?? [
@@ -99,12 +98,10 @@ class VariableCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheKey($scope, $name)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
@@ -127,12 +124,10 @@ class VariableCache extends ServiceClass
         // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
         // Note: the cacheStorage may add its own namespace internally to take into account the host, site, ...
         return $scope . ':' . $name;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheSettings()
     {
-        // --- LEGACY METHOD BODY ---
         if (!isset($this->cacheSettings)) {
             // TODO: make things configurable in cachemanager
             // Load the caching configuration
@@ -153,12 +148,10 @@ class VariableCache extends ServiceClass
             $this->cacheSettings = $settings;
         }
         return $this->cacheSettings;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function checkCachingRules($scope, $name)
     {
-        // --- LEGACY METHOD BODY ---
         $settings = $this->getCacheSettings();
 
         if (!empty($settings) && !empty($settings[$scope])) {
@@ -175,22 +168,18 @@ class VariableCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function isCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return false;
         }
         return $this->cacheStorage->isCached($cacheKey);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return null;
         }
@@ -204,12 +193,10 @@ class VariableCache extends ServiceClass
             }
         }
         return $value;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setCached($cacheKey, $value, $expire = null)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
@@ -223,39 +210,32 @@ class VariableCache extends ServiceClass
         } else {
             $this->cacheStorage->setCached($cacheKey, $value);
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function delCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
         // delete the value from cache
         $this->cacheStorage->delCached($cacheKey);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function keyCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return null;
         }
         // get the key info from cache
         return $this->cacheStorage->keyInfo($cacheKey);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function flushCached($scope)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
         // CHECKME: not all cache storage supports this in the same way !
         $this->cacheStorage->flushCached($scope . ':');
-        // --- END LEGACY METHOD BODY ---
     }
 }

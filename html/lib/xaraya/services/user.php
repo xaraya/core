@@ -79,7 +79,6 @@ trait UserTrait
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($config)) {
             if ($this->initialized) {
                 return true;
@@ -107,7 +106,6 @@ trait UserTrait
 
         $this->initialized = true;
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -117,10 +115,8 @@ trait UserTrait
     public function getConfig(): array
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         $systemArgs = ['authenticationModules' => $xar->config()->getVar('Site.User.AuthenticationModules')];
         return $systemArgs;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -129,7 +125,6 @@ trait UserTrait
     public function getVar(string $varName): mixed
     {
         $userId = $this->getCurrentId();
-        // --- LEGACY METHOD BODY ---
         if (empty($varName)) {
             throw new EmptyParameterException('name');
         }
@@ -265,7 +260,6 @@ trait UserTrait
         }
 
         return $cachedValue;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -274,7 +268,6 @@ trait UserTrait
     public function setVar(string $varName, mixed $value): bool
     {
         $userId = $this->getCurrentId();
-        // --- LEGACY METHOD BODY ---
         // check that $varName is valid
         if (empty($varName)) {
             throw new EmptyParameterException('name');
@@ -331,7 +324,6 @@ trait UserTrait
         $xar->mem()->set('User.Variables.' . $userId, $varName, $value);
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -364,33 +356,26 @@ trait UserTrait
         // @todo see UserContext::getUserId() for userId without session
         $userId = $this->getCurrentId();
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         return !empty($userId) && ($userId != $xar->session()->getAnonId());
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function isDebugAdmin(): bool
     {
         $userId = $this->getCurrentId();
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         return in_array($userId, $xar->config()->getVar('Site.User.DebugAdmins'));
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function isSiteAdmin(): bool
     {
         $userId = $this->getCurrentId();
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         return $userId == $xar->mod('roles')->getVar('admin');
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getLocale(): mixed
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         if ($this->isLoggedIn()) {
             $id = $this->getVar('id');
             //last resort user is falling over on this uservar by setting multiple times
@@ -411,13 +396,11 @@ trait UserTrait
         }
         $xar->session()->setVar('navigationLocale', $locale);
         return $locale;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setLocale(string $locale): bool
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         $xar->log()->info("Changing the navigation locale from " . $this->getLocale() . " to " . $locale);
         if ($xar->mls()->getMode() != $xar->mls()::SINGLE_LANGUAGE_MODE) {
             $xar->session()->setVar('navigationLocale', $locale);
@@ -427,13 +410,11 @@ trait UserTrait
             return true;
         }
         return false;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getThemeName(): mixed
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         $themeName = $xar->tpl()->getThemeName();
 
         if ($this->isLoggedIn() && (bool) $xar->mod('themes')->getVar('enable_user_menu')) {
@@ -444,22 +425,18 @@ trait UserTrait
         }
 
         return $themeName;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setThemeName(string $themeName): void
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         assert($themeName != "");
         // uservar system takes care of dealing with anynomous
         $xar->mod('themes')->setUserVar('default_theme', $themeName);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function logIn(string $userName, string $password, int $rememberMe = 0): bool
     {
-        // --- LEGACY METHOD BODY ---
         if ($this->isLoggedIn()) {
             return true;
         }
@@ -562,12 +539,10 @@ trait UserTrait
         xarEvents::notify('UserLogin', $userId, $this->getContext());
         $xar->session()->delVar('privilegeset');
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function logOut(): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (!$this->isLoggedIn()) {
             return true;
         }
@@ -593,12 +568,10 @@ trait UserTrait
 
         $xar->session()->delVar('privilegeset');
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function comparePasswords(string $givenPassword, string $realPassword, string $userName, string $cryptSalt = ''): bool
     {
-        // --- LEGACY METHOD BODY ---
         // TODO: consider moving to something stronger like sha1
         $md5pass = md5($givenPassword);
         if (strcmp($md5pass, $realPassword ?? '') == 0) {
@@ -607,7 +580,6 @@ trait UserTrait
         }
 
         return false;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -622,7 +594,6 @@ trait UserTrait
     protected function getAuthModule(int $userId): mixed
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         if ($userId == $xar->session()->getUserId()) {
             $authModName = $xar->session()->getVar('authenticationModule');
             if (isset($authModName)) {
@@ -663,13 +634,11 @@ trait UserTrait
         }
 
         return $authModName;
-        // --- END LEGACY METHOD BODY ---
     }
 
     protected function isVarDefined(string $varName): bool
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         // Retrieve the dynamic user object if necessary
         if (!isset($this->objectRef) && $xar->mod()->isHooked('dynamicdata', 'roles')) {
             $this->objectRef = $xar->data()->getObject(['module' => 'roles']);
@@ -683,7 +652,6 @@ trait UserTrait
             return false;
         }
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**

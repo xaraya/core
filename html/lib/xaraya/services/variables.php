@@ -247,6 +247,7 @@ trait VariablesTrait
      */
     public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVarPrep::NOTHING): true
     {
+        // Note: this should be restricted to gui methods
         assert(is_int($flags));
         assert(empty($name) || preg_match("/^[a-zA-Z0-9_\[\]\"\x7f-\xff][a-zA-Z0-9_\[\]\"\x7f-\xff]*$/", $name));
 
@@ -312,8 +313,6 @@ trait VariablesTrait
             }
         }
         return true;
-        // Note: this should be restricted to gui methods
-        //return xarVar::fetch($name, $validation, $variable, $defaultValue, $flags, $prep);
     }
 
     /**
@@ -354,6 +353,7 @@ trait VariablesTrait
      */
     public function check($name, &$variable, $validation = 'isset', $defaultValue = null): true
     {
+        // Note: this should be restricted to gui methods
         // use current value or get it by name if it is not already set
         if (!isset($variable)) {
             // get variable from request if any
@@ -367,8 +367,6 @@ trait VariablesTrait
             $variable = $defaultValue;
         }
         return true;
-        // Note: this should be restricted to gui methods
-        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_SET, xarVarPrep::NOTHING);
     }
 
     /**
@@ -389,9 +387,8 @@ trait VariablesTrait
      */
     public function find($name, &$variable, $validation = 'isset', $defaultValue = null): true
     {
-        return $this->check($name, $variable, $validation, $defaultValue);
         // Note: this should be restricted to gui methods
-        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::NOT_REQUIRED, xarVarPrep::NOTHING);
+        return $this->check($name, $variable, $validation, $defaultValue);
     }
 
     /**
@@ -411,6 +408,7 @@ trait VariablesTrait
      */
     public function update($name, &$variable, $validation = 'isset', $defaultValue = null): true
     {
+        // Note: this should be restricted to gui methods
         // set the value if there is one or reset it
         $variable = $this->getRequestVar($name);
         // validate the variable or throw exception unless we have default value
@@ -424,8 +422,6 @@ trait VariablesTrait
             $variable = $defaultValue;
         }
         return true;
-        // Note: this should be restricted to gui methods
-        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_REUSE, xarVarPrep::NOTHING);
     }
 
     /**

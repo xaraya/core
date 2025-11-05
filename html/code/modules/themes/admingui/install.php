@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -63,7 +62,7 @@ class InstallMethod extends MethodClass
             ''
         );
 
-        $minfo = xarTheme::getInfo($id);
+        $minfo = $this->theme()->getInfo($id);
         if (!$adminapi->install(['regid' => $id])) {
             return;
         }

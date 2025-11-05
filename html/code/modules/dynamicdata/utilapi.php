@@ -18,6 +18,7 @@ use Xaraya\Database\DatabaseInterface;
 use Xaraya\Database\DatabaseTrait;
 use Xaraya\Database\ExternalDatabase;
 use Xaraya\DataObject\Import\PhpImporter;
+use Xaraya\Services\xar;
 use DataObjectFactory;
 use DataPropertyMaster;
 use TableObjectDescriptor;
@@ -66,7 +67,7 @@ class UtilApi extends UserApi implements DatabaseInterface
         $this->setDbModName($modName);
         // we extend from UserApi now
         // @todo verify if/when we can use $this->mod() here before/after parent constructor
-        $parent ??= xarMod::getModule($modName, $context);
+        $parent ??= xar::mod()->getModule($modName);
         parent::__construct($modName, $parent, $context);
     }
 

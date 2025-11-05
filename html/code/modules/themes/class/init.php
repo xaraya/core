@@ -14,6 +14,7 @@
  */
 
 sys::import('modules.themes.class.interfaces');
+use Xaraya\Services\xar;
 
 class ThemeInit implements iThemeInit
 {
@@ -22,7 +23,7 @@ class ThemeInit implements iThemeInit
         $dat_file = 'themes/' . $data['name'] . '/configuration.xml';
         $data = ['file' => $dat_file];
         try {
-            $objectid = xarMod::apiFunc('dynamicdata', 'util', 'import', $data);
+            $objectid = xar::mod()->apiFunc('dynamicdata', 'util', 'import', $data);
         } catch (Exception $e) {
             //
         }

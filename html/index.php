@@ -108,14 +108,14 @@ function xarMain()
     $xar->var()->find('theme', $themeName, 'str:1:');
     if (!empty($themeName)) {
         $themeName = $xar->prep()->path($themeName);
-        if (xarTheme::isAvailable($themeName)) {
+        if ($xar->theme()->isAvailable($themeName)) {
             $xar->tpl()->setThemeName($themeName);
             $xar->mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
         // Admin theme
     } elseif ($xar->user()->isLoggedIn() && $request->getType() == 'admin') {
         $themeName = $xar->mod('themes')->getVar('admin_theme');
-        if (!empty($themeName) && xarTheme::isAvailable($themeName)) {
+        if (!empty($themeName) && $xar->theme()->isAvailable($themeName)) {
             $themeName = $xar->prep()->path($themeName);
             $xar->tpl()->setThemeName(strtolower($themeName));
             $xar->mem()->set('Themes.name', 'CurrentTheme', $themeName);
@@ -129,7 +129,7 @@ function xarMain()
         $user_themes = !empty($user_themes) ? explode(',', $user_themes) : [];
 
         // check we have a valid theme
-        if (!empty($themeName) && xarTheme::isAvailable($themeName)
+        if (!empty($themeName) && $xar->theme()->isAvailable($themeName)
             && !empty($user_themes) && in_array($themeName, $user_themes)) {
             $themeName = $xar->prep()->path($themeName);
             $xar->tpl()->setThemeName(strtolower($themeName));

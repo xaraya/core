@@ -1326,7 +1326,7 @@ class RestAPIBuilder extends xarObject
             }
             $allowed[$module][] = $api;
         }
-        xarMod::init();
+        xar::mod()->init();
         $items = [];
         foreach ($moduleList as $module) {
             $items[$module] = [

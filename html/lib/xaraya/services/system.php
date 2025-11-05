@@ -46,7 +46,6 @@ trait SystemTrait
      */
     public function getVar(?string $scope, string $name): mixed
     {
-        // --- LEGACY METHOD BODY ---
         if (!isset($scope)) {
             $scope = sys::CONFIG;
         }
@@ -61,8 +60,6 @@ trait SystemTrait
         }
 
         return $this->systemVars[$scope][$name];
-        // --- END LEGACY METHOD BODY ---
-        // return xarSystemVars::get($scope, $name, $default);
     }
 
     /**
@@ -70,7 +67,6 @@ trait SystemTrait
      */
     public function setVar(string $scope, string $name, mixed $value): bool
     {
-        // --- LEGACY METHOD BODY ---
         // Allow overriding system layout if needed
         if ($scope == sys::LAYOUT) {
             $this->systemVars[$scope][$name] = $value;
@@ -83,8 +79,6 @@ trait SystemTrait
         }
         // Not supported ?
         return false;
-        // --- END LEGACY METHOD BODY ---
-        // return xarSystemVars::set($scope, $name, $value);
     }
 
     /**
@@ -92,16 +86,12 @@ trait SystemTrait
      */
     public function delVar(string $scope, string $name): bool
     {
-        // --- LEGACY METHOD BODY ---
         // Not supported ?
         return false;
-        // --- END LEGACY METHOD BODY ---
-        // return xarSystemVars::delete($scope, $name);
     }
 
     protected function preload(string $scope)
     {
-        // --- LEGACY METHOD BODY ---
         $fileName = sys::varpath() . '/';
         if ($scope == sys::LOG) {
             $fileName .= 'logs/';
@@ -118,8 +108,6 @@ trait SystemTrait
         include $fileName;
         /** @phpstan-ignore-next-line */
         $this->systemVars[$scope] = $systemConfiguration;
-        // --- END LEGACY METHOD BODY ---
-        // xarSystemVars::preload($scope);
     }
 }
 

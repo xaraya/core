@@ -68,7 +68,6 @@ class ObjectCache extends ServiceClass
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         $this->cacheTime = $config['Object.TimeExpiration'] ?? 7200;
         $this->cacheSizeLimit = $config['Object.SizeLimit'] ?? 2097152;
         $this->cacheMethods = $config['Object.CacheMethods'] ?? ['view' => 1, 'display' => 1];
@@ -94,12 +93,10 @@ class ObjectCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheKey($objectName, $methodName = 'view', $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return null;
         }
@@ -153,12 +150,10 @@ class ObjectCache extends ServiceClass
 
         // return the cacheKey
         return $this->cacheKey;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheSettings()
     {
-        // --- LEGACY METHOD BODY ---
         if (!isset($this->cacheSettings)) {
             $xar = $this->getParent();
             $settings = [];
@@ -169,12 +164,10 @@ class ObjectCache extends ServiceClass
             $this->cacheSettings = $settings;
         }
         return $this->cacheSettings;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function checkCachingRules($objectName, $methodName = 'view', $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         // we only cache the top-most object method in case of nested methods
         if (!empty($this->cacheKey)) {
             return false;
@@ -211,12 +204,10 @@ class ObjectCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function isCached($cacheKey = null)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return false;
         }
@@ -237,12 +228,10 @@ class ObjectCache extends ServiceClass
         }
 
         return $result;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return '';
         }
@@ -279,12 +268,10 @@ class ObjectCache extends ServiceClass
             }
         }
         return $content['output'];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setCached($cacheKey, $value)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
@@ -327,57 +314,46 @@ class ObjectCache extends ServiceClass
 
         // we're done with this cacheKey
         $this->cacheKey = null;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function flushCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
 
         $this->cacheStorage->flushCached($cacheKey);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setPageTitle($title = null, $module = null)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheKey)) {
             return;
         }
         $this->pageTitle = [$title, $module];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function addStyle(array $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheKey)) {
             return;
         }
         $this->styleList[] = $args;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function addJavaScript(array $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheKey)) {
             return;
         }
         $this->scriptList[] = $args;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function addMeta(array $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheKey)) {
             return;
         }
         $this->metaList[] = $args;
-        // --- END LEGACY METHOD BODY ---
     }
 }

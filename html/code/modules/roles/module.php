@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Roles;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get roles module classes via xarMod::getModule()
+ * Get roles module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

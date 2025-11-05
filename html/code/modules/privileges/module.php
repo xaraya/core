@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Privileges;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get privileges module classes via xarMod::getModule()
+ * Get privileges module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

@@ -56,7 +56,7 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_replace(xarSession::getConfig(), $config);
+        $this->config = array_replace(xar::session()->getConfig(), $config);
         $this->cookieName = $this->config['cookieName'] ?? SessionHandler::COOKIE;
         $this->prefix = SessionHandler::PREFIX;
         $this->anonId = intval(xar::config()->getVar('Site.User.AnonymousUID', 5));

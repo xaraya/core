@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use Exception;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -154,7 +153,7 @@ class BootstrapMethod extends MethodClass
         $themelist = ['print','rss','default'];
         foreach ($themelist as $theme) {
             // Set state to inactive
-            $regid = xarTheme::getIDFromName($theme);
+            $regid = $this->theme()->getIDFromName($theme);
             if (isset($regid)) {
                 if (!$this->mod()->apiFunc('themes', 'admin', 'setstate', ['regid' => $regid,'state' => ixarTheme::STATE_INACTIVE])) {
                     throw new Exception("Setting state of theme with regid: $regid failed");

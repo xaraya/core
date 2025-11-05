@@ -34,40 +34,31 @@ class AliasHelper extends ServiceClass
      */
     public function resolve(string $alias): string
     {
-        // --- LEGACY METHOD BODY ---
         if ($alias == 'object') {
             return $alias;
         }
         $xar = $this->getParent();
         $aliasesMap = $xar->config()->getVar('System.ModuleAliases');
         return (!empty($aliasesMap[$alias])) ? $aliasesMap[$alias] : $alias;
-        // --- END LEGACY METHOD BODY ---
-        // return xarModAlias::resolve($alias);
     }
 
     public function set($alias, $modName): mixed
     {
-        // --- LEGACY METHOD BODY ---
         $mod = $this->getParent()->mod();
         if (!$mod->apiLoad('modules', 'admin')) {
             return null;
         }
         $args = ['modName' => $modName, 'aliasModName' => $alias];
         return $mod->apiFunc('modules', 'admin', 'add_module_alias', $args);
-        // --- END LEGACY METHOD BODY ---
-        // return xarModAlias::set($alias, $modName);
     }
 
     public function remove($alias, $modName): mixed
     {
-        // --- LEGACY METHOD BODY ---
         $mod = $this->getParent()->mod();
         if (!$mod->apiLoad('modules', 'admin')) {
             return null;
         }
         $args = ['modName' => $modName, 'aliasModName' => $alias];
         return $mod->apiFunc('modules', 'admin', 'delete_module_alias', $args);
-        // --- END LEGACY METHOD BODY ---
-        // return xarModAlias::delete($alias, $modName);
     }
 }

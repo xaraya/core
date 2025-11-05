@@ -83,15 +83,12 @@ trait RequestTrait
 
     public static function setRequestClass(string $className): void
     {
-        // --- LEGACY METHOD BODY ---
         self::$requestClass = $className;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /** @param array<string, mixed> $config */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($config)) {
             if (!empty($this->initialized)) {
                 return true;
@@ -108,9 +105,6 @@ trait RequestTrait
         $request->initialize();
         $this->initialized = true;
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // this will be relying on RequestService in the future
-        //return xarServer::init($config, $context);
     }
 
     /**
@@ -120,14 +114,11 @@ trait RequestTrait
     public function getConfig(): array
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         $systemArgs = [
             'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
             //'generateXMLURLs'        => true,
         ];
         return $systemArgs;
-        // --- END LEGACY METHOD BODY ---
-        //return xarServer::getConfig();
     }
 
     /** @param array<string, mixed> $config */
@@ -144,7 +135,6 @@ trait RequestTrait
      */
     public function getInstance(): RequestFacade
     {
-        // --- LEGACY METHOD BODY ---
         // moved to static services class
         $instance = $this->getParent()->getRequestInstance();
         if (!isset($instance)) {
@@ -155,7 +145,6 @@ trait RequestTrait
             $instance->initialize();
         }
         return $instance;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -163,10 +152,8 @@ trait RequestTrait
      */
     public function setInstance(RequestFacade $instance): void
     {
-        // --- LEGACY METHOD BODY ---
         // moved to static services class
         $this->getParent()->setRequestInstance($instance);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -175,9 +162,7 @@ trait RequestTrait
     public function newInstance(): RequestFacade
     {
         // Set up the request instance with current context
-        // --- LEGACY METHOD BODY ---
         return new self::$requestClass($this->args, $this->getContext());
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -210,7 +195,6 @@ trait RequestTrait
      */
     public function getURL(array $params = []): string
     {
-        // --- LEGACY METHOD BODY ---
         $server   = $this->getHost();
         $protocol = $this->getProtocol();
         $baseurl  = "$protocol://$server";
@@ -222,13 +206,10 @@ trait RequestTrait
             $baseurl .= $path;
         }
         return $baseurl . $request;
-        // --- END LEGACY METHOD BODY ---
-        //return xarServer::getCurrentURL($params, $generateXMLURL);
     }
 
     public function getRequestString(array $params = []): string
     {
-        // --- LEGACY METHOD BODY ---
         // get current URI
         $request = $this->getServerVar('REQUEST_URI');
 
@@ -300,8 +281,6 @@ trait RequestTrait
         $request = substr($request, 0, -1);
 
         return $request;
-        // --- END LEGACY METHOD BODY ---
-        //return xarServer::getCurrentRequestString($params, $generateXMLURL, $target);
     }
 
     /**
@@ -309,7 +288,6 @@ trait RequestTrait
      */
     public function getBaseURI(): string
     {
-        // --- LEGACY METHOD BODY ---
         // Allows overriding the Base URI from config.php
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseURI = '' in config.php
@@ -352,8 +330,6 @@ trait RequestTrait
             $path = '';
         }
         return $path;
-        // --- END LEGACY METHOD BODY ---
-        //return xarServer::getBaseURI();
     }
 
     /**
@@ -362,16 +338,12 @@ trait RequestTrait
      */
     public function getServerVar(string $varName): mixed
     {
-        // --- LEGACY METHOD BODY ---
         return $this->getInstance()->getServerVar($varName);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setServerVar(string $varName, mixed $value): void
     {
-        // --- LEGACY METHOD BODY ---
         $this->getInstance()->setServerVar($varName, $value);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -380,7 +352,6 @@ trait RequestTrait
      */
     public function getVar(string $varName, ?string $allowOnlyMethod = null): mixed
     {
-        // --- LEGACY METHOD BODY ---
         // First check in $_POST
         if (strpos($varName, '[') === false) {
             $value = $this->getInstance()?->getBodyVar($varName) ?? null;
@@ -438,20 +409,16 @@ trait RequestTrait
         //    $value = $this->stripVarSlashes($value);
         //}
         return $value;
-        // --- END LEGACY METHOD BODY ---
     }
 
     protected function stripVarSlashes($value)
     {
-        // --- LEGACY METHOD BODY ---
         $value = is_array($value) ? array_map(['self','stripVarSlashes'], $value) : stripslashes($value);
         return $value;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getHost(): string
     {
-        // --- LEGACY METHOD BODY ---
         $server = (string) $this->getServerVar('HTTP_HOST');
         if (empty($server)) {
             // @todo default to empty string here?
@@ -464,13 +431,11 @@ trait RequestTrait
             }
         }
         return $server;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getProtocol(): string
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         try {
             if ($xar->config()->getVar('Site.Core.EnableSecureServer')) {
                 if (preg_match('/^http:/', $this->getServerVar('REQUEST_URI') ?? '')) {
@@ -484,7 +449,6 @@ trait RequestTrait
             return self::PROTOCOL_HTTP;
         }
         return self::PROTOCOL_HTTP;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -500,7 +464,6 @@ trait RequestTrait
      */
     public function isLocalReferer(): bool
     {
-        // --- LEGACY METHOD BODY ---
         $server  = $this->getHost();
         $referer = $this->getServerVar('HTTP_REFERER');
 
@@ -509,8 +472,6 @@ trait RequestTrait
         } else {
             return false;
         }
-        // --- END LEGACY METHOD BODY ---
-        //return xarController::isLocalReferer();
     }
 
     /**
@@ -519,14 +480,11 @@ trait RequestTrait
     public function isSameReferer(): bool
     {
         // @todo this should parse referrer url according to routes etc. too - see xarRequest::getInfo()
-        // --- LEGACY METHOD BODY ---
         //$referer = new xarRequest($this->getServerVar('HTTP_REFERER'));
         //$refererinfo = $referer->getInfo();
         $refererinfo = $this->getRequest()->getInfo($this->getServerVar('HTTP_REFERER'));
         $module = $this->getRequest()->getModule();
         return $module == $refererinfo[0];
-        // --- END LEGACY METHOD BODY ---
-        //return xarController::isRefererSameModule();
     }
 
     /**
@@ -535,19 +493,15 @@ trait RequestTrait
      */
     public function getRequest(mixed $url = null): xarRequest
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->request)) {
             $this->setRequest($url);
         }
         return $this->request;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setRequest(mixed $url = null): void
     {
-        // --- LEGACY METHOD BODY ---
         $this->request = new xarRequest($url);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -557,7 +511,6 @@ trait RequestTrait
      */
     public function getArrayVar(mixed $var, string $varName): mixed
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($var) || !is_array($var)) {
             return null;
         }
@@ -581,7 +534,6 @@ trait RequestTrait
         // 2nd: pass along key2][...]
         // 3rd: pass along ...]
         return $this->getArrayVar($var[$key], implode('[', $rest));
-        // --- END LEGACY METHOD BODY ---
     }
 }
 

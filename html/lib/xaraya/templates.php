@@ -53,6 +53,7 @@ class BLException extends xarExceptions
 
 sys::import('xaraya.variables.config');
 sys::import('xaraya.services.xar');
+use Xaraya\Services\TemplatingService;
 use Xaraya\Services\xar;
 
 /**
@@ -85,6 +86,16 @@ class xarTpl extends xarObject
     protected static $showPHPCommentBlockInTemplates;
     protected static $showTemplateFilenames;
     protected static bool $initialized = false;
+    protected static ?TemplatingService $tplService = null;
+
+    protected static function tpl(): TemplatingService
+    {
+        if (!isset(self::$tplService)) {
+            $xar = xar::getServicesClass();
+            self::$tplService = $xar->tpl();
+        }
+        return self::$tplService;
+    }
 
     /**
      * Initializes the BlockLayout Template Engine
@@ -100,61 +111,14 @@ class xarTpl extends xarObject
     **/
     public static function init(array $args = [])
     {
-        if (empty($args)) {
-            if (self::$initialized) {
-                return true;
-            }
-            $args = self::getConfig();
-        }
-        // This is the theme directory, solo (aka, themename)
-        self::setThemeDir($args['defaultThemeDir']);
-
-        // This is the default document type
-        if (isset($args['defaultDocType'])) {
-            self::$doctype = $args['defaultDocType'];
-        }
-
-        // This should be always true or better defined if it's
-        // a client thing (js internal code generation for example)
-        self::$generateXMLURLs = $args['generateXMLURLs'];
-
-        $pageTemplateName = $args['pageTemplateName'] ?? 'default';
-        if (!self::setPageTemplateName($pageTemplateName)) {
-            // If there is no page template, we can't show anything
-            throw new FileNotFoundException($pageTemplateName . '.xt', "xarTpl::init: Called a nonexistent #(1) page in theme directory '" . self::getThemeDir() . "'");
-        }
-
-        // initialize context for templating service
-        xar::tpl()->init([
-            'themeDir'         => self::$themeDir,
-            'themeName'        => self::$themeName,
-            'pageTemplateName' => self::$pageTemplateName,
-            'generateXMLURLs'  => self::$generateXMLURLs,
-            'doctype'          => self::$doctype,
-            'baseDir'          => self::getBaseDir(),
-            'pageTitle'        => self::getPageTitle(),
-        ]);
-
-        // @todo is the core define still needed now?
-        sys::import('xaraya.caching.template');
-        xarTemplateCache::init(sys::varpath() . xarConst::TPL_CACHEDIR, $args['enableTemplatesCaching']);
-
-        // This is wrong here as well, but it's better at least than in modules.php
-        sys::import('xaraya.themes');
-        self::$initialized = true;
-        return true;
+        // static cache for migration
+        self::$tplService = null;
+        return self::tpl()->init($args);
     }
 
     public static function getConfig()
     {
-        $xar = xar::getServicesClass();
-        $systemArgs = [
-            'enableTemplatesCaching' => $xar->config()->getVar('Site.BL.CacheTemplates'),
-            'defaultThemeDir'        => $xar->mod('themes')->getVar('default_theme') ?? 'default',
-            'generateXMLURLs'        => true,
-            'defaultDocType'         => $xar->config()->getVar('Site.BL.DocType'),
-        ];
-        return $systemArgs;
+        return self::tpl()->getConfig();
     }
 
     /**
@@ -169,20 +133,7 @@ class xarTpl extends xarObject
     **/
     public static function setBaseDir($themesDir)
     {
-        assert($themesDir != "" && $themesDir[0] != "/");
-        $xar = xar::getServicesClass();
-
-        $xar->log()->info("xarTpl::setBaseDir: Setting the theme base dir to $themesDir");
-
-        if (!is_dir($themesDir)) {
-            // no directory
-            throw new DirectoryNotFoundException($themesDir, 'xarTpl::setBaseDir: Nonexistent base themes directory #(1)');
-        } elseif (!is_dir($themesDir . '/' . self::getThemeName())) {
-            // found a directory, but the current theme isn't in it
-            throw new DirectoryNotFoundException([self::getThemeName(), $themesDir], 'xarTpl::setBaseDir: Nonexistant theme #(1) in base themes directory #(2)');
-        }
-        $xar->config()->setVar('Site.BL.ThemesDirectory', $themesDir);
-        return true;
+        return self::tpl()->setBaseDir($themesDir);
     }
 
     /**
@@ -193,12 +144,7 @@ class xarTpl extends xarObject
     **/
     public static function getBaseDir()
     {
-        try {
-            $themesdir = sys::web() . xar::config()->getVar('Site.BL.ThemesDirectory', 'themes');
-        } catch (Exception $e) {
-            $themesdir = sys::web() . 'themes';
-        }
-        return $themesdir;
+        return self::tpl()->getBaseDir();
     }
 
     /**
@@ -211,17 +157,7 @@ class xarTpl extends xarObject
      */
     public static function setThemeName($themeName)
     {
-        assert($themeName != "" && $themeName[0] != "/");
-
-        xar::log()->info("xarTpl::setThemeName: Setting the theme name to $themeName");
-
-        $currentBase = self::getBaseDir();
-        if (!is_dir($currentBase . '/' . $themeName)) {
-            // @checkme: return false here vs throw exception in setThemeDir ?
-            return false;
-        }
-        self::setThemeNameAndDir($themeName);
-        return true;
+        return self::tpl()->setThemeName($themeName);
     }
 
     /**
@@ -235,37 +171,7 @@ class xarTpl extends xarObject
      */
     public static function setThemeDir($themeDir)
     {
-        assert($themeDir != "" && $themeDir[0] != "/");
-
-        xar::log()->info("xarTpl::setThemeDir: Setting the theme dir to $themeDir");
-
-        $currentBase = self::getBaseDir();
-        if (is_dir($currentBase . '/' . $themeDir)) {
-            // use current
-        } elseif (is_dir($currentBase . '/common')) {
-            // fall back to common
-            $themeDir = 'common';
-        } else {
-            // @checkme: throw exception here vs return false in setThemeName ?
-            throw new DirectoryNotFoundException("$currentBase/$themeDir", 'xarTpl::setThemeDir: Nonexistent theme directory #(1)');
-        }
-        self::setThemeNameAndDir($themeDir);
-        return true;
-    }
-
-    /**
-     * Private helper function for xarTpl::setThemeName and xarTpl::setThemeDir
-     *
-     * @access private
-     * @param  string $name Name of the theme
-     * @todo theme name and dir are not required to be identical
-     * @return void
-     */
-    private static function setThemeNameAndDir($name)
-    {
-        // dir and name are still required to be the same
-        self::$themeName = $name;
-        self::$themeDir  = self::getBaseDir() . '/' . $name;
+        return self::tpl()->setThemeDir($themeDir);
     }
 
     /**
@@ -277,19 +183,7 @@ class xarTpl extends xarObject
      */
     public static function getThemeName()
     {
-        if (isset(self::$themeName)) {
-            return self::$themeName;
-        }
-        // If it is not set, set it return the default theme.
-        // @checkme: modules is a depency of templates, redundant check?
-        if (method_exists('xarModVars', 'get')) {
-            $themeName = xar::mod('themes')->getVar('default_theme');
-            if (!empty($themeName)) {
-                self::setThemeName($themeName);
-            }
-        }
-        assert(isset(self::$themeName));
-        return self::$themeName;
+        return self::tpl()->getThemeName();
     }
 
     /**
@@ -301,39 +195,17 @@ class xarTpl extends xarObject
      */
     public static function getThemeDir($theme = null)
     {
-        $currentBase = self::getBaseDir();
-        if (isset($theme) && is_dir($currentBase . '/' . $theme)) {
-            return $currentBase . '/' . $theme;
-        }
-        return self::$themeDir;
+        return self::tpl()->getThemeDir();
     }
 
     public static function getThemeUrl($theme = null)
     {
-        $themeDir = self::getThemeDir($theme);
-
-        // Turn relative path into an absolute URL
-        $webDir = sys::web();
-        if (!empty($webDir) && strpos($themeDir, $webDir) === 0) {
-            $themeDir = substr($themeDir, strlen($webDir));
-        }
-        $themeUrl = xar::ctl()->getBaseURL() . $themeDir;
-
-        return $themeUrl;
+        return self::tpl()->getThemeUrl($theme);
     }
 
     public static function getCodeUrl()
     {
-        $codeDir = sys::code();
-
-        // Turn relative path into an absolute URL
-        $webDir = sys::web();
-        if (!empty($webDir) && strpos($codeDir, $webDir) === 0) {
-            $codeDir = substr($codeDir, strlen($webDir));
-        }
-        $codeUrl = xar::ctl()->getBaseURL() . $codeDir;
-
-        return $codeUrl;
+        return self::tpl()->getCodeUrl();
     }
 
     /**
@@ -345,15 +217,7 @@ class xarTpl extends xarObject
      */
     public static function setPageTemplateName($templateName)
     {
-        assert($templateName != "");
-
-        xar::log()->info("xarTpl::setPageTemplateName: Setting the template name to $templateName");
-
-        if (!self::exists('theme', self::getThemeName(), $templateName, null, 'pages')) {
-            return false;
-        }
-        self::$pageTemplateName = $templateName;
-        return true;
+        return self::tpl()->setPageTemplateName($templateName);
     }
 
     /**
@@ -364,7 +228,7 @@ class xarTpl extends xarObject
      */
     public static function getPageTemplateName()
     {
-        return self::$pageTemplateName;
+        return self::tpl()->getPageTemplateName();
     }
 
     /**
@@ -376,12 +240,7 @@ class xarTpl extends xarObject
      */
     public static function setDoctype($doctypeName)
     {
-        assert(is_string($doctypeName));
-
-        xar::log()->info("xarTpl::setDoctype: Setting the doc type to $doctypeName");
-
-        self::$doctype = $doctypeName;
-        return true;
+        return self::tpl()->setDoctype($doctypeName);
     }
 
     /**
@@ -392,7 +251,7 @@ class xarTpl extends xarObject
      */
     public static function getDoctype()
     {
-        return self::$doctype;
+        return self::tpl()->getDoctype();
     }
 
     /**
@@ -406,43 +265,7 @@ class xarTpl extends xarObject
      */
     public static function setPageTitle($title = null, $module = null)
     {
-        $xar = xar::getServicesClass();
-        // keep track of page title when we're caching
-        $xar->cache()->setPageTitle($title, $module);
-
-        $xar->log()->info("xarTpl::setPageTitle: Setting pageTitle to $title");
-
-        // @checkme: modules is a dependency of templates, redundant check?
-        if (!method_exists('xarModVars', 'Get') || !empty($xar->mem()->get('installer', 'installing'))) {
-            self::$pageTitle = $title;
-        } else {
-            $order      = $xar->mod('themes')->getVar('SiteTitleOrder');
-            $separator  = $xar->mod('themes')->getVar('SiteTitleSeparator');
-            if (empty($module)) {
-                // FIXME: the ucwords is layout stuff which doesn't belong here
-                // <chris/> Why don't we just use display name then?
-                $module = ucwords($xar->mod()->getDisplayName($xar->mod()->getName()));
-            }
-            switch (strtolower($order)) {
-                case 'default':
-                default:
-                    self::$pageTitle = $xar->mod('themes')->getVar('SiteName') . $separator . $module . $separator . $title;
-                    break;
-                case 'sp':
-                    self::$pageTitle = $xar->mod('themes')->getVar('SiteName') . $separator . $title;
-                    break;
-                case 'mps':
-                    self::$pageTitle = $module . $separator . $title . $separator . $xar->mod('themes')->getVar('SiteName');
-                    break;
-                case 'pms':
-                    self::$pageTitle = $title . $separator . $module . $separator . $xar->mod('themes')->getVar('SiteName');
-                    break;
-                case 'to':
-                    self::$pageTitle = $title;
-                    break;
-            }
-        }
-        return true;
+        return self::tpl()->setPageTitle($title, $module);
     }
 
     /**
@@ -453,10 +276,7 @@ class xarTpl extends xarObject
      */
     public static function getPageTitle()
     {
-        if (isset(self::$pageTitle)) {
-            return self::$pageTitle;
-        }
-        return '';
+        return self::tpl()->getPageTitle();
     }
 
     /**
@@ -475,44 +295,7 @@ class xarTpl extends xarObject
      */
     public static function module($modName, $modType, $funcName, $tplData = [], $templateName = null)
     {
-        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
-            if (xarTwigTpl::isModuleSupported($modName)) {
-                return xarTwigTpl::module($modName, $modType, $funcName, $tplData, $templateName);
-            }
-        }
-        // Basename of module template is apitype-functioname
-        $tplBase        = "$modType-$funcName";
-
-        // Get the right source filename (current > common > module)
-        $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $templateName);
-
-        // Common data for BL
-        $tplData['_bl_module_name'] = $modName;
-        $tplData['_bl_module_type'] = $modType;
-        $tplData['_bl_module_func'] = $funcName;
-        $tplData['_bl_template']    = $sourceFileName;
-        $tpl = (object) null;
-        $tpl->pageTitle = self::getPageTitle();
-        $tplData['tpl'] = $tpl;
-
-        $xar = xar::getServicesClass();
-        // TODO: make this work different, for example:
-        // 1. Only create a link somewhere on the page,
-        //    when clicked opens a page with the variables on that page
-        // 2. Create a page in the themes module with an interface
-        // 3. Use 1. to link to 2.
-        // @checkme: modules is a depency of templates, redundant check?
-        if (method_exists('xarModVars', 'get') && method_exists('xarUser', 'getVar') && empty($xar->mem()->get('installer', 'installing'))) {
-            if ($xar->mod('themes')->getVar('variable_dump') && $xar->user()->isDebugAdmin()) {
-                echo '<pre>',var_export($tplData, 1),'</pre>';
-            }
-        }
-
-        if (empty($sourceFileName)) {
-            throw new FileNotFoundException("Module: [$modName],[$tplBase],[$templateName]");
-        }
-        return self::executeFromFile($sourceFileName, $tplData);
+        return self::tpl()->module($modName, $modType, $funcName, $tplData, $templateName);
     }
 
     /**
@@ -531,200 +314,7 @@ class xarTpl extends xarObject
      */
     public static function block($modName, $blockType, $tplData = [], $tplName = null, $tplBase = null, $tplModule = null)
     {
-        // use name of blocktype as base unless over-ridden
-        $tplBase = empty($tplBase) ? $blockType : $tplBase;
-        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
-            if (xarTwigTpl::isBlockSupported($tplBase, $modName)) {
-                return xarTwigTpl::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
-            }
-        }
-        if (!empty($modName)) {
-            // get module block template (current > common > module)
-            $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $tplName, 'blocks');
-        } else {
-            // get standalone block template (current > common > module override > block)
-            $sourceFileName = self::getScopeFileName('block', $blockType, $tplBase, $tplName, '', $tplModule);
-        }
-        if (empty($sourceFileName)) {
-            $msg = "Block: [#(1)],[#(2)],[#(3)]";
-            $vars = [$modName, $tplBase, $tplName];
-            throw new FileNotFoundException($vars, $msg);
-        }
-        return self::executeFromFile($sourceFileName, $tplData);
-
-    }
-
-    /**
-     * Summary of exists
-     * @param string $scope
-     * @param string $package
-     * @param string $tplBase
-     * @param ?string $tplName
-     * @param mixed $tplPart
-     * @return bool
-     */
-    public static function exists($scope, $package, $tplBase, $tplName = null, $tplPart = '')
-    {
-        return (bool) self::getScopeFileName($scope, $package, $tplBase, $tplName, $tplPart);
-    }
-
-    /**
-     * Determine the template sourcefile to use
-     *
-     * Based on the scope, the module|property|block|theme name, the basename for the template
-     * a possible override and a subpart and the active
-     * theme, determine the template source we should use and loads
-     * the appropriate translations based on the outcome (see todo).
-     *
-     * @access private
-     * @param  string $scope        scope in which to look for templates [theme|module|block|property]
-     * @param  string $package      name of the theme|module|block|property supplying the template
-     * @param  string $tplBase      The base name for the template
-     * @param  ?string $tplName      The name of the template to use, if any
-     * @param  string $tplPart      Optional sub path to look for templates in, default ''
-     * @param  ?string $callerMod    Optional name of module calling this package (looks here first if supplied)
-     * @return string the path [including sys::code()] to an existing template sourcefile, or empty
-     *
-     * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction)
-     */
-
-    private static function getScopeFileName($scope, $package, $tplBase, $tplName = null, $tplPart = '', $callerMod = null)
-    {
-        $xar = xar::getServicesClass();
-        // prep input
-        $package = xarVarPrep::path($package);
-        $tplBase = xarVarPrep::path($tplBase);
-        if (!empty($tplName)) {
-            $tplName = xarVarPrep::path($tplName);
-        }
-        if (!empty($tplPart)) {
-            $tplPart = strtr(trim(xarVarPrep::path($tplPart)), " ", "/");
-        }
-        $canTemplateName = strtr($tplName ?? "", "-", "/");
-        $canonical = ($canTemplateName == $tplName) ? false : true;
-
-        $cachename = "$scope:$package:$tplBase:$tplName:$tplPart:$callerMod";
-        // cache frequently-used sourcefilenames
-        if ($xar->mem()->has('Templates.Element', $cachename)) {
-            return $xar->mem()->get('Templates.Element', $cachename);
-        }
-
-        // default paths
-        $themePath = self::getThemeDir();
-        $commonPath = self::getThemeDir('common');
-        $codePath = sys::code();
-
-        if ($scope == 'theme') {
-            // theme scope
-            // if package isn't current theme or common theme, look there first
-            if ($package != self::getThemeName() && $package != 'common') {
-                $basepaths[] = self::getThemeDir($package);
-            }
-            $basepaths[] = $themePath;
-            $basepaths[] = $commonPath;
-        } else {
-
-            switch ($scope) {
-                case 'module':
-                    $packages = 'modules';
-                    break;
-                case 'block':
-                    // standalone blocks
-                    $packages = 'blocks';
-                    break;
-                case 'property':
-                    // standalone properties
-                    $packages = 'properties';
-                    break;
-                default:
-                    $vars = [$scope];
-                    $msg = 'Invalid scope "#(1)" for core function xarTpl::getScopeFileName()';
-                    throw new BadParameterException($vars, $msg);
-            }
-            if (!empty($callerMod) && $callerMod != $package) {
-                if ($scope != 'module') {
-                    $basepaths = [
-                        "$themePath/modules/$callerMod/$packages/",
-                        "$commonPath/modules/$callerMod/$packages/",
-                        "{$codePath}modules/$callerMod/xartemplates/$packages/",
-                        "$themePath/modules/$callerMod/",
-                        "$commonPath/modules/$callerMod/",
-                        "{$codePath}modules/$callerMod/xartemplates/",
-                        "$themePath/$packages/$package/",
-                        "$commonPath/$packages/$package/",
-                        "{$codePath}{$packages}/$package/xartemplates/",
-                    ];
-                } else {
-                    $basepaths = [
-                        "$themePath/modules/$callerMod/",
-                        "$commonPath/modules/$callerMod/",
-                        "{$codePath}modules/$callerMod/xartemplates/",
-                        "$themePath/$packages/$package/",
-                        "$commonPath/$packages/$package/",
-                        "{$codePath}{$packages}/$package/xartemplates/",
-                    ];
-                }
-            } else {
-                $basepaths = [
-                    "$themePath/$packages/$package/",
-                    "$commonPath/$packages/$package/",
-                    "{$codePath}{$packages}/$package/xartemplates/",
-                ];
-            }
-
-        }
-
-        $paths = [];
-        // approach this the other way, look for tplBase-tplName in all paths first
-        if (!empty($tplName)) {
-            foreach ($basepaths as $basepath) {
-                $paths[] = "$basepath/$tplPart/$tplBase-$tplName.xt";
-            }
-        }
-        // then look for tplBase... (checkme: this is cfr getSourceFileName order)
-        foreach ($basepaths as $basepath) {
-            $paths[] = "$basepath/$tplPart/$tplBase.xt";
-        }
-        // then look at canonical... (see checkme)
-        if ($canonical) {
-            foreach ($basepaths as $basepath) {
-                $paths[] = "$basepath/$tplPart/$canTemplateName.xt";
-            }
-        }
-
-        $debug = 0;
-        // Debug display
-        if ($debug) {
-            foreach ($paths as $path) {
-                $path = preg_replace('%\/\/+%', '/', $path);
-                echo $xar->mls()->translate('Possible location: ') . $path . "<br/>";
-            }
-        }
-
-        $sourceFileName = '';
-        if (count($paths) > 0) {
-            foreach ($paths as $file) {
-
-                if (!file_exists($file)) {
-                    continue;
-                }
-
-                // Some parts may have been empty, remove extra slashes
-                $sourceFileName = preg_replace('%\/\/+%', '/', $file);
-
-                // Debug display
-                if ($debug) {
-                    echo "<b>" . $xar->mls()->translate('Chosen: ') . $sourceFileName . "</b><br/>";
-                }
-                break;
-            }
-        }
-
-        $xar->mem()->set('Templates.Element', $cachename, $sourceFileName);
-
-        return $sourceFileName;
-
+        return self::tpl()->block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
     }
 
     /**
@@ -741,37 +331,7 @@ class xarTpl extends xarObject
      */
     public static function object($modName, $objectName, $tplType = 'showdisplay', $tplData = [], $tplBase = null)
     {
-        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
-            if (xarTwigTpl::isObjectSupported($objectName, $modName)) {
-                return xarTwigTpl::object($modName, $objectName, $tplType, $tplData, $tplBase);
-            }
-        }
-        $xar = xar::getServicesClass();
-        $modName = xarVarPrep::path($modName);
-        $objectName = xarVarPrep::path($objectName);
-        $tplType = xarVarPrep::path($tplType);
-        $tplBase   = empty($tplBase) ? $tplType : xarVarPrep::path($tplBase);
-        $cachename = "$modName:$objectName:$tplType:$tplBase:objects";
-
-        // cache frequently-used sourcefilenames for DD elements
-        if ($xar->mem()->has('Templates.DDElement', $cachename)) {
-            $sourceFileName = $xar->mem()->get('Templates.DDElement', $cachename);
-            return self::executeFromFile($sourceFileName, $tplData);
-        }
-
-        $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $objectName, 'objects');
-        if (empty($sourceFileName) && $modName != 'dynamicdata') {
-            $sourceFileName = self::getScopeFileName('module', 'dynamicdata', $tplBase, $objectName, 'objects');
-        }
-
-        if (empty($sourceFileName)) {
-            throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$objectName]");
-        }
-
-        $xar->mem()->set('Templates.DDElement', $cachename, $sourceFileName);
-
-        return self::executeFromFile($sourceFileName, $tplData);
+        return self::tpl()->object($modName, $objectName, $tplType, $tplData);
     }
 
     /**
@@ -789,65 +349,7 @@ class xarTpl extends xarObject
      */
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = [], $tplBase = null)
     {
-        // @todo check and handle stand-alone properties with module 'auto' + adapt includes path
-        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
-            if (xarTwigTpl::isPropertySupported($propertyName, $modName)) {
-                return xarTwigTpl::property($modName, $propertyName, $tplType, $tplData, $tplBase);
-            }
-        }
-        $xar = xar::getServicesClass();
-        $modName = xarVarPrep::path($modName);
-        $propertyName = xarVarPrep::path($propertyName);
-        $tplType = xarVarPrep::path($tplType);
-        $tplBase   = empty($tplBase) ? $tplType : xarVarPrep::path($tplBase);
-        $cachename = "$modName:$propertyName:$tplType:$tplBase:properties";
-
-        // cache frequently-used sourcefilenames for DD elements
-        if ($xar->mem()->has('Templates.DDElement', $cachename)) {
-            $sourceFileName = $xar->mem()->get('Templates.DDElement', $cachename);
-            return self::executeFromFile($sourceFileName, $tplData);
-        }
-
-        $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $propertyName, 'properties');
-
-        // Property fall-back to default template in the module the property belongs to
-        if (empty($sourceFileName)) {
-            $tplModule = DataPropertyMaster::getProperty(['type' => $propertyName])->tplmodule;
-
-            if ($modName == 'auto') {
-                // standalone property called in standalone context
-                $sourceFileName = self::getScopeFileName('property', $propertyName, $tplBase, $propertyName);
-
-                if (empty($sourceFileName)) {
-                    // property inherits its template
-                    $sourceFileName = self::getScopeFileName('module', $tplModule, $tplBase, $propertyName, 'properties', $modName);
-                }
-            } else {
-                // property called in module context
-                if ($tplModule == 'auto') {
-                    // standalone property (caller > owner)
-                    $sourceFileName = self::getScopeFileName('property', $propertyName, $tplBase, $propertyName, '', $modName);
-                } else {
-                    // module property (caller > owner)
-                    $sourceFileName = self::getScopeFileName('module', $tplModule, $tplBase, $propertyName, 'properties', $modName);
-
-                }
-            }
-        }
-
-        // fall back on dynamicdata template
-        if (empty($sourceFileName)) {
-            $sourceFileName = self::getScopeFileName('module', 'dynamicdata', $tplBase, $propertyName, 'properties');
-        }
-
-        if (empty($sourceFileName)) {
-            throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$propertyName]");
-        }
-
-        $xar->mem()->set('Templates.DDElement', $cachename, $sourceFileName);
-
-        return self::executeFromFile($sourceFileName, $tplData);
+        return self::tpl()->property($modName, $propertyName, $tplType, $tplData, $tplBase);
     }
 
     /**
@@ -887,121 +389,7 @@ class xarTpl extends xarObject
     */
     public static function getImage($fileName, $scope = null, $package = null)
     {
-        // return absolute URIs and URLs "as is"
-        if (empty($fileName) || substr($fileName, 0, 1) == '/' || preg_match('/^https?\:\/\//', $fileName)) {
-            return $fileName;
-        }
-
-        // handle legacy calls still passing module as second param
-        // @todo remove this when all modules are passing correct params
-        if ($scope != 'theme' && $scope != 'module' && $scope != 'property' && $scope != 'block') {
-            // assume module scope
-            $package = $scope;
-            $scope = 'module';
-        }
-        $xar = xar::getServicesClass();
-
-        $paths = [];
-        switch ($scope) {
-            case 'theme':
-                // optional theme images to look in passed as third param
-                if (!empty($package)) {
-                    $package = xarVarPrep::path($package);
-                    $paths[] = self::getThemeDir($package) . '/images/' . $fileName;
-                }
-                // current theme images
-                $paths[] = self::getThemeDir() . '/images/' . $fileName;
-                // common images
-                $paths[] = self::getThemeDir('common') . '/images/' . $fileName;
-                break;
-            case 'module':
-                if (empty($package)) {
-                    $package = $xar->mod()->getName();
-                }
-                // @checkme: modules is a depency of templates, redundant check?
-                if (method_exists('xarMod', 'getBaseInfo')) {
-                    $modBaseInfo = $xar->mod()->getBaseInfo($package);
-                    if (empty($modBaseInfo)) {
-                        return null;
-                    }
-                    $modOsDir = $modBaseInfo['osdirectory'];
-                } else {
-                    $modOsDir = xarVarPrep::path($package);
-                }
-                // handle legacy calls to base module images moved to common/images or themename/images
-                // @todo remove this when all modules are passing correct params
-                if ($package == 'base') {
-                    // current theme images
-                    $paths[] = self::getThemeDir() . '/images/' . $fileName;
-                    // common images
-                    $paths[] = self::getThemeDir('common') . '/images/' . $fileName;
-                }
-                // current theme module images
-                $paths[] = self::getThemeDir() . '/modules/' . $modOsDir . '/images/' . $fileName;
-                // common module images
-                $paths[] = self::getThemeDir('common') . '/modules/' . $modOsDir . '/images/' . $fileName;
-                // module images (legacy)
-                $paths[] = sys::code() . 'modules/' . $modOsDir . '/xarimages/' . $fileName;
-                // module images
-                $paths[] = sys::code() . 'modules/' . $modOsDir . '/xartemplates/images/' . $fileName;
-                break;
-            case 'property':
-                if (empty($package)) {
-                    return null;
-                }
-                $package = xarVarPrep::path($package);
-                // current theme property images
-                $paths[] = self::getThemeDir() . '/properties/' . $package . '/images/' . $fileName;
-                // common property images
-                $paths[] = self::getThemeDir('common') . '/properties/' . $package . '/images/' . $fileName;
-                // property images (legacy)
-                $paths[] = sys::code() . 'properties/' . $package . '/xarimages/' . $fileName;
-                // property images
-                $paths[] = sys::code() . 'properties/' . $package . '/xartemplates/images/' . $fileName;
-                break;
-            case 'block':
-                if (empty($package)) {
-                    return null;
-                }
-                $package = xarVarPrep::path($package);
-                // current theme block images
-                $paths[] = self::getThemeDir() . '/blocks/' . $package . '/images/' . $fileName;
-                // common block images
-                $paths[] = self::getThemeDir('common') . '/blocks/' . $package . '/images/' . $fileName;
-                // code/blocks/block/xartemplates/style
-                $paths[] = sys::code() . 'blocks/' . $package . '/xarimages/' . $fileName;
-                break;
-        }
-        if (empty($paths)) {
-            return null;
-        }
-
-        $filePath = null;
-        foreach ($paths as $path) {
-            if (!file_exists($path)) {
-                continue;
-            }
-            $filePath = $path;
-            break;
-        }
-        if (empty($filePath)) {
-            return null;
-        }
-
-        // Turn relative path into an absolute URL
-        $webDir = sys::web();
-        if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
-            $filePath = substr($filePath, strlen($webDir));
-        }
-        $filePath = $xar->ctl()->getBaseURL() . $filePath;
-
-        // Return as an XML URL if required.
-        // This will generally have little effect, but is here for
-        // completeness to support alternative types of URL.
-        if (self::$generateXMLURLs) {
-            $filePath = htmlspecialchars($filePath);
-        }
-        return $filePath;
+        return self::tpl()->getImage($fileName, $scope, $package);
     }
 
     /**
@@ -1021,93 +409,7 @@ class xarTpl extends xarObject
     */
     public static function getFile($fileName, $scope = null, $package = null)
     {
-        // return absolute URIs and URLs "as is"
-        if (empty($fileName) || substr($fileName, 0, 1) == '/' || preg_match('/^https?\:\/\//', $fileName)) {
-            return $fileName;
-        }
-
-        if ($scope != 'theme' && $scope != 'module' && $scope != 'property' && $scope != 'block') {
-            return null;
-        }
-        $xar = xar::getServicesClass();
-
-        $paths = [];
-        switch ($scope) {
-            case 'theme':
-                // optional theme files to look in passed as third param
-                if (!empty($package)) {
-                    $package = xarVarPrep::path($package);
-                    $paths[] = self::getThemeDir($package) . '/' . $fileName;
-                }
-                // current theme files
-                $paths[] = self::getThemeDir() . '/' . $fileName;
-                // common files
-                $paths[] = self::getThemeDir('common') . '/' . $fileName;
-                break;
-            case 'module':
-                if (empty($package)) {
-                    $package = $xar->mod()->getName();
-                }
-                // @checkme: modules is a depency of templates, redundant check?
-                if (method_exists('xarMod', 'getBaseInfo')) {
-                    $modBaseInfo = $xar->mod()->getBaseInfo($package);
-                    if (empty($modBaseInfo)) {
-                        return null;
-                    }
-                    $modOsDir = $modBaseInfo['osdirectory'];
-                } else {
-                    $modOsDir = xarVarPrep::path($package);
-                }
-                // code/modules/{module}/{file}
-                $paths[] = sys::code() . 'modules/' . $modOsDir . '/' . $fileName;
-                break;
-            case 'property':
-                if (empty($package)) {
-                    return null;
-                }
-                $package = xarVarPrep::path($package);
-                // code/properties/{property}/{file}
-                $paths[] = sys::code() . 'properties/' . $package . '/' . $fileName;
-                break;
-            case 'block':
-                if (empty($package)) {
-                    return null;
-                }
-                $package = xarVarPrep::path($package);
-                // code/blocks/{block}/{file}
-                $paths[] = sys::code() . 'blocks/' . $package . '/' . $fileName;
-                break;
-        }
-        if (empty($paths)) {
-            return null;
-        }
-
-        $filePath = null;
-        foreach ($paths as $path) {
-            if (!file_exists($path)) {
-                continue;
-            }
-            $filePath = $path;
-            break;
-        }
-        if (empty($filePath)) {
-            return null;
-        }
-
-        // Turn relative path into an absolute URL
-        $webDir = sys::web();
-        if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
-            $filePath = substr($filePath, strlen($webDir));
-        }
-        $filePath = $xar->ctl()->getBaseURL() . $filePath;
-
-        // Return as an XML URL if required.
-        // This will generally have little effect, but is here for
-        // completeness to support alternative types of URL.
-        if (self::$generateXMLURLs) {
-            $filePath = htmlspecialchars($filePath);
-        }
-        return $filePath;
+        return self::tpl()->getFile($fileName, $scope, $package);
     }
 
     /**
@@ -1122,19 +424,7 @@ class xarTpl extends xarObject
      */
     public static function string($templateCode, $tplData)
     {
-        // Pretend as if the cache is fully operational and we'll be fine
-        xarTemplateCache::saveEntry('memory', $templateCode);
-
-        // Execute the cache file
-        sys::import('blocklayout.template.compiled');
-        $compiled = new CompiledTemplate(xarTemplateCache::cacheFile('memory'));
-        try {
-            $caching = xar::config()->getVar('Site.BL.MemCacheTemplates');
-        } catch (Exception $e) {
-            $caching = 0;
-        }
-        $out = $compiled->execute($tplData, $caching);
-        return $out;
+        return self::tpl()->string($templateCode, $tplData);
     }
 
     /**
@@ -1147,7 +437,7 @@ class xarTpl extends xarObject
      */
     public static function file($fileName, &$tplData)
     {
-        return self::executeFromFile($fileName, $tplData);
+        return self::tpl()->file($fileName, $tplData);
     }
 
     /**
@@ -1162,9 +452,7 @@ class xarTpl extends xarObject
      */
     public static function compileString($templateSource)
     {
-        sys::import('xaraya.templating.compiler');
-        $compiler = XarayaCompiler::instance();
-        return $compiler->compileString($templateSource);
+        return self::tpl()->compileString($templateSource);
     }
 
     /**
@@ -1181,30 +469,7 @@ class xarTpl extends xarObject
      */
     public static function renderPage($mainModuleOutput, $pageTemplate = null, $context = null)
     {
-        if (empty($pageTemplate)) {
-            $pageTemplate = self::getPageTemplateName();
-        }
-        if (!empty($context) && !empty($context['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
-            if (xarTwigTpl::isThemeSupported($context)) {
-                return xarTwigTpl::renderPage($mainModuleOutput, $pageTemplate, $context);
-            }
-        }
-
-        // get page template source (current > common)
-        $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $pageTemplate, null, 'pages');
-
-        $tpl = (object) null; // Create an object to hold the 'specials'
-        $tpl->pageTitle = self::getPageTitle();
-
-        $tplData = [
-            'tpl'                      => $tpl,
-            '_bl_mainModuleOutput'     => $mainModuleOutput,
-            // pass context for xar:blockgroup etc.
-            '_bl_context'              => $context,
-        ];
-
-        return self::executeFromFile($sourceFileName, $tplData);
+        return self::tpl()->renderPage($mainModuleOutput, $pageTemplate);
     }
 
     /**
@@ -1220,30 +485,7 @@ class xarTpl extends xarObject
      */
     public static function renderBlockBox($blockInfo, $templateName = null)
     {
-        if (!empty($blockInfo['context']) && !empty($blockInfo['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
-            if (xarTwigTpl::isThemeSupported($blockInfo['context'])) {
-                return xarTwigTpl::renderBlockBox($blockInfo, $templateName);
-            }
-        }
-        // look for specific templateName.xt (current > common)
-        if (!empty($templateName)) {
-            $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $templateName, null, 'blocks');
-        }
-        // no specific template, fallback to default.xt (current > common)
-        if (empty($sourceFileName)) {
-            $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), 'default', null, 'blocks');
-        }
-        // no default, fallback to blocks module block.xt (current > common > module)
-        if (empty($sourceFileName)) {
-            $sourceFileName = self::getScopeFileName('module', 'blocks', 'block', null, 'blocks');
-        }
-        // sanity check: shouldn't happen since block.xt is a core module template, but just in case
-        if (empty($sourceFileName)) {
-            throw new FileNotFoundException(null, 'Could not find block outer template block.xt');
-        }
-
-        return self::executeFromFile($sourceFileName, $blockInfo);
+        return self::tpl()->renderBlockBox($blockInfo, $templateName);
     }
 
     /**
@@ -1262,25 +504,7 @@ class xarTpl extends xarObject
     **/
     public static function includeTemplate($tplType, $package, $tplBase, $tplData = [], $tplPart = 'includes', $tplName = null, $callerMod = null)
     {
-        // chris: added this to replicate behaviour of includeModuleTemplate()
-        $packages = array_map('trim', explode(',', $package));
-        // @checkme: do we really want to fall back on dd in all cases here?
-        if ($tplType == 'module' && !in_array('dynamicdata', $packages)) {
-            $packages[] = 'dynamicdata';
-        }
-        foreach ($packages as $tplPkg) {
-            if (!$sourceFileName = self::getScopeFileName($tplType, $tplPkg, $tplBase, $tplName, $tplPart, $callerMod)) {
-                continue;
-            }
-            break;
-        }
-        if (empty($sourceFileName)) {
-            // Not found: raise an exception
-            $vars = [$tplType, $tplPart, $tplBase, $package];
-            $msg = 'Missing #(1) include template #(2)/#(3) in #(4)';
-            throw new FileNotFoundException($vars, $msg);
-        }
-        return self::executeFromFile($sourceFileName, $tplData);
+        return self::tpl()->includeTemplate($tplType, $package, $tplBase, $tplData, $tplPart, $tplName, $callerMod);
     }
 
     /* PRIVATE FUNCTIONS */
@@ -1299,53 +523,7 @@ class xarTpl extends xarObject
      */
     public static function executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     {
-        assert(!empty($sourceFileName));
-        assert(is_array($tplData));
-
-        $xar = xar::getServicesClass();
-        // cache frequently-used cachedfilenames
-        if ($xar->mem()->has('Templates.ExecuteFromFile', $sourceFileName)) {
-            $cachedFileName = $xar->mem()->get('Templates.ExecuteFromFile', $sourceFileName);
-
-        } else {
-            // Load translations for the template
-            $xar->mls()->loadTranslations($sourceFileName);
-
-            $xar->log()->debug("xarTpl::executeFromFile: Using template $sourceFileName");
-            $templateCode = null;
-
-            // Determine if we need to compile this template
-            if (xarTemplateCache::isDirty($sourceFileName)) {
-                // Get an instance of SourceTemplate
-                sys::import('xaraya.templating.source');
-                $srcTemplate = new XarayaSourceTemplate($sourceFileName);
-
-                // Compile it
-                // @todo return a CompiledTemplate object here?
-                $templateCode = $srcTemplate->compile();
-
-                // Save the entry in templatecache (if active)
-                xarTemplateCache::saveEntry($sourceFileName, $templateCode);
-            }
-
-            // Execute either the compiled template, or the code determined
-            // @todo get rid of the cachedFileName usage - why?
-            $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
-
-            $xar->mem()->set('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);
-        }
-
-        // Execute the compiled template from the cache file
-        // @todo the tplType should be irrelevant
-        sys::import('blocklayout.template.compiled');
-        $compiled = new CompiledTemplate($cachedFileName, $sourceFileName, $tplType);
-        try {
-            $caching = $xar->config()->getVar('Site.BL.MemCacheTemplates');
-        } catch (Exception $e) {
-            $caching = 0;
-        }
-        $output = $compiled->execute($tplData, $caching);
-        return $output;
+        return self::tpl()->executeFromFile($sourceFileName, $tplData, $tplType);
     }
 
 
@@ -1365,36 +543,7 @@ class xarTpl extends xarObject
      */
     public static function outputTemplate($sourceFileName, &$tplOutput)
     {
-        // flag used to determine if the header content has been found.
-        static $isHeaderContent;
-        if (!isset($isHeaderContent)) {
-            $isHeaderContent = false;
-        }
-        $xar = xar::getServicesClass();
-
-        $finalTemplate = '';
-        try {
-            if (self::outputTemplateFilenames() && class_exists('xarUser') && ($xar->user()->isDebugAdmin())) {
-                $outputStartComment = true;
-                if ($isHeaderContent === false) {
-                    if ($isHeaderContent = self::modifyHeaderContent($sourceFileName, $tplOutput)) {
-                        $outputStartComment = false;
-                    }
-                }
-                // optionally show template filenames if start comment has not already
-                // been added as part of a header determination.
-                if ($outputStartComment === true) {
-                    $finalTemplate .= "<!-- start: " . $sourceFileName . " -->\n";
-                }
-                $finalTemplate .= $tplOutput;
-                $finalTemplate .= "<!-- end: " . $sourceFileName . " -->\n";
-            } else {
-                $finalTemplate .= $tplOutput;
-            }
-        } catch (Exception $e) {
-            $finalTemplate .= $tplOutput;
-        }
-        return $finalTemplate;
+        return self::tpl()->outputTemplate($sourceFileName, $tplOutput);
     }
 
     /**
@@ -1405,29 +554,7 @@ class xarTpl extends xarObject
      */
     public static function outputPHPCommentBlockInTemplates()
     {
-        $xar = xar::getServicesClass();
-        try {
-            // We need to make sure enough of the core is loaded to run this
-            $allowed = method_exists('xarUser', 'getVar');
-            if ($allowed
-                && !isset(self::$showPHPCommentBlockInTemplates)
-                && $xar->user()->isDebugAdmin()) {
-                // Default to not show the comments
-                self::$showPHPCommentBlockInTemplates = 0;
-                // @checkme: modules is a depency of templates, redundant check?
-                if (method_exists('xarModVars', 'Get')) {
-                    $showphpcbit = $xar->mod('themes')->getVar('ShowPHPCommentBlockInTemplates');
-                    if (!empty($showphpcbit)) {
-                        self::$showPHPCommentBlockInTemplates = 1;
-                    }
-                } else {
-                    self::$showPHPCommentBlockInTemplates = 0;
-                }
-            }
-        } catch (Exception $e) {
-            self::$showPHPCommentBlockInTemplates = 0;
-        }
-        return self::$showPHPCommentBlockInTemplates;
+        return self::tpl()->outputPHPCommentBlockInTemplates();
     }
 
     /**
@@ -1441,69 +568,6 @@ class xarTpl extends xarObject
      */
     public static function outputTemplateFilenames()
     {
-        if (!isset(self::$showTemplateFilenames)) {
-            // Default to not showing it
-            self::$showTemplateFilenames = 0;
-            // @checkme: modules is a depency of templates, redundant check?
-            if (method_exists('xarModVars', 'Get')) {
-                $showtemplates = xar::mod('themes')->getVar('ShowTemplates');
-                if (!empty($showtemplates)) {
-                    self::$showTemplateFilenames = 1;
-                }
-            }
-        }
-        return self::$showTemplateFilenames;
+        return self::tpl()->outputTemplateFilenames();
     }
-
-    /**
-     * Modify header content
-     *
-     * Attempt to determine if $tplOutput contains header content and if
-     * so append a start comment after the first matched header tag
-     * found.
-     *
-     * @access public
-     * @param  string $sourceFileName
-     * @param  string $tplOutput
-     * @return boolean found header content
-     *
-     * @todo it is possible that the first regex <!DOCTYPE[^>].*]> is too
-     *       greedy in more complex xml documents and others.
-     * @todo The doctype of the output belongs in a template somewhere (probably the xar:blocklayout tag, as an attribute
-     */
-    public static function modifyHeaderContent($sourceFileName, &$tplOutput)
-    {
-        $foundHeaderContent = false;
-
-        // $headerTagsRegexes is an array of string regexes to match tags that could
-        // be sent as part of a header. Important: the order here should be inside out
-        // as the first regex that matches will have a start comment appended.
-        // fixes bugs: #1427, #1190, #603
-        // - Comments that precede <!doctype... cause ie6 not to sniff the doctype
-        //   correctly.
-        // - xml parsers dont like comments that precede xml output.
-        // At this time attempting to match <!doctype... and <?xml version... tags.
-        // This is about the best we can do now, until we process xar documents with an xml parser and actually 'parse'
-        // the document.
-        $headerTagRegexes = ['<!DOCTYPE[^>].*]>',// eg. <!DOCTYPE doc [<!ATTLIST e9 attr CDATA "default">]>
-            '<!DOCTYPE[^>]*>',// eg. <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-            '<\?xml\s+version[^>]*\?>'];// eg. <?xml version="1.0"? > // remove space between qmark and gt
-
-        foreach ($headerTagRegexes as $headerTagRegex) {
-            if (preg_match("/$headerTagRegex/smix", $tplOutput, $matchedHeaderTag)) {
-                // FIXME: the next line assumes that we are not in a comment already, no way of knowing that,
-                // keep the functionality for now, but dont change more than necessary (see bug #3559)
-                // $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . ' -->';
-                $startComment = '';
-                // replace matched tag with an appended start comment tag in the first match
-                // in the template output $tplOutput
-                $tplOutput = preg_replace("/$headerTagRegex/smix", $matchedHeaderTag[0] . $startComment, $tplOutput, 1);
-                // dont want start comment to be sent below as it has already been added.
-                $foundHeaderContent = true;
-                break;
-            }
-        }
-        return $foundHeaderContent;
-    }
-
 }

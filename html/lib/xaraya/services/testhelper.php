@@ -4,7 +4,6 @@ namespace Xaraya\Services;
 
 use PHPUnit\Framework\TestCase;
 use Xaraya\Context\Context;
-use xarController;
 use xarSecurity;
 use LogicException;
 use UnauthorizedOperationException;
@@ -88,10 +87,10 @@ class TestHelper extends TestCase
         $mock->expects($constraint)
             ->method('callSecurityCheck')
             ->willReturnCallback(function ($mask, $catch = 1, $component = '', $instance = '') {
-                $this->callback = xarController::getCallback('redirectTo');
-                xarController::setCallback('redirectTo', [$this, 'sendRedirectToCallback']);
+                $this->callback = xar::ctl()->getCallback('redirectTo');
+                xar::ctl()->setCallback('redirectTo', [$this, 'sendRedirectToCallback']);
                 $result = xarSecurity::check($mask, $catch, $component, $instance) ? true : false;
-                xarController::setCallback('redirectTo', $this->callback);
+                xar::ctl()->setCallback('redirectTo', $this->callback);
                 return $result;
             });
         // set mock service as new security service
@@ -100,7 +99,7 @@ class TestHelper extends TestCase
     }
 
     /**
-     * Send redirect to callback in xarController::redirect()
+     * Send redirect to callback in xar::ctl()->redirect()
      * @param string $redirectURL
      * @param mixed $httpResponse
      * @param mixed $context
@@ -109,7 +108,7 @@ class TestHelper extends TestCase
      */
     public function sendRedirectToCallback($redirectURL, $httpResponse, $context)
     {
-        xarController::setCallback('redirectTo', $this->callback);
+        xar::ctl()->setCallback('redirectTo', $this->callback);
         throw new UnauthorizedOperationException('Called redirectToCallback() for ' . $redirectURL);
     }
 

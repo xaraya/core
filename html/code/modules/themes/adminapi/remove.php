@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use ForbiddenOperationException;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -51,9 +50,9 @@ class RemoveMethod extends MethodClass
 
         // Get theme information
         if (isset($name)) {
-            $regid = xarTheme::getRegID($name);
+            $regid = $this->theme()->getRegID($name);
         }
-        $themeInfo = xarTheme::getInfo($regid);
+        $themeInfo = $this->theme()->getInfo($regid);
         $defaultTheme = $this->mod()->getVar('default_theme');
 
         // Bail out if we're trying to remove the default theme

@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -46,7 +45,7 @@ class GetdbthemesMethod extends MethodClass
         while ($result->next()) {
             [$themeRegId] = $result->fields;
             //Get Theme Info
-            $themeInfo = xarTheme::getInfo($themeRegId);
+            $themeInfo = $this->theme()->getInfo($themeRegId);
             if (!isset($themeInfo)) {
                 return;
             }

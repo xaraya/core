@@ -335,7 +335,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
 
     // @param access (display|modify|delete)
     // this method is called by blocks_admin_modify|update|delete functions
-    // and by xarBlock::render() method to determine access for current user
+    // and by xar::block()->render() method to determine access for current user
     // @return boolean true if access allowed
     public function checkAccess($access)
     {

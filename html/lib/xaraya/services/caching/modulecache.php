@@ -69,7 +69,6 @@ class ModuleCache extends ServiceClass
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         $this->cacheTime = $config['Module.TimeExpiration'] ?? 7200;
         $this->cacheSizeLimit = $config['Module.SizeLimit'] ?? 2097152;
         $this->cacheFunctions = $config['Module.CacheFunctions'] ?? [
@@ -99,12 +98,10 @@ class ModuleCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheKey($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return null;
         }
@@ -172,12 +169,10 @@ class ModuleCache extends ServiceClass
 
         // return the cacheKey
         return $this->cacheKey;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheSettings()
     {
-        // --- LEGACY METHOD BODY ---
         if (!isset($this->cacheSettings)) {
             $xar = $this->getParent();
             $settings = [];
@@ -188,12 +183,10 @@ class ModuleCache extends ServiceClass
             $this->cacheSettings = $settings;
         }
         return $this->cacheSettings;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function checkCachingRules($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         // we only cache the top-most module function in case of nested functions
         if (!empty($this->cacheKey)) {
             return false;
@@ -237,12 +230,10 @@ class ModuleCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function isCached($cacheKey = null)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return false;
         }
@@ -263,12 +254,10 @@ class ModuleCache extends ServiceClass
         }
 
         return $result;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return '';
         }
@@ -305,12 +294,10 @@ class ModuleCache extends ServiceClass
             }
         }
         return $content['output'];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setCached($cacheKey, $value)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
@@ -354,57 +341,46 @@ class ModuleCache extends ServiceClass
 
         // we're done with this cacheKey
         $this->cacheKey = null;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function flushCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
 
         $this->cacheStorage->flushCached($cacheKey);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setPageTitle($title = null, $module = null)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheKey)) {
             return;
         }
         $this->pageTitle = [$title, $module];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function addStyle(array $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheKey)) {
             return;
         }
         $this->styleList[] = $args;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function addJavaScript(array $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheKey)) {
             return;
         }
         $this->scriptList[] = $args;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function addMeta(array $args = [])
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheKey)) {
             return;
         }
         $this->metaList[] = $args;
-        // --- END LEGACY METHOD BODY ---
     }
 }

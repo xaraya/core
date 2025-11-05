@@ -33,16 +33,16 @@ class GenericAPIHandler extends RestAPIHandler
     /**
      * Return the current user or exit with 401 status code
      * @param array<string, mixed> $args
-     * @uses xarMod::init()
-     * @uses xarUser::init()
+     * @uses xar::mod()->init()
+     * @uses xar::user()->init()
      * @return array<string, mixed>
      */
     public function whoami($args = [])
     {
         $userId = $this->checkUser();
         //return array('id' => xar::user()->getVar('id'), 'name' => xar::user()->getVar('name'));
-        xarMod::init();
-        xarUser::init();
+        xar::mod()->init();
+        xar::user()->init();
         $role = xarRoles::getRole($userId);
         $user = $role->getFieldValues();
         $context = $this->getContext();
@@ -62,7 +62,7 @@ class GenericAPIHandler extends RestAPIHandler
         $context = $this->getContext();
         $userId = $context->getUserId();
         // return restricted version for non-site admin
-        if (empty($userId) || !xarUser::isSiteAdmin($userId)) {
+        if (empty($userId) || !xar::user($userId)->isSiteAdmin()) {
             return ['userId' => $userId, 'error' => 'Restricted to site admin'];
         }
         $context['args'] ??= $args;
@@ -72,8 +72,8 @@ class GenericAPIHandler extends RestAPIHandler
     /**
      * Summary of postToken
      * @param array<string, mixed> $args
-     * @uses xarMod::init()
-     * @uses xarUser::init()
+     * @uses xar::mod()->init()
+     * @uses xar::user()->init()
      * @throws \UnauthorizedOperationException
      * @return array<string, mixed>
      */
@@ -101,10 +101,10 @@ class GenericAPIHandler extends RestAPIHandler
             throw new UnauthorizedOperationException();
         }
         $context = $this->getContext();
-        //xarSession::init();
-        xarMod::init();
-        xarUser::init();
-        // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
+        //xar::session()->init();
+        xar::mod()->init();
+        xar::user()->init();
+        // @checkme unset xarSession role_id if needed, otherwise xar::user()->logIn will hit xar::user()->isLoggedIn first!?
         // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
         $userId = xar::mod()->apiFunc('authsystem', 'user', 'authenticate_user', $args['input']);
         if (empty($userId) || $userId == xar::user()::AUTH_FAILED) {

@@ -10,14 +10,9 @@ use Xaraya\Context\SessionContext;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Services\TestHelper as ServicesHelper;
 use xarCache;
-use xarController;
 use xarDatabase;
 use xarEvents;
 use xarLog;
-use xarMod;
-use xarServer;
-use xarSession;
-use xarUser;
 use sys;
 use LogicException;
 
@@ -51,7 +46,7 @@ class TestHelper extends TestCase
         // initialize events
         xarEvents::init();
         // initialize modules
-        xarMod::init();
+        $xar->mod()->init();
         // initialize server
         $xar->req()->init([]);
         // initialize session
@@ -102,6 +97,7 @@ class TestHelper extends TestCase
      */
     protected function createModule(string $modName, string $className)
     {
+        $xar = \Xaraya\Services\xar::getServicesClass();
         // Xaraya\Modules\MyFancyModule\UserApi
         $parts = explode('\\', $className);
         array_pop($parts);
@@ -109,7 +105,7 @@ class TestHelper extends TestCase
         $moduleName = implode('\\', $parts) . '\Module';
         assert(is_subclass_of($moduleName, ModuleInterface::class));
         //return new $moduleName($modName);
-        return xarMod::getModule($modName);
+        return $xar->mod()->getModule($modName);
     }
 
     /**
@@ -120,6 +116,7 @@ class TestHelper extends TestCase
      */
     protected function createComponent(string $modName, string $className)
     {
+        $xar = \Xaraya\Services\xar::getServicesClass();
         // Xaraya\Modules\MyFancyModule\UserApi\ViewMethod
         $parts = explode('\\', $className);
         array_pop($parts);
@@ -128,7 +125,7 @@ class TestHelper extends TestCase
         assert(is_subclass_of($parentName, ModuleServicesInterface::class));
         //return new $parentName($modName);
         $classType = array_pop($parts);
-        return xarMod::getModule($modName)->getComponent($classType);
+        return $xar->mod()->getModule($modName)->getComponent($classType);
     }
 
     /**

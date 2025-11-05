@@ -10,6 +10,8 @@
  * @link http://www.xaraya.info
  */
 
+use Xaraya\Services\xar;
+
 /**
  * Interface declaration for theme vars
  *
@@ -28,7 +30,7 @@ interface IxarThemeVars
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- * @deprecated 2.4.1 not used
+ * @deprecated 2.4.1 not used except in kingston theme pages
  */
 class xarThemeVars extends xarObject implements IxarThemeVars
 {
@@ -45,7 +47,7 @@ class xarThemeVars extends xarObject implements IxarThemeVars
     public static function get($scope, $name, $itemid = null)
     {
         try {
-            $themeBaseInfo = xarMod::getBaseInfo($scope, 'theme');
+            $themeBaseInfo = xar::mod()->getBaseInfo($scope, 'theme');
             $varvalue = $themeBaseInfo['configuration'][$name];
             return $varvalue;
         } catch (Exception $e) {

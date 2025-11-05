@@ -348,7 +348,7 @@ function xarModernWebServices(string $type)
     // initialize modules
     //xarMod::init();
     // initialize users
-    //xarUser::init();
+    //xar::user()->init();
 
     // let whoever we call know this request comes from here ;-)
     $_SERVER['SERVER_FRAMEWORK'] = 'xaraya';

@@ -533,7 +533,7 @@ class InstallerTool extends ServicesClass
     {
         $topid = $this->modulestack->pop();
         if ($this->extType == 'themes') {
-            $extInfo = xarTheme::getInfo($regid);
+            $extInfo = $this->theme()->getInfo($regid);
             if (!isset($extInfo)) {
                 throw new ThemeNotFoundException($regid, 'Theme (regid: #(1)) does not exist.');
             }

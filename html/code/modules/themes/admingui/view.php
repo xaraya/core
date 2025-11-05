@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -77,9 +76,9 @@ class ViewMethod extends MethodClass
                 $old_admin_theme
             );
             if ($new_user_theme != $old_user_theme) {
-                $themeid = xarTheme::getIDFromName($new_user_theme);
+                $themeid = $this->theme()->getIDFromName($new_user_theme);
                 if ($themeid) {
-                    $info = xarTheme::getInfo($themeid);
+                    $info = $this->theme()->getInfo($themeid);
                     if ($info['class'] != 2) {
                         $new_user_theme = $old_user_theme;
                     } else {
@@ -96,9 +95,9 @@ class ViewMethod extends MethodClass
                 $this->mod()->setVar('default_theme', $new_user_theme);
             }
             if ($new_admin_theme != $old_admin_theme) {
-                $themeid = xarTheme::getIDFromName($new_admin_theme);
+                $themeid = $this->theme()->getIDFromName($new_admin_theme);
                 if ($themeid) {
-                    $info = xarTheme::getInfo($themeid);
+                    $info = $this->theme()->getInfo($themeid);
                     if ($info['class'] != 2) {
                         $new_admin_theme = $old_admin_theme;
                     } else {

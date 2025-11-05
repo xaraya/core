@@ -83,9 +83,7 @@ trait SessionTrait
 
     public static function setSessionClass($className): void
     {
-        // --- LEGACY METHOD BODY ---
         self::$sessionClass = $className;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -94,7 +92,6 @@ trait SessionTrait
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($config)) {
             if (!empty($this->initialized)) {
                 return true;
@@ -122,7 +119,6 @@ trait SessionTrait
         $session->initialize();
         $this->initialized = true;
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -132,7 +128,6 @@ trait SessionTrait
     public function getConfig(): array
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         $systemArgs = [
             'securityLevel'     => $xar->config()->getVar('Site.Session.SecurityLevel'),
             'duration'          => $xar->config()->getVar('Site.Session.Duration'),
@@ -144,12 +139,10 @@ trait SessionTrait
             //'sessionClass'      => $xar->config()->getVar('Site.Session.HandlerClass'),
         ];
         return $systemArgs;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getInstance(): ?SessionFacade
     {
-        // --- LEGACY METHOD BODY ---
         // moved to static services class
         $instance = $this->getParent()->getSessionInstance();
         if (!isset($instance)) {
@@ -157,39 +150,31 @@ trait SessionTrait
             //$this->init($this->args);
         }
         return $instance;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setInstance(SessionFacade $instance): void
     {
-        // --- LEGACY METHOD BODY ---
         // moved to static services class
         $this->getParent()->setSessionInstance($instance);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function newInstance(): SessionFacade
     {
         // Set up the session instance with current context
-        // --- LEGACY METHOD BODY ---
         return new self::$sessionClass($this->args, $this->getContext());
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getId(?string $id = null): mixed
     {
-        // --- LEGACY METHOD BODY ---
         $instance = $this->getInstance();
         if (!isset($instance)) {
             return $id;
         }
         return $instance->getId($id);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getDefaultVar(string $varName): mixed
     {
-        // --- LEGACY METHOD BODY ---
         // no session means anonymous user by default
         if ($varName == 'role_id') {
             return $this->anonId;
@@ -202,7 +187,6 @@ trait SessionTrait
             return null;
         }
         throw new SessionException('Session was not initialized to get ' . $varName);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -210,13 +194,11 @@ trait SessionTrait
      */
     public function getVar(string $varName): mixed
     {
-        // --- LEGACY METHOD BODY ---
         $instance = $this->getInstance();
         if (!isset($instance)) {
             return $this->getDefaultVar($varName);
         }
         return $instance->getVar($varName);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -224,7 +206,6 @@ trait SessionTrait
      */
     public function setVar(string $varName, mixed $value): bool
     {
-        // --- LEGACY METHOD BODY ---
         assert(!is_null($value));
         // security checks : do not allow to set the id or mess with the session serialization
         if ($varName == 'role_id' || strpos($varName, '|') !== false) {
@@ -240,7 +221,6 @@ trait SessionTrait
             throw new SessionException('Session was not initialized to set ' . $varName);
         }
         return $instance->setVar($varName, $value);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -248,13 +228,11 @@ trait SessionTrait
      */
     public function delVar(string $varName): bool
     {
-        // --- LEGACY METHOD BODY ---
         if ($varName == 'role_id') {
             return false;
         }
 
         return $this->getInstance()?->delVar($varName) ?? false;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -262,10 +240,8 @@ trait SessionTrait
      */
     public function getUserId(): ?int
     {
-        // --- LEGACY METHOD BODY ---
         // @todo see UserContext::getUserId() for userId without session
         return $this->getInstance()?->getUserId();
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -273,16 +249,12 @@ trait SessionTrait
      */
     public function getAnonId(): ?int
     {
-        // --- LEGACY METHOD BODY ---
         return $this->anonId;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setAnonId(?int $anonId): void
     {
-        // --- LEGACY METHOD BODY ---
         $this->anonId = $anonId;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -290,45 +262,33 @@ trait SessionTrait
      */
     public function setUserInfo(int $userId, int $rememberSession): bool
     {
-        // --- LEGACY METHOD BODY ---
         return $this->getInstance()?->setUserInfo($userId, $rememberSession);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function saveTime(int $lastused = 0): int
     {
-        // --- LEGACY METHOD BODY ---
         return $this->getInstance()?->saveTime($lastused);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getSecurityLevel(): string
     {
-        // --- LEGACY METHOD BODY ---
         return $this->securityLevel;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getTimeoutSetting(): int
     {
-        // --- LEGACY METHOD BODY ---
         $timeoutSetting = time() - ($this->inactivityTimeout * 60);
         return $timeoutSetting;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getDuration(): int
     {
-        // --- LEGACY METHOD BODY ---
         return $this->duration;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function clear($spared = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         return $this->getInstance()?->clear() ?? false;
-        // --- END LEGACY METHOD BODY ---
     }
 }
 

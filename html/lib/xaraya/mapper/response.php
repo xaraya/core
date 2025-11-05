@@ -25,7 +25,7 @@ class xarResponse extends xarObject
     public array $headers;
 
     /**
-     * @todo no arguments are set/known by xarController::setResponse() before dispatch()
+     * @todo no arguments are set/known by xar::ctl()->setResponse() before dispatch()
      * @param array<string, mixed> $headers
      */
     public function __construct(?string $output = null, int $status = 200, string $mediaType = '', array $headers = [])

@@ -58,7 +58,6 @@ class BlockCache extends ServiceClass
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         $this->cacheTime = $config['Block.TimeExpiration'] ?? 7200;
         $this->cacheSizeLimit = $config['Block.SizeLimit'] ?? 2097152;
 
@@ -83,12 +82,10 @@ class BlockCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheKey($blockInfo)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return null;
         }
@@ -137,19 +134,15 @@ class BlockCache extends ServiceClass
 
         // return the cacheKey
         return $this->cacheKey;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheSettings()
     {
-        // --- LEGACY METHOD BODY ---
         return [];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function checkCachingRules($blockInfo = [])
     {
-        // --- LEGACY METHOD BODY ---
         // we only cache the top-most block in case of nested blocks
         if (!empty($this->cacheKey)) {
             return false;
@@ -200,12 +193,10 @@ class BlockCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function isCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return false;
         }
@@ -219,12 +210,10 @@ class BlockCache extends ServiceClass
         $result = $this->cacheStorage->isCached($cacheKey, $this->expireTime);
 
         return $result;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return '';
         }
@@ -247,12 +236,10 @@ class BlockCache extends ServiceClass
         }
 
         return $value;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setCached($cacheKey, $value)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
@@ -283,17 +270,14 @@ class BlockCache extends ServiceClass
 
         // we're done with this cacheKey
         $this->cacheKey = null;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function flushCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
 
         $this->cacheStorage->flushCached($cacheKey);
-        // --- END LEGACY METHOD BODY ---
     }
 }

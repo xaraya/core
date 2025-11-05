@@ -61,7 +61,6 @@ class PageCache extends ServiceClass
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         $this->cacheTime = $config['Page.TimeExpiration'] ?? 1800;
         $this->cacheDisplay = $config['Page.DisplayView'] ?? 0;
         $this->cacheShowTime = $config['Page.ShowTime'] ?? 1;
@@ -102,12 +101,10 @@ class PageCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheKey($url = null)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return null;
         }
@@ -144,25 +141,21 @@ class PageCache extends ServiceClass
 
         // return the cacheKey
         return $this->cacheKey;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheSettings()
     {
-        // --- LEGACY METHOD BODY ---
         if (!isset($this->cacheSettings)) {
             $settings = [];
             // TODO: make more things configurable ?
             $this->cacheSettings = $settings;
         }
         return $this->cacheSettings;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function checkCachingRules($url = null)
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         if (empty($url)) {
             // get module parameters
             [$modName, $modType, $funcName] = $xar->req()->getRequest()->getInfo();
@@ -199,12 +192,10 @@ class PageCache extends ServiceClass
         } else {
             return false;
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function sendHeaders($modtime = 0)
     {
-        // --- LEGACY METHOD BODY ---
         // Note: still using $_SERVER here since xarServer is not initialized
         if (empty($modtime)) {
             // CHECKME: this means 304 will never apply then - is that what we want here ?
@@ -273,12 +264,10 @@ class PageCache extends ServiceClass
         }
         // CHECKME: what about other content types ?
         header("Content-type: text/html; charset=" . $charset);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function isCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return false;
         }
@@ -309,12 +298,10 @@ class PageCache extends ServiceClass
         } else {
             return false;
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCached($cacheKey, $output = 1)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return false;
         }
@@ -327,12 +314,10 @@ class PageCache extends ServiceClass
         $result = $this->cacheStorage->getCached($cacheKey, $output);
 
         return $result;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setCached($cacheKey, $value)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
@@ -367,13 +352,13 @@ class PageCache extends ServiceClass
             if ($this->cacheShowTime == 1) {
                 $now = $this->getParent()->ml(
                     'Last updated on #(1)',
-                    date(DATE_RFC7231)
+                    date(DATE_RFC7231),
                 );
                 $value = str_replace(
                     '</body>',
                     // TODO: set this up to be templated
                     '<div class="xar-sub" style="text-align: center; padding: 8px; ">' . $now . '</div></body>',
-                    $value
+                    $value,
                 );
             }
 
@@ -393,23 +378,19 @@ class PageCache extends ServiceClass
             $modtime = time();
             $this->sendHeaders($modtime);
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function flushCached($cacheKey)
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->cacheStorage)) {
             return;
         }
 
         $this->cacheStorage->flushCached($cacheKey);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function checkUserCaching($cacheGroups)
     {
-        // --- LEGACY METHOD BODY ---
         $user = $this->getParent()->user();
         if (!$user->isLoggedIn()) {
             // always allow caching for anonymous users
@@ -428,6 +409,5 @@ class PageCache extends ServiceClass
             }
         }
         return false;
-        // --- END LEGACY METHOD BODY ---
     }
 }

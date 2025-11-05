@@ -19,6 +19,7 @@ namespace Xaraya\Services;
 use Xaraya\Modules\ModuleInterface;
 use Xaraya\Modules\UserApiInterface;
 use Xaraya\Modules\UserGuiInterface;
+use ixarMod;
 use xarRoles;
 use xarSecurity;
 use sys;
@@ -76,13 +77,13 @@ interface ModulesInterface extends ServiceInterface
     public function isAvailable(?string $modName = null): bool;
     /** @param array<string, mixed> $args */
     public function apiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
-    public function apiLoad(?string $modName = null, ?string $modType = null): mixed;
+    public function apiLoad(?string $modName = null, ?string $modType = null, int $flags = ixarMod::LOAD_ANYSTATE): mixed;
     /** @param array<string, mixed> $args */
     public function guiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
-    public function load(?string $modName = null, ?string $modType = null): mixed;
+    public function load(?string $modName = null, ?string $modType = null, int $flags = ixarMod::LOAD_ONLYACTIVE): mixed;
     public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed;
-    public function userapi(?string $modName = null): UserApiInterface|null;
-    public function usergui(?string $modName = null): UserGuiInterface|null;
+    public function userapi(?string $modName = null): ?UserApiInterface;
+    public function usergui(?string $modName = null): ?UserGuiInterface;
     public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string;
     public function getModule(?string $modName = null): ModuleInterface;
     public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): ?callable;
@@ -167,7 +168,6 @@ trait ModulesTrait
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($config)) {
             if ($this->initialized) {
                 return true;
@@ -196,7 +196,6 @@ trait ModulesTrait
         $xar->db()->importTables($tables);
         $this->initialized = true;
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -206,13 +205,11 @@ trait ModulesTrait
     public function getConfig(): array
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         $systemArgs = [
             'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
             'generateXMLURLs'        => true,
         ];
         return $systemArgs;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -358,7 +355,7 @@ trait ModulesTrait
             $modType,
             $funcName,
             $tplData,
-            $templateName
+            $templateName,
         );
     }
 
@@ -472,9 +469,7 @@ trait ModulesTrait
      */
     public function setNoCache(bool $noCache): void
     {
-        // --- LEGACY METHOD BODY ---
         $this->getInfoHelper()->noCacheMod = (bool) $noCache;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -511,11 +506,11 @@ trait ModulesTrait
     /**
      * Wrapper for xarMod::apiLoad() - only for migration
      */
-    public function apiLoad(?string $modName = null, ?string $modType = null): mixed
+    public function apiLoad(?string $modName = null, ?string $modType = null, int $flags = ixarMod::LOAD_ANYSTATE): mixed
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return $this->getExecHelper()->apiLoad($modName, $modType);
+        return $this->getExecHelper()->apiLoad($modName, $modType, $flags);
     }
 
     /**
@@ -532,11 +527,11 @@ trait ModulesTrait
     /**
      * Wrapper for xarMod::load() - only for migration
      */
-    public function load(?string $modName = null, ?string $modType = null): mixed
+    public function load(?string $modName = null, ?string $modType = null, int $flags = ixarMod::LOAD_ONLYACTIVE): mixed
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return $this->getExecHelper()->load($modName, $modType);
+        return $this->getExecHelper()->load($modName, $modType, $flags);
     }
 
     /**
@@ -551,13 +546,13 @@ trait ModulesTrait
         return $this->getInfoHelper()->loadDbInfo($modName, $modDir);
     }
 
-    public function userapi(?string $modName = null): UserApiInterface|null
+    public function userapi(?string $modName = null): ?UserApiInterface
     {
         $modName ??= $this->getModName();
         return $this->getModule($modName)->userapi();
     }
 
-    public function usergui(?string $modName = null): UserGuiInterface|null
+    public function usergui(?string $modName = null): ?UserGuiInterface
     {
         $modName ??= $this->getModName();
         return $this->getModule($modName)->usergui();
@@ -688,7 +683,7 @@ trait ModulesTrait
     {
         $callerModName ??= $this->getModName();
         $callerItemType ??= $this->getItemType();
-        //return xarModHooks::call($scope, $action, $itemid, $extraInfo, $this->getModName(), $this->getItemType(), $this->getContext());
+        //return $this->getHooksHelper()->callHooks($scope, $action, $itemid, $extraInfo, $this->getModName(), $this->getItemType(), $this->getContext());
         // scope and action are concatenated to form the name of the hook event
         $event = ucfirst($scope) . ucfirst($action);
         $extraInfo ??= [];
@@ -716,7 +711,6 @@ trait ModulesTrait
     public function checkAccess(?string $modName = null, string $action = '', ?int $roleid = null): bool
     {
         $modName ??= $this->getModName();
-        // --- LEGACY METHOD BODY ---
         // TODO: get module variable with access config: groups, masks, levels or whatever
 
         // TODO: check for access e.g. by group
@@ -746,7 +740,6 @@ trait ModulesTrait
         } else {
             return xarSecurity::check('', 0, 'All', 'All', $modName, '', 0, $seclevel);
         }
-        // --- END LEGACY METHOD BODY ---
     }
 }
 

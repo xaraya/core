@@ -265,7 +265,6 @@ trait CachingTrait
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($config) && $this->initialized) {
             return true;
         }
@@ -306,7 +305,6 @@ trait CachingTrait
         }
         $this->initialized = true;
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -315,14 +313,12 @@ trait CachingTrait
      */
     public function getConfig(): array
     {
-        // --- LEGACY METHOD BODY ---
         // load the caching configuration
         $cachingConfiguration = [];
         if (file_exists($this->cacheDir . '/config.caching.php')) {
             @include($this->cacheDir . '/config.caching.php');
         }
         return $cachingConfiguration;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function withOutput(): bool
@@ -342,7 +338,6 @@ trait CachingTrait
      */
     public function getPageKey(?string $url = null): ?string
     {
-        // --- END LEGACY METHOD BODY ---
         if (empty($this->pageCache)) {
             return null;
         }
@@ -430,7 +425,6 @@ trait CachingTrait
      */
     public function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): ?string
     {
-        // --- END LEGACY METHOD BODY ---
         if (empty($modName)) {
             return null;
         }
@@ -649,14 +643,12 @@ trait CachingTrait
      */
     public function getVariableKey(string $scope, string $name): ?string
     {
-        // --- LEGACY METHOD BODY ---
         /**
         if ($this->isVariableCacheEnabled()) {
             return $this->variableCache->getCacheKey($scope, $name);
         }
         return null;
          */
-        // --- END LEGACY METHOD BODY ---
         if (empty($this->variableCache)) {
             return null;
         }
@@ -750,7 +742,6 @@ trait CachingTrait
      */
     public function noCache(): void
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->outputCache)) {
             return;
         }
@@ -771,7 +762,6 @@ trait CachingTrait
             // set the current cacheKey to null
             $this->objectCache->cacheKey = null;
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -779,7 +769,6 @@ trait CachingTrait
      */
     public function setPageTitle(?string $title = null, ?string $module = null): void
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->outputCache)) {
             return;
         }
@@ -792,7 +781,6 @@ trait CachingTrait
             // set page title for object output
             $this->objectCache->setPageTitle($title, $module);
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -801,7 +789,6 @@ trait CachingTrait
      */
     public function addStyle(array $args = []): void
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->outputCache)) {
             return;
         }
@@ -814,7 +801,6 @@ trait CachingTrait
             // add stylesheet for object output
             $this->objectCache->addStyle($args);
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -823,7 +809,6 @@ trait CachingTrait
      */
     public function addJavascript(array $args = []): void
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->outputCache)) {
             return;
         }
@@ -836,7 +821,6 @@ trait CachingTrait
             // add javascript for object output
             $this->objectCache->addJavaScript($args);
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -845,7 +829,6 @@ trait CachingTrait
      */
     public function addMeta(array $args = []): void
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->outputCache)) {
             return;
         }
@@ -858,7 +841,6 @@ trait CachingTrait
             // add javascript for object output
             $this->objectCache->addMeta($args);
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -867,9 +849,7 @@ trait CachingTrait
      */
     public function getStorage(array $args = []): ixarCache_Storage
     {
-        // --- LEGACY METHOD BODY ---
         return xarCache_Storage::getCacheStorage($args);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -879,7 +859,6 @@ trait CachingTrait
     public function getParents(?int $currentid = null): array
     {
         $mem = $this->getParent()->mem();
-        // --- LEGACY METHOD BODY ---
         if (empty($currentid)) {
             $currentid = $this->getParent()->session()->getUserId();
         }
@@ -908,7 +887,6 @@ trait CachingTrait
         $result->Close();
         $mem->set('User.Variables.' . $currentid, 'parentlist', $gidlist);
         return $gidlist;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -917,7 +895,6 @@ trait CachingTrait
      */
     public function getOutputCacheDir(): string
     {
-        // --- LEGACY METHOD BODY ---
         // make sure xarOutputCache is initialized
         if (!$this->outputCacheIsEnabled) {
             // get the caching configuration
@@ -932,7 +909,6 @@ trait CachingTrait
             $this->noCache();
         }
         return $this->outputCache->getCacheDir();
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -940,9 +916,7 @@ trait CachingTrait
      */
     public function isOutputCacheEnabled()
     {
-        // --- LEGACY METHOD BODY ---
         return $this->outputCacheIsEnabled;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -950,9 +924,7 @@ trait CachingTrait
      */
     public function isCoreCacheEnabled()
     {
-        // --- LEGACY METHOD BODY ---
         return $this->coreCacheIsEnabled;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -960,9 +932,7 @@ trait CachingTrait
      */
     public function isTemplateCacheEnabled()
     {
-        // --- LEGACY METHOD BODY ---
         return $this->templateCacheIsEnabled;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -970,9 +940,7 @@ trait CachingTrait
      */
     public function isVariableCacheEnabled()
     {
-        // --- LEGACY METHOD BODY ---
         return $this->variableCacheIsEnabled;
-        // --- END LEGACY METHOD BODY ---
     }
 }
 

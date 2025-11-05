@@ -287,7 +287,7 @@ class Themes_MetaBlock extends BasicBlock
                         $params = explode('=', $pair);
                         $key = $params[0];
                         $val = $params[1] ?? null;
-                        if ($key == 'theme' && !empty($val) && !xarTheme::isAvailable($val)) {
+                        if ($key == 'theme' && !empty($val) && !$this->theme()->isAvailable($val)) {
                             return;
                         }
                         $args[$key] = $val;

@@ -16,6 +16,8 @@
  *         (there should be a chain of classes, not a chain of methods)
 **/
 
+use Xaraya\Services\xar;
+
 interface IExceptionHandlers
 {
     public static function defaulthandler($e);
@@ -74,18 +76,20 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             // If we have em, use em
 
             if (method_exists('xarTpl', 'getThemeDir') && method_exists('xarTpl', 'file')) {
-                $theme_dir = xarTpl::getThemeDir();
+                $tpl = xar::tpl();
+                $theme_dir = $tpl->getThemeDir();
                 $template = "systemerror";
                 sys::import('xaraya.caching.template');
                 if (file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
-                    $msg = xarTpl::file($theme_dir . '/modules/base/message-' . $template . '.xt', self::$data);
+                    $msg = $tpl->file($theme_dir . '/modules/base/message-' . $template . '.xt', self::$data);
                 } else {
-                    $msg = xarTpl::file(sys::code() . 'modules/base/xartemplates/message-' . $template . '.xt', self::$data);
+                    $msg = $tpl->file(sys::code() . 'modules/base/xartemplates/message-' . $template . '.xt', self::$data);
                 }
                 if ($e instanceof xarExceptions) {
-                    echo xarTpl::renderPage($msg, null, $e->getContext());
+                    $tpl->setContext($e->getContext());
+                    echo $tpl->renderPage($msg);
                 } else {
-                    echo xarTpl::renderPage($msg);
+                    echo $tpl->renderPage($msg);
                 }
             } else {
                 // Rethrow it, we cant handle it.
@@ -192,7 +196,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         $show = false;
         if (class_exists('xarConfigVars') && xarCore::isLoaded(xarCore::SYSTEM_CONFIGURATION)) {
             try {
-                $show = xarConfigVars::get(null, 'Site.BL.ExceptionDisplay');
+                $show = xar::config()->getVar(null, 'Site.BL.ExceptionDisplay');
             } catch (Exception $e) {
             }
         }
@@ -209,13 +213,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             $rawmsg .= $msg;
             $msg = $rawmsg;
         } else {
-            $module = '';
-            if (xarController::$allowShortURLs && isset(xarController::$shortURLVariables['module'])) {
-                $module = xarController::$shortURLVariables['module'];
-            } else {
-                // Then check in $_GET
-                $module = xarServer::getInstance()?->getQueryVar('module');
-            }
+            $module = xar::req()->getVar('module');
 
             // @todo consider removing this, it doesnt add much and causes quite a maintenance task
             $product = '';

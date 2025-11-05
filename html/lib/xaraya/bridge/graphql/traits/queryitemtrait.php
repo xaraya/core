@@ -114,7 +114,7 @@ trait QueryItemTrait
                 throw new Exception('Unknown item for type ' . $typename);
             }
             try {
-                // @checkme this throws exception for userlist property when xarUser::init() is not called first
+                // @checkme this throws exception for userlist property when xar::user()->init() is not called first
                 //$values = $objectitem->getFieldValues();
                 // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
                 $values = $objectitem->getFieldValues([], 1);

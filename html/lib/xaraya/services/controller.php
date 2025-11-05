@@ -176,9 +176,7 @@ trait ControllerTrait
      */
     public function getModuleURL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $params = [], ?bool $generateXMLURL = null): string
     {
-        // --- LEGACY METHOD BODY ---
         return $this->URL($modName, $modType, $funcName, $params, $generateXMLURL);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -187,7 +185,6 @@ trait ControllerTrait
      */
     public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $params = [], ?bool $generateXMLURL = null): string
     {
-        // --- LEGACY METHOD BODY ---
         // Allow overriding building URL if needed
         $callback = $this->getCallback('buildUri');
         if (!empty($callback) && is_callable($callback)) {
@@ -248,8 +245,6 @@ trait ControllerTrait
 
         // Return the URL.
         return $this->getBaseURL() . $path;
-        // --- END LEGACY METHOD BODY ---
-        //return xarServer::getObjectURL($objectName, $methodName, $params, $generateXMLURL);
     }
 
     /**
@@ -288,35 +283,28 @@ trait ControllerTrait
 
     public function getRouter(): xarRouter
     {
-        // --- LEGACY METHOD BODY ---
         if (null == $this->router) {
             $this->setRouter(new xarRouter());
         }
         return $this->router;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setRouter(?xarRouter $router): void
     {
-        // --- LEGACY METHOD BODY ---
         $this->router = $router;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getDispatcher(): xarDispatcher
     {
-        // --- LEGACY METHOD BODY ---
         if (!$this->dispatcher instanceof xarDispatcher) {
             $this->dispatcher = new xarDispatcher();
         }
         return $this->dispatcher;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /** @param array<string, mixed> $config */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($config)) {
             $config = $this->getConfig();
         }
@@ -332,22 +320,18 @@ trait ControllerTrait
             $this->entryPoint = 'index.php';
         }
         return true;
-        // --- END LEGACY METHOD BODY ---
-        //return xarController::init($config, $context);
     }
 
     /** @return array<string, mixed> */
     public function getConfig(): array
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         $systemArgs = [
             'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
             // @todo re-evaluate this default
             'generateXMLURLs'        => true,
         ];
         return $systemArgs;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /** @param array<string, mixed> $config */
@@ -374,7 +358,6 @@ trait ControllerTrait
         if (!empty($context)) {
             $this->setContext($context);
         }
-        // --- LEGACY METHOD BODY ---
         try {
             $response = $this->getResponse();
             do {
@@ -384,7 +367,6 @@ trait ControllerTrait
         } catch (Exception $e) {
             throw $e;
         }
-        // --- END LEGACY METHOD BODY ---
         // @todo return $response here!?
         return $response;
     }
@@ -392,36 +374,30 @@ trait ControllerTrait
     public function normalizeRequest(?xarRequest $request = null): xarRequest
     {
         $request ??= $this->getRequest();
-        // --- LEGACY METHOD BODY ---
         $router = $this->getRouter();
         try {
             $router->route($request);
         } catch (Exception $e) {
             throw $e;
         }
-        // --- END LEGACY METHOD BODY ---
         // @todo return $request here!?
         return $request;
     }
 
     public function setCallback(string $name, ?callable $callback): void
     {
-        // --- LEGACY METHOD BODY ---
         if (!in_array($name, ['buildUri', 'redirectTo', 'forbiddenTo', 'notFoundTo', 'badRequestTo'])) {
             return;
         }
         $this->callback[$name] = $callback;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCallback(string $name): ?callable
     {
-        // --- LEGACY METHOD BODY ---
         if (!in_array($name, ['buildUri', 'redirectTo', 'forbiddenTo', 'notFoundTo', 'badRequestTo'])) {
             return null;
         }
         return $this->callback[$name] ?? null;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setRequest(mixed $url = null): void
@@ -431,24 +407,19 @@ trait ControllerTrait
 
     public function setResponse(?xarResponse $response = null): void
     {
-        // --- LEGACY METHOD BODY ---
         $this->response = $response ?? new xarResponse();
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getResponse(): xarResponse
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($this->response)) {
             $this->setResponse();
         }
         return $this->response;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setBaseURL(?string $baseurl): void
     {
-        // --- LEGACY METHOD BODY ---
         // if entry point is specified in baseurl, e.g. http://localhost/xaraya/dispatch.php
         if (!empty($baseurl) && !str_ends_with($baseurl, '/')) {
             $parts = explode('/', $baseurl);
@@ -478,16 +449,11 @@ trait ControllerTrait
         }
         // strip trailing slash for BaseURI here - added again in getBaseURL()
         xarSystemVars::set(sys::LAYOUT, 'BaseURI', rtrim($info['path'], '/'));
-        // --- END LEGACY METHOD BODY ---
-        //xarServer::setBaseURL($baseurl);
     }
 
     public function getPageTime(): float
     {
-        // --- LEGACY METHOD BODY ---
         return microtime(true) - $GLOBALS["Xaraya_PageTime"];
-        // --- END LEGACY METHOD BODY ---
-        //return xarServer::getPageTime();
     }
 
     /**
@@ -522,7 +488,6 @@ trait ControllerTrait
      */
     public function getBaseURL(): string
     {
-        // --- LEGACY METHOD BODY ---
         if ($this->baseurl != null) {
             return $this->baseurl;
         }
@@ -534,8 +499,6 @@ trait ControllerTrait
 
         $this->baseurl = "$protocol://$server$path/";
         return $this->baseurl;
-        // --- END LEGACY METHOD BODY ---
-        //return xarServer::getBaseURL();
     }
 
     /**
@@ -605,7 +568,6 @@ trait ControllerTrait
      */
     public function parseQuery(?string $url = null): array
     {
-        // --- LEGACY METHOD BODY ---
         $params = [];
         if (empty($url)) {
             return $params;
@@ -626,8 +588,6 @@ trait ControllerTrait
             }
         }
         return $params;
-        // --- END LEGACY METHOD BODY ---
-        //return xarController::parseQuery($url);
     }
 
     public function isLocalReferer(): bool
@@ -646,7 +606,6 @@ trait ControllerTrait
      */
     public function redirect(string $url, ?int $httpResponse = null)
     {
-        // --- LEGACY METHOD BODY ---
         $this->getParent()->cache()->noCache();
         $redirectURL = urldecode($url); // this is safe if called multiple times.
 
@@ -701,8 +660,6 @@ trait ControllerTrait
         // exit point.
         \xarCore::exit();
         return false;
-        // --- END LEGACY METHOD BODY ---
-        //return xarController::redirect($url, $httpResponse, $this->getContext());
     }
 
     /**
@@ -711,15 +668,12 @@ trait ControllerTrait
      */
     public function forbidden(string $msg = '', ?string $template = null): ?string
     {
-        // --- LEGACY METHOD BODY ---
         $this->getContext()?->setResponse($msg, 403);
         $callback = $this->getCallback('forbiddenTo');
         if (!empty($callback) && is_callable($callback)) {
             return call_user_func($callback, $msg, $this->getContext());
         }
         return xarResponse::Forbidden($msg, 'base', 'message', 'forbidden', $template, $this->getContext());
-        // --- END LEGACY METHOD BODY ---
-        //return xarController::forbidden($msg, $this->getContext(), $template);
     }
 
     /**
@@ -728,14 +682,12 @@ trait ControllerTrait
      */
     public function notFound(string $msg = '', ?string $template = null): ?string
     {
-        // --- LEGACY METHOD BODY ---
         $this->getContext()?->setResponse($msg, 404);
         $callback = $this->getCallback('notFoundTo');
         if (!empty($callback) && is_callable($callback)) {
             return call_user_func($callback, $msg, $this->getContext());
         }
         return xarResponse::NotFound($msg, 'base', 'message', 'notfound', $template, $this->getContext());
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -744,7 +696,6 @@ trait ControllerTrait
      */
     public function badRequest(?string $layout = null): ?string
     {
-        // --- LEGACY METHOD BODY ---
         $layout ??= 'bad_author';
         $this->getContext()?->setResponse($layout, 400);
         $callback = $this->getCallback('badRequestTo');
@@ -760,7 +711,6 @@ trait ControllerTrait
             'context' => $this->getContext(),
         ];
         return $this->getParent()->tpl()->module('privileges', 'user', 'errors', $tplData);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -769,7 +719,6 @@ trait ControllerTrait
      */
     public function URL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $params = [], ?bool $generateXMLURL = null, ?string $fragment = null, mixed $entrypoint = [], ?string $route = null)
     {
-        // --- LEGACY METHOD BODY ---
         // Allow overriding building URL if needed
         $callback = $this->getCallback('buildUri');
         if (!empty($callback) && is_callable(value: $callback)) {
@@ -849,7 +798,6 @@ trait ControllerTrait
 
         // Return the URL.
         return $this->getBaseURL() . $path;
-        // --- END LEGACY METHOD BODY ---
     }
 }
 

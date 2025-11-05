@@ -118,7 +118,7 @@ class DeactivateMethod extends MethodClass
         }
 
         // Hmmm, I wonder if the target adding is considered a hack
-        // it certainly depends on the implementation of xarController::URL
+        // it certainly depends on the implementation of xar::ctl()->getModuleURL()
         $this->ctl()->redirect($return_url);
 
         return true;

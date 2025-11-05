@@ -68,6 +68,6 @@ trait AdminGuiTrait
     {
         $this->setModType('admin');
         // any state here = otherwise during module init(), any GUI hook functions registered will throw ModuleNotActiveException
-        xarMod::load($this->getModName(), $this->getModType(), ixarMod::LOAD_ANYSTATE, $this->getContext());
+        $this->mod()->load($this->getModName(), $this->getModType(), ixarMod::LOAD_ANYSTATE);
     }
 }

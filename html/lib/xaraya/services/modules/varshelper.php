@@ -33,7 +33,6 @@ class VarsHelper extends ServiceClass
 
     public function get(string $modName, string $varName): mixed
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
@@ -84,8 +83,6 @@ class VarsHelper extends ServiceClass
         }
         $result->close();
         return $value;
-        // --- END LEGACY METHOD BODY ---
-        // return xarModVars::get($modName, $varName);
     }
 
     public function set(string $modName, string $varName, mixed $value): bool
@@ -94,7 +91,6 @@ class VarsHelper extends ServiceClass
         if (is_null($value)) {
             return $this->delete($modName, $varName);
         }
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
@@ -139,13 +135,10 @@ class VarsHelper extends ServiceClass
         $mem = $this->getParent()->mem();
         $mem->set($cacheScope, $varName, $value);
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // return xarModVars::set($modName, $varName, $value);
     }
 
     public function delete(string $modName, string $varName): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
@@ -180,13 +173,10 @@ class VarsHelper extends ServiceClass
         $mem = $this->getParent()->mem();
         $mem->del($cacheScope, $varName);
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // return xarModVars::delete($modName, $varName);
     }
 
     public function cache(string $modName, ?string $source = null): void
     {
-        // --- LEGACY METHOD BODY ---
         $cacheScope = self::SCOPE . '.' . $modName;
         $mem = $this->getParent()->mem();
         if ($mem->hasPreload($cacheScope)) {
@@ -195,9 +185,6 @@ class VarsHelper extends ServiceClass
         }
         // Saved in DD > Modify Configuration = modules/dynamicdata/admingui/modifyconfig.php
         //xar::mod('dynamicdata')->cacheVars();
-        // --- END LEGACY METHOD BODY ---
-        // $source ??= __CLASS__ . '::' . __FUNCTION__;
-        // xarModVars::cache($modName, $source);
     }
 
     /**
@@ -207,7 +194,6 @@ class VarsHelper extends ServiceClass
      */
     public function getID(string $modName, string $varName): int
     {
-        // --- LEGACY METHOD BODY ---
         // Module name and variable name are both necesary
         if (empty($modName) || empty($varName)) {
             throw new EmptyParameterException('modName and/or name');
@@ -246,8 +232,6 @@ class VarsHelper extends ServiceClass
 
         $mem->set($cacheScope, $modName . $varName, $modvarid);
         return $modvarid;
-        // --- END LEGACY METHOD BODY ---
-        // return xarModVars::getID($modName, $varName);
     }
 
     public function disableOverview(): bool
@@ -257,7 +241,6 @@ class VarsHelper extends ServiceClass
 
     public function preload($modName): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
@@ -296,12 +279,10 @@ class VarsHelper extends ServiceClass
 
         $this->preloaded[$modName] = true;
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function flush($modName): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
@@ -354,7 +335,5 @@ class VarsHelper extends ServiceClass
             throw $e;
         }
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // return xarModVars::delete_all($modName);
     }
 }

@@ -101,6 +101,7 @@ class XarayaCompiler extends xarBLCompiler
     * Summary of boot
     * @param DOMDocument|null $customDoc
     * @return string
+    * @todo there is no themeworks module ;-)
     */
     protected function boot($customDoc = null)
     {
@@ -121,7 +122,7 @@ class XarayaCompiler extends xarBLCompiler
 
             // Get the value for the framework tag, which is defined in a modvar
             if (method_exists('xarModVars', 'get')) {
-                $framework = xarModVars::get('themeworks', 'framework');
+                $framework = xar::mod()->getVar('themeworks', 'framework');
             } else {
                 $framework = '';
             }
@@ -143,7 +144,7 @@ class XarayaCompiler extends xarBLCompiler
     private function getModuleTagPaths()
     {
         if (method_exists('xarMod', 'apiFunc') && empty(xar::mem()->get('installer', 'installing'))) {
-            $activeMods = xarMod::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => ixarMod::STATE_ACTIVE]]);
+            $activeMods = xar::mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => ixarMod::STATE_ACTIVE]]);
         } else {
             return [];
         }
@@ -225,7 +226,7 @@ class XarayaCompiler extends xarBLCompiler
     private function getBlockTagPaths()
     {
         if (method_exists('xarMod', 'apiFunc') && empty(xar::mem()->get('installer', 'installing'))) {
-            $activeBlocks = xarMod::apiFunc('blocks', 'instances', 'getitems', ['state' => 2]);
+            $activeBlocks = xar::mod()->apiFunc('blocks', 'instances', 'getitems', ['state' => 2]);
         } else {
             return [];
         }

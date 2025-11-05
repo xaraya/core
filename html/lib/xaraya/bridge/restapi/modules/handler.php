@@ -94,8 +94,8 @@ class ModuleAPIHandler extends RestAPIHandler
     /**
      * Summary of getModuleCall
      * @param array<string, mixed> $args
-     * @uses xarMod::init()
-     * @uses xarUser::init()
+     * @uses xar::mod()->init()
+     * @uses xar::user()->init()
      * @throws \ForbiddenOperationException
      * @return mixed
      */
@@ -110,8 +110,8 @@ class ModuleAPIHandler extends RestAPIHandler
         if (empty($func)) {
             return ['method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
-        xarMod::init();
-        xarUser::init();
+        xar::mod()->init();
+        xar::user()->init();
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = $this->checkUser();
@@ -158,8 +158,8 @@ class ModuleAPIHandler extends RestAPIHandler
     /**
      * Summary of postModuleCall
      * @param array<string, mixed> $args
-     * @uses xarMod::init()
-     * @uses xarUser::init()
+     * @uses xar::mod()->init()
+     * @uses xar::user()->init()
      * @throws \ForbiddenOperationException
      * @return mixed
      */
@@ -177,8 +177,8 @@ class ModuleAPIHandler extends RestAPIHandler
         if (empty($args['input'])) {
             $args['input'] = [];
         }
-        xarMod::init();
-        xarUser::init();
+        xar::mod()->init();
+        xar::user()->init();
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = $this->checkUser();
@@ -386,13 +386,14 @@ class ModuleAPIHandler extends RestAPIHandler
 
     /**
      * Summary of getDefaultModules
+     * @uses xar::mod()->init()
      * @return array<string, mixed>
      */
     public static function getDefaultModules()
     {
         $modulelist = ['dynamicdata'];
         $default = [];
-        xarMod::init();
+        xar::mod()->init();
         foreach ($modulelist as $module) {
             $default[$module] = [
                 'module' => $module,

@@ -221,7 +221,7 @@ class xarLocale extends xarObject
      *
      * @return array<mixed>|bool|null locale data
      * @throws LocaleNotFoundException
-     * @todo   figure out why we go through this function for xarMod::isAvailable
+     * @todo   figure out why we go through this function for xar::mod()->isAvailable
      */
     public static function &loadData($locale = null)
     {

@@ -14,8 +14,6 @@ namespace Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
-use xarTheme;
-use xarTpl;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -62,7 +60,7 @@ class SetdefaultMethod extends MethodClass
             $defaulttheme = $whatwasbefore;
         }
 
-        $themeInfo = xarTheme::getInfo($defaulttheme);
+        $themeInfo = $this->theme()->getInfo($defaulttheme);
 
         if ($themeInfo['class'] != 2) {
             $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'modifyconfig'));
@@ -80,7 +78,7 @@ class SetdefaultMethod extends MethodClass
         }
 
         // update the data
-        xarTpl::setThemeDir($themeInfo['directory']);
+        $this->tpl()->setThemeDir($themeInfo['directory']);
         $this->mod()->setVar('default_theme', $themeInfo['directory']);
 
         // set the target location (anchor) to go to within the page

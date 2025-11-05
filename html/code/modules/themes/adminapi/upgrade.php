@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -50,7 +49,7 @@ class UpgradeMethod extends MethodClass
         }
 
         // Get theme information
-        $themeInfo = xarTheme::getInfo($regid);
+        $themeInfo = $this->theme()->getInfo($regid);
         if (empty($themeInfo)) {
             $this->session()->setVar('errormsg', $this->ml('No such theme'));
             return false;
@@ -64,7 +63,7 @@ class UpgradeMethod extends MethodClass
         }
 
         // Get the new version information...
-        $themeFileInfo = xarTheme::getFileInfo($themeInfo['osdirectory']);
+        $themeFileInfo = $this->theme()->getFileInfo($themeInfo['osdirectory']);
         if (empty($themeFileInfo)) {
             return;
         }

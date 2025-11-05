@@ -54,7 +54,6 @@ class OutputCache extends ServiceClass
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($config)) {
             return false;
         }
@@ -93,14 +92,11 @@ class OutputCache extends ServiceClass
         }
 
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCacheDir()
     {
-        // --- LEGACY METHOD BODY ---
         return $this->cacheDir;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -108,9 +104,7 @@ class OutputCache extends ServiceClass
      */
     public function isPageCacheEnabled()
     {
-        // --- LEGACY METHOD BODY ---
         return $this->pageCacheIsEnabled;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -118,9 +112,7 @@ class OutputCache extends ServiceClass
      */
     public function isBlockCacheEnabled()
     {
-        // --- LEGACY METHOD BODY ---
         return $this->blockCacheIsEnabled;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -128,9 +120,7 @@ class OutputCache extends ServiceClass
      */
     public function isModuleCacheEnabled()
     {
-        // --- LEGACY METHOD BODY ---
         return $this->moduleCacheIsEnabled;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -138,8 +128,6 @@ class OutputCache extends ServiceClass
      */
     public function isObjectCacheEnabled()
     {
-        // --- LEGACY METHOD BODY ---
         return $this->objectCacheIsEnabled;
-        // --- END LEGACY METHOD BODY ---
     }
 }

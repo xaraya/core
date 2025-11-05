@@ -28,11 +28,12 @@ class DecodeShorturlMethod extends MethodClass
 
     /**
      * extract function and arguments from short URLs for this module, and pass
-     * them back to xarGetRequestInfo()
+     * them back to xarRequest::getInfo()
      * @param array $params array of optional parameters<br/>
      * @return array|void containing func the function to be called and args the query
      * string arguments, or empty if it failed
      * @see UserApi::decodeShorturl()
+     * @deprecated 2.4.1 use controllers instead
      */
     public function __invoke(array $params = [])
     {

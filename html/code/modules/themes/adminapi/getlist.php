@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use BadParameterException;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');

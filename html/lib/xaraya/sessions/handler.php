@@ -190,7 +190,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
                     $lifetime = 0;
                     // Referer check defaults to the current host for security level High
                     if (empty($args['refererCheck'])) {
-                        $host = $xar->req()->getServerVar('HTTP_HOST');
+                        $host = $xar->req()->getHost();
                         $host = preg_replace('/:.*/', '', $host);
                         // this won't work for non-standard ports
                         //if (!xarCore::funcIsDisabled('ini_set')) ini_set('session.referer_check', "$host$path");
@@ -227,7 +227,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             // and should be configurable for multi-site setups
             // Example: .Xaraya.com for all *.Xaraya.com servers
             // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
-            //$domain = xarServer::getVar('HTTP_HOST');
+            //$domain = $xar->req()->getHost();
             //$domain = preg_replace('/:.*/', '', $domain);
             if (!empty($args['cookieDomain'])) {
                 ini_set('session.cookie_domain', $args['cookieDomain']);

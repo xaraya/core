@@ -51,8 +51,7 @@ trait BasicBridgeTrait
         //sys::import('xaraya.bridge.middleware.modules.router');
         //ModuleRouter::setBaseUri($baseUri);
         $ctl->setCallback('buildUri', [$this, 'buildUri']);
-        //xarController::$buildUri = [ModuleRequestHandler::class, 'buildModulePath'];
-        //xarController::$redirectTo = [ModuleRequestHandler::class, 'redirectTo'];
+        //$ctl->setCallback('redirectTo', [$this, 'redirectTo']);
         // Note: do this after updating controller entryPoint, so that request entryPoint matches
         $request = $ctl->getRequest();
         $request->setEntryPoint($ctl->getEntryPoint());

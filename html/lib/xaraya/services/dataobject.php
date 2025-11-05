@@ -138,7 +138,7 @@ trait DataObjectTrait
             $modName,
             $objecTemplate,
             $tplType,
-            $tplData
+            $tplData,
         );
     }
 

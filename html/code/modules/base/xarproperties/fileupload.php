@@ -77,10 +77,10 @@ class FileUploadProperty extends DataProperty
             */
         }
         /*
-                if($this->ctl()->getServerVar('PATH_TRANSLATED')) {
-                    $basepath = dirname(realpath($this->ctl()->getServerVar('PATH_TRANSLATED')));
-                } elseif($this->ctl()->getServerVar('SCRIPT_FILENAME')) {
-                    $basepath = dirname(realpath($this->ctl()->getServerVar('SCRIPT_FILENAME')));
+                if($this->req()->getServerVar('PATH_TRANSLATED')) {
+                    $basepath = dirname(realpath($this->req()->getServerVar('PATH_TRANSLATED')));
+                } elseif($this->req()->getServerVar('SCRIPT_FILENAME')) {
+                    $basepath = dirname(realpath($this->req()->getServerVar('SCRIPT_FILENAME')));
                 } else {
                     $basepath = './';
                 }

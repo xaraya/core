@@ -337,9 +337,9 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         // initialize database - delay until caching fails
         xarDatabase::init();
         // initialize modules
-        //xarMod::init();
+        //xar::mod()->init();
         // initialize users
-        //xarUser::init();
+        //xar::user()->init();
         $this->setTimer('handle');
         // get handler instance with context
         $handler = $this->resolveHandler($handler);

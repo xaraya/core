@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Themes\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -52,7 +51,7 @@ class ThemesinfoMethod extends MethodClass
         }
 
         // obtain maximum information about a theme
-        $info = xarTheme::getInfo($themeid);
+        $info = $this->theme()->getInfo($themeid);
 
         // get the theme object corresponding to this theme
         sys::import('modules.dynamicdata.class.objects.factory');

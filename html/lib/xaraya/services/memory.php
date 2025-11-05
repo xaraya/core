@@ -72,7 +72,6 @@ class MemoryService implements MemoryInterface
 
     public function has(string $scope, string $name): bool
     {
-        // --- LEGACY METHOD BODY ---
         // initialize cache if necessary
         $this->cacheCollection[$scope] ??= [];
         if (isset($this->cacheCollection[$scope][$name])) {
@@ -88,29 +87,19 @@ class MemoryService implements MemoryInterface
             return true;
         }
         return false;
-        // --- END LEGACY METHOD BODY ---
-        // return isset($this->cacheCollection[$scope][$name]);
-        // this needs to call the original static method for now
-        // return xarCoreCache::isCached($scope, $name);
     }
 
     public function get(string $scope, string $name): mixed
     {
-        // --- LEGACY METHOD BODY ---
         if (!isset($this->cacheCollection[$scope][$name])) {
             // don't fetch the value from second-level cache here
             return null;
         }
         return $this->cacheCollection[$scope][$name];
-        // --- END LEGACY METHOD BODY ---
-        // return $this->cacheCollection[$scope][$name] ?? null;
-        // this needs to call the original static method for now
-        // return xarCoreCache::getCached($scope, $name);
     }
 
     public function set(string $scope, string $name, mixed $value): void
     {
-        // --- LEGACY METHOD BODY ---
         // initialize cache if necessary
         $this->cacheCollection[$scope] ??= [];
         $this->cacheCollection[$scope][$name] = $value;
@@ -121,15 +110,10 @@ class MemoryService implements MemoryInterface
             // save the value to second-level cache here
             $this->cacheStorage->setCached($scope . ':' . $name, $value);
         }
-        // --- END LEGACY METHOD BODY ---
-        // $this->cacheCollection[$scope][$name] = $value;
-        // this needs to call the original static method for now
-        // xarCoreCache::setCached($scope, $name, $value);
     }
 
     public function del(string $scope, string $name): void
     {
-        // --- LEGACY METHOD BODY ---
         if (isset($this->cacheCollection[$scope][$name])) {
             unset($this->cacheCollection[$scope][$name]);
         }
@@ -140,15 +124,10 @@ class MemoryService implements MemoryInterface
             // delete the value from second-level cache here
             $this->cacheStorage->delCached($scope . ':' . $name);
         }
-        // --- END LEGACY METHOD BODY ---
-        // unset($this->cacheCollection[$scope][$name]);
-        // this needs to call the original static method for now
-        // xarCoreCache::delCached($scope, $name);
     }
 
     public function flush(string $scope): void
     {
-        // --- LEGACY METHOD BODY ---
         if (isset($this->cacheCollection[$scope])) {
             unset($this->cacheCollection[$scope]);
         }
@@ -159,15 +138,10 @@ class MemoryService implements MemoryInterface
             // CHECKME: not all cache storage supports this in the same way !
             $this->cacheStorage->flushCached($scope . ':');
         }
-        // --- END LEGACY METHOD BODY ---
-        // unset($this->cacheCollection[$scope]);
-        // this needs to call the original static method for now
-        // xarCoreCache::flushCached($scope);
     }
 
     public function hasPreload(string $scope, ?string $name = null): bool
     {
-        // --- LEGACY METHOD BODY ---
         if ($scope === 'CoreCache.Preload') {
             return false;
         }
@@ -176,14 +150,10 @@ class MemoryService implements MemoryInterface
             return $this->has('CoreCache.Preload', $scope . ':' . $name);
         }
         return $this->has('CoreCache.Preload', $scope);
-        // --- END LEGACY METHOD BODY ---
-        // this needs to call the original static method for now
-        // return xarCoreCache::hasPreload($scope, $name);
     }
 
     public function load(string $scope, ?string $name = null): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (isset($name)) {
             $filepath = sys::varpath() . '/cache/core/' . $scope . '.' . $name . '.php';
             if (!is_file($filepath)) {
@@ -211,14 +181,10 @@ class MemoryService implements MemoryInterface
             $this->cacheCollection[$scope][$name] = $value;
         }
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // this needs to call the original static method for now
-        // return xarCoreCache::loadCached($scope, $name);
     }
 
     public function save(string $scope, ?string $name = null, ?string $source = null): bool
     {
-        // --- LEGACY METHOD BODY ---
         $source ??= __METHOD__;
         $date = date('c');
         if (isset($name)) {
@@ -253,14 +219,10 @@ return $values;
 ';
         file_put_contents($filepath, $info);
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // this needs to call the original static method for now
-        // return xarCoreCache::saveCached($scope, $name, $source);
     }
 
     public function delPreload(string $scope, ?string $name = null)
     {
-        // --- LEGACY METHOD BODY ---
         if (isset($name)) {
             $filepath = sys::varpath() . '/cache/core/' . $scope . '.' . $name . '.php';
             if (is_file($filepath)) {
@@ -272,12 +234,10 @@ return $values;
         if (is_file($filepath)) {
             unlink($filepath);
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setCacheStorage(ixarCache_Storage $cacheStorage, int $cacheExpire = 0)
     {
-        // --- LEGACY METHOD BODY ---
         $this->cacheStorage = $cacheStorage;
         $this->cacheStorage->setExpire($cacheExpire);
         // Make sure we use type 'core' for the cache storage here
@@ -289,13 +249,10 @@ return $values;
         // see what's going on in the cache storage ;-)
         //$this->cacheStorage->logfile = sys::varpath() . '/logs/core_cache.txt';
         // FIXME: some in-memory cache storage requires explicit garbage collection !?
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCachedScopes()
     {
-        // --- LEGACY METHOD BODY ---
         return array_keys($this->cacheCollection);
-        // --- END LEGACY METHOD BODY ---
     }
 }

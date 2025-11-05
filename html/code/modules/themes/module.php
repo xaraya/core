@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Themes;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get themes module classes via xarMod::getModule()
+ * Get themes module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

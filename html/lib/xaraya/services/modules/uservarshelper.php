@@ -25,7 +25,6 @@ class UserVarsHelper extends ItemVarsHelper
 
     public function get(string $modName, string $varName, mixed $userId = null): mixed
     {
-        // --- LEGACY METHOD BODY ---
         // If id not specified take the current user
         $user = $this->getParent()->user($userId);
 
@@ -36,13 +35,10 @@ class UserVarsHelper extends ItemVarsHelper
         $userId = $user->getCurrentId();
 
         return parent::get($modName, $varName, $userId);
-        // --- END LEGACY METHOD BODY ---
-        // return xarModUserVars::get($modName, $varName, $userId);
     }
 
     public function set(string $modName, string $varName, mixed $value, mixed $userId = null): bool
     {
-        // --- LEGACY METHOD BODY ---
         // If no id specified assume current user
         $user = $this->getParent()->user($userId);
 
@@ -54,13 +50,10 @@ class UserVarsHelper extends ItemVarsHelper
         $userId = $user->getCurrentId();
 
         return parent::set($modName, $varName, $value, $userId);
-        // --- END LEGACY METHOD BODY ---
-        // return xarModUserVars::set($modName, $varName, $value, $userId);
     }
 
     public function delete(string $modName, string $varName, mixed $userId = null): bool
     {
-        // --- LEGACY METHOD BODY ---
         // If id is not set assume current user
         $user = $this->getParent()->user($userId);
 
@@ -74,7 +67,5 @@ class UserVarsHelper extends ItemVarsHelper
         $userId = $user->getCurrentId();
 
         return parent::delete($modName, $varName, $userId);
-        // --- END LEGACY METHOD BODY ---
-        // return xarModUserVars::delete($modName, $varName, $userId);
     }
 }

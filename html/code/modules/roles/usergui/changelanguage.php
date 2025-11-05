@@ -37,7 +37,7 @@ class ChangelanguageMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $this->var()->find('locale', $locale, 'str:1:', $this->mls()->getCurrentLocale());
-        $this->var()->find('return_url', $return_url, 'str:1:', $this->ctl()->getServerVar('HTTP_REFERER'));
+        $this->var()->find('return_url', $return_url, 'str:1:', $this->req()->getServerVar('HTTP_REFERER'));
 
         $locales = xarMLS::listSiteLocales();
         if (!isset($locales)) {

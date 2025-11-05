@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -71,7 +70,7 @@ class DeactivateMethod extends MethodClass
         $this->var()->find('command', $command, 'checkbox', false);
 
         // set the target location (anchor) to go to within the page
-        $minfo = xarTheme::getInfo($id);
+        $minfo = $this->theme()->getInfo($id);
         $target = $minfo['name'];
         if (empty($return_url)) {
             $return_url = $this->ctl()->getModuleURL('themes', 'admin', 'view', ['state' => ixarTheme::STATE_ANY], null) . '#' . $target;
@@ -88,7 +87,7 @@ class DeactivateMethod extends MethodClass
         $deactivated = $adminapi->setstate(['regid' => $id,'state' => ixarTheme::STATE_INACTIVE]);
 
         // Hmmm, I wonder if the target adding is considered a hack
-        // it certainly depends on the implementation of xarController::URL
+        // it certainly depends on the implementation of xar::ctl()->getModuleURL()
         $this->ctl()->redirect($return_url);
         return true;
     }

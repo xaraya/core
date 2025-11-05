@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -49,7 +48,7 @@ class GetfilethemesMethod extends MethodClass
                 default:
                     if (is_dir($basedir . "/" . $themeOsDir)) {
                         // no xartheme.php, no theme
-                        $themeFileInfo = xarTheme::getFileInfo($themeOsDir);
+                        $themeFileInfo = $this->theme()->getFileInfo($themeOsDir);
                         if (empty($themeFileInfo)) {
                             continue 2;
                         }

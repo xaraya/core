@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -45,7 +44,7 @@ class SetstateMethod extends MethodClass
 
         // Argument check
         if (isset($name)) {
-            $regid = xarTheme::getRegID($name);
+            $regid = $this->theme()->getRegID($name);
         }
         if (!isset($regid)) {
             throw new EmptyParameterException('regid');
@@ -65,7 +64,7 @@ class SetstateMethod extends MethodClass
         }
 
         //Get theme info
-        $themeInfo = xarTheme::getInfo($regid);
+        $themeInfo = $this->theme()->getInfo($regid);
 
         //Set up database object
         $dbconn = $this->db()->getConn();

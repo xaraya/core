@@ -86,13 +86,13 @@ class Installer extends InstallerClass
         $this->config()->setVar('Site.Core.WebserverAllowsSlashes', false);
 
         // when installing via https, we assume that we want to support that :)
-        $HTTPS = $this->ctl()->getServerVar('HTTPS');
+        $HTTPS = $this->req()->getServerVar('HTTPS');
         /* jojodee - monitor this fix.
          Localized fix for installer where HTTPS shows incorrectly as being on in
          some environments. Fix is ok as long as we dont access directly
          outside of installer. Consider setting config vars at later point rather than here.
         */
-        $REQ_URI = parse_url($this->ctl()->getServerVar('HTTP_REFERER'));
+        $REQ_URI = parse_url($this->req()->getServerVar('HTTP_REFERER'));
         // IIS seems to set HTTPS = off for some reason (cfr. xarServer::getProtocol)
         if (!empty($HTTPS) && $HTTPS != 'off' && $REQ_URI['scheme'] == 'https') {
             $this->config()->setVar('Site.Core.EnableSecureServer', true);
@@ -133,7 +133,7 @@ class Installer extends InstallerClass
         ];
         // @todo do we want to reset ctl() here?
         //$this->ctl()->init($systemArgs);
-        xarMod::init($systemArgs);
+        $this->mod()->init($systemArgs);
 
         // Installation complete; check for upgrades
         return $this->upgrade('2.0.0');

@@ -102,7 +102,6 @@ trait SecurityTrait
         // Note: this should be restricted to gui methods
         $modName ??= $this->getModName();
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             $modName = $xar->req()->getRequest()->getModule();
         }
@@ -119,7 +118,6 @@ trait SecurityTrait
 
         // Return encrypted key
         return $authid;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -130,7 +128,6 @@ trait SecurityTrait
         // Note: this should be restricted to gui methods
         $modName ??= $this->getModName();
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         // We don't need this check for AJAX calls
         if ($xar->req()->getRequest()->isAjax()) {
             return true;
@@ -174,7 +171,6 @@ trait SecurityTrait
         } else {
             return false;
         }
-        // --- END LEGACY METHOD BODY ---
     }
 }
 

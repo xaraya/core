@@ -44,26 +44,21 @@ class ExecHelper extends ServiceClass
     /** @param array<string, mixed> $args */
     public function apiFunc(string $modName, string $modType, string $funcName, array $args): mixed
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
         // @todo call module api class method directly if available
         return $this->callfunc($modName, $modType, $funcName, $args, 'api');
-        // --- END LEGACY METHOD BODY ---
     }
 
-    public function apiLoad(string $modName, string $modType): mixed
+    public function apiLoad(string $modName, string $modType, int $flags = ixarMod::LOAD_ANYSTATE): mixed
     {
-        // --- LEGACY METHOD BODY ---
-        return $this->privateLoad($modName, $modType . 'api', ixarMod::LOAD_ANYSTATE);
-        // --- END LEGACY METHOD BODY ---
+        return $this->privateLoad($modName, $modType . 'api', $flags);
     }
 
     /** @param array<string, mixed> $args */
     public function guiFunc(string $modName, string $modType, string $funcName, array $args): mixed
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
@@ -109,19 +104,15 @@ class ExecHelper extends ServiceClass
         $xar->cache()->setModule($cacheKey, $tplOutput);
 
         return $tplOutput;
-        // --- END LEGACY METHOD BODY ---
     }
 
-    public function load(string $modName, string $modType): mixed
+    public function load(string $modName, string $modType, $flags = ixarMod::LOAD_ONLYACTIVE): mixed
     {
-        // --- LEGACY METHOD BODY ---
-        return $this->privateLoad($modName, $modType, ixarMod::LOAD_ONLYACTIVE);
-        // --- END LEGACY METHOD BODY ---
+        return $this->privateLoad($modName, $modType, $flags);
     }
 
     protected function callFunc($modName, $modType, $funcName, $args, $funcType = '')
     {
-        // --- LEGACY METHOD BODY ---
         assert(($funcType == "api" || $funcType == ""));
         $xar = $this->getParent();
 
@@ -166,7 +157,7 @@ class ExecHelper extends ServiceClass
             }
             $xar = $this->getParent();
 
-            $xar->log()->info("xarMod::callFunc: Calling $modFunc");
+            $xar->log()->info("xar::mod()->callFunc: Calling $modFunc");
 
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {
@@ -223,12 +214,10 @@ class ExecHelper extends ServiceClass
 
         $funcResult = $modFunc($args, $this->getContext());
         return $funcResult;
-        // --- END LEGACY METHOD BODY ---
     }
 
     protected function privateLoad($modName, $modType, $flags = 0)
     {
-        // --- LEGACY METHOD BODY ---
         static $loadedModuleCache = [];
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
@@ -242,7 +231,7 @@ class ExecHelper extends ServiceClass
         $xar = $this->getParent();
 
         // Log it when it doesn't come from the cache
-        $xar->log()->debug("xarMod::load: Loading $modName:$modType");
+        $xar->log()->debug("xar::mod()->load: Loading $modName:$modType");
 
         $info = $xar->mod()->getInfoHelper();
 
@@ -285,7 +274,7 @@ class ExecHelper extends ServiceClass
             } else {
                 // this is (not really) OK too - do nothing
                 $loadedModuleCache[$cacheKey] = false;
-                $xar->log()->info("xarMod::load: Loading $modName:$modType FAILED");
+                $xar->log()->info("xar::mod()->load: Loading $modName:$modType FAILED");
             }
         }
 
@@ -306,26 +295,20 @@ class ExecHelper extends ServiceClass
             xarEvents::notify('ModLoad', $modName, $this->getContext());
         }
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function userapi(string $modName)
     {
-        // --- LEGACY METHOD BODY ---
         return $this->getModule($modName)->userapi();
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function usergui(string $modName)
     {
-        // --- LEGACY METHOD BODY ---
         return $this->getModule($modName)->usergui();
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string
     {
-        // --- LEGACY METHOD BODY ---
         static $tplmodule_cache = [];
 
         $key = "$tplmodule:$type:$func";
@@ -352,12 +335,10 @@ class ExecHelper extends ServiceClass
             }
         }
         return $tplmodule_cache[$key];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getModule(string $modName): ModuleInterface
     {
-        // --- LEGACY METHOD BODY ---
         if (!array_key_exists($modName, $this->moduleClasses)) {
             $result = xarClassMap::findModuleClass($modName);
             if (!empty($result) && class_exists($result['classname'])) {
@@ -367,7 +348,7 @@ class ExecHelper extends ServiceClass
                 } catch (Throwable $e) {
                     $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext());
                     $xar = $this->getParent();
-                    $xar->log()->warning("xarMod::getModule: Error loading $class for module $modName");
+                    $xar->log()->warning("xar::mod()->getModule: Error loading $class for module $modName");
                 }
             } else {
                 $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext());
@@ -376,12 +357,10 @@ class ExecHelper extends ServiceClass
             $this->moduleClasses[$modName]->setContext($this->getContext());
         }
         return $this->moduleClasses[$modName];
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getModuleClassMethod(string $modName, string $modType, string $funcName, string $callType): ?callable
     {
-        // --- LEGACY METHOD BODY ---
         static $methods_cache = [];
 
         $key = "$modName:$modType:$funcName:$callType";
@@ -391,14 +370,13 @@ class ExecHelper extends ServiceClass
             // returns null for DefaultModule() = no suitable class method
             $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName, $callType);
             if (!isset($methods_cache[$key])) {
-                $xar->log()->info("xarMod::getModuleClassMethod: Missing method for $key");
+                $xar->log()->info("xar::mod()->getModuleClassMethod: Missing method for $key");
             } else {
                 // Load the translations file, only if we have loaded the function for the first time here.
                 $xar->mls()->loadModuleTranslations($modName, $modType, $funcName);
             }
         }
         return $methods_cache[$key];
-        // --- END LEGACY METHOD BODY ---
     }
 
     /** @param array<string, mixed> $args */

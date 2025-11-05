@@ -18,8 +18,6 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
-use xarMod;
-use xarUser;
 use Exception;
 
 /**
@@ -432,8 +430,8 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     {
         //$role = xarRoles::getRole($userId);
         //$rolename = $role->getName();
-        xarMod::init();
-        xarUser::init();
+        xar::mod()->init();
+        xar::user()->init();
         $context->tracePath(__CLASS__ . '::call_module_function: ' . "$module $type $func for user $userId", ['args' => $args, 'fields' => $fields]);
         return xar::mod()->apiFunc($module, $type, $func, $args);
         //$values = ['func_args' => $args];

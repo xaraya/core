@@ -159,7 +159,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
 
             sys::import('modules.themes.class.configurations');
             $config = new Configurations();
-            $info = xarTheme::getInfo($this->theme_id);
+            $info = $this->theme()->getInfo($this->theme_id);
 
             // Get the theme specific options being used in the theme
             $var_re = "!xarThemeVars::get\(\s*[\"|\']" . $info['name'] . "[\"|\']+\s*,\s*[\'|\"]+([^\"|\']*)[\"|\']\s*\)!is";

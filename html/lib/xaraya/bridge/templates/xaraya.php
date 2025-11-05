@@ -241,12 +241,12 @@ class XarayaCoreExtension extends XarayaTwigExtension
 
     public function xar_requestvar($name)
     {
-        return $this->ctl()->getRequestVar($name);
+        return $this->req()->getVar($name);
     }
 
     public function xar_servervar($name)
     {
-        return $this->ctl()->getServerVar($name);
+        return $this->req()->getServerVar($name);
     }
 
     public function xar_sessionvar($name, $value = null)

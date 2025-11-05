@@ -17,7 +17,6 @@ use EmptyParameterException;
 use Exception;
 use ThemeNotFoundException;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -48,19 +47,19 @@ class InitialiseMethod extends MethodClass
         $adminapi = $this->adminapi();
 
         if (isset($name)) {
-            $regid = xarTheme::getRegID($name);
+            $regid = $this->theme()->getRegID($name);
         }
         if (!isset($regid)) {
             throw new EmptyParameterException('regid');
         }
 
         // Get theme information
-        $themeInfo = xarTheme::getInfo($regid);
+        $themeInfo = $this->theme()->getInfo($regid);
         if (!isset($themeInfo)) {
             throw new ThemeNotFoundException($regid, 'Theme (regid: #(1) does not exist.');
         }
         $themename = $themeInfo['name'];
-        $themeInfo = xarTheme::getBaseInfo($themename);
+        $themeInfo = $this->theme()->getBaseInfo($themename);
 
         // Update state of theme
         $set = $adminapi->setstate(['regid' => $regid,

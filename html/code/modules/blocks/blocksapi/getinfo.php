@@ -136,7 +136,7 @@ class GetinfoMethod extends MethodClass
             throw new DataNotFoundException();
         }
 
-        // from this point on we have an array of blockinfo suitable for use by xarBlock::render()
+        // from this point on we have an array of blockinfo suitable for use by xar::block()->render()
 
         // We're now safe to apply any over-rides (usually from block tag)
         // title over-ride

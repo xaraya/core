@@ -18,8 +18,6 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use Xaraya\Authentication\AuthToken;
-use xarMod;
-use xarUser;
 use Exception;
 
 /**
@@ -121,10 +119,10 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
                 throw new Exception('Invalid access');
             }
             // @todo use $context
-            //xarSession::init();
-            xarMod::init();
-            xarUser::init();
-            // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
+            //xar::session()->init();
+            xar::mod()->init();
+            xar::user()->init();
+            // @checkme unset xarSession role_id if needed, otherwise xar::user()->logIn will hit xar::user()->isLoggedIn first!?
             // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
             $userId = xar::mod()->apiFunc('authsystem', 'user', 'authenticate_user', $args);
             if (empty($userId) || $userId == xar::user()::AUTH_FAILED) {

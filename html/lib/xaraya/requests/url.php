@@ -70,7 +70,7 @@ class RequestURL extends xarObject
     }
 
     /**
-     * Format GET parameters formed by nested arrays, to support xarController::URL().
+     * Format GET parameters formed by nested arrays, to support xar::ctl()->getModuleURL().
      * This function will recurse for each level to the arrays.
      *
      * @param array<string, mixed> $args the array to be expanded as a GET parameter

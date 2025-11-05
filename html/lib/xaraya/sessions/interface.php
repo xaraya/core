@@ -14,7 +14,7 @@ namespace Xaraya\Sessions;
 /**
  * Interface between xarSession (static) and SessionHandler (instance)
  * Note: if you want to replace SessionHandler with a custom class, use
- * xarSession::setSessionClass(SessionContext::class);
+ * xar::session()->setSessionClass(SessionContext::class);
  * @todo align with Xaraya\Services\SessionInterface
  */
 interface SessionInterface

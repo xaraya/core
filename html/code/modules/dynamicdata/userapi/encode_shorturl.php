@@ -13,7 +13,6 @@ namespace Xaraya\Modules\DynamicData\UserApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UserApi;
-use xarController;
 use sys;
 
 sys::import('modules.dynamicdata.method');
@@ -28,11 +27,12 @@ class EncodeShorturlMethod extends MethodClass
     /** functions imported by bermuda_cleanup */
 
     /**
-     * return the path for a short URL to xarController::URL for this module
+     * return the path for a short URL to xar::ctl()->getModuleURL() for this module
      * @param array<string,mixed> $args array of optional parameters<br/>
-     * string   $args the function and arguments passed to xarController::URL
+     * string   $args the function and arguments passed to xar::ctl()->getModuleURL()
      * @return string|void path to be added to index.php for a short URL, or empty if failed
      * @see UserApi::encodeShorturl()
+     * @deprecated 2.4.1 use controllers instead
      */
     public function __invoke(array $args = [])
     {

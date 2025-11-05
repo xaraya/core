@@ -21,7 +21,7 @@ sys::import('xaraya.core');
 
 xarCore::xarInit(xarCore::SYSTEM_ALL);
 
-if(!xarUser::logIn('Admin','12345')) {
+if(!xar::user()->logIn('Admin','12345')) {
     throw new Exception("Authentication failed\n");
 } else {
     xar_m('Authenticated');

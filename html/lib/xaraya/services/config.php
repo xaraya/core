@@ -49,7 +49,6 @@ trait ConfigTrait
      */
     public function getVar(string $varName, mixed $default = null): mixed
     {
-        // --- LEGACY METHOD BODY ---
         // Preload the config vars once
         if (!$this->preloaded) {
             $this->preload();
@@ -112,8 +111,6 @@ trait ConfigTrait
             return $value;
         }
         throw new VariableNotFoundException($varName, "Variable #(1) not found");
-        // --- END LEGACY METHOD BODY ---
-        // return xarConfigVars::get(null, $varName, $value);
     }
 
     /**
@@ -121,7 +118,6 @@ trait ConfigTrait
      */
     public function setVar(string $varName, mixed $value): bool
     {
-        // --- LEGACY METHOD BODY ---
         // FIXME: do we really want that ?
         // This way, worst case: 3 queries:
         // 1. deleting it
@@ -151,8 +147,6 @@ trait ConfigTrait
         $mem->set(self::SCOPE, $varName, $value);
 
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // return xarConfigVars::set(null, $varName, $value);
     }
 
     /**
@@ -160,7 +154,6 @@ trait ConfigTrait
      */
     public function delVar(string $varName): bool
     {
-        // --- LEGACY METHOD BODY ---
         $db = $this->getParent()->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
@@ -175,8 +168,6 @@ trait ConfigTrait
         $mem->del(self::SCOPE, $varName);
 
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // return xarConfigVars::delete(null, $varName);
     }
 
     /**
@@ -184,7 +175,6 @@ trait ConfigTrait
      */
     public function cacheVars(?string $source = null): void
     {
-        // --- LEGACY METHOD BODY ---
         $mem = $this->getParent()->mem();
         if ($mem->hasPreload(self::SCOPE)) {
             $source ??= __METHOD__;
@@ -192,14 +182,10 @@ trait ConfigTrait
         }
         // Saved in Base > Modify Configuration = modules/base/admingui/modifyconfig.php
         //xar::config()->cacheVars();
-        // --- END LEGACY METHOD BODY ---
-        // $source ??= __CLASS__ . '::' . __FUNCTION__;
-        // xarConfigVars::cache($source);
     }
 
     protected function preload()
     {
-        // --- LEGACY METHOD BODY ---
         $mem = $this->getParent()->mem();
         if ($mem->hasPreload(self::SCOPE) && $mem->load(self::SCOPE)) {
             $this->preloaded = true;
@@ -233,8 +219,6 @@ trait ConfigTrait
 
         $this->preloaded = true;
         return true;
-        // --- END LEGACY METHOD BODY ---
-        // xarConfigVars::preload();
     }
 }
 

@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -148,7 +147,7 @@ class GetitemsMethod extends MethodClass
 
                 $this->mem()->set('Theme.BaseInfos', $item['name'], $item);
 
-                $fileinfo = xarTheme::getFileInfo($item['osdirectory']);
+                $fileinfo = $this->theme()->getFileInfo($item['osdirectory']);
                 if (!empty($fileinfo)) {
                     $item = array_merge($fileinfo, $item);
                     $this->mem()->set('Theme.Infos', $item['regid'], $item);

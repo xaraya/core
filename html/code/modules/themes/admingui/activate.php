@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
 use ixarTheme;
-use xarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -70,7 +69,7 @@ class ActivateMethod extends MethodClass
         if (!isset($activated)) {
             return;
         }
-        $minfo = xarTheme::getInfo($id);
+        $minfo = $this->theme()->getInfo($id);
         // set the target location (anchor) to go to within the page
         $target = $minfo['name'];
         if (empty($return_url)) {

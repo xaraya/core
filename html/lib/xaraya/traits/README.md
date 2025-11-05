@@ -121,7 +121,7 @@ $descriptor->set('config', serialize($config));
 
 If you support more than 1 database (besides the Xaraya DB), you can set the current DB for the user with:
 ```
-$userapi = xarMod::userapi('library');
+$userapi = xar::mod()->userapi('library');
 $userapi->setCurrentDatabase($name)
 ```
 
@@ -167,7 +167,7 @@ class myFancyClass implements ContextInterface
 
 ## Module Traits
 
-Trait to get module classes via xarMod::getModule(), and associated traits for user/admin api/gui classes.
+Trait to get module classes via xar::mod()->getModule(), and associated traits for user/admin api/gui classes.
 
 Usage:
 ```
@@ -217,11 +217,11 @@ class UserGui implements UserGuiInterface
 # xaruser/main.php or xaruser.php (migration)
 function myfancymodule_user_main($args = [], $context = null) {
     // get module class instance first
-    //$module = xarMod::getModule('myfancymodule');
+    //$module = xar::mod()->getModule('myfancymodule');
     //$module->setContext($context);
     //return $module->usergui()->main($args);
     // or get module gui directly
-    $usergui = xarMod::usergui('myfancymodule');
+    $usergui = xar::mod()->usergui('myfancymodule');
     $usergui->setContext($context);
     return $usergui->main($args);
 }
@@ -229,11 +229,11 @@ function myfancymodule_user_main($args = [], $context = null) {
 # xaruserapi/get.php or xaruserapi.php (migration)
 function myfancymodule_userapi_get($args = [], $context = null) {
     // get module class instance first
-    //$module = xarMod::getModule('myfancymodule');
+    //$module = xar::mod()->getModule('myfancymodule');
     //$module->setContext($context);
     //return $module->userapi()->get($args);
     // or get module api directly
-    $userapi = xarMod::userapi('myfancymodule');
+    $userapi = xar::mod()->userapi('myfancymodule');
     $userapi->setContext($context);
     return $userapi->get($args);
 }

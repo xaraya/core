@@ -86,12 +86,13 @@ class StaticServicesClass extends ServicesClass
 
     /**
      * @return RequestFacade|null
+     * @see xar::req()->getInstance()
      */
     public function getRequestInstance()
     {
         if (!isset($this->requestInstance)) {
             // do *not* initialize request here - depends on the caller
-            //$this->requestInstance ??= \xarServer::newInstance($this->context);
+            //$this->requestInstance ??= $this->req()->newInstance($this->context);
         }
         return $this->requestInstance;
     }
@@ -99,7 +100,7 @@ class StaticServicesClass extends ServicesClass
     /**
      * @param ?RequestFacade $instance
      * @return void
-     * @see \xarServer::setInstance()
+     * @see xar::req()->setInstance()
      */
     public function setRequestInstance($instance)
     {
@@ -108,12 +109,13 @@ class StaticServicesClass extends ServicesClass
 
     /**
      * @return SessionFacade|null
+     * @see xar::session()->getInstance()
      */
     public function getSessionInstance()
     {
         if (!isset($this->sessionInstance)) {
             // do *not* initialize session here - depends on the caller
-            //$this->sessionInstance ??= xarSession::newInstance($this->context);
+            //$this->sessionInstance ??= $this->session()->newInstance($this->context);
         }
         return $this->sessionInstance;
     }
@@ -121,7 +123,7 @@ class StaticServicesClass extends ServicesClass
     /**
      * @param ?SessionFacade $instance
      * @return void
-     * @see xarSession::setInstance()
+     * @see xar::session()->setInstance()
      */
     public function setSessionInstance($instance)
     {

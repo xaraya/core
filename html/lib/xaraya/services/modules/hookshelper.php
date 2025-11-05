@@ -32,9 +32,7 @@ class HooksHelper extends ServiceClass
      */
     public function isHooked(string $hookModName, string $callerModName, ?int $callerItemType = null): bool
     {
-        // --- LEGACY METHOD BODY ---
         return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -71,25 +69,19 @@ class HooksHelper extends ServiceClass
 
     public function getList($callerModName, $hookScope, $hookAction, $callerItemType = '')
     {
-        // --- LEGACY METHOD BODY ---
         $event = ucfirst($hookScope) . ucfirst($hookAction);
         return xarHooks::getSubjectObservers($callerModName, $event, $callerItemType);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function register($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
     {
-        // --- LEGACY METHOD BODY ---
         $event = ucfirst($hookScope) . ucfirst($hookAction);
         return xarHooks::registerObserver($event, $hookModName, $hookArea, $hookModType, $hookModFunc);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function unregister($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
     {
-        // --- LEGACY METHOD BODY ---
         $event = ucfirst($hookScope) . ucfirst($hookAction);
         return xarHooks::unregisterObserver($event, $hookModName);
-        // --- END LEGACY METHOD BODY ---
     }
 }

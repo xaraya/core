@@ -40,9 +40,9 @@ sys::init();
 // initialize database - delay until caching fails
 //xarDatabase::init();
 // initialize modules
-//xarMod::init();
+//xar::mod()->init();
 // initialize users
-//xarUser::init();
+//xar::user()->init();
 
 /**
  * Summary of try_builder

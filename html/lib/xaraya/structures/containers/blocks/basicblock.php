@@ -60,8 +60,8 @@ interface iBlockDelete extends iBlock
  * Basic block class
  *
  * Available methods:
- * - __construct(array $blockinfo = [], $context = null) - called by xarBlock::getObject()
- * - display() - called by xarBlock::render()
+ * - __construct(array $blockinfo = [], $context = null) - called by xar::block()->getObject()
+ * - display() - called by xar::block()->render()
  * - getInfo()
  * - ...
  *
@@ -169,7 +169,7 @@ abstract class BasicBlock extends BlockType implements iBlock
         return true;
     }
 
-    // this method is called by xarBlock::render();
+    // this method is called by xar::block()->render();
     public function display()
     {
         $data = $this->getInfo();

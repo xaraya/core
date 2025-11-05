@@ -50,6 +50,7 @@ use Xaraya\Bridge\Routing\RoutingBridge;
 use Xaraya\Bridge\Routing\RoutingApiBridge;
 use Xaraya\Routing\RouterInterface;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
+use Xaraya\Services\xar;
 
 /**
  * Combined routing middleware + request handler
@@ -122,7 +123,7 @@ class RoutingHandler implements MiddlewareInterface, RequestHandlerInterface
             $request = $request->withAttribute('redirectURL', $redirectURL);
             $request = $request->withAttribute('status', $status);
         };
-        xarController::setCallback('redirectTo', $callback);
+        xar::ctl()->setCallback('redirectTo', $callback);
     }
 
     /**

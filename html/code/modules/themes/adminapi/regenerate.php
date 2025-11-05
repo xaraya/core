@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use DuplicateException;
 use ixarTheme;
-use xarTheme;
 use sys;
 use Xaraya\Modules\InstallerTool;
 use ThemeInitialization;

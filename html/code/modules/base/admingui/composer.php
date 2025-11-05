@@ -58,8 +58,8 @@ class ComposerMethod extends MethodClass
             $root = sys::root();
             // flat install supporting symlinks
             if (empty($root)) {
-                $root = realpath(dirname(realpath($this->ctl()->getServerVar('SCRIPT_FILENAME'))) . '/../');
-                //$vendor = realpath(dirname(realpath($this->ctl()->getServerVar('SCRIPT_FILENAME'))) . '/../vendor');
+                $root = realpath(dirname(realpath($this->req()->getServerVar('SCRIPT_FILENAME'))) . '/../');
+                //$vendor = realpath(dirname(realpath($this->req()->getServerVar('SCRIPT_FILENAME'))) . '/../vendor');
             } else {
                 $root = realpath($root);
                 //$vendor = realpath($root . 'vendor');

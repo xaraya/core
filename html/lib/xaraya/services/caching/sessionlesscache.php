@@ -42,7 +42,6 @@ class SessionLessCache extends ServiceClass
     public function checkCachingRules()
     {
         $cacheCookie = $this->cache->outputCache->cacheCookie;
-        // --- LEGACY METHOD BODY ---
         // Note: still using $_SERVER here since xarServer is not initialized
         if (
             // we have no session id in a cookie or URL parameter
@@ -59,12 +58,10 @@ class SessionLessCache extends ServiceClass
         } else {
             return false;
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function isCached($sessionLessList = null, $autoCachePeriod = 0)
     {
-        // --- LEGACY METHOD BODY ---
         // Check if this page is suitable for session-less page caching
         if (!($this->checkCachingRules())) {
             return;
@@ -116,24 +113,19 @@ class SessionLessCache extends ServiceClass
         if (file_exists($cacheDir . '/autocache.start')) {
             xarAutoSessionCache::logStatus('MISS', $autoCachePeriod, $cacheDir);
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function getCached($cache_file)
     {
-        // --- LEGACY METHOD BODY ---
         // send the content of the cache file to the browser
         @readfile($cache_file);
         // FIXME: separate cache cleaning for session-less caching if necessary
         //$this->cache->pageCache->cacheStorage->cleanCached();
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function setCached()
     {
-        // --- LEGACY METHOD BODY ---
         // tell PageCache::setCached() that we want to save another copy here
         $this->cache->pageCache->cacheNoSession = 1;
-        // --- END LEGACY METHOD BODY ---
     }
 }

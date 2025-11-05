@@ -135,7 +135,7 @@ class InternalSendmailMethod extends MethodClass
                 $mail->IsSMTP(); // telling the class to use SMTP
                 $mail->Host = $this->mod()->getVar('smtpHost'); // SMTP server
                 $mail->Port = $this->mod()->getVar('smtpPort'); // SMTP Port default 25.
-                $mail->Helo = $this->ctl()->getServerVar('SERVER_NAME'); // identification string sent to MTA at smtpHost
+                $mail->Helo = $this->req()->getServerVar('SERVER_NAME'); // identification string sent to MTA at smtpHost
 
                 // the smtp server might require authentication
                 if ($this->mod()->getVar('smtpAuth')) {

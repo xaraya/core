@@ -71,12 +71,12 @@ class TestApisMethod extends MethodClass
                 //return $contents;
                 // see session-less page caching
                 //sys::import('xaraya.caching.output.page');
-                $cacheCode = md5($this->ctl()->getServerVar('HTTP_HOST') . $this->ctl()->getServerVar('REQUEST_URI'));
+                $cacheCode = md5($this->req()->getHost() . $this->req()->getRequestString());
                 //xarPageCache::$cacheCode = $cacheCode;
                 $modtime = filemtime($apiFile);
                 //xarPageCache::sendHeaders($modtime);
                 $etag = $cacheCode . $modtime;
-                $match = $this->ctl()->getServerVar('HTTP_IF_NONE_MATCH') ?? null;
+                $match = $this->req()->getServerVar('HTTP_IF_NONE_MATCH') ?? null;
                 if (!empty($match) && $match == $etag) {
                     header('HTTP/1.1 304 Not Modified');
                     header("Cache-Control: public, must-revalidate");

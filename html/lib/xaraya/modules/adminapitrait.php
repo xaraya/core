@@ -68,6 +68,6 @@ trait AdminApiTrait
     {
         $this->setModType('admin');
         // any state here = default for api load
-        xarMod::apiLoad($this->getModName(), $this->getModType(), ixarMod::LOAD_ANYSTATE, $this->getContext());
+        $this->mod()->apiLoad($this->getModName(), $this->getModType());
     }
 }

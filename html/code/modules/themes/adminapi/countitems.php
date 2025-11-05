@@ -13,7 +13,7 @@ namespace Xaraya\Modules\Themes\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
-use xarTheme;
+use ixarTheme;
 use sys;
 
 sys::import('xaraya.modules.method');

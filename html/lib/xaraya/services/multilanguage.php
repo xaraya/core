@@ -164,7 +164,7 @@ trait MultiLanguageTrait
     }
 
     /**
-     * Get the current locale or empty if not defined in xarUser::init() yet
+     * Get the current locale or empty if not defined in xar::user()->init() yet
      */
     public function getCurrentLocale(): string
     {

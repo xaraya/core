@@ -19,7 +19,7 @@ namespace Xaraya\Modules;
 use Xaraya\Context\Context;
 use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\CoreServicesTrait;
-use xarMod;
+use Xaraya\Services\xar;
 use sys;
 
 sys::import('xaraya.services.servicestrait');
@@ -205,10 +205,10 @@ trait ModuleServicesTrait
     public function getModule(?string $modName = null): ?ModuleInterface
     {
         if (!empty($modName)) {
-            $module = xarMod::getModule($modName, $this->context);
+            $module = $this->mod()->getModule($modName);
             return $module;
         }
-        $this->parent ??= xarMod::getModule($this->getModName(), $this->context);
+        $this->parent ??= $this->mod()->getModule($this->getModName());
         if (!$this->parent->hasContext()) {
             $this->parent->setContext($this->context);
         }

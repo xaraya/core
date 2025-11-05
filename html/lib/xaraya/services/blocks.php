@@ -71,7 +71,6 @@ trait BlocksTrait
      */
     public function init(array $config = []): bool
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($config) && $this->initialized) {
             return true;
         }
@@ -80,7 +79,6 @@ trait BlocksTrait
         $xar->mod()->loadDbInfo('blocks');
         $this->initialized = true;
         return true;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -90,7 +88,6 @@ trait BlocksTrait
     public function render(array $blockinfo = []): string
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         // Get a cache key for this block if it's suitable for block caching
         $cacheKey = $xar->cache()->getBlockKey($blockinfo);
 
@@ -121,7 +118,7 @@ trait BlocksTrait
                         'privileges',
                         'user',
                         'errors',
-                        ['layout' => 'no_block_privileges']
+                        ['layout' => 'no_block_privileges'],
                     );
                 }
                 return '';
@@ -173,7 +170,6 @@ trait BlocksTrait
                 throw($e);
             }
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -181,12 +177,10 @@ trait BlocksTrait
      */
     public function renderGroup(string $groupName, ?string $template): string
     {
-        // --- LEGACY METHOD BODY ---
         if (empty($groupName)) {
             throw new EmptyParameterException('groupName');
         }
         return $this->renderBlock(['instance' => $groupName, 'box_template' => $template]);
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -196,7 +190,6 @@ trait BlocksTrait
     public function renderBlock(array $args): string
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         // All the hard work is done in this function.
         // It keeps the core code lighter when standalone blocks are not used.
         if (isset($args['instance'])) {  // valid block instance states
@@ -219,7 +212,6 @@ trait BlocksTrait
                 throw($e);
             }
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -232,7 +224,6 @@ trait BlocksTrait
     public function getObject(array $blockinfo = [], ?string $interface = null, ?string $method = null): iBlock
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         $invalid = [];
         if (empty($blockinfo['type']) || !is_string($blockinfo['type'])) {
             $invalid[] = 'type';
@@ -284,13 +275,11 @@ trait BlocksTrait
         // @deprecated 2.7.0 remove old code
         $key = !empty($blockinfo['module']) ? $blockinfo['module'] . ':' . $blockinfo['type'] : $blockinfo['type'];
         throw new ClassNotFoundException($key);
-        // --- END LEGACY METHOD BODY ---
     }
 
     public function guiMethod(iBlock $block, string $method, ?string $block_tpl = null): string
     {
         $xar = $this->getParent();
-        // --- LEGACY METHOD BODY ---
         if (!method_exists($block, $method)) {
             throw new FunctionNotFoundException($method);
         }
@@ -334,19 +323,17 @@ trait BlocksTrait
                 $tplData,
                 $block->block_template,
                 $block->template_base,
-                $block->tplmodule
+                $block->tplmodule,
             );
         } elseif (!empty($tplData) && is_string($tplData)) {
             return $tplData;
         } else {
             return '';
         }
-        // --- END LEGACY METHOD BODY ---
     }
 
     public static function hasMethod(iBlockType $block, string $method, bool $strict = false): bool
     {
-        // --- LEGACY METHOD BODY ---
         $hasMethod = method_exists($block, $method);
         // if not strict or method not exist, return
         if (!$strict || !$hasMethod) {
@@ -368,7 +355,6 @@ trait BlocksTrait
         unset($refObject, $methodObject);
 
         return $hasMethod;
-        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -403,10 +389,8 @@ trait BlocksTrait
 
     public function checkAccess(iBlock $block, string $action, ?int $roleid = null): bool
     {
-        // --- LEGACY METHOD BODY ---
         // TODO: support $roleid there someday ?
         return $block->checkAccess($action);
-        // --- END LEGACY METHOD BODY ---
     }
 }
 
