@@ -69,11 +69,13 @@ class xarLogger_syslog extends xarLogger
         /* If a logging facility is passed, then use it. */
         if (isset($conf['facility'])) {
             try {
-                // Convert the string to a constant expression
-                $const = $conf['facility'];
-                eval("\$facility = $const;");
                 /** @var mixed $facility */
-                $facility ??= LOG_USER;
+                // Convert the string to a constant expression
+                if (defined($conf['facility'])) {
+                    $facility = constant($conf['facility']);
+                } else {
+                    $facility = LOG_USER;
+                }
                 $this->facility = $facility;
             } catch (Exception $e) {
                 xarCore::exit("The value " . $conf['facility'] . " does not correspond to a recognized constant and will be ignored.");
@@ -84,11 +86,13 @@ class xarLogger_syslog extends xarLogger
         /* If logging facility options are given, then use them. */
         if (isset($conf['options'])) {
             try {
-                // Convert the string to a constant expression
-                $const = $conf['options'];
-                eval("\$options = $const;");
                 /** @var mixed $options */
-                $options ??= LOG_PID;
+                // Convert the string to a constant expression
+                if (defined($conf['options'])) {
+                    $options = constant($conf['options']);
+                } else {
+                    $options = LOG_PID;
+                }
                 $this->options = $options;
             } catch (Exception $e) {
                 xarCore::exit("The value " . $conf['options'] . " does not correspond to an expression of recognized constants and will be ignored.");

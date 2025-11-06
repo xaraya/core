@@ -54,7 +54,11 @@ class FilePickerProperty extends SelectProperty
             if ((strpos($this->initialization_basedirectory, 'sys') === 0) || (strpos($this->initialization_basedirectory, 'xar') === 0)) {
                 /** @var string $temp */
                 $temp = '';
-                eval('$temp=' . $this->initialization_basedirectory . ";");
+                $namespace = '';
+                if (str_starts_with($this->initialization_basedirectory, 'xar::')) {
+                    $namespace = '\\Xaraya\\Services\\';
+                }
+                eval('$temp=' . $namespace . $this->initialization_basedirectory . ";");
                 $this->initialization_basedirectory = $temp;
             }
         }

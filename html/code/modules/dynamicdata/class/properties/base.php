@@ -150,7 +150,11 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
                 try {
                     /** @var mixed|null $value */
                     $value = null;
-                    eval('$value = ' . $this->defaultvalue . ';');
+                    $namespace = '';
+                    if (str_starts_with($this->defaultvalue, 'xar::')) {
+                        $namespace = '\\Xaraya\\Services\\';
+                    }
+                    eval('$value = ' . $namespace . $this->defaultvalue . ';');
                     if (isset($value)) {
                         $this->defaultvalue = $value;
                     } else {

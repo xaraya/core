@@ -70,11 +70,8 @@ class TestApisMethod extends MethodClass
                 //$this->tpl()->setPageTemplateName('passthru');
                 //return $contents;
                 // see session-less page caching
-                //sys::import('xaraya.caching.output.page');
                 $cacheCode = md5($this->req()->getHost() . $this->req()->getRequestString());
-                //xarPageCache::$cacheCode = $cacheCode;
                 $modtime = filemtime($apiFile);
-                //xarPageCache::sendHeaders($modtime);
                 $etag = $cacheCode . $modtime;
                 $match = $this->req()->getServerVar('HTTP_IF_NONE_MATCH') ?? null;
                 if (!empty($match) && $match == $etag) {
@@ -82,11 +79,6 @@ class TestApisMethod extends MethodClass
                     header("Cache-Control: public, must-revalidate");
                     $this->exit();
                 }
-                //header("Expires: " .
-                //       gmdate("D, d M Y H:i:s", $modtime + xarPageCache::$cacheTime) .
-                //       " GMT");
-                //header("Cache-Control: public, max-age=" . xarPageCache::$cacheTime);
-                //header("Expires: 0");
                 header("Cache-Control: public, must-revalidate");
                 header("ETag: $etag");
                 header("Last-Modified: " . gmdate("D, d M Y H:i:s", $modtime) . " GMT");

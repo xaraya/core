@@ -191,7 +191,11 @@ class SelectProperty extends DataProperty
         if (!empty($this->initialization_function)) {
             /** @var array<mixed>|null $items */
             $items = null;
-            eval('$items = ' . $this->initialization_function . ';');
+            $namespace = '';
+            if (str_starts_with($this->initialization_function, 'xar::')) {
+                $namespace = '\\Xaraya\\Services\\';
+            }
+            eval('$items = ' . $namespace . $this->initialization_function . ';');
             if (!isset($items) || !is_array($items)) {
                 $items = [];
             }
@@ -257,7 +261,11 @@ class SelectProperty extends DataProperty
             sys::import('xaraya.structures.sets.collection');
             /** @var Collection|null $items */
             $items = null;
-            eval('$items = ' . $this->initialization_collection . ';');
+            $namespace = '';
+            if (str_starts_with($this->initialization_collection, 'xar::')) {
+                $namespace = '\\Xaraya\\Services\\';
+            }
+            eval('$items = ' . $namespace . $this->initialization_collection . ';');
             if (isset($items) && is_object($items)) {
                 $iter = $items->getIterator();
                 while ($iter->valid()) {
@@ -293,12 +301,20 @@ class SelectProperty extends DataProperty
         if (is_array($firstline)) {
             if (isset($firstline['name'])) {
                 if (strpos($firstline['name'], 'xar') === 0) {
-                    @eval('$firstline["name"] = ' . $firstline['name'] . ';');
+                    $namespace = '';
+                    if (str_starts_with($firstline['name'], 'xar::')) {
+                        $namespace = '\\Xaraya\\Services\\';
+                    }
+                    @eval('$firstline["name"] = ' . $namespace . $firstline['name'] . ';');
                 }
                 $line = ['id' => $firstline['id'], 'name' => $firstline['name']];
             } else {
                 if (strpos($firstline['id'], 'xar') === 0) {
-                    @eval('$firstline["id"] = ' . $firstline['id'] . ';');
+                    $namespace = '';
+                    if (str_starts_with($firstline['id'], 'xar::')) {
+                        $namespace = '\\Xaraya\\Services\\';
+                    }
+                    @eval('$firstline["id"] = ' . $namespace . $firstline['id'] . ';');
                 }
                 $line = ['id' => $firstline['id'], 'name' => $firstline['id']];
             }
@@ -309,12 +325,20 @@ class SelectProperty extends DataProperty
             $firstline = explode(',', $firstline);
             if (isset($firstline[1])) {
                 if (strpos($firstline[1], 'xar') === 0) {
-                    @eval('$firstline[1] = ' . $firstline[1] . ';');
+                    $namespace = '';
+                    if (str_starts_with($firstline[1], 'xar::')) {
+                        $namespace = '\\Xaraya\\Services\\';
+                    }
+                    @eval('$firstline[1] = ' . $namespace . $firstline[1] . ';');
                 }
                 $line = ['id' => $firstline[0], 'name' => $firstline[1]];
             } else {
                 if (strpos($firstline[0], 'xar') === 0) {
-                    @eval('$firstline[0] = ' . $firstline[0] . ';');
+                    $namespace = '';
+                    if (str_starts_with($firstline[0], 'xar::')) {
+                        $namespace = '\\Xaraya\\Services\\';
+                    }
+                    @eval('$firstline[0] = ' . $namespace . $firstline[0] . ';');
                 }
                 $line = ['id' => $firstline[0], 'name' => $firstline[0]];
             }
@@ -383,7 +407,11 @@ class SelectProperty extends DataProperty
         if (!empty($this->itemfunc)) {
             // use $value as argument for your API function : array('whatever' => $value, ...)
             $value = $this->value;
-            eval('$result = ' . $this->itemfunc .';');
+            $namespace = '';
+            if (str_starts_with($this->itemfunc, 'xar::')) {
+                $namespace = '\\Xaraya\\Services\\';
+            }
+            eval('$result = ' . $namespace . $this->itemfunc .';');
             if (isset($result)) {
                 if ($check) return true;
                 return $result;
