@@ -81,6 +81,8 @@ interface MultiLanguageInterface extends ServiceInterface
      */
     public function loadLocale(?string $locale = null): array;
 
+    public function getFormatter(): LocaleFormatter;
+
     /**
      * Format a date/time according to the current locale
      * @param ?string $format
@@ -176,6 +178,7 @@ trait MultiLanguageTrait
     public $defaultTimeZone   = 'UTC';
     public $defaultTimeOffset = 0;
     public $backend           = null;
+    public $formatter         = null;
     protected bool $initialized = false;
 
     /**
@@ -324,6 +327,14 @@ trait MultiLanguageTrait
 
         $called++;
 
+        // Set locale formatter
+        if ($xar->user()->isLoggedIn()) {
+            $timezone = $xar->mod('roles')->getUserVar('usertimezone');
+        } else {
+            $timezone = $this->defaultTimeZone;
+        }
+        $this->formatter = new LocaleFormatter($locale, $timezone);
+
         $mode = $this->getMode();
         switch ($mode) {
             case ixarMLS::SINGLE_LANGUAGE_MODE:
@@ -424,17 +435,42 @@ trait MultiLanguageTrait
         return xarLocale::loadData($locale);
     }
 
+    public function getFormatter(): LocaleFormatter
+    {
+        if (!isset($this->formatter)) {
+            $this->setFormatter();
+        }
+        return $this->formatter;
+    }
+
+    public function setFormatter(?string $locale = null, ?string $timezone = null): LocaleFormatter
+    {
+        $locale ??= $this->getCurrentLocale();
+        if (empty($locale)) {
+            $locale = $this->defaultLocale;
+        }
+        if (!isset($timezone)) {
+            $xar = $this->getParent();
+            if ($xar->user()->isLoggedIn()) {
+                $timezone = $xar->mod('roles')->getUserVar('usertimezone');
+            } else {
+                $timezone = $this->defaultTimeZone;
+            }
+        }
+        $this->formatter = new LocaleFormatter($locale, $timezone);
+        return $this->formatter;
+    }
+
     /**
      * Format a date/time according to the current locale
      * @param ?string $format
      * @param mixed $timestamp
      * @param bool $addoffset
      * @return string
-     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public function formatDate(?string $format = null, mixed $timestamp = null, bool $addoffset = true): string
     {
-        return xarLocale::formatDate($format, $timestamp, $addoffset);
+        return $this->getFormatter()->formatDate($format, $timestamp, $addoffset);
     }
 
     /**
@@ -443,11 +479,10 @@ trait MultiLanguageTrait
      * @param mixed $timestamp
      * @param bool $addoffset
      * @return string
-     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public function getFormattedDate(string $length = 'short', mixed $timestamp = null, bool $addoffset = true): string
     {
-        return xarLocale::getFormattedDate($length, $timestamp, $addoffset);
+        return $this->getFormatter()->getFormattedDate($length, $timestamp, $addoffset);
     }
 
     /**
@@ -456,11 +491,10 @@ trait MultiLanguageTrait
      * @param mixed $timestamp
      * @param bool $addoffset
      * @return string
-     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public function getFormattedTime(string $length = 'short', mixed $timestamp = null, bool $addoffset = true): string
     {
-        return xarLocale::getFormattedTime($length, $timestamp, $addoffset);
+        return $this->getFormatter()->getFormattedTime($length, $timestamp, $addoffset);
     }
 
     /**
@@ -508,31 +542,12 @@ trait MultiLanguageTrait
      */
     public function userTime($time = null, $flag = 1): int
     {
-        // get the current UTC time
-        if (!isset($time)) {
-            $time = time();
-        }
-        if ($flag) {
-            $time += $this->userOffset($time) * 3600;
-        }
-        // return the corrected timestamp
-        return $time;
+        return $this->getFormatter()->userTime($time, $flag);
     }
 
     public function userOffset($timestamp = null): int
     {
-        sys::import('xaraya.structures.datetime');
-        $datetime = new XarDateTime();
-        $datetime->setTimeStamp($timestamp);
-        $xar = $this->getParent();
-        if ($xar->user()->isLoggedIn()) {
-            $usertz = $xar->mod('roles')->getUserVar('usertimezone');
-        } else {
-            $usertz = $xar->config()->getVar('Site.Core.TimeZone');
-        }
-        $useroffset = $datetime->getTZOffset($usertz);
-
-        return intdiv($useroffset, 3600);
+        return $this->getFormatter()->userOffset($timestamp);
     }
 
     /**

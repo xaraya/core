@@ -16,8 +16,9 @@
  * @author Roger Raymond <roger@asphyxia.com>
 **/
 
-sys::import('xaraya.tools.legacy');
-use Xaraya\Tools\Legacy;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\MultiLanguageService;
+use Xaraya\Services\xar;
 
 /**
  * Exception raised by the multilanguage subsystem
@@ -215,6 +216,16 @@ class xarLocale extends xarObject
     public static $dataLoader  = null;
     public static $dataCache   = [];
     public static $newEncoding = null;
+    protected static ?MultiLanguageService $mlsService = null;
+
+    protected static function mls(): MultiLanguageService
+    {
+        if (!isset(self::$mlsService)) {
+            $xar = xar::getServicesClass();
+            self::$mlsService = $xar->mls();
+        }
+        return self::$mlsService;
+    }
 
     /**
      * Gets the locale data for a certain locale.
@@ -229,7 +240,7 @@ class xarLocale extends xarObject
     {
         static $loaded = []; // keep track of files we have loaded
         if (!isset($locale)) {
-            $locale = xarMLS::getCurrentLocale();
+            $locale = self::mls()->getCurrentLocale();
         }
 
         // rraymond : move the check for the loaded locale before processing as
@@ -240,7 +251,7 @@ class xarLocale extends xarObject
         }
 
         // check for locale availability
-        $siteLocales = xarMLS::listSiteLocales();
+        $siteLocales = self::mls()->listSiteLocales();
 
         $nullreturn = null;
         $falsereturn = false;
@@ -315,14 +326,7 @@ class xarLocale extends xarObject
      */
     public static function parseCurrency($currency, $localeData = null)
     {
-        if ($localeData == null) {
-            $localeData = & self::loadData();
-        }
-
-        $currencySym = $localeData['/monetary/currencySymbol'];
-        $currency = str_replace($currencySym, '', $currency);
-        $currency = self::parseNumber($currency, $localeData, true);
-        return trim($currency);
+        return self::mls()->getFormatter()->parseCurrency($currency);
     }
 
     /**
@@ -330,18 +334,7 @@ class xarLocale extends xarObject
      */
     public static function parseNumber($number, $localeData = null, $isCurrency = false)
     {
-        if ($localeData == null) {
-            $localeData = & self::loadData();
-        }
-        if ($isCurrency == true) {
-            $bp = 'monetary';
-        } else {
-            $bp = 'numeric';
-        }
-
-        $groupSep = $localeData["/$bp/groupingSeparator"];
-        $number = str_replace($groupSep, '', $number);
-        return trim($number);
+        return self::mls()->getFormatter()->parseNumber($number, $isCurrency);
     }
 
     /**
@@ -349,11 +342,7 @@ class xarLocale extends xarObject
      */
     public static function formatCurrency($currency, $localeData = null)
     {
-        if ($localeData == null) {
-            $localeData = & self::loadData(); // rraymond : assign by reference for large array (memory issues)
-        }
-        $currencySym = $localeData['/monetary/currencySymbol'];
-        return $currencySym . ' ' . self::formatNumber($currency, $localeData, true);
+        return self::mls()->getFormatter()->formatCurrency($currency);
     }
 
     /**
@@ -361,94 +350,7 @@ class xarLocale extends xarObject
      */
     public static function formatNumber($number, $localeData = null, $isCurrency = false)
     {
-        if (!is_numeric($number)) {
-            $number = (float) $number;
-        }
-
-        if ($localeData == null) {
-            $localeData = & self::loadData(); // rraymond : assign by reference for large array (memory issues)
-        }
-
-        if ($isCurrency == true) {
-            $bp = 'monetary';
-        } else {
-            $bp = 'numeric';
-        }
-
-        $groupSize = $localeData["/$bp/groupingSize"];
-        $groupSep = $localeData["/$bp/groupingSeparator"];
-        $decSep = $localeData["/$bp/decimalSeparator"];
-        $decSepShown = $localeData["/$bp/isDecimalSeparatorAlwaysShown"];
-        $maxFractDigits = $localeData["/$bp/fractionDigits/maximum"];
-        $minFractDigits = $localeData["/$bp/fractionDigits/minimum"];
-
-        $zeroDigit = $localeData['/decimalSymbols/zeroDigit'];
-        $minusSign = $localeData['/decimalSymbols/minusSign'];
-
-        if ($number < 0) {
-            $number = -1 * $number;
-            $minus = true;
-        }
-
-        $str_num = (string) $number; // Convert to string
-
-        if (($dsep_pos = strpos($str_num, '.')) !== false) {
-            $int_part = substr($str_num, 0, $dsep_pos);
-            $dec_part = substr($str_num, $dsep_pos + 1);
-        } else {
-            $int_part = $str_num;
-        }
-        // FIXME: <marco> Do we really need the maximum integer digits?
-        $int_part_len = strlen($int_part);
-        if ($groupSize > 0) {
-            $sepNum = (int) ($int_part_len / $groupSize);
-            $firstSkip = $int_part_len - ($sepNum * $groupSize);
-
-            $str_num = '';
-
-            $pos = $firstSkip;
-            while ($pos < $int_part_len) {
-                $str_num .= $groupSep . substr($int_part, $pos, $groupSize);
-                $pos += $groupSize;
-            }
-            if ($firstSkip > 0) {
-                $str_num = substr($int_part, 0, $firstSkip) . $str_num;
-            } else {
-                $str_num = substr($str_num, 1);
-            }
-        } else {
-            $str_num = $int_part;
-        }
-
-        if (isset($dec_part) || $decSepShown) {
-            $str_num .= $decSep;
-            if (!isset($dec_part)) {
-                for ($i = 0; $i < $minFractDigits; $i++) {
-                    $str_num .= '0';
-                }
-            } else {
-                $dec_part_len = strlen($dec_part);
-                if ($dec_part_len < $minFractDigits) {
-                    for ($i = 0; $i < $minFractDigits - $dec_part_len; $i++) {
-                        $dec_part .= '0';
-                    }
-                } elseif ($dec_part_len > $maxFractDigits) {
-                    // FIXME: <marco> Do we need round here?
-                    $dec_part = substr($dec_part, 0, $maxFractDigits - $dec_part_len); // Note negative length
-                }
-                $str_num .= $dec_part;
-            }
-        }
-
-        if (isset($minus)) {
-            $str_num = $minusSign . $str_num;
-        }
-
-        if ($zeroDigit != '0') {
-            $str_num = str_replace('0', $zeroDigit, $str_num);
-        }
-
-        return $str_num;
+        return self::mls()->getFormatter()->formatNumber($number, $isCurrency);
     }
 
     /**
@@ -456,13 +358,7 @@ class xarLocale extends xarObject
      */
     public static function getFormattedUTCDate($length = 'short', $timestamp = null, $addoffset = false)
     {
-        if (!isset($timestamp)) {
-            // get UTC timestamp
-            $timestamp = time();
-        }
-
-        // pass this to the regular function, but without using the timezone offset here
-        return  self::getFormattedDate($length, $timestamp, $addoffset);
+        return self::mls()->getFormatter()->getFormattedUTCDate($length, $timestamp, $addoffset);
     }
 
     /**
@@ -472,35 +368,10 @@ class xarLocale extends xarObject
      * @param int $timestamp optional unix timestamp in UTC to format
      * @param bool $addoffset add user timezone offset (default true)
      * @todo Check the exceptions when $length is not in the $validlengths (assert on it?)
-     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public static function getFormattedDate($length = 'short', $timestamp = null, $addoffset = true)
     {
-        $length = strtolower($length);
-        $validLengths = ['short','medium','long'];
-        if (!in_array($length, $validLengths)) {
-            //TODO: We should throw a USER exception here
-            return '';
-        }
-
-        // the locale data should already be a static var in the main loader script
-        // so we no longer need to make it a static in this function
-        $localeData = & self::loadData();  // rraymond : assign by reference for large array (memory issues)
-
-        // @todo get rid of these double transformations
-        // grab the right set of locale data
-        $locale_format = $localeData["/dateFormats/$length"];
-        // replace the locale formatting style with valid strftime() style
-        $locale_format = str_replace('MMMM', '%B', $locale_format);
-        $locale_format = str_replace('MMM', '%b', $locale_format);
-        $locale_format = str_replace('M', '%m', $locale_format);
-        $locale_format = str_replace('dddd', '%A', $locale_format);
-        $locale_format = str_replace('ddd', '%a', $locale_format);
-        $locale_format = str_replace('d', '%d', $locale_format);
-        $locale_format = str_replace('yyyy', '%Y', $locale_format);
-        $locale_format = str_replace('yy', '%y', $locale_format);
-
-        return  self::formatDate($locale_format, $timestamp, $addoffset);
+        return self::mls()->getFormatter()->getFormattedDate($length, $timestamp, $addoffset);
     }
 
     /**
@@ -508,13 +379,7 @@ class xarLocale extends xarObject
      */
     public static function getFormattedUTCTime($length = 'short', $timestamp = null, $addoffset = false)
     {
-        if (!isset($timestamp)) {
-            // get UTC timestamp
-            $timestamp = time();
-        }
-
-        // pass this to the regular function, but without using the timezone offset here
-        return  self::getFormattedTime($length, $timestamp, $addoffset);
+        return self::mls()->getFormatter()->getFormattedUTCTime($length, $timestamp, $addoffset);
     }
 
     /**
@@ -524,75 +389,10 @@ class xarLocale extends xarObject
      * @param int $timestamp optional unix timestamp in UTC to format
      * @param bool $addoffset add user timezone offset (default true)
      * @todo MichelV: why are the formatting rules not the same as PHP rules for strftime?
-     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public static function getFormattedTime($length = 'short', $timestamp = null, $addoffset = true)
     {
-        $length = strtolower($length);
-        $validLengths = ['short','medium','long'];
-        if (!in_array($length, $validLengths)) {
-            return '';
-        }
-
-        if (empty($timestamp)) {
-            // starting with PHP 5.1.0, strtotime returns false instead of -1
-            if (isset($timestamp) && $timestamp === false) {
-                return '';
-            }
-            if ($addoffset) {
-                $timestamp = xarMLS::userTime();
-            } else {
-                $timestamp = time();
-            }
-        } elseif ($timestamp >= 0) {
-            if ($addoffset) {
-                // adjust for the user's timezone offset
-                $timestamp += xarMLS::userOffset($timestamp) * 3600;
-            }
-        } else {
-            // invalid dates < 0 (e.g. from strtotime) return an empty date string
-            return '';
-        }
-        $addoffset = false;
-
-        // the locale data should already be a static var in the main loader script
-        // so we no longer need to make it a static in this function
-        $localeData = & self::loadData();  // rraymond : assign by reference for large array (memory issues)
-
-        // @todo get rid of these double transformations
-        // grab the right set of locale data
-        $locale_format = $localeData["/timeFormats/$length"];
-        // replace the locale formatting style with valid strftime() style
-
-        $locale_format = str_replace('HH', '%H', $locale_format);
-        $locale_format = str_replace('H', '%H', $locale_format); // Bug 5806
-        $locale_format = str_replace('%%H', '%H', $locale_format); // Now put back the double replaced ones.
-        $locale_format = str_replace('hh', '%I', $locale_format);
-        $locale_format = str_replace('mm', '%M', $locale_format);
-        $locale_format = str_replace('ss', '%S', $locale_format);
-        $locale_format = str_replace('a', '%p', $locale_format);
-        $locale_format = str_replace('z', '%Z', $locale_format);
-        // format the single digit flags
-
-        $datetime = date_create('@' . $timestamp);
-        // H = %H = Two digit representation of the hour in 24-hour format
-        if (strpos($locale_format, 'H') !== false) {
-            $locale_format = str_replace('%H', sprintf('%1d', $datetime->format('H')), $locale_format);
-        }
-        // h = %I = Two digit representation of the hour in 12-hour format
-        if (strpos($locale_format, 'h') !== false) {
-            $locale_format = str_replace('h', sprintf('%1d', $datetime->format('h')), $locale_format);
-        }
-        // i = %M = Two digit representation of the minute
-        if (strpos($locale_format, 'm') !== false) {
-            $locale_format = str_replace('m', sprintf('%1d', $datetime->format('i')), $locale_format);
-        }
-        // s = %S = Two digit representation of the second
-        if (strpos($locale_format, 's') !== false) {
-            $locale_format = str_replace('s', sprintf('%1d', $datetime->format('s')), $locale_format);
-        }
-
-        return  self::formatDate($locale_format, $timestamp, $addoffset);
+        return self::mls()->getFormatter()->getFormattedTime($length, $timestamp, $addoffset);
     }
 
     /**
@@ -600,12 +400,7 @@ class xarLocale extends xarObject
      */
     public static function formatUTCDate($format = null, $time = null, $addoffset = false)
     {
-        if (!isset($time)) {
-            $time = time();
-        }
-
-        // pass this to the regular function, but without using the timezone offset here
-        return  self::formatDate($format, $time, $addoffset);
+        return self::mls()->getFormatter()->formatUTCDate($format, $time, $addoffset);
     }
 
     /**
@@ -614,32 +409,10 @@ class xarLocale extends xarObject
      * @param string $format strftime() format to use (TODO: default locale-dependent or configurable ?)
      * @param mixed $timestamp or date string (default now)
      * @param bool $addoffset add user timezone offset (default true)
-     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public static function formatDate($format = null, $timestamp = null, $addoffset = true)
     {
-        // CHECKME: should we default to current time only when timestamp is not set at all ?
-        //if (!isset($timestamp)) {
-        if (empty($timestamp)) {
-            // starting with PHP 5.1.0, strtotime returns false instead of -1
-            if (isset($timestamp) && $timestamp === false) {
-                return '';
-            }
-            if ($addoffset) {
-                $timestamp = xarMLS::userTime();
-            } else {
-                $timestamp = time();
-            }
-        } elseif ($timestamp >= 0) {
-            if ($addoffset) {
-                // adjust for the user's timezone offset
-                $timestamp += xarMLS::userOffset($timestamp) * 3600;
-            }
-        } else {
-            // invalid dates < 0 (e.g. from strtotime) return an empty date string
-            return '';
-        }
-        return self::strftime($format, $timestamp);
+        return self::mls()->getFormatter()->formatDate($format, $timestamp, $addoffset);
     }
 
     /**
@@ -670,39 +443,10 @@ class xarLocale extends xarObject
      *  @param string $format valid format params from strftime() function\
      *  @param int $timestamp optional unix timestamp to translate
      *  @return string datetime string with locale translations
-     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public static function strftime($format = null, $timestamp = null)
     {
-        // if we don't have a timestamp, get the user's current time
-        if (!isset($timestamp)) {
-            $timestamp = xarMLS::userTime();
-        } elseif ($timestamp < 0) {
-            // invalid dates < 0 (e.g. from strtotime) return an empty date string
-            return '';
-        } elseif ($timestamp === false) {
-            // starting with PHP 5.1.0, strtotime returns false instead of -1
-            return '';
-        }
-
-        // we need to get the correct timestamp format if we do not have one
-        if (!isset($format)) {
-            // check for user defined format
-            /*
-            if($user_defined) {
-                $format =& $user_defined;
-            } elseif ($admin_defined) {
-                $format =& $admin_defined;
-            } else {
-            */
-            $format = '%c';
-            /*
-            }
-            */
-        }
-
-        $locale = xarMLS::getCurrentLocale();
-        return Legacy::strftime($format, $timestamp, $locale);
+        return self::mls()->getFormatter()->strftime($format, $timestamp);
     }
 
     /**

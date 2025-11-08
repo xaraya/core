@@ -186,7 +186,7 @@ function xarInstallLoader()
     // So we need something temporarily set, so we can continue
     // We set a utf locale intially, otherwise the combo box wont be filled correctly
     // for language names which include utf characters
-    xarMLS::$mode = 'SINGLE';
+    $xar->mls()->setMode('SINGLE');
     $xar->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
 
     // Construct an array of the available locale folders
