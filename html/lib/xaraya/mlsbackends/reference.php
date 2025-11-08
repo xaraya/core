@@ -9,6 +9,9 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 /**
  * Translations backend interface
  *.
@@ -144,7 +147,7 @@ abstract class xarMLS__ReferencesBackend extends xarObject implements ITranslati
                 // CHECKME: save $this->domainlocation here instead ?
                 //$this->domaincache["$dnType.$dnName"] = true;
                 return true;
-            } elseif (xarMLS::$backendName == 'xml2php') {
+            } elseif (xar::mls()->getBackendName() == 'xml2php') {
                 $this->locale = $locale;
                 // CHECKME: save $this->domainlocation here instead ?
                 //$this->domaincache["$dnType.$dnName"] = true;

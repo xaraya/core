@@ -134,6 +134,7 @@ class xarController extends xarObject
      * Summary of __stripslashes
      * @param array<string, mixed>|string $value
      * @return array<string, mixed>|string
+     * @deprecated 2.4.1 not used
      */
     protected static function __stripslashes($value)
     {

@@ -68,7 +68,7 @@ class CalendarProperty extends DataProperty
             }
             if ($this->value >= 0) {
                 // adjust for the user's timezone offset
-                $this->value -= xarMLS::userOffset($this->value) * 3600;
+                $this->value -= $this->mls()->userOffset($this->value) * 3600;
             }
         } else {
             $this->invalid = $this->ml('date: #(1)', $this->name);

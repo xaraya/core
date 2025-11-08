@@ -403,14 +403,19 @@ trait RequestTrait
             }
         }
 
-        //$value = xarMLS::convertFromInput($value, $method);
+        // @deprecated 2.4.1 not used
+        //$value = $this->getParent()->mls()->convertFromInput($value, $method);
 
+        // @deprecated 2.4.1 not used
         //if (get_magic_quotes_gpc()) {
         //    $value = $this->stripVarSlashes($value);
         //}
         return $value;
     }
 
+    /**
+     * @deprecated 2.4.1 not used
+     */
     protected function stripVarSlashes($value)
     {
         $value = is_array($value) ? array_map(['self','stripVarSlashes'], $value) : stripslashes($value);

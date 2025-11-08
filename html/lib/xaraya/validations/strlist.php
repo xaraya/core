@@ -31,6 +31,9 @@
  * @throws VariableValidationException, BadParameterException
 **/
 sys::import('xaraya.validations');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 class StrListValidation extends ValueValidations
 {
     public function validate(&$subject, array $parameters)
@@ -48,7 +51,7 @@ class StrListValidation extends ValueValidations
 
             // @todo error if no separator?
             if (empty($sep)) {
-                $msg = xarMLS::translate('No separator character(s) provided for validation type "strlist"');
+                $msg = xar::mls()->translate('No separator character(s) provided for validation type "strlist"');
                 throw new BadParameterException(null, $msg);
             }
 

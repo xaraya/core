@@ -16,8 +16,8 @@ use Xaraya\Modules\Installer\AdminGui;
 use Exception;
 use xarConst;
 use xarInst;
-use xarMLS;
 use sys;
+use PHPBackendGenerator;
 
 sys::import('xaraya.modules.method');
 
@@ -86,8 +86,8 @@ class Phase3Method extends MethodClass
         $cacheIsWritable            = $this->check_dir($cacheDir);
         $cacheTemplatesIsWritable   = ($this->check_dir($cacheTemplatesDir) || @mkdir($cacheTemplatesDir, 0o700));
         $rssTemplatesIsWritable     = ($this->check_dir($rssTemplatesDir) || @mkdir($rssTemplatesDir, 0o700));
-        $phpLanguageFilesIsWritable = xarMLS::iswritable($phpLanguageDir);
-        $xmlLanguageFilesIsWritable = xarMLS::iswritable($xmlLanguageDir);
+        $phpLanguageFilesIsWritable = PHPBackendGenerator::iswritable($phpLanguageDir);
+        $xmlLanguageFilesIsWritable = PHPBackendGenerator::iswritable($xmlLanguageDir);
         $maxexectime = trim(ini_get('max_execution_time'));
         $memLimit = trim(ini_get('memory_limit'));
         $memLimit = empty($memLimit) ? $this->ml('Undetermined') : $memLimit;

@@ -67,7 +67,7 @@ class xarMLS__LocaleDataLoader extends xarObject
         // TRICK: <marco> Since this xml parser sucks, we obviously use utf-8 for utf-8 charset
         // and iso-8859-1 for other charsets, even if they're not single byte.
         // The only important thing here is to split utf-8 from other charsets.
-        $charset = xarMLS::getCharsetFromLocale($locale);
+        $charset = xarLocale::getCharsetFromLocale($locale);
         // FIXME: <marco> try, re-try and re-re-try this!
         if ($charset == 'utf-8') {
             $this->parser = xml_parser_create('utf-8');
@@ -208,11 +208,13 @@ class xarMLS__LocaleDataLoader extends xarObject
 
 /**
  * xarLocale class
+ * @todo move dependency on xar::mls()->getCurrentLocale() to caller?
 **/
 class xarLocale extends xarObject
 {
     public static $dataLoader  = null;
     public static $dataCache   = [];
+    public static $newEncoding = null;
 
     /**
      * Gets the locale data for a certain locale.
@@ -255,7 +257,7 @@ class xarLocale extends xarObject
 
         // @todo get rid of invalid .php locale files
         $fileName = sys::varpath() . "/locales/$locale/locale.php";
-        if (!$parsedLocale = xarMLS::parseLocaleString($locale)) {
+        if (!$parsedLocale = self::parseLocaleString($locale)) {
             return false;
         }
         $siteCharset = $parsedLocale['charset'];
@@ -272,18 +274,16 @@ class xarLocale extends xarObject
             include $utf8FileName;
             $loaded[$utf8FileName] = true;
             if ($siteCharset != 'utf-8') {
+                self::$newEncoding ??= new xarCharset();
                 /** @phpstan-ignore-next-line */
                 foreach ($localeData as $tempKey => $tempValue) {
-                    $tempValue = xarMLS::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
+                    $tempValue = self::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
                     $localeData[$tempKey] = $tempValue;
                 }
             }
             self::$dataCache[$locale] = $localeData;
         } else {
-            /* TODO: delete after new backend testing
-                    if (xarMLS::$backendName == 'xml2php') {
-            */
-            if (!$parsedLocale = xarMLS::parseLocaleString($locale)) {
+            if (!$parsedLocale = self::parseLocaleString($locale)) {
                 return $falsereturn;
             }
             $utf8locale = $parsedLocale['lang'] . '_' . $parsedLocale['country'] . '.utf-8';
@@ -298,24 +298,13 @@ class xarLocale extends xarObject
             } // Throw back
             $tempArray =  self::$dataLoader->getLocaleData();
             if ($siteCharset != 'utf-8') {
+                self::$newEncoding ??= new xarCharset();
                 foreach ($tempArray as $tempKey => $tempValue) {
-                    $tempValue = xarMLS::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
+                    $tempValue = self::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
                     $tempArray[$tempKey] = $tempValue;
                 }
             }
             self::$dataCache[$locale] = $tempArray;
-            /* TODO: delete after new backend testing
-                    } else {
-                        $res =  self::$dataLoader->load($locale);
-                        if (!isset($res)) return $nullreturn; // Throw back
-                        if ($res == false) {
-                            // Can we use xarML here? border case, play it safe for now.
-                            throw new LocaleNotFoundException($locale);
-
-                        }
-                         self::$dataCache[$locale] =  self::$dataLoader->getLocaleData();
-                    }
-            */
         }
 
         return  self::$dataCache[$locale];
@@ -483,6 +472,7 @@ class xarLocale extends xarObject
      * @param int $timestamp optional unix timestamp in UTC to format
      * @param bool $addoffset add user timezone offset (default true)
      * @todo Check the exceptions when $length is not in the $validlengths (assert on it?)
+     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public static function getFormattedDate($length = 'short', $timestamp = null, $addoffset = true)
     {
@@ -534,6 +524,7 @@ class xarLocale extends xarObject
      * @param int $timestamp optional unix timestamp in UTC to format
      * @param bool $addoffset add user timezone offset (default true)
      * @todo MichelV: why are the formatting rules not the same as PHP rules for strftime?
+     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public static function getFormattedTime($length = 'short', $timestamp = null, $addoffset = true)
     {
@@ -623,6 +614,7 @@ class xarLocale extends xarObject
      * @param string $format strftime() format to use (TODO: default locale-dependent or configurable ?)
      * @param mixed $timestamp or date string (default now)
      * @param bool $addoffset add user timezone offset (default true)
+     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public static function formatDate($format = null, $timestamp = null, $addoffset = true)
     {
@@ -678,6 +670,7 @@ class xarLocale extends xarObject
      *  @param string $format valid format params from strftime() function\
      *  @param int $timestamp optional unix timestamp to translate
      *  @return string datetime string with locale translations
+     * @todo move dependency on xar::mls()->userOffset() to caller
      */
     public static function strftime($format = null, $timestamp = null)
     {
@@ -710,5 +703,179 @@ class xarLocale extends xarObject
 
         $locale = xarMLS::getCurrentLocale();
         return Legacy::strftime($format, $timestamp, $locale);
+    }
+
+    /**
+     * Parses a locale string into an associative array composed of
+     * lang, country, specializer and charset keys
+     *
+     * @author Marco Canini <marco@xaraya.com>
+     * @return array<mixed> parsed locale
+     */
+    public static function parseLocaleString($locale)
+    {
+        $res = ['lang' => '', 'country' => '', 'specializer' => '', 'charset' => 'utf-8'];
+        // Match the locales standard format  : en_US.iso-8859-1
+        // Thus: language code lowercase(2), country code uppercase(2), encoding lowercase(1+)
+        if (!preg_match('/([a-z][a-z])(_([A-Z][A-Z]))?(\.([0-9a-z\-]+))?(@([0-9a-zA-Z]+))?/', $locale, $matches)) {
+            throw new BadParameterException('locale');
+        }
+
+        $res['lang'] = $matches[1];
+        if (!empty($matches[3])) {
+            $res['country'] = $matches[3];
+        }
+        if (!empty($matches[5])) {
+            $res['charset'] = $matches[5];
+        }
+        if (!empty($matches[7])) {
+            $res['specializer'] = $matches[7];
+        }
+
+        return $res;
+    }
+
+    /**
+     * Gets the charset component from a locale
+     *
+     * @author Marco Canini <marco@xaraya.com>
+     * @return string|void the charset name
+     */
+    public static function getCharsetFromLocale($locale)
+    {
+        if (!$parsedLocale = self::parseLocaleString($locale)) {
+            return;
+        } // throw back
+        return $parsedLocale['charset'];
+    }
+
+    /**
+     * Gets a list of alternatives for a certain locale.
+     * The first alternative is the locale itself
+     *
+     * @author Marco Canini <marco@xaraya.com>
+     * @return array<mixed>|void alternative locales
+     */
+    public static function getLocaleAlternatives($locale)
+    {
+        if (!$parsedLocale = self::parseLocaleString($locale)) {
+            return;
+        } // throw back
+        extract($parsedLocale); // $lang, $country, $charset
+        /** @var string $lang */
+        /** @var string $country */
+        /** @var string $charset */
+
+        $alternatives = [$locale];
+        if (!empty($country) && !empty($specializer)) {
+            $alternatives[] = $lang . '_' . $country . '.' . $charset;
+        }
+        if (!empty($country) && empty($specializer)) {
+            $alternatives[] = $lang . '.' . $charset;
+        }
+
+        return $alternatives;
+    }
+
+    /**
+     * Gets the locale string for the specified locale info.
+     * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
+     *
+     * @author Marco Canini <marco@xaraya.com>
+     * @throws BadParameterException
+     * @return string locale string
+     */
+    public static function getLocaleString($localeInfo)
+    {
+        if (!isset($localeInfo['lang'])
+            || !isset($localeInfo['country'])
+            || !isset($localeInfo['specializer'])
+            || !isset($localeInfo['charset'])) {
+            throw new BadParameterException('localeInfo');
+        }
+        if (strlen($localeInfo['lang']) != 2) {
+            throw new BadParameterException('localeInfo');
+        }
+
+        $locale = strtolower($localeInfo['lang']);
+        if (!empty($localeInfo['country'])) {
+            if (strlen($localeInfo['country']) != 2) {
+                throw new BadParameterException('localeInfo');
+            }
+
+            $locale .= '_' . strtoupper($localeInfo['country']);
+        }
+        if (!empty($localeInfo['charset'])) {
+            $locale .= '.' . $localeInfo['charset'];
+        } else {
+            $locale .= '.utf-8';
+        }
+        if (!empty($localeInfo['specializer'])) {
+            $locale .= '@' . $localeInfo['specializer'];
+        }
+        return $locale;
+    }
+
+    /**
+     * Gets a list of locale string which met the specified filter criteria.
+     * Filter criteria are set as item of $filter parameter, they can be one or more of the following:
+     * lang, country, specializer, charset.
+     *
+     * @author Marco Canini <marco@xaraya.com>
+     * @return array<mixed> locale list
+     */
+    public static function filterLocaleList($locales = [], $filter = [])
+    {
+        $list = [];
+        foreach ($locales as $locale) {
+            $l = self::parseLocaleString($locale);
+            if (isset($filter['lang']) && $filter['lang'] != $l['lang']) {
+                continue;
+            }
+            if (isset($filter['country']) && $filter['country'] != $l['country']) {
+                continue;
+            }
+            if (isset($filter['specializer']) && $filter['specializer'] != $l['specializer']) {
+                continue;
+            }
+            if (isset($filter['charset']) && $filter['charset'] != $l['charset']) {
+                continue;
+            }
+            $list[] = $locale;
+        }
+        return $list;
+    }
+
+    /**
+     * Gets the single byte charset most typically used in the Web for the
+     * requested language
+     *
+     * @author Marco Canini <marco@xaraya.com>
+     * @return string the charset
+     * @todo   Dont hardcode this
+     * @deprecated 2.4.1 not used
+     */
+    // CHECKME: is this used anywhere?
+    public static function getSingleByteCharset($langISO2Code)
+    {
+        static $charsets = [
+            'af' => 'iso-8859-1', 'sq' => 'iso-8859-1',
+            'ar' => 'iso-8859-6',  'eu' => 'iso-8859-1',  'bg' => 'iso-8859-5',
+            'be' => 'iso-8859-5',  'ca' => 'iso-8859-1',  'hr' => 'iso-8859-2',
+            'cs' => 'iso-8859-2',  'da' => 'iso-8859-1',  'nl' => 'iso-8859-1',
+            'en' => 'iso-8859-1',  'eo' => 'iso-8859-3',  'et' => 'iso-8859-15',
+            'fo' => 'iso-8859-1',  'fi' => 'iso-8859-1',  'fr' => 'iso-8859-1',
+            'gl' => 'iso-8859-1',  'de' => 'iso-8859-1',  'el' => 'iso-8859-7',
+            'iw' => 'iso-8859-8',  'hu' => 'iso-8859-2',  'is' => 'iso-8859-1',
+            'ga' => 'iso-8859-1',  'it' => 'iso-8859-1',  //'ja' => '',
+            'lv' => 'iso-8859-13', 'lt' => 'iso-8859-13', 'mk' => 'iso-8859-5',
+            'mt' => 'iso-8859-3',  'no' => 'iso-8859-1',  'pl' => 'iso-8859-2',
+            'pt' => 'iso-8859-1',  'ro' => 'iso-8859-2',  'ru' => 'windows-1251',
+            'gd' => 'iso-8859-1',  'sr' => 'iso-8859-2',  'sk' => 'iso-8859-2',
+            'sl' => 'iso-8859-2',  'es' => 'iso-8859-1',  'sv' => 'iso-8859-1',
+            'tr' => 'iso-8859-9',  'uk' => 'iso-8859-5',
+        ];
+
+        return @$charsets[$langISO2Code];
     }
 }

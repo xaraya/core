@@ -100,7 +100,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
     public function loadContext($contextType, $contextName)
     {
         if (!$fileName = $this->findContext($contextType, $contextName)) {
-            //            $msg = xarMLS::translate("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
+            //            $msg = xar::mls()->translate("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
             //            throw new ContextNotFoundException?
             //            return;
             return true;

@@ -37,7 +37,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         parent::__construct($locales);
         $this->backendtype = "php";
 
-        $this->gen = new PHPBackendGenerator(xarMLS::getCurrentLocale());
+        $this->gen = new PHPBackendGenerator(xar::mls()->getCurrentLocale());
         if (!isset($this->gen)) {
             return;
         }
@@ -81,7 +81,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 
         $php_locale_dir = sys::varpath() . "/locales/{$this->locale}";
 
-        if (!$parsedLocale = xarMLS::parseLocaleString("{$this->locale}")) {
+        if (!$parsedLocale = xarLocale::parseLocaleString("{$this->locale}")) {
             return false;
         }
         $xml_locale_dir = sys::varpath() . '/locales/';
@@ -114,7 +114,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
                 return false;
             }
             //            if (!isset($this->gen)) {
-            //                $this->gen = new PHPBackendGenerator(xarMLS::getCurrentLocale());
+            //                $this->gen = new PHPBackendGenerator(xar::mls()->getCurrentLocale());
             //                if (!isset($this->gen)) return false;
             //            }
 
@@ -200,7 +200,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         }
 
         if ($needGeneration) {
-            //$gen = new PHPBackendGenerator(xarMLS::getCurrentLocale());
+            //$gen = new PHPBackendGenerator(xar::mls()->getCurrentLocale());
             //if (!isset($gen)) return false;
             //if (!$gen->bindDomain($dnType, $dnName)) return false;
             //if (parent::bindDomain($dnType, $dnName)) return true;
@@ -285,13 +285,15 @@ class PHPBackendGenerator extends xarObject
     public $isUTF8;
     public $fileName;
     public $xmlFileName;
+    public $newEncoding;
 
     public function __construct($locale)
     {
         $this->locale = $locale;
-        $l = xarMLS::localeGetInfo($locale);
+        $l = xarLocale::parseLocaleString($locale);
         $this->outCharset = $l['charset'];
         $this->isUTF8 = ($l['charset'] == 'utf-8');
+        $this->newEncoding = new xarCharset();
 
         $varDir = sys::varpath();
         $locales_dir = "$varDir/locales";
@@ -305,14 +307,14 @@ class PHPBackendGenerator extends xarObject
         $blocks_dir     = "$php_dir/blocks";
         $objects_dir    = "$php_dir/objects";
 
-        xarMLS::mkdirr($php_locale_dir);
-        xarMLS::mkdirr($php_dir);
-        xarMLS::mkdirr($modules_dir);
-        xarMLS::mkdirr($properties_dir);
-        xarMLS::mkdirr($blocks_dir);
-        xarMLS::mkdirr($themes_dir);
-        xarMLS::mkdirr($objects_dir);
-        xarMLS::mkdirr($core_dir);
+        self::mkdirr($php_locale_dir);
+        self::mkdirr($php_dir);
+        self::mkdirr($modules_dir);
+        self::mkdirr($properties_dir);
+        self::mkdirr($blocks_dir);
+        self::mkdirr($themes_dir);
+        self::mkdirr($objects_dir);
+        self::mkdirr($core_dir);
     }
 
     public function bindDomain($domainType = ixarMLS::DNTYPE_CORE, $domainName = 'xaraya')
@@ -322,7 +324,7 @@ class PHPBackendGenerator extends xarObject
 
         $php_locale_dir = "$locales_dir/{$this->locale}";
 
-        if (!$parsedLocale = xarMLS::parseLocaleString("{$this->locale}")) {
+        if (!$parsedLocale = xarLocale::parseLocaleString("{$this->locale}")) {
             return false;
         }
         $xml_locale_dir = "$locales_dir/";
@@ -346,7 +348,7 @@ class PHPBackendGenerator extends xarObject
                 $this->baseDir .= $domainName . "/";
                 $this->baseXMLDir = $domainName . "/";
                 if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) {
-                    xarMLS::mkdirr($this->baseDir);
+                    self::mkdirr($this->baseDir);
                 }
                 break;
         }
@@ -373,10 +375,11 @@ class PHPBackendGenerator extends xarObject
         $this->fileName .= $ctxName . ".php";
         $this->xmlFileName .= $ctxName . ".xml";
 
+        $xar = xar::getServicesClass();
         $xmlFileExists = false;
         if (file_exists($this->xmlFileName)) {
             if (!($fp1 = fopen($this->xmlFileName, "r"))) {
-                xar::log()->error("Could not open XML input: " . $this->xmlFileName);
+                $xar->log()->error("Could not open XML input: " . $this->xmlFileName);
             }
             $data = fread($fp1, filesize($this->xmlFileName));
             fclose($fp1);
@@ -385,8 +388,8 @@ class PHPBackendGenerator extends xarObject
             xml_parser_free($xml_parser);
             $xmlFileExists = true;
         } else {
-            xar::log()->error("Context Type: " . $ctxType . " Context Name: " . $ctxName);
-            xar::log()->error("MLS Could not find XML input: " . $this->xmlFileName);
+            $xar->log()->error("Context Type: " . $ctxType . " Context Name: " . $ctxName);
+            $xar->log()->error("MLS Could not find XML input: " . $this->xmlFileName);
         }
 
         if (!$xmlFileExists) {
@@ -394,7 +397,7 @@ class PHPBackendGenerator extends xarObject
         }
 
         if (!file_exists($dirForMkDir)) {
-            xarMLS::mkdirr($dirForMkDir);
+            self::mkdirr($dirForMkDir);
         }
         $fp2 = @fopen($this->fileName, "w");
         if ($fp2 !== false) {
@@ -417,7 +420,7 @@ class PHPBackendGenerator extends xarObject
                     $start = '$xarML_PHPBackend_keyEntries[\'' . $node['value'] . "']";
                 } elseif ($node['tag'] == 'TRANSLATION') {
                     if ($this->outCharset != 'utf-8') {
-                        $node['value'] = xarMLS::$newEncoding->convert($node['value'], 'utf-8', $this->outCharset, 0);
+                        $node['value'] = $this->newEncoding->convert($node['value'], 'utf-8', $this->outCharset, 0);
                     }
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     if (!empty($node['value'])) {
@@ -425,10 +428,10 @@ class PHPBackendGenerator extends xarObject
                     }
                 }
             }
-            fputs($fp2, "?>");
+            fputs($fp2, "\n");
             fclose($fp2);
         } else {
-            xar::log()->error("Could not create file: " . $this->fileName);
+            $xar->log()->error("Could not create file: " . $this->fileName);
             global $xarML_PHPBackend_entries;
             global $xarML_PHPBackend_keyEntries;
             $entryIndex = '';
@@ -450,7 +453,7 @@ class PHPBackendGenerator extends xarObject
                     $entryType = 'key';
                 } elseif ($node['tag'] == 'TRANSLATION') {
                     if ($this->outCharset != 'utf-8') {
-                        $node['value'] = xarMLS::$newEncoding->convert($node['value'], 'utf-8', $this->outCharset, 0);
+                        $node['value'] = $this->newEncoding->convert($node['value'], 'utf-8', $this->outCharset, 0);
                     }
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     if ($entryType == 'string') {
@@ -462,5 +465,75 @@ class PHPBackendGenerator extends xarObject
             }
         }
         return true;
+    }
+
+    /**
+     * Create directories tree
+     *
+     * @author Volodymyr Metenchuk <voll@xaraya.com>
+     * @return boolean true
+     */
+    public static function mkdirr($path)
+    {
+        // Check if directory already exists
+        if (is_dir($path) || empty($path)) {
+            return true;
+        }
+
+        // Crawl up the directory tree
+        $next_path = substr($path, 0, strrpos($path, '/'));
+        if (self::mkdirr($next_path)) {
+            if (!file_exists($path)) {
+                try {
+                    $madeDir = mkdir($path, 0o700);
+                    return $madeDir;
+                } catch (Exception $e) {
+                    $xar = xar::getServicesClass();
+                    $msg = $xar->mls()->translate("Could not create directory #(1). The directories under #(2) must be writeable by PHP.", $path, $next_path);
+                    $xar->log()->error($msg);
+                    xarCore::exit($msg);
+                    // throw new PermissionException?
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check directory writability and create directory if it doesn't exist
+     *
+     * @author Volodymyr Metenchuk <voll@xaraya.com>
+     * @access protected
+     * @return bool true
+     */
+    public static function iswritable($directory = null)
+    {
+        if ($directory == null) {
+            $directory = getcwd();
+        }
+
+        if (file_exists($directory)) {
+            if (!is_dir($directory)) {
+                return false;
+            }
+            $isWritable = true;
+            $isWritable &= is_writable($directory);
+            $handle = opendir($directory);
+            while ($isWritable && (false !== ($filename = readdir($handle)))) {
+                if (($filename != ".") && ($filename != "..") && ($filename != "SCCS")) {
+                    if (is_dir($directory . "/" . $filename)) {
+                        $isWritable &= is_writable($directory . "/" . $filename);
+                        $isWritable &= self::iswritable($directory . "/" . $filename);
+                    } else {
+                        $isWritable &= is_writable($directory . "/" . $filename);
+                    }
+                }
+            }
+            return $isWritable;
+        } else {
+            $isWritable = self::mkdirr($directory);
+            return $isWritable;
+        }
     }
 }

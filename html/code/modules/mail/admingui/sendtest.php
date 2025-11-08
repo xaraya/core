@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Mail\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminGui;
 use Xaraya\Modules\Mail\AdminApi;
-use xarMLS;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -68,7 +67,7 @@ class SendtestMethod extends MethodClass
         if (!empty($when)) {
             $when .= ' GMT';
             $when = strtotime($when);
-            $when -= xarMLS::userOffset() * 3600;
+            $when -= $this->mls()->userOffset() * 3600;
         } else {
             $when = 0;
         }

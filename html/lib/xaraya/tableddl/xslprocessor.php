@@ -35,7 +35,7 @@ class XarayaXSLProcessor extends xarObject
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
         if (!$this->xslProc->importStyleSheet($this->xslDoc)) {
-            $halt = xarMLS::translate('Could not load a stylesheet');
+            $halt = xar::mls()->translate('Could not load a stylesheet');
             echo $halt;
             xarCore::exit();
         }

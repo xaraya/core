@@ -337,7 +337,7 @@ trait TemplatingTrait
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
             sys::import('xaraya.bridge.templates.twigtpl');
             if (xarTwigTpl::isObjectSupported($objectName, $modName)) {
-                return xarTwigTpl::object($modName, $objectName, $tplType, $tplData, $tplBase);
+                return xarTwigTpl::object($modName, $objectName, $tplType, $tplData);
             }
         }
         $xar = $this->getParent();

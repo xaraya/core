@@ -14,6 +14,9 @@
  * @author Marco Canini <marco@xaraya.com>
  */
 sys::import('xaraya.mlsbackends.reference');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 /**
  * XML based translation backend
  *
@@ -106,11 +109,11 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         $this->curData = '';
 
         if (!isset($this->locale)) {
-            $locale = xarMLS::getCurrentLocale();
+            $this->locale = xar::mls()->getCurrentLocale();
         }
 
         // Patch from Camille Perinel
-        $charset = xarMLS::getCharsetFromLocale($this->locale);
+        $charset = xarLocale::getCharsetFromLocale($this->locale);
 
         $this->parser = xml_parser_create('utf-8');
         if ($charset == 'utf-8') {
@@ -128,7 +131,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
             return true;
         }
 
-        $currentcharset = xarMLS::getCharsetFromLocale(xarMLS::getCurrentLocale());
+        $currentcharset = xarLocale::getCharsetFromLocale(xar::mls()->getCurrentLocale());
 
         $fp = fopen($fileName, 'r');
 
