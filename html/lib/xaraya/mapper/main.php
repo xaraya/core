@@ -25,20 +25,8 @@ use Xaraya\Services\xar;
  */
 class xarController extends xarObject
 {
-    public static bool $allowShortURLs = true;
-    /** @var array<string, mixed> */
-    public static $shortURLVariables = [];
     public static string $delimiter = '?';    // This character divides the URL into action part and parameters
     public static string $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route
-    /** @var xarDispatcher */
-    public static $dispatcher;
-    /** @var xarRequest */
-    public static $request;
-    /** @var xarResponse */
-    public static $response;
-    /** @var xarRouter */
-    public static $router;
-
     public static string $moduleKey = 'module';
     public static string $typeKey   = 'type';
     public static string $funcKey   = 'func';
@@ -48,18 +36,6 @@ class xarController extends xarObject
     public static string $object    = 'objects';
     public static string $method    = 'view';
     public static string $entryPoint = 'index.php';
-    /** @var ?callable */
-    public static $buildUri;     // callable for building URIs when using non-standard entrypoints
-    /** @var ?callable */
-    public static $redirectTo;   // callable for redirecting to when using non-standard entrypoints
-    /** @var ?callable */
-    public static $forbiddenTo;   // callable for forbidden when using non-standard entrypoints
-    /** @var ?callable */
-    public static $notFoundTo;   // callable for not found when using non-standard entrypoints
-    /** @var ?callable */
-    public static $badRequestTo;   // callable for bad request when using non-standard entrypoints
-    /** @var ?RequestInterface */
-    private static $requestContext = null;
     protected static ?ControllerService $ctlService = null;
     protected static ?RequestService $reqService = null;
 

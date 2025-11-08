@@ -31,23 +31,8 @@ use Xaraya\Services\xar;
  */
 class xarSession
 {
-    /** @var ?int */
-    public static $anonId = null;     // Replacement for _XAR_ID_UNREGISTERED
-    /** @var string */
-    private static $securityLevel;
-    /** @var int */
-    private static $duration;
-    /** @var int */
-    private static $inactivityTimeout;
-    //private static $cookieName;
-    //private static $cookiePath;
-    //private static $cookieDomain;
-    //private static $refererCheck;
     /** @var class-string<SessionInterface> */
     private static $sessionClass = SessionHandler::class;
-    /** @var array<string, mixed> */
-    private static array $args = [];
-    protected static bool $initialized = false;
     protected static ?SessionService $sessionService = null;
 
     protected static function session(): SessionService

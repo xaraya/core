@@ -23,6 +23,8 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
     public ?int $lastid = null;
     public mixed $value = null;
     private ?object $dbconn = null;
+    private $isCachedStmt = null;
+    private $getCachedStmt = null;
     /** @var array<string, mixed> */
     private $lastinfo = null;
 
@@ -53,8 +55,6 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
 
     public function isCached($key = '', $expire = 0, $log = 1)
     {
-        static $stmt = null;
-
         if (empty($expire)) {
             $expire = $this->expire;
         }
@@ -72,10 +72,10 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
                   WHERE type = ? AND cache_key = ? AND code = ?";
         $bindvars = [$this->type, $key, $this->code];
         // Prepare it once.
-        if (!isset($stmt)) {
-            $stmt = $this->dbconn->prepareStatement($query);
+        if (!isset($this->isCachedStmt)) {
+            $this->isCachedStmt = $this->dbconn->prepareStatement($query);
         }
-        $result = $stmt->executeQuery($bindvars);
+        $result = $this->isCachedStmt->executeQuery($bindvars);
 
         $this->lastkey = $key;
 
@@ -117,8 +117,6 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
 
     public function getCached($key = '', $output = 0, $expire = 0)
     {
-        static $stmt;
-
         if (empty($expire)) {
             $expire = $this->expire;
         }
@@ -142,10 +140,10 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
                   WHERE type = ? AND cache_key = ? AND code = ?";
         $bindvars = [$this->type, $key, $this->code];
         // Prepare it once
-        if (!isset($stmt)) {
-            $stmt = $this->dbconn->prepareStatement($query);
+        if (!isset($this->getCachedStmt)) {
+            $this->getCachedStmt = $this->dbconn->prepareStatement($query);
         }
-        $result = $stmt->executeQuery($bindvars);
+        $result = $this->getCachedStmt->executeQuery($bindvars);
 
         $this->lastkey = $key;
 

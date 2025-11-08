@@ -129,6 +129,7 @@ trait TemplatingTrait
     protected $pageTemplateName;
     protected $pageTitle;
 
+    protected $isHeaderContent;
     protected $showPHPCommentBlockInTemplates;
     protected $showTemplateFilenames;
     protected bool $initialized = false;
@@ -1220,17 +1221,16 @@ trait TemplatingTrait
     {
         $xar = $this->getParent();
         // flag used to determine if the header content has been found.
-        static $isHeaderContent;
-        if (!isset($isHeaderContent)) {
-            $isHeaderContent = false;
+        if (!isset($this->isHeaderContent)) {
+            $this->isHeaderContent = false;
         }
 
         $finalTemplate = '';
         try {
             if ($this->outputTemplateFilenames() && class_exists('xarUser') && ($xar->user()->isDebugAdmin())) {
                 $outputStartComment = true;
-                if ($isHeaderContent === false) {
-                    if ($isHeaderContent = $this->modifyHeaderContent($sourceFileName, $tplOutput)) {
+                if ($this->isHeaderContent === false) {
+                    if ($this->isHeaderContent = $this->modifyHeaderContent($sourceFileName, $tplOutput)) {
                         $outputStartComment = false;
                     }
                 }

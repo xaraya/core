@@ -28,7 +28,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
     protected $menumodtypes    = [];      // optional array of valid modtypes
     protected $xarmodules      = [];      // list of $menumodtype capable modules
 
-    // store current request info as static properties
+    // @todo FIXME store current request info as static properties
     public static $thismodname;
     public static $thismodtype;
     public static $thisfuncname;

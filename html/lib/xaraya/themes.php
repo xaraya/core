@@ -45,7 +45,6 @@ interface ixarTheme
  */
 class xarTheme extends xarObject implements ixarTheme
 {
-    public static $noCacheState = false;
     protected static ?InfoHelper $infoService = null;
 
     protected static function info(): InfoHelper

@@ -25,7 +25,6 @@ use Xaraya\Services\xar;
  */
 class xarCache extends xarObject
 {
-    protected static bool $initialized = false;
     protected static ?CachingService $cacheService = null;
 
     protected static function cache(): CachingService
@@ -45,14 +44,11 @@ class xarCache extends xarObject
      */
     public static function init($cacheDir = null)
     {
-        if (empty($cacheDir) && self::$initialized) {
-            return true;
-        }
-        if (empty($cacheDir) || !is_dir($cacheDir)) {
-            $cacheDir = sys::varpath() . '/cache';
-        }
         // static cache for migration
         self::$cacheService = null;
+        if (empty($cacheDir) || !is_dir($cacheDir)) {
+            return self::cache()->init();
+        }
         return self::cache()->init(['cacheDir' => $cacheDir]);
     }
 

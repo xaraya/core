@@ -47,7 +47,7 @@ class MemoryService implements MemoryInterface
 
     /** @var array<string, array<string, mixed>> */
     private array $cacheCollection = [];
-    private static ?ixarCache_Storage $cacheStorage = null;
+    private ?ixarCache_Storage $cacheStorage = null;
 
     /**
      * Initialise the caching options

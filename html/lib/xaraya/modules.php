@@ -96,12 +96,6 @@ interface ixarMod
  */
 class xarMod extends xarObject implements ixarMod
 {
-    public static $genShortUrls = false;
-    public static $genXmlUrls   = true;
-    public static $noCacheState = false;
-    /** @var array<string, object> */
-    private static $moduleClasses = [];
-    protected static bool $initialized = false;
     protected static ?ModulesService $modService = null;
 
     protected static function mod(): ModulesService
@@ -198,7 +192,6 @@ class xarMod extends xarObject implements ixarMod
     /**
      * Check if a module is installed and its state is STATE_ACTIVE
      *
-     * @static $modAvailableCache array
      * @param string $modName registered name of module
      * @param string $type determines theme or module
      * @return bool true if the module is available

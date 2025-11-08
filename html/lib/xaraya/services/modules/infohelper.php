@@ -36,6 +36,8 @@ class InfoHelper extends ServiceClass
 
     public $noCacheMod = false;
     public $noCacheTheme = false;
+    protected $loadedDbInfoCache = [];
+    protected $modAvailableCache = [];
 
     /**
      * @todo align with xar::mod($modName)->getName() - move back to ModuleService?
@@ -450,14 +452,13 @@ class InfoHelper extends ServiceClass
         }
         // @checkme force this here
         $modDir ??= $modName;
-        static $loadedDbInfoCache = [];
 
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
 
         // Check to ensure we aren't doing this twice
-        if (isset($loadedDbInfoCache[$modName])) {
+        if (isset($this->loadedDbInfoCache[$modName])) {
             return true;
         }
         $xar = $this->getParent();
@@ -467,14 +468,14 @@ class InfoHelper extends ServiceClass
             $tablesCall = new $result['classname']();
             // pass along the DB prefix to $tablesCall
             $xar->db()->importTables($tablesCall($xar->db()->getPrefix()));
-            $loadedDbInfoCache[$modName] = true;
+            $this->loadedDbInfoCache[$modName] = true;
             return true;
         }
 
         // For base and modules, which don't have a xartables - CHECKME: why not again ?
         if (!file_exists(sys::code() . 'modules/' . $modDir . '/xartables.php')) {
             // set anyway, so we don't try over and over
-            $loadedDbInfoCache[$modName] = false;
+            $this->loadedDbInfoCache[$modName] = false;
             return false;
         }
 
@@ -483,7 +484,7 @@ class InfoHelper extends ServiceClass
             include_once sys::code() . 'modules/' . $modDir . '/xartables.php';
         } catch (Exception $e) {
             // set anyway, so we don't try over and over
-            $loadedDbInfoCache[$modName] = false;
+            $this->loadedDbInfoCache[$modName] = false;
             return false;
         }
 
@@ -493,7 +494,7 @@ class InfoHelper extends ServiceClass
             $xar->db()->importTables($tablefunc($xar->db()->getPrefix()));
         }
 
-        $loadedDbInfoCache[$modName] = true;
+        $this->loadedDbInfoCache[$modName] = true;
         return true;
     }
 
@@ -501,7 +502,6 @@ class InfoHelper extends ServiceClass
     {
         // FIXME: there is no point to the cache here, since
         // xar::mod()->getBaseInfo() caches module details anyway.
-        static $modAvailableCache = [];
 
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
@@ -516,16 +516,16 @@ class InfoHelper extends ServiceClass
             return false;
         } // throw back
 
-        if (!empty($this->noCacheMod) || !isset($modAvailableCache[$modBaseInfo['name']])) {
+        if (!empty($this->noCacheMod) || !isset($this->modAvailableCache[$modBaseInfo['name']])) {
             // We should be ok now, return the state of the module
             $modState = $modBaseInfo['state'];
-            $modAvailableCache[$modBaseInfo['name']] = false;
+            $this->modAvailableCache[$modBaseInfo['name']] = false;
 
             if ($modState == ixarMod::STATE_ACTIVE) {
-                $modAvailableCache[$modBaseInfo['name']] = true;
+                $this->modAvailableCache[$modBaseInfo['name']] = true;
             }
         }
-        return $modAvailableCache[$modBaseInfo['name']];
+        return $this->modAvailableCache[$modBaseInfo['name']];
     }
 
     public function getIds($modName, $type = 'module')

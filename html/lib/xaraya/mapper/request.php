@@ -52,6 +52,7 @@ class xarRequest extends xarObject
     private $isAjax   = null;
     /** @var ?RequestInterface */
     private $requestContext = null;
+    private $currentRequestInfo = null;
 
     /**
      * @param ?string $url
@@ -263,10 +264,10 @@ class xarRequest extends xarObject
      */
     public function getInfo($url = '')
     {
-        static $currentRequestInfo = null;
+        // @todo is this still relevant
         static $loopHole = null;
-        if (is_array($currentRequestInfo) && empty($url)) {
-            return $currentRequestInfo;
+        if (is_array($this->currentRequestInfo) && empty($url)) {
+            return $this->currentRequestInfo;
         } elseif (is_array($loopHole)) {
             $xar = $this->getServicesClass();
             // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
@@ -282,7 +283,7 @@ class xarRequest extends xarObject
                 $this->getFunction(),
             ];
             // Save the current info in case we call this function again
-            $currentRequestInfo = $info;
+            $this->currentRequestInfo = $info;
             return $info;
         }
         $xar = $this->getServicesClass();

@@ -100,6 +100,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     protected $display_access      = ['group' => 0, 'level' => 100, 'failure' => 0];
     protected $modify_access       = ['group' => 0, 'level' => 100, 'failure' => 0];
     protected $delete_access       = ['group' => 0, 'level' => 100, 'failure' => 0];
+    /** @var ?AccessProperty */
     protected static $access_property = null;
 
     // groups this block instance belongs to, handled by blocks subsystem
@@ -353,13 +354,11 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
             'group' => $access['group'],
             'level' => $access['level'],
         ];
-        /** @var AccessProperty $access_property */
-        static $access_property;
-        if (!isset($access_property)) {
+        if (!isset(self::$access_property)) {
             sys::import('modules.dynamicdata.class.properties.master');
-            $access_property = DataPropertyMaster::getProperty(['name' => 'access']);
+            self::$access_property = DataPropertyMaster::getProperty(['name' => 'access']);
         }
-        return $access_property->check($args);
+        return self::$access_property->check($args);
     }
 
     final public function attachGroup($block_id, $box_template = null, $block_template = null)

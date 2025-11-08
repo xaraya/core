@@ -74,18 +74,6 @@ use Xaraya\Services\xar;
  **/
 class xarTpl extends xarObject
 {
-    // statics to replace $GLOBALS[xarTpl_*]
-    protected static $themeName;
-    protected static $themeDir;
-
-    protected static $generateXMLURLs  = true;
-    protected static $doctype          = 'xhtml1-strict';
-    protected static $pageTemplateName;
-    protected static $pageTitle;
-
-    protected static $showPHPCommentBlockInTemplates;
-    protected static $showTemplateFilenames;
-    protected static bool $initialized = false;
     protected static ?TemplatingService $tplService = null;
 
     protected static function tpl(): TemplatingService

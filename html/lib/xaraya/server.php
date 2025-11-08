@@ -32,17 +32,8 @@ class xarServer extends xarObject
     public const PROTOCOL_HTTP  = 'http';
     public const PROTOCOL_HTTPS = 'https';
 
-    /** @var ?string */
-    public static $baseurl;
-    /** @var bool */
-    public static $allowShortURLs = true;
-    /** @var bool */
-    public static $generateXMLURLs = true;
     /** @var class-string<RequestInterface> */
     private static $requestClass = RequestHandler::class;
-    /** @var array<string, mixed> */
-    private static array $args = [];
-    protected static bool $initialized = false;
     protected static ?ControllerService $ctlService = null;
     protected static ?RequestService $reqService = null;
 

@@ -40,6 +40,9 @@ class ExecHelper extends ServiceClass
 
     /** @var array<string, object> */
     private $moduleClasses = [];
+    protected $loadedModuleCache = [];
+    protected $checkFunctionCache = [];
+    protected $getMethodCache = [];
 
     /** @param array<string, mixed> $args */
     public function apiFunc(string $modName, string $modType, string $funcName, array $args): mixed
@@ -218,14 +221,13 @@ class ExecHelper extends ServiceClass
 
     protected function privateLoad($modName, $modType, $flags = 0)
     {
-        static $loadedModuleCache = [];
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
 
         // Make sure we access the cache with lower case key, return true when we already loaded
         $cacheKey = strtolower($modName . $modType);
-        if (isset($loadedModuleCache[$cacheKey])) {
+        if (isset($this->loadedModuleCache[$cacheKey])) {
             return true;
         }
         $xar = $this->getParent();
@@ -259,10 +261,10 @@ class ExecHelper extends ServiceClass
         // Assume failure
         if (file_exists($fileName)) {
             sys::import('modules.' . $modDir . '.xar' . $modType);
-            $loadedModuleCache[$cacheKey] = true;
+            $this->loadedModuleCache[$cacheKey] = true;
         } elseif (is_dir(sys::code() . 'modules/' . $modDir . '/xar' . $modType)) {
             // this is OK too - do nothing
-            $loadedModuleCache[$cacheKey] = true;
+            $this->loadedModuleCache[$cacheKey] = true;
         } else {
             // Do we have a module class handling this modType
             $instance = $this->getModule($modName);
@@ -270,10 +272,10 @@ class ExecHelper extends ServiceClass
             $classType = $instance->getClassType($modType);
             if (isset($classType)) {
                 // this is OK too - do nothing
-                $loadedModuleCache[$cacheKey] = true;
+                $this->loadedModuleCache[$cacheKey] = true;
             } else {
                 // this is (not really) OK too - do nothing
-                $loadedModuleCache[$cacheKey] = false;
+                $this->loadedModuleCache[$cacheKey] = false;
                 $xar->log()->info("xar::mod()->load: Loading $modName:$modType FAILED");
             }
         }
@@ -309,14 +311,12 @@ class ExecHelper extends ServiceClass
 
     public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string
     {
-        static $tplmodule_cache = [];
-
         $key = "$tplmodule:$type:$func";
-        if (!isset($tplmodule_cache[$key])) {
+        if (!isset($this->checkFunctionCache[$key])) {
             $file = sys::code() . 'modules/' . $tplmodule . '/xar' . $type . '/' . $func . '.php';
             if (file_exists($file)) {
-                $tplmodule_cache[$key] = $tplmodule;
-                return $tplmodule_cache[$key];
+                $this->checkFunctionCache[$key] = $tplmodule;
+                return $this->checkFunctionCache[$key];
             }
             // Note: pass modType . funcType as modType here for module classes, and use callType (api or not)
             if (str_ends_with($type, 'api')) {
@@ -329,12 +329,12 @@ class ExecHelper extends ServiceClass
             // Note: component would use configure() with no context here
             $callable = $this->getModuleClassMethod($tplmodule, $type, $func, $callType);
             if (!empty($callable)) {
-                $tplmodule_cache[$key] = $tplmodule;
+                $this->checkFunctionCache[$key] = $tplmodule;
             } else {
-                $tplmodule_cache[$key] = $defaultmodule;
+                $this->checkFunctionCache[$key] = $defaultmodule;
             }
         }
-        return $tplmodule_cache[$key];
+        return $this->checkFunctionCache[$key];
     }
 
     public function getModule(string $modName): ModuleInterface
@@ -361,22 +361,20 @@ class ExecHelper extends ServiceClass
 
     public function getModuleClassMethod(string $modName, string $modType, string $funcName, string $callType): ?callable
     {
-        static $methods_cache = [];
-
         $key = "$modName:$modType:$funcName:$callType";
-        if (!array_key_exists($key, $methods_cache)) {
+        if (!array_key_exists($key, $this->getMethodCache)) {
             $xar = $this->getParent();
             $instance = $this->getModule($modName);
             // returns null for DefaultModule() = no suitable class method
-            $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName, $callType);
-            if (!isset($methods_cache[$key])) {
+            $this->getMethodCache[$key] = $instance->getCallableMethod($modType, $funcName, $callType);
+            if (!isset($this->getMethodCache[$key])) {
                 $xar->log()->info("xar::mod()->getModuleClassMethod: Missing method for $key");
             } else {
                 // Load the translations file, only if we have loaded the function for the first time here.
                 $xar->mls()->loadModuleTranslations($modName, $modType, $funcName);
             }
         }
-        return $methods_cache[$key];
+        return $this->getMethodCache[$key];
     }
 
     /** @param array<string, mixed> $args */

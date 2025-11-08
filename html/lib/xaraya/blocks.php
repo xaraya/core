@@ -56,7 +56,6 @@ interface ixarBlock
  */
 class xarBlock extends xarObject implements ixarBlock
 {
-    protected static bool $initialized = false;
     protected static ?BlocksService $blockService = null;
 
     protected static function block(): BlocksService

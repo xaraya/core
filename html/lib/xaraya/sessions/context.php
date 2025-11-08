@@ -42,7 +42,7 @@ class SessionContext implements ContextInterface, SessionInterface
     /** @var class-string<SessionStorageInterface> */
     private static $storageClass = SessionCacheStorage::class;
     /** @var ?SessionStorageInterface */
-    private static $storage = null;
+    private $storage = null;
     /** @var array<string, mixed> */
     private array $args = [];
     private ?string $sessionId = null;
@@ -112,7 +112,7 @@ class SessionContext implements ContextInterface, SessionInterface
         }
         $serverVars = $this->context['server'] ?? [];
         $ipAddress = $serverVars['REMOTE_ADDR'] ?? '-';
-        $session = self::getStorage()->lookup($sessionId, $ipAddress);
+        $session = $this->getStorage()->lookup($sessionId, $ipAddress);
         $this->context['session'] = $session;
         if (empty($session)) {
             // @todo create dummy virtual session?
@@ -138,8 +138,8 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function getStorage()
     {
-        self::$storage ??= new self::$storageClass($this->args);
-        return self::$storage;
+        $this->storage ??= new self::$storageClass($this->args);
+        return $this->storage;
     }
 
     /**
@@ -332,7 +332,7 @@ class SessionContext implements ContextInterface, SessionInterface
         $session->vars = [];
         // @todo do we want to update or delete here?
         //$this->isUpdated = true;
-        self::getStorage()->delete($session);
+        $this->getStorage()->delete($session);
     }
 
     /**
@@ -360,10 +360,10 @@ class SessionContext implements ContextInterface, SessionInterface
     public function startSession(Context $context, string $sessionId, int $userId = 0, string $ipAddress = '')
     {
         // @todo do we want to lookup or register RemoteUser: or AuthToken: sessions in storage here?
-        $session = self::getStorage()->lookup($sessionId, $ipAddress);
+        $session = $this->getStorage()->lookup($sessionId, $ipAddress);
         if (!isset($session)) {
             $session = new VirtualSession($sessionId, $userId, $ipAddress, time(), []);
-            self::getStorage()->register($session);
+            $this->getStorage()->register($session);
             $session->isNew = true;
         } else {
             $session->setUserId($userId);
@@ -386,8 +386,8 @@ class SessionContext implements ContextInterface, SessionInterface
             return false;
         }
         // do we want to save session if storage is not initialized here?
-        if ($this->isUpdated && !empty(self::$storage)) {
-            self::getStorage()->update($session);
+        if ($this->isUpdated && !empty($this->storage)) {
+            $this->getStorage()->update($session);
             $this->isUpdated = false;
         }
         $this->saveTime($session->lastUsed);

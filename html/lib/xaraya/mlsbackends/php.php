@@ -24,8 +24,8 @@
 sys::import('xaraya.mlsbackends.reference');
 class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
-    public static $PHPBackend_entries = [];
-    public static $PHPBackend_keyEntries = [];
+    public $PHPBackend_entries = [];
+    public $PHPBackend_keyEntries = [];
 
     public function __construct($locales)
     {
@@ -35,8 +35,8 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     public function translate($string, $type = 0)
     {
-        if (isset(self::$PHPBackend_entries[$string])) {
-            return self::$PHPBackend_entries[$string];
+        if (isset($this->PHPBackend_entries[$string])) {
+            return $this->PHPBackend_entries[$string];
         } else {
             if ($type == 1) {
                 return $string;
@@ -48,8 +48,8 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     public function translateByKey($key, $type = 0)
     {
-        if (isset(self::$PHPBackend_keyEntries[$key])) {
-            return self::$PHPBackend_keyEntries[$key];
+        if (isset($this->PHPBackend_keyEntries[$key])) {
+            return $this->PHPBackend_keyEntries[$key];
         } else {
             if ($type == 1) {
                 return $key;
@@ -61,8 +61,8 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     public function clear()
     {
-        self::$PHPBackend_entries = [];
-        self::$PHPBackend_keyEntries = [];
+        $this->PHPBackend_entries = [];
+        $this->PHPBackend_keyEntries = [];
     }
 
     public function bindDomain($dnType = ixarMLS::DNTYPE_CORE, $dnName = 'xaraya')
@@ -79,24 +79,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
         //        }
         return false;
     }
-    /*
-        function loadKEYS($dnName)
-        {
-            $modBaseInfo = xar::mod()->getBaseInfo($dnName);
-            $fileName = "modules/$modBaseInfo[directory]/KEYS";
-            if (file_exists($fileName)) {
 
-                $lines = file($fileName);
-                foreach ($lines as $line) {
-                    if ($line[0] == '#') continue;
-                    list($key, $value) = explode('=', $line);
-                    $key = trim($key);
-                    $value = trim($value);
-                    self::$PHPBackend_keyEntries[$key] = $value;
-                }
-            }
-        }
-    */
     public function loadContext($contextType, $contextName)
     {
         if (!$fileName = $this->findContext($contextType, $contextName)) {
@@ -110,10 +93,10 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
         global $xarML_PHPBackend_keyEntries;
         include_once $fileName;
         if (!empty($xarML_PHPBackend_entries)) {
-            self::$PHPBackend_entries = array_merge(self::$PHPBackend_entries, $xarML_PHPBackend_entries);
+            $this->PHPBackend_entries = array_merge($this->PHPBackend_entries, $xarML_PHPBackend_entries);
         }
         if (!empty($xarML_PHPBackend_keyEntries)) {
-            self::$PHPBackend_keyEntries = array_merge(self::$PHPBackend_keyEntries, $xarML_PHPBackend_keyEntries);
+            $this->PHPBackend_keyEntries = array_merge($this->PHPBackend_keyEntries, $xarML_PHPBackend_keyEntries);
         }
 
         return true;

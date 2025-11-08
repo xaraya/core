@@ -62,6 +62,8 @@ trait SessionTrait
 {
     use ServiceTrait;
 
+    /** @var class-string<SessionFacade> */
+    private static $sessionClass = SessionHandler::class;
     /** @var ?int */
     public $anonId = null;     // Replacement for _XAR_ID_UNREGISTERED
     /** @var string */
@@ -74,8 +76,6 @@ trait SessionTrait
     //private $cookiePath;
     //private $cookieDomain;
     //private $refererCheck;
-    /** @var class-string<SessionFacade> */
-    private static $sessionClass = SessionHandler::class;
     /** @var array<string, mixed> */
     private array $args = [];
     protected bool $initialized = false;

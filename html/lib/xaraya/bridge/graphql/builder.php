@@ -34,10 +34,6 @@ use sys;
 class GraphQLBuilder
 {
     public static string $endpoint = 'gql.php';
-    /** @var array<string, mixed> */
-    public static $config = [];
-    /** @var string|null */
-    public static $schemaFile = null;
 
     /**
      * Get GraphQL Schema with Query type and typeLoader

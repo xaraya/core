@@ -179,6 +179,9 @@ trait MultiLanguageTrait
     public $defaultTimeOffset = 0;
     public $backend           = null;
     public $formatter         = null;
+    protected $loadedCommons  = [];
+    protected $loadedTranslations = [];
+    protected $calledSetLocale = 0;
     protected bool $initialized = false;
 
     /**
@@ -319,13 +322,11 @@ trait MultiLanguageTrait
 
         $xar->log()->info("Changing the default locale from " . $this->getCurrentLocale() . " to " . $locale);
 
-        static $called = 0;
-
         // FIXME: during initialisation, the current locale was set, and it gets called
         // again during user subsystem initialisation, we have to provide better defaults
         // if we really want this to run only once.
 
-        $called++;
+        $this->calledSetLocale++;
 
         // Set locale formatter
         if ($xar->user()->isLoggedIn()) {
@@ -714,8 +715,6 @@ trait MultiLanguageTrait
      */
     protected function _loadTranslations($domainType, $domainName, $contextType, $contextName)
     {
-        static $loadedCommons = [];
-        static $loadedTranslations = [];
         $xar = $this->getParent();
 
         $xar->log()->debug("MLS: Loading translations for the context " . "$domainType,$domainName,$contextType,$contextName");
@@ -730,16 +729,16 @@ trait MultiLanguageTrait
         }
 
         // only load each translation once
-        if (isset($loadedTranslations["$domainType.$domainName.$contextType.$contextName"])) {
-            return $loadedTranslations["$domainType.$domainName.$contextType.$contextName"];
+        if (isset($this->loadedTranslations["$domainType.$domainName.$contextType.$contextName"])) {
+            return $this->loadedTranslations["$domainType.$domainName.$contextType.$contextName"];
         }
 
         if ($this->backend->bindDomain($domainType, $domainName)) {
             switch ($domainType) {
                 case ixarMLS::DNTYPE_THEME:
                     // Load common translations
-                    if (!isset($loadedCommons[$domainName . 'theme'])) {
-                        $loadedCommons[$domainName . 'theme'] = true;
+                    if (!isset($this->loadedCommons[$domainName . 'theme'])) {
+                        $this->loadedCommons[$domainName . 'theme'] = true;
                         if (!$this->backend->loadContext('themes:', 'common')) {
                             return;
                         }
@@ -748,8 +747,8 @@ trait MultiLanguageTrait
                 case ixarMLS::DNTYPE_MODULE:
                     // Handle in a special way the module type
                     // for which it's necessary to load common translations
-                    if (!isset($loadedCommons[$domainName . 'module'])) {
-                        $loadedCommons[$domainName . 'module'] = true;
+                    if (!isset($this->loadedCommons[$domainName . 'module'])) {
+                        $this->loadedCommons[$domainName . 'module'] = true;
                         if (!$this->backend->loadContext('modules:', 'common')) {
                             return;
                         }
@@ -760,8 +759,8 @@ trait MultiLanguageTrait
                     break;
                 case ixarMLS::DNTYPE_PROPERTY:
                     // Load common translations
-                    if (!isset($loadedCommons[$domainName . 'property'])) {
-                        $loadedCommons[$domainName . 'property'] = true;
+                    if (!isset($this->loadedCommons[$domainName . 'property'])) {
+                        $this->loadedCommons[$domainName . 'property'] = true;
                         if (!$this->backend->loadContext('properties:', 'common')) {
                             return;
                         }
@@ -769,8 +768,8 @@ trait MultiLanguageTrait
                     break;
                 case ixarMLS::DNTYPE_BLOCK:
                     // Load common translations
-                    if (!isset($loadedCommons[$domainName . 'block'])) {
-                        $loadedCommons[$domainName . 'block'] = true;
+                    if (!isset($this->loadedCommons[$domainName . 'block'])) {
+                        $this->loadedCommons[$domainName . 'block'] = true;
                         if (!$this->backend->loadContext('blocks:', 'common')) {
                             return;
                         }
@@ -778,8 +777,8 @@ trait MultiLanguageTrait
                     break;
                 case ixarMLS::DNTYPE_OBJECT:
                     // Load common translations
-                    if (!isset($loadedCommons[$domainName . 'object'])) {
-                        $loadedCommons[$domainName . 'object'] = true;
+                    if (!isset($this->loadedCommons[$domainName . 'object'])) {
+                        $this->loadedCommons[$domainName . 'object'] = true;
                         if (!$this->backend->loadContext('objects:', 'common')) {
                             return;
                         }
@@ -790,13 +789,13 @@ trait MultiLanguageTrait
             if (!$this->backend->loadContext($contextType, $contextName)) {
                 return;
             }
-            $loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = true;
+            $this->loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = true;
             return true;
         } else {
             // FIXME: postpone
             //xarEvents::notify('MLSMissingTranslationDomain', array($domainType, $domainName));
 
-            $loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = false;
+            $this->loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = false;
             return false;
         }
     }

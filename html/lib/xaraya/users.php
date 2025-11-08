@@ -58,9 +58,6 @@ interface ixarUser
  */
 class xarUser extends xarObject implements ixarUser
 {
-    private static $objectRef;
-    public static $authenticationModules;
-    protected static bool $initialized = false;
     protected static ?UserService $userService = null;
 
     protected static function user(): UserService

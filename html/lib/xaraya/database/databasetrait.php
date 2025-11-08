@@ -173,9 +173,9 @@ trait DatabaseTrait
     use WithServicesClass;
 
     /** @var array<string, mixed> */
-    protected static array $_databases = [];
+    protected array $_databases = [];
     /** @var array<string, mixed> */
-    protected static array $_connections = [];
+    protected array $_connections = [];
 
     /**
      * Summary of getDbModName
@@ -197,7 +197,7 @@ trait DatabaseTrait
         $this->moduleName ??= $modName;
         // reset list of databases in DatabaseTrait
         if ($modName !== $this->moduleName) {
-            static::$_databases = [];
+            $this->_databases = [];
         }
         $this->moduleName = $modName;
     }
@@ -213,26 +213,26 @@ trait DatabaseTrait
             $this->setDbModName($modName);
         }
         $modName = $this->getDbModName();
-        if (empty(static::$_databases)) {
+        if (empty($this->_databases)) {
             $allDatabases = [];
             $xar = $this->getServicesClass();
             if ($xar->mem()->has('DynamicData', 'Databases')) {
                 $allDatabases = $xar->mem()->get('DynamicData', 'Databases');
             }
             if (!empty($allDatabases[$modName])) {
-                static::$_databases = $allDatabases[$modName];
+                $this->_databases = $allDatabases[$modName];
             } else {
                 $databases = unserialize($xar->mod($modName)->getVar('databases') ?? '');
                 if (empty($databases)) {
-                    static::$_databases = [];
+                    $this->_databases = [];
                 } else {
-                    static::$_databases = $databases;
+                    $this->_databases = $databases;
                 }
-                $allDatabases[$modName] = static::$_databases;
+                $allDatabases[$modName] = $this->_databases;
                 $xar->mem()->set('DynamicData', 'Databases', $allDatabases);
             }
         }
-        return static::$_databases;
+        return $this->_databases;
     }
 
     /**
@@ -245,13 +245,13 @@ trait DatabaseTrait
     public function addDatabase(string $name, ?array $database = null, bool $save = false): void
     {
         // allow starting with un-initialized $_databases = before calling getDatabases()
-        static::$_databases ??= [];
+        $this->_databases ??= [];
         if (empty($database)) {
-            unset(static::$_databases[$name]);
+            unset($this->_databases[$name]);
         } else {
             $database['name'] ??= $name;
             $database['description'] ??= ucwords(str_replace('_', ' ', $name));
-            static::$_databases[$name] = $database;
+            $this->_databases[$name] = $database;
         }
         if ($save) {
             $this->saveDatabases();
@@ -266,7 +266,7 @@ trait DatabaseTrait
      */
     public function saveDatabases(?array $databases = null, ?string $modName = null): void
     {
-        $databases ??= static::$_databases;
+        $databases ??= $this->_databases;
         $modName ??= $this->getDbModName();
         $xar = $this->getServicesClass();
         $xar->mod($modName)->setVar('databases', serialize($databases));
@@ -288,8 +288,8 @@ trait DatabaseTrait
      */
     public function connectDatabase(string $name): int|string|null
     {
-        if (!empty(static::$_connections[$name])) {
-            return static::$_connections[$name];
+        if (!empty($this->_connections[$name])) {
+            return $this->_connections[$name];
         }
         try {
             $args = $this->getDatabaseDSN($name);
@@ -297,7 +297,7 @@ trait DatabaseTrait
             return null;
         }
         $dbConnIndex = ExternalDatabase::checkDbConnection(null, $args);
-        static::$_connections[$name] = $dbConnIndex;
+        $this->_connections[$name] = $dbConnIndex;
         // return the connection index
         return $dbConnIndex;
     }
@@ -352,7 +352,7 @@ trait DatabaseTrait
     {
         // if we only have one database, return its name
         if (count($this->getDatabases()) === 1) {
-            return array_key_first(static::$_databases);
+            return array_key_first($this->_databases);
         }
         $xar = $this->getServicesClass();
         // we need 'module_itemvars' and/or 'module_vars' tables below

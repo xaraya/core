@@ -56,16 +56,6 @@ interface ixarMLS
 **/
 class xarMLS extends xarObject implements ixarMLS
 {
-    public static $mode              = self::SINGLE_LANGUAGE_MODE;
-    public static $backendName       = 'xml2php';
-    public static $currentLocale     = '';
-    public static $defaultLocale     = 'en_US.utf-8';
-    public static $allowedLocales    = ['en_US.utf-8'];
-    //public static $newEncoding       = null;
-    public static $defaultTimeZone   = 'UTC';
-    public static $defaultTimeOffset = 0;
-    public static $backend           = null;
-    protected static bool $initialized = false;
     protected static ?MultiLanguageService $mlsService = null;
 
     protected static function mls(): MultiLanguageService

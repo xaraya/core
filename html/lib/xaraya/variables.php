@@ -117,7 +117,6 @@ class xarVar extends xarObject implements ixarVar
     public const PREP_FOR_STORE   = 16;
     public const PREP_TRIM        = 8;
 
-    protected static bool $initialized = false;
     protected static ?MemoryService $memService = null;
     protected static ?VariablesService $varService = null;
 
