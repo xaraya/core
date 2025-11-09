@@ -58,7 +58,7 @@ final class ServerTest extends TestCase
         $expected = $this->getServerVars();
         $_SERVER = array_replace($_SERVER ?? [], $expected);
         xar::req()->init(xar::req()->getConfig());
-        // @todo we need to reset xar::sysConfig()->getVar('BaseURI', sys::LAYOUT)
+        // @todo we need to reset xar::sysConfig(sys::LAYOUT)->getVar('BaseURI')
 
         $this->assertEquals($expected['REQUEST_URI'], xar::req()->getServerVar('REQUEST_URI'));
         $this->assertEquals('/xaraya', xar::req()->getBaseURI());
@@ -75,7 +75,7 @@ final class ServerTest extends TestCase
         $expected = $this->getServerVars();
         $_SERVER = array_replace($_SERVER ?? [], $expected);
         xar::req()->init(xar::req()->getConfig());
-        // @todo we need to reset xar::sysConfig()->getVar('BaseURI', sys::LAYOUT)
+        // @todo we need to reset xar::sysConfig(sys::LAYOUT)->getVar('BaseURI')
 
         // default empty context for the request
         $this->assertEquals(null, xar::req()->getServerVar('REQUEST_URI'));

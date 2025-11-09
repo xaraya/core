@@ -451,9 +451,9 @@ trait WithStaticServices
      * - ...
      *
      */
-    public static function sysConfig(): SystemInterface
+    public static function sysConfig(?string $scope = null): SystemInterface
     {
-        return self::getServicesClass()->sysConfig();
+        return self::getServicesClass()->sysConfig($scope);
     }
 
     /**

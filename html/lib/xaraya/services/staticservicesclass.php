@@ -378,8 +378,11 @@ class StaticServicesClass extends ServicesClass
      * - ...
      *
      */
-    public function sysConfig(): SystemInterface
+    public function sysConfig(?string $scope = null): SystemInterface
     {
+        if (!empty($scope)) {
+            return $this->service('system', $scope);
+        }
         return $this->getServicePrototype('system');
     }
 

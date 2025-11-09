@@ -13,7 +13,7 @@ final class DataObjectTest extends TestCase
 
     public static function tearDownAfterClass(): void
     {
-        xar::sysConfig()->setVar('BaseURI', null, sys::LAYOUT);
+        xar::sysConfig(sys::LAYOUT)->setVar('BaseURI', null);
         // @todo reset deferred property caches after DataObjectTest
         DeferredItemProperty::$deferred = [];
         DeferredListProperty::$deferred = [];

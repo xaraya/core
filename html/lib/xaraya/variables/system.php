@@ -45,18 +45,30 @@ class xarSystemVars extends xarVars implements IxarVars
     public static function get($scope, $name)
     {
         $scope ??= sys::CONFIG;
-        return self::sysConfig()->getVar($name, $scope);
+        if ($scope !== sys::CONFIG) {
+            $sysConfig = xar::getServicesClass()->sysConfig($scope);
+            return $sysConfig->getVar($name);
+        }
+        return self::sysConfig()->getVar($name);
     }
 
     public static function set($scope, $name, $value)
     {
         $scope ??= sys::CONFIG;
-        return self::sysConfig()->setVar($name, $value, $scope);
+        if ($scope !== sys::CONFIG) {
+            $sysConfig = xar::getServicesClass()->sysConfig($scope);
+            return $sysConfig->setVar($name, $value);
+        }
+        return self::sysConfig()->setVar($name, $value);
     }
 
     public static function delete($scope, $name)
     {
         $scope ??= sys::CONFIG;
-        return self::sysConfig()->delVar($name, $scope);
+        if ($scope !== sys::CONFIG) {
+            $sysConfig = xar::getServicesClass()->sysConfig($scope);
+            return $sysConfig->getVar($name);
+        }
+        return self::sysConfig()->delVar($name);
     }
 }

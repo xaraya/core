@@ -102,7 +102,7 @@ class xarLogger extends xarObject
             $levels = $conf['level'] ?? xar::sysConfig()->getVar('Log.Level');
         } else {
             // The levels defined in the log configuration file
-            $levels = $conf['level'] ?? xar::sysConfig()->getVar('Log.' . ucwords($this->name) . '.Level', sys::LOG);
+            $levels = $conf['level'] ?? xar::sysConfig(sys::LOG)->getVar('Log.' . ucwords($this->name) . '.Level');
         }
         if (!empty($levels)) {
             $this->logLevel = 0;

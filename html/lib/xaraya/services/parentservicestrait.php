@@ -447,9 +447,9 @@ trait ParentServicesTrait
      * - ...
      *
      */
-    public function sysConfig(): SystemInterface
+    public function sysConfig(?string $scope = null): SystemInterface
     {
-        return $this->getParent()->sysConfig();
+        return $this->getParent()->sysConfig($scope);
     }
 
     /**

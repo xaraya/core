@@ -293,7 +293,7 @@ trait RequestTrait
         // setting BaseURI = '' in config.php
         try {
             $xar = $this->getParent();
-            $BaseURI =  $xar->sysConfig()->getVar('BaseURI', sys::LAYOUT);
+            $BaseURI =  $xar->sysConfig(sys::LAYOUT)->getVar('BaseURI');
             return $BaseURI;
         } catch (Exception $e) {
             // We need to build it

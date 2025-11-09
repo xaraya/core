@@ -37,7 +37,7 @@ class ServiceFactory
     /** @var list<string> */
     public static array $sharedServices = [
         // shared services
-        'ctl', 'log', 'mls', 'var', 'block', 'prop', 'cache', 'mem', 'req', 'config', 'system', 'session', 'db',
+        'ctl', 'log', 'mls', 'var', 'block', 'prop', 'cache', 'mem', 'req', 'config', 'session', 'db',
         // parent-aware services = not shared
         // 'sec', 'tpl', 'data',
         // static wrappers
@@ -50,7 +50,7 @@ class ServiceFactory
     /** @var list<string> */
     public static array $argumentServices = [
         // shared services with optional argument
-        'user',
+        'user', 'system',
         // parent-aware services with optional argument = not shared
         // 'mod',
     ];

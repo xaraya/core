@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.4
+ * @version 2.8.6
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -26,9 +26,9 @@ interface SystemInterface extends ServiceInterface
 {
     public const SLICE = 'system';
 
-    public function getVar(string $name, string $scope = sys::CONFIG): mixed;
-    public function setVar(string $name, mixed $value, string $scope = sys::CONFIG): bool;
-    public function delVar(string $name, string $scope = sys::CONFIG): mixed;
+    public function getVar(string $name): mixed;
+    public function setVar(string $name, mixed $value): bool;
+    public function delVar(string $name): mixed;
 }
 
 /**
@@ -40,12 +40,14 @@ trait SystemTrait
     public const SCOPE = 'System.Variables';
     /** @var array<string, array<string, mixed>> */
     private array $systemVars = [];
+    private string $scope = sys::CONFIG;
 
     /**
      * Get system variable
      */
-    public function getVar(string $name, string $scope = sys::CONFIG): mixed
+    public function getVar(string $name): mixed
     {
+        $scope = $this->getScope();
         if (!isset($this->systemVars[$scope])) {
             $this->preload($scope);
         }
@@ -61,8 +63,9 @@ trait SystemTrait
     /**
      * Set system variable
      */
-    public function setVar(string $name, mixed $value, string $scope = sys::CONFIG): bool
+    public function setVar(string $name, mixed $value): bool
     {
+        $scope = $this->getScope();
         // Allow overriding system layout if needed
         if ($scope == sys::LAYOUT) {
             $this->systemVars[$scope][$name] = $value;
@@ -80,8 +83,9 @@ trait SystemTrait
     /**
      * Delete system variable
      */
-    public function delVar(string $name, string $scope = sys::CONFIG): bool
+    public function delVar(string $name): bool
     {
+        $scope = $this->getScope();
         // Not supported ?
         return false;
     }
@@ -107,6 +111,38 @@ trait SystemTrait
         /** @phpstan-ignore-next-line */
         $this->systemVars[$scope] = $systemConfiguration;
     }
+
+    /**
+     * Get current scope when called as $this->sysConfig(sys::LAYOUT)->...
+     */
+    public function getScope(): string
+    {
+        return $this->scope;
+    }
+
+    /**
+     * Override current scope when called as $this->sysConfig(sys::LAYOUT)->...
+     * @param string $scope
+     * @return void
+     */
+    public function setScope(string $scope): void
+    {
+        $this->scope = $scope;
+    }
+
+    /**
+     * Create a specialized version of this service for a specific user ID.
+     * @param mixed ...$args
+     * @return ServiceInterface
+     */
+    public function specialize(...$args): ServiceInterface
+    {
+        $clone = clone $this;
+        if (isset($args[0])) {
+            $clone->setScope($args[0]);
+        }
+        return $clone;
+    }
 }
 
 /**
@@ -123,4 +159,10 @@ trait SystemTrait
 class SystemService implements SystemInterface
 {
     use SystemTrait;
+
+    // @todo remove this when all specialize() methods are implemented
+    public function __clone()
+    {
+        $this->scope = sys::CONFIG;
+    }
 }
