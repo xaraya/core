@@ -43,7 +43,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
     /**
      * Get a user variable for a module
      *
-     * This is basically the same as xarModVars::set(), but this
+     * This is basically the same as xar::mod()->getVar(), but this
      * allows for getting variable values which are tied to
      * a specific item for a certain module. Typical usage
      * is storing user preferences.
@@ -53,7 +53,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * @param  string  $name    The name of the variable to get
      * @param  integer $itemid  User id for which value is to be retrieved
      * @return mixed The value of the variable or void if variable doesn't exist.
-     * @see  xarModVars::get()
+     * @see  xar::mod()->getVar()
      * @todo Mrb : Add caching?
      */
     public static function get($scope, $name, $itemid = null)
@@ -64,7 +64,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
     /**
      * Set a user variable for a module
      *
-     * This is basically the same as xarModVars::set(), but this
+     * This is basically the same as xar::mod()->setVar(), but this
      * allows for setting variable values which are tied to
      * a specific user for a certain module. Typical usage
      * is storing user preferences.
@@ -77,7 +77,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * @param  integer $itemid  User id for which value needs to be set
      * @return boolean true on success false on failure
      * @throws EmptyParameterException
-     * @see xarModVars::set()
+     * @see xar::mod()->setVar()
      * @todo Add caching?
      */
     public static function set($scope, $name, $value, $itemid = null)
@@ -88,7 +88,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
     /**
      * Delete a user variable for a module
      *
-     * This is the same as xarModVars::delete() but this allows
+     * This is the same as xar::mod()->delVar() but this allows
      * for deleting a specific user variable, effectively
      * setting the value for that user to the default setting
      *
@@ -97,7 +97,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * @param  string  $name  The name of the variable to set
      * @param  integer $itemid User id of the user to delete the variable for.
      * @return boolean true on success
-     * @see xarModVars::delete()
+     * @see xar::mod()->delVar()
      * @todo Add caching?
      */
     public static function delete($scope, $name, $itemid = null)

@@ -1,5 +1,7 @@
 <?php
 
+use Xaraya\Services\xar;
+
 /**
  * Loads the files required for a local services request
  *
@@ -34,7 +36,7 @@ function xarLSLoader($argc, $argv)
      *       without loading the core
      */
     sys::import('xaraya.caching');
-    xarCache::init();
+    xar::cache()->init();
 
     /**
      * Load the Xaraya core
@@ -90,8 +92,10 @@ function xarLocalServicesMain($argc, $argv)
         return usage();
     }
     $handler = $argv[1];
-    if (xarMod::isAvailable($handler)) {
-        return xarMod::apiFunc($handler, 'cli', 'process', ['argc' => $argc, 'argv' => $argv]);
+    // Get Xaraya Services Class
+    $xar = xar::getServicesClass();
+    if ($xar->mod()->isAvailable($handler)) {
+        return $xar->mod()->apiFunc($handler, 'cli', 'process', ['argc' => $argc, 'argv' => $argv]);
     } else {
         return usage();
     }

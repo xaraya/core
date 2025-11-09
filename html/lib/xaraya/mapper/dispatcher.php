@@ -34,6 +34,7 @@ class xarDispatcher extends xarObject
             sys::import('xaraya.mapper.controllers.' . $request->getRoute());
             $controllername = UCFirst($request->getRoute()) . 'ActionController';
         }
+        /** @var iController $controller */
         $controller = new $controllername($request);
         $request->setActionString($controller->getActionString($request));
         return $controller;

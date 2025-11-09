@@ -51,7 +51,7 @@ class xarDDObject extends xarObject implements ixarDDObject
      * @param string $methodName specific method to run
      * @param array<string, mixed> $args arguments to pass to the method
      * @param ?Context<string, mixed> $context optional context for the method call (default = none)
-     * @return mixed The output of the method, or raise an exception
+     * @return string The output of the method, or raise an exception
      * @throws EmptyParameterException
      */
     public static function guiMethod($objectName, $methodName = 'view', $args = [], $context = null)

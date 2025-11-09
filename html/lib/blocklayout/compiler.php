@@ -153,7 +153,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
     {
         // Compressing excess whitespace
         try {
-            $this->compresswhitespace = xarConfigVars::get(null, 'Site.BL.CompressWhitespace');
+            $this->compresswhitespace = xar::config()->getVar('Site.BL.CompressWhitespace');
         } catch (Exception $e) {
             $this->compresswhitespace = 1;
         }

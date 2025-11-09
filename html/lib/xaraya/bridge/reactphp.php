@@ -47,7 +47,7 @@ $xar->req()->setRequestClass(\Xaraya\Context\RequestContext::class);
 $xar->session()->setSessionClass(\Xaraya\Context\SessionContext::class);
 xarCore::xarInit(xarCore::SYSTEM_USER);
 // @checkme we need to set at least the $basurl here
-//xarServer::setBaseURL('https://owncloud.mikespub.net/test/');
+//xar::ctl()->setBaseURL('https://owncloud.mikespub.net/test/');
 $xar->ctl()->setBaseURL('http://localhost:8080/');
 $serverVars = $xar->req()->getInstance()->getContext()['server'];
 var_dump($serverVars);

@@ -31,9 +31,9 @@ class DefaultActionController extends BaseActionController implements iControlle
      */
     public function decode(array $data = []): array
     {
+        $request = $this->getRequest();
         $xar = xar::getServicesClass();
         // @todo avoid duplication of param parsing - see xarRequest::setURL()
-        $request = $xar->req()->getRequest();
         $xar->var()->find('module', $module, 'regexp:/^[a-z][a-z_0-9]*$/');
         if (null != $module) {
             $xar->var()->find('type', $data['type'], "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $request->getType());

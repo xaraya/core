@@ -592,8 +592,9 @@ class xarRequest extends xarObject
     {
         if ($this->isAjax()) {
             if (is_array($msg)) {
+                $xar = $this->getServicesClass();
                 $data = ['message' => $msg];
-                $output = xarTpl::includeTemplate('theme', '', 'user-message', $data);
+                $output = $xar->tpl()->includeTemplate('theme', '', 'user-message', $data);
                 echo $output;
             } else {
                 echo $msg;

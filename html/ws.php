@@ -1,5 +1,7 @@
 <?php
 
+use Xaraya\Services\xar;
+
 /**
  * Entrypoint for handling legacy & modern web services
  *
@@ -35,7 +37,7 @@ function xarWSLoader()
      *       without loading the core
      */
     sys::import('xaraya.caching');
-    xarCache::init();
+    xar::cache()->init();
 
     /**
      * Load the Xaraya core
@@ -79,13 +81,16 @@ function xarWSLoader()
  */
 function xarWebservicesMain()
 {
+    // Get Xaraya Services Class
+    $xar = xar::getServicesClass();
+
     /*
      determine the server type, then
      create an instance of that server and
      serve the request according the the servers protocol
     */
-    xarVar::fetch('type', 'enum:rest:xmlrpc:trackback:soap:webdav:flashremoting:native', $type, '');
-    xarLog::message("In webservices with type=$type");
+    $xar->var()->get('type', $type, 'enum:rest:xmlrpc:trackback:soap:webdav:flashremoting:native', '');
+    $xar->log()->message("In webservices with type=$type");
     $server = false;
     switch ($type) {
         /**
@@ -93,15 +98,15 @@ function xarWebservicesMain()
          */
         case 'xmlrpc' :
             // xmlrpc server does automatic processing directly
-            if (xarMod::isAvailable('xmlrpcserver')) {
-                $server = xarMod::apiFunc('xmlrpcserver', 'user', 'initxmlrpcserver');
+            if ($xar->mod()->isAvailable('xmlrpcserver')) {
+                $server = $xar->mod()->apiFunc('xmlrpcserver', 'user', 'initxmlrpcserver');
             }
             if (!$server) {
-                xarLog::message("Could not load XML-RPC server, giving up");
+                $xar->log()->message("Could not load XML-RPC server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarMLS::translate('Could not load XML-RPC server');
+                echo $xar->mls()->translate('Could not load XML-RPC server');
             } else {
-                xarLog::message("Created XMLRPC server");
+                $xar->log()->message("Created XMLRPC server");
             }
             break;
             /**
@@ -109,15 +114,15 @@ function xarWebservicesMain()
              */
         case 'jsonrpc' :
             // jsonrpc server does automatic processing directly
-            if (xarMod::isAvailable('jsonrpcserver')) {
-                $server = xarMod::apiFunc('jsonrpcserver', 'user', 'initjsonrpcserver');
+            if ($xar->mod()->isAvailable('jsonrpcserver')) {
+                $server = $xar->mod()->apiFunc('jsonrpcserver', 'user', 'initjsonrpcserver');
             }
             if (!$server) {
-                xarLog::message("Could not load JSON-RPC server, giving up");
+                $xar->log()->message("Could not load JSON-RPC server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarMLS::translate('Could not load JSON-RPC server');
+                echo $xar->mls()->translate('Could not load JSON-RPC server');
             } else {
-                xarLog::message("Created JSONRPC server");
+                $xar->log()->message("Created JSONRPC server");
             }
             break;
             /**
@@ -127,28 +132,28 @@ function xarWebservicesMain()
             // Trackback with its mixed spec. i.e. not an xml formatted request, but a simple POST
             // It doesnt mean however we can't treat the thing the same, ergo move the specifics out of here
         case 'trackback':
-            if (xarMod::isAvailable('trackback')) {
+            if ($xar->mod()->isAvailable('trackback')) {
                 $error = [];
-                xarVar::fetch('url', 'str:1:', $url);
+                $xar->var()->get('url', $url, 'str:1:');
                 if (empty($url)) {
                     // Gots to return the proper error reply
-                    $error['errordata'] = xarMLS::translate('No URL Supplied');
+                    $error['errordata'] = $xar->mls()->translate('No URL Supplied');
                 }
                 // These are the specifics ;-)
-                xarVar::fetch('title', 'str:1', $title, '', xarVar::NOT_REQUIRED);
-                xarVar::fetch('blog_name', 'str:1', $blogname, '', xarVar::NOT_REQUIRED);
-                xarVar::fetch('excerpt', 'str:1:255', $excerpt, '', xarVar::NOT_REQUIRED);
+                $xar->var()->find('title', $title, 'str:1', '');
+                $xar->var()->find('blog_name', $blogname, 'str:1', '');
+                $xar->var()->find('excerpt', $excerpt, 'str:1:255', '');
                 if (empty($excerpt)) {
                     // Gots to return the proper error reply
-                    $error['errordata'] = xarMLS::translate('Excerpt longer that 255 characters');
+                    $error['errordata'] = $xar->mls()->translate('Excerpt longer that 255 characters');
                 }
-                xarVar::fetch('id', 'str:1:', $id);
+                $xar->var()->get('id', $id, 'str:1:');
                 if (empty($id)) {
                     // Gots to return the proper error reply
-                    $error['errordata'] = xarMLS::translate('Bad TrackBack URL.');
+                    $error['errordata'] = $xar->mls()->translate('Bad TrackBack URL.');
                 }
 
-                $server = xarMod::apiFunc(
+                $server = $xar->mod()->apiFunc(
                     'trackback',
                     'user',
                     'receive',
@@ -161,11 +166,11 @@ function xarWebservicesMain()
                 );
             }
             if (!$server) {
-                xarLog::message("Could not load trackback server, giving up");
+                $xar->log()->message("Could not load trackback server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarMLS::translate('Could not load trackback server');
+                echo $xar->mls()->translate('Could not load trackback server');
             } else {
-                xarLog::message("Created trackback server");
+                $xar->log()->message("Created trackback server");
             }
             break;
             /**
@@ -173,11 +178,11 @@ function xarWebservicesMain()
              */
         case 'soap' :
             if (!extension_loaded('soap')) {
-                echo xarMLS::translate('Could not load SOAP server');
+                echo $xar->mls()->translate('Could not load SOAP server');
                 return;
             }
-            if (xarMod::isAvailable('soapserver')) {
-                $server = xarMod::apiFunc('soapserver', 'user', 'initsoapserver');
+            if ($xar->mod()->isAvailable('soapserver')) {
+                $server = $xar->mod()->apiFunc('soapserver', 'user', 'initsoapserver');
 
                 if (!$server) {
                     // erm, where does this one come from? lucky because we did the api func?
@@ -191,44 +196,44 @@ function xarWebservicesMain()
                 }
             }
             if (!$server) {
-                xarLog::message("Could not load SOAP server, giving up");
+                $xar->log()->message("Could not load SOAP server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarMLS::translate('Could not load SOAP server');
+                echo $xar->mls()->translate('Could not load SOAP server');
             } else {
-                xarLog::message("Created SOAP server");
+                $xar->log()->message("Created SOAP server");
             }
             break;
             /**
              * Entry point for WebDAV web service
              */
         case 'webdav' :
-            xarLog::message("WebDAV request");
-            if (xarMod::isAvailable('webdavserver')) {
-                $server = xarMod::apiFunc('webdavserver', 'user', 'initwebdavserver');
+            $xar->log()->message("WebDAV request");
+            if ($xar->mod()->isAvailable('webdavserver')) {
+                $server = $xar->mod()->apiFunc('webdavserver', 'user', 'initwebdavserver');
                 if (!$server) {
-                    xarLog::message('Could not load webdav server, giving up');
+                    $xar->log()->message('Could not load webdav server, giving up');
                     // TODO: we need a specific handler for this
                     throw new Exception('Could not load webdav server');
                 } else {
-                    xarLog::message("Created webdav server");
+                    $xar->log()->message("Created webdav server");
                 }
                 $server->ServeRequest();
             }
             if (!$server) {
-                xarLog::message("Could not load webdav server, giving up");
+                $xar->log()->message("Could not load webdav server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarMLS::translate('Could not load webdav server');
+                echo $xar->mls()->translate('Could not load webdav server');
             } else {
-                xarLog::message("Created webdav server");
+                $xar->log()->message("Created webdav server");
             }
             break;
             /**
              * Entry point for Flashremoting web service
              */
         case 'flashremoting' :
-            xarLog::message("FlashRemoting request");
-            if (xarMod::isAvailable('flashservices')) {
-                $server = xarMod::apiFunc('flashservices', 'user', 'initflashservices');
+            $xar->log()->message("FlashRemoting request");
+            if ($xar->mod()->isAvailable('flashservices')) {
+                $server = $xar->mod()->apiFunc('flashservices', 'user', 'initflashservices');
                 if (is_object($server)) {
                     $server->service();
 
@@ -238,29 +243,29 @@ function xarWebservicesMain()
                 }
             }
             if (!$server) {
-                xarLog::message("Could not load flashremoting server, giving up");
+                $xar->log()->message("Could not load flashremoting server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarMLS::translate('Could not load flashremoting server');
+                echo $xar->mls()->translate('Could not load flashremoting server');
             } else {
-                xarLog::message("Created flashremoting server");
+                $xar->log()->message("Created flashremoting server");
             }
             break;
             /**
              * Entry point for REST web service
              */
         case 'rest' :
-            if (xarMod::isAvailable('restserver')) {
-                $server = xarMod::apiFunc('restserver', 'user', 'initrestserver');
+            if ($xar->mod()->isAvailable('restserver')) {
+                $server = $xar->mod()->apiFunc('restserver', 'user', 'initrestserver');
                 if ($server) {
                     // Try to process the request
                     $server->ServeRequest();
                 }
             }
             if (!$server) {
-                xarLog::message("Could not load REST server, giving up");
-                echo xarMLS::translate('Could not load REST server');
+                $xar->log()->message("Could not load REST server, giving up");
+                echo $xar->mls()->translate('Could not load REST server');
             } else {
-                xarLog::message("Created REST server");
+                $xar->log()->message("Created REST server");
             }
             break;
             /**
@@ -272,13 +277,13 @@ function xarWebservicesMain()
              * All other parameters passed in the call get bundled together in an array and passed to the called Xaraya function
              */
         case 'native' :
-            xarVar::fetch('module', 'str:1', $module, 'base', xarVar::NOT_REQUIRED);
-            xarVar::fetch('func', 'str:1', $func, 'default', xarVar::NOT_REQUIRED);
+            $xar->var()->find('module', $module, 'str:1', 'base');
+            $xar->var()->find('func', $func, 'str:1', 'default');
             try {
-                $request = xarController::getRequest(xarServer::getCurrentURL());
-                $data = xarMod::apiFunc($module, 'ws', $func, $request->getFunctionArgs());
+                $request = $xar->req()->getRequest($xar->req()->getURL());
+                $data = $xar->mod()->apiFunc($module, 'ws', $func, $request->getFunctionArgs());
             } catch (Exception $e) {
-                $data = xarMLS::translate('Unknown web service request');
+                $data = $xar->mls()->translate('Unknown web service request');
             }
             echo $data;
             break;
@@ -287,17 +292,17 @@ function xarWebservicesMain()
              * Entry point for WSDL calls
              */
         default:
-            if (xarServer::getVar('QUERY_STRING') == 'wsdl') {
+            if ($xar->req()->getServerVar('QUERY_STRING') == 'wsdl') {
                 // FIXME: for now wsdl description is in soapserver module
                 // consider making the webservices module a container for wsdl files (multiple?)
-                $wsdllocation = xarServer::getBaseURL() . 'modules/soapserver/xaraya.wsdl';
+                $wsdllocation = $xar->ctl()->getBaseURL() . 'modules/soapserver/xaraya.wsdl';
                 if (file_exists($wsdllocation)) {
-                    xarLog::message("Moving to wsdl location");
+                    $xar->log()->message("Moving to wsdl location");
                     header('Location: ' . $wsdllocation);
                 } else {
-                    xarLog::message("No wsdl location available, giving up");
+                    $xar->log()->message("No wsdl location available, giving up");
                     // TODO: we need a specific handler for this
-                    echo xarMLS::translate('Could not move to wsdl location. URL not found.');
+                    echo $xar->mls()->translate('Could not move to wsdl location. URL not found.');
                 }
             } else {
                 // TODO: show something nice(r) ?
@@ -342,11 +347,11 @@ function xarModernWebServices(string $type)
     // start autoload
     sys::autoload();
     // initialize caching - delay until we need results
-    //xarCache::init();
+    //xar::cache()->init();
     // initialize database - delay until caching fails
     //xarDatabase::init();
     // initialize modules
-    //xarMod::init();
+    //xar::mod()->init();
     // initialize users
     //xar::user()->init();
 
@@ -359,16 +364,16 @@ function xarModernWebServices(string $type)
             require_once dirname(__DIR__) . '/vendor/xaraya/webhooks/public/index.php';
             return;
         case 'htmx':
-            xarCache::init();
+            xar::cache()->init();
             // try out request context class
-            //xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
+            //xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
             // try out session context class
-            //xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
+            //xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
             //xarCore::xarInit(xarCore::SYSTEM_USER);
             xarCore::xarInit();
-            //xarServer::setBaseURL(xarServer::getBaseURL());
+            //xar::ctl()->setBaseURL(xar::ctl()->getBaseURL());
             $htmx = new \Xaraya\Bridge\Routing\HtmxHandler('/htmx');
-            //$request = xarServer::getInstance();
+            //$request = xar::req()->getInstance();
             $request = null;
             $htmx->run($request);
             return;

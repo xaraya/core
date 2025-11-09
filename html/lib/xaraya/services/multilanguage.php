@@ -650,7 +650,8 @@ trait MultiLanguageTrait
         //    return true;
         //}
 
-        $domainArray = xarMLSContext::getContextFromPath($path);
+        $themeBaseDir = $xar->tpl()->getBaseDir();
+        $domainArray = xarMLSContext::getContextFromPath($path, $themeBaseDir);
         if (empty($domainArray)) {
             // some non-standard file from another location, e.g. from var/processes for workflows
             return true;

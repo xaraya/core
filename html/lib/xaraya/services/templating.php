@@ -161,7 +161,7 @@ trait TemplatingTrait
         $pageTemplateName = $config['pageTemplateName'] ?? 'default';
         if (!$this->setPageTemplateName($pageTemplateName)) {
             // If there is no page template, we can't show anything
-            throw new FileNotFoundException($pageTemplateName . '.xt', "xarTpl::init: Called a nonexistent #(1) page in theme directory '" . $this->getThemeDir() . "'");
+            throw new FileNotFoundException($pageTemplateName . '.xt', "xar::tpl()->init: Called a nonexistent #(1) page in theme directory '" . $this->getThemeDir() . "'");
         }
 
         // initialize context for templating service
@@ -221,7 +221,6 @@ trait TemplatingTrait
 
     /**
      * Render output with module template
-     * @uses xarTpl::module()
      * @param string $modName
      * @param string $modType
      * @param string $funcName
@@ -282,7 +281,6 @@ trait TemplatingTrait
 
     /**
      * Render output with object template
-     * @uses xarTpl::block()
      * @param string $modName
      * @param string $blockType
      * @param array<string, mixed> $tplData
@@ -322,7 +320,6 @@ trait TemplatingTrait
 
     /**
      * Render output with object template
-     * @uses xarTpl::object()
      * @param string $modName
      * @param string $objectName
      * @param string $tplType
@@ -370,7 +367,6 @@ trait TemplatingTrait
 
     /**
      * Render output with property template
-     * @uses xarTpl::property()
      * @param string $modName
      * @param string $propertyName
      * @param string $tplType
@@ -459,7 +455,6 @@ trait TemplatingTrait
 
     /**
      * Set page title
-     * @uses xarTpl::setPageTitle()
      * @param string $title
      * @param ?string $modName
      * @return bool
@@ -475,7 +470,7 @@ trait TemplatingTrait
         // keep track of page title when we're caching
         $xar->cache()->setPageTitle($title, $modName);
 
-        $xar->log()->info("xarTpl::setPageTitle: Setting pageTitle to $title");
+        $xar->log()->info("xar::tpl()->setPageTitle: Setting pageTitle to $title");
 
         // @checkme: modules is a dependency of templates, redundant check?
         if (!method_exists('\xarModVars', 'get') || !empty($xar->mem()->get('installer', 'installing'))) {
@@ -526,7 +521,6 @@ trait TemplatingTrait
 
     /**
      * Set page template name
-     * @uses xarTpl::setPageTemplateName()
      * @param  string $templateName Name of the page template
      * @return bool
      */
@@ -535,7 +529,7 @@ trait TemplatingTrait
         assert($templateName != "");
         $xar = $this->getParent();
 
-        $xar->log()->info("xarTpl::setPageTemplateName: Setting the template name to $templateName");
+        $xar->log()->info("xar::tpl()->setPageTemplateName: Setting the template name to $templateName");
 
         if (!$this->exists('theme', $this->getThemeName(), $templateName, null, 'pages')) {
             return false;
@@ -555,7 +549,7 @@ trait TemplatingTrait
         assert(is_string($doctypeName));
         $xar = $this->getParent();
 
-        $xar->log()->info("xarTpl::setDoctype: Setting the doc type to $doctypeName");
+        $xar->log()->info("xar::tpl()->setDoctype: Setting the doc type to $doctypeName");
 
         $this->doctype = $doctypeName;
         // Set doctype in current context
@@ -586,14 +580,14 @@ trait TemplatingTrait
         assert($themesDir != "" && $themesDir[0] != "/");
         $xar = $this->getParent();
 
-        $xar->log()->info("xarTpl::setBaseDir: Setting the theme base dir to $themesDir");
+        $xar->log()->info("xar::tpl()->setBaseDir: Setting the theme base dir to $themesDir");
 
         if (!is_dir($themesDir)) {
             // no directory
-            throw new DirectoryNotFoundException($themesDir, 'xarTpl::setBaseDir: Nonexistent base themes directory #(1)');
+            throw new DirectoryNotFoundException($themesDir, 'xar::tpl()->setBaseDir: Nonexistent base themes directory #(1)');
         } elseif (!is_dir($themesDir . '/' . $this->getThemeName())) {
             // found a directory, but the current theme isn't in it
-            throw new DirectoryNotFoundException([$this->getThemeName(), $themesDir], 'xarTpl::setBaseDir: Nonexistant theme #(1) in base themes directory #(2)');
+            throw new DirectoryNotFoundException([$this->getThemeName(), $themesDir], 'xar::tpl()->setBaseDir: Nonexistant theme #(1) in base themes directory #(2)');
         }
         $xar->config()->setVar('Site.BL.ThemesDirectory', $themesDir);
         // Set baseDir in current context
@@ -639,7 +633,7 @@ trait TemplatingTrait
         assert($themeDir != "" && $themeDir[0] != "/");
         $xar = $this->getParent();
 
-        $xar->log()->info("xarTpl::setThemeDir: Setting the theme dir to $themeDir");
+        $xar->log()->info("xar::tpl()->setThemeDir: Setting the theme dir to $themeDir");
 
         $currentBase = $this->getBaseDir();
         if (is_dir($currentBase . '/' . $themeDir)) {
@@ -649,7 +643,7 @@ trait TemplatingTrait
             $themeDir = 'common';
         } else {
             // @checkme: throw exception here vs return false in setThemeName ?
-            throw new DirectoryNotFoundException("$currentBase/$themeDir", 'xarTpl::setThemeDir: Nonexistent theme directory #(1)');
+            throw new DirectoryNotFoundException("$currentBase/$themeDir", 'xar::tpl()->setThemeDir: Nonexistent theme directory #(1)');
         }
         $this->setThemeNameAndDir($themeDir);
         return true;
@@ -688,7 +682,7 @@ trait TemplatingTrait
         assert($themeName != "" && $themeName[0] != "/");
         $xar = $this->getParent();
 
-        $xar->log()->info("xarTpl::setThemeName: Setting the theme name to $themeName");
+        $xar->log()->info("xar::tpl()->setThemeName: Setting the theme name to $themeName");
 
         $currentBase = $this->getBaseDir();
         if (!is_dir($currentBase . '/' . $themeName)) {
@@ -977,7 +971,7 @@ trait TemplatingTrait
 
     /**
      * Execute a pre-compiled template string with the supplied template variables
-     * @param  string $templateCode pre-compiled template code (see xarTpl::compileString)
+     * @param  string $templateCode pre-compiled template code (see self::compileString)
      * @param array<mixed> $tplData template variables
      * @return string filled-in template
      * @todo   this is not MLS-aware (never was)
@@ -1013,7 +1007,7 @@ trait TemplatingTrait
     }
 
     /**
-     * Compile a template string for storage and/or later use in xarTpl::string()
+     * Compile a template string for storage and/or later use in self::string()
      * Note : your module should always support the possibility of re-compiling
      *        template strings e.g. after an upgrade, so you should store both
      *        the original template and the compiled version if necessary
@@ -1082,7 +1076,7 @@ trait TemplatingTrait
      * Render a block box
      * @param array<string, mixed> $blockInfo  Information on the block
      * @param  ?string $templateName string
-     * @return string xarTpl::executeFromFile($sourceFileName, $blockInfo)
+     * @return string self::executeFromFile($sourceFileName, $blockInfo)
      *
      * @todo the search logic for the templates can perhaps use the private function?
      * @todo implement common templates in cascade
@@ -1173,7 +1167,7 @@ trait TemplatingTrait
             // Load translations for the template
             $xar->mls()->loadTranslations($sourceFileName);
 
-            $xar->log()->debug("xarTpl::executeFromFile: Using template $sourceFileName");
+            $xar->log()->debug("xar::tpl()->executeFromFile: Using template $sourceFileName");
             $templateCode = null;
 
             // Determine if we need to compile this template
@@ -1252,7 +1246,7 @@ trait TemplatingTrait
 
     /**
      * Output php comment block in templates
-     * @return int value of xarTpl::showPHPCommentBlockInTemplates (0 or 1)
+     * @return int value of self::showPHPCommentBlockInTemplates (0 or 1)
      */
     public function outputPHPCommentBlockInTemplates(): int
     {
@@ -1285,7 +1279,7 @@ trait TemplatingTrait
 
     /**
      * Output template filenames
-     * @return int value of xarTpl::showTemplateFilenames (0 or 1)
+     * @return int value of self::showTemplateFilenames (0 or 1)
      * @todo Check whether the check for xar::mod()->getVar is needed
      * @todo Rethink this function
      */
@@ -1431,7 +1425,7 @@ trait TemplatingTrait
                     break;
                 default:
                     $vars = [$scope];
-                    $msg = 'Invalid scope "#(1)" for core function xarTpl::getScopeFileName()';
+                    $msg = 'Invalid scope "#(1)" for core function xar::tpl()->getScopeFileName()';
                     throw new BadParameterException($vars, $msg);
             }
             if (!empty($callerMod) && $callerMod != $package) {

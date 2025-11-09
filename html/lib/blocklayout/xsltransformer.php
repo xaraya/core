@@ -96,7 +96,7 @@ class BlockLayoutXSLTProcessor extends xarObject
             // Set up the parameters
             $this->xslProc->setParameter('', 'bl_filename', basename($this->xmlFile));
             $this->xslProc->setParameter('', 'bl_dirname', dirname($this->xmlFile));
-            $this->xslProc->setParameter('', 'bl_doctype', xarTpl::getDocType());
+            $this->xslProc->setParameter('', 'bl_doctype', xar::tpl()->getDocType());
         }
     }
 
@@ -130,7 +130,7 @@ class BlockLayoutXSLTProcessor extends xarObject
     {
         xar::log()->debug("XSL: Importing the stylesheet");
         if (!$this->xslProc->importStyleSheet($xslDoc)) {
-            $halt = xarMLS::translate('Could not load the stylesheet #(1)', $xslDoc->saveXML());
+            $halt = xar::mls()->translate('Could not load the stylesheet #(1)', $xslDoc->saveXML());
             echo $halt;
             xarCore::exit();
             return;

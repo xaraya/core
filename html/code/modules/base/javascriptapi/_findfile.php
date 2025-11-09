@@ -76,7 +76,7 @@ class FindfileMethod extends MethodClass
         }
 
         // Theme base directory.
-        $themedir = xarTpl::getThemeDir();
+        $themedir = $this->tpl()->getThemeDir();
 
         // Initialise the search path.
         $searchPath = [];

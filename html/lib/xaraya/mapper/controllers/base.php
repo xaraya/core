@@ -26,7 +26,7 @@ class BaseActionController extends xarObject
     public string $module;
     public string $modulealias;
 
-    public function __construct(?xarRequest $request = null)
+    public function __construct(xarRequest $request)
     {
         $this->request = $request;
         $this->actionstring = $request->getActionString();
@@ -36,13 +36,14 @@ class BaseActionController extends xarObject
 
     /**
      * Summary of run
-     * @param xarRequest|null $request
-     * @param xarResponse|null $response
+     * @param xarRequest $request
+     * @param xarResponse $response
      * @return void
      * @uses \Xaraya\Requests\RequestInterface::getContext()
      */
-    public function run(?xarRequest $request = null, ?xarResponse $response = null): void
+    public function run(xarRequest $request, xarResponse $response): void
     {
+        $this->request = $request;
         // Get the part of the URL we will tokenize and decode
         $this->actionstring = $request->getActionString();
         // Add the results of decoding to the params we already got when the request was created
@@ -52,11 +53,10 @@ class BaseActionController extends xarObject
         // Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xar::var()->fetch()
         $request->getServerContext()?->withQueryParams($args);
         // Get context of the request if available
-        $context = $request->getServerContext()?->getContext();
+        //$context = $request->getServerContext()?->getContext();
         // Now get the output
         if ($request->getModule() == 'object') {
-            sys::import('xaraya.objects');
-            $response->output = xarDDObject::guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs(), $context);
+            $response->output = xar::data()->guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs());
         } else {
             $response->output = xar::mod()->guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getFunctionArgs());
         }
@@ -69,6 +69,7 @@ class BaseActionController extends xarObject
      */
     public function decode(array $data = [])
     {
+        //$request = $this->getRequest();
         return $data;
     }
 

@@ -1,5 +1,8 @@
 <?php
 
+use Xaraya\Services\SystemService;
+use Xaraya\Services\xar;
+
 /**
  * Exceptions raised within the loggers
  *
@@ -54,6 +57,15 @@ class xarLog extends xarObject
     public static $loggers  = [];
     public static $config  = [];
     protected static bool $initialized = false;
+    protected static ?SystemService $systemService = null;
+
+    protected static function sysConfig()
+    {
+        if (!isset(self::$systemService)) {
+            self::$systemService = xar::system();
+        }
+        return self::$systemService;
+    }
 
     public static function init(array $args = [])
     {
@@ -63,7 +75,8 @@ class xarLog extends xarObject
         // Only log if logging is enabled and if the config.system file is present
         // Of course, if this file doesn't exist then Xaraya is already kaputt :)
         try {
-            if (!xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) {
+            $sysConfig = self::sysConfig();
+            if (!$sysConfig->getVar(sys::CONFIG, 'Log.Enabled')) {
                 return true;
             }
         } catch (Exception $e) {
@@ -107,13 +120,13 @@ class xarLog extends xarObject
         }
 
         // If logging is enabled but no loggers are active, try to fall back
-        if ((int) xarSystemVars::get(sys::CONFIG, 'Log.Enabled') && empty($availables) && self::fallbackPossible()) {
+        if ((int) $sysConfig->getVar(sys::CONFIG, 'Log.Enabled') && empty($availables) && self::fallbackPossible()) {
             //Fallback mechanism to allow some logging in important cases when
             //the user might not have logging yet installed, or for some reason we
             //should be able to have a way to get error messages back => installation?!
             $logFile = self::fallbackFile();
             if ($logFile) {
-                $levels = @unserialize((string) xarSystemVars::get(sys::CONFIG, 'Log.Level'));
+                $levels = @unserialize((string) $sysConfig->getVar(sys::CONFIG, 'Log.Level'));
 
                 self::$config[] = [
                     'type'          => 'simple',
@@ -176,8 +189,9 @@ class xarLog extends xarObject
         if (isset(self::$logFile)) {
             return self::$logFile;
         }
+        $sysConfig = self::sysConfig();
 
-        $logFile = sys::varpath() . '/logs/' . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+        $logFile = sys::varpath() . '/logs/' . $sysConfig->getVar(sys::CONFIG, 'Log.Filename');
         if (!file_exists($logFile)) {
             touch($logFile);
         }
@@ -204,8 +218,9 @@ class xarLog extends xarObject
      */
     public static function availables()
     {
+        $sysConfig = self::sysConfig();
         // Get the available loggers as an array
-        $availables = xarSystemVars::get(sys::CONFIG, 'Log.Available');
+        $availables = $sysConfig->getVar(sys::CONFIG, 'Log.Available');
         if (!empty($availables)) {
             $availables = explode(',', $availables);
         } else {

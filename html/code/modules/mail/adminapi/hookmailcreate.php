@@ -100,8 +100,8 @@ class HookmailcreateMethod extends MethodClass
         $message = $strings['message'];
 
         // Add root tage and compile the subject and message
-        $subject  = xarTpl::compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $subject . '</xar:template>');
-        $message  = xarTpl::compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $message . '</xar:template>');
+        $subject  = $this->tpl()->compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $subject . '</xar:template>');
+        $message  = $this->tpl()->compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $message . '</xar:template>');
 
         // Define the variables automatically available to all templates
         // LEGACY
@@ -120,8 +120,8 @@ class HookmailcreateMethod extends MethodClass
         $data = array_merge($data, $extrainfo);
         $data['modulename'] = $modname;
         $data['objectid'] = $objectid;
-        $subject = xarTpl::string($subject, $data);
-        $message = xarTpl::string($message, $data);
+        $subject = $this->tpl()->string($subject, $data);
+        $message = $this->tpl()->string($message, $data);
 
         // TODO How to do html message with BL? Create yet another template? Don't think so.
         // Send a formatted html message to the mail module for use if the admin has the html turned on.

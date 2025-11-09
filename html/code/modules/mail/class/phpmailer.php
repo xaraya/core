@@ -12,6 +12,9 @@
  * @link http://xaraya.info/index.php/release/771.html
  * @authorBrent R. Matzelle
  */
+
+use Xaraya\Services\xar;
+
 ////////////////////////////////////////////////////
 // PHPMailer - PHP email class
 //
@@ -845,15 +848,18 @@ class PHPMailer extends xarObject
             $result .= $this->HeaderLine("Subject", $this->EncodeHeader(trim($this->Subject)));
         }
 
+        // Get Xaraya RequestService
+        $req = xar::req();
+
         // Get  client IP addr
         //
-        $forwarded = xarServer::getVar('HTTP_X_FORWARDED_FOR');
+        $forwarded = $req->getServerVar('HTTP_X_FORWARDED_FOR');
         if (!empty($forwarded)) {
             $ipAddress = preg_replace('/,.*/', '', $forwarded);
         } else {
-            $ipAddress = xarServer::getVar('REMOTE_ADDR');
+            $ipAddress = $req->getServerVar('REMOTE_ADDR');
         }
-        $result .= $this->HeaderLine("Received", "from [$ipAddress] by " . xarServer::getVar('HTTP_HOST') . "; " . date('r'));
+        $result .= $this->HeaderLine("Received", "from [$ipAddress] by " . $req->getServerVar('HTTP_HOST') . "; " . date('r'));
 
         $result .= sprintf("Message-ID: <%s@%s>%s", $uniq_id, $this->ServerHostname(), $this->LE);
         $result .= $this->HeaderLine("X-Priority", $this->Priority);

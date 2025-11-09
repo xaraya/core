@@ -306,6 +306,7 @@ class xarVarPrep
     public const TRIM    = 8;
     public const STORE   = 16;
 
+    public static $dbCharSet = 'utf8';
     public static $allowableHTML = [];
     public static $fixHTMLEntities = true;
     protected static bool $initialized = false;
@@ -326,6 +327,7 @@ class xarVarPrep
         }
         $xar = xar::getServicesClass();
 
+        self::$dbCharSet = $xar->system()->getVar(sys::CONFIG, 'DB.Charset');
         self::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);
         self::$fixHTMLEntities = $xar->config()->getVar('Site.Core.FixHTMLEntities', true);
 
@@ -427,7 +429,7 @@ class xarVarPrep
     public static function text(...$args)
     {
         $resarray = [];
-        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+        $charset = self::$dbCharSet;
         // stopgap for now. we need to agree on a naming convention for the charsets that won't confuse the hell out of everyone
         $charset = $charset == 'utf8' ? 'utf-8' : $charset;
         foreach ($args as $var) {

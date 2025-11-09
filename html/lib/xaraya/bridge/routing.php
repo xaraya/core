@@ -10,10 +10,11 @@
  *
  * // use some routing bridge
  * use Xaraya\Bridge\Routing\RoutingBridge;
- * use xarServer;
+ * use Xaraya\Services\xar;
  *
- * $path = xarServer::getVar('PATH_INFO') ?? '/';
- * $method = xarServer::getVar('REQUEST_METHOD');
+ * $req = xar::getServicesClass()->req();
+ * $path = $req->getServerVar('PATH_INFO') ?? '/';
+ * $method = $req->getServerVar('REQUEST_METHOD');
  *
  * // let the routing bridge handle the request itself and return the result
  * $bridge = new RoutingBridge();
@@ -408,7 +409,7 @@ class RoutingBridge extends BasicBridge
             //header('Access-Control-Allow-Origin: *');
             // @checkme set server url to current path here
             $result['servers'][0]['url'] = $this->getRestApiHandler()->getBaseURL();
-            //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . RestAPIHandler::$endpoint;
+            //$result['servers'][0]['url'] = xar::req()->getProtocol() . '://' . xar::req()->getHost() . RestAPIHandler::$endpoint;
         }
         return [$result, $context];
     }

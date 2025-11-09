@@ -46,13 +46,7 @@ interface ixarMLS
 /**
  * Multilanguage System Class
  *
- * @package core\multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.8.6
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
+ * @deprecated 2.8.6 use xar::mls() instead
 **/
 class xarMLS extends xarObject implements ixarMLS
 {
@@ -373,14 +367,14 @@ class xarMLSContext extends xarObject
         self::$current_domain_type = $domainType_id;
     }
 
-    public static function getContextFromPath($path = '')
+    public static function getContextFromPath($path = '', $themeBaseDir = 'themes')
     {
         $domainType = 0;
         // @todo be able to handle standard files from other locations, e.g. from /vendor/ with composer
         if (strpos($path, sys::lib()) === 0) {
             $domainType = ixarMLS::DNTYPE_CORE;
             $path = substr($path, strlen(sys::lib()));
-        } elseif (strpos($path, xarTpl::getBasedir()) === 0) {
+        } elseif (strpos($path, $themeBaseDir) === 0) {
             $domainType = ixarMLS::DNTYPE_THEME;
         } elseif (strpos($path, sys::code()) === 0) {
             // This is a module, property or block file

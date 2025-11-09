@@ -162,7 +162,7 @@ trait ModuleBridgeTrait
             $handler = new DataObjectRequestHandler();
             return $handler->buildDataObjectPath($type, $func, $itemid, $extra, $prefix);
         }
-        // see xarServer::getModuleURL()
+        // see xar::ctl()->getModuleURL()
         $uri = $prefix;
         // {prefix}/{module} = user main
         $uri .= '/' . $module;

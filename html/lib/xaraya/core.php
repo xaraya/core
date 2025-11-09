@@ -226,6 +226,18 @@ class xarCore extends xarObject
             // that we've already loaded
             $whatToLoad ^= self::$runLevel;
         }
+
+        /**
+         * Get context from globals if not specified (default)
+         */
+        if (is_null($context)) {
+            sys::import('xaraya.context.factory');
+            $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
+        }
+        // Set context for core services here first + return static services class
+        sys::import('xaraya.services.xar');
+        $xar = Xaraya\Services\xar::setServicesContext($context);
+
         /**
          * At this point we should be able to catch all low level errors, so we can start the debugger
          *
@@ -242,7 +254,7 @@ class xarCore extends xarObject
         /**
          * Start exceptions subsystem
         **/
-        self::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
+        self::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT, $xar);
 
         /**
          * Load system variables
@@ -259,21 +271,10 @@ class xarCore extends xarObject
          * Make sure we can get time for logging
         **/
         try {
-            date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
+            date_default_timezone_set($xar->system()->getVar(sys::CONFIG, 'SystemTimeZone'));
         } catch (Exception $e) {
             throw new Exception('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
         }
-
-        /**
-         * Get context from globals if not specified (default)
-         */
-        if (is_null($context)) {
-            sys::import('xaraya.context.factory');
-            $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
-        }
-        // Set context for core services here first + return static services class
-        sys::import('xaraya.services.xar');
-        $xar = Xaraya\Services\xar::setServicesContext($context);
 
         /**
          * Start Database Connection Handling System
@@ -300,7 +301,7 @@ class xarCore extends xarObject
         $xar->cache()->init();
 
         // Check that the database was installed before we activate variable caching (we don't need to load it yet)
-        if (xarSystemVars::get(sys::CONFIG, 'DB.Installation') != 3) {
+        if ($xar->system()->getVar(sys::CONFIG, 'DB.Installation') != 3) {
             $xar->cache()->variableCache = null;
         }
 
@@ -351,7 +352,7 @@ class xarCore extends xarObject
         **/
         if ($whatToLoad & self::SYSTEM_MODULES) {
             sys::import('xaraya.modules');
-            xarMod::init();
+            $xar->mod()->init();
             $whatToLoad ^= self::BIT_MODULES;
             // We're about done here - everything else requires modules !?
         } else {
@@ -375,7 +376,7 @@ class xarCore extends xarObject
          */
         sys::import('xaraya.mls');
         // FIXME: Site.MLS.MLSMode is NULL during install
-        xarMLS::init();
+        $xar->mls()->init();
 
         /*
         // Testing of autoload + second-level cache storage - please do not use on live sites
@@ -391,7 +392,7 @@ class xarCore extends xarObject
          */
         if ($whatToLoad & self::SYSTEM_TEMPLATES) {
             sys::import('xaraya.templates');
-            xarTpl::init();
+            $xar->tpl()->init();
             $whatToLoad ^= self::BIT_TEMPLATES;
             // We're about done here - everything else requires templates !?
         } else {
@@ -443,7 +444,7 @@ class xarCore extends xarObject
         if ($whatToLoad & self::SYSTEM_BLOCKS) {
             sys::import('xaraya.blocks');
             // Start Blocks Support System
-            xarBlock::init();
+            $xar->block()->init();
             $whatToLoad ^= self::BIT_BLOCKS;
             // We're about done here - everything else requires templates !?
         } else {
@@ -502,7 +503,7 @@ class xarCore extends xarObject
      * @return void
      * @todo  a big part of this should be in the exception (error handling) subsystem.
     **/
-    public static function activateDebugger($flags)
+    public static function activateDebugger($flags, $xarServices = null)
     {
         xarDebug::$flags = $flags;
         if ($flags & xarConst::DBG_INACTIVE) {
@@ -513,8 +514,9 @@ class xarCore extends xarObject
         } elseif ($flags & xarConst::DBG_ACTIVE) {
             // See if config.system.php has info for us on the errorlevel, but dont break if it has not
             try {
+                $xarServices ??= Xaraya\Services\xar::getServicesClass();
                 sys::import('xaraya.variables.system');
-                $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
+                $errLevel = $xarServices->system()->getVar(sys::CONFIG, 'Exception.ErrorLevel');
             } catch (Exception $e) {
                 $errLevel = E_ALL;
             }

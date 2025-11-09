@@ -61,7 +61,7 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
                 // No passing arguments (yet)
                 $args = [];
                 $tplInputString = $blCompiler->compilestring($tplInputString);
-                $data['content_text'] = xarTpl::string($tplInputString, $args);
+                $data['content_text'] = $this->tpl()->string($tplInputString, $args);
             } catch (Exception $e) {
                 // Show an error message if I am an admin. Otherwise just throw an exception
                 if (xarRoles::isParent("Administrators", $this->user()->getUser())) {

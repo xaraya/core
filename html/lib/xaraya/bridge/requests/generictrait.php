@@ -121,7 +121,7 @@ trait GenericBridgeTrait
      */
     public function buildGenericPath(string $route = '', ?string $type = null, string|int|null $path = null, array $extra = [], string $prefix = ''): string
     {
-        // @todo see xarServer::getCurrentURL()
+        // @todo see xar::ctl()->getCurrentURL()
         $uri = $prefix;
         // {prefix}/{route} = route
         $uri .= '/' . $route;

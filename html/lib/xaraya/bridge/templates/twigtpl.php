@@ -12,11 +12,8 @@ use Twig\Loader\LoaderInterface;
 use Twig\TemplateWrapper;
 use Xaraya\Bridge\TemplateEngine\TwigBridge;
 use Xaraya\Context\Context;
+use Xaraya\Services\TemplatingService;
 use Xaraya\Services\xar;
-
-//use xarMod;
-//use xarServer;
-//use xarTpl;
 
 /**
  * Use Twig template engine to generate output in Xaraya
@@ -42,10 +39,20 @@ class xarTwigTpl extends xarTpl
         'property' => [],
         'block' => [],
     ];
+    protected static ?TemplatingService $tplService = null;
+
+    protected static function tpl(): TemplatingService
+    {
+        if (!isset(self::$tplService)) {
+            $xar = xar::getServicesClass();
+            self::$tplService = $xar->tpl();
+        }
+        return self::$tplService;
+    }
 
     public static function init(array $args = [])
     {
-        //return parent::init($args);
+        //return self::tpl()->init($args);
         // @todo initialize twig with supported module namespaces
         return false;
     }
@@ -324,7 +331,7 @@ class xarTwigTpl extends xarTpl
             $output = str_replace('&amp;amp;', '&amp;', $output);
         }
         // don't use caller in page templates to avoid adding comments to page
-        if (empty($caller) || !xarTpl::outputTemplateFilenames()) {
+        if (empty($caller) || !self::tpl()->outputTemplateFilenames()) {
             return $output;
         }
         return '<!-- start: ' . $templateName . " -->\n"
@@ -340,7 +347,7 @@ class xarTwigTpl extends xarTpl
      */
     public static function isThemeSupported($context)
     {
-        $themeName = $context['theme'] ?? xarTpl::getThemeName();
+        $themeName = $context['theme'] ?? self::tpl()->getThemeName();
         // let's keep the installer with blocklayout for now
         if (in_array($themeName, ['common', 'default', 'print', 'rss'])) {
             return true;
@@ -375,7 +382,7 @@ class xarTwigTpl extends xarTpl
         if (empty($pageTemplate)) {
             $pageTemplate = $context['page'] ?? self::getPageTemplateName();
         }
-        $themeName = $context['theme'] ?? xarTpl::getThemeName();
+        $themeName = $context['theme'] ?? self::tpl()->getThemeName();
         $caller = "xarTwigTpl::renderPage('...', 'theme', $themeName, $pageTemplate, null, 'pages')";
         // get page template source (current > common)
         //$sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $pageTemplate, null, 'pages');
@@ -383,12 +390,12 @@ class xarTwigTpl extends xarTpl
         $twig = $context['twig'];
         $templateName = static::findPageTemplate($twig, $themeName, 'pages', $pageTemplate, '');
         if (empty($templateName)) {
-            //return parent::renderPage($mainModuleOutput, $pageTemplate, $context);
+            //return self::tpl()->renderPage($mainModuleOutput, $pageTemplate, $context);
             return 'Twig template not found: ' . $caller;
         }
-        // see xarTpl::renderPage
+        // see self::tpl()->renderPage
         $tpl = (object) null; // Create an object to hold the 'specials'
-        $tpl->pageTitle = parent::getPageTitle();
+        $tpl->pageTitle = self::tpl()->getPageTitle();
         $tplData = [
             'tpl'                      => $tpl,
             '_bl_mainModuleOutput'     => $mainModuleOutput,
@@ -457,13 +464,13 @@ class xarTwigTpl extends xarTpl
         if (is_bool($blockInfo['context']['twig'])) {
             $blockInfo['context']['twig'] = static::getTwigEnvironment($blockInfo['context']);
         }
-        $themeName = $blockInfo['context']['theme'] ?? xarTpl::getThemeName();
+        $themeName = $blockInfo['context']['theme'] ?? self::tpl()->getThemeName();
         $caller = "[$themeName] xarTwigTpl::renderBlockBox([...], $tplName)";
         /** @var Environment $twig */
         $twig = $blockInfo['context']['twig'];
         $templateName = static::findBoxTemplate($twig, $themeName, $tplName ?? '');
         if (empty($templateName)) {
-            //return parent::renderPage($mainModuleOutput, $pageTemplate, $context);
+            //return self::tpl()->renderPage($mainModuleOutput, $pageTemplate, $context);
             return 'Twig template not found: ' . $caller;
         }
         //var_dump($blockInfo);
@@ -552,13 +559,13 @@ class xarTwigTpl extends xarTpl
         if (is_bool($tplData['context']['twig'])) {
             $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
-        $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
+        $themeName = $tplData['context']['theme'] ?? self::tpl()->getThemeName();
         $caller = "[$themeName] xarTwigTpl::module($modName, $modType, $funcName, [...], $tplName)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findModuleTemplate($twig, $themeName, $modName, $modType, $funcName, $tplName ?? '');
         if (empty($templateName)) {
-            //return parent::module($modName, $modType, $funcName, $tplData, $templateName);
+            //return self::tpl()->module($modName, $modType, $funcName, $tplData, $templateName);
             return 'Twig template not found: ' . $caller;
         }
         $template = $twig->load($templateName);
@@ -684,14 +691,14 @@ class xarTwigTpl extends xarTpl
         if (is_bool($tplData['context']['twig'])) {
             $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
-        $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
-        //return parent::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
+        $themeName = $tplData['context']['theme'] ?? self::tpl()->getThemeName();
+        //return self::tpl()->block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
         $caller = "[$themeName] xarTwigTpl::block($modName, $blockType, [...], $tplName, $tplBase, $tplModule)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findBlockTemplate($twig, $themeName, $modName, $blockType, $tplName ?? '', $tplBase ?? '', $tplModule ?? '');
         if (empty($templateName)) {
-            //return parent::object($modName, $objectName, $tplType, $tplData, $tplBase);
+            //return self::tpl()->object($modName, $objectName, $tplType, $tplData, $tplBase);
             return 'Twig template not found: ' . $caller;
         }
         //var_dump($tplData);
@@ -781,13 +788,13 @@ class xarTwigTpl extends xarTpl
         if (is_bool($tplData['context']['twig'])) {
             $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
-        $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
+        $themeName = $tplData['context']['theme'] ?? self::tpl()->getThemeName();
         $caller = "[$themeName] xarTwigTpl::object($modName, $objectName, $tplType, [...], $tplBase)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findObjectTemplate($twig, $themeName, $modName, $objectName, $tplType, $tplBase ?? '');
         if (empty($templateName)) {
-            //return parent::object($modName, $objectName, $tplType, $tplData, $tplBase);
+            //return self::tpl()->object($modName, $objectName, $tplType, $tplData, $tplBase);
             return 'Twig template not found: ' . $caller;
         }
         $template = $twig->load($templateName);
@@ -887,13 +894,13 @@ class xarTwigTpl extends xarTpl
         if (is_bool($tplData['context']['twig'])) {
             $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
-        $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
+        $themeName = $tplData['context']['theme'] ?? self::tpl()->getThemeName();
         $caller = "[$themeName] xarTwigTpl::property($modName, $propertyName, $tplType, [...], $tplBase)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findPropertyTemplate($twig, $themeName, $modName, $propertyName, $tplType, $tplBase ?? '');
         if (empty($templateName)) {
-            //return parent::property($modName, $propertyName, $tplType, $tplData, $tplBase);
+            //return self::tpl()->property($modName, $propertyName, $tplType, $tplData, $tplBase);
             return 'Twig template not found: ' . $caller;
         }
         $template = $twig->load($templateName);

@@ -64,10 +64,10 @@ class SenduseremailMethod extends MethodClass
         $strings = $adminapi->getmessagestrings(['module' => 'roles','template' => $mailtype]);
 
         if (!isset($subject)) {
-            $subject = xarTpl::compileString($strings['subject']);
+            $subject = $this->tpl()->compileString($strings['subject']);
         }
         if (!isset($message)) {
-            $message = xarTpl::compileString($strings['message']);
+            $message = $this->tpl()->compileString($strings['message']);
         }
         //Get the common search and replace values
         //if (is_array($id)) {
@@ -134,8 +134,8 @@ class SenduseremailMethod extends MethodClass
                 }
             }
 
-            $subject = xarTpl::string($subject, $data);
-            $message = xarTpl::string($message, $data);
+            $subject = $this->tpl()->string($subject, $data);
+            $message = $this->tpl()->string($message, $data);
             // TODO Make HTML Message.
             // Send confirmation email
             if (!$this->mod()->apiFunc(

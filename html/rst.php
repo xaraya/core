@@ -27,6 +27,7 @@ use Xaraya\Routing\RouterInterface;
 use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use Xaraya\Bridge\RestAPI\RestAPIRoutes;
+use Xaraya\Services\xar;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     RestAPIHandler::sendCORSOptions();
@@ -36,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // initialize bootstrap
 sys::init();
 // initialize caching - delay until we need results
-//xarCache::init();
+//xar::cache()->init();
 // initialize database - delay until caching fails
 //xarDatabase::init();
 // initialize modules
@@ -137,13 +138,14 @@ function handle_request($method, $path, $router, $restHandler)
  */
 function try_handler($restHandler)
 {
-    if (empty(xarServer::getVar('PATH_INFO'))) {
+    $req = xar::req();
+    if (empty($req->getServerVar('PATH_INFO'))) {
         send_openapi($restHandler);
     } else {
         // $restHandler::enableTimer(true);
         // $restHandler::setTimer('start');
         $router = get_router($restHandler);
-        handle_request(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO'), $router, $restHandler);
+        handle_request($req->getServerVar('REQUEST_METHOD'), $req->getServerVar('PATH_INFO'), $router, $restHandler);
     }
 }
 

@@ -323,7 +323,7 @@ trait ModulesTrait
 
     /**
      * Render output with module template
-     * @uses xarTpl::module()
+     * @uses xar::tpl()->module()
      * @param string $funcName
      * @param array<string, mixed> $tplData
      * @param ?string $templateName
@@ -369,7 +369,7 @@ trait ModulesTrait
         // Add standard template variables
         $tplData['module'] ??= $this->getModName();
         $tplData['itemtype'] ??= $this->getItemType();
-        // Pass along the context for xarTpl::module() if needed
+        // Pass along the context for xar::tpl()->module() if needed
         $tplData['context'] ??= $this->getContext();
         return $tplData;
     }
@@ -493,7 +493,6 @@ trait ModulesTrait
     }
 
     /**
-     * Wrapper for xarMod::apiFunc() - only for migration
      * @param array<string, mixed> $args
      */
     public function apiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed
@@ -503,9 +502,6 @@ trait ModulesTrait
         return $this->getExecHelper()->apiFunc($modName, $modType, $funcName, $args);
     }
 
-    /**
-     * Wrapper for xarMod::apiLoad() - only for migration
-     */
     public function apiLoad(?string $modName = null, ?string $modType = null, int $flags = ixarMod::LOAD_ANYSTATE): mixed
     {
         $modName ??= $this->getModName();
@@ -514,7 +510,6 @@ trait ModulesTrait
     }
 
     /**
-     * Wrapper for xarMod::guiFunc() - only for migration
      * @param array<string, mixed> $args
      */
     public function guiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed
@@ -524,9 +519,6 @@ trait ModulesTrait
         return $this->getExecHelper()->guiFunc($modName, $modType, $funcName, $args);
     }
 
-    /**
-     * Wrapper for xarMod::load() - only for migration
-     */
     public function load(?string $modName = null, ?string $modType = null, int $flags = ixarMod::LOAD_ONLYACTIVE): mixed
     {
         $modName ??= $this->getModName();

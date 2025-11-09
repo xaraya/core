@@ -132,7 +132,7 @@ function xarInstallLoader()
     sys::import('xaraya.exceptions');
 
     // Enable debugging always for the installer
-    xarCore::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
+    xarCore::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT, $xar);
 
     // Include some extra functions, as the installer is somewhat special
     // for loading gui and api functions
@@ -179,7 +179,7 @@ function xarInstallLoader()
         'defaultDocType'         => 'xhtml1-strict',
         'generateXMLURLs'        => false,
     ];
-    xarTpl::init($systemArgs);
+    $xar->tpl()->init($systemArgs);
 
     // Get the install language everytime we request install.php
     // We need the var to be able to initialize MLS, but we need MLS to get the var
@@ -222,7 +222,7 @@ function xarInstallLoader()
         'defaultLocale'       => $install_language,
         'allowedLocales'      => $allowedLocales,
     ];
-    xarMLS::init($systemArgs);
+    $xar->mls()->init($systemArgs);
 }
 
 /**

@@ -129,10 +129,11 @@ Usage:
 ```php
 // use some routing bridge
 use Xaraya\Bridge\Routing\RoutingBridge;
-use xarServer;
+use Xaraya\Services\xar;
 
-$path = xarServer::getVar('PATH_INFO') ?? '/';
-$method = xarServer::getVar('REQUEST_METHOD');
+$req = xar::getServicesClass()->req();
+$path = $req->getServerVar('PATH_INFO') ?? '/';
+$method = $req->getServerVar('REQUEST_METHOD');
 
 // get a simple router to work with yourself, possibly in a group
 // $router = RoutingBridge::getSimpleRouter('/mysite');

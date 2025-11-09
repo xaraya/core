@@ -21,6 +21,7 @@ use DataObjectFactory;
 use DataObject;
 use DataObjectList;
 use DataObjectLoader;
+use xarDDObject;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -44,6 +45,12 @@ interface DataObjectInterface extends ServiceInterface
      * @param array<mixed> $tplData
      */
     public function template(string $tplType, array $tplData = []): string;
+
+    /**
+     * Call a dataobject user interface method (maybe from index.php someday)
+     * @param array<string, mixed> $args arguments to pass to the method
+     */
+    public function guiMethod(?string $objectName = null, string $methodName = 'view', array $args = []): string;
 
     /**
      * Get data object
@@ -143,6 +150,16 @@ trait DataObjectTrait
             $tplType,
             $tplData,
         );
+    }
+
+    /**
+     * Call a dataobject user interface method (maybe from index.php someday)
+     * @param array<string, mixed> $args arguments to pass to the method
+     */
+    public function guiMethod(?string $objectName = null, string $methodName = 'view', array $args = []): string
+    {
+        $objectName ??= $this->getObjectName();
+        return xarDDObject::guiMethod($objectName, $methodName, $args, $this->getContext());
     }
 
     /**

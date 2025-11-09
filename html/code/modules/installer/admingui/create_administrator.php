@@ -48,7 +48,7 @@ class CreateAdministratorMethod extends MethodClass
         $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
 
         $this->mem()->set('installer', 'installing', true);
-        xarTpl::setThemeName('installer');
+        $this->tpl()->setThemeName('installer');
 
         $data = [];
         $data['language'] = $install_language;

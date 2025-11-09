@@ -135,7 +135,7 @@ class xarModVars extends xarVars implements IxarModVars
      * @param  string $name  The name of the variable
      * @return integer|void identifier for the variable
      * @throws EmptyParameterException
-     * @see xarModUserVars::set(), xarModUserVars::get(), xarModUserVars::delete()
+     * @see xar::mod()->getUserVar(), xar::mod()->setUserVar(), xar::mod()->delUserVar()
      */
     public static function getID($scope, $name)
     {

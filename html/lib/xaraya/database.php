@@ -18,7 +18,8 @@
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
-switch (xarSystemVars::get(sys::CONFIG, 'DB.Middleware')) {
+$sysConfig = xar::system();
+switch ($sysConfig->getVar(sys::CONFIG, 'DB.Middleware')) {
     case 'Creole':
         // As per creole.ResultSet.php
         define('FETCHMODE_ASSOC', 1);
@@ -37,6 +38,7 @@ switch (xarSystemVars::get(sys::CONFIG, 'DB.Middleware')) {
 class xarDB
 {
     private static $mw;   				// We store the applicable middleware class here
+    private static $mwName;
 
     // Get fetch modes associaiated with the middleware
     public const FETCHMODE_ASSOC = FETCHMODE_ASSOC;   // Index result set by field name.
@@ -54,18 +56,20 @@ class xarDB
     private static $latest        = null;
 
 
-    public static function getInstance()
+    public static function getInstance($sysConfig = null)
     {
-        $middleware_name = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+        $sysConfig ??= xar::system();
+        $middleware_name = $sysConfig->getVar(sys::CONFIG, 'DB.Middleware');
         sys::import('xaraya.database.' . strtolower($middleware_name));
         $class = 'xarDB_' . $middleware_name;
         $middleware_class = new $class();
         self::$mw = $middleware_class;
+        self::$mwName = $middleware_name;
     }
 
     public static function withPDO()
     {
-        return xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO';
+        return self::$mwName == 'PDO';
     }
 
     // Not all database types have more than one driver
@@ -136,7 +140,7 @@ class xarDB
         switch ($args['databaseType']) {
             case 'sqlite3':
             case 'pdosqlite':
-                $args['location'] = xarSystemVars::get(sys::CONFIG, 'DB.Location');
+                $args['location'] = $args['location'] ?? xar::system()->getVar(sys::CONFIG, 'DB.Location');
                 $args['phptype']       = $args['databaseType'];
                 $args['database']      = $args['location'] . $args['databaseName'] ?? ':memory:';
                 $args['hostspec']    ??= '';
@@ -168,7 +172,7 @@ class xarDB
                     'encoding'  => $args['databaseCharset']];
                 break;
             default:
-                throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $args['databaseType']));
+                throw new Exception(xar::mls()->translate("Unknown database type: '#(1)'", $args['databaseType']));
         }
 
         // Get the flags
@@ -227,7 +231,7 @@ class xarDB
         }
 
         // No luck. This happens e.g. early in the installation before we have a database to connect to
-        throw new Exception(xarMLS::translate('No connection available'));
+        throw new Exception(xar::mls()->translate('No connection available'));
     }
 
     /**
@@ -385,7 +389,7 @@ class xarDB
     }
 }
 
-xarDB::getInstance();
+xarDB::getInstance($sysConfig);
 
 function xarDB_init(array &$args)
 {
@@ -421,27 +425,28 @@ class xarDatabase extends xarObject
 
     public static function getConfig()
     {
+        $sysConfig = xar::system();
         //---------------------------------------------------------------------------
         // Assemble the args from the config file
         // Host name
         // Hive off the port if there is one added as part of the host
-        $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+        $host = $sysConfig->getVar(sys::CONFIG, 'DB.Host');
         $host_parts = explode(':', $host);
         $host = $host_parts[0];
         $port = $host_parts[1] ?? '';
 
         // Database type, name and Location
-        $databaseType = xarSystemVars::get(sys::CONFIG, 'DB.Type');
-        $databaseName = xarSystemVars::get(sys::CONFIG, 'DB.Name');
-        $location = xarSystemVars::get(sys::CONFIG, 'DB.Location');
+        $databaseType = $sysConfig->getVar(sys::CONFIG, 'DB.Type');
+        $databaseName = $sysConfig->getVar(sys::CONFIG, 'DB.Name');
+        $location = $sysConfig->getVar(sys::CONFIG, 'DB.Location');
 
         // User and Password
-        $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
-        $password = xarSystemVars::get(sys::CONFIG, 'DB.Password');
+        $userName = $sysConfig->getVar(sys::CONFIG, 'DB.UserName');
+        $password = $sysConfig->getVar(sys::CONFIG, 'DB.Password');
 
         // Encoded
         try {
-            if (xarSystemVars::get(sys::CONFIG, 'DB.Encoded') == '1') {
+            if ($sysConfig->getVar(sys::CONFIG, 'DB.Encoded') == '1') {
                 $userName = base64_decode($userName);
                 $password  = base64_decode($password);
             }
@@ -450,13 +455,13 @@ class xarDatabase extends xarObject
         }
 
         // Prefix and character set
-        $prefix          = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
-        $databaseCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+        $prefix          = $sysConfig->getVar(sys::CONFIG, 'DB.TablePrefix');
+        $databaseCharset = $sysConfig->getVar(sys::CONFIG, 'DB.Charset');
 
         // Persistence
         $persistent = null;
         try {
-            $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
+            $persistent = $sysConfig->getVar(sys::CONFIG, 'DB.Persistent');
         } catch (VariableNotFoundException $e) {
             $persistent = null;
         }
@@ -482,7 +487,7 @@ class xarDatabase extends xarObject
                 break;
 
             default:
-                throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $databaseType));
+                throw new Exception(xar::mls()->translate("Unknown database type: '#(1)'", $databaseType));
         }
         $systemArgs = ['databaseHost'    => $host,
             'databasePort'    => $port,

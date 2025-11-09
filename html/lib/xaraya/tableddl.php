@@ -109,7 +109,6 @@ class xarTableDDL extends xarObject
     /**
      * Generate the SQL to create a database
      *
-     * @uses xarTableDDL::createDatabase()
      * @param string $databaseName
      * @param string $databaseType
      * @return string $databaseCharset
@@ -154,7 +153,6 @@ class xarTableDDL extends xarObject
     /**
      * Generate the SQL to create a table
      *
-     * @uses xarTableDDL::createTable()
      * @param string $tableName the table to alter
      * @param array<mixed> $fields
      * @param string $databaseType the database type (optional)
@@ -175,10 +173,10 @@ class xarTableDDL extends xarObject
             $databaseType = xar::db()->getType();
         }
         if (empty($charset)) {
-            $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+            $charset = xar::system()->getVar(sys::CONFIG, 'DB.Charset');
         }
         // set Dbtype to pdosqlite
-        $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+        $middleware = xar::system()->getVar(sys::CONFIG, 'DB.Middleware');
         if ($middleware == 'PDO') {
             $databaseType = 'pdosqlite';
         }
@@ -218,7 +216,6 @@ class xarTableDDL extends xarObject
     /**
      * Alter database table
      *
-     * @uses xarTableDDL::alterTable()
      * @param string $tableName the table to alter
      * @param array<string, mixed> $args
      * with
@@ -284,7 +281,6 @@ class xarTableDDL extends xarObject
     /**
      * Generate the SQL to delete a table
      *
-     * @uses xarTableDDL::dropTable()
      * @param string $tableName the physical table name
      * @param ?string $databaseType the database type
      * @return string|false the generated SQL statement, or false on failure
@@ -325,7 +321,6 @@ class xarTableDDL extends xarObject
     /**
      * Generate the SQL to create a table column
      *
-     * @uses xarTableDDL::dropTable()
      * @param string $tableName the physical table name
      * @param ?string $databaseType the database type
      * @return string|false the generated SQL statement, or false on failure
@@ -465,7 +460,6 @@ class xarTableDDL extends xarObject
     /**
      * Generate the SQL to create a table index
      *
-     * @uses xarTableDDL::createIndex()
      * @param string $tableName the physical table name
      * @param array<string, mixed> $index an array containing the index name, type and fields array
      * @param string $databaseType is an optional parameter to specify the database type
@@ -490,7 +484,7 @@ class xarTableDDL extends xarObject
             $databaseType = xar::db()->getType();
         }
         // set Dbtype to pdosqlite
-        $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+        $middleware = xar::system()->getVar(sys::CONFIG, 'DB.Middleware');
         if ($middleware == 'PDO') {
             $databaseType = 'pdosqlite';
         }
@@ -534,7 +528,6 @@ class xarTableDDL extends xarObject
     /**
      * Generate the SQL to drop an index
      *
-     * @uses xarTableDDL::dropIndex()
      * @param string $tableName
      * @param array<string, mixed> $index name a db index name
      * @param string $databaseType
@@ -555,7 +548,7 @@ class xarTableDDL extends xarObject
         }
 
         // set Dbtype to pdosqlite
-        $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+        $middleware = xar::system()->getVar(sys::CONFIG, 'DB.Middleware');
         if ($middleware == 'PDO') {
             $databaseType = 'pdosqlite';
         }
@@ -675,7 +668,7 @@ class xarXMLInstaller extends xarObject
         // Create a query string for table creation from the XML schema passed
         $sqlCode = self::transform($xmlfile, 'create');
         // Run the query code to add variable values (there aren't any) and execute any PHP snippets inserted by the transform
-        $sqlCode = xarTpl::string($sqlCode, []);
+        $sqlCode = xar::tpl()->string($sqlCode, []);
         // Turn the query string into an array of queries
         $queries = explode(';', $sqlCode);
         // The last element is empty: remove it

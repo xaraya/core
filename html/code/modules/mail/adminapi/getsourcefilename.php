@@ -76,7 +76,7 @@ class GetsourcefilenameMethod extends MethodClass
             throw new FileNotFoundException($this->ml('No template was found corresponding to #(1) #(2)', $templateName, $messagepart));
         }
         $sourceFileName = str_replace('//', '/', $sourceFileName);
-        // assert(isset($sourceFileName), /* The source file for the template has no value in xarTpl::module */);
+        // assert(isset($sourceFileName), /* The source file for the template has no value in xar::tpl()->module */);
         return $sourceFileName;
     }
 }

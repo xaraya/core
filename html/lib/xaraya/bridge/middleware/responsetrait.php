@@ -15,6 +15,7 @@ namespace Xaraya\Bridge\Middleware;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Xaraya\Services\WithServicesClass;
 use Throwable;
 use JsonException;
 
@@ -46,6 +47,8 @@ interface DefaultResponseInterface
  */
 trait DefaultResponseTrait
 {
+    use WithServicesClass;
+
     protected ResponseFactoryInterface $responseFactory;
     protected StreamFactoryInterface $streamFactory;
     /** @var array<mixed> */
@@ -206,8 +209,9 @@ trait DefaultResponseTrait
 
     public function wrapOutputInPage(string $body, $context = null): string
     {
+        $tpl = $this->getServicesClass()->tpl();
         // Render page with the output - see index.php - @todo use context?
-        return \xarTpl::renderPage($body, null, $context);
+        return $tpl->renderPage($body, null);
     }
 
     /**

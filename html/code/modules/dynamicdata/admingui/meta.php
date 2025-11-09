@@ -123,7 +123,7 @@ class MetaMethod extends MethodClass
                 $data['tables'] = [$dbInfo->getTable($table)];
             }
             $data['types']  = $this->db()->getTypeMap();
-            $data['xml'] = xarTpl::file(sys::code() . 'modules/dynamicdata/xartemplates/includes/exportddl.xt', $data);
+            $data['xml'] = $this->tpl()->file(sys::code() . 'modules/dynamicdata/xartemplates/includes/exportddl.xt', $data);
         }
 
         $data['table'] = $table;

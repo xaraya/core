@@ -30,7 +30,7 @@ class AdminApi extends AdminApiClass
     public function configure()
     {
         $this->setModType('admin');
-        // don't call xarMod:apiLoad() for xarInstall::apiFunc()
+        // don't call xar::mod()->apiLoad() for xarInstall::apiFunc()
     }
 
     /**

@@ -16,9 +16,9 @@
 
 interface iController
 {
-    public function __construct(?xarRequest $request = null);
+    public function __construct(xarRequest $request);
 
-    public function run(?xarRequest $request = null, ?xarResponse $response = null): void;
+    public function run(xarRequest $request, xarResponse $response): void;
 
     /**
      * Summary of decode

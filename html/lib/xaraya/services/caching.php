@@ -291,9 +291,7 @@ trait CachingTrait
         }
 
         // Enable core caching in memory
-        // $this->coreCacheIsEnabled = xarCoreCache::init($config);
-
-        // @todo check loading xar::mem() here in parallel (for now)
+        // @todo verify with StaticServicesClass::__construct()
         $this->coreCacheIsEnabled = $this->getParent()->mem()->init($config);
 
         // Enable template caching ? Too early in the process here, cfr. xaraya/templates.php

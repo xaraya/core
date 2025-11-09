@@ -158,6 +158,9 @@ class SessionDatabaseStorage implements SessionStorageInterface
                     $vars = self::unserialize_php($varString);
                 }
             }
+            if (empty($vars)) {
+                $vars = [];
+            }
         }
         $session = new VirtualSession($sessionId, $userId, $ipAddress, $lastUsed, $vars);
         $session->isNew = false;
@@ -183,10 +186,16 @@ class SessionDatabaseStorage implements SessionStorageInterface
         if (str_contains($session->sessionId, ':')) {
             return;
         }
+        // @todo still not compatible with session.serialize_handler = 'php' here
+        if (false && ini_get('session.serialize_handler') == 'php') {
+            $data = self::serialize_php($session->vars);
+        } else {
+            $data = serialize($session->vars);
+        }
         $query = "UPDATE $this->table
             SET role_id = ?, ip_addr = ?, vars = ?, last_use = ?
             WHERE id = ?";
-        $bindvars = [$session->getUserId(), $session->ipAddress, serialize($session->vars), time(), $session->sessionId];
+        $bindvars = [$session->getUserId(), $session->ipAddress, $data, time(), $session->sessionId];
         $stmt = $this->db->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
     }
@@ -225,5 +234,37 @@ class SessionDatabaseStorage implements SessionStorageInterface
             $offset += strlen(serialize($data));
         }
         return $return_data;
+    }
+
+    /**
+     * Summary of serialize_php
+     * @todo still not compatible with session.serialize_handler = 'php' here
+     * Taken from http://www.php.net/manual/en/function.session-encode.php#76425
+     * @param array<string, mixed> $array
+     * @param bool $safe
+     * @return string
+     * @see https://stackoverflow.com/questions/15538787/safety-of-these-methods-to-encode-and-decode-php-sessions
+     */
+    private static function serialize_php($array, $safe = true)
+    {
+        // the session is passed as reference, even if you dont want it to
+        if ($safe) {
+            $array = unserialize(serialize($array)) ;
+        }
+        $raw = '' ;
+        $line = 0 ;
+        $keys = array_keys($array) ;
+        foreach ($keys as $key) {
+            $value = $array[ $key ] ;
+            $line++ ;
+            $raw .= $key . '|' ;
+            if (is_array($value) && isset($value['huge_recursion_blocker_we_hope'])) {
+                $raw .= 'R:' . $value['huge_recursion_blocker_we_hope'] . ';' ;
+            } else {
+                $raw .= serialize($value) ;
+            }
+            $array[$key] = [ 'huge_recursion_blocker_we_hope' => $line ] ;
+        }
+        return $raw;
     }
 }

@@ -308,7 +308,7 @@ class Role extends DataObject
         }
 
         if ($this->getID() == (int) $this->mod('roles')->getVar('defaultgroup')) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'remove_defaultusergroup', 'group' => $this->getID()]);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_defaultusergroup', 'group' => $this->getID()]);
         }
 
         // get a list of all relevant entries in the rolemembers table
@@ -320,7 +320,7 @@ class Role extends DataObject
         $result = $stmt->executeQuery([$this->getID()]);
 
         if (count($result->fields) == 1) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'remove_sole_parent']);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_sole_parent']);
         }
 
         sys::import('modules.roles.class.roles');

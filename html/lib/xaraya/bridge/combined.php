@@ -189,7 +189,7 @@ class RoutingHandler implements MiddlewareInterface, RequestHandlerInterface
                 //header('Access-Control-Allow-Origin: *');
                 // @checkme set server url to current path here
                 //$result['servers'][0]['url'] = RestAPIHandler::getBaseURL();
-                //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . RestAPIHandler::$endpoint;
+                //$result['servers'][0]['url'] = xar::req()->getProtocol() . '://' . xar::req()->getHost() . RestAPIHandler::$endpoint;
             }
         } catch (UnauthorizedOperationException) {
             return $this->responseUtil->createUnauthorizedResponse();

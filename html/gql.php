@@ -20,6 +20,7 @@
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use Xaraya\Bridge\GraphQL\GraphQLHandler;
+use Xaraya\Services\xar;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     GraphQLHandler::sendCORSOptions();
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // initialize bootstrap
 sys::init();
 // initialize caching
-xarCache::init();
+xar::cache()->init();
 // initialize database
 xarDatabase::init();
 // initialize modules

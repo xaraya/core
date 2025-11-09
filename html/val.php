@@ -1,5 +1,7 @@
 <?php
 
+use Xaraya\Services\xar;
+
 /**
  * Loads the files required for a validation request
  *
@@ -30,7 +32,7 @@ function xarValidationLoader()
      * Set up caching
      */
     sys::import('xaraya.caching');
-    xarCache::init();
+    xar::cache()->init();
 
     /**
      * Load the Xaraya core
@@ -54,21 +56,24 @@ function xarValidationLoader()
  */
 function xarValidationMain()
 {
+    // Get Xaraya Services Class
+    $xar = xar::getServicesClass();
+
     /**
      * Get the user ID and the validation code
      */
-    xarVar::fetch('v', 'str:1', $v);
-    xarVar::fetch('u', 'str:1', $u);
+    $xar->var()->get('v', $v, 'str:1');
+    $xar->var()->get('u', $u, 'str:1');
 
     /**
      * Get the user information
      */
-    $user = xarMod::apiFunc('roles', 'user', 'get', ['id' => $u]);
+    $user = $xar->mod()->apiFunc('roles', 'user', 'get', ['id' => $u]);
 
     /**
      * Redirect to the validation page
      */
-    xarController::redirect(xarController::URL(
+    $xar->ctl()->redirect($xar->ctl()->getModuleURL(
         'roles',
         'user',
         'getvalidation',

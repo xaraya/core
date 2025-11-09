@@ -12,6 +12,8 @@
  * @link http://xaraya.info/index.php/release/200.html
  */
 
+use Xaraya\Services\xar;
+
 class xarInstall extends xarObject
 {
     /**
@@ -42,7 +44,7 @@ class xarInstall extends xarObject
         $className = $namespace . '\\Module';
         if (!class_exists($className)) {
             // try to load it
-            xarInstall::load($funcName);
+            self::load($funcName);
             if (!class_exists($className)) {
                 throw new ClassNotFoundException($className);
             }
@@ -53,10 +55,12 @@ class xarInstall extends xarObject
         if (empty($modFunc)) {
             throw new FunctionNotFoundException($funcName);
         }
+        // Get Xaraya Services Class
+        $xar = xar::getServicesClass();
 
         // Load the translations file
         $file = sys::code() . 'modules/' . $modName . '/xar' . $modType . '/' . strtolower($funcName) . '.php';
-        if (!xarMLS::loadTranslations($file)) {
+        if (!$xar->mls()->loadTranslations($file)) {
             return;
         }
 
@@ -70,7 +74,7 @@ class xarInstall extends xarObject
             $templateName = $tplData['_bl_template'];
         }
 
-        return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
+        return $xar->tpl()->module($modName, $modType, $funcName, $tplData, $templateName);
     }
 
     /**
@@ -86,7 +90,7 @@ class xarInstall extends xarObject
         $className = $namespace . '\\Module';
         if (!class_exists($className)) {
             // attempt to load the install api
-            xarInstall::apiLoad();
+            self::apiLoad();
             if (!class_exists($className)) {
                 throw new ClassNotFoundException($className);
             }
@@ -97,10 +101,12 @@ class xarInstall extends xarObject
         if (empty($modAPIFunc)) {
             throw new FunctionNotFoundException($funcName);
         }
+        // Get Xaraya Services Class
+        $xar = xar::getServicesClass();
 
         // Load the translations file
         $file = sys::code() . 'modules/' . $modName . '/xar' . $modType . 'api/' . strtolower($funcName) . '.php';
-        if (!xarMLS::loadTranslations($file)) {
+        if (!$xar->mls()->loadTranslations($file)) {
             return;
         }
 
@@ -169,8 +175,11 @@ class xarInstall extends xarObject
 
         $loadedModuleCache[strtolower("$modName$modType")] = true;
 
+        // Get Xaraya Services Class
+        $xar = xar::getServicesClass();
+
         // Load the module translations files
-        $res = xarMLS::loadTranslations($osfile);
+        $res = $xar->mls()->loadTranslations($osfile);
         return true;
     }
 }

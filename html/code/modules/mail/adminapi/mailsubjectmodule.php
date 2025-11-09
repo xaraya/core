@@ -36,7 +36,7 @@ class MailsubjectmoduleMethod extends MethodClass
      * string   $args['templateName'] string the specific template to call<br/>
      * string   $args['tplData']     arguments for the template<br/>
      * string   $args['mailtype']     The type of mail html|text
-     * @return string xarTpl::file($sourceFileName, $tplData)
+     * @return string xar::tpl()->file($sourceFileName, $tplData)
      * @see AdminApi::mailsubjectmodule()
      */
     public function __invoke(array $args = [])
@@ -51,6 +51,6 @@ class MailsubjectmoduleMethod extends MethodClass
             'mailType' => $mailType,
             'messagepart' => 'subject'];
         $sourceFileName = $adminapi->getsourcefilename($params);
-        return xarTpl::file($sourceFileName, $tplData);
+        return $this->tpl()->file($sourceFileName, $tplData);
     }
 }

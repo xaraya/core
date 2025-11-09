@@ -64,7 +64,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     public function __construct()
     {
         // @todo use request context for query params etc.
-        //xarServer::setRequestClass(RequestContext::class);
+        //xar::req()->setRequestClass(RequestContext::class);
     }
 
     /**
@@ -218,8 +218,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             $context = $this->getContext();
             // Assume context for core services is already set here
         }
-        // Initialize server - not really needed since xarServer::getInstance() is on demand
-        //xarServer::init([], $context);
+        // Initialize server - not really needed since xar::req()->getInstance() is on demand
+        //xar::req()->init([], $context);
         return $context;
     }
 
@@ -293,7 +293,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      * @param mixed $handler
      * @param array<string, mixed> $params
      * @param mixed $request
-     * @uses xarCache::init()
+     * @uses xar::cache()->init()
      * @uses xarDatabase::init()
      * @throws \UnauthorizedOperationException
      * @throws \ForbiddenOperationException
@@ -302,7 +302,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     public function getResult($handler, $params, &$request = null)
     {
         // initialize caching - delay until we need results
-        xarCache::init();
+        xar::cache()->init();
         $this->loadConfig();
         $tryCachedResult = false;
         // this expects a class name or instance in $handler[0]

@@ -100,8 +100,8 @@ class SendmailMethod extends MethodClass
         $this->mod('themes')->setVar('ShowTemplates', 0);
 
         // Add root tage and compile the subject and message
-        $subject  = xarTpl::compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $subject . '</xar:template>');
-        $message  = xarTpl::compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $message . '</xar:template>');
+        $subject  = $this->tpl()->compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $subject . '</xar:template>');
+        $message  = $this->tpl()->compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $message . '</xar:template>');
 
         // Define the variables automatically available to all templates
         // LEGACY
@@ -125,8 +125,8 @@ class SendmailMethod extends MethodClass
             $data['recipientemail']    = $user['email'];
 
             // Get the output through BL
-            $mailsubject = xarTpl::string($subject, $data);
-            $mailmessage = xarTpl::string($message, $data);
+            $mailsubject = $this->tpl()->string($subject, $data);
+            $mailmessage = $this->tpl()->string($message, $data);
 
             if (!$this->mod()->apiFunc(
                 'mail',

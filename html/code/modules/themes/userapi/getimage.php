@@ -28,7 +28,7 @@ class GetimageMethod extends MethodClass
 
     /**
      * Get image
-     * Wrapper for the <xar:img .../> template tag and xarTpl::getImage function
+     * Wrapper for the <xar:img .../> template tag and xar::tpl()->getImage function
      * @author Chris Powis <crisp@xaraya.com>
      * @access public
      * @param mixed $args array of parameters<br/>

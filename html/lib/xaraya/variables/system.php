@@ -20,7 +20,7 @@ use Xaraya\Services\SystemService;
  * @link http://www.xaraya.info
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
- * @see xar::system()
+ * @deprecated 2.8.6 use xar::system() instead
  **/
 class xarSystemVars extends xarVars implements IxarVars
 {

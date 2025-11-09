@@ -14,7 +14,7 @@ namespace Xaraya\Requests;
 /**
  * Interface between xarServer (static) and RequestHandler (instance)
  * Note: if you want to replace RequestHandler with a custom class, use
- * xarServer::setRequestClass(RequestContext::class);
+ * xar::req()->setRequestClass(RequestContext::class);
  */
 interface RequestInterface
 {
@@ -90,7 +90,7 @@ interface RequestInterface
     public function getQueryParams();
 
     /**
-     * Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVar::fetch
+     * Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xar::var()->fetch
      * @param array<string, mixed> $args
      * @return void
      */

@@ -70,16 +70,16 @@ class xarResponse extends xarObject
      * Usage in GUI functions etc.:
      *
      *    if (something not found, e.g. item $id) {
-     *        $msg = xarMLS::translate("Sorry, item #(1) is not available right now", $id);
-     *        return xarResponse::NotFound($msg);
+     *        $msg = xar::mls()->translate("Sorry, item #(1) is not available right now", $id);
+     *        return xar::ctl()->notFound($msg);
      *    }
      *    ...
      *
      * @param string $msg the message
-     * @param string $modName template overrides, cfr. xarTpl::module (optional)
-     * @param string $modType template overrides, cfr. xarTpl::module (optional)
-     * @param string $funcName template overrides, cfr. xarTpl::module (optional)
-     * @param string $templateName template overrides, cfr. xarTpl::module (optional)
+     * @param string $modName template overrides, cfr. xar::tpl()->module (optional)
+     * @param string $modType template overrides, cfr. xar::tpl()->module (optional)
+     * @param string $funcName template overrides, cfr. xar::tpl()->module (optional)
+     * @param string $templateName template overrides, cfr. xar::tpl()->module (optional)
      * @param mixed $context
      * @return string output display string
      */
@@ -107,16 +107,16 @@ class xarResponse extends xarObject
      * Usage in GUI functions etc.:
      *
      *    if (something not allowed, e.g. edit item $id) {
-     *        $msg = xarMLS::translate("Sorry, you are not allowed to edit item #(1)", $id);
-     *        return xarResponse::Forbidden($msg);
+     *        $msg = xar::mls()->translate("Sorry, you are not allowed to edit item #(1)", $id);
+     *        return xar::ctl()->forbidden($msg);
      *    }
      *    ...
      *
      * @param string $msg the message
-     * @param string $modName template overrides, cfr. xarTpl::module (optional)
-     * @param string $modType template overrides, cfr. xarTpl::module (optional)
-     * @param string $funcName template overrides, cfr. xarTpl::module (optional)
-     * @param string $templateName template overrides, cfr. xarTpl::module (optional)
+     * @param string $modName template overrides, cfr. xar::tpl()->module (optional)
+     * @param string $modType template overrides, cfr. xar::tpl()->module (optional)
+     * @param string $funcName template overrides, cfr. xar::tpl()->module (optional)
+     * @param string $templateName template overrides, cfr. xar::tpl()->module (optional)
      * @param mixed $context
      * @return string output display string
      */

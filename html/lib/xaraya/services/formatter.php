@@ -162,7 +162,7 @@ class LocaleFormatter
     }
 
     /**
-     * Wrapper to xarLocale::getFormattedDate without timezone offset
+     * Wrapper to self::getFormattedDate without timezone offset
      */
     public function getFormattedUTCDate(string $length = 'short', ?int $timestamp = null, bool $addoffset = false): string
     {
@@ -209,7 +209,7 @@ class LocaleFormatter
     }
 
     /**
-     * Wrapper to xarLocale::getFormattedTime without timezone offset
+     * Wrapper to self::getFormattedTime without timezone offset
      */
     public function getFormattedUTCTime(string $length = 'short', ?int $timestamp = null, bool $addoffset = false): string
     {
@@ -296,7 +296,7 @@ class LocaleFormatter
     }
 
     /**
-     * Wrapper to xarLocale::formatDate without timezone offset
+     * Wrapper to self::formatDate without timezone offset
      */
     public function formatUTCDate(?string $format = null, ?int $time = null, bool $addoffset = false): string
     {

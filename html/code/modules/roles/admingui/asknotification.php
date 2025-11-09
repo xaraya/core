@@ -108,8 +108,8 @@ class AsknotificationMethod extends MethodClass
                 $data['subject'] = preg_replace("/%%(.+)%%/", "#$\\1#", $data['subject']);
 
                 // Compile Template before sending it to senduseremail()
-                $data['message'] = xarTpl::compileString($data['message']);
-                $data['subject'] = xarTpl::compileString($data['subject']);
+                $data['message'] = $this->tpl()->compileString($data['message']);
+                $data['subject'] = $this->tpl()->compileString($data['subject']);
 
                 //Send notification
                 $id = unserialize(base64_decode($id));

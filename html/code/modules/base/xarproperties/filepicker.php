@@ -86,7 +86,7 @@ class FilePickerProperty extends SelectProperty
             $basedir = str_replace('{admin_theme}', "themes/" . $this->mod('themes')->getVar('admin_theme'), $basedir);
         }
         if (strpos($basedir, '{theme}') !== false) {
-            $basedir = str_replace('{theme}', xarTpl::getThemeDir(), $basedir);
+            $basedir = str_replace('{theme}', $this->tpl()->getThemeDir(), $basedir);
         }
         return $basedir;
     }

@@ -30,7 +30,6 @@ class RequestHandler implements RequestInterface
      * Constructor for the request handler
      * @param array<string, mixed> $args not by reference anymore
      * @param mixed $context
-     * @uses xarServer::setInstance()
      * @return void
      **/
     public function __construct($args = [], $context = null)
@@ -138,7 +137,7 @@ class RequestHandler implements RequestInterface
     }
 
     /**
-     * Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVar::fetch
+     * Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xar::var()->fetch
      * @param array<string, mixed> $args
      * @return void
      */

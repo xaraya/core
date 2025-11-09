@@ -61,7 +61,7 @@ use Xaraya\Services\xar;
  *
  * @package core\templating
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.6
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -71,6 +71,7 @@ use Xaraya\Services\xar;
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @author Andy Varganov <andyv@xaraya.com>
  * @author Jason Judge
+ * @deprecated 2.8.6 use xar::tpl() instead
  **/
 class xarTpl extends xarObject
 {
@@ -279,7 +280,7 @@ class xarTpl extends xarObject
      * @param array<mixed> $tplData arguments for the template
      * @param  ?string $templateName string the specific template to call
      * @throws FileNotFoundException
-     * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
+     * @return string xar::tpl()->executeFromFile($sourceFileName, $tplData)
      */
     public static function module($modName, $modType, $funcName, $tplData = [], $templateName = null)
     {
@@ -298,7 +299,7 @@ class xarTpl extends xarObject
      * @param  ?string $tplName   the specific template to call
      * @param  ?string $tplBase   the base name of the template (defaults to $blockType)
      * @throws FileNotFoundException
-     * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
+     * @return string xar::tpl()->executeFromFile($sourceFileName, $tplData)
      */
     public static function block($modName, $blockType, $tplData = [], $tplName = null, $tplBase = null, $tplModule = null)
     {
@@ -315,7 +316,7 @@ class xarTpl extends xarObject
      * @param array<mixed> $tplData arguments for the template
      * @param  ?string $tplBase      the template type can be overridden too ( unused )
      * @throws FileNotFoundException
-     * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
+     * @return string xar::tpl()->executeFromFile($sourceFileName, $tplData)
      */
     public static function object($modName, $objectName, $tplType = 'showdisplay', $tplData = [], $tplBase = null)
     {
@@ -333,7 +334,7 @@ class xarTpl extends xarObject
      * @param array<mixed> $tplData arguments for the template
      * @param  ?string $tplBase      the template type can be overridden too ( used by xar:data-label - why not change tplType? )
      * @throws FileNotFoundException
-     * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
+     * @return string xar::tpl()->executeFromFile($sourceFileName, $tplData)
      */
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = [], $tplBase = null)
     {
@@ -344,8 +345,8 @@ class xarTpl extends xarObject
      * Get theme template image replacement for a module's image
      *
      * Example:
-     * $my_module_image = xarTpl::getImage('button1.png');
-     * $other_module_image = xarTpl::getImage('set1/info.png','module');
+     * $my_module_image = xar::tpl()->getImage('button1.png');
+     * $other_module_image = xar::tpl()->getImage('set1/info.png','module');
      *
      * Correct practices:
      *
@@ -384,7 +385,7 @@ class xarTpl extends xarObject
      * Get theme/module/property/block file with the right file URL - for non-standard elements
      *
      * Example:
-     * $my_module_file = xarTpl::getFile('xardata/config-sample.xml', 'module', 'dynamicdata');
+     * $my_module_file = xar::tpl()->getFile('xardata/config-sample.xml', 'module', 'dynamicdata');
      *
      * Note : your module is still responsible for taking care that "files"
      *        don't contain nasty stuff. Filter as appropriate when using
@@ -404,7 +405,7 @@ class xarTpl extends xarObject
      * Execute a pre-compiled template string with the supplied template variables
      *
      * @access public
-     * @param  string $templateCode pre-compiled template code (see xarTpl::compileString)
+     * @param  string $templateCode pre-compiled template code (see xar::tpl()->compileString)
      * @param array<mixed> $tplData template variables
      * @return string filled-in template
      * @todo   this is not MLS-aware (never was)
@@ -429,7 +430,7 @@ class xarTpl extends xarObject
     }
 
     /**
-     * Compile a template string for storage and/or later use in xarTpl::string()
+     * Compile a template string for storage and/or later use in xar::tpl()->string()
      * Note : your module should always support the possibility of re-compiling
      *        template strings e.g. after an upgrade, so you should store both
      *        the original template and the compiled version if necessary
@@ -466,7 +467,7 @@ class xarTpl extends xarObject
      * @access public
      * @param array<string, mixed> $blockInfo  Information on the block
      * @param  ?string $templateName string
-     * @return string xarTpl::executeFromFile($sourceFileName, $blockInfo)
+     * @return string xar::tpl()->executeFromFile($sourceFileName, $blockInfo)
      *
      * @todo the search logic for the templates can perhaps use the private function?
      * @todo implement common templates in cascade
@@ -538,7 +539,7 @@ class xarTpl extends xarObject
      * Output php comment block in templates
      *
      * @access public
-     * @return int value of xarTpl::showPHPCommentBlockInTemplates (0 or 1)
+     * @return int value of xar::tpl()->showPHPCommentBlockInTemplates (0 or 1)
      */
     public static function outputPHPCommentBlockInTemplates()
     {
@@ -549,7 +550,7 @@ class xarTpl extends xarObject
      * Output template filenames
      *
      * @access public
-     * @return int value of xarTpl::showTemplateFilenames (0 or 1)
+     * @return int value of xar::tpl()->showTemplateFilenames (0 or 1)
      *
      * @todo Check whether the check for xar::mod()->getVar is needed
      * @todo Rethink this function

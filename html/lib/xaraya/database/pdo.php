@@ -502,7 +502,7 @@ class PDOConnection extends PDO implements ConnectionInterface
                 $dsnstring .= 'dbname=' . $dsn['database'] . ";";
                 break;
             default:
-                throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $dsn['phptype']));
+                throw new Exception(xar::mls()->translate("Unknown database type: '#(1)'", $dsn['phptype']));
         }
         return $dsnstring;
     }
@@ -1000,7 +1000,7 @@ class PDOTable extends xarObject
         try {
             $pdostatement = $this->pdo->query($sql);
         } catch (PDOException $e) {
-            throw new PDOException(xarMLS::translate('Could not initialize table columns with: #(1)', $sql));
+            throw new PDOException(xar::mls()->translate('Could not initialize table columns with: #(1)', $sql));
         }
         $columnarray = [];
         for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
@@ -1171,7 +1171,7 @@ class PDOColumn extends xarObject
             } catch (PDOException $e) {
                 // No default value. Return a descriptive string for now
                 return 'No value';
-                //throw new PDOException(xarMLS::translate('Could not get default value for column #(1) with #(2)', $this->getName(), $sql));
+                //throw new PDOException(xar::mls()->translate('Could not get default value for column #(1) with #(2)', $this->getName(), $sql));
             }
             $value = null;
             while ($row = $pdostatement->fetch()) {

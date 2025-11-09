@@ -21,7 +21,7 @@ sys::import('xaraya.server');
 sys::import('xaraya.context.contexttrait');
 
 /**
- * Request instance with context for use with xarServer::setInstance() etc.
+ * Request instance with context for use with xar::req()->setInstance() etc.
  */
 class RequestContext implements ContextInterface, RequestInterface
 {
@@ -192,7 +192,7 @@ class RequestContext implements ContextInterface, RequestInterface
     }
 
     /**
-     * Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVar::fetch
+     * Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xar::var()->fetch
      * @param array<string, mixed> $args
      * @return void
      */

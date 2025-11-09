@@ -149,7 +149,7 @@ class ModifyconfigMethod extends MethodClass
                 // let xarTpl take care of it, it'll complain if the directory doesn't
                 // exist or the current theme isn't in the directory specified
                 // $this->config()->setVar('Site.BL.ThemesDirectory', $data['defaultThemeDir']);
-                xarTpl::setBaseDir($data['defaultThemeDir']);
+                $this->tpl()->setBaseDir($data['defaultThemeDir']);
                 $this->config()->setVar('Site.BL.CacheTemplates', $data['cachetemplates']);
                 $this->config()->setVar('Site.BL.MemCacheTemplates', $data['memcachetemplates']);
                 $this->config()->setVar('Site.BL.CompressWhitespace', $data['compresswhitespace']);

@@ -94,7 +94,7 @@ class ProcessMethod extends MethodClass
 
         // 5. Generate create hook calls?
         // This would typically be something we want to postpone.
-        // TODO: insert xarModHooks::call blah blah here.
+        // TODO: insert xar::hooked()->notify blah blah here.
 
         // Once we got here, stuff is ok
         return 0;

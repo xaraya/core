@@ -46,7 +46,7 @@ class ModifyMethod extends MethodClass
 
         extract($args);
 
-        // xarVar::fetch does validation if not explicitly set to be not required
+        // xar::var()->fetch does validation if not explicitly set to be not required
         $this->var()->find('id', $id, 'int:1', 0);
         if (empty($id)) {
             return $this->ctl()->notFound();

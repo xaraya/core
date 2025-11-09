@@ -90,7 +90,7 @@ class Installer extends InstallerClass
          outside of installer. Consider setting config vars at later point rather than here.
         */
         $REQ_URI = parse_url($this->req()->getServerVar('HTTP_REFERER'));
-        // IIS seems to set HTTPS = off for some reason (cfr. xarServer::getProtocol)
+        // IIS seems to set HTTPS = off for some reason (cfr. xar::req()->getProtocol)
         if (!empty($HTTPS) && $HTTPS != 'off' && $REQ_URI['scheme'] == 'https') {
             $this->config()->setVar('Site.Core.EnableSecureServer', true);
         } else {

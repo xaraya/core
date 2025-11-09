@@ -23,6 +23,7 @@
  *
  */
 sys::import('xaraya.log.loggers.xarLogger');
+use Xaraya\Services\xar;
 
 /**
  * Javascript logger
@@ -115,7 +116,7 @@ class xarLogger_javascript extends xarLogger
     public function writeOut()
     {
         $this->buffer = '';
-        xarMod::apiFunc(
+        xar::mod()->apiFunc(
             'themes',
             'user',
             'registerjs',

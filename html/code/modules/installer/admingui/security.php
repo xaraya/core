@@ -44,7 +44,7 @@ class SecurityMethod extends MethodClass
             throw new Exception('Already installed');
         }
         $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
-        xarTpl::setThemeName('installer');
+        $this->tpl()->setThemeName('installer');
         $data['language']    = $install_language;
         $data['phase'] = 7;
         $data['phase_label'] = $this->ml('Security Considerations');
