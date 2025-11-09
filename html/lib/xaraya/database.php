@@ -18,8 +18,8 @@
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
-$sysConfig = xar::system();
-switch ($sysConfig->getVar(sys::CONFIG, 'DB.Middleware')) {
+$sysConfig = xar::sysConfig();
+switch ($sysConfig->getVar('DB.Middleware')) {
     case 'Creole':
         // As per creole.ResultSet.php
         define('FETCHMODE_ASSOC', 1);
@@ -58,8 +58,8 @@ class xarDB
 
     public static function getInstance($sysConfig = null)
     {
-        $sysConfig ??= xar::system();
-        $middleware_name = $sysConfig->getVar(sys::CONFIG, 'DB.Middleware');
+        $sysConfig ??= xar::sysConfig();
+        $middleware_name = $sysConfig->getVar('DB.Middleware');
         sys::import('xaraya.database.' . strtolower($middleware_name));
         $class = 'xarDB_' . $middleware_name;
         $middleware_class = new $class();
@@ -140,7 +140,7 @@ class xarDB
         switch ($args['databaseType']) {
             case 'sqlite3':
             case 'pdosqlite':
-                $args['location'] = $args['location'] ?? xar::system()->getVar(sys::CONFIG, 'DB.Location');
+                $args['location'] = $args['location'] ?? xar::sysConfig()->getVar('DB.Location');
                 $args['phptype']       = $args['databaseType'];
                 $args['database']      = $args['location'] . $args['databaseName'] ?? ':memory:';
                 $args['hostspec']    ??= '';
@@ -425,28 +425,28 @@ class xarDatabase extends xarObject
 
     public static function getConfig()
     {
-        $sysConfig = xar::system();
+        $sysConfig = xar::sysConfig();
         //---------------------------------------------------------------------------
         // Assemble the args from the config file
         // Host name
         // Hive off the port if there is one added as part of the host
-        $host = $sysConfig->getVar(sys::CONFIG, 'DB.Host');
+        $host = $sysConfig->getVar('DB.Host');
         $host_parts = explode(':', $host);
         $host = $host_parts[0];
         $port = $host_parts[1] ?? '';
 
         // Database type, name and Location
-        $databaseType = $sysConfig->getVar(sys::CONFIG, 'DB.Type');
-        $databaseName = $sysConfig->getVar(sys::CONFIG, 'DB.Name');
-        $location = $sysConfig->getVar(sys::CONFIG, 'DB.Location');
+        $databaseType = $sysConfig->getVar('DB.Type');
+        $databaseName = $sysConfig->getVar('DB.Name');
+        $location = $sysConfig->getVar('DB.Location');
 
         // User and Password
-        $userName = $sysConfig->getVar(sys::CONFIG, 'DB.UserName');
-        $password = $sysConfig->getVar(sys::CONFIG, 'DB.Password');
+        $userName = $sysConfig->getVar('DB.UserName');
+        $password = $sysConfig->getVar('DB.Password');
 
         // Encoded
         try {
-            if ($sysConfig->getVar(sys::CONFIG, 'DB.Encoded') == '1') {
+            if ($sysConfig->getVar('DB.Encoded') == '1') {
                 $userName = base64_decode($userName);
                 $password  = base64_decode($password);
             }
@@ -455,13 +455,13 @@ class xarDatabase extends xarObject
         }
 
         // Prefix and character set
-        $prefix          = $sysConfig->getVar(sys::CONFIG, 'DB.TablePrefix');
-        $databaseCharset = $sysConfig->getVar(sys::CONFIG, 'DB.Charset');
+        $prefix          = $sysConfig->getVar('DB.TablePrefix');
+        $databaseCharset = $sysConfig->getVar('DB.Charset');
 
         // Persistence
         $persistent = null;
         try {
-            $persistent = $sysConfig->getVar(sys::CONFIG, 'DB.Persistent');
+            $persistent = $sysConfig->getVar('DB.Persistent');
         } catch (VariableNotFoundException $e) {
             $persistent = null;
         }

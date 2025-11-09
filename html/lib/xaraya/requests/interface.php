@@ -41,6 +41,8 @@ interface RequestInterface
      */
     public function getContext();
 
+    public function setContext($context);
+
     /**
      * Gets a server variable
      * @param string $name the name of the variable

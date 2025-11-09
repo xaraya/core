@@ -235,7 +235,7 @@ class Phase5Method extends MethodClass
             // Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
             // Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
             // Probably there is already a core function that can make that for us...
-            // the config.system.php is lazy loaded in xarSystemVars::get(sys::CONFIG, $name), which means we cant reload the values
+            // the config.system.php is lazy loaded in $this->sysConfig()->getVar($name), which means we cant reload the values
             // in this phase... Not a big deal 'though.
             //        if ($dbExists) {
             //            if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;

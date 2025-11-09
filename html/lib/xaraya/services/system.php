@@ -26,9 +26,9 @@ interface SystemInterface extends ServiceInterface
 {
     public const SLICE = 'system';
 
-    public function getVar(string $scope, string $name): mixed;
-    public function setVar(string $scope, string $name, mixed $value): bool;
-    public function delVar(string $scope, string $name): mixed;
+    public function getVar(string $name, string $scope = sys::CONFIG): mixed;
+    public function setVar(string $name, mixed $value, string $scope = sys::CONFIG): bool;
+    public function delVar(string $name, string $scope = sys::CONFIG): mixed;
 }
 
 /**
@@ -44,12 +44,8 @@ trait SystemTrait
     /**
      * Get system variable
      */
-    public function getVar(?string $scope, string $name): mixed
+    public function getVar(string $name, string $scope = sys::CONFIG): mixed
     {
-        if (!isset($scope)) {
-            $scope = sys::CONFIG;
-        }
-
         if (!isset($this->systemVars[$scope])) {
             $this->preload($scope);
         }
@@ -65,7 +61,7 @@ trait SystemTrait
     /**
      * Set system variable
      */
-    public function setVar(string $scope, string $name, mixed $value): bool
+    public function setVar(string $name, mixed $value, string $scope = sys::CONFIG): bool
     {
         // Allow overriding system layout if needed
         if ($scope == sys::LAYOUT) {
@@ -84,13 +80,13 @@ trait SystemTrait
     /**
      * Delete system variable
      */
-    public function delVar(string $scope, string $name): bool
+    public function delVar(string $name, string $scope = sys::CONFIG): bool
     {
         // Not supported ?
         return false;
     }
 
-    protected function preload(string $scope)
+    protected function preload(string $scope = sys::CONFIG)
     {
         $fileName = sys::varpath() . '/';
         if ($scope == sys::LOG) {
@@ -103,6 +99,8 @@ trait SystemTrait
             throw new Exception("The system config file '$fileName' could not be found.");
         }
 
+        /** @var array<string, mixed> $systemConfiguration */
+        $systemConfiguration = [];
         // Make stuff from config.system.php available
         // NOTE: we can not use sys::import since the variable scope would be wrong.
         include $fileName;

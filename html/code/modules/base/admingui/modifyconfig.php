@@ -23,7 +23,6 @@ use OrderSelectProperty;
 use Query;
 use xarCore;
 use xarLog;
-use xarSystemVars;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -195,7 +194,7 @@ class ModifyconfigMethod extends MethodClass
     {
         $this->var()->find('middleware', $middleware, 'str', 'Creole');
         $variables = ['DB.Middleware' => $middleware];
-        $current_database = xarSystemVars::get(sys::CONFIG, 'DB.Name');
+        $current_database = $this->sysConfig()->getVar('DB.Name');
         $this->var()->find('database', $database, 'str', $current_database);
         $variables['DB.Name'] = $database;
         $this->mod()->apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
@@ -570,7 +569,7 @@ class ModifyconfigMethod extends MethodClass
         $data['available_loggers'] = xarLog::availables();
         $data['fallback_possible'] = xarLog::fallbackPossible();
 
-        $filepath = $picker->initialization_basedirectory . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+        $filepath = $picker->initialization_basedirectory . $this->sysConfig()->getVar('Log.Filename');
         // Delete the log file and create a new, empty one
         $this->var()->find('clear', $clear);
         if (isset($clear)) {
@@ -584,7 +583,7 @@ class ModifyconfigMethod extends MethodClass
             rename($filepath, $newname);
             touch($filepath);
         }
-        if (xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) {
+        if ($this->sysConfig()->getVar('Log.Enabled')) {
             $data['log_data'] = trim($adminapi->read_file(['file' => $filepath]));
         } else {
             $data['log_data'] = '';
@@ -632,7 +631,7 @@ class ModifyconfigMethod extends MethodClass
     public function modifyOther(array $data)
     {
         $data['hostdatetime'] = new DateTime();
-        $tzobject = new DateTimeZone(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
+        $tzobject = new DateTimeZone($this->sysConfig()->getVar('SystemTimeZone'));
         $data['hostdatetime']->setTimezone($tzobject);
 
         $data['sitedatetime'] = new DateTime();

@@ -70,7 +70,8 @@ class UserContext
     protected function checkUser()
     {
         try {
-            RequestContext::$remoteUser = xarSystemVars::get(sys::CONFIG, 'Auth.RemoteUser');
+            $xar = $this->getServicesClass();
+            RequestContext::$remoteUser = $xar->sysConfig()->getVar('Auth.RemoteUser');
         } catch (Exception) {
             return null;
         }
@@ -95,7 +96,8 @@ class UserContext
     protected function checkToken()
     {
         try {
-            RequestContext::$authToken = xarSystemVars::get(sys::CONFIG, 'Auth.AuthToken');
+            $xar = $this->getServicesClass();
+            RequestContext::$authToken = $xar->sysConfig()->getVar('Auth.AuthToken');
         } catch (Exception) {
             return null;
         }

@@ -20,19 +20,19 @@ use Xaraya\Services\SystemService;
  * @link http://www.xaraya.info
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
- * @deprecated 2.8.6 use xar::system() instead
+ * @deprecated 2.8.6 use xar::sysConfig() instead
  **/
 class xarSystemVars extends xarVars implements IxarVars
 {
     private static $KEY = 'System.Variables'; // const cannot be private :-(
-    protected static ?SystemService $system = null;
+    protected static ?SystemService $sysConfig = null;
 
-    protected static function system()
+    protected static function sysConfig()
     {
-        if (!isset(self::$system)) {
-            self::$system = xar::getServicesClass()->system();
+        if (!isset(self::$sysConfig)) {
+            self::$sysConfig = xar::getServicesClass()->sysConfig();
         }
-        return self::$system;
+        return self::$sysConfig;
     }
 
     /**
@@ -44,16 +44,19 @@ class xarSystemVars extends xarVars implements IxarVars
      */
     public static function get($scope, $name)
     {
-        return self::system()->getVar($scope, $name);
+        $scope ??= sys::CONFIG;
+        return self::sysConfig()->getVar($name, $scope);
     }
 
     public static function set($scope, $name, $value)
     {
-        return self::system()->setVar($scope, $name, $value);
+        $scope ??= sys::CONFIG;
+        return self::sysConfig()->setVar($name, $value, $scope);
     }
 
     public static function delete($scope, $name)
     {
-        return self::system()->delVar($scope, $name);
+        $scope ??= sys::CONFIG;
+        return self::sysConfig()->delVar($name, $scope);
     }
 }

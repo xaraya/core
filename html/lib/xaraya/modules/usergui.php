@@ -76,7 +76,7 @@ sys::import('xaraya.modules.userguitrait');
  * - $this->prop() = DataProperty*::* with context (getProperty, getPropertyTypes, ...)
  * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
  * - $this->config() = xarConfigVars::* Config (getVar, setVar, ...)
- * - $this->system() = xarSystemVars::* System (getVar, setVar, ...)
+ * - $this->sysConfig() = xarSystemVars::* System (getVar, setVar, ...)
  * - $this->session() = xarSession::* Session (getVar, setVar, ...)
  * - $this->db() = xarDB::* Database (getConn, getPrefix, ...)
  * - ...

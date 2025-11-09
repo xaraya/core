@@ -11,33 +11,33 @@ final class ServerTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        xarCache::init();
-        // preload Config.Variables here for xar::config()->getVar() in xarServer::getConfig()
+        xar::cache()->init();
+        // preload Config.Variables here for xar::config()->getVar() in xar::req()->getConfig()
         xar::mem()->set('CoreCache.Preload', 'Config.Variables', 1);
     }
 
     public function tearDown(): void
     {
         $_SERVER = [];
-        xarServer::setRequestClass(RequestHandler::class);
+        xar::req()->setRequestClass(RequestHandler::class);
     }
 
     public function testStandardInit(): void
     {
         $expected = RequestHandler::class;
-        xarServer::init(xarServer::getConfig());
+        xar::req()->init(xar::req()->getConfig());
 
-        $instance = xarServer::getInstance();
+        $instance = xar::req()->getInstance();
         $this->assertEquals($expected, $instance::class);
     }
 
     public function testContextInit(): void
     {
-        xarServer::setRequestClass(RequestContext::class);
+        xar::req()->setRequestClass(RequestContext::class);
         $expected = RequestContext::class;
-        xarServer::init(xarServer::getConfig());
+        xar::req()->init(xar::req()->getConfig());
 
-        $instance = xarServer::getInstance();
+        $instance = xar::req()->getInstance();
         $this->assertEquals($expected, $instance::class);
     }
 
@@ -57,28 +57,28 @@ final class ServerTest extends TestCase
     {
         $expected = $this->getServerVars();
         $_SERVER = array_replace($_SERVER ?? [], $expected);
-        xarServer::init(xarServer::getConfig());
-        // @todo we need to reset xarSystemVars::get(sys::LAYOUT, 'BaseURI')
+        xar::req()->init(xar::req()->getConfig());
+        // @todo we need to reset xar::sysConfig()->getVar('BaseURI', sys::LAYOUT)
 
-        $this->assertEquals($expected['REQUEST_URI'], xarServer::getVar('REQUEST_URI'));
-        $this->assertEquals('/xaraya', xarServer::getBaseURI());
-        $this->assertEquals('http://test:123/xaraya/index.php', xarServer::getModuleURL());
-        $this->assertEquals('http://test:123/xaraya/index.php?module=base&amp;type=user&amp;func=main', xarServer::getModuleURL('base'));
-        $this->assertEquals('http://test:123/xaraya/index.php?object=sample&amp;method=view', xarServer::getObjectURL('sample'));
+        $this->assertEquals($expected['REQUEST_URI'], xar::req()->getServerVar('REQUEST_URI'));
+        $this->assertEquals('/xaraya', xar::req()->getBaseURI());
+        $this->assertEquals('http://test:123/xaraya/index.php', xar::ctl()->getModuleURL());
+        $this->assertEquals('http://test:123/xaraya/index.php?module=base&amp;type=user&amp;func=main', xar::ctl()->getModuleURL('base'));
+        $this->assertEquals('http://test:123/xaraya/index.php?object=sample&amp;method=view', xar::ctl()->getObjectURL('sample'));
     }
 
     public function testContextGetVar(): void
     {
-        xarServer::setRequestClass(RequestContext::class);
+        xar::req()->setRequestClass(RequestContext::class);
         $context = new Context(['source' => __METHOD__]);
         xar::setServicesContext($context);
         $expected = $this->getServerVars();
         $_SERVER = array_replace($_SERVER ?? [], $expected);
-        xarServer::init(xarServer::getConfig(), $context);
-        // @todo we need to reset xarSystemVars::get(sys::LAYOUT, 'BaseURI')
+        xar::req()->init(xar::req()->getConfig());
+        // @todo we need to reset xar::sysConfig()->getVar('BaseURI', sys::LAYOUT)
 
         // default empty context for the request
-        $this->assertEquals(null, xarServer::getVar('REQUEST_URI'));
+        $this->assertEquals(null, xar::req()->getServerVar('REQUEST_URI'));
 
         // set current context for the request
         $expected['REQUEST_URI'] = '/home/site.php/more?hello=world';
@@ -88,13 +88,13 @@ final class ServerTest extends TestCase
         $context = new Context([
             'server' => $expected,
         ]);
-        xarServer::getInstance()->setContext($context);
+        xar::req()->getInstance()->setContext($context);
 
         // @todo update xarController::$endpoint based on actual SCRIPT_NAME?
-        $this->assertEquals($expected['REQUEST_URI'], xarServer::getVar('REQUEST_URI'));
-        $this->assertEquals('/home', xarServer::getBaseURI());
-        $this->assertEquals('http://test:123/home/index.php', xarServer::getModuleURL());
-        $this->assertEquals('http://test:123/home/index.php?module=base&amp;type=user&amp;func=main', xarServer::getModuleURL('base'));
-        $this->assertEquals('http://test:123/home/index.php?object=sample&amp;method=view', xarServer::getObjectURL('sample'));
+        $this->assertEquals($expected['REQUEST_URI'], xar::req()->getServerVar('REQUEST_URI'));
+        $this->assertEquals('/home', xar::req()->getBaseURI());
+        $this->assertEquals('http://test:123/home/index.php', xar::ctl()->getModuleURL());
+        $this->assertEquals('http://test:123/home/index.php?module=base&amp;type=user&amp;func=main', xar::ctl()->getModuleURL('base'));
+        $this->assertEquals('http://test:123/home/index.php?object=sample&amp;method=view', xar::ctl()->getObjectURL('sample'));
     }
 }

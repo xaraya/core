@@ -48,7 +48,7 @@ class FinishMethod extends MethodClass
         }
 
         // Default for the site time zone is the system time zone
-        $this->config()->setVar('Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
+        $this->config()->setVar('Site.Core.TimeZone', $this->sysConfig()->getVar('SystemTimeZone'));
 
         // Defaults for templating engine options
         $this->config()->setVar('Site.BL.CompressWhitespace', 1);

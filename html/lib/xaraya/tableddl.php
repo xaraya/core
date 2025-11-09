@@ -173,10 +173,10 @@ class xarTableDDL extends xarObject
             $databaseType = xar::db()->getType();
         }
         if (empty($charset)) {
-            $charset = xar::system()->getVar(sys::CONFIG, 'DB.Charset');
+            $charset = xar::sysConfig()->getVar('DB.Charset');
         }
         // set Dbtype to pdosqlite
-        $middleware = xar::system()->getVar(sys::CONFIG, 'DB.Middleware');
+        $middleware = xar::sysConfig()->getVar('DB.Middleware');
         if ($middleware == 'PDO') {
             $databaseType = 'pdosqlite';
         }
@@ -484,7 +484,7 @@ class xarTableDDL extends xarObject
             $databaseType = xar::db()->getType();
         }
         // set Dbtype to pdosqlite
-        $middleware = xar::system()->getVar(sys::CONFIG, 'DB.Middleware');
+        $middleware = xar::sysConfig()->getVar('DB.Middleware');
         if ($middleware == 'PDO') {
             $databaseType = 'pdosqlite';
         }
@@ -548,7 +548,7 @@ class xarTableDDL extends xarObject
         }
 
         // set Dbtype to pdosqlite
-        $middleware = xar::system()->getVar(sys::CONFIG, 'DB.Middleware');
+        $middleware = xar::sysConfig()->getVar('DB.Middleware');
         if ($middleware == 'PDO') {
             $databaseType = 'pdosqlite';
         }

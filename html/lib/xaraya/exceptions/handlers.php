@@ -150,7 +150,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         $oldLevel = error_reporting();
         try {
             // We'll try to get the configured threshold
-            $errThreshold = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
+            $errThreshold = xar::sysConfig()->getVar('Exception.ErrorLevel');
         } catch (Exception $e) {
             // Oh well, show everything so construct the maximum bitmask
             // Note that E_ALL is already a summed bitmask value (2047) while E_STRICT is *NOT* (2048)
@@ -196,7 +196,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         $show = false;
         if (class_exists('xarConfigVars') && xarCore::isLoaded(xarCore::SYSTEM_CONFIGURATION)) {
             try {
-                $show = xar::config()->getVar(null, 'Site.BL.ExceptionDisplay');
+                $show = xar::config()->getVar('Site.BL.ExceptionDisplay');
             } catch (Exception $e) {
             }
         }

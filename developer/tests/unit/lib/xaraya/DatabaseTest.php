@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Xaraya\Database\ExternalDatabase;
+use Xaraya\Services\xar;
 
 /**
  * We need to run each test in a separate process here to switch databases
@@ -49,7 +50,7 @@ final class DatabaseTest extends TestCase
         self::useMiddleware($expected);
 
         // check we get the expected classes
-        $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+        $middleware = xar::sysConfig()->getVar('DB.Middleware');
         $this->assertEquals($expected, $middleware);
         xarDatabase::init();
         //$this->assertTrue(is_subclass_of('xarDB', 'xarDB_Creole'));
@@ -105,7 +106,7 @@ final class DatabaseTest extends TestCase
         self::useMiddleware($expected);
 
         // check we get the expected classes
-        $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+        $middleware = xar::sysConfig()->getVar('DB.Middleware');
         $this->assertEquals($expected, $middleware);
         xarDatabase::init();
         //$this->assertTrue(is_subclass_of('xarDB', 'xarDB_PDO'));

@@ -451,9 +451,9 @@ trait WithStaticServices
      * - ...
      *
      */
-    public static function system(): SystemInterface
+    public static function sysConfig(): SystemInterface
     {
-        return self::getServicesClass()->system();
+        return self::getServicesClass()->sysConfig();
     }
 
     /**

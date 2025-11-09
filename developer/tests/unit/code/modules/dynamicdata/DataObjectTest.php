@@ -1,18 +1,19 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Xaraya\Services\xar;
 
 final class DataObjectTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        xarCache::init();
+        xar::cache()->init();
         xarDatabase::init();
     }
 
     public static function tearDownAfterClass(): void
     {
-        xarSystemVars::set(sys::LAYOUT, 'BaseURI', null);
+        xar::sysConfig()->setVar('BaseURI', null, sys::LAYOUT);
         // @todo reset deferred property caches after DataObjectTest
         DeferredItemProperty::$deferred = [];
         DeferredListProperty::$deferred = [];

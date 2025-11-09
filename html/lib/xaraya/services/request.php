@@ -292,7 +292,8 @@ trait RequestTrait
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseURI = '' in config.php
         try {
-            $BaseURI =  xarSystemVars::get(sys::LAYOUT, 'BaseURI');
+            $xar = $this->getParent();
+            $BaseURI =  $xar->sysConfig()->getVar('BaseURI', sys::LAYOUT);
             return $BaseURI;
         } catch (Exception $e) {
             // We need to build it

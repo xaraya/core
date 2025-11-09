@@ -378,7 +378,7 @@ class StaticServicesClass extends ServicesClass
      * - ...
      *
      */
-    public function system(): SystemInterface
+    public function sysConfig(): SystemInterface
     {
         return $this->getServicePrototype('system');
     }

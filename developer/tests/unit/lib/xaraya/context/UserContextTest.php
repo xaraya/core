@@ -15,7 +15,7 @@ final class UserContextTest extends TestCase
 {
     protected function setUp(): void
     {
-        xarCache::init();
+        xar::cache()->init();
         xarDatabase::init();
 
         // Set context for core services here first
@@ -48,8 +48,8 @@ final class UserContextTest extends TestCase
     {
         xar::mem()->set('Testing:' . sys::CONFIG, 'Auth.RemoteUser', true);
         $expected = RequestContext::$remoteUser;
-        xarSystemVars::set(sys::CONFIG, 'Auth.RemoteUser', $expected);
-        $this->assertEquals($expected, xarSystemVars::get(sys::CONFIG, 'Auth.RemoteUser'));
+        xar::sysConfig()->setVar('Auth.RemoteUser', $expected);
+        $this->assertEquals($expected, xar::sysConfig()->getVar('Auth.RemoteUser'));
 
         // admin user
         $expected = 6;
@@ -62,7 +62,7 @@ final class UserContextTest extends TestCase
         $expected = VirtualSession::class;
         $this->assertEquals($expected, $context->getSession()::class);
 
-        xarSystemVars::set(sys::CONFIG, 'Auth.RemoteUser', null);
+        xar::sysConfig()->setVar('Auth.RemoteUser', null);
         xar::mem()->del('Testing:' . sys::CONFIG, 'Auth.RemoteUser');
     }
 
@@ -70,8 +70,8 @@ final class UserContextTest extends TestCase
     {
         xar::mem()->set('Testing:' . sys::CONFIG, 'Auth.AuthToken', true);
         $expected = RequestContext::$authToken;
-        xarSystemVars::set(sys::CONFIG, 'Auth.AuthToken', $expected);
-        $this->assertEquals($expected, xarSystemVars::get(sys::CONFIG, 'Auth.AuthToken'));
+        xar::sysConfig()->setVar('Auth.AuthToken', $expected);
+        $this->assertEquals($expected, xar::sysConfig()->getVar('Auth.AuthToken'));
 
         $expected = 123;
         $userInfo = ['userId' => $expected, 'access' => 'ignored'];
@@ -84,7 +84,7 @@ final class UserContextTest extends TestCase
         $expected = VirtualSession::class;
         $this->assertEquals($expected, $context->getSession()::class);
 
-        //xarSystemVars::set(sys::CONFIG, 'Auth.AuthToken', null);
+        xar::sysConfig()->setVar('Auth.AuthToken', null);
         xar::mem()->del('Testing:' . sys::CONFIG, 'Auth.AuthToken');
     }
 
@@ -125,7 +125,7 @@ final class UserContextTest extends TestCase
 
         // verify that we have the same sessionId
         $expected = $sessionInfo['id'];
-        $sessionId = xarSession::getId();
+        $sessionId = xar::session()->getId();
         $this->assertEquals($expected, $sessionId);
 
         unset($_COOKIE[RequestContext::$cookieName]);
@@ -151,12 +151,12 @@ final class UserContextTest extends TestCase
 
         // verify that we have the same sessionId
         $expected = $sessionInfo['id'];
-        $sessionId = xarSession::getId();
+        $sessionId = xar::session()->getId();
         $this->assertEquals($expected, $sessionId);
 
         // verify that we have the expected userId
         $expected = $sessionInfo['role_id'];
-        $userId = xarSession::getInstance()->getUserId();
+        $userId = xar::session()->getInstance()->getUserId();
         $this->assertEquals($expected, $userId);
 
         // XARSVrole_id|i:6;XARSVrand|i:1012024923;...

@@ -315,7 +315,8 @@ trait ControllerTrait
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseModURL = '' in config.system.php
         try {
-            $this->entryPoint = xarSystemVars::get(sys::LAYOUT, 'BaseModURL');
+            $sysConfig = $this->getParent()->sysConfig();
+            $this->entryPoint = $sysConfig->getVar('BaseModURL', sys::LAYOUT);
         } catch (Exception $e) {
             $this->entryPoint = 'index.php';
         }
@@ -420,21 +421,22 @@ trait ControllerTrait
 
     public function setBaseURL(?string $baseurl): void
     {
+        $sysConfig = $this->getParent()->sysConfig();
         // if entry point is specified in baseurl, e.g. http://localhost/xaraya/dispatch.php
         if (!empty($baseurl) && !str_ends_with($baseurl, '/')) {
             $parts = explode('/', $baseurl);
             $entryPoint = array_pop($parts);
             $this->entryPoint = $entryPoint;
             // @checkme override system config here, since xarController does re-init() for each URL() for some reason...
-            xarSystemVars::set(sys::LAYOUT, 'BaseModURL', $entryPoint);
+            $sysConfig->setVar('BaseModURL', $entryPoint, sys::LAYOUT);
             $baseurl = substr($baseurl, 0, -strlen($entryPoint));
         }
         $this->baseurl = $baseurl;
         if (empty($baseurl)) {
-            xarSystemVars::set(sys::LAYOUT, 'BaseURI', null);
+            $sysConfig->setVar('BaseURI', null, sys::LAYOUT);
             // reset entry point to default here
             $this->entryPoint = 'index.php';
-            xarSystemVars::set(sys::LAYOUT, 'BaseModURL', null);
+            $sysConfig->setVar('BaseModURL', null, sys::LAYOUT);
             return;
         }
 
@@ -448,7 +450,7 @@ trait ControllerTrait
             $req->setServerVar('SERVER_PORT', $info['port'] ?? 80);
         }
         // strip trailing slash for BaseURI here - added again in getBaseURL()
-        xarSystemVars::set(sys::LAYOUT, 'BaseURI', rtrim($info['path'], '/'));
+        $sysConfig->setVar('BaseURI', rtrim($info['path'], '/'), sys::LAYOUT);
     }
 
     public function getPageTime(): float
@@ -537,7 +539,8 @@ trait ControllerTrait
      */
     public function getSystemVar(string $varName): mixed
     {
-        return xarSystemVars::get(sys::CONFIG, $varName);
+        $sysConfig = $this->getParent()->sysConfig();
+        return $sysConfig->getVar($varName);
     }
 
     /**

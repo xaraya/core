@@ -155,7 +155,7 @@ class Installer extends InstallerClass
                 //Load Table Maintainance API
                 sys::import('xaraya.tableddl');
                 $hookstable = $xartable['hooks'];
-                $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+                $charset = $this->sysConfig()->getVar('DB.Charset');
                 $fieldargs = ['command' => 'add', 'field' => 't_file', 'type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset];
                 $query = xarTableDDL::alterTable($hookstable, $fieldargs);
                 $result = $dbconn->Execute($query);

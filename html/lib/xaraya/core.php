@@ -271,7 +271,7 @@ class xarCore extends xarObject
          * Make sure we can get time for logging
         **/
         try {
-            date_default_timezone_set($xar->system()->getVar(sys::CONFIG, 'SystemTimeZone'));
+            date_default_timezone_set($xar->sysConfig()->getVar('SystemTimeZone'));
         } catch (Exception $e) {
             throw new Exception('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
         }
@@ -301,7 +301,7 @@ class xarCore extends xarObject
         $xar->cache()->init();
 
         // Check that the database was installed before we activate variable caching (we don't need to load it yet)
-        if ($xar->system()->getVar(sys::CONFIG, 'DB.Installation') != 3) {
+        if ($xar->sysConfig()->getVar('DB.Installation') != 3) {
             $xar->cache()->variableCache = null;
         }
 
@@ -516,7 +516,7 @@ class xarCore extends xarObject
             try {
                 $xarServices ??= Xaraya\Services\xar::getServicesClass();
                 sys::import('xaraya.variables.system');
-                $errLevel = $xarServices->system()->getVar(sys::CONFIG, 'Exception.ErrorLevel');
+                $errLevel = $xarServices->sysConfig()->getVar('Exception.ErrorLevel');
             } catch (Exception $e) {
                 $errLevel = E_ALL;
             }

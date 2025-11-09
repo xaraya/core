@@ -63,7 +63,7 @@ interface CoreServicesInterface extends ContextInterface
     public function mem(): MemoryInterface;
     public function req(): RequestInterface;
     public function config(): ConfigInterface;
-    public function system(): SystemInterface;
+    public function sysConfig(): SystemInterface;
     public function session(): SessionInterface;
     public function user(?int $userId = null): UserInterface;
     public function db(): DatabaseInterface;
@@ -511,9 +511,9 @@ trait CoreServicesTrait
      * - ...
      *
      */
-    public function system(): SystemInterface
+    public function sysConfig(): SystemInterface
     {
-        return $this->getStaticServices()->system();
+        return $this->getStaticServices()->sysConfig();
     }
 
     /**

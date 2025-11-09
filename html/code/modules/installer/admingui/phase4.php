@@ -43,14 +43,14 @@ class Phase4Method extends MethodClass
         $this->var()->find('continue', $continue, 'isset', null);
 
         $data = [];
-        $this->var()->find('install_database_host', $data['database_host'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Host'));
-        $this->var()->find('install_database_middleware', $data['database_middleware'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Middleware'));
-        $this->var()->find('install_database_type', $data['database_type'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Type'));
-        $this->var()->find('install_database_name', $data['database_name'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Name'));
-        $this->var()->find('install_database_username', $data['database_username'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.UserName'));
+        $this->var()->find('install_database_host', $data['database_host'], 'str::', $this->sysConfig()->getVar('DB.Host'));
+        $this->var()->find('install_database_middleware', $data['database_middleware'], 'str::', $this->sysConfig()->getVar('DB.Middleware'));
+        $this->var()->find('install_database_type', $data['database_type'], 'str::', $this->sysConfig()->getVar('DB.Type'));
+        $this->var()->find('install_database_name', $data['database_name'], 'str::', $this->sysConfig()->getVar('DB.Name'));
+        $this->var()->find('install_database_username', $data['database_username'], 'str::', $this->sysConfig()->getVar('DB.UserName'));
         $this->var()->find('install_database_password', $data['database_password'], 'str::', '');
-        $this->var()->find('install_database_prefix', $data['database_prefix'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
-        $this->var()->find('install_database_charset', $data['database_charset'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Charset'));
+        $this->var()->find('install_database_prefix', $data['database_prefix'], 'str::', $this->sysConfig()->getVar('DB.TablePrefix'));
+        $this->var()->find('install_database_charset', $data['database_charset'], 'str::', $this->sysConfig()->getVar('DB.Charset'));
 
         // Supported Middleware:
         $data['database_middleware_packages']  = ['Creole' => ['name' => 'Creole', 'available' => true],

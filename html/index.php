@@ -99,7 +99,7 @@ function xarMain()
     $xar->log()->notice('The page title is set: ' . $xar->tpl()->getPageTitle());
 
     // Check the Installation
-    if (($request->getModule() != 'installer') && ($xar->system()->getVar(sys::CONFIG, 'DB.Installation') != 3)) {
+    if (($request->getModule() != 'installer') && ($xar->sysConfig()->getVar('DB.Installation') != 3)) {
         die('Xaraya was not properly installed. The exact error cannot be diagnosed.<br/>Please rerun the installer. If you have important data in your database please make a backup first.');
     }
     $xar->log()->notice('The installation is checked');

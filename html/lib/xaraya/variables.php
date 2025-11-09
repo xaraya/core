@@ -327,7 +327,7 @@ class xarVarPrep
         }
         $xar = xar::getServicesClass();
 
-        self::$dbCharSet = $xar->system()->getVar(sys::CONFIG, 'DB.Charset');
+        self::$dbCharSet = $xar->sysConfig()->getVar('DB.Charset');
         self::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);
         self::$fixHTMLEntities = $xar->config()->getVar('Site.Core.FixHTMLEntities', true);
 

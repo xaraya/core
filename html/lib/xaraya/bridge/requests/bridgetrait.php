@@ -42,10 +42,10 @@ trait BasicBridgeTrait
     public function prepareController(string $module = 'base', string $baseUri = ''): void
     {
         $ctl = $this->getServicesClass()->ctl();
+        $sysConfig = $this->getServicesClass()->sysConfig();
         // @checkme override system config here, since xarController does re-init() for each URL() for some reason...
         $entryPoint = str_replace($ctl->getBaseURI(), '', $baseUri);
-        //xarSystemVars::set(sys::LAYOUT, 'BaseURI');
-        xarSystemVars::set(sys::LAYOUT, 'BaseModURL', $entryPoint);
+        $sysConfig->setVar('BaseModURL', $entryPoint, sys::LAYOUT);
         $ctl->setEntryPoint($entryPoint);
         // @todo get $ctl->getBaseURL() working correctly for ReactPHP etc.
         //sys::import('xaraya.bridge.middleware.modules.router');

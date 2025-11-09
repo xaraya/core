@@ -61,7 +61,8 @@ trait ConfigTrait
         // Configvars which are not in the database (either in config file or in code defines)
         switch ($varName) {
             case 'Site.DB.TablePrefix':
-                return xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
+                $sysConfig = $this->getParent()->sysConfig();
+                return $sysConfig->getVar('DB.TablePrefix');
             case 'System.Core.Generation':
                 return xarCore::GENERATION;
             case 'System.Core.VersionNumber':

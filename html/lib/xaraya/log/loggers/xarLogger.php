@@ -23,6 +23,8 @@
     delete this exception statement from your version.
 */
 
+use Xaraya\Services\xar;
+
 /**
  * Base class for all loggers
  *
@@ -97,10 +99,10 @@ class xarLogger extends xarObject
 
         if ($conf['fallback'] == true) {
             // The levels defined in the system configuration file
-            $levels = $conf['level'] ?? xarSystemVars::get(sys::CONFIG, 'Log.Level');
+            $levels = $conf['level'] ?? xar::sysConfig()->getVar('Log.Level');
         } else {
             // The levels defined in the log configuration file
-            $levels = $conf['level'] ?? xarSystemVars::get(sys::LOG, 'Log.' . ucwords($this->name) . '.Level');
+            $levels = $conf['level'] ?? xar::sysConfig()->getVar('Log.' . ucwords($this->name) . '.Level', sys::LOG);
         }
         if (!empty($levels)) {
             $this->logLevel = 0;

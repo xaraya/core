@@ -5,6 +5,8 @@
  */
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
+use Xaraya\Services\xar;
+
 // initialize bootstrap
 sys::init();
 
@@ -13,16 +15,16 @@ function get_xaraya_config()
 {
     // Decode encoded DB parameters
     // These need to be there
-    $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
-    $password = xarSystemVars::get(sys::CONFIG, 'DB.Password');
+    $userName = xar::sysConfig()->getVar('DB.UserName');
+    $password = xar::sysConfig()->getVar('DB.Password');
     $persistent = null;
     try {
-        $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
+        $persistent = xar::sysConfig()->getVar('DB.Persistent');
     } catch (VariableNotFoundException $e) {
         $persistent = null;
     }
     try {
-        if (xarSystemVars::get(sys::CONFIG, 'DB.Encoded') == '1') {
+        if (xar::sysConfig()->getVar('DB.Encoded') == '1') {
             $userName = base64_decode($userName);
             $password  = base64_decode($password);
         }
@@ -31,7 +33,7 @@ function get_xaraya_config()
     }
 
     // Hive off the port if there is one added as part of the host
-    $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+    $host = xar::sysConfig()->getVar('DB.Host');
     $host_parts = explode(':', $host);
     $host = $host_parts[0];
     $port = $host_parts[1] ?? '';
@@ -42,11 +44,11 @@ function get_xaraya_config()
         'password'        => $password,
         'databaseHost'    => $host,
         'databasePort'    => $port,
-        'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
-        'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
-        'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
+        'databaseType'    => xar::sysConfig()->getVar('DB.Type'),
+        'databaseName'    => xar::sysConfig()->getVar('DB.Name'),
+        'databaseCharset' => xar::sysConfig()->getVar('DB.Charset'),
         'persistent'      => $persistent,
-        'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'),
+        'prefix'          => xar::sysConfig()->getVar('DB.TablePrefix'),
     ];
     return $systemArgs;
 }
