@@ -16,7 +16,7 @@ final class UserContextTest extends TestCase
     protected function setUp(): void
     {
         xar::cache()->init();
-        xarDatabase::init();
+        xar::db()->init();
 
         // Set context for core services here first
         $context = new Context();

@@ -9,7 +9,7 @@ final class TestGuiTest extends TestHelper
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        xarServer::setBaseURL('http://localhost/');
+        xar::ctl()->setBaseURL('http://localhost/');
     }
 
     public static function tearDownAfterClass(): void

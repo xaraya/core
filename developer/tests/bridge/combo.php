@@ -15,6 +15,7 @@ use Nyholm\Psr7Server\ServerRequestCreator;
 use Xaraya\Bridge\Middleware\RoutingHandler;
 use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
+use Xaraya\Services\xar;
 
 class LocalTimer implements TimerInterface
 {
@@ -25,12 +26,12 @@ LocalTimer::enableTimer(true);
 //LocalTimer::setTimer('autoload');
 sys::init();
 LocalTimer::setTimer('sys');
-xarCache::init();
+xar::cache()->init();
 LocalTimer::setTimer('cache');
 // try out request context class - can't with PSR-17 ::fromGlobals()
-//xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
+//xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class
-xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
+xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
 xarCore::xarInit(xarCore::SYSTEM_USER);
 LocalTimer::setTimer('core');
 
@@ -38,8 +39,8 @@ LocalTimer::setTimer('core');
 if (php_sapi_name() === 'cli') {
     //parse_str(implode('&', array_slice($argv, 1)), $_GET);
     if ($argc > 1 && str_contains($argv[1], '/')) {
-        xarServer::setVar('PATH_INFO', $argv[1]);
-        xarServer::setVar('REQUEST_URI', $argv[0] . $argv[1]);
+        xar::req()->setServerVar('PATH_INFO', $argv[1]);
+        xar::req()->setServerVar('REQUEST_URI', $argv[0] . $argv[1]);
     }
 }
 

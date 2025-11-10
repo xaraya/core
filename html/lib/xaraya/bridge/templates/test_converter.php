@@ -6,6 +6,7 @@
 
 namespace Xaraya\Bridge\TemplateEngine;
 
+use Xaraya\Services\xar;
 use xarCache;
 use xarDatabase;
 use xarTwigTpl;
@@ -23,8 +24,8 @@ chdir($baseDir . '/html');
 // initialize bootstrap
 sys::init();
 // initialize database to call xar::mod()->apiFunc() for namespaces
-xarCache::init();
-xarDatabase::init();
+xar::cache()->init();
+xar::db()->init();
 
 // convert all test_*.xt templates from workflow includes directory
 /**

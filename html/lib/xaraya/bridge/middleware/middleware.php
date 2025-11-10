@@ -6,8 +6,9 @@
  * See dynamicdata/controllers/middleware.php and modules/controllers/middleware.php
  *
  * require_once dirname(__DIR__).'/vendor/autoload.php';
+ * use Xaraya\Services\xar;
  * sys::init();
- * xarCache::init();
+ * xar::cache()->init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);
  *
  * // use some PSR-7 factory and PSR-15 dispatcher

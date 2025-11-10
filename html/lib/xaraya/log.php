@@ -67,6 +67,13 @@ class xarLog extends xarObject
         return self::$sysConfig;
     }
 
+    /**
+     * Summary of init
+     * @param array<mixed> $args
+     * @throws \LoggerException
+     * @return bool
+     * @see \Xaraya\Services\LoggerService::init()
+     */
     public static function init(array $args = [])
     {
         if (empty($args) && self::$initialized) {

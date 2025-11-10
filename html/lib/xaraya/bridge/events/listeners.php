@@ -16,8 +16,9 @@
  * (hook observer) for that event - see lib/xaraya/bridge/events/testers.php
  *
  * require_once dirname(__DIR__).'/vendor/autoload.php';
+ * use Xaraya\Services\xar;
  * sys::init();
- * xarCache::init();
+ * xar::cache()->init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);
  *
  * use Symfony\Component\EventDispatcher\EventDispatcher;

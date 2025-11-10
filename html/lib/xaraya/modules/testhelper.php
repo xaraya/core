@@ -27,22 +27,24 @@ class TestHelper extends TestCase
     {
         // initialize bootstrap
         sys::init();
-        // initialize caching - delay until we need results
-        xarCache::init();
-        // initialize loggers
-        xarLog::init();
 
         // create dummy context
         $context = static::createContext(['source' => __METHOD__]);
         // set context for core services here first + return static services class
         $xar = \Xaraya\Services\xar::setServicesContext($context);
+
+        // initialize caching - delay until we need results
+        $xar->cache()->init();
+        // initialize loggers
+        $xar->log()->init();
+
         // use RequestContext as request handler
         $xar->req()->setRequestClass(RequestContext::class);
         // use SessionContext as session handler
         $xar->session()->setSessionClass(SessionContext::class);
 
         // initialize database - delay until caching fails
-        xarDatabase::init();
+        $xar->db()->init();
         // initialize events
         $xar->events()->init();
         // initialize modules

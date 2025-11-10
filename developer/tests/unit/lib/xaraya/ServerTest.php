@@ -90,7 +90,7 @@ final class ServerTest extends TestCase
         ]);
         xar::req()->getInstance()->setContext($context);
 
-        // @todo update xarController::$endpoint based on actual SCRIPT_NAME?
+        // @todo update xar::ctl()->endpoint based on actual SCRIPT_NAME?
         $this->assertEquals($expected['REQUEST_URI'], xar::req()->getServerVar('REQUEST_URI'));
         $this->assertEquals('/home', xar::req()->getBaseURI());
         $this->assertEquals('http://test:123/home/index.php', xar::ctl()->getModuleURL());

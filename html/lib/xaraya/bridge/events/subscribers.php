@@ -15,8 +15,9 @@
  * Optionally, specific callback functions can also be defined to react to certain events (see also listeners).
  *
  * require_once dirname(__DIR__).'/vendor/autoload.php';
+ * use Xaraya\Services\xar;
  * sys::init();
- * xarCache::init();
+ * xar::cache()->init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);
  *
  * use Symfony\Component\EventDispatcher\EventDispatcher;

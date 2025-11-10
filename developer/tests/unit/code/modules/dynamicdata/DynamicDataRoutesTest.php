@@ -5,6 +5,7 @@ use Xaraya\Routing\Dispatcher;
 use Xaraya\Routing\RouterInterface;
 use Xaraya\Routing\Routing;
 use Xaraya\Modules\DynamicData\DynamicDataRoutes;
+use Xaraya\Services\xar;
 
 final class DynamicDataRoutesTest extends TestHelper
 {
@@ -39,7 +40,7 @@ final class DynamicDataRoutesTest extends TestHelper
 
     public function testRoutesMain(): void
     {
-        xarTpl::init();
+        xar::tpl()->init();
 
         $router = new Routing(function () {
             return DynamicDataRoutes::getRoutes();
@@ -82,7 +83,7 @@ final class DynamicDataRoutesTest extends TestHelper
 
     public function testRoutesEntity(): void
     {
-        xarTpl::init();
+        xar::tpl()->init();
 
         $router = new Routing(function () {
             return DynamicDataRoutes::getRoutes();

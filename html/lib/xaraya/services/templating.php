@@ -512,7 +512,7 @@ trait TemplatingTrait
     {
         // Get pageTemplateName from current context
         $this->pageTemplateName = $this->getValue('pageTemplateName');
-        return $this->pageTemplateName;
+        return $this->pageTemplateName ?: 'default';
     }
 
     /**

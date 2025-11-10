@@ -8,6 +8,7 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 use Xaraya\DataObject\Generated\Sample;
 use Xaraya\DataObject\Generated\VirtualSample;
 use Brick\VarExporter\VarExporter;
+use Xaraya\Services\xar;
 
 if (!class_exists('\Brick\VarExporter\VarExporter')) {
     return;
@@ -16,14 +17,14 @@ if (!class_exists('\Brick\VarExporter\VarExporter')) {
 // initialize bootstrap
 sys::init();
 // initialize caching
-xarCache::init();
+xar::cache()->init();
 
 // initialize database for itemid - if not already loaded
-xarDatabase::init();
+xar::db()->init();
 // for hook calls - if not already loaded
-//xarMod::init();
+//xar::mod()->init();
 // for showOutput
-//xarTpl::init();
+//xar::tpl()->init();
 //xarCore::xarInit(xarCore::SYSTEM_MODULES);
 
 const TEST_COUNT = 5000;
@@ -397,7 +398,7 @@ function test_properties()
     $data = $sample->children->getDeferredData();
     var_dump($data['value']);
     var_dump($sample->children->getDeferredLoader());
-    xarTpl::init();
+    xar::tpl()->init();
     var_dump($sample->name->showOutput());
 }
 

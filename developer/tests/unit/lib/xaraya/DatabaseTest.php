@@ -15,7 +15,7 @@ final class DatabaseTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        //xarCache::init();
+        //xar::cache()->init();
     }
 
     public static function tearDownAfterClass(): void
@@ -52,7 +52,7 @@ final class DatabaseTest extends TestCase
         // check we get the expected classes
         $middleware = xar::sysConfig()->getVar('DB.Middleware');
         $this->assertEquals($expected, $middleware);
-        xarDatabase::init();
+        xar::db()->init();
         //$this->assertTrue(is_subclass_of('xarDB', 'xarDB_Creole'));
         $conn = xarDB::getConn();
         $this->assertTrue($conn instanceof \Connection);
@@ -108,7 +108,7 @@ final class DatabaseTest extends TestCase
         // check we get the expected classes
         $middleware = xar::sysConfig()->getVar('DB.Middleware');
         $this->assertEquals($expected, $middleware);
-        xarDatabase::init();
+        xar::db()->init();
         //$this->assertTrue(is_subclass_of('xarDB', 'xarDB_PDO'));
         $conn = xarDB::getConn();
         $this->assertTrue($conn instanceof \PDOConnection);

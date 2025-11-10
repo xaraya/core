@@ -6,6 +6,7 @@ use Nyholm\Psr7Server\ServerRequestCreator;
 use Xaraya\Bridge\Requests\BasicRequest;
 use Xaraya\Bridge\Requests\DataObjectGuiHandler;
 use Xaraya\Bridge\Requests\DataObjectApiHandler;
+use Xaraya\Services\xar;
 
 final class BridgeRequestsTest extends TestCase
 {
@@ -18,7 +19,7 @@ final class BridgeRequestsTest extends TestCase
         $requestCreator = new ServerRequestCreator($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
         static::$psr17Factory = $psr17Factory;
         static::$requestCreator = $requestCreator;
-        xarController::setCallback('buildUri', null);
+        xar::ctl()->setCallback('buildUri', null);
     }
 
     protected function getServerVars()
@@ -157,21 +158,21 @@ final class BridgeRequestsTest extends TestCase
 
     public function testPrepareOutput(): void
     {
-        xarServer::setBaseURL('http://localhost/');
-        xarServer::setVar('REQUEST_URI', '/index.php');
+        xar::ctl()->setBaseURL('http://localhost/');
+        xar::req()->setServerVar('REQUEST_URI', '/index.php');
 
         //xarCore::xarInit(xarCore::SYSTEM_USER);
-        xarCache::init();
-        xarDatabase::init();
+        xar::cache()->init();
+        xar::db()->init();
         // needed to initialize the template cache
-        xarTpl::init();
+        xar::tpl()->init();
         // needed for security checks later...
-        xarSession::setAnonId(xarConfigVars::get(null, 'Site.User.AnonymousUID', 5));
+        xar::session()->setAnonId(xar::config()->getVar('Site.User.AnonymousUID', 5));
         // needed to check security for the view options
-        xarUser::init();
+        xar::user()->init();
 
         $expected = '5';
-        $this->assertEquals($expected, xarSession::getAnonId());
+        $this->assertEquals($expected, xar::session()->getAnonId());
     }
 
     protected function getFixtureFile($name)

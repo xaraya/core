@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Xaraya\Services\xar;
 
 /**
  * We need to run each test in a separate process here to avoid session issues
@@ -10,11 +11,11 @@ final class EndpointTest extends TestCase
 {
     public function testGqlGet(): void
     {
-        xarServer::setVar('REQUEST_METHOD', 'GET');
+        xar::req()->setServerVar('REQUEST_METHOD', 'GET');
         ob_start();
         include sys::web() . 'gql.php';
         $output = ob_get_clean();
-        xarServer::setVar('REQUEST_METHOD', null);
+        xar::req()->setServerVar('REQUEST_METHOD', null);
 
         $expected = 'Get GraphQL Schema Definition';
         $this->assertStringContainsString($expected, $output);
@@ -22,13 +23,13 @@ final class EndpointTest extends TestCase
 
     public function testGqlGetObjects(): void
     {
-        xarServer::setVar('REQUEST_METHOD', 'GET');
-        xarServer::setVar('QUERY_STRING', 'query={objects{objectid,name}}');
+        xar::req()->setServerVar('REQUEST_METHOD', 'GET');
+        xar::req()->setServerVar('QUERY_STRING', 'query={objects{objectid,name}}');
         ob_start();
         include sys::web() . 'gql.php';
         $output = ob_get_clean();
-        xarServer::setVar('REQUEST_METHOD', null);
-        xarServer::setVar('QUERY_STRING', null);
+        xar::req()->setServerVar('REQUEST_METHOD', null);
+        xar::req()->setServerVar('QUERY_STRING', null);
 
         $expected = null;
         $result = json_decode($output, true);
@@ -40,13 +41,13 @@ final class EndpointTest extends TestCase
 
     public function testGqlGetSamples(): void
     {
-        xarServer::setVar('REQUEST_METHOD', 'GET');
-        xarServer::setVar('QUERY_STRING', 'query={samples{id,name}}');
+        xar::req()->setServerVar('REQUEST_METHOD', 'GET');
+        xar::req()->setServerVar('QUERY_STRING', 'query={samples{id,name}}');
         ob_start();
         include sys::web() . 'gql.php';
         $output = ob_get_clean();
-        xarServer::setVar('REQUEST_METHOD', null);
-        xarServer::setVar('QUERY_STRING', null);
+        xar::req()->setServerVar('REQUEST_METHOD', null);
+        xar::req()->setServerVar('QUERY_STRING', null);
 
         $expected = 3;
         $result = json_decode($output, true);
@@ -58,11 +59,11 @@ final class EndpointTest extends TestCase
 
     public function testGqlOptions(): void
     {
-        xarServer::setVar('REQUEST_METHOD', 'OPTIONS');
+        xar::req()->setServerVar('REQUEST_METHOD', 'OPTIONS');
         ob_start();
         include sys::web() . 'gql.php';
         $output = ob_get_clean();
-        xarServer::setVar('REQUEST_METHOD', null);
+        xar::req()->setServerVar('REQUEST_METHOD', null);
 
         $expected = '';
         // @todo this doesn't actually capture the headers
@@ -76,7 +77,7 @@ final class EndpointTest extends TestCase
         // twig fails to load namespaces otherwise because themes getfilethemes checks for 'themes'
         chdir(sys::web());
 
-        xarServer::setVar('REQUEST_URI', '/xaraya/index.php');
+        xar::req()->setServerVar('REQUEST_URI', '/xaraya/index.php');
         ob_start();
         include sys::web() . 'index.php';
         $output = ob_get_clean();
@@ -119,11 +120,11 @@ final class EndpointTest extends TestCase
 
     public function testRstGet(): void
     {
-        xarServer::setVar('REQUEST_METHOD', 'GET');
+        xar::req()->setServerVar('REQUEST_METHOD', 'GET');
         ob_start();
         include sys::web() . 'rst.php';
         $output = ob_get_clean();
-        xarServer::setVar('REQUEST_METHOD', null);
+        xar::req()->setServerVar('REQUEST_METHOD', null);
 
         $expected = 'Xaraya REST API';
         $result = json_decode($output, true);
@@ -132,13 +133,13 @@ final class EndpointTest extends TestCase
 
     public function testRstGetObjects(): void
     {
-        xarServer::setVar('REQUEST_METHOD', 'GET');
-        xarServer::setVar('PATH_INFO', '/v1/objects');
+        xar::req()->setServerVar('REQUEST_METHOD', 'GET');
+        xar::req()->setServerVar('PATH_INFO', '/v1/objects');
         ob_start();
         include sys::web() . 'rst.php';
         $output = ob_get_clean();
-        xarServer::setVar('REQUEST_METHOD', null);
-        xarServer::setVar('PATH_INFO', null);
+        xar::req()->setServerVar('REQUEST_METHOD', null);
+        xar::req()->setServerVar('PATH_INFO', null);
 
         $expected = 1;
         $result = json_decode($output, true);
@@ -149,13 +150,13 @@ final class EndpointTest extends TestCase
 
     public function testRstGetSamples(): void
     {
-        xarServer::setVar('REQUEST_METHOD', 'GET');
-        xarServer::setVar('PATH_INFO', '/v1/objects/sample');
+        xar::req()->setServerVar('REQUEST_METHOD', 'GET');
+        xar::req()->setServerVar('PATH_INFO', '/v1/objects/sample');
         ob_start();
         include sys::web() . 'rst.php';
         $output = ob_get_clean();
-        xarServer::setVar('REQUEST_METHOD', null);
-        xarServer::setVar('PATH_INFO', null);
+        xar::req()->setServerVar('REQUEST_METHOD', null);
+        xar::req()->setServerVar('PATH_INFO', null);
 
         $expected = 3;
         $result = json_decode($output, true);
@@ -166,11 +167,11 @@ final class EndpointTest extends TestCase
 
     public function testRstOptions(): void
     {
-        xarServer::setVar('REQUEST_METHOD', 'OPTIONS');
+        xar::req()->setServerVar('REQUEST_METHOD', 'OPTIONS');
         ob_start();
         include sys::web() . 'rst.php';
         $output = ob_get_clean();
-        xarServer::setVar('REQUEST_METHOD', null);
+        xar::req()->setServerVar('REQUEST_METHOD', null);
 
         $expected = '';
         // @todo this doesn't actually capture the headers

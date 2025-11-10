@@ -138,7 +138,7 @@ class ServicesClass implements ServicesInterface
     use ServicesTrait;
 
     public string $moduleName;
-    public string $moduleType;
+    public string $moduleType = 'user';
     public int $itemtype = 0;
     /** @var DataObject|DataObjectList */
     public $object;

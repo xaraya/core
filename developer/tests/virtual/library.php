@@ -8,14 +8,15 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 use Xaraya\Modules\Library\LibraryObject;
 use Xaraya\Modules\Library\LibraryObjectList;
 use Xaraya\Modules\Library\UserApi;
+use Xaraya\Services\xar;
 
 // initialize bootstrap
 sys::init();
 // initialize caching
-xarCache::init();
+xar::cache()->init();
 
 // *don't* initialize database for Xaraya first here (dbConnIndex = 0)
-//xarDatabase::init();
+//xar::db()->init();
 
 function get_descriptor($table, $offline)
 {
@@ -29,7 +30,7 @@ function get_descriptor($table, $offline)
 $offline = false;
 
 if (!$offline) {
-    xarDatabase::init();
+    xar::db()->init();
 }
 
 $dirpath = dirname(__DIR__, 3) . '/html/code/modules/library/xardata/';
@@ -43,9 +44,9 @@ $table = 'books';
 // try out session context class
 $session = new \Xaraya\Context\SessionContext();
 // set instance in xarSession for setCurrentDatabase()
-xarSession::setInstance($session);
-//xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
-//xarSession::init();
+xar::session()->setInstance($session);
+//xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
+//xar::session()->init();
 
 /** @var UserApi $userapi */
 $userapi = xarMod::userapi('library');

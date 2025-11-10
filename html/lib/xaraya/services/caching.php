@@ -866,7 +866,7 @@ trait CachingTrait
         $gidlist = [];
         // load Database Service on demand here for caching
         try {
-            // @todo do we want to call xarDatabase::init() here first?
+            // @todo do we want to call xar::db()->init() here first?
             $xarDB = $this->getParent()->db();
         } catch (\Throwable $e) {
             error_log('Unable to load database service in xarCache: ' . $e->getMessage());

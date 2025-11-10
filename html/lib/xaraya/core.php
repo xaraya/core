@@ -153,7 +153,7 @@ if (!class_exists('sys')) {
 if (!class_exists('xarExceptions')) {
     sys::import('xaraya.exceptions');
 }
-// Load core caching in case we didn't go through xarCache::init()
+// Load core caching in case we didn't go through xar::cache()->init()
 if (!class_exists('xarCoreCache')) {
     sys::import('xaraya.caching.core');
 }
@@ -265,7 +265,7 @@ class xarCore extends xarObject
          * Start the logging subsystem
          */
         sys::import('xaraya.log');
-        xarLog::init();
+        $xar->log()->init();
 
         /**
          * Make sure we can get time for logging
@@ -286,7 +286,7 @@ class xarCore extends xarObject
          */
         if ($whatToLoad & self::SYSTEM_DATABASE) { // yeah right, as if this is optional
             sys::import('xaraya.database');
-            xarDatabase::init();
+            $xar->db()->init();
             $whatToLoad ^= self::BIT_DATABASE;
         }
 

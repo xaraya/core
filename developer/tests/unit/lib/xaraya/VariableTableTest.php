@@ -8,8 +8,8 @@ final class VariableTableTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        xarCache::init();
-        xarDatabase::init();
+        xar::cache()->init();
+        xar::db()->init();
 
         // Set context for core services here first - for $this->mod()->loadDbInfo(...) inside DD
         $context = new Context();

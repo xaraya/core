@@ -20,6 +20,7 @@ use Xaraya\Bridge\Middleware\ModuleApiMiddleware;
 use Xaraya\Bridge\Middleware\ResponseUtil;
 use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
+use Xaraya\Services\xar;
 
 class LocalTimer implements TimerInterface
 {
@@ -30,19 +31,19 @@ LocalTimer::enableTimer(true);
 //LocalTimer::setTimer('autoload');
 sys::init();
 LocalTimer::setTimer('sys');
-xarCache::init();
+xar::cache()->init();
 LocalTimer::setTimer('cache');
 // try out request context class
-xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
+xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class
-xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
+xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
 xarCore::xarInit(xarCore::SYSTEM_USER);
 LocalTimer::setTimer('core');
 
 // Concatenate and parse string into $_GET: php psr.php object=sample ...
 if (php_sapi_name() === 'cli') {
     parse_str(implode('&', array_slice($argv, 1)), $_GET);
-    xarServer::setVar('REQUEST_URI', $argv[0]);
+    xar::req()->setServerVar('REQUEST_URI', $argv[0]);
 }
 
 function getRequest($psr17Factory)

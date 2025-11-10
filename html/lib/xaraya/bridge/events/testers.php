@@ -22,8 +22,9 @@
  * (hook observer) for that event.
  *
  * require_once dirname(__DIR__).'/vendor/autoload.php';
+ * use Xaraya\Services\xar;
  * sys::init();
- * xarCache::init();
+ * xar::cache()->init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);
  *
  * use Xaraya\Bridge\Events\TestEventListeners;

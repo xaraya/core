@@ -11,35 +11,36 @@ chdir(dirname(__DIR__, 3) . '/html');
 use Xaraya\Bridge\Routing\RoutingBridge;
 use Xaraya\Bridge\Routing\RoutingApiBridge;
 use Xaraya\Bridge\Routing\RoutingStaticBridge;
+use Xaraya\Services\xar;
 
 sys::init();
-xarCache::init();
+xar::cache()->init();
 // try out request context class
-xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
+xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class
-xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
+xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
 xarCore::xarInit(xarCore::SYSTEM_USER);
 
 // Concatenate and parse string into $_GET: php routing.php /object/sample ...
 if (php_sapi_name() === 'cli') {
     //parse_str(implode('&', array_slice($argv, 1)), $_GET);
     if ($argc > 1 && str_contains($argv[1], '/')) {
-        xarServer::setVar('PATH_INFO', $argv[1]);
-        //xarServer::setVar('REQUEST_URI', $argv[0] . $argv[1]);
+        xar::req()->setServerVar('PATH_INFO', $argv[1]);
+        //xar::req()->setServerVar('REQUEST_URI', $argv[0] . $argv[1]);
     }
 }
 
 // or direct use of simple route dispatcher
 //$bridge = new RoutingBridge();
-//[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
+//[$result, $context] = $bridge->dispatchRequest(xar::req()->getServerVar('REQUEST_METHOD'), xar::req()->getServerVar('PATH_INFO') ?? '/');
 //echo $result;
-//echo xarTpl::renderPage($result);
+//echo xar::tpl()->renderPage($result);
 //$bridge->run();
 
 // or direct use of simple route dispatcher
 $wrapPage = false;
 $bridge = new RoutingBridge($wrapPage);
-[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD') ?? 'GET', xarServer::getVar('PATH_INFO') ?? '/');
+[$result, $context] = $bridge->dispatchRequest(xar::req()->getServerVar('REQUEST_METHOD') ?? 'GET', xar::req()->getServerVar('PATH_INFO') ?? '/');
 $transform = function ($result) {
     // strip html comments from templates
     return preg_replace('/\s*<!--.*?-->\s*/s', '', $result);

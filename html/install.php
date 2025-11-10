@@ -150,7 +150,7 @@ function xarInstallLoader()
 
     // Start Logging Facilities as soon as possible
     $systemArgs = [];
-    xarLog::init($systemArgs);
+    $xar->log()->init($systemArgs);
 
     /*
         As long as we are coming in through install.php we need to pick up the

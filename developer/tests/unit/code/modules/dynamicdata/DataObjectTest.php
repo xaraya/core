@@ -8,7 +8,7 @@ final class DataObjectTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         xar::cache()->init();
-        xarDatabase::init();
+        xar::db()->init();
     }
 
     public static function tearDownAfterClass(): void
@@ -83,18 +83,18 @@ final class DataObjectTest extends TestCase
 
     public function testPrepareOutput(): void
     {
-        xarServer::setBaseURL('http://localhost/');
-        xarServer::setVar('REQUEST_URI', '/index.php');
+        xar::ctl()->setBaseURL('http://localhost/');
+        xar::req()->setServerVar('REQUEST_URI', '/index.php');
 
         // needed to initialize the template cache
-        xarTpl::init();
+        xar::tpl()->init();
         // needed for security checks later...
-        xarSession::setAnonId(xarConfigVars::get(null, 'Site.User.AnonymousUID', 5));
+        xar::session()->setAnonId(xarConfigVars::get(null, 'Site.User.AnonymousUID', 5));
         // needed to check security for the view options
-        xarUser::init();
+        xar::user()->init();
 
         $expected = '5';
-        $this->assertEquals($expected, xarSession::getAnonId());
+        $this->assertEquals($expected, xar::session()->getAnonId());
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('testPrepareOutput')]

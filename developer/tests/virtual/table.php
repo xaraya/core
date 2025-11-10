@@ -6,16 +6,17 @@
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\Export\PhpExporter;
+use Xaraya\Services\xar;
 
 // initialize bootstrap
 sys::init();
 // initialize caching
-xarCache::init();
+xar::cache()->init();
 
 // initialize database for itemid - if not already loaded
-xarDatabase::init();
+xar::db()->init();
 // for hook calls - if not already loaded
-//xarMod::init();
+//xar::mod()->init();
 
 function test_get_items()
 {
@@ -31,9 +32,9 @@ function test_get_items()
 function test_show_view()
 {
     // for checkAccess to display links
-    xarUser::init();
+    xar::user()->init();
     // for showView
-    xarTpl::init();
+    xar::tpl()->init();
     //$descriptor = new TableObjectDescriptor(['table' => 'xar_module_vars']);
     //$objectlist = new DataObjectList($descriptor);
     $objectlist = VirtualObjectFactory::getObjectList(['table' => 'xar_module_vars']);

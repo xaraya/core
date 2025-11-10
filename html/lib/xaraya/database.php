@@ -414,6 +414,9 @@ function xarDB_init(array &$args)
 
 class xarDatabase extends xarObject
 {
+    /**
+     * @see \Xaraya\Services\DatabaseService::init()
+     */
     public static function init(array $args = [])
     {
         if (empty($args)) {
@@ -423,6 +426,9 @@ class xarDatabase extends xarObject
         return self::connect($args);
     }
 
+    /**
+     * @see \Xaraya\Services\DatabaseService::getConfig()
+     */
     public static function getConfig()
     {
         $sysConfig = xar::sysConfig();

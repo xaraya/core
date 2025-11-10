@@ -5,6 +5,7 @@ use Xaraya\Routing\Dispatcher;
 use Xaraya\Routing\RouterInterface;
 use Xaraya\Routing\Routing;
 use Xaraya\Routing\DefaultRoutes;
+use Xaraya\Services\xar;
 
 final class DefaultRoutesTest extends TestHelper
 {
@@ -53,7 +54,7 @@ final class DefaultRoutesTest extends TestHelper
 
     public function testDefaultHome(): void
     {
-        xarTpl::init();
+        xar::tpl()->init();
 
         $router = new Routing(function () {
             return DefaultRoutes::getRoutes();

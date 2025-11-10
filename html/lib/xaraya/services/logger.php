@@ -82,6 +82,26 @@ trait LoggerTrait
         'debug' => xarLog::LEVEL_DEBUG,
     ];
 
+    /**
+     * Initialize service class
+     * @param array<string, mixed> $config
+     * @uses \xarLog::init()
+     */
+    public function init(array $config = []): bool
+    {
+        return xarLog::init($config);
+    }
+
+    /**
+     * Get configuration
+     * @return array<string, mixed>
+     */
+    public function getConfig(): array
+    {
+        // @todo do something with xarLog::configFile() here?
+        return [];
+    }
+
     public function message(string|\Stringable $message, int $level = 0): void
     {
         if (empty($level)) {

@@ -4,14 +4,15 @@ use PHPUnit\Framework\TestCase;
 use Xaraya\Bridge\Routing\RoutingBridge;
 use Xaraya\Context\SessionContext;
 use Xaraya\Requests\RequestHandler;
+use Xaraya\Services\xar;
 
 final class BridgeRoutingTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        xarCache::init();
-        xarServer::setRequestClass(RequestHandler::class);
-        xarSession::setSessionClass(SessionContext::class);
+        xar::cache()->init();
+        xar::req()->setRequestClass(RequestHandler::class);
+        xar::session()->setSessionClass(SessionContext::class);
         xarCore::xarInit(xarCore::SYSTEM_USER);
     }
 

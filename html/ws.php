@@ -349,7 +349,7 @@ function xarModernWebServices(string $type)
     // initialize caching - delay until we need results
     //xar::cache()->init();
     // initialize database - delay until caching fails
-    //xarDatabase::init();
+    //xar::db()->init();
     // initialize modules
     //xar::mod()->init();
     // initialize users

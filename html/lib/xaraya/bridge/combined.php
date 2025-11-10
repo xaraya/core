@@ -6,8 +6,9 @@
  * Note: see also lib/xaraya/bridge/reactphp.php for an example with ReactPHP (not fully functional with links)
  *
  * require_once dirname(__DIR__).'/vendor/autoload.php';
+ * use Xaraya\Services\xar;
  * sys::init();
- * xarCache::init();
+ * xar::cache()->init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);
  *
  * // use some PSR-7 factory

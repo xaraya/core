@@ -4,13 +4,13 @@
  * Experiment with routing bridges for use with other dispatchers
  *
  * require_once dirname(__DIR__).'/vendor/autoload.php';
+ * use Xaraya\Services\xar;
  * sys::init();
- * xarCache::init();
+ * xar::cache()->init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);
  *
  * // use some routing bridge
  * use Xaraya\Bridge\Routing\RoutingBridge;
- * use Xaraya\Services\xar;
  *
  * $req = xar::getServicesClass()->req();
  * $path = $req->getServerVar('PATH_INFO') ?? '/';

@@ -11,13 +11,14 @@
 
 $baseDir = dirname(__DIR__, 2);
 require_once $baseDir . '/vendor/autoload.php';
+use Xaraya\Services\xar;
 chdir($baseDir . '/html');
 
 // initialize bootstrap
 sys::init();
 // initialize database to call xar::mod()->apiFunc() for namespaces
-xarCache::init();
-xarDatabase::init();
+xar::cache()->init();
+xar::db()->init();
 
 // return Twig environment
 return xarTwigTpl::getTwigEnvironment();

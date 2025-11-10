@@ -19,6 +19,7 @@
 
 namespace Xaraya\Services;
 
+use xarDatabase;
 use xarDB;
 use sys;
 
@@ -73,6 +74,26 @@ interface DatabaseInterface extends ServiceInterface
 trait DatabaseTrait
 {
     use ServiceTrait;
+
+    /**
+     * Initialize service class
+     * @param array<string, mixed> $config
+     * @uses \xarDatabase::init()
+     */
+    public function init(array $config = []): bool
+    {
+        return xarDatabase::init($config);
+    }
+
+    /**
+     * Get configuration
+     * @return array<string, mixed>
+     * @uses \xarDatabase::getConfig()
+     */
+    public function getConfig(): array
+    {
+        return xarDatabase::getConfig();
+    }
 
     /**
      * Summary of getConn

@@ -21,16 +21,16 @@ use Brick\VarExporter\VarExporter;
 // initialize bootstrap
 sys::init();
 // initialize caching
-xarCache::init();
+xar::cache()->init();
 //xarCore::xarInit(xarCore::SYSTEM_MODULES);
 
 function init_online()
 {
     // initialize database for itemid - if not already loaded
-    xarDatabase::init();
+    xar::db()->init();
     // for hook calls - if not already loaded
-    xarMod::init();
-    xarEvents::init();
+    xar::mod()->init();
+    xar::events()->init();
 }
 
 function init_offline_cache()
@@ -171,7 +171,7 @@ function test_delete_item($lastid = 2)
 
 function test_virtual_sample()
 {
-    xarDatabase::init();
+    xar::db()->init();
     $context = new Context(['source' => __FUNCTION__]);
     $sample = new VirtualSample(['itemid' => 1], $context);
     echo get_class($sample) . "\n";
@@ -197,7 +197,7 @@ function test_virtual_sample()
 
 function test_normal_sample()
 {
-    xarDatabase::init();
+    xar::db()->init();
     $context = new Context(['source' => __FUNCTION__]);
     $sample = DataObjectFactory::getObject(['name' => 'sample', 'itemid' => 1], $context);
     echo get_class($sample) . "\n";

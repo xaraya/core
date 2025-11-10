@@ -7,14 +7,15 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\Export\PhpExporter;
 use Xaraya\Services\ServiceFactory;
+use Xaraya\Services\xar;
 
 // initialize bootstrap
 sys::init();
 // initialize caching
-xarCache::init();
+xar::cache()->init();
 
 // initialize database for Xaraya first here (dbConnIndex = 0)
-xarDatabase::init();
+xar::db()->init();
 
 function get_dbconn_index($filepath)
 {

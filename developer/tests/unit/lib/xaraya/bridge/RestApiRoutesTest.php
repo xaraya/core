@@ -8,6 +8,7 @@ use Xaraya\Routing\Routing;
 use Xaraya\Bridge\RestAPI\RestAPIRoutes;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use Xaraya\Bridge\RestAPI\DataObjectAPIHandler;
+use Xaraya\Services\xar;
 
 final class RestApiRoutesTest extends TestHelper
 {
@@ -60,7 +61,7 @@ final class RestApiRoutesTest extends TestHelper
 
     public function testGetOpenAPI(): void
     {
-        xarTpl::init();
+        xar::tpl()->init();
 
         $router = new Routing(function () {
             return RestAPIRoutes::getRoutes();
@@ -97,7 +98,7 @@ final class RestApiRoutesTest extends TestHelper
 
     public function testGetObjectList(): void
     {
-        xarTpl::init();
+        xar::tpl()->init();
 
         $router = new Routing(function () {
             return RestAPIRoutes::getRoutes();

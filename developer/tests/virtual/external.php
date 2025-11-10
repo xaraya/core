@@ -13,9 +13,9 @@ sys::init();
 xar::cache()->init();
 
 // initialize database for itemid - if not already loaded
-//xarDatabase::init();
+//xar::db()->init();
 // for hook calls - if not already loaded
-//xarMod::init();
+//xar::mod()->init();
 
 // see lib/xaraya/database.php
 function get_xaraya_config()

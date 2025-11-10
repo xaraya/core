@@ -76,7 +76,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     {
         $openapi = sys::varpath() . '/cache/api/openapi.json';
         if (!file_exists($openapi)) {
-            xarDatabase::init();
+            xar::db()->init();
             sys::import('xaraya.bridge.restapi.builder');
             RestAPIBuilder::init();
             return ['TODO' => 'generate var/cache/api/openapi.json with builder'];
@@ -294,7 +294,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      * @param array<string, mixed> $params
      * @param mixed $request
      * @uses xar::cache()->init()
-     * @uses xarDatabase::init()
+     * @uses xar::db()->init()
      * @throws \UnauthorizedOperationException
      * @throws \ForbiddenOperationException
      * @return mixed
@@ -335,7 +335,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             }
         }
         // initialize database - delay until caching fails
-        xarDatabase::init();
+        xar::db()->init();
         // initialize modules
         //xar::mod()->init();
         // initialize users

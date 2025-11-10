@@ -5,6 +5,7 @@ use Xaraya\Routing\Dispatcher;
 use Xaraya\Routing\RouterInterface;
 use Xaraya\Routing\Routing;
 use Xaraya\Modules\Base\BaseRoutes;
+use Xaraya\Services\xar;
 
 final class BaseRoutesTest extends TestHelper
 {
@@ -64,7 +65,7 @@ final class BaseRoutesTest extends TestHelper
 
     public function testBasePage(): void
     {
-        xarTpl::init();
+        xar::tpl()->init();
 
         $router = new Routing(function () {
             return BaseRoutes::getRoutes();

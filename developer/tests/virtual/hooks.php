@@ -11,20 +11,21 @@ use Xaraya\Bridge\Events\EventObserverBridge;
 use Xaraya\Bridge\Events\HookObserverBridge;
 use Xaraya\Bridge\Events\TestObserverBridgeSubscriber;
 use Xaraya\Context\Context;
+use Xaraya\Services\xar;
 
 // initialize bootstrap
 sys::init();
 // initialize caching
-xarCache::init();
+xar::cache()->init();
 
 // initialize database for itemid - if not already loaded
-xarDatabase::init();
+xar::db()->init();
 // for hook calls - if not already loaded
-xarMod::init();
+xar::mod()->init();
 // for event system - if not already loaded
-xarEvents::init();
+xar::events()->init();
 // for showOutput
-//xarTpl::init();
+//xar::tpl()->init();
 
 function test_crud()
 {

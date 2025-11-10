@@ -2,13 +2,14 @@
 
 use Xaraya\Modules\TestHelper;
 use Xaraya\Routing\Dispatcher;
+use Xaraya\Services\xar;
 
 final class DispatcherTest extends TestHelper
 {
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        xarTpl::init();
+        xar::tpl()->init();
     }
 
     public function testInRoot(): void

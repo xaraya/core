@@ -10,14 +10,14 @@ final class UserGuiTest extends TestHelper
     public function testUserGui(): void
     {
         $expected = UserGui::class;
-        $usergui = xarMod::usergui('dynamicdata');
+        $usergui = xar::mod()->usergui('dynamicdata');
         $this->assertEquals($expected, $usergui::class);
     }
 
     public function testMain(): void
     {
         $context = $this->createContext(['source' => __METHOD__]);
-        $usergui = xarMod::usergui('dynamicdata');
+        $usergui = xar::mod()->usergui('dynamicdata');
         $usergui->setContext($context);
 
         // the method "exists" as inherited class method (case-insensitive)
@@ -45,33 +45,33 @@ final class UserGuiTest extends TestHelper
     public function testXarModGuiFunc(): void
     {
         // initialize modules
-        //xarMod::init();
+        //xar::mod()->init();
         // needed to initialize the template cache
-        xarTpl::init();
+        xar::tpl()->init();
         $expected = 'View Dynamic Objects';
-        $output = xarMod::guiFunc('dynamicdata');
+        $output = xar::mod()->guiFunc('dynamicdata');
         $this->assertStringContainsString($expected, $output);
     }
 
     public function testXarModGuiFuncInvalidName(): void
     {
         // initialize modules
-        //xarMod::init();
+        //xar::mod()->init();
         // needed to initialize the template cache
-        xarTpl::init();
+        xar::tpl()->init();
         $expected = 'Function not found';
-        $output = xarMod::guiFunc('dynamicdata', 'user', 'invalid');
+        $output = xar::mod()->guiFunc('dynamicdata', 'user', 'invalid');
         $this->assertStringContainsString($expected, $output);
     }
 
     public function testXarModGuiFuncInvalidType(): void
     {
         // initialize modules
-        //xarMod::init();
+        //xar::mod()->init();
         // needed to initialize the template cache
-        xarTpl::init();
+        xar::tpl()->init();
         $expected = 'Function not found';
-        $output = xarMod::guiFunc('dynamicdata', 'oops', 'main');
+        $output = xar::mod()->guiFunc('dynamicdata', 'oops', 'main');
         $this->assertStringContainsString($expected, $output);
     }
 }

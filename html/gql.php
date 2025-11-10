@@ -32,7 +32,7 @@ sys::init();
 // initialize caching
 xar::cache()->init();
 // initialize database
-xarDatabase::init();
+xar::db()->init();
 // initialize modules
 //xar::mod()->init();
 // initialize users
