@@ -228,16 +228,6 @@ trait MultiLanguageTrait
         // Set the timezone
         date_default_timezone_set($this->defaultTimeZone);
 
-        // Register MLS events
-        // These should be done before the xar::mls()->setCurrentLocale function
-        // These are now registered during base module init
-        // @CHECKME: <chris> grep -R xarEvents::notify . finds no results
-        // It appears these events are never raised ?
-        // In addition, these seem more like exceptions than 'events' ?
-        //xarEvents::register('MLSMissingTranslationString');
-        //xarEvents::register('MLSMissingTranslationKey');
-        //xarEvents::register('MLSMissingTranslationDomain');
-
         // FIXME: this was previously conditional on User subsystem initialisation,
         // but in the 2.x flow we need it earlier apparently, so made this unconditional
         // *AND* commented out the assertion on running this once per request lower
@@ -584,7 +574,6 @@ trait MultiLanguageTrait
 
         if (empty($trans)) {
             // FIXME: postpone
-            //xarEvents::notify('MLSMissingTranslationString', $string);
             $trans = $string;
         }
         if (!empty($args)) {
@@ -612,7 +601,6 @@ trait MultiLanguageTrait
         }
         if (empty($trans)) {
             // FIXME: postpone
-            //xarEvents::notify('MLSMissingTranslationKey', $key);
             $trans = $key;
         }
         if (!empty($args)) {
@@ -794,7 +782,6 @@ trait MultiLanguageTrait
             return true;
         } else {
             // FIXME: postpone
-            //xarEvents::notify('MLSMissingTranslationDomain', array($domainType, $domainName));
 
             $this->loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = false;
             return false;

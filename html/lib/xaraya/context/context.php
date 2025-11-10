@@ -159,7 +159,8 @@ class Context extends ArrayObject implements ContextObjectInterface
         if (!$this->offsetExists($slice)) {
             $this->offsetSet($slice, []);
         }
-        $this->offsetGet($slice)[$name] = $value;
+        // update actual slice array here
+        $this[$slice][$name] = $value;
     }
 
     /**

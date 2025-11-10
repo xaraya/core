@@ -39,14 +39,43 @@ trait WrapperTrait
 
     /** @var callable */
     public $callable;
+    /** @var class-string */
+    public $className;
 
     /**
      * Create service class for parent with callable
      */
-    public function __construct(mixed $parent, ?callable $callable = null)
+    public function __construct(mixed $parent, ?callable $callable = null, ?string $className = null)
     {
         $this->parent = $parent;
         $this->callable = $callable;
+        $this->className = $className;
+    }
+
+    /**
+     * Initialize service class
+     * @param array<string, mixed> $config
+     */
+    public function init(array $config = []): bool
+    {
+        if (!empty($this->className) && !method_exists($this->className, 'init')) {
+            return true;
+        }
+        // override default ServiceInterface here
+        return $this->__call('init', [$config]);
+    }
+
+    /**
+     * Get configuration
+     * @return array<string, mixed>
+     */
+    public function getConfig(): array
+    {
+        if (!empty($this->className) && !method_exists($this->className, 'getConfig')) {
+            return [];
+        }
+        // override default ServiceInterface here
+        return $this->__call('getConfig', []);
     }
 
     /**
@@ -73,12 +102,12 @@ trait WrapperTrait
             $callable = function ($method, ...$args) use (&$instance) {
                 return $instance->$method(...$args);
             };
-            return new static($parent, $callable);
+            return new static($parent, $callable, $instance::class);
         }
         $callable = function ($method, ...$args) use ($className) {
             return $className::$method(...$args);
         };
-        return new static($parent, $callable);
+        return new static($parent, $callable, $className);
     }
 }
 

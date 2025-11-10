@@ -71,7 +71,7 @@ class ActivateMethod extends MethodClass
 
         // notify any observers that this module was activated
         // NOTE: the ModActivate event observer notifies ModuleActivate hooks
-        xarEvents::notify('ModActivate', $modInfo['name'], $this->getContext());
+        $this->events()->notify('ModActivate', $modInfo['name'], $this->getContext());
         return true;
     }
 }

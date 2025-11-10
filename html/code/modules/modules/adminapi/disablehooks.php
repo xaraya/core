@@ -59,6 +59,6 @@ class DisablehooksMethod extends MethodClass
             $callerItemType = 0;
         }
 
-        return xarHooks::detach($hookModName, $callerModName, $callerItemType);
+        return $this->hooked()->detach($hookModName, $callerModName, $callerItemType);
     }
 }

@@ -584,16 +584,38 @@ trait CoreServicesTrait
         return $this->getStaticServices()->prep();
     }
 
+    /**
+     * Access xarEvents::* methods (notify, ...)
+     *
+     * Available methods:
+     * - notify()
+     * - ...
+     */
     public function events(): WrapperInterface
     {
         return $this->getStaticServices()->events();
     }
 
+    /**
+     * Access xarHooks::* methods (notify, ...)
+     *
+     * Available methods:
+     * - notify()
+     * - ...
+     */
     public function hooked(): WrapperInterface
     {
         return $this->getStaticServices()->hooked();
     }
 
+    /**
+     * Access xarTheme::* methods (isAvailable, getInfo, ...)
+     *
+     * Available methods:
+     * - isAvailable()
+     * - getInfo()
+     * - ...
+     */
     public function theme(): WrapperInterface
     {
         return $this->getStaticServices()->theme();

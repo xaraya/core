@@ -337,7 +337,7 @@ class PageCache extends ServiceClass
         // We delay checking this extra caching rule until now
         if ($this->cacheHookedOnly) {
             $modName = substr($cacheKey, 0, strpos($cacheKey, '-'));
-            if (!xarHooks::isAttached('cachemanager', $modName)) {
+            if (!$this->getParent()->hooked()->isAttached('cachemanager', $modName)) {
                 return;
             }
         }

@@ -103,7 +103,7 @@ class ModinfoMethod extends MethodClass
             }
         }
         $modname = $modinfo['name'];
-        $hookobservers = xarHooks::getObserverModules($modname);
+        $hookobservers = $this->hooked()->getObserverModules($modname);
         if (!empty($hookobservers[$modname]) && !empty($hookobservers[$modname]['scopes'])) {
             $data['hookobservers'] = $hookobservers[$modname]['scopes'];
         }

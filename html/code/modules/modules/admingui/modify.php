@@ -75,11 +75,11 @@ class ModifyMethod extends MethodClass
         }
 
         // Get list of hook module(s) (observers) and the available hooks supplied
-        $observers = xarHooks::getObserverModules();
+        $observers = $this->hooked()->getObserverModules();
         foreach ($observers as $observer => $modinfo) {
             $curhook = $observer;
             // get subject itemtypes this observer is hooked to (if any)
-            $subjects = xarHooks::getObserverSubjects($observer, $modname);
+            $subjects = $this->hooked()->getObserverSubjects($observer, $modname);
             $hookstate = 0;
             if (!empty($subjects[$modname][0][0])) {
                 // Hooked by ALL scopes to ALL itemtypes

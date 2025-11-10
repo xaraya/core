@@ -75,7 +75,7 @@ class DeactivateMethod extends MethodClass
 
         // notify any observers that this module was deactivated
         // NOTE: the ModDeactivate event observer notifies ModuleDeactivate hooks
-        xarEvents::notify('ModDeactivate', $modInfo['name'], $this->getContext());
+        $this->events()->notify('ModDeactivate', $modInfo['name'], $this->getContext());
         return true;
     }
 }

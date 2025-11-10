@@ -84,11 +84,11 @@ class GetrelationsMethod extends MethodClass
 
         // get the list of hook modules that are enabled for this module
         // TODO: get all hooks types, not only item display hooks
-        //    $hooklist = xarHooks::getSubjectObservers($modinfo['name'],'ItemDisplay');
+        //    $hooklist = $this->hooked()->getSubjectObservers($modinfo['name'],'ItemDisplay');
         $hooklist = array_merge(
-            xarHooks::getSubjectObservers($modinfo['name'], 'ItemDisplay'),
-            xarHooks::getSubjectObservers($modinfo['name'], 'ItemUpdate'),
-            xarHooks::getSubjectObservers($modinfo['name'], 'ModuleRemove')
+            $this->hooked()->getSubjectObservers($modinfo['name'], 'ItemDisplay'),
+            $this->hooked()->getSubjectObservers($modinfo['name'], 'ItemUpdate'),
+            $this->hooked()->getSubjectObservers($modinfo['name'], 'ModuleRemove')
         );
         $modlist = [];
         foreach ($hooklist as $hook) {

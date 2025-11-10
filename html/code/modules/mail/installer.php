@@ -56,9 +56,9 @@ class Installer extends InstallerClass
         $this->mod()->setVar('embed_images', false);
         $this->mod()->setVar('debug', false);
 
-        xarModHooks::register('item', 'create', 'API', 'mail', 'admin', 'hookmailcreate');
-        xarModHooks::register('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');
-        xarModHooks::register('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
+        $this->hooked()->registerObserver('ItemCreate', 'mail', 'API', 'admin', 'hookmailcreate');
+        $this->hooked()->registerObserver('ItemDelete', 'mail', 'API', 'admin', 'hookmaildelete');
+        $this->hooked()->registerObserver('ItemUpdate', 'mail', 'API', 'admin', 'hookmailchange');
 
         xarMasks::register('ViewMail', 'All', 'mail', 'All', 'All', 'ACCESS_OVERVIEW');
         xarMasks::register('EditMail', 'All', 'mail', 'All', 'All', 'ACCESS_EDIT');

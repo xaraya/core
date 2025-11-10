@@ -64,14 +64,14 @@ class UpdatehooksMethod extends MethodClass
             foreach ($subjects as $module => $values) {
 
                 // remove current assignments
-                xarHooks::detach($curhook, $module, -1, -1);
+                $this->hooked()->detach($curhook, $module, -1, -1);
                 switch ($values['hookstate']) {
                     case 0:
                         // hooked to none
                         break;
                     case 1:
                         // hooked to all scopes, all items
-                        xarHooks::attach($curhook, $module, 0, 0);
+                        $this->hooked()->attach($curhook, $module, 0, 0);
                         break;
                     case 2:
                         // hooked to some scopes, all items
@@ -82,7 +82,7 @@ class UpdatehooksMethod extends MethodClass
                                     continue;
                                 }
                                 if (!empty($setting)) {
-                                    xarHooks::attach($curhook, $module, 0, $scope);
+                                    $this->hooked()->attach($curhook, $module, 0, $scope);
                                 }
                             }
                         }
@@ -102,7 +102,7 @@ class UpdatehooksMethod extends MethodClass
                                         break;
                                     case 1:
                                         // all scopes, this itemtype
-                                        xarHooks::attach($curhook, $module, $itemtype, 0);
+                                        $this->hooked()->attach($curhook, $module, $itemtype, 0);
                                         break;
                                     case 2:
                                         // some scopes, this itemtype
@@ -112,7 +112,7 @@ class UpdatehooksMethod extends MethodClass
                                                 continue;
                                             }
                                             if (!empty($setting)) {
-                                                xarHooks::attach($curhook, $module, $itemtype, $scope);
+                                                $this->hooked()->attach($curhook, $module, $itemtype, $scope);
                                             }
                                         }
                                         break;
@@ -139,12 +139,12 @@ class UpdatehooksMethod extends MethodClass
                 // hooked_$mod['name'][0] contains the global setting ( 0 -> not, 1 -> all, 2 -> some)
                 $this->var()->update("hooked_" . $mod['name'], $ishooked, 'isset', '');
                 // remove current assignments
-                xarHooks::detach($curhook, $mod['name'], -1);
+                $this->hooked()->detach($curhook, $mod['name'], -1);
                 // No setting or explicit NOT, skip it (note: empty shouldn't occur anymore
                 if (!empty($ishooked) && $ishooked[0] != 0) {
                     if ($ishooked[0] == 1) {
                         // hooked to all itemtypes
-                        xarHooks::attach($curhook, $mod['name'], 0, 0);
+                        $this->hooked()->attach($curhook, $mod['name'], 0, 0);
                     } elseif ($ishooked[0] == 2) {
                         // hooked to some itemtypes
                         foreach (array_keys($ishooked) as $itemtype) {
@@ -152,7 +152,7 @@ class UpdatehooksMethod extends MethodClass
                             if ($itemtype == 0) {
                                 continue;
                             }
-                            xarHooks::attach($curhook, $mod['name'], $itemtype, 0);
+                            $this->hooked()->attach($curhook, $mod['name'], $itemtype, 0);
                         }
                     }
                 }

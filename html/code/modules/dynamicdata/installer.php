@@ -201,8 +201,9 @@ class Installer extends InstallerClass
         $this->mod()->setVar('suppress_updates', 0);
         /**
          * Register hooks
+         * @todo re-evaluate ItemSearch hook (registered by search module = gone)
          */
-        xarModHooks::register('item', 'search', 'GUI', 'dynamicdata', 'user', 'search');
+        $this->hooked()->registerObserver('ItemSearch', 'dynamicdata', 'GUI', 'user', 'search');
         /*********************************************************************
          * Register the module components that are privileges objects
          * Format is
@@ -233,7 +234,7 @@ class Installer extends InstallerClass
         ];
         xarPrivileges::defineInstance('dynamicdata', 'Item', $instances);
         // Installation complete; check for upgrades
-        return $this->upgrade('2.0.0');
+        return $this->upgrade('2.4.1');
     }
 
     /**
@@ -248,7 +249,7 @@ class Installer extends InstallerClass
         switch ($oldversion) {
             case '2.0.0':
                 // fall through to next upgrade
-            case '2.4.1':
+            case '2.4.0':
                 // @todo remove xaModHooks::unregister() calls at next upgrade
                 // when a new module item is being specified
                 xarModHooks::unregister('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
@@ -274,30 +275,31 @@ class Installer extends InstallerClass
                 /*  display hook is now disabled by default - use the BL tags or APIs instead
                     xarModHooks::unregister('item', 'display', 'GUI', 'dynamicdata', 'user', 'displayhook');
                 */
+                // fall through to next upgrade
+            case '2.4.1':
                 // @todo change namespace to DD module + move out of class subdir
                 $namespace = 'Xaraya\DataObject\HookObservers';
                 // when a new module item is being specified
-                xarHooks::registerObserver('ItemNew', 'dynamicdata', $namespace . '\ItemNew');
+                $this->hooked()->registerObserver('ItemNew', 'dynamicdata', $namespace . '\ItemNew');
                 // when a module item is created (uses 'dd_*')
-                xarHooks::registerObserver('ItemCreate', 'dynamicdata', $namespace . '\ItemCreate');
+                $this->hooked()->registerObserver('ItemCreate', 'dynamicdata', $namespace . '\ItemCreate');
                 // when a module item is being modified (uses 'dd_*')
-                xarHooks::registerObserver('ItemModify', 'dynamicdata', $namespace . '\ItemModify');
+                $this->hooked()->registerObserver('ItemModify', 'dynamicdata', $namespace . '\ItemModify');
                 // when a module item is updated (uses 'dd_*')
-                xarHooks::registerObserver('ItemUpdate', 'dynamicdata', $namespace . '\ItemUpdate');
+                $this->hooked()->registerObserver('ItemUpdate', 'dynamicdata', $namespace . '\ItemUpdate');
                 // when a module item is deleted
-                xarHooks::registerObserver('ItemDelete', 'dynamicdata', $namespace . '\ItemDelete');
+                $this->hooked()->registerObserver('ItemDelete', 'dynamicdata', $namespace . '\ItemDelete');
                 // when a module configuration is being modified (uses 'dd_*')
-                xarHooks::registerObserver('ModuleModifyconfig', 'dynamicdata', $namespace . '\ModuleModifyconfig');
+                $this->hooked()->registerObserver('ModuleModifyconfig', 'dynamicdata', $namespace . '\ModuleModifyconfig');
                 // when a module configuration is updated (uses 'dd_*')
-                xarHooks::registerObserver('ModuleUpdateconfig', 'dynamicdata', $namespace . '\ModuleUpdateconfig');
+                $this->hooked()->registerObserver('ModuleUpdateconfig', 'dynamicdata', $namespace . '\ModuleUpdateconfig');
                 // when a whole module is removed, e.g. via the modules admin screen
                 // (set object ID to the module name !)
-                xarHooks::registerObserver('ModuleRemove', 'dynamicdata', $namespace . '\ModuleRemove');
+                $this->hooked()->registerObserver('ModuleRemove', 'dynamicdata', $namespace . '\ModuleRemove');
                 /*  display hook is now disabled by default - use the BL tags or APIs instead
-                    xarHooks::registerObserver('ItemDisplay', 'dynamicdata', $namespace . '\ItemDisplay');
+                    $this->hooked()->registerObserver('ItemDisplay', 'dynamicdata', $namespace . '\ItemDisplay');
                 */
                 // fall through to next upgrade
-                // no break
             case '2.8.1':
                 // fall through to next upgrade
             default:

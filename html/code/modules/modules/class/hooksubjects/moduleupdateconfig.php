@@ -36,7 +36,7 @@ class ModulesModuleUpdateconfigSubject extends ApiHookSubject
         $args = $this->getArgs();
         // Legacy Module observers expect an objectid with the name of the module
         if (!isset($args['objectid'])) {
-            // when called as xarHooks::notify() objectid will be empty
+            // when called as xar::hooked()->notify() objectid will be empty
             // we instead get it from the module name in $args['extrainfo']
             $args['objectid'] = $args['extrainfo']['module'];
             // update args

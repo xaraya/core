@@ -313,7 +313,7 @@ class xarCore extends xarObject
          * Start Events Subsystem
         **/
         sys::import('xaraya.events');
-        xarEvents::init();
+        $xar->events()->init();
 
         xarLog::message("The basic subsystems are loaded", xarLog::LEVEL_NOTICE);
 
@@ -458,7 +458,7 @@ class xarCore extends xarObject
         **/
         if ($whatToLoad & self::SYSTEM_HOOKS) {
             sys::import('xaraya.hooks');
-            xarHooks::init();
+            $xar->hooked()->init();
             $whatToLoad ^= self::BIT_HOOKS;
             // We're about done here - everything else requires hooks !?
         } /*else {

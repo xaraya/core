@@ -292,9 +292,9 @@ class ExecHelper extends ServiceClass
 
         // Module loaded successfully, trigger the proper event
         if (preg_match('/(.*)?api$/', $modType)) {
-            xarEvents::notify('ModApiLoad', $modName, $this->getContext());
+            $xar->events()->notify('ModApiLoad', $modName, $this->getContext());
         } else {
-            xarEvents::notify('ModLoad', $modName, $this->getContext());
+            $xar->events()->notify('ModLoad', $modName, $this->getContext());
         }
         return true;
     }

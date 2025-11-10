@@ -177,11 +177,6 @@ trait ModulesTrait
         $this->genShortUrls = $config['enableShortURLsSupport'];
         $this->genXmlUrls   = $config['generateXMLURLs'];
 
-        // Register the events for this subsystem
-        // events are now registered during modules module init
-        //xarEvents::register('ModLoad');
-        //xarEvents::register('ModAPILoad');
-
         $xar = $this->getParent();
         // Modules Support Tables
         $prefix = $xar->db()->getPrefix();

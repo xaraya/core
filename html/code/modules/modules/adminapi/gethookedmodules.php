@@ -52,7 +52,7 @@ class GethookedmodulesMethod extends MethodClass
             throw new EmptyParameterException('hookModName');
         }
 
-        return xarHooks::getObserverSubjects($hookModName);
+        return $this->hooked()->getObserverSubjects($hookModName);
 
     }
 }

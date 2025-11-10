@@ -66,7 +66,7 @@ class EnablehooksMethod extends MethodClass
             $callerItemType = 0;
         }
 
-        return xarHooks::attach($hookModName, $callerModName, $callerItemType);
+        return $this->hooked()->attach($hookModName, $callerModName, $callerItemType);
 
     }
 }

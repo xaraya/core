@@ -88,8 +88,9 @@ class Installer extends InstallerClass
     public function create_roles()
     {
         // Register hooks here, init is too soon
-        xarModHooks::register('item', 'search', 'GUI', 'roles', 'user', 'search');
-        xarModHooks::register('item', 'usermenu', 'GUI', 'roles', 'user', 'usermenu');
+        // @todo re-evaluate these hooks - not called anywhere
+        $this->hooked()->registerObserver('ItemSearch', 'roles', 'GUI', 'user', 'search');
+        $this->hooked()->registerObserver('ItemUsermenu', 'roles', 'GUI', 'user', 'usermenu');
         // Enter some default groups and users and put them in a hierarchy
         $rolefields = [
             'itemid' => 0,  // make this explicit, because we are going to reuse the roles we define

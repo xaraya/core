@@ -51,7 +51,7 @@ class HooksMethod extends MethodClass
         extract($args);
 
         // Get list of hook module(s) (observers) and the available hooks supplied
-        $hookmods = xarHooks::getObserverModules($curhook);
+        $hookmods = $this->hooked()->getObserverModules($curhook);
 
         if (!empty($curhook) && isset($hookmods[$curhook])) {
             $get = [];
@@ -64,7 +64,7 @@ class HooksMethod extends MethodClass
                 return;
             }
             // get list of modules / itemtypes this module is hooked to
-            $obssubjects = xarHooks::getObserverSubjects($curhook);
+            $obssubjects = $this->hooked()->getObserverSubjects($curhook);
             $cats = [];
             $subjects = [];
             foreach ($modules as $k => $modinfo) {

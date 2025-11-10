@@ -35,6 +35,6 @@ class ModulesModActivateObserver extends EventObserver implements ixarEventObser
         }
         $context = $subject->getContext();
         // let any hooks know the module was activated
-        xarHooks::notify('ModuleActivate', ['objectid' => $modName, 'module' => $modName], $context);
+        $xar->hooked()->notify('ModuleActivate', ['objectid' => $modName, 'module' => $modName], $context);
     }
 }

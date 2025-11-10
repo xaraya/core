@@ -109,8 +109,8 @@ class Installer extends InstallerClass
         switch ($oldversion) {
             case '2.0.0':
                 // Register event subjects
-                xarEvents::registerSubject('UserLogin', 'user', 'authsystem');
-                xarEvents::registerSubject('UserLogout', 'user', 'authsystem');
+                $this->events()->registerSubject('UserLogin', 'user', 'authsystem');
+                $this->events()->registerSubject('UserLogout', 'user', 'authsystem');
                 break;
         }
         return true;

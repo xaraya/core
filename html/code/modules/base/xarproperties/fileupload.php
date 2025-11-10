@@ -67,7 +67,7 @@ class FileUploadProperty extends DataProperty
                 $this->UploadsModule_isHooked = true;
             }
             /*
-            $list = xarHooks::getSubjectObservers($this->mod()->getName(), 'ItemTransform');
+            $list = $this->hooked()->getSubjectObservers($this->mod()->getName(), 'ItemTransform');
             foreach ($list as $hook) {
                 if ($hook['module'] == 'uploads') {
                     $this->UploadsModule_isHooked = TRUE;

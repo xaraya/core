@@ -68,7 +68,7 @@ class RemoveMethod extends MethodClass
             || $modinfo['state'] == ixarMod::STATE_MISSING_FROM_UPGRADED) {
 
             // All cleanup needs to happen before a module entry is removed
-            xarEvents::notify('ModRemove', $modinfo['name'], $this->getContext());
+            $this->events()->notify('ModRemove', $modinfo['name'], $this->getContext());
             // this is now handled by the modules module ModRemove event observer
             //xar::mod($modinfo['name'])->flushVars();
 
@@ -89,7 +89,7 @@ class RemoveMethod extends MethodClass
             $adminapi->executeinitfunction(['regid' => $regid, 'function' => 'delete']);
 
             // All cleanup needs to happen before a module entry is removed
-            xarEvents::notify('ModRemove', $modinfo['name'], $this->getContext());
+            $this->events()->notify('ModRemove', $modinfo['name'], $this->getContext());
             // this is now handled by the modules module ModRemove event observer
             //xar::mod($modinfo['name'])->flushVars();
 

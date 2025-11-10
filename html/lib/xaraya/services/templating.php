@@ -447,9 +447,7 @@ trait TemplatingTrait
     public function getPageTitle(): string
     {
         // Get pageTitle from current context
-        if (!isset($this->pageTitle)) {
-            $this->pageTitle = $this->getValue('pageTitle');
-        }
+        $this->pageTitle = $this->getValue('pageTitle');
         return $this->pageTitle;
     }
 
@@ -513,9 +511,7 @@ trait TemplatingTrait
     public function getPageTemplateName(): string
     {
         // Get pageTemplateName from current context
-        if (!isset($this->pageTemplateName)) {
-            $this->pageTemplateName = $this->getValue('pageTemplateName');
-        }
+        $this->pageTemplateName = $this->getValue('pageTemplateName');
         return $this->pageTemplateName;
     }
 
@@ -619,9 +615,7 @@ trait TemplatingTrait
             return $currentBase . '/' . $theme;
         }
         // Get themeDir from current context
-        if (!isset($this->themeDir)) {
-            $this->themeDir = $this->getValue('themeDir', $currentBase . '/' . 'default');
-        }
+        $this->themeDir = $this->getValue('themeDir', $currentBase . '/' . 'default');
         return $this->themeDir;
     }
 
@@ -655,9 +649,7 @@ trait TemplatingTrait
     public function getThemeName(): string
     {
         // Get themeName from current context
-        if (!isset($this->themeName)) {
-            $this->themeName = $this->getValue('themeName', null);
-        }
+        $this->themeName = $this->getValue('themeName', null);
         if (isset($this->themeName)) {
             return $this->themeName;
         }

@@ -45,7 +45,7 @@ class GethooklistMethod extends MethodClass
         extract($args);
 
         // get a list of observer (hook) modules
-        $hookmods = xarHooks::getObserverModules();
+        $hookmods = $this->hooked()->getObserverModules();
 
 
         // reconstruct hooklist[hookmod][object:action:area][hookedto][itemtype] for anyone still using this
@@ -56,7 +56,7 @@ class GethooklistMethod extends MethodClass
                 $hooklist[$modname] = [];
             }
             // get list of modules / itemtypes this module is hooked to
-            $hookedto = xarHooks::getObserverSubjects($modname);
+            $hookedto = $this->hooked()->getObserverSubjects($modname);
             if (!empty($info['hooks'])) {
 
                 foreach ($info['hooks'] as $event => $hook) {

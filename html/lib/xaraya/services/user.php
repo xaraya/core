@@ -536,7 +536,7 @@ trait UserTrait
         $this->getContext()?->setUserId($userId);
 
         // User logged in successfully, trigger the proper event with the new userid
-        xarEvents::notify('UserLogin', $userId, $this->getContext());
+        $xar->events()->notify('UserLogin', $userId, $this->getContext());
         $xar->session()->delVar('privilegeset');
         return true;
     }
@@ -564,7 +564,7 @@ trait UserTrait
         $this->getContext()?->setUserId($anonId);
 
         // User logged out successfully, trigger the proper event with the old userid
-        xarEvents::notify('UserLogout', $userId, $this->getContext());
+        $xar->events()->notify('UserLogout', $userId, $this->getContext());
 
         $xar->session()->delVar('privilegeset');
         return true;

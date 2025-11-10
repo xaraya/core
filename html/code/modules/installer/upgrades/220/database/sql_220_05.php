@@ -55,7 +55,7 @@ function sql_220_05()
         xarHooks::registerSubject('ItemFormarea', 'item', 'modules');
         // Register base module hook subjects
         xarHooks::registerSubject('ItemWaitingcontent', 'item', 'base');
-        // NOTE: ItemSearch is registered by search module
+        // @TODO: ItemSearch is registered by search module = gone
     } catch (Exception $e) {
         // Damn
         $data['success'] = false;

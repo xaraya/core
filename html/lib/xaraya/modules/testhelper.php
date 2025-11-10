@@ -44,7 +44,7 @@ class TestHelper extends TestCase
         // initialize database - delay until caching fails
         xarDatabase::init();
         // initialize events
-        xarEvents::init();
+        $xar->events()->init();
         // initialize modules
         $xar->mod()->init();
         // initialize server

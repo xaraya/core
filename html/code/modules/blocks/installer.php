@@ -117,9 +117,9 @@ class Installer extends InstallerClass
         switch ($oldversion) {
             case '2.2.0':
                 // Register blocks module event observers
-                xarEvents::registerObserver('ModRemove', 'blocks');
-                xarEvents::registerObserver('ModActivate', 'blocks');
-                xarEvents::registerObserver('ModDeactivate', 'blocks');
+                $this->events()->registerObserver('ModRemove', 'blocks');
+                $this->events()->registerObserver('ModActivate', 'blocks');
+                $this->events()->registerObserver('ModDeactivate', 'blocks');
                 // no break
             default:
                 break;

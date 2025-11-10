@@ -169,59 +169,59 @@ class Installer extends InstallerClass
                 $this->db()->importTables($tables);
                 // Register base module event subjects
                 // Base module inits before modules, so we have to register events for it here
-                xarEvents::registerSubject('Event', 'event', 'base');
-                xarEvents::registerSubject('ServerRequest', 'server', 'base');
-                xarEvents::registerSubject('SessionCreate', 'session', 'base');
+                $this->events()->registerSubject('Event', 'event', 'base');
+                $this->events()->registerSubject('ServerRequest', 'server', 'base');
+                $this->events()->registerSubject('SessionCreate', 'session', 'base');
                 // Register base module event observers
-                xarEvents::registerObserver('Event', 'base');
+                $this->events()->registerObserver('Event', 'base');
                 // Register modules module event subjects
-                xarEvents::registerSubject('ModLoad', 'module', 'modules');
-                xarEvents::registerSubject('ModApiLoad', 'module', 'modules');
+                $this->events()->registerSubject('ModLoad', 'module', 'modules');
+                $this->events()->registerSubject('ModApiLoad', 'module', 'modules');
                 // Register modules module hook subjects
-                xarHooks::registerSubject('ModuleModifyconfig', 'module', 'modules');
-                xarHooks::registerSubject('ModuleUpdateconfig', 'module', 'modules');
-                xarHooks::registerSubject('ModuleRemove', 'module', 'modules');
-                xarHooks::registerSubject('ModuleInit', 'module', 'modules');
-                xarHooks::registerSubject('ModuleActivate', 'module', 'modules');
-                xarHooks::registerSubject('ModuleUpgrade', 'module', 'modules');
+                $this->hooked()->registerSubject('ModuleModifyconfig', 'module', 'modules');
+                $this->hooked()->registerSubject('ModuleUpdateconfig', 'module', 'modules');
+                $this->hooked()->registerSubject('ModuleRemove', 'module', 'modules');
+                $this->hooked()->registerSubject('ModuleInit', 'module', 'modules');
+                $this->hooked()->registerSubject('ModuleActivate', 'module', 'modules');
+                $this->hooked()->registerSubject('ModuleUpgrade', 'module', 'modules');
                 // Module itemtype hook subjects
-                xarHooks::registerSubject('ItemtypeCreate', 'itemtype', 'modules');
-                xarHooks::registerSubject('ItemtypeDelete', 'itemtype', 'modules');
-                xarHooks::registerSubject('ItemtypeView', 'itemtype', 'modules');
+                $this->hooked()->registerSubject('ItemtypeCreate', 'itemtype', 'modules');
+                $this->hooked()->registerSubject('ItemtypeDelete', 'itemtype', 'modules');
+                $this->hooked()->registerSubject('ItemtypeView', 'itemtype', 'modules');
                 // Module item hook subjects (@TODO: these should no longer apply to roles)
-                xarHooks::registerSubject('ItemNew', 'item', 'modules');
-                xarHooks::registerSubject('ItemCreate', 'item', 'modules');
-                xarHooks::registerSubject('ItemModify', 'item', 'modules');
-                xarHooks::registerSubject('ItemUpdate', 'item', 'modules');
-                xarHooks::registerSubject('ItemDisplay', 'item', 'modules');
-                xarHooks::registerSubject('ItemDelete', 'item', 'modules');
-                xarHooks::registerSubject('ItemSubmit', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemNew', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemCreate', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemModify', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemUpdate', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemDisplay', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemDelete', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemSubmit', 'item', 'modules');
                 // Transform hooks
                 // @TODO: these really need to go away...
-                xarHooks::registerSubject('ItemTransform', 'item', 'modules');
-                xarHooks::registerSubject('ItemTransforminput', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemTransform', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemTransforminput', 'item', 'modules');
                 // @TODO: these need evaluating
-                xarHooks::registerSubject('ItemFormheader', 'item', 'modules');
-                xarHooks::registerSubject('ItemFormaction', 'item', 'modules');
-                xarHooks::registerSubject('ItemFormdisplay', 'item', 'modules');
-                xarHooks::registerSubject('ItemFormarea', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemFormheader', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemFormaction', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemFormdisplay', 'item', 'modules');
+                $this->hooked()->registerSubject('ItemFormarea', 'item', 'modules');
                 // Register base module hook subjects
-                xarHooks::registerSubject('ItemWaitingcontent', 'item', 'base');
+                $this->hooked()->registerSubject('ItemWaitingcontent', 'item', 'base');
                 // NOTE: UserLogin and UserLogout are registered by authsystem module
-                // NOTE: ItemSearch is registered by search module
+                // @TODO: ItemSearch is registered by search module = gone
                 // @TODO: Roles module to register User* and Group* event subjects
                 // no break
             case '2.2.0':
                 // Register modules module event subjects
-                xarEvents::registerSubject('ModInitialise', 'module', 'modules');
-                xarEvents::registerSubject('ModActivate', 'module', 'modules');
-                xarEvents::registerSubject('ModDeactivate', 'module', 'modules');
-                xarEvents::registerSubject('ModRemove', 'module', 'modules');
+                $this->events()->registerSubject('ModInitialise', 'module', 'modules');
+                $this->events()->registerSubject('ModActivate', 'module', 'modules');
+                $this->events()->registerSubject('ModDeactivate', 'module', 'modules');
+                $this->events()->registerSubject('ModRemove', 'module', 'modules');
                 // Register modules module event observers
-                xarEvents::registerObserver('ModInitialise', 'modules');
-                xarEvents::registerObserver('ModActivate', 'modules');
-                xarEvents::registerObserver('ModDeactivate', 'modules');
-                xarEvents::registerObserver('ModRemove', 'modules');
+                $this->events()->registerObserver('ModInitialise', 'modules');
+                $this->events()->registerObserver('ModActivate', 'modules');
+                $this->events()->registerObserver('ModDeactivate', 'modules');
+                $this->events()->registerObserver('ModRemove', 'modules');
                 // no break
             case '2.3.0':
                 break;
