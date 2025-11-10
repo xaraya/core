@@ -161,7 +161,7 @@ class ObjectRefProperty extends SelectProperty
                 [
                     'sort'     => $this->initialization_display_prop,
                     'fieldlist' => [$this->initialization_display_prop,$this->initialization_store_prop],
-                    'fordisplay' => 1]
+                    'fordisplay' => 1],
             );
             $object = $this->data()->getObject(['name' => $this->initialization_refobject]);
         }

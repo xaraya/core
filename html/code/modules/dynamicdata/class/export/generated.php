@@ -245,19 +245,25 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
 
     /**
      * Only serialize the current itemid and values
-     * @return array<string>
+     * @return array<mixed>
      */
-    public function __sleep()
+    public function __serialize()
     {
-        return ['_itemid', '_values'];
+        return [
+            '_itemid' => $this->_itemid,
+            '_values' => $this->_values,
+        ];
     }
 
     /**
      * Reconnect the properties to the DataObject
+     * @param array<mixed> $data
      * @return void
      */
-    public function __wakeup()
+    public function __unserialize($data)
     {
+        $this->_itemid = $data['_itemid'] ?? null;
+        $this->_values = $data['_values'] ?? [];
         //$this->refresh();
         $this->connect();
     }

@@ -116,9 +116,17 @@ class ColumnInfo
      * the serialization and unserialization of this object.
      * @return array<mixed> The class variables that should be serialized (all must be public!).
      */
-    public function __sleep()
+    public function __serialize()
     {
-        return ['name', 'type', 'nativeType', 'size', 'precision', 'isNullable', 'defaultValue'];
+        return [
+            'name' => $this->name,
+            'type' => $this->type,
+            'nativeType' => $this->nativeType,
+            'size' => $this->size,
+            'precision' => $this->precision,
+            'isNullable' => $this->isNullable,
+            'defaultValue' => $this->defaultValue,
+        ];
     }
 
     /**

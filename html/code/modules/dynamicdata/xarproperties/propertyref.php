@@ -103,7 +103,7 @@ class PropertyRefProperty extends SelectProperty
                     'dynamicdata',
                     'util',
                     'getmeta',
-                    ['table' => $objectname]
+                    ['table' => $objectname],
                 );
                 if (!empty($fields) && !empty($fields[$objectname])) {
                     foreach (array_keys($fields[$objectname]) as $fieldname) {

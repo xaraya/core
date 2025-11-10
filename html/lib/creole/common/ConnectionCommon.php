@@ -95,10 +95,10 @@ abstract class ConnectionCommon
     /* END XARAYA MODIFICATION */
 
     /**
-     * This "magic" method is invoked upon serialize() and works in tandem with the __wakeup()
+     * This "magic" method is invoked upon serialize() and works in tandem with the __unserialize()
      * method to ensure that your database connection is serializable.
      *
-     * This method returns an array containing the names of any members of your class
+     * This method returns an array containing the names and values of any members of your class
      * which need to be serialized in order to allow the class to re-connect to the database
      * when it is unserialized.
      *
@@ -107,7 +107,7 @@ abstract class ConnectionCommon
      *
      * Note that you cannot serialize resources (connection links) and expect them to
      * be valid when you unserialize.  For this reason, you must re-connect to the database in the
-     * __wakeup() method.
+     * __unserialize() method.
      *
      * It's up to your class implimentation to ensure that the necessary data is serialized.
      * You probably at least need to serialize:
@@ -117,23 +117,29 @@ abstract class ConnectionCommon
      *  (3) Possibly the autocommit state
      *
      * @return array<mixed> The class variable names that should be serialized.
-     * @see __wakeup()
+     * @see __unserialize()
      * @see DriverManager::getConnection()
-     * @see DatabaseInfo::__sleep()
+     * @see DatabaseInfo::__serialize()
      */
-    public function __sleep()
+    public function __serialize()
     {
-        return ['dsn', 'flags'];
+        return [
+            'dsn' => $this->dsn,
+            'flags' => $this->flags,
+        ];
     }
 
     /**
      * This "magic" method is invoked upon unserialize().
      * This method will re-connects to the database using the information that was
-     * stored using the __sleep() method.
-     * @see __sleep()
+     * stored using the __serialize() method.
+     * @see __serialize()
+     * @param array<mixed> $data
      */
-    public function __wakeup()
+    public function __unserialize($data)
     {
+        $this->dsn = $data['dsn'];
+        $this->flags = $data['flags'];
         $this->connect($this->dsn, $this->flags);
     }
 

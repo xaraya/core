@@ -123,10 +123,14 @@ class DataObjectLoader implements ContextInterface
 
     /**
      * Re-initialize todo and cache if needed
+     * @param array<mixed> $data
      * @return void
      */
-    public function __wakeup()
+    public function __unserialize($data)
     {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
         $this->todo = [];
         $this->cache = [];
     }

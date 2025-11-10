@@ -118,10 +118,14 @@ class DeferredItemProperty extends DataProperty
 
     /**
      * Parse config value again based on the old default value after unserialize()
+     * @param array<mixed> $data
      * @return void
      */
-    public function __wakeup()
+    public function __unserialize($data)
     {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
         if (empty($this->defaultvalue) && !empty($this->olddefault)) {
             $this->defaultvalue = $this->olddefault;
         }

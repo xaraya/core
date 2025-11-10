@@ -73,7 +73,7 @@ abstract class xarVariableObject extends xarObject
                     break;
             }
             // NOTE: if the object unserialized successfully
-            // the __wakeup() method will be called here...
+            // the __unserialize() method will be called here...
             // Otherwise a new instance is created...
             if (empty(static::$instance) || !is_object(static::$instance)) {
                 $c = get_called_class();
@@ -161,23 +161,27 @@ abstract class xarVariableObject extends xarObject
 
 
     /**
-     * Object wakeup (unserialize)
+     * Object unserialize
      *
      * this method gets called when the object is unserialized by the getInstance method
      * Classes extending this class can use it to perform any initial operations
      *
      * @author Chris Powis <crisp@xaraya.com>
      * @access public
+     * @param array<mixed> $data
      * @return void
     **/
-    public function __wakeup()
+    public function __unserialize($data)
     {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
         // perform any actions required after unserialize here...
     }
 
 
     /**
-     * Object sleep (serialize)
+     * Object serialize
      *
      * this method gets called when the object is serialized (usually when saving)
      * Classes extending this class can use it to perform any last minute
@@ -185,13 +189,13 @@ abstract class xarVariableObject extends xarObject
      *
      * @author Chris Powis <crisp@xaraya.com>
      * @access public
-     * @return array<mixed> names of properties to store when object is serialized
+     * @return array<mixed> public properties to store when object is serialized
     **/
-    public function __sleep()
+    public function __serialize()
     {
         // perform any actions before serialize (save) here...
-        // return an array of property names to save
-        return array_keys($this->getPublicProperties());
+        // return an array of properties to save
+        return $this->getPublicProperties();
 
     }
 
@@ -223,18 +227,19 @@ Class testClass extends xarVariableObject
     public $lastrun  = 0; // last run never
     public $mystring = 'foo';
 
-    public function __wakeup()
+    public function __unserialize($data)
     {
+        parent::__unserialize($data);
         // increment the counter
         $this->counter++;
     }
 
-    public function __sleep()
+    public function __serialize()
 
     {
         // set last run time
         $this->lastrun = time();
-        return parent::__sleep();
+        return parent::__serialize();
 
     }
 }
@@ -254,7 +259,7 @@ var_dump($foo); // count still 1, lastrun still 0
 unset($foo); // __sleep() is called, setting lastrun to now
 
 // get the stored instance
-$foo = testClass::getInstance(); // __wakeup() is called, incrementing counter
+$foo = testClass::getInstance(); // __unserialize() is called, incrementing counter
 var_dump($foo);
 // mystring is now bar, counter incremented by 1, and lastrun is the time unset() was called :)
 */

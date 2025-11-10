@@ -562,7 +562,7 @@ trait MultiLanguageTrait
         // the most sensible thing to do
         $string = trim($rawstring ?? '');
         if ($string == '') {
-            return $rawstring;
+            return $string;
         }
 
         $start = strpos($rawstring, $string);

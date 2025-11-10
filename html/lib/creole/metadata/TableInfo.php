@@ -84,17 +84,30 @@ abstract class TableInfo
      * the serialization and unserialization of this object.
      * @return array<mixed> The class variables that should be serialized (all must be public!).
      */
-    public function __sleep()
+    public function __serialize()
     {
-        return ['name', 'columns', 'foreignKeys', 'indexes', 'primaryKey'];
+        return [
+            'name' => $this->name,
+            'columns' => $this->columns,
+            'foreignKeys' => $this->foreignKeys,
+            'indexes' => $this->indexes,
+            'primaryKey' => $this->primaryKey,
+        ];
     }
 
     /**
      * This "magic" method is invoked upon unserialize().
      * This method re-hydrates the object and restores the recursive hierarchy.
+     * @param array<mixed> $data
      */
-    public function __wakeup()
+    public function __unserialize($data)
     {
+        $this->name = $data['name'];
+        $this->columns = $data['columns'];
+        $this->foreignKeys = $data['foreignKeys'];
+        $this->indexes = $data['indexes'];
+        $this->primaryKey = $data['primaryKey'];
+
         // restore chaining
         foreach ($this->columns as $col) {
             $col->table = $this;

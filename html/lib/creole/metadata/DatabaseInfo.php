@@ -84,17 +84,26 @@ abstract class DatabaseInfo
      * the serialization and unserialization of this object.
      * @return array<mixed> The class variables that should be serialized (all must be public!).
      */
-    public function __sleep()
+    public function __serialize()
     {
-        return ['tables','sequences','conn'];
+        return [
+            'tables' => $this->tables,
+            'sequences' => $this->sequences,
+            'conn' => $this->conn,
+        ];
     }
 
     /**
      * This method is invoked upon unserialize().
      * This method re-hydrates the object and restores the recursive hierarchy.
+     * @param array<mixed> $data
      */
-    public function __wakeup()
+    public function __unserialize($data)
     {
+        $this->tables = $data['tables'];
+        $this->sequences = $data['sequences'];
+        $this->conn = $data['conn'];
+
         // Re-init vars from serialized connection
         $this->dbname = $this->conn->database;
         $this->dblink = $this->conn->connection;

@@ -105,25 +105,29 @@ class xarCSS extends xarObject
     }
 
     /**
-     * Object wakeup
+     * Object unserialize
      *
      * This is called immediately after the object is unserialized
      * this function is only ever run once per page request
      *
      * @author Chris Powis <crisp@xaraya.com>
      * @access public
+     * @param array<mixed> $data
      * @return void
     **/
-    public function __wakeup()
+    public function __unserialize($data)
     {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
         // Check what libraries are present in the filesystem
         if (time() - $this->last_run > $this->expires) {
             $xar = $this->getServicesClass();
-            $xar->log()->debug('xarCSS::__wakeup: unserialize & refresh ' . (string) $this->last_run);
+            $xar->log()->debug('xarCSS::__unserialize: unserialize & refresh ' . (string) $this->last_run);
             $this->refresh();
             $this->refreshed = true;
         } else {
-            //xar::log()->debug('xarCSS::__wakeup: unserialize & NOT refresh');
+            //xar::log()->debug('xarCSS::__unserialize: unserialize & NOT refresh');
             $this->refreshed = false;
         }
         // Load the default libraries
@@ -132,7 +136,7 @@ class xarCSS extends xarObject
         }
     }
     /**
-     * Object sleep method
+     * Object serialize method
      *
      * This is called whenever the object is serialized
      * this function is only ever run once per page request
@@ -142,14 +146,14 @@ class xarCSS extends xarObject
      * @access public
      * @return array<mixed> public object properties to store values for
     **/
-    public function __sleep()
+    public function __serialize()
     {
         $xar = $this->getServicesClass();
-        $xar->log()->debug('xarCSS::__sleep: serialize');
+        $xar->log()->debug('xarCSS::__serialize: serialize');
         // set the last run time before we exit
         $this->last_run = time();
-        // return the array of public property names to store
-        return array_keys($this->getPublicProperties());
+        // return the array of public properties to store
+        return $this->getPublicProperties();
     }
 
     /**

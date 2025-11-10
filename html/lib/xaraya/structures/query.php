@@ -1098,23 +1098,36 @@ class Query
         return $key;
     }
 
-    public function __sleep()
+    /**
+     * Summary of __serialize
+     * @return array<mixed>
+     */
+    public function __serialize()
     {
         // Return array of variables to be serialized.
-        $vars = array_keys(get_object_vars($this));
+        $vars = get_object_vars($this);
 
         // Strip out the variables we don't want serialized, but don't
         // destroy anything yet, as this object may still be needed.
         foreach (['dbconn', 'result', 'output'] as $var) {
-            if (($key = array_search($var, $vars)) !== false) {
-                unset($vars[$key]);
-            }
+            unset($vars[$var]);
         }
-        return($vars);
+        return $vars;
     }
 
-    public function __wakeup()
+    /**
+     * Summary of __unserialize
+     * @param array<mixed> $data
+     * @return void
+     */
+    public function __unserialize($data)
     {
+        foreach ($data as $name => $value) {
+            if (in_array($name, ['dbconn', 'result', 'output'])) {
+                continue;
+            }
+            $this->{$name} = $value;
+        }
         $this->openconnection();
     }
 
