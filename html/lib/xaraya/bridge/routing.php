@@ -7,7 +7,7 @@
  * use Xaraya\Services\xar;
  * sys::init();
  * xar::cache()->init();
- * xarCore::xarInit(xarCore::SYSTEM_USER);
+ * xar::load(xarCore::SYSTEM_USER);
  *
  * // use some routing bridge
  * use Xaraya\Bridge\Routing\RoutingBridge;

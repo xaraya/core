@@ -25,7 +25,7 @@
  * use Xaraya\Services\xar;
  * sys::init();
  * xar::cache()->init();
- * xarCore::xarInit(xarCore::SYSTEM_USER);
+ * xar::load(xarCore::SYSTEM_USER);
  *
  * use Xaraya\Bridge\Events\TestEventListeners;
  * use Xaraya\Bridge\Events\TestHookListeners;

@@ -36,7 +36,7 @@ function xarValidationLoader()
     /**
      * Load the Xaraya core
      */
-    xarCore::xarInit(xarCore::SYSTEM_ALL);
+    xar::load();
 }
 
 /**

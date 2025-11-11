@@ -17,8 +17,9 @@ $savedir = getcwd();
 chdir('/var/mt/xar/core/core.2.x/html');
 
 include_once('bootstrap.php');
+use Xaraya\Services\xar;
 
-xarCore::xarInit(xarCore::SYSTEM_ALL);
+xar::load(xarCore::SYSTEM_ALL);
 
 if(!xar::user()->logIn('Admin','12345')) {
     throw new Exception("Authentication failed\n");

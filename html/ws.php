@@ -41,7 +41,7 @@ function xarWSLoader()
     /**
      * Load the Xaraya core
      */
-    xarCore::xarInit(xarCore::SYSTEM_ALL);
+    xar::load();
 }
 
 /**
@@ -367,8 +367,8 @@ function xarModernWebServices(string $type)
             //xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
             // try out session context class
             //xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
-            //xarCore::xarInit(xarCore::SYSTEM_USER);
-            xarCore::xarInit();
+            //xar::load(xarCore::SYSTEM_USER);
+            xar::load();
             //xar::ctl()->setBaseURL(xar::ctl()->getBaseURL());
             $htmx = new \Xaraya\Bridge\Routing\HtmxHandler('/htmx');
             //$request = xar::req()->getInstance();

@@ -19,7 +19,7 @@
  * use Xaraya\Services\xar;
  * sys::init();
  * xar::cache()->init();
- * xarCore::xarInit(xarCore::SYSTEM_USER);
+ * xar::load(xarCore::SYSTEM_USER);
  *
  * use Symfony\Component\EventDispatcher\EventDispatcher;
  * use Xaraya\Bridge\Events\EventListenerProvider;

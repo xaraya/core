@@ -54,7 +54,7 @@ function xarLSLoader($argc, $argv)
         putenv("REMOTE_ADDR=127.0.0.1");
     }
     try {
-        xarCore::xarInit(xarCore::SYSTEM_ALL);
+        xar::load();
     } catch (Exception $e) {
         print_r($e->getMessage());
         exit;

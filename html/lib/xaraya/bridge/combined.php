@@ -9,7 +9,7 @@
  * use Xaraya\Services\xar;
  * sys::init();
  * xar::cache()->init();
- * xarCore::xarInit(xarCore::SYSTEM_USER);
+ * xar::load(xarCore::SYSTEM_USER);
  *
  * // use some PSR-7 factory
  * use Nyholm\Psr7\Factory\Psr17Factory;

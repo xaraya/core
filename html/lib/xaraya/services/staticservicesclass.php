@@ -19,6 +19,7 @@ namespace Xaraya\Services;
 use Xaraya\Context\Context;
 use Xaraya\Requests\RequestInterface as RequestFacade;
 use Xaraya\Sessions\SessionInterface as SessionFacade;
+use xarConst;
 use xarCore;
 
 /**
@@ -508,6 +509,16 @@ class StaticServicesClass extends ServicesClass
             $this->serviceCache[$name] = ServiceFactory::createServicePrototype($name, $this);
         }
         return $this->serviceCache[$name];
+    }
+
+    /**
+     * Initialize core with $xar->load(); instance (current context)
+     * @todo differentiate between site init and request init
+     * @return bool
+     */
+    public function load($whatToLoad = xarConst::SYSTEM_ALL)
+    {
+        return xarCore::load($whatToLoad, $this);
     }
 
     /**

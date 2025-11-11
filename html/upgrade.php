@@ -45,7 +45,7 @@ function xarUpgradeLoader()
     /**
      * Load the Xaraya core with context
      */
-    xarCore::xarInit(xarCore::SYSTEM_ALL, $context);
+    $xar->load();
 }
 
 /**

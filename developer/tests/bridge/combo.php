@@ -32,15 +32,15 @@ LocalTimer::setTimer('cache');
 //xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class
 xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
-xarCore::xarInit(xarCore::SYSTEM_USER);
+$xar = xar::load(xarCore::SYSTEM_USER);
 LocalTimer::setTimer('core');
 
 // Concatenate and parse string into $_GET: php combo.php /object/sample ...
 if (php_sapi_name() === 'cli') {
     //parse_str(implode('&', array_slice($argv, 1)), $_GET);
     if ($argc > 1 && str_contains($argv[1], '/')) {
-        xar::req()->setServerVar('PATH_INFO', $argv[1]);
-        xar::req()->setServerVar('REQUEST_URI', $argv[0] . $argv[1]);
+        $xar->req()->setServerVar('PATH_INFO', $argv[1]);
+        $xar->req()->setServerVar('REQUEST_URI', $argv[0] . $argv[1]);
     }
 }
 

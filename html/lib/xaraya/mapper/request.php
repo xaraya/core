@@ -65,7 +65,7 @@ class xarRequest extends xarObject
         //$this->setType($xar->mod('modules')->getVar('defaultmoduletype'));
         //$this->setFunction($xar->mod('modules')->getVar('defaultmodulefunction'));
 
-        // xar::req()->getRequest() comes after xarCore::xarInit()
+        // xar::req()->getRequest() comes after xar::load()
         $this->setServerContext($xar->req()->getInstance());
         $this->setEntryPoint($xar->ctl()->getEntryPoint());
         $this->setURL($url);

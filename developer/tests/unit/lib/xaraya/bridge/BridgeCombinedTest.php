@@ -26,8 +26,7 @@ final class BridgeCombinedTest extends TestCase
         xar::req()->setRequestClass(RequestHandler::class);
         xar::session()->setSessionClass(SessionContext::class);
         $context = ContextFactory::fromGlobals(__METHOD__);
-        xar::setServicesContext($context);
-        xarCore::xarInit(xarCore::SYSTEM_USER, $context);
+        xar::load(xarCore::SYSTEM_USER, $context);
     }
 
 

@@ -13,7 +13,7 @@ final class BridgeRoutingTest extends TestCase
         xar::cache()->init();
         xar::req()->setRequestClass(RequestHandler::class);
         xar::session()->setSessionClass(SessionContext::class);
-        xarCore::xarInit(xarCore::SYSTEM_USER);
+        xar::load(xarCore::SYSTEM_USER);
     }
 
     public static function tearDownAfterClass(): void

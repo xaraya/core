@@ -35,14 +35,16 @@ putenv("REMOTE_ADDR=127.0.0.1");
 /* Make sure we're in the docroot */
 chdir("../../../../html");
 include '../lib/bootstrap.php';
-xarCore::xarInit(xarCore::SYSTEM_ALL);
+use Xaraya\Services\xar;
+
+$xar = xar::load(xarCore::SYSTEM_ALL);
 
 /* Make sure we handle boney instead of fancy */
 set_exception_handler(array('ExceptionHandlers','bone'));
 
 if (!empty($xaruser)) {
     /* Authenticate */
-    if (!xarUserLogin($xaruser,$xarpass)) {
+    if (!$xar->user()->logIn($xaruser,$xarpass)) {
         fwrite(STDERR,"Authentication failed\n");
         return 1;
     }
@@ -57,9 +59,9 @@ if (!empty($dbhost)) {
         'userName'      =>  $dbuser,
         'password'      =>  $dbpass
     );
-    $dbconn = xarDBNewConn($dsnArgs);
+    $dbconn = $xar->db()->newConn($dsnArgs);
 } else {
-    $dbconn = xarDB::getConn();
+    $dbconn = $xar->db()->getConn();
 }
 
 $dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
@@ -67,10 +69,9 @@ $dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
 $tplData = array(
     'schemaName' => $dbInfo->getName(),     // string
     'tables'     => $dbInfo->getTables(),   // array of TableInfo objects
-    'types'      => xarDB::getTypeMap()
+    'types'      => $xar->db()->getTypeMap()
 );
 
 // Produce the xml
-$out = xarTplFile('../html/modules/dynamicdata/xartemplates/includes/exportddl.xd',$tplData);
+$out = $xar->tpl()->file('../html/modules/dynamicdata/xartemplates/includes/exportddl.xd',$tplData);
 echo $out;
-?>

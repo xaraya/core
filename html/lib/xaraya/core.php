@@ -210,6 +210,29 @@ class xarCore extends xarObject
     **/
     public static function xarInit($whatToLoad = self::SYSTEM_ALL, $context = null)
     {
+        /**
+         * Get context from globals if not specified (default)
+         */
+        if (is_null($context)) {
+            $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
+        }
+        // Set context for core services here first + return static services class
+        $xar = Xaraya\Services\xar::setServicesContext($context);
+
+        // Initialize core with current services instance
+        return self::load($whatToLoad, $xar);
+    }
+
+    /**
+     * Initialize core with current services instance
+     * @param int $whatToLoad
+     * @param \Xaraya\Services\StaticServicesClass $xar
+     * @throws \Exception
+     * @return bool
+     * @todo differentiate between site init and request init
+     */
+    public static function load($whatToLoad, $xar)
+    {
         static $first_load = true;
 
         $new_SYSTEM_level = $whatToLoad;
@@ -226,15 +249,6 @@ class xarCore extends xarObject
             // that we've already loaded
             $whatToLoad ^= self::$runLevel;
         }
-
-        /**
-         * Get context from globals if not specified (default)
-         */
-        if (is_null($context)) {
-            $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
-        }
-        // Set context for core services here first + return static services class
-        $xar = Xaraya\Services\xar::setServicesContext($context);
 
         /**
          * At this point we should be able to catch all low level errors, so we can start the debugger

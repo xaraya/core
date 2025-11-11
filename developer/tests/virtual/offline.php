@@ -22,7 +22,7 @@ use Brick\VarExporter\VarExporter;
 sys::init();
 // initialize caching
 xar::cache()->init();
-//xarCore::xarInit(xarCore::SYSTEM_MODULES);
+//xar::load(xarCore::SYSTEM_MODULES);
 
 function init_online()
 {

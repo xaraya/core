@@ -25,7 +25,7 @@ xar::db()->init();
 //xar::mod()->init();
 // for showOutput
 //xar::tpl()->init();
-//xarCore::xarInit(xarCore::SYSTEM_MODULES);
+//xar::load(xarCore::SYSTEM_MODULES);
 
 const TEST_COUNT = 5000;
 

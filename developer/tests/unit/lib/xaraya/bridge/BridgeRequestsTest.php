@@ -161,7 +161,7 @@ final class BridgeRequestsTest extends TestCase
         xar::ctl()->setBaseURL('http://localhost/');
         xar::req()->setServerVar('REQUEST_URI', '/index.php');
 
-        //xarCore::xarInit(xarCore::SYSTEM_USER);
+        //xar::load(xarCore::SYSTEM_USER);
         xar::cache()->init();
         xar::db()->init();
         // needed to initialize the template cache
