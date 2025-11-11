@@ -17,13 +17,8 @@
  * @todo We have to define a public interface so NOWHERE ever anyone else touches anything related to the session implementation
  */
 
-sys::import('xaraya.sessions.interface');
-sys::import('xaraya.sessions.handler');
-sys::import('xaraya.services.xar');
+use Xaraya\Sessions\SessionInterface as SessionFacade;
 use Xaraya\Services\SessionService;
-use Xaraya\Sessions\SessionInterface;
-use Xaraya\Sessions\SessionHandler;
-use Xaraya\Sessions\SessionException;
 use Xaraya\Services\xar;
 
 /**
@@ -31,8 +26,6 @@ use Xaraya\Services\xar;
  */
 class xarSession
 {
-    /** @var class-string<SessionInterface> */
-    private static $sessionClass = SessionHandler::class;
     protected static ?SessionService $sessionService = null;
 
     protected static function session(): SessionService
@@ -79,7 +72,7 @@ class xarSession
 
     /**
      * Get the session class instance (optional)
-     * @return ?SessionInterface
+     * @return ?SessionFacade
      */
     public static function getInstance()
     {
@@ -88,7 +81,7 @@ class xarSession
 
     /**
      * Set the session class instance
-     * @param SessionInterface $instance
+     * @param SessionFacade $instance
      * @return void
      */
     public static function setInstance($instance)
@@ -99,7 +92,7 @@ class xarSession
     /**
      * Summary of newInstance
      * @param mixed $context
-     * @return SessionInterface
+     * @return SessionFacade
      */
     public static function newInstance($context = null)
     {

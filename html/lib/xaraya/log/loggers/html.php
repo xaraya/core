@@ -20,7 +20,6 @@
  * Simple logger is the parent class
  *
  */
-sys::import('xaraya.log.loggers.simple');
 
 /**
  * HTMLLoggger

@@ -13,10 +13,6 @@ namespace Xaraya\Modules\Categories\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserApi;
-use xarDB;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories userapi getcat function
@@ -223,7 +219,7 @@ class GetcatMethod extends MethodClass
         $categories = [];
 
         // TODO: Ideally this all goes into a Query or similar so we avoid this if statement
-        if (xarDB::withPDO()) {
+        if ($this->db()->withPDO()) {
             $rows = $result->getall();
             $index = -1;
             foreach ($rows as $row) {

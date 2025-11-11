@@ -20,9 +20,6 @@ use FunctionNotFoundException;
 use xarClassMap;
 use sys;
 
-sys::import('modules.blocks.method');
-sys::import('xaraya.classmap');
-
 /**
  * blocks blocksapi getblock function
  * @extends MethodClass<BlocksApi>

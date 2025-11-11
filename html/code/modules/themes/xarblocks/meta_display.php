@@ -20,8 +20,6 @@
  * @access  public
  * @return  void
 */
-sys::import('modules.themes.xarblocks.meta');
-sys::import('modules.themes.class.xarmeta');
 class Themes_MetaBlockDisplay extends Themes_MetaBlock
 {
     /**
@@ -63,7 +61,6 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
         // determined by the page template, in our current setup compiled too
         // late to pull it in here, this is addressed in the tpl_order
         // scenario, no choice but to leave or delete, leaving it for now
-        sys::import('modules.themes.class.xarmeta');
         $xarmeta = xarMeta::getInstance();
         $xarmeta->register([
             'type' => 'http-equiv',

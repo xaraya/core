@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Blocks\UserApi;
 
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\UserApi;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks userapi convertseconds function

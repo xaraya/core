@@ -21,9 +21,6 @@ use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
 use sys;
 
-sys::import('xaraya.context.contexttrait');
-sys::import('xaraya.context.context');
-
 /**
  * @todo find out why sys::import() has an issue with autoload of xarDatabase() in gql.php
  */

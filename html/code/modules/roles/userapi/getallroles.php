@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use Query;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles userapi getallroles function
@@ -55,7 +52,6 @@ class GetallrolesMethod extends MethodClass
             $numitems = (int) $this->mod()->getVar('items_per_page');
         }
 
-        sys::import('xaraya.structures.query');
         $q = new Query();
         $xartable = $this->db()->getTables();
         $q->addtable($xartable['roles'], 'r');

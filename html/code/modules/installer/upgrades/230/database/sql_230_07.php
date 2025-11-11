@@ -16,7 +16,6 @@ function sql_230_07()
     $dbconn = xarDB::getConn();
     $prefix = xarDB::getPrefix();
     $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
-    sys::import('xaraya.tableddl');
 
     $types_table = "{$prefix}_block_types";
     $instances_table = "{$prefix}_block_instances";

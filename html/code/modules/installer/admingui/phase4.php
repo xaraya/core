@@ -13,12 +13,8 @@ namespace Xaraya\Modules\Installer\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
-use Exception;
 use xarInstall;
-use xarSystemVars;
-use sys;
-
-sys::import('xaraya.modules.method');
+use Exception;
 
 /**
  * installer admin phase4 function
@@ -58,9 +54,7 @@ class Phase4Method extends MethodClass
             'DBAL'   => ['name' => 'DBAL',   'available' => false],
         ];
         // Supported Databases:
-        // Not very Xaraya, but xarMod is not yet available
-        //sys::import('modules.base.adminapi.get_supported_dbs');
-        sys::import('modules.base.adminapi');
+        // Not very Xaraya, but xar::mod() is not yet available
         $data['database_types'] = \Xaraya\Modules\Base\AdminApi::getSupportedDbs($data['database_middleware']);
 
         // The Continue button was clicked

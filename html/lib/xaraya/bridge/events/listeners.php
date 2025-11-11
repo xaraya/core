@@ -3,12 +3,12 @@
 /**
  * PSR-14 Event Listener Providers for ixarEventSubject and ixarHookSubject events (work in progress)
  *
- * Not really useful here, but based on what happens in xarEvents::notify() once the $subject is created.
+ * Not really useful here, but based on what happens in xar::events()->notify() once the $subject is created.
  * Event dispatchers and/or event subscribers (PSR-14 or otherwise) could potentially use these to:
  *   1. create $subject from incoming $event + $args, and
  *   2. get a list of listeners to call for that $subject, or
  *   3. subscribe all listeners for a hook module (event subscriber)
- * to dispatch events without ever calling xarEvents::notify() itself. For a more practical way to bridge events to
+ * to dispatch events without ever calling xar::events()->notify() itself. For a more practical way to bridge events to
  * and from the Xaraya eventsystem, see event subscribers (App -> Xaraya) and event observer bridges (Xaraya -> App).
  *
  * The step from $event + $args to create $subject is simulated in TestEventListeners and TestHookListeners for
@@ -47,19 +47,10 @@
 namespace Xaraya\Bridge\Events;
 
 use Psr\EventDispatcher\ListenerProviderInterface;
-use Exception;
-use sys;
-
-sys::import('xaraya.events');
-sys::import('xaraya.hooks');
-sys::import('xaraya.structures.events.apiobserver');
-sys::import('xaraya.structures.events.guiobserver');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
-use xarEvents;
-use xarHooks;
 use ixarEventSubject;
 use ixarHookSubject;
+use Exception;
 
 /**
  * Listeners (observers) in Xaraya depend on $subject, created from $event and $args - especially for hooks
@@ -75,7 +66,7 @@ class EventListenerProvider implements ListenerProviderInterface
         if (!($this->checkSubject($subject))) {
             return [];
         }
-        //$info = xarEvents::getSubject($event);
+        //$info = xar::events()->getSubject($event);
         //$subject = new $classname($args);
         //$event = $subject->getSubject();
         $obsinfo = $this->getObservers($subject);
@@ -115,31 +106,31 @@ class EventListenerProvider implements ListenerProviderInterface
 
     public function getObservers($subject)
     {
-        $obsinfo = xarEvents::getObservers($subject);
+        $obsinfo = xar::events()->getObservers($subject);
         return $obsinfo;
     }
 
     public function getEventList()
     {
-        return xarEvents::getSubjects();
+        return xar::events()->getSubjects();
     }
 
     public function getEventInfo($event)
     {
         // get info for specified event
-        $info = xarEvents::getSubject($event);
+        $info = xar::events()->getSubject($event);
         if (empty($info)) {
             return;
         }
         // file load takes care of validation for us
-        if (!xarEvents::fileLoad($info)) {
+        if (!xar::events()->fileLoad($info)) {
             return;
         }
         return $info;
     }
 
     /**
-     * See xarEvents::notify() on how $subject is created from $event and $args
+     * See xar::events()->notify() on how $subject is created from $event and $args
      */
     public function getEventSubject($event, $args = [])
     {
@@ -163,7 +154,7 @@ class EventListenerProvider implements ListenerProviderInterface
                     return;
                 }
                 // get observer info from subject
-                //$obsinfo = xarEvents::getObservers($subject);
+                //$obsinfo = xar::events()->getObservers($subject);
                 // ...
                 //$method = !empty($info['func']) ? $info['func'] : 'notify';
                 // always notify the subject, even if there are no observers
@@ -184,13 +175,13 @@ class EventListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * See xarEvents::notify() on how $observers are created from $obsinfo = $this->getObservers($subject)
+     * See xar::events()->notify() on how $observers are created from $obsinfo = $this->getObservers($subject)
      */
     public function getObserverCallables($obsinfo)
     {
         $callables = [];
         foreach ($obsinfo as $obs) {
-            if (!xarEvents::fileLoad($obs)) {
+            if (!xar::events()->fileLoad($obs)) {
                 continue;
             }
             $obsmod = xar::mod()->getName($obs['module_id']);
@@ -233,7 +224,7 @@ class HookListenerProvider extends EventListenerProvider implements ListenerProv
         if (!($this->checkSubject($subject))) {
             return [];
         }
-        //$info = xarHooks::getSubject($event);
+        //$info = xar::hooked()->getSubject($event);
         //$subject = new $classname($args);
         //$event = $subject->getSubject();
         $obsinfo = $this->getObservers($subject);
@@ -248,24 +239,24 @@ class HookListenerProvider extends EventListenerProvider implements ListenerProv
 
     public function getObservers($subject)
     {
-        $obsinfo = xarHooks::getObservers($subject);
+        $obsinfo = xar::hooked()->getObservers($subject);
         return $obsinfo;
     }
 
     public function getEventList()
     {
-        return xarHooks::getSubjects();
+        return xar::hooked()->getSubjects();
     }
 
     public function getEventInfo($event)
     {
         // get info for specified event
-        $info = xarHooks::getSubject($event);
+        $info = xar::hooked()->getSubject($event);
         if (empty($info)) {
             return;
         }
         // file load takes care of validation for us
-        if (!xarHooks::fileLoad($info)) {
+        if (!xar::hooked()->fileLoad($info)) {
             return;
         }
         return $info;

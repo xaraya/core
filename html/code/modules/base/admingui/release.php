@@ -15,12 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\AdminGui;
 use Xaraya\Modules\Base\UserApi;
 use Exception;
-use ForbiddenOperationException;
 use feedParser;
-use xarCore;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base admin release function
@@ -64,7 +59,9 @@ class ReleaseMethod extends MethodClass
         }
         */
         // Require the feedParser class
-        sys::import('modules.base.class.feedParser');
+        if (!class_exists('\feedParser')) {
+            throw new \ClassNotFoundException('feedParser');
+        }
         // Check and see if a feed has been supplied to us.
         // Need to change the url once release module is moved to
         $feedfile = "http://xaraya.info/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";

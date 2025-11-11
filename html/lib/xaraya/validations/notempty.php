@@ -19,7 +19,6 @@
  * @throws VariableValidationException
  * @todo this class is probably too close to issetvalidation
 **/
-sys::import('xaraya.validations');
 class NotEmptyValidation extends ValueValidations
 {
     public function validate(&$subject, array $parameters)

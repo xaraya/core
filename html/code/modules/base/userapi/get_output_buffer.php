@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Base\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\UserApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base userapi get_output_buffer function

@@ -16,11 +16,6 @@
 
 namespace Xaraya\Services;
 
-use sys;
-
-sys::import('xaraya.services.servicefactory');
-sys::import('xaraya.services.staticservicesclass');
-
 /**
  * The ServiceOrchestrator is responsible for the entire lifecycle of service
  * resolution, including caching and specialization.

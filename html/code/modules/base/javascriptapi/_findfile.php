@@ -13,10 +13,7 @@ namespace Xaraya\Modules\Base\JavascriptApi;
 
 use Xaraya\Modules\Base\MethodClass;
 use Xaraya\Modules\Base\JavascriptApi;
-use xarTpl;
 use sys;
-
-sys::import('modules.base.method');
 
 /**
  * base javascriptapi _findfile function

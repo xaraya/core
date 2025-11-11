@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\CliApi;
 use Xaraya\Modules\Mail\AdminApi;
 use xarMailParser;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * mail cliapi process function
@@ -70,7 +67,6 @@ class ProcessMethod extends MethodClass
         } // ok, but nothing to do here
 
         // 2. Parse the input, we do this early so it never enters the system when it cannot be parsed.
-        sys::import('modules.mail.class.decode');
         $parser = new xarMailParser($input);
         $structure = $parser->decode();
         if ($parser->isError($structure)) {

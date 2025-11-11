@@ -17,7 +17,6 @@
  * @todo we have to clarify the interaction between these datastructures and
  *       datastores.
  */
-sys::import('xaraya.structures.sequences.adapters.array_sequence');
 use Xaraya\Services\xar;
 
 class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceAdapter
@@ -145,7 +144,6 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     /* Refresh the sequence data */
     private function getSequence()
     {
-        sys::import('modules.dynamicdata.class.objects.factory');
         $this->seqObject = DataObjectFactory::getObjectList($this->seqInfo);
         $objectData = $this->seqObject->getItems([
             'sort'      => 'nextid',

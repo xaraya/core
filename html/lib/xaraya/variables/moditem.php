@@ -15,10 +15,8 @@
  * where we end up
  */
 
-sys::import('xaraya.variables');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 use Xaraya\Services\Modules\ItemVarsHelper;
+use Xaraya\Services\xar;
 
 interface IxarModItemVars
 {

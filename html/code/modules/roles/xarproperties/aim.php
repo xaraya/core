@@ -1,7 +1,6 @@
 <?php
 
 /* Include the base class */
-sys::import('modules.base.xarproperties.textbox');
 
 /**
  * The AIM property is a basic wrapper for AIM  messaging functionality

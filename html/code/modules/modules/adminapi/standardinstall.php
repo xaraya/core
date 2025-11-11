@@ -17,8 +17,6 @@ use BadParameterException;
 use DataObjectFactory;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * modules adminapi standardinstall function
  * @extends MethodClass<AdminApi>
@@ -41,7 +39,6 @@ class StandardinstallMethod extends MethodClass
 
         if (isset($objects)) {
             // FIXME: Data loss risk!!
-            sys::import('modules.dynamicdata.class.objects.factory');
             $existing_objects  = $this->data()->getObjects();
             foreach ($existing_objects as $objectid => $objectinfo) {
                 if (in_array($objectinfo['name'], $objects)) {

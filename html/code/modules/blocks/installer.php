@@ -14,14 +14,10 @@
 namespace Xaraya\Modules\Blocks;
 
 use Xaraya\Modules\InstallerClass;
-use Exception;
-use xarEvents;
 use xarMasks;
 use xarPrivileges;
 use xarXMLInstaller;
-use sys;
-
-sys::import('xaraya.modules.installer');
+use Exception;
 
 /**
  * Handle module installer functions
@@ -44,7 +40,6 @@ class Installer extends InstallerClass
         $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
-            sys::import('xaraya.tableddl');
             xarXMLInstaller::createTable('table_schema-def', 'blocks');
             // We're done, commit
             $dbconn->commit();

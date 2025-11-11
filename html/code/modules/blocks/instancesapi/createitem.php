@@ -18,9 +18,6 @@ use BadParameterException;
 use DuplicateException;
 use IDNotFoundException;
 use ixarBlock;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks instancesapi createitem function

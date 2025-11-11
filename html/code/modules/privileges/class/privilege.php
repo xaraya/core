@@ -16,8 +16,6 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
 */
-sys::import('modules.privileges.class.mask');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class xarPrivilege extends xarMask
@@ -81,7 +79,6 @@ class xarPrivilege extends xarMask
 
         // make this privilege a child of its parent
         if (!empty($this->parentid)) {
-            sys::import('modules.privileges.class.privileges');
             $parentperm = xarPrivileges::getprivilege($this->parentid);
             $parentperm->addMember($this);
         }
@@ -108,7 +105,6 @@ class xarPrivilege extends xarMask
         $dbconn = xar::db()->getConn();
         $dbconn->Execute($query, $bindvars);
         // Refresh the privileges cached for the current sessions
-        sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
         return true;
     }
@@ -141,7 +137,6 @@ class xarPrivilege extends xarMask
             return false;
         }
         // Refresh the privileges cached for the current sessions
-        sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
         return true;
     }
@@ -179,7 +174,6 @@ class xarPrivilege extends xarMask
         $dbconn->Execute($query, $bindvars);
 
         // Refresh the privileges cached for the current sessions
-        sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
         return true;
     }
@@ -289,10 +283,8 @@ class xarPrivilege extends xarMask
         $result = $stmt->executeQuery([$this->id]);
 
         // make objects from the db entries retrieved
-        sys::import('modules.roles.class.roles');
         $roles = [];
 
-        sys::import('modules.dynamicdata.class.objects.factory');
         while ($result->next()) {
             [$id, $name, $itemtype, $uname, $email, $pass, $auth_modid] = $result->fields;
             switch ($itemtype) {

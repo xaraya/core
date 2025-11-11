@@ -22,8 +22,6 @@ use DeferredItemProperty;
 use DeferredManyProperty;
 use BadParameterException;
 use sys;
-
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -230,9 +228,6 @@ class DataObjectExporter
      */
     public static function export($objectid, $itemid = null, $format = 'xml', $tofile = false)
     {
-        sys::import('modules.dynamicdata.class.export.xmlexporter');
-        sys::import('modules.dynamicdata.class.export.jsonexporter');
-        sys::import('modules.dynamicdata.class.export.phpexporter');
         $exporter = match ($format) {
             'php' => new PhpExporter($objectid, $tofile),
             'json' => new JsonExporter($objectid, $tofile),

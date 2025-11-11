@@ -19,8 +19,6 @@ namespace Xaraya\Services;
 use ixarCache_Storage;
 use sys;
 
-sys::import('xaraya.services.servicetrait');
-
 /**
  * For documentation purposes only
  */

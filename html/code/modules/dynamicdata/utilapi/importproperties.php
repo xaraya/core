@@ -16,10 +16,6 @@ use Xaraya\Modules\DynamicData\UtilApi;
 use Xaraya\Modules\DynamicData\AdminApi;
 use BadParameterException;
 use DataObjectFactory;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata utilapi importproperties function
@@ -83,7 +79,6 @@ class ImportpropertiesMethod extends MethodClass
                 if (!empty($itemtype)) {
                     $name .= '_' . $itemtype;
                 }
-                sys::import('modules.dynamicdata.class.objects.factory');
                 $objectid = DataObjectFactory::createObject(
                     ['moduleid' => $module_id,
                         'itemtype' => $itemtype,

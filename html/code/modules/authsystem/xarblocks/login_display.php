@@ -16,7 +16,6 @@
  *
  * @author Jim McDonald
  */
-sys::import('modules.authsystem.xarblocks.login');
 
 /**
  * Authsystem Login Block Display

@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Base\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\AdminApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base adminapi menuarray function

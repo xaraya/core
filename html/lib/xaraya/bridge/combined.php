@@ -43,10 +43,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 use ForbiddenOperationException;
 use UnauthorizedOperationException;
-use xarController;
 use sys;
-
-sys::import('xaraya.bridge.routing');
 use Xaraya\Bridge\Routing\RoutingBridge;
 use Xaraya\Bridge\Routing\RoutingApiBridge;
 use Xaraya\Routing\RouterInterface;

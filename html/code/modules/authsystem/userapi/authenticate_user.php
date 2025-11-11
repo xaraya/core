@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Authsystem\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\UserApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * authsystem userapi authenticate_user function

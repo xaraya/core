@@ -15,12 +15,8 @@ namespace Xaraya\Modules\Roles;
 
 use Xaraya\Modules\InstallerClass;
 use Exception;
-use xarModHooks;
 use xarRoles;
 use xarXMLInstaller;
-use sys;
-
-sys::import('xaraya.modules.installer');
 
 /**
  * Handle module installer functions
@@ -43,7 +39,6 @@ class Installer extends InstallerClass
         $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
-            sys::import('xaraya.tableddl');
             xarXMLInstaller::createTable('table_schema-def', 'roles');
             // We're done, commit
             $dbconn->commit();

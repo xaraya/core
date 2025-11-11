@@ -21,7 +21,6 @@
  * @author Michael Makushev
  * @author Marc Lutolf
  */
-sys::import('modules.roles.xarblocks.online');
 class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
 {
     /**

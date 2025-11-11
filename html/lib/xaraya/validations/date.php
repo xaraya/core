@@ -12,7 +12,6 @@
  * @link http://www.xaraya.info
 */
 
-sys::import('xaraya.tools.legacy');
 use Xaraya\Tools\Legacy;
 
 /**
@@ -37,7 +36,6 @@ use Xaraya\Tools\Legacy;
  *
  * @throws VariableValidationException
  */
-sys::import('xaraya.validations');
 class DateValidation extends ValueValidations
 {
     public function validate(&$subject, array $parameters)

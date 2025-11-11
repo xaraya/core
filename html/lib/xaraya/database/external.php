@@ -16,11 +16,8 @@
 
 namespace Xaraya\Database;
 
-use xarDB;
-use sys;
-
-// sys::import('xaraya.services.xar');
 // use Xaraya\Services\xar;
+use xarDB;
 
 /**
  * Provide an external database connection to something via PDO/DBAL/... DB driver
@@ -190,7 +187,6 @@ class ExternalDatabase implements xarDB_Interface
     /**
      * Summary of getDriverClass
      * @param mixed $index
-     * @uses \sys::autoload()
      * @throws \BadMethodCallException
      * @return string
      */
@@ -200,14 +196,11 @@ class ExternalDatabase implements xarDB_Interface
         switch ($driverName) {
             case 'dbal':
                 // we really need sys::autoload() here
-                sys::import('xaraya.database.drivers.dbal');
                 return Drivers\DbalDriver::class;
             case 'mongodb':
                 // we really need sys::autoload() here
-                sys::import('xaraya.database.drivers.mongodb');
                 return Drivers\MongoDBDriver::class;
             case 'pdo':
-                sys::import('xaraya.database.drivers.pdo');
                 return Drivers\PdoDriver::class;
             case 'xaraya':
                 // probably not very useful here, but who knows
@@ -280,7 +273,6 @@ class ExternalDatabase implements xarDB_Interface
      * Summary of getConnection
      * @param array<mixed> $dsn
      * @param mixed $flags
-     * @uses \sys::autoload()
      * @return object
      */
     public static function getConnection(array $dsn, $flags = [])
@@ -290,19 +282,14 @@ class ExternalDatabase implements xarDB_Interface
 
         switch ($dsn['external']) {
             case 'pdo':
-                sys::import('xaraya.database.drivers.pdo');
                 $conn = Drivers\PdoDriver::getConnection($dsn, $flags);
                 break;
             case 'dbal':
                 // we really need sys::autoload() here
-                sys::autoload();
-                sys::import('xaraya.database.drivers.dbal');
                 $conn = Drivers\DbalDriver::getConnection($dsn, $flags);
                 break;
             case 'mongodb':
                 // we really need sys::autoload() here
-                sys::autoload();
-                sys::import('xaraya.database.drivers.mongodb');
                 $conn = Drivers\MongoDBDriver::getConnection($dsn, $flags);
                 break;
             default:

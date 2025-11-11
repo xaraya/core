@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Roles;
 
 use Xaraya\Modules\AdminGuiClass;
-use sys;
-
-sys::import('xaraya.modules.admingui');
-sys::import('modules.roles.adminapi');
 
 /**
  * Handle the roles admin GUI

@@ -18,8 +18,6 @@
  * @access  public
 */
 
-sys::import('modules.privileges.class.masks');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class xarPrivileges extends xarMasks
@@ -528,7 +526,6 @@ class xarPrivileges extends xarMasks
                 'description' => $description,
                 'parentid' => 0];
 
-            sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
             $xar->mem()->set($cacheKey, $id, $priv);
             return $priv;
@@ -570,7 +567,6 @@ class xarPrivileges extends xarMasks
                 'level'       => $level,
                 'description' => $description,
                 'parentid'    => 0];
-            sys::import('modules.privileges.class.privilege');
             return new xarPrivilege($pargs);
         }
         return;
@@ -690,7 +686,6 @@ class xarPrivileges extends xarMasks
                 'level'     => $level,
                 'parentid'  => 0,
             ];
-            sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
             if ($priv->add()) {
                 return $priv->getID();

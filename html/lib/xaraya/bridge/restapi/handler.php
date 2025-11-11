@@ -29,23 +29,13 @@ use Xaraya\Context\Context;
 use Xaraya\Authentication\AuthToken;
 use Xaraya\Services\xar;
 use xarObject;
-use xarCache;
-use xarDatabase;
 use sys;
 use ForbiddenOperationException;
 use UnauthorizedOperationException;
 use JsonException;
 
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('xaraya.tools.timertrait');
-sys::import('xaraya.caching.cachetrait');
-sys::import('xaraya.bridge.requests.requesttrait');
-sys::import('xaraya.context.contexttrait');
-sys::import('modules.authsystem.class.authtoken');
-
 /**
  * Class to handle REST API calls
- * @uses \sys::autoload()
  */
 class RestAPIHandler extends xarObject implements CommonRequestInterface, ContextInterface, CacheInterface, TimerInterface
 {
@@ -77,7 +67,6 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         $openapi = sys::varpath() . '/cache/api/openapi.json';
         if (!file_exists($openapi)) {
             xar::db()->init();
-            sys::import('xaraya.bridge.restapi.builder');
             RestAPIBuilder::init();
             return ['TODO' => 'generate var/cache/api/openapi.json with builder'];
         }

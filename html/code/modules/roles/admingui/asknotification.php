@@ -16,10 +16,6 @@ use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\AdminApi;
 use DataObject;
 use xarRoles;
-use xarTpl;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles admin asknotification function

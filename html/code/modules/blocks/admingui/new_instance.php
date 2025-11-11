@@ -22,9 +22,6 @@ use DuplicateException;
 use Exception;
 use IDNotFoundException;
 use ixarBlock;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks admin new_instance function

@@ -3,7 +3,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.url');
 
 /**
  * @package modules\base

@@ -13,12 +13,9 @@ namespace Xaraya\Modules\Roles\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
+use xarRoles;
 use EmptyParameterException;
 use IDNotFoundException;
-use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles userapi removemember function

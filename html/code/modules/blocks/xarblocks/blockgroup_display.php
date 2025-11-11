@@ -18,7 +18,6 @@
  *
  * @author  Chris Powis <crisp@xaraya.com>
 */
-sys::import('modules.blocks.xarblocks.blockgroup');
 // use ixarBlock;
 
 class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iBlockGroup

@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use DuplicateException;
 use EmptyParameterException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules adminapi add_module_alias function

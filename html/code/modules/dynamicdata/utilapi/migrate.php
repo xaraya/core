@@ -17,10 +17,6 @@ use Xaraya\Modules\DynamicData\UserApi;
 use Xaraya\Modules\DynamicData\AdminApi;
 use BadParameterException;
 use Exception;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata utilapi migrate function

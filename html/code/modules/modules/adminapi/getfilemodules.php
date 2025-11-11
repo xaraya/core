@@ -15,8 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * modules adminapi getfilemodules function
  * @extends MethodClass<AdminApi>

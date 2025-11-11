@@ -14,8 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('xaraya.structures.tree');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class Categories extends xarObject
@@ -123,7 +121,6 @@ class CategoryTreeNode extends TreeNode
             return;
         }
 
-        sys::import('xaraya.structures.sets.collection');
         $collection = new BasicSet();
         while ($result->next()) {
             $c = new CategoryTreeNode();

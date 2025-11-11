@@ -21,9 +21,6 @@ namespace Xaraya\Services;
 
 use xarDatabase;
 use xarDB;
-use sys;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via DatabaseTrait

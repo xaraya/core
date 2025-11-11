@@ -15,10 +15,6 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UtilApi;
 use DataObjectLinks;
 use DataStoreLinks;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata utilapi getinfo function
@@ -56,28 +52,24 @@ class GetinfoMethod extends MethodClass
                 break;
 
             case 'objectlinktypes':
-                sys::import('modules.dynamicdata.class.objects.links');
                 foreach (DataObjectLinks::$linktypes as $linktype => $descr) {
                     $options[] = ['id' => $linktype, 'name' => $descr];
                 }
                 break;
 
             case 'objectdirections':
-                sys::import('modules.dynamicdata.class.objects.links');
                 foreach (DataObjectLinks::$directions as $direction => $descr) {
                     $options[] = ['id' => $direction, 'name' => $descr];
                 }
                 break;
 
             case 'tablelinktypes':
-                sys::import('modules.dynamicdata.class.datastores.links');
                 foreach (DataStoreLinks::$linktypes as $linktype => $descr) {
                     $options[] = ['id' => $linktype, 'name' => $descr];
                 }
                 break;
 
             case 'tabledirections':
-                sys::import('modules.dynamicdata.class.datastores.links');
                 foreach (DataStoreLinks::$directions as $direction => $descr) {
                     $options[] = ['id' => $direction, 'name' => $descr];
                 }

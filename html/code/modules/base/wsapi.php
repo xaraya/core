@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Base;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the base ws API
@@ -27,6 +24,6 @@ class WsApi extends UserApiClass
     public function configure()
     {
         $this->setModType('ws');
-        // don't call xarMod:apiLoad() for base ws API
+        // don't call xar::mod()->apiLoad() for base ws API
     }
 }

@@ -18,8 +18,6 @@ use Exception;
 use ModuleNotFoundException;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * modules adminapi executeinitfunction function
  * @extends MethodClass<AdminApi>

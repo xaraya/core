@@ -23,8 +23,6 @@
 **/
 
 // Import all our exception types and the core exception handlers
-sys::import('xaraya.exceptions.types');
-sys::import('xaraya.exceptions.handlers');
 
 /**
  * Default settings for:

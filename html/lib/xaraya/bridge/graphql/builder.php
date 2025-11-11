@@ -29,7 +29,6 @@ use sys;
 
 /**
  * See xardocs/graphql.txt for class structure
- * @uses \sys::autoload()
  */
 class GraphQLBuilder
 {

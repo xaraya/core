@@ -8,7 +8,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
-sys::import('xaraya.structures.events.subject');
 class BaseServerRequestSubject extends EventSubject implements ixarEventSubject
 {
     protected $subject = 'ServerRequest';

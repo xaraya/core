@@ -37,10 +37,6 @@
 
 namespace Xaraya\Modules;
 
-use sys;
-
-sys::import('xaraya.modules.userguitrait');
-
 /**
  * Handle module user gui functions
  *

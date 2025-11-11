@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Base\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\AdminGui;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base admin sysinfo function

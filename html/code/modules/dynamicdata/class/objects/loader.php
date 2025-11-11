@@ -30,9 +30,6 @@
  *
  **/
 
-sys::import('modules.dynamicdata.class.objects.virtual');
-sys::import('xaraya.context.contexttrait');
-sys::import('xaraya.services.xar');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Services\xar;

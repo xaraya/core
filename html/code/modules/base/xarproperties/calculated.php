@@ -1,7 +1,6 @@
 <?php
 
 /* Include the parent class  */
-sys::import('modules.base.xarproperties.textbox');
 
 /**
  * @package modules\base

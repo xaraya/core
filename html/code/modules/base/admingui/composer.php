@@ -16,8 +16,6 @@ use Xaraya\Modules\Base\AdminGui;
 use Xaraya\Modules\Base\AdminApi;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * base admin composer function
  * @extends MethodClass<AdminGui>

@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Modules\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules adminapi delete_module_alias function

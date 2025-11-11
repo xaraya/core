@@ -18,10 +18,6 @@ use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
 use Exception;
-use sys;
-
-sys::import('modules.dynamicdata.class.export.generic');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**

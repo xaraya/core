@@ -16,10 +16,6 @@ use Xaraya\Modules\DynamicData\UtilApi;
 use BadParameterException;
 use CreoleTypes;
 use DataPropertyMaster;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata utilapi getstatic function

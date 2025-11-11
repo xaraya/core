@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use DataPropertyMaster;
 use xarCSS;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes admin view_csslibs function
@@ -48,7 +45,6 @@ class ViewCsslibsMethod extends MethodClass
         }
         $data['properties'] = $data['object']->getProperties();
 
-        sys::import('modules.themes.class.xarcss');
         $libobject = xarCSS::getInstance();
         // CHECKME: is this the right place to do it?
         $libobject->refresh();

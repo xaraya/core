@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Mail;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the mail cli API
@@ -27,6 +24,6 @@ class CliApi extends UserApiClass
     public function configure()
     {
         $this->setModType('cli');
-        // don't call xarMod:apiLoad() for mail cli API
+        // don't call xar::mod()->apiLoad() for mail cli API
     }
 }

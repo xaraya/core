@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Base\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\AdminApi;
 use Exception;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base adminapi getusersettings function
@@ -43,7 +40,6 @@ class GetusersettingsMethod extends MethodClass
         if (!isset($args['itemid'])) { // itemid = 0, module vars :)
             throw new Exception($this->ml('The getusersettings function requires an itemid parameter'));
         }
-        sys::import('modules.dynamicdata.class.objects.factory');
         // look for module specific user settings object
         $object = $this->data()->getObject(['name' => $args['module'] . '_user_settings']);
         // fall back to base module user settings?

@@ -18,7 +18,6 @@
  *
  * @author Jason Judge
  */
-sys::import('modules.base.xarblocks.content');
 class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
 {
     /**

@@ -18,10 +18,7 @@ use FilePickerProperty;
 use Query;
 use RelativeDirectoryIterator;
 use ixarMod;
-use xarTpl;
 use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes admin modifyconfig function
@@ -103,7 +100,6 @@ class ModifyconfigMethod extends MethodClass
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
         $data['module_settings']->getItem();
 
-        sys::import('modules.dynamicdata.class.properties.master');
         $data['user_themes'] = $this->prop()->getProperty(['name' => 'checkboxlist']);
         $data['user_themes']->options = $adminapi->dropdownlist(['Class' => 2]);
         $data['user_themes']->setValue($this->mod()->getVar('user_themes'));
@@ -167,7 +163,6 @@ class ModifyconfigMethod extends MethodClass
 
                 $this->mod()->setVar('debugmode', $data['debugmode']);
 
-                sys::import('modules.dynamicdata.class.properties.master');
                 $caches = $this->prop()->getProperty(['name' => 'checkboxlist']);
                 $caches->checkInput('flushcaches');
                 $this->mod()->setVar('flushcaches', $caches->value);
@@ -192,7 +187,6 @@ class ModifyconfigMethod extends MethodClass
 
             case 'flush':
                 // Flush the cache directories
-                sys::import('modules.dynamicdata.class.properties.master');
                 $caches = $this->prop()->getProperty(['name' => 'checkboxlist']);
                 $caches->checkInput('flushcaches');
                 $this->mod()->setVar('flushcaches', $caches->value);
@@ -226,7 +220,6 @@ class ModifyconfigMethod extends MethodClass
                 $caches->checkInput('flushdbcaches');
                 $this->mod()->setVar('flushdbcaches', $caches->value);
                 $cachestoflush = $caches->getValue();
-                sys::import('xaraya.structures.query');
                 foreach ($cachestoflush as $cachetoflush) {
                     if ($cachetoflush == 'dynamicdata') {
                         $q = new Query('DELETE', $this->db()->getPrefix() . '_cache_data');

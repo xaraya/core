@@ -27,7 +27,6 @@
  *     #$hookoutput#
  * </xar:foreach>
 **/
-sys::import('xaraya.structures.hooks.guisubject');
 class ModulesItemModifySubject extends GuiHookSubject
 {
     public $subject = 'ItemModify';

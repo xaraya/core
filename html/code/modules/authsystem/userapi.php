@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Authsystem;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the authsystem user API

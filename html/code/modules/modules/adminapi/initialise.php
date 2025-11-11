@@ -13,16 +13,11 @@ namespace Xaraya\Modules\Modules\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
+use Xaraya\Modules\InstallerTool;
+use ixarMod;
 use EmptyParameterException;
 use Exception;
 use ModuleNotFoundException;
-use xarEvents;
-use ixarMod;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
-use Xaraya\Modules\InstallerTool;
 
 /**
  * modules adminapi initialise function
@@ -64,7 +59,6 @@ class InitialiseMethod extends MethodClass
         }
 
         //Checks module dependency
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();
         if (!$installer->verifydependency($regid)) {
             //TODO: Add description of the dependencies

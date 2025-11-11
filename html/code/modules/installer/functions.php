@@ -135,7 +135,6 @@ class xarInstall extends xarObject
             return true;
         }
         // Use autoload() for module class methods
-        sys::autoload();
 
         $loadedAPICache[strtolower("$modName$modType")] = true;
 
@@ -165,7 +164,6 @@ class xarInstall extends xarObject
             return true;
         }
         // Use autoload() for module class methods
-        sys::autoload();
 
         // Load the module files
         $modOsType = xarVarPrep::path($modType);

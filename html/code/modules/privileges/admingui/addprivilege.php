@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use xarPrivilege;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin addprivilege function
@@ -87,7 +84,6 @@ class AddprivilegeMethod extends MethodClass
         }
 
         //Call the Privileges class
-        sys::import('modules.privileges.class.privilege');
         $priv = new xarPrivilege($pargs);
 
         //Try to add the privilege and bail if an error was thrown

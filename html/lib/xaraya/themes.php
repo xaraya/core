@@ -14,8 +14,6 @@
  * @todo Most of this doesnt belong here, but in the themes module, move it away
 */
 
-sys::import('xaraya.variables.theme');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\Modules\InfoHelper;
 use Xaraya\Services\xar;
 

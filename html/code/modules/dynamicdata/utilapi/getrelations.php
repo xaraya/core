@@ -13,13 +13,8 @@ namespace Xaraya\Modules\DynamicData\UtilApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UtilApi;
-use BadParameterException;
 use DataPropertyMaster;
-use xarHooks;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
+use BadParameterException;
 
 /**
  * dynamicdata utilapi getrelations function

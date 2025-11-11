@@ -15,9 +15,6 @@ use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\AdminGui;
 use Xaraya\Modules\Blocks\TypesApi;
 use ixarBlock;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks admin refresh_types function

@@ -11,8 +11,6 @@
  */
 
 // this is used in most methods below, so we import it here
-sys::import('modules.dynamicdata.class.objects.descriptor');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -228,8 +226,8 @@ class DataPropertyMaster extends xarObject
         } else {
             $proptypes = self::getPropertyTypes();
         }
-        if (!class_exists('DataProperty')) {
-            sys::import('modules.dynamicdata.class.properties.base');
+        if (!class_exists('DataProperty', true)) {
+            // oops
         }
         $clazz = 'DataProperty';
         if (isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']])) {
@@ -302,8 +300,8 @@ class DataPropertyMaster extends xarObject
                 'itemid' => $args['itemid'],
             ]
         );
-        if (!class_exists('DataObject')) {
-            sys::import('modules.dynamicdata.class.objects.base');
+        if (!class_exists('DataObject', true)) {
+            // oops
         }
         $objectid = $object->getItem();
         if (empty($objectid)) {
@@ -321,8 +319,8 @@ class DataPropertyMaster extends xarObject
      */
     public static function getPropertyTypes()
     {
-        if (!class_exists('PropertyRegistration')) {
-            sys::import('modules.dynamicdata.class.properties.registration');
+        if (!class_exists('PropertyRegistration', true)) {
+            // oops
         }
         return PropertyRegistration::Retrieve();
     }

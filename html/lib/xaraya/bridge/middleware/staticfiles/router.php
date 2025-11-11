@@ -15,10 +15,6 @@
 namespace Xaraya\Bridge\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;
-use sys;
-
-sys::import('xaraya.bridge.middleware.router');
-sys::import('xaraya.bridge.requests.staticfile');
 use Xaraya\Bridge\Requests\StaticFileHandler;
 
 class StaticFileRouter extends DefaultRouter implements DefaultRouterInterface

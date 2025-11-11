@@ -75,11 +75,10 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             );
             // If we have em, use em
 
-            if (method_exists('xarTpl', 'getThemeDir') && method_exists('xarTpl', 'file')) {
+            if (xarCore::isLoaded(xarCore::SYSTEM_TEMPLATES)) {
                 $tpl = xar::tpl();
                 $theme_dir = $tpl->getThemeDir();
                 $template = "systemerror";
-                sys::import('xaraya.caching.template');
                 if (file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
                     $msg = $tpl->file($theme_dir . '/modules/base/message-' . $template . '.xt', self::$data);
                 } else {
@@ -178,7 +177,6 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         // This is just for convenience when giving support, as people will probably
         // not look in the CACHEKEYS file to mention the template.
         $key = basename(strval($file), '.php');
-        sys::import('xaraya.caching.template');
         $sourceFile = xarTemplateCache::sourceFile($key);
 
         // Construct the msg in a table like way, so it's easily copy/pasteable
@@ -194,7 +192,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         // Show variables only if this configvar is set in the themes backend
         // Default is no
         $show = false;
-        if (class_exists('xarConfigVars') && xarCore::isLoaded(xarCore::SYSTEM_CONFIGURATION)) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_CONFIGURATION)) {
             try {
                 $show = xar::config()->getVar('Site.BL.ExceptionDisplay');
             } catch (Exception $e) {
@@ -207,7 +205,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             }
         }
 
-        if (!class_exists('xarController')) {
+        if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
             $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered.\n\n";
             $rawmsg .= "The last registered error message is:\n\n";
             $rawmsg .= $msg;
@@ -220,7 +218,6 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             $component = '';
             if ($module != '') {
                 // load relative to the current file (e.g. for shutdown functions)
-                sys::import('xaraya.exceptions.xarayacomponents');
                 foreach (xarComponents::$core as $corecomponent) {
                     if ($corecomponent['name'] == $module) {
                         $component = $corecomponent['fullname'];

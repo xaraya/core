@@ -16,9 +16,6 @@ use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\UserApi;
 use Query;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles admin showusers function
@@ -88,7 +85,6 @@ class ShowusersMethod extends MethodClass
         }
 
         // Check if we already have a selection
-        sys::import('xaraya.structures.query');
         $q = new Query();
         $q = $q->sessiongetvar('rolesquery');
         $q = '';

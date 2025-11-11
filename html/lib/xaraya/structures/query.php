@@ -10,7 +10,6 @@
  * @link http://www.xaraya.info
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -1307,7 +1306,6 @@ class Query
         // Each successive link needs to add exactly zero or one new table to the query string
 
         // Create a stack and load it
-        sys::import('xaraya.structures.sequences.stack');
         $stack = new Stack();
         $stack->load($this->tablelinks);
 

@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Privileges;
 
 use Xaraya\Modules\UserGuiClass;
-use sys;
-
-sys::import('xaraya.modules.usergui');
 
 /**
  * Handle the privileges user GUI

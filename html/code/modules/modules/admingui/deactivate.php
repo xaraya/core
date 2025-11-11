@@ -15,10 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
 use ixarMod;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
 use Xaraya\Modules\InstallerTool;
 
 /**
@@ -76,7 +72,6 @@ class DeactivateMethod extends MethodClass
             $return_url = $this->ctl()->getModuleURL('modules', 'admin', 'list', ['state' => 0], null) . '#' . $target;
         }
 
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();
 
         // If we haven't been to the deps GUI, check that first

@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\Privileges\AdminApi;
 use xarPrivileges;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin displayprivilege function
@@ -45,7 +42,6 @@ class DisplayprivilegeMethod extends MethodClass
         $this->var()->find('pinstance', $instance, 'array', []);
 
         //Call the Privileges class and get the privilege to be modified
-        sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getPrivilege($id);
 
         //Get the array of parents of this privilege

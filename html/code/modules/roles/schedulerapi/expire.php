@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Roles\SchedulerApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\SchedulerApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles schedulerapi expire function

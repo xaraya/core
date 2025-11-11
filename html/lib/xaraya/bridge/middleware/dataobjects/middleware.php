@@ -18,12 +18,6 @@ use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
 use Xaraya\Services\xar;
 use Exception;
-use sys;
-
-sys::import('xaraya.bridge.middleware.router');
-sys::import('xaraya.bridge.middleware.dataobjects.router');
-sys::import('modules.dynamicdata.class.userinterface');
-sys::import('xaraya.bridge.requests.dataobject');
 use Xaraya\Bridge\Requests\DataObjectRequestHandler;
 
 /**

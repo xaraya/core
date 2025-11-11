@@ -48,9 +48,6 @@ use Xaraya\Context\Context;
 use xarConst;
 use sys;
 
-sys::import('xaraya.context.contexttrait');
-sys::import("xaraya.context.context");
-
 /**
  * Use Twig template engine to generate output in Xaraya
  *
@@ -61,7 +58,6 @@ sys::import("xaraya.context.context");
  * 4. ModuleTagExtension - see modules.php
  * 5. PHPOtherExtension - see phpothers.php
  *
- * @uses \sys::autoload()
  */
 class TwigBridge implements ContextInterface
 {

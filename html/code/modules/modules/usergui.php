@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Modules;
 
 use Xaraya\Modules\UserGuiClass;
-use sys;
-
-sys::import('xaraya.modules.usergui');
 
 /**
  * Handle the modules user GUI

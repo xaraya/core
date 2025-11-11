@@ -13,14 +13,10 @@ namespace Xaraya\Modules\Modules\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
-use DuplicateException;
+use Xaraya\Modules\InstallerTool;
 use ixarMod;
 use xarVersion;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
-use Xaraya\Modules\InstallerTool;
+use DuplicateException;
 
 /**
  * modules adminapi regenerate function
@@ -47,7 +43,6 @@ class RegenerateMethod extends MethodClass
         }
 
         //Finds and updates missing modules
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();
         if (!$installer->checkformissing()) {
             return;
@@ -134,7 +129,6 @@ class RegenerateMethod extends MethodClass
                     // levels are significant for upgrades. A module writer could use the third level
                     // from 1.0.3 to 1.0.4
 
-                    sys::import('xaraya.version');
                     $vercompare = xarVersion::compare($modinfo['version'], $dbModules[$name]['version'], 2);
 
                     // Check if database version is less than (or equal to) the file version

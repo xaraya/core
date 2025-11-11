@@ -151,11 +151,11 @@ if (!class_exists('sys')) {
  */
 // Before we do anything make sure we can except out of code in a predictable matter
 if (!class_exists('xarExceptions')) {
-    sys::import('xaraya.exceptions');
+    // Note: this will set exception handlers
 }
 // Load core caching in case we didn't go through xar::cache()->init()
 if (!class_exists('xarCoreCache')) {
-    sys::import('xaraya.caching.core');
+    // Note: this is no longer applicable
 }
 
 /**
@@ -231,11 +231,9 @@ class xarCore extends xarObject
          * Get context from globals if not specified (default)
          */
         if (is_null($context)) {
-            sys::import('xaraya.context.factory');
             $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
         }
         // Set context for core services here first + return static services class
-        sys::import('xaraya.services.xar');
         $xar = Xaraya\Services\xar::setServicesContext($context);
 
         /**
@@ -259,12 +257,10 @@ class xarCore extends xarObject
         /**
          * Load system variables
         **/
-        sys::import('xaraya.variables.system');
 
         /*
          * Start the logging subsystem
          */
-        sys::import('xaraya.log');
         $xar->log()->init();
 
         /**
@@ -285,7 +281,6 @@ class xarCore extends xarObject
          *
          */
         if ($whatToLoad & self::SYSTEM_DATABASE) { // yeah right, as if this is optional
-            sys::import('xaraya.database');
             $xar->db()->init();
             $whatToLoad ^= self::BIT_DATABASE;
         }
@@ -297,7 +292,6 @@ class xarCore extends xarObject
          *       of Xaraya classes someday, we could initialize this earlier, e.g. in bootstrap ?
          */
         /* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
-        sys::import('xaraya.caching');
         $xar->cache()->init();
 
         // Check that the database was installed before we activate variable caching (we don't need to load it yet)
@@ -306,13 +300,11 @@ class xarCore extends xarObject
         }
 
         if ($xar->cache()->withVariables()) {
-            sys::import('xaraya.caching.variable');
         }
 
         /**
          * Start Events Subsystem
         **/
-        sys::import('xaraya.events');
         $xar->events()->init();
 
         xarLog::message("The basic subsystems are loaded", xarLog::LEVEL_NOTICE);
@@ -327,7 +319,6 @@ class xarCore extends xarObject
          */
         if ($whatToLoad & self::SYSTEM_CONFIGURATION) {
             // Start Variables utilities
-            sys::import('xaraya.variables');
             $xar->var()->init();
             $whatToLoad ^= self::BIT_CONFIGURATION;
             // We're about done here - everything else requires configuration, at least to initialize them !?
@@ -351,7 +342,6 @@ class xarCore extends xarObject
          * @todo <mrb> i thought it was configurable
         **/
         if ($whatToLoad & self::SYSTEM_MODULES) {
-            sys::import('xaraya.modules');
             $xar->mod()->init();
             $whatToLoad ^= self::BIT_MODULES;
             // We're about done here - everything else requires modules !?
@@ -365,22 +355,18 @@ class xarCore extends xarObject
          * Bring HTTP Protocol Server/Request/Response utilities into the story
          *
          */
-        sys::import('xaraya.server');
         $xar->req()->init([]);
-        sys::import('xaraya.mapper.main');
         $xar->ctl()->init();
 
         /**
          * Bring Multi Language System online
          *
          */
-        sys::import('xaraya.mls');
         // FIXME: Site.MLS.MLSMode is NULL during install
         $xar->mls()->init();
 
         /*
         // Testing of autoload + second-level cache storage - please do not use on live sites
-            sys::import('xaraya.caching.storage');
             $cache = xarCache_Storage::getCacheStorage(array('storage' => 'apcu', 'type' => 'core'));
             $xar->mem()->setCacheStorage($cache);
         */
@@ -391,7 +377,6 @@ class xarCore extends xarObject
          *
          */
         if ($whatToLoad & self::SYSTEM_TEMPLATES) {
-            sys::import('xaraya.templates');
             $xar->tpl()->init();
             $whatToLoad ^= self::BIT_TEMPLATES;
             // We're about done here - everything else requires templates !?
@@ -407,7 +392,6 @@ class xarCore extends xarObject
          */
 
         if ($whatToLoad & self::SYSTEM_SESSION) {
-            sys::import('xaraya.sessions');
             $xar->session()->init([]);
             $whatToLoad ^= self::BIT_SESSION;
             // We're about done here - everything else requires sessions !?
@@ -422,8 +406,6 @@ class xarCore extends xarObject
          * Initialise users, session, templates for GUI functions
         **/
         if ($whatToLoad & self::SYSTEM_USER) {
-            sys::import('xaraya.users');
-            sys::import('xaraya.security');
             // Start User System
             $xar->user()->init();
             $whatToLoad ^= self::BIT_USER;
@@ -442,7 +424,6 @@ class xarCore extends xarObject
         //        it's a legacy thought, we don't need it anymore
 
         if ($whatToLoad & self::SYSTEM_BLOCKS) {
-            sys::import('xaraya.blocks');
             // Start Blocks Support System
             $xar->block()->init();
             $whatToLoad ^= self::BIT_BLOCKS;
@@ -457,7 +438,6 @@ class xarCore extends xarObject
          * Start Hooks Subsystem
         **/
         if ($whatToLoad & self::SYSTEM_HOOKS) {
-            sys::import('xaraya.hooks');
             $xar->hooked()->init();
             $whatToLoad ^= self::BIT_HOOKS;
             // We're about done here - everything else requires hooks !?
@@ -515,7 +495,6 @@ class xarCore extends xarObject
             // See if config.system.php has info for us on the errorlevel, but dont break if it has not
             try {
                 $xarServices ??= Xaraya\Services\xar::getServicesClass();
-                sys::import('xaraya.variables.system');
                 $errLevel = $xarServices->sysConfig()->getVar('Exception.ErrorLevel');
             } catch (Exception $e) {
                 $errLevel = E_ALL;

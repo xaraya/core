@@ -16,10 +16,6 @@
 
 namespace Xaraya\Modules;
 
-use sys;
-
-sys::import('xaraya.modules.moduletrait');
-
 /**
  * Default module class without any components or methods
  */

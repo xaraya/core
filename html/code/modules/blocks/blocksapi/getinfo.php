@@ -16,9 +16,6 @@ use Xaraya\Modules\Blocks\BlocksApi;
 use BadParameterException;
 use DataNotFoundException;
 use EmptyParameterException;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks blocksapi getinfo function

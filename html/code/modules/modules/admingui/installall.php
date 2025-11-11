@@ -15,10 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
 use ixarMod;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
 use Xaraya\Modules\InstallerTool;
 
 /**
@@ -62,7 +58,6 @@ class InstallallMethod extends MethodClass
             return;
         }
 
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();
         foreach ($dbModules as $name => $info) {
             //Jump if already installed

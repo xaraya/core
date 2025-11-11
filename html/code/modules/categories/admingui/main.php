@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Categories\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin main function

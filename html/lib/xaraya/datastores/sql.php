@@ -15,11 +15,6 @@
 namespace Xaraya\DataObject\DataStores;
 
 use DataProperty;
-use sys;
-
-sys::import('xaraya.datastores.basic');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 
 /**
  * Base class for SQL Data Stores

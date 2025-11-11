@@ -24,8 +24,6 @@
  * @todo    evaluate scoping
 */
 
-sys::import('modules.privileges.class.security');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class xarMasks extends xarSecurity
@@ -302,7 +300,7 @@ class xarMasks extends xarSecurity
      */
     public static function clearCache()
     {
-        if (class_exists('xarModVars')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
             xar::mod('privileges')->setVar('clearcache', time());
         }
     }

@@ -17,9 +17,6 @@ use Xaraya\Services\DataObjectInterface;
 use Xaraya\Services\ServiceFactory;
 use Xaraya\Context\ContextFactory;
 use Exception;
-use sys;
-
-sys::import('modules.dynamicdata.class.userinterface');
 use DataObjectUserInterface;
 
 /**

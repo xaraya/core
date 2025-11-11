@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use BadParameterException;
 use ixarTheme;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes adminapi getlist function

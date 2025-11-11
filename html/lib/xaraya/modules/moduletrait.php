@@ -43,12 +43,8 @@ namespace Xaraya\Modules;
 use Xaraya\Context\Context;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
-use xarMod;
 use sys;
 use Exception;
-
-sys::import('xaraya.modules.servicestrait');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -80,7 +76,6 @@ interface ModuleInterface extends ContextInterface
 
 /**
  * Trait to get module classes via xar::mod()->getModule()
- * @uses \sys::autoload()
  * @see \xar::mod()->getModule()
  */
 trait ModuleTrait

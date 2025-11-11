@@ -22,10 +22,6 @@
  * @todo the double headed theme/module stuff needs to go, a theme is not a module
  */
 
-sys::import("xaraya.context.contexttrait");
-sys::import("xaraya.context.context");
-sys::import('xaraya.services.xar');
-use Xaraya\Context\ContextInterface;
 use Xaraya\Context\Context;
 use Xaraya\Services\ModulesService;
 use Xaraya\Services\Modules\AliasHelper;
@@ -55,12 +51,6 @@ class ModuleNotActiveException extends xarExceptions
 {
     protected $message = 'The module "#(1)" was called, but it is not active.';
 }
-
-/*
-    Bring in the module variables to maintain interface compatibility for now
-*/
-sys::import('xaraya.variables.module');
-sys::import('xaraya.variables.moduser');
 
 /**
  * Interface declaration for xarMod
@@ -340,7 +330,6 @@ class xarMod extends xarObject implements ixarMod
 
     /**
      * Get module class for modName based on defined namespace or ucfirst($modName)
-     * @uses \sys::autoload()
      * @param string $modName
      * @return \Xaraya\Modules\ModuleInterface
      */

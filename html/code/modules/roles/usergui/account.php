@@ -14,11 +14,8 @@ namespace Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
-use Exception;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
+use Exception;
 
 /**
  * roles user account function
@@ -151,7 +148,6 @@ class AccountMethod extends MethodClass
                 }
                 // no settings, we're dealing with the roles_user object
             } else {
-                sys::import('modules.dynamicdata.class.objects');
                 $object = $this->data()->getObject(['name' => 'roles_users']);
                 $object->tplmodule = 'roles';   // roles/xartemplates/objects/
                 $object->template = 'account';  // showdisplay- || showform- account.xt

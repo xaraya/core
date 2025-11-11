@@ -16,10 +16,6 @@ use Xaraya\Modules\DynamicData\UtilApi;
 use DataObject;
 use Query;
 use xarTableDDL;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata utilapi maketable function
@@ -103,7 +99,6 @@ class MaketableMethod extends MethodClass
         $dbconn = $this->db()->getConn();
 
         //Load Table Maintenance API
-        sys::import('xaraya.tableddl');
 
         $table = $prefix . 'dd_' . $myobject->name;
 
@@ -205,7 +200,6 @@ class MaketableMethod extends MethodClass
         } // throw back
         $dbconn->Execute($query);
 
-        sys::import('xaraya.structures.query');
         $objectlist = $this->data()->getObjectList(['name' => $myobject->name]);
         $items = $objectlist->getItems();
         $q = new Query('INSERT', $table);

@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Themes\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\UserApi;
 use xarMeta;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes userapi rendermeta function
@@ -37,7 +34,6 @@ class RendermetaMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        sys::import('modules.themes.class.xarmeta');
         $meta = xarMeta::getInstance();
         return $meta->render($args);
     }

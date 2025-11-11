@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules admin updateversion function

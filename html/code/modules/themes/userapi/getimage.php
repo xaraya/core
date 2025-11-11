@@ -13,10 +13,6 @@ namespace Xaraya\Modules\Themes\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\UserApi;
-use xarTpl;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes userapi getimage function

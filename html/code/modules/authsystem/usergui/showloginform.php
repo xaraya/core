@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Authsystem\UserGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\UserGui;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * authsystem user showloginform function

@@ -35,13 +35,6 @@ use Xaraya\Routing\RouterInterface;
 // use some Xaraya classes
 use sys;
 use JsonException;
-
-sys::import('xaraya.bridge.requests.bridge');
-sys::import('xaraya.bridge.requests.dataobject');
-sys::import('xaraya.bridge.requests.module');
-sys::import('xaraya.bridge.requests.block');
-sys::import('xaraya.bridge.requests.staticfile');
-sys::import('xaraya.bridge.requests.generic');
 use Xaraya\Bridge\Requests\BasicBridge;
 use Xaraya\Bridge\Requests\BasicRequest;
 use Xaraya\Bridge\Requests\DataObjectGuiHandler;
@@ -385,7 +378,6 @@ class RoutingBridge extends BasicBridge
      */
     public function getRestApiHandler()
     {
-        sys::import('xaraya.bridge.restapi.handler');
         $this->restAPIHandler ??= new RestAPIHandler();
         return $this->restAPIHandler;
     }
@@ -438,7 +430,6 @@ class RoutingBridge extends BasicBridge
      */
     public function getGraphQLHandler()
     {
-        sys::import('xaraya.bridge.graphql.handler');
         $this->graphQLHandler ??= new GraphQLHandler();
         return $this->graphQLHandler;
     }

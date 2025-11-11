@@ -17,10 +17,6 @@ use BadParameterException;
 use DataObjectList;
 use DataProperty;
 use EmptyParameterException;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata userapi dropdownlist function

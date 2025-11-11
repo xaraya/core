@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\UserApi;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles admin display function
@@ -44,7 +41,6 @@ class DisplayMethod extends MethodClass
 
 
         $data = [];
-        sys::import('modules.roles.class.roles');
         $role = xarRoles::get($id);
 
         $data['itemtype'] = $role->getType();

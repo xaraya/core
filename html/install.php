@@ -109,19 +109,14 @@ function xarInstallLoader()
     /**
      * Get context from globals if not specified (default)
      */
-    sys::import('xaraya.context.factory');
     $context = ContextFactory::fromGlobals(__METHOD__);
     // Set context for core services here first + return static services class
-    sys::import('xaraya.services.xar');
     $xar = xar::setServicesContext($context);
 
     /**
      * Set up caching
      */
-    sys::import('xaraya.caching');
 
-    sys::import('xaraya.core');
-    sys::import('xaraya.variables.system');
 
     // Besides what we explicitly load, we dont want to load
     // anything extra for maximum control
@@ -129,24 +124,14 @@ function xarInstallLoader()
     $whatToLoad = xarConst::SYSTEM_NONE;
 
     // Start Exception Handling System very early
-    sys::import('xaraya.exceptions');
 
     // Enable debugging always for the installer
     xarCore::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT, $xar);
 
     // Include some extra functions, as the installer is somewhat special
     // for loading gui and api functions
-    sys::import('modules.installer.functions');
 
     // Basic systems always loaded
-    sys::import('xaraya.log');
-    sys::import('xaraya.database');
-    sys::import('xaraya.events');
-    sys::import('xaraya.variables');
-    sys::import('xaraya.server');
-    sys::import('xaraya.mls');
-    sys::import('xaraya.templates');
-    sys::import('xaraya.mapper.main');
 
     // Start Logging Facilities as soon as possible
     $systemArgs = [];

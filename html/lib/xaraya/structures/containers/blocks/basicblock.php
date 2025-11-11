@@ -17,8 +17,6 @@
  * @param $args blockinfo from db passed in when instantiating
  *
 **/
-sys::import('xaraya.structures.containers.blocks.blocktype');
-sys::import('xaraya.structures.containers.blocks.servicestrait');
 use Xaraya\Blocks\BlockServicesInterface;
 use Xaraya\Blocks\BlockServicesTrait;
 use Xaraya\Context\Context;
@@ -154,7 +152,6 @@ abstract class BasicBlock extends BlockType implements iBlock
     {
         if ($this->xarversion != $this->type_version && $this->block()->hasMethod($this, 'upgrade', true)) {
             if (!empty($this->type_version)) {
-                sys::import('xaraya.version');
                 if (xarVersion::compare($this->type_version, $this->xarversion, 3) >= 0) {
                     // 1st version is bigger, can't downgrade blocks
                     throw new Exception();

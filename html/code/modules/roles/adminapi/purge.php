@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminApi;
 use Xaraya\Modules\Roles\UserApi;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles adminapi purge function

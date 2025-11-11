@@ -20,7 +20,6 @@
  * @author Michael Makushev
  * @author Marc Lutolf
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 class Roles_OnlineBlock extends BasicBlock
 {
     protected $type                = 'online';

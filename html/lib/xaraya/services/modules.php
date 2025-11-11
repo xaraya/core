@@ -22,11 +22,8 @@ use Xaraya\Modules\UserGuiInterface;
 use ixarMod;
 use xarRoles;
 use xarSecurity;
-use sys;
 use BadParameterException;
 use FunctionNotFoundException;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via ModulesTrait

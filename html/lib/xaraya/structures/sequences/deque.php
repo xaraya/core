@@ -10,8 +10,6 @@
  * @link http://www.xaraya.info
  */
 
-sys::import('xaraya.structures.sequences.interfaces');
-sys::import('xaraya.structures.sequences.adapters.sequence_adapter');
 
 // A deque can be manipulated at both ends
 // pop() and push() methods need a parameter $whichEnd, which can be:

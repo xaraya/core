@@ -14,7 +14,6 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 
-sys::import('blocklayout.template.source');
 use Xaraya\Services\xar;
 
 /**
@@ -32,7 +31,6 @@ class XarayaSourceTemplate extends SourceTemplate
     public function &compile()
     {
         assert(isset($this->fileName));
-        sys::import('xaraya.templating.compiler');
         $compiler = XarayaCompiler::instance();
         $templateCode = $compiler->compileFile($this->fileName);
 

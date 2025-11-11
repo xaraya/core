@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use xarPrivileges;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin updateprivilege function
@@ -74,7 +71,6 @@ class UpdateprivilegeMethod extends MethodClass
 
         // call the Privileges class and update the values
 
-        sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getPrivilege($id);
         if ($type == "empty") {
 

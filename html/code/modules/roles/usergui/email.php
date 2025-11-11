@@ -16,9 +16,6 @@ use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
 use ForbiddenOperationException;
 use ValidationExceptions;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles user email function

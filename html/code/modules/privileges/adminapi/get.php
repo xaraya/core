@@ -16,9 +16,6 @@ use Xaraya\Modules\Privileges\AdminApi;
 use EmptyParameterException;
 use VariableValidationException;
 use xarSecurity;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges adminapi get function

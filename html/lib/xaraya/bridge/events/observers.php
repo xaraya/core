@@ -3,13 +3,13 @@
 /**
  * Event Observer Bridges for Xaraya to forward events to a dispatcher compatible with Symfony EventDispatcher (not PSR-14)
  *
- * Xaraya -> call xarEvents::notify() -> callback to EventObserverBridge -> dispatch with EventDispatcher -> App event subscribers
+ * Xaraya -> call xar::events()->notify() -> callback to EventObserverBridge -> dispatch with EventDispatcher -> App event subscribers
  *
  * Event names to be dispatched via the EventDispatcher are structured as:
  * - xarEvents.{scope}.{event} e.g. xarEvents.user.UserLogin
  * - xarHooks.{scope}.{event} e.g. xarHooks.item.ItemCreate
  *
- * By default, any call to xarEvents::notify or xarHooks::notify can trigger an event dispatch as well, so it's up
+ * By default, any call to xar::events()->notify or xar::hooked()->notify can trigger an event dispatch as well, so it's up
  * to the event/hook observer bridges and your event subscribers to select which events they want to listen to.
  * An example of a test event subscriber is available in lib/xaraya/bridge/events/testers.php
  *
@@ -42,7 +42,7 @@
  * // trigger an event or hook call in Xaraya
  * $itemid = spl_object_id($subscriber);
  * $args = ['module' => 'dynamicdata', 'itemtype' => 3, 'itemid' => $itemid];
- * xarHooks::notify('ItemUpdate', $args, $context);
+ * xar::hooked()->notify('ItemUpdate', $args, $context);
  *
  * // receive the event via the event dispatcher in the event subscriber
  */
@@ -51,12 +51,7 @@ namespace Xaraya\Bridge\Events;
 
 //use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use sys;
-
-sys::import('xaraya.events');
-sys::import('xaraya.hooks');
-use xarEvents;
-use xarHooks;
+use Xaraya\Services\xar;
 
 interface ObserverBridgeInterface
 {
@@ -124,7 +119,7 @@ class EventObserverBridge implements ObserverBridgeInterface
     public static function register(): void
     {
         foreach (static::getObservedEvents() as $event => $eventName) {
-            xarEvents::registerCallback($event, [static::class, 'callbackEvent']);
+            xar::events()->registerCallback($event, [static::class, 'callbackEvent']);
         }
     }
 
@@ -137,7 +132,7 @@ class EventObserverBridge implements ObserverBridgeInterface
 
     public static function getEventList(): array
     {
-        return xarEvents::getSubjects();
+        return xar::events()->getSubjects();
     }
 
     public static function getEventName(string $eventScope, string $eventType): string
@@ -173,7 +168,7 @@ class HookObserverBridge extends EventObserverBridge implements ObserverBridgeIn
     public static function register(): void
     {
         foreach (static::getObservedEvents() as $event => $eventName) {
-            xarHooks::registerCallback($event, [static::class, 'callbackEvent']);
+            xar::hooked()->registerCallback($event, [static::class, 'callbackEvent']);
         }
     }
 
@@ -186,6 +181,6 @@ class HookObserverBridge extends EventObserverBridge implements ObserverBridgeIn
 
     public static function getEventList(): array
     {
-        return xarHooks::getSubjects();
+        return xar::hooked()->getSubjects();
     }
 }

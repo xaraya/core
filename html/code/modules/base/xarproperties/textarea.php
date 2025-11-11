@@ -3,7 +3,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.dynamicdata.class.properties.base');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework

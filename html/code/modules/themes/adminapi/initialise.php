@@ -17,9 +17,6 @@ use EmptyParameterException;
 use Exception;
 use ThemeNotFoundException;
 use ixarTheme;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes adminapi initialise function

@@ -17,10 +17,7 @@
 namespace Xaraya\Services;
 
 use xarSecurity;
-use sys;
 use ForbiddenOperationException;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via SecurityTrait

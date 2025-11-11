@@ -1,7 +1,6 @@
 <?php
 
 /* Include the base class */
-sys::import('modules.base.xarproperties.textbox');
 
 /**
  * The ICQ property is a basic wrapper for ICQ messaging functionality

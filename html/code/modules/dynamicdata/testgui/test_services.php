@@ -16,10 +16,6 @@ namespace Xaraya\Modules\DynamicData\TestGui;
 
 use Xaraya\Modules\DynamicData\TestGui;
 use Xaraya\Modules\DynamicData\MethodClass;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * Test handling module function in separate file with services

@@ -10,7 +10,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 class Base_WaitingContentBlock extends BasicBlock implements iBlock
 {
     public $type                = 'waitingcontent';

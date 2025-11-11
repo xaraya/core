@@ -51,10 +51,6 @@ use Xaraya\Services\WithServicesClass;
 use Connection;
 use xarCore;
 use BadParameterException;
-use sys;
-
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('xaraya.database.external');
 
 /**
  * For documentation purposes only - available via DatabaseTrait

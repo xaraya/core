@@ -14,7 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('modules.dynamicdata.class.objects.base');
 
 class Category extends DataObject
 {
@@ -109,7 +108,6 @@ class Category extends DataObject
                 $celkoposition->inorout = 'in';
 
                 // Get top level nodes (there should only be one)
-                sys::import('modules.categories.class.worker');
                 $worker = new CategoryWorker();
                 $worker->setTable($celkoposition->initialization_celkotable);
                 $toplevels = $worker->gettoplevel();

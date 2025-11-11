@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use xarPrivileges;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles admin removeprivilege function

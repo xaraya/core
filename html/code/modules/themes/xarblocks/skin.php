@@ -20,7 +20,6 @@
  * @author Marco Canini
  * initialise block
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class Themes_SkinBlock extends BasicBlock implements iBlock
 {

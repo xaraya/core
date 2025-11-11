@@ -16,7 +16,6 @@
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-sys::import('modules.dynamicdata.class.simpleinterface');
 
 function dynamicdata_object_runmethod(array $args = [], $context = null)
 {

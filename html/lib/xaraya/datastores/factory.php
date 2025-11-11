@@ -13,17 +13,14 @@
 namespace Xaraya\DataObject\DataStores;
 
 use Xaraya\Database\ExternalDatabase;
+use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\xar;
 use xarObject;
 use DataObject;
 use SimpleXMLElement;
 use BadParameterException;
 use Exception;
 use sys;
-
-sys::import('xaraya.datastores.interface');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
-use Xaraya\Services\WithServicesClass;
 
 /**
  * Base class for DD objects datastore
@@ -169,37 +166,28 @@ class DataStoreFactory extends xarObject
     {
         switch ($type) {
             case 'relational':
-                sys::import('xaraya.datastores.sql.relational');
                 $datastore = new RelationalDataStore(null, $dbConnIndex);
                 break;
             case 'data':
-                sys::import('xaraya.datastores.sql.variabletable');
                 $datastore = new VariableTableDataStore($name);
                 break;
             case 'hook':
-                sys::import('xaraya.datastores.hook');
                 $datastore = new HookDataStore($name);
                 break;
             case 'modulevars':
-                sys::import('xaraya.datastores.sql.modulevariables');
                 // TODO: integrate module variable handling with DD
                 $datastore = new ModuleVariablesDataStore($name);
                 break;
             case 'none':
-                sys::import('xaraya.datastores.virtual');
                 $datastore = new DummyDataStore($name);
                 break;
             case 'cache':
-                sys::import('xaraya.datastores.caching');
                 $datastore = new CachingDataStore($name, $storage);
                 break;
             case 'external':
-                /** @uses \sys::autoload() */
-                sys::import('xaraya.datastores.external');
                 $datastore = ExternalDataStore::getDataStore($name, $dbConnIndex, $dbConnArgs);
                 break;
             default:
-                sys::import('xaraya.datastores.sql.variabletable');
                 $datastore = new VariableTableDataStore($name);
                 break;
         }
@@ -241,7 +229,6 @@ class DataStoreFactory extends xarObject
         }
 
         // @todo add support/combine with Database Service
-        sys::import('xaraya.database.external');
         $object->dbConnIndex = ExternalDatabase::checkDbConnection($object->dbConnIndex, $object->dbConnArgs);
         // use external database connection
         if (ExternalDatabase::isIndexExternal($object->dbConnIndex)) {

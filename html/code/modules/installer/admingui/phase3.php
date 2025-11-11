@@ -13,13 +13,11 @@ namespace Xaraya\Modules\Installer\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
-use Exception;
 use xarConst;
 use xarInst;
 use sys;
 use PHPBackendGenerator;
-
-sys::import('xaraya.modules.method');
+use Exception;
 
 /**
  * installer admin phase3 function

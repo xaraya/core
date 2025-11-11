@@ -35,10 +35,6 @@
 
 namespace Xaraya\Modules;
 
-use sys;
-
-sys::import('xaraya.modules.installertrait');
-
 /**
  * Handle module installer functions
  * @template TModule of ModuleInterface|null

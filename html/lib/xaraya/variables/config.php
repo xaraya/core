@@ -14,8 +14,6 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
 
-sys::import('xaraya.variables');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 use Xaraya\Services\ConfigService;
 

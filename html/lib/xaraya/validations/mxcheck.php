@@ -40,7 +40,6 @@ ifsnow is korean phper. Is sorry to be unskillful to English. *^^*;;
  *
  * @throws VariableValidationException
 **/
-sys::import('xaraya.validations');
 class MxCheckValidation extends ValueValidations
 {
     public function validate(&$subject, array $parameters)

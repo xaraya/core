@@ -11,7 +11,6 @@
  *
  * @author mikespub <mikespub@xaraya.com>
 */
-sys::import('modules.base.xarproperties.dropdown');
 
 /**
  * This property displays a dropdown of dataproperty statuses

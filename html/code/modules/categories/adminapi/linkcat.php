@@ -18,8 +18,6 @@ use BadParameterException;
 use Query;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * categories adminapi linkcat function
  * @extends MethodClass<AdminApi>
@@ -133,7 +131,6 @@ class LinkcatMethod extends MethodClass
         }
 
         foreach ($args['iids'] as $iid) {
-            sys::import('xaraya.structures.query');
             // @checkme where is this coming from?
             //sys::import('modules.categories.class.tag');
             $i = 0;

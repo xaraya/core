@@ -16,10 +16,6 @@ use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
 use Exception;
 use ixarMod;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
 use Xaraya\Modules\InstallerTool;
 
 /**
@@ -69,7 +65,6 @@ class UpgradeMethod extends MethodClass
         $success = true;
 
         // See if we have lost any modules since last generation
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();
         if (!$installer->checkformissing()) {
             return;

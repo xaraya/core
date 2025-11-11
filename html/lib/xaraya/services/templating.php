@@ -21,6 +21,7 @@ use DataPropertyMaster;
 use XarayaCompiler;
 use XarayaSourceTemplate;
 use xarConst;
+use xarCore;
 use xarTemplateCache;
 use xarTplPager;
 use xarTwigTpl;
@@ -30,8 +31,6 @@ use BadParameterException;
 use DirectoryNotFoundException;
 use FileNotFoundException;
 use Exception;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via TemplatingTrait
@@ -178,11 +177,8 @@ trait TemplatingTrait
         }
 
         // @todo is the core define still needed now?
-        sys::import('xaraya.caching.template');
         xarTemplateCache::init(sys::varpath() . xarConst::TPL_CACHEDIR, $config['enableTemplatesCaching']);
 
-        // This is wrong here as well, but it's better at least than in modules.php
-        sys::import('xaraya.themes');
         $this->initialized = true;
         return true;
     }
@@ -240,7 +236,6 @@ trait TemplatingTrait
         }
 
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
             if (xarTwigTpl::isModuleSupported($modName)) {
                 return xarTwigTpl::module($modName, $modType, $funcName, $tplData, $templateName);
             }
@@ -267,7 +262,7 @@ trait TemplatingTrait
         // 2. Create a page in the themes module with an interface
         // 3. Use 1. to link to 2.
         // @checkme: modules is a depency of templates, redundant check?
-        if (method_exists('\xarModVars', 'get') && method_exists('\xarUser', 'getVar') && empty($xar->mem()->get('installer', 'installing'))) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xarCore::isLoaded(xarCore::SYSTEM_USER) && empty($xar->mem()->get('installer', 'installing'))) {
             if ($xar->mod('themes')->getVar('variable_dump') && $xar->user()->isDebugAdmin()) {
                 echo '<pre>',var_export($tplData, 1),'</pre>';
             }
@@ -298,7 +293,6 @@ trait TemplatingTrait
         // use name of blocktype as base unless over-ridden
         $tplBase = empty($tplBase) ? $blockType : $tplBase;
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
             if (xarTwigTpl::isBlockSupported($tplBase, $modName)) {
                 return xarTwigTpl::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
             }
@@ -333,7 +327,6 @@ trait TemplatingTrait
         $tplData['context'] ??= $this->getContext();
 
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
             if (xarTwigTpl::isObjectSupported($objectName, $modName)) {
                 return xarTwigTpl::object($modName, $objectName, $tplType, $tplData);
             }
@@ -382,7 +375,6 @@ trait TemplatingTrait
 
         // @todo check and handle stand-alone properties with module 'auto' + adapt includes path
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
             if (xarTwigTpl::isPropertySupported($propertyName, $modName)) {
                 return xarTwigTpl::property($modName, $propertyName, $tplType, $tplData, $tplBase);
             }
@@ -976,7 +968,6 @@ trait TemplatingTrait
         xarTemplateCache::saveEntry('memory', $templateCode);
 
         // Execute the cache file
-        sys::import('blocklayout.template.compiled');
         $compiled = new CompiledTemplate(xarTemplateCache::cacheFile('memory'));
         try {
             $caching = $xar->config()->getVar('Site.BL.MemCacheTemplates');
@@ -1008,7 +999,6 @@ trait TemplatingTrait
      */
     public function compileString(string $templateSource): string
     {
-        sys::import('xaraya.templating.compiler');
         $compiler = XarayaCompiler::instance();
         return $compiler->compileString($templateSource);
     }
@@ -1042,7 +1032,6 @@ trait TemplatingTrait
         }
         $context = $this->getContext();
         if (!empty($context) && !empty($context['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
             if (xarTwigTpl::isThemeSupported($context)) {
                 return xarTwigTpl::renderPage($mainModuleOutput, $pageTemplate, $context);
             }
@@ -1076,7 +1065,6 @@ trait TemplatingTrait
     public function renderBlockBox(array $blockInfo, ?string $templateName = null): string
     {
         if (!empty($blockInfo['context']) && !empty($blockInfo['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
             if (xarTwigTpl::isThemeSupported($blockInfo['context'])) {
                 return xarTwigTpl::renderBlockBox($blockInfo, $templateName);
             }
@@ -1165,7 +1153,6 @@ trait TemplatingTrait
             // Determine if we need to compile this template
             if (xarTemplateCache::isDirty($sourceFileName)) {
                 // Get an instance of SourceTemplate
-                sys::import('xaraya.templating.source');
                 $srcTemplate = new XarayaSourceTemplate($sourceFileName);
 
                 // Compile it
@@ -1185,7 +1172,6 @@ trait TemplatingTrait
 
         // Execute the compiled template from the cache file
         // @todo the tplType should be irrelevant
-        sys::import('blocklayout.template.compiled');
         $compiled = new CompiledTemplate($cachedFileName, $sourceFileName, $tplType);
         try {
             $caching = $xar->config()->getVar('Site.BL.MemCacheTemplates');
@@ -1213,7 +1199,7 @@ trait TemplatingTrait
 
         $finalTemplate = '';
         try {
-            if ($this->outputTemplateFilenames() && class_exists('xarUser') && ($xar->user()->isDebugAdmin())) {
+            if ($this->outputTemplateFilenames() && xarCore::isLoaded(xarCore::SYSTEM_USER) && ($xar->user()->isDebugAdmin())) {
                 $outputStartComment = true;
                 if ($this->isHeaderContent === false) {
                     if ($this->isHeaderContent = $this->modifyHeaderContent($sourceFileName, $tplOutput)) {
@@ -1245,7 +1231,7 @@ trait TemplatingTrait
         $xar = $this->getParent();
         try {
             // We need to make sure enough of the core is loaded to run this
-            $allowed = method_exists('\xarUser', 'getVar');
+            $allowed = xarCore::isLoaded(xarCore::SYSTEM_USER);
             if ($allowed
                 && !isset($this->showPHPCommentBlockInTemplates)
                 && $xar->user()->isDebugAdmin()) {

@@ -16,9 +16,6 @@ use Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\AdminApi;
 use sys;
 
-sys::import('modules.dynamicdata.method');
-
-
 /**
  * dynamicdata admin modify function
  * @extends MethodClass<AdminGui>

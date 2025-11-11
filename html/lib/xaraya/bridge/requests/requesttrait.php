@@ -13,9 +13,6 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
-use sys;
-
-sys::import('modules.dynamicdata.class.userinterface');
 
 /**
  * For documentation purposes only - available via CommonRequestTrait

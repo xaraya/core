@@ -18,10 +18,6 @@
 
 namespace Xaraya\DataObject\DataStores;
 
-use sys;
-
-sys::import('xaraya.datastores.external');
-
 /**
  * External datastore for DD objects using MongoDB connection from ExternalDatabase
  * ```
@@ -35,7 +31,6 @@ sys::import('xaraya.datastores.external');
  * ];
  * $config['dbConnArgs'] = json_encode($config['dbConnArgs']);
  * ```
- * @uses \sys::autoload()
  */
 class MongoDBDataStore extends ExternalDataStore
 {

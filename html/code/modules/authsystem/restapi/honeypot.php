@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Authsystem\RestApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\RestApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * authsystem restapi honeypot function

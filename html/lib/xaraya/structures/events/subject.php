@@ -12,7 +12,6 @@
  **/
 
 
-sys::import('xaraya.context.contexttrait');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Services\WithServicesClass;

@@ -17,13 +17,7 @@ use Xaraya\Sessions\VirtualSession;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
 use Xaraya\Services\xar;
-use sys;
 use RuntimeException;
-
-sys::import('xaraya.sessions.interface');
-sys::import('xaraya.sessions.virtual');
-sys::import('xaraya.sessions.storage');
-sys::import('xaraya.context.contexttrait');
 
 /**
  * Session instance with context for use with xar::session()->setInstance()

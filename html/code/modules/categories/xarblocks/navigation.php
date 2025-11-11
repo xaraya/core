@@ -16,7 +16,6 @@
 /**
  * initialise block
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class Categories_NavigationBlock extends BasicBlock implements iBlock
 {
@@ -116,7 +115,6 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
             $mastercids = $rootcids;
         } else {
             // Get number of categories for this module + item type
-            sys::import('modules.categories.class.worker');
             $worker = new CategoryWorker();
             $numcats = $worker->gettoplevelcount();
 

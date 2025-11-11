@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Themes\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\UserApi;
 use xarJS;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes userapi registerjs function
@@ -57,7 +54,6 @@ class RegisterjsMethod extends MethodClass
             $args['index'] = null;
         }
 
-        sys::import('modules.themes.class.xarjs');
         $javascript = xarJS::getInstance();
         return $javascript->register($args);
     }

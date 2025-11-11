@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Authsystem;
 
 use Xaraya\Modules\AdminGuiClass;
-use sys;
-
-sys::import('xaraya.modules.admingui');
 
 /**
  * Handle the authsystem admin GUI

@@ -52,11 +52,8 @@ use sys;
 use Exception;
 use FunctionNotFoundException;
 
-sys::import('xaraya.bridge.requests.requesttrait');
-
 /**
  * See xardocs/graphql.txt for class structure
- * @uses \sys::autoload()
  */
 class GraphQLHandler extends xarObject implements CommonRequestInterface, ContextInterface, CacheInterface, TimerInterface
 {

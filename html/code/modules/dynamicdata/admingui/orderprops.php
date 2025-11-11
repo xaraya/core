@@ -16,10 +16,6 @@ use Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\UserApi;
 use Xaraya\Modules\DynamicData\AdminApi;
 use BadParameterException;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata admin orderprops function

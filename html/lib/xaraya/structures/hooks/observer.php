@@ -10,8 +10,6 @@
  * @link http://www.xaraya.info
  */
 
-sys::import('xaraya.structures.events.observer');
-sys::import('xaraya.services.servicestrait');
 use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\ServicesTrait;
 

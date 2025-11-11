@@ -40,7 +40,6 @@
  *
  * @throws VariableValidationException
 **/
-sys::import('xaraya.validations');
 class KeyListValidation extends ValueValidations
 {
     public function validate(&$subject, array $parameters)

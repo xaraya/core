@@ -16,9 +16,6 @@ namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Modules\ModuleClass;
 use Xaraya\Modules\AdminGuiInterface;
-use sys;
-
-sys::import('modules.dynamicdata.class.objects');
 
 /**
  * Get dynamicdata module classes via xar::mod()->getModule()

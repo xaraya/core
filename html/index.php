@@ -36,10 +36,8 @@ function xarLoader()
     /**
      * Get context from globals if not specified (default)
      */
-    sys::import('xaraya.context.factory');
     $context = ContextFactory::fromGlobals(__METHOD__);
     // Set context for core services here first + return static services class
-    sys::import('xaraya.services.xar');
     $xar = xar::setServicesContext($context);
 
     /**
@@ -47,14 +45,12 @@ function xarLoader()
      * Note: this happens first so we can serve cached pages to first-time visitors
      *       without loading the core
      */
-    sys::import('xaraya.caching');
     // Note: we may already exit here if session-less page caching is enabled
     $xar->cache()->init();
 
     /**
      * Load the Xaraya core with context
      */
-    sys::import('xaraya.core');
     xarCore::xarInit(xarCore::SYSTEM_ALL, $context);
 }
 

@@ -18,9 +18,6 @@ use Xaraya\Modules\DynamicData\AdminApi;
 use DataPropertyMaster;
 use sys;
 
-sys::import('modules.dynamicdata.method');
-
-
 /**
  * dynamicdata admin delete function
  * @extends MethodClass<AdminGui>

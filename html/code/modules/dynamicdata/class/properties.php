@@ -21,6 +21,3 @@
     Over time this will probably change. For now i just made sure that everyone
     can still reach the same stuff as before.
 */
-sys::import('modules.dynamicdata.class.properties.master');
-sys::import('modules.dynamicdata.class.properties.base');
-sys::import('modules.dynamicdata.class.properties.registration');

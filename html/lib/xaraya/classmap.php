@@ -71,7 +71,6 @@ class xarClassMap extends xarObject
             $classmap = require $cacheFile;
             return $classmap;
         }
-        sys::import('xaraya.tools.classmapparser');
         $parser = new \Xaraya\Tools\ClassMapParser();
         $classmap = $parser->parse($file);
         file_put_contents($cacheFile, "<?php\nreturn " . var_export($classmap, true) . ";\n");

@@ -16,9 +16,6 @@ use Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\Categories\UserApi;
 use Xaraya\Modules\Categories\AdminApi;
 use Exception;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin checklinks function

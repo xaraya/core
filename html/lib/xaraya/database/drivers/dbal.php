@@ -16,7 +16,6 @@ namespace Xaraya\Database\Drivers;
 
 /**
  * Provide an external database connection via Doctrine DBAL
- * @uses \sys::autoload()
  */
 class DbalDriver
 {

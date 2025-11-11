@@ -15,11 +15,7 @@
  * @author Michel Dalle <mikespub@xaraya.com>
 **/
 
-sys::import('xaraya.requests.interface');
-sys::import('xaraya.requests.handler');
-sys::import('xaraya.services.xar');
-use Xaraya\Requests\RequestInterface;
-use Xaraya\Requests\RequestHandler;
+use Xaraya\Requests\RequestInterface as RequestFacade;
 use Xaraya\Services\ControllerService;
 use Xaraya\Services\RequestService;
 use Xaraya\Services\xar;
@@ -32,8 +28,6 @@ class xarServer extends xarObject
     public const PROTOCOL_HTTP  = 'http';
     public const PROTOCOL_HTTPS = 'https';
 
-    /** @var class-string<RequestInterface> */
-    private static $requestClass = RequestHandler::class;
     protected static ?ControllerService $ctlService = null;
     protected static ?RequestService $reqService = null;
 
@@ -92,7 +86,7 @@ class xarServer extends xarObject
 
     /**
      * Get the request class instance (on demand)
-     * @return RequestInterface
+     * @return RequestFacade
      */
     public static function getInstance()
     {
@@ -101,7 +95,7 @@ class xarServer extends xarObject
 
     /**
      * Set the request class instance
-     * @param RequestInterface $instance
+     * @param RequestFacade $instance
      * @return void
      */
     public static function setInstance($instance)
@@ -112,7 +106,7 @@ class xarServer extends xarObject
     /**
      * Summary of newInstance
      * @param mixed $context
-     * @return RequestInterface
+     * @return RequestFacade
      */
     public static function newInstance($context = null)
     {

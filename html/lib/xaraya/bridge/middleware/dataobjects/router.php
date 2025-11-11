@@ -16,10 +16,6 @@
 namespace Xaraya\Bridge\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;
-use sys;
-
-sys::import('xaraya.bridge.middleware.router');
-sys::import('xaraya.bridge.requests.dataobject');
 use Xaraya\Bridge\Requests\DataObjectRequestHandler;
 
 class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface

@@ -19,7 +19,6 @@ namespace Xaraya\Services\Caching;
 use Xaraya\Services\CachingService;
 use Xaraya\Services\ServiceClass;
 use xarCore;
-use xarHooks;
 use ixarCache_Storage;
 
 /**

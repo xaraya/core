@@ -23,10 +23,6 @@
  * @todo See how utf-8 works for xml backend
  */
 
-sys::import('xaraya.locales');
-//sys::import('xaraya.transforms.xarCharset');
-sys::import('xaraya.mlsbackends.reference');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\MultiLanguageService;
 use Xaraya\Services\xar;
 

@@ -15,13 +15,10 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\Roles\AdminApi;
+use xarRoles;
 use DuplicateException;
 use Exception;
 use ForbiddenOperationException;
-use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles user usermenu function
@@ -74,8 +71,6 @@ class UsermenuMethod extends MethodClass
         switch (strtolower($phase)) {
 
             case 'updatebasic':
-
-                sys::import('modules.dynamicdata.class.objects.factory');
 
                 $object = $this->data()->getObject(['name' => 'roles_users']);
                 $object->getItem(['itemid' => $id]);

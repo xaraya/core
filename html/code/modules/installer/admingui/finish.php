@@ -13,10 +13,6 @@ namespace Xaraya\Modules\Installer\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
-use xarSystemVars;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * installer admin finish function

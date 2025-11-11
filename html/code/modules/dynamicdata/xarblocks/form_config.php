@@ -14,7 +14,6 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.dynamicdata.xarblocks.form');
 
 /**
  * Manage block config

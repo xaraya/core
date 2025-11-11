@@ -13,12 +13,9 @@ namespace Xaraya\Modules\Mail\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminApi;
+use sys;
 use DirectoryNotFoundException;
 use FileNotFoundException;
-use xarTpl;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * mail adminapi getsourcefilename function

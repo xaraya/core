@@ -266,7 +266,6 @@ class xarLog extends xarObject
         $args = ['name' => $name, 'var' => $var, 'format' => 'text'];
 
         //Encapsulate core libraries in classes and let __call work lazy loading
-        sys::import('xaraya.log.functions.dumpvariable');
         self::message(self::dumpVariable($args), $level);
     }
 
@@ -376,7 +375,6 @@ class xarLog extends xarObject
     **/
     public static function addLogger($type, $config_args)
     {
-        sys::import('xaraya.log.loggers.' . $type);
         $logger = 'xarLogger_' . $type;
 
         if (!$observer = new $logger($config_args)) {

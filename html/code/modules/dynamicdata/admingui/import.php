@@ -20,9 +20,6 @@ use Exception;
 use FileNotFoundException;
 use sys;
 
-sys::import('modules.dynamicdata.method');
-
-
 /**
  * dynamicdata admin import function
  * @extends MethodClass<AdminGui>

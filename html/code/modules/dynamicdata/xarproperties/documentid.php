@@ -21,10 +21,8 @@ namespace Xaraya\DataObject\Properties;
 
 use DataProperty;
 use ObjectDescriptor;
-use sys;
 
 /* Include parent class */
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * The Document ID property holds a unique string identifier for an item or document

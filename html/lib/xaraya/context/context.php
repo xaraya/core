@@ -15,10 +15,6 @@ namespace Xaraya\Context;
 use ArrayObject;
 use sys;
 
-sys::import('xaraya.context.interface');
-sys::import('xaraya.context.factory');
-sys::import('xaraya.requests.context');
-
 /**
  * Context object for request etc.
  * @template TKey of array-key
@@ -81,7 +77,6 @@ class Context extends ArrayObject implements ContextObjectInterface
     public function getUserId()
     {
         if (!$this->offsetExists('userId')) {
-            sys::import('xaraya.context.user');
             $userContext = new UserContext($this);
             $userId = $userContext->getUserId();
             $this->offsetSet('userId', $userId);

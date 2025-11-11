@@ -21,11 +21,7 @@ use EmptyParameterException;
 use Exception;
 use Query;
 use SimpleXMLElement;
-use sys;
 use ValueValidations;
-
-sys::import('modules.blocks.method');
-sys::import('xaraya.validations');
 
 /**
  * blocks adminapi import function
@@ -77,7 +73,6 @@ class ImportMethod extends MethodClass
         $dom = dom_import_simplexml($xmlobject);
         $roottag = $dom->tagName;
 
-        sys::import('xaraya.validations');
         $boolean = ValueValidations::get('bool');
         $integer = ValueValidations::get('int');
 
@@ -129,7 +124,6 @@ class ImportMethod extends MethodClass
 
             // Oddly enough there is no blocks dd object, so do a direct SQL insert
             $tables = $this->db()->getTables();
-            sys::import('xaraya.structures.query');
             $q = new Query('INSERT', $tables['block_instances']);
             $q->addfield('name', $args['name']);
             $q->addfield('title', $args['title']);

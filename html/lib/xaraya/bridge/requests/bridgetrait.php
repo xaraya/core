@@ -14,7 +14,6 @@ namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
 use Xaraya\Services\WithServicesClass;
-use xarSystemVars;
 use sys;
 
 /**

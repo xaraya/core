@@ -16,9 +16,6 @@ use Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\Categories\UserApi;
 use Xaraya\Modules\Categories\VisualApi;
 use BadParameterException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin modifyhook function

@@ -13,10 +13,6 @@ namespace Xaraya\Modules\DynamicData\UserApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UserApi;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata userapi decode_shorturl function

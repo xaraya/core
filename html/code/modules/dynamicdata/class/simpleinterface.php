@@ -12,8 +12,6 @@
  * @author Johnny Robeson <johnny@localmomentum.net>
  */
 
-sys::import('modules.dynamicdata.class.ui_handlers.default');
-sys::import("xaraya.context.context");
 use Xaraya\DataObject\Handlers\DefaultHandler;
 use Xaraya\Context\Context;
 

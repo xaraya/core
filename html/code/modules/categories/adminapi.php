@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Categories;
 
 use Xaraya\Modules\AdminApiClass;
-use sys;
-
-sys::import('xaraya.modules.adminapi');
 
 /**
  * Handle the categories admin API

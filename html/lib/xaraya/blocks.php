@@ -14,8 +14,6 @@
  * @author Chris Powis
  */
 
-sys::import("xaraya.context.context");
-sys::import('xaraya.services.xar');
 use Xaraya\Context\Context;
 use Xaraya\Services\BlocksService;
 use Xaraya\Services\xar;

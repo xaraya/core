@@ -13,10 +13,6 @@ namespace Xaraya\Modules\DynamicData\AdminGui;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminGui;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata admin rename_static_table function

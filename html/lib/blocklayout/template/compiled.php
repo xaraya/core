@@ -13,8 +13,6 @@
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
-
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -66,7 +64,6 @@ class CompiledTemplate extends xarObject
         extract($bindvars, EXTR_OVERWRITE);
 
         if ($this->type == 'page') {
-            sys::import('xaraya.exceptions.handlers');
             xarDebug::setExceptionHandler(['ExceptionHandlers','bone']);
         }
 
@@ -75,9 +72,9 @@ class CompiledTemplate extends xarObject
 
         try {
             // If caching is enabled then cache it for subsequent reuse
-            if ($caching) {
+            // @todo check auto-loading this for stream_wrapper_register()
+            if ($caching && class_exists('VariableStream', true)) {
                 // Set up a variable stream
-                sys::import('xaraya.streams.variables');
                 // This variable will hold the stream contents
                 global $_compiler_output;
 

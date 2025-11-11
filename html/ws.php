@@ -36,13 +36,11 @@ function xarWSLoader()
      * Note: this happens first so we can serve cached pages to first-time visitors
      *       without loading the core
      */
-    sys::import('xaraya.caching');
     xar::cache()->init();
 
     /**
      * Load the Xaraya core
      */
-    sys::import('xaraya.core');
     xarCore::xarInit(xarCore::SYSTEM_ALL);
 }
 

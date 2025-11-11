@@ -24,9 +24,6 @@ use FileNotFoundException;
 use FunctionNotFoundException;
 use IDNotFoundException;
 use ixarBlock;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks admin modify_instance function

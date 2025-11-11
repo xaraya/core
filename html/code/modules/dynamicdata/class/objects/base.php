@@ -10,8 +10,6 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-sys::import('modules.dynamicdata.class.objects.master');
-sys::import('modules.dynamicdata.class.objects.interfaces');
 
 /**
  * DataObject Base class

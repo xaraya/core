@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes adminapi dropdownlist function

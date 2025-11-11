@@ -18,10 +18,6 @@
  * http://www.doctrine-project.org/documentation/manual/2_0/en
  */
 
-sys::import('modules.dynamicdata.class.objects.descriptor');
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('xaraya.datastores.factory');
-sys::import('modules.dynamicdata.class.objects.servicestrait');
 use Xaraya\DataObject\DataStores\DataStoreFactory;
 use Xaraya\DataObject\DataStores\IBasicDataStore;
 use Xaraya\DataObject\DataObjectServicesInterface;
@@ -168,7 +164,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         }
 
         // get the properties defined for this object
-        sys::import('modules.dynamicdata.class.properties.master');
         foreach ($this->propertyargs as $row) {
             DataPropertyMaster::addProperty($row, $this);
         }
@@ -199,7 +194,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             }
         }
 
-        sys::import('xaraya.structures.query');
         $this->dataquery = new Query();
         if ($descriptor->exists('datastore')) {
             $this->datastore = $descriptor->get('datastore');
@@ -434,7 +428,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             } else {
                 // no status filter: return those that are not disabled
                 // CHECKME: filter out DISPLAYONLY or VIEWONLY depending on the class we're in !
-                sys::import('modules.dynamicdata.class.properties.master');
                 if (method_exists($this, 'getItems')) {
                     $not_allowed_state = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
                 } else {
@@ -508,7 +501,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         }
         if (is_array($this->dbConnArgs) && count($this->dbConnArgs) == 2 && is_string($this->dbConnArgs[0] ?? null)) {
             // instantiate UserApi class here!?
-            sys::import('xaraya.database.databasetrait');
             if (class_exists($this->dbConnArgs[0]) && is_subclass_of($this->dbConnArgs[0], Xaraya\Database\DatabaseInterface::class)) {
                 // @todo avoid calling $this->mod()->getName() with xaraya db connection here - see virtual library offline
                 $modname = $this->mod()->getName($this->moduleid);
@@ -521,7 +513,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             $args = call_user_func($this->dbConnArgs, $this);
             $this->dbConnArgs = $args;
         } elseif (!empty($this->dbConnArgs['databaseConfig'])) {
-            sys::import('modules.dynamicdata.utilapi');
             $utilapi = new \Xaraya\Modules\DynamicData\UtilApi();
             // get existing database config
             try {
@@ -677,7 +668,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         if (!isset($args['id'])) {
             $args['id'] = count($this->properties) + 1;
         }
-        sys::import('modules.dynamicdata.class.properties.master');
         DataPropertyMaster::addProperty($args, $this);
         return true;
     }
@@ -933,7 +923,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
      */
     public function getLinkedObjects($linktype = '', $itemid = null)
     {
-        sys::import('modules.dynamicdata.class.objects.links');
         // we'll skip the 'info' here, unless explicitly asked for 'all'
         return DataObjectLinks::getLinkedObjects($this, $linktype, $itemid);
     }

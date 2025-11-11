@@ -19,8 +19,6 @@ use DirectoryNotFoundException;
 use FileNotFoundException;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * roles admin modifyemail function
  * @extends MethodClass<AdminGui>

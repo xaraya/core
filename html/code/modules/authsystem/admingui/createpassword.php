@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\AdminGui;
 use BadParameterException;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * authsystem admin createpassword function

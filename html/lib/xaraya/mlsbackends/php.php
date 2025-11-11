@@ -21,7 +21,6 @@
  *
  */
 
-sys::import('xaraya.mlsbackends.reference');
 class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     public $PHPBackend_entries = [];

@@ -14,12 +14,9 @@ namespace Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\AdminApi;
-use Exception;
 use xarRoles;
 use sys;
-
-sys::import('modules.dynamicdata.method');
-
+use Exception;
 
 /**
  * dynamicdata admin access function

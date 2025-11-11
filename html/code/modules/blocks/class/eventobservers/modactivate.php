@@ -12,7 +12,6 @@
  * @link http://xaraya.info/index.php/release/13.html
  */
 
-sys::import('xaraya.structures.events.observer');
 
 /**
  * ModActivate Subject Observer
@@ -26,7 +25,7 @@ class BlocksModActivateObserver extends EventObserver implements ixarEventObserv
     {
         $xar = $subject->getServicesClass();
         $modName = $subject->getArgs();
-        if (function_exists('xarMod::getName') && $xar->mod()->getName() != 'installer') {
+        if ($xar->req()->getModule() != 'installer') {
             // a status update might mean a new menulink and new base homepage
             $xar->cache()->flushBlocks('base');
         }

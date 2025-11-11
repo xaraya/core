@@ -1,7 +1,6 @@
 <?php
 
 /* Include the base class */
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * The RolesTree property displays groups and users in a tree format
@@ -49,7 +48,6 @@ class RolesTreeProperty extends DataProperty
 }
 
 /* Include the base class */
-sys::import('xaraya.structures.tree');
 
 /**
  * The RolesTree class models a tree structure of Xaraya users and groups
@@ -72,7 +70,6 @@ class RolesTree extends Tree
     */
     public function createnodes(TreeNode $node)
     {
-        sys::import('modules.roles.class.roles');
         $data = xarRoles::getgroups();
         foreach ($data as $row) {
             $nodedata = [

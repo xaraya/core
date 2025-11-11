@@ -13,9 +13,6 @@ namespace Xaraya\Requests;
 
 use Xaraya\Context\ContextFactory;
 use Xaraya\Services\xar;
-use sys;
-
-sys::import('xaraya.context.factory');
 
 /**
  * Request handler based on $_SERVER etc.

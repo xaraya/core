@@ -17,7 +17,6 @@
  * @author Marco Canini
  * initialise block
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 
 /**
  * Roles Language Block

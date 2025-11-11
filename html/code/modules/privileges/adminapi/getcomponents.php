@@ -13,11 +13,6 @@ namespace Xaraya\Modules\Privileges\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminApi;
-use Exception;
-use xarSecurity;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges adminapi getcomponents function
@@ -50,13 +45,15 @@ class GetcomponentsMethod extends MethodClass
         } else {
             $module = $this->mod()->getName($modid);
 
-            // @checkme where is getcomponents() supposed to come from?
+            // @todo where is getcomponents() supposed to come from?
             // Do we have the components in a file?
+            /**
             try {
                 sys::import('modules.' . $module . '.security');
                 return getcomponents();
             } catch (Exception $e) {
             }
+             */
 
             $modid = $this->mod()->getID($module);
         }

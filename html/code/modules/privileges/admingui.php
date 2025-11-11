@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Privileges;
 
 use Xaraya\Modules\AdminGuiClass;
-use sys;
-
-sys::import('xaraya.modules.admingui');
-sys::import('modules.privileges.adminapi');
 
 /**
  * Handle the privileges admin GUI

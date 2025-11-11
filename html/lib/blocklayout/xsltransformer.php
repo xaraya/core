@@ -14,8 +14,6 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
 **/
 
-sys::import('blocklayout.compiler');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class BlockLayoutXSLTProcessor extends xarObject
@@ -45,7 +43,6 @@ class BlockLayoutXSLTProcessor extends xarObject
         $this->xslProc->registerPHPFunctions();
 
         // Set the exceptions handler
-        sys::import('xaraya.exceptions.handlers');
         xarDebug::setExceptionHandler(['ExceptionHandlers','bone']);
 
         // Set up the stylesheet

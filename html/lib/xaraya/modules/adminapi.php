@@ -37,10 +37,6 @@
 
 namespace Xaraya\Modules;
 
-use sys;
-
-sys::import('xaraya.modules.adminapitrait');
-
 /**
  * Handle module admin api functions
  *

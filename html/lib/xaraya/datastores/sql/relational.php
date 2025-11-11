@@ -22,9 +22,6 @@ use DataPropertyMaster;
 use Query;
 use BadParameterException;
 use Exception;
-use sys;
-
-sys::import('xaraya.datastores.sql');
 
 /**
  * Class for relational datastore
@@ -52,7 +49,6 @@ class RelationalDataStore extends SQLDataStore
          * @deprecated in PHP 7.1.0 and removed in PHP 7.2.0 - see https://www.php.net/manual/en/intro.mcrypt.php
         if (extension_loaded('mcrypt')) {
             // Load the encryption class in case we have encrypted fields
-            sys::import('xaraya.encryptor');
             $this->encryptor = xarEncryptor::instance();
         }
          */

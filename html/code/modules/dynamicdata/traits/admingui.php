@@ -19,9 +19,6 @@ use Xaraya\Modules\AdminGuiTrait as CoreGuiTrait;
 use Xaraya\Modules\ModuleInterface;
 use sys;
 
-sys::import('xaraya.modules.adminguitrait');
-sys::import('modules.dynamicdata.traits.otherapi');
-
 /**
  * For documentation purposes only - available via AdminGuiTrait
  */

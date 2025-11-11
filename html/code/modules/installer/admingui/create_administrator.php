@@ -13,13 +13,9 @@ namespace Xaraya\Modules\Installer\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
-use Exception;
 use xarPrivileges;
 use xarRoles;
-use xarTpl;
-use sys;
-
-sys::import('xaraya.modules.method');
+use Exception;
 
 /**
  * installer admin create_administrator function
@@ -55,7 +51,6 @@ class CreateAdministratorMethod extends MethodClass
         $data['phase'] = 6;
         $data['phase_label'] = $this->ml('Create Administrator');
 
-        sys::import('modules.roles.class.roles');
         $data['admin'] = xarRoles::getRole((int) $this->mod('roles')->getVar('admin'));
 
         // Set up some custom validation checks and messages

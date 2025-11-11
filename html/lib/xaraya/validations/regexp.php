@@ -18,7 +18,6 @@
  *
  * @throws VariableValidationException
 **/
-sys::import("xaraya.validations");
 class RegExpValidation extends ValueValidations
 {
     public function validate(&$subject, array $parameters)

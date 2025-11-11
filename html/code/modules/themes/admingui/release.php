@@ -13,13 +13,10 @@ namespace Xaraya\Modules\Themes\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
-use ConfigurationException;
-use Exception;
 use feedParser;
 use xarCore;
-use sys;
-
-sys::import('xaraya.modules.method');
+use ConfigurationException;
+use Exception;
 
 /**
  * themes admin release function
@@ -53,7 +50,9 @@ class ReleaseMethod extends MethodClass
                                  of remote files.  Please turn on #(1) to use the base module getfile userapi.');
         }
         // Require the feedParser class
-        sys::import('modules.base.class.feedParser');
+        if (!class_exists('\feedParser')) {
+            throw new \ClassNotFoundException('feedParser');
+        }
         // Check and see if a feed has been supplied to us.
         // Need to change the url once release module is moved to
         $feedfile = "http://www.xaraya.com/index.php/articles/rnid/c69/?theme=rss";

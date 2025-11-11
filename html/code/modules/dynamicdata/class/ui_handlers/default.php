@@ -15,15 +15,10 @@
 
 namespace Xaraya\DataObject\Handlers;
 
-use xarObject;
+use Xaraya\Context\Context;
 use DataObjectList;
 use DataObject;
-use sys;
-
-sys::import('xaraya.objects');
-sys::import('modules.dynamicdata.class.ui_handlers.servicestrait');
-sys::import("xaraya.context.context");
-use Xaraya\Context\Context;
+use xarObject;
 
 /**
  * Dynamic Object User Interface Handler
@@ -126,8 +121,6 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         if (empty($args['object']) && !empty($args['name'])) {
             $args['object'] = $args['name'];
         }
-
-        sys::import('modules.dynamicdata.class.objects.factory');
 
         // retrieve the object information for this object
         if (!empty($args['object'])) {

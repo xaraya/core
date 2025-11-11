@@ -15,7 +15,6 @@
  *
  * @author Patrick Kellum
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 class Base_FincludeBlock extends BasicBlock implements iBlock
 {
     protected $type                = 'finclude';

@@ -16,9 +16,6 @@ use Xaraya\Modules\Privileges\AdminGui;
 use ForbiddenOperationException;
 use xarPrivileges;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin removerole function
@@ -54,7 +51,6 @@ class RemoveroleMethod extends MethodClass
         $role = xarRoles::get($roleid);
 
         //Call the Privileges class and get the privilege to be de-assigned
-        sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getPrivilege($id);
 
 

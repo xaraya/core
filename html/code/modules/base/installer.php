@@ -14,12 +14,9 @@
 namespace Xaraya\Modules\Base;
 
 use Xaraya\Modules\InstallerClass;
-use Exception;
 use xarCore;
 use xarXMLInstaller;
-use sys;
-
-sys::import('xaraya.modules.installer');
+use Exception;
 
 /**
  * Handle module installer functions
@@ -42,7 +39,6 @@ class Installer extends InstallerClass
         $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
-            sys::import('xaraya.tableddl');
             xarXMLInstaller::createTable('table_schema-def', 'base');
             // We're done, commit
             $dbconn->commit();
@@ -52,7 +48,6 @@ class Installer extends InstallerClass
         }
         $prefix = $this->db()->getPrefix();
         // Start Configuration Unit
-        sys::import('xaraya.variables');
         $systemArgs = [];
         $this->var()->init($systemArgs);
 

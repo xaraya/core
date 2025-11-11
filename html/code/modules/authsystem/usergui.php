@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Authsystem;
 
 use Xaraya\Modules\UserGuiClass;
-use sys;
-
-sys::import('xaraya.modules.usergui');
-sys::import('modules.authsystem.userapi');
 
 /**
  * Handle the authsystem user GUI

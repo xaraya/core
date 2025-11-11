@@ -20,8 +20,6 @@
  * Make sure the base class is available
  *
  */
-sys::import('xaraya.log.loggers.xarLogger');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 // Modified from the original by the Xaraya Team

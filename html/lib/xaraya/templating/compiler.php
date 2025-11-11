@@ -1,11 +1,12 @@
 <?php
 
 use Xaraya\Services\xar;
+
 // use ixarMod;
 
 /* This one exception depends on BL being inside Xaraya, try to correct this later */
 if (!class_exists('xarExceptions')) {
-    sys::import('xaraya.exceptions');
+    // Note: this will set exception handlers
 }
 /**
  * Exception raised by the templating subsystem
@@ -23,7 +24,6 @@ class BLCompilerException extends xarExceptions
     protected $message = "Cannot open template file '#(1)'";
 }
 
-sys::import('blocklayout.compiler');
 
 /**
  * XarayaCompiler - an extension of the BL compiler
@@ -180,7 +180,6 @@ class XarayaCompiler extends xarBLCompiler
     private function getPropertyTagPaths()
     {
         // Loop through properties directory and look for tags
-        sys::import('xaraya.structures.relativedirectoryiterator');
         $propertiesdir = sys::code() . 'properties/';
         if (!file_exists($propertiesdir)) {
             throw new DirectoryNotFoundException($propertiesdir);

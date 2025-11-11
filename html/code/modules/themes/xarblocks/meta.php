@@ -20,7 +20,6 @@
  * @access  public
  * @return  void
 */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 
 /**
  * Themes Meta Block

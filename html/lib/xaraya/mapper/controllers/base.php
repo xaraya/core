@@ -14,8 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.mapper.controllers.interfaces');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class BaseActionController extends xarObject

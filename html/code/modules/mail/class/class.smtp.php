@@ -1064,7 +1064,7 @@ class SMTP extends xarObject
             }
             # if the 4th character is a space then we are done reading
             # so just break the loop
-            if (substr($str,3,1) == " ") {
+            if (substr($str, 3, 1) == " ") {
                 break;
             }
         }

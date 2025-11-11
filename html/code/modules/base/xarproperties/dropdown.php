@@ -3,7 +3,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * @package modules\base
@@ -258,7 +257,6 @@ class SelectProperty extends DataProperty
                 }
             }
         } elseif (!empty($this->initialization_collection)) {
-            sys::import('xaraya.structures.sets.collection');
             /** @var Collection|null $items */
             $items = null;
             $namespace = '';
@@ -559,7 +557,6 @@ class SelectProperty extends DataProperty
  * The installation class for the dropdown (select) dataproperty
  *
 **/
-sys::import('modules.dynamicdata.class.properties.interfaces');
 
 class DropdownPropertyInstall extends SelectProperty implements iDataPropertyInstall
 {

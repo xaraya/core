@@ -13,7 +13,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('modules.themes.class.interfaces');
 use Xaraya\Services\xar;
 
 class ThemeInit implements iThemeInit

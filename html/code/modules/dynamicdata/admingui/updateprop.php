@@ -18,10 +18,6 @@ use Xaraya\Modules\DynamicData\AdminApi;
 use BadParameterException;
 use DataObjectFactory;
 use DataPropertyMaster;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata admin updateprop function

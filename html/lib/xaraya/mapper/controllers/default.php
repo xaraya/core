@@ -14,9 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.mapper.controllers.base');
-sys::import('xaraya.mapper.controllers.interfaces');
-sys::import('xaraya.requests.url');
 use Xaraya\Requests\RequestURL;
 use Xaraya\Services\xar;
 

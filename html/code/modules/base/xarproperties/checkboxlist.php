@@ -1,7 +1,6 @@
 <?php
 
 /* include the base class */
-sys::import('modules.base.xarproperties.dropdown');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework

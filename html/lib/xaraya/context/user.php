@@ -15,12 +15,7 @@ namespace Xaraya\Context;
 use Xaraya\Authentication\AuthToken;
 use Xaraya\Authentication\RemoteUser;
 use Xaraya\Services\WithServicesClass;
-use xarSystemVars;
 use Exception;
-use sys;
-
-sys::import('modules.authsystem.class.authtoken');
-sys::import('modules.authsystem.class.remoteuser');
 
 /**
  * Get userId from user context with token or cookie
@@ -151,7 +146,6 @@ class UserContext
         if (!empty($xar->session()->getInstance())) {
             throw new Exception('Session was already initialized');
         }
-        sys::import('xaraya.sessions.context');
         $xar->session()->setSessionClass(SessionContext::class);
         $xar->session()->init([]);
         $serverVars = $this->context['server'] ?? [];

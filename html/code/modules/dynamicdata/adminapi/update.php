@@ -14,10 +14,6 @@ namespace Xaraya\Modules\DynamicData\AdminApi;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminApi;
 use BadParameterException;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata adminapi update function

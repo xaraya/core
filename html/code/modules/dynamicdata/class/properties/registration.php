@@ -12,8 +12,8 @@
  * @author mrb <marcel@xaraya.com>
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+
 // use ixarMod;
 
 /**
@@ -238,7 +238,6 @@ class PropertyRegistration extends DataContainer
     {
         $xar = xar::getServicesClass();
         $xar->log()->notice('DynamicData: Flushing the property cache');
-        sys::import('xaraya.structures.relativedirectoryiterator');
 
         $dbconn = $xar->db()->getConn(); // Need this for the transaction
         $propDirs = [];

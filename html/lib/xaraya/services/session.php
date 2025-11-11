@@ -22,9 +22,6 @@ namespace Xaraya\Services;
 use Xaraya\Sessions\SessionInterface as SessionFacade;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Sessions\SessionException;
-use sys;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via SessionTrait

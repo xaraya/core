@@ -7,8 +7,6 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Xaraya\Services\xar;
-use xarCache;
-use xarDatabase;
 use xarTwigTpl;
 use sys;
 

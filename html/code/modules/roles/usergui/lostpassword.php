@@ -15,11 +15,8 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\Roles\AdminApi;
-use DataNotFoundException;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
+use DataNotFoundException;
 
 /**
  * roles user lostpassword function

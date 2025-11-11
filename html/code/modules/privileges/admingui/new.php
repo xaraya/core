@@ -15,10 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\Privileges\AdminApi;
 use xarPrivileges;
-use sys;
 use SecurityLevel;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin new function

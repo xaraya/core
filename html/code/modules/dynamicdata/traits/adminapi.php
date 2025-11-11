@@ -19,9 +19,6 @@ use Xaraya\Modules\AdminApiTrait as CoreApiTrait;
 use Xaraya\Modules\ModuleInterface;
 use sys;
 
-sys::import('xaraya.modules.adminapitrait');
-sys::import('modules.dynamicdata.traits.otherapi');
-
 /**
  * For documentation purposes only - available via AdminApiTrait
  */

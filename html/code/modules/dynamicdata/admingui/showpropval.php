@@ -17,9 +17,6 @@ use BadParameterException;
 use DataPropertyMaster;
 use sys;
 
-sys::import('modules.dynamicdata.method');
-
-
 /**
  * dynamicdata admin showpropval function
  * @extends MethodClass<AdminGui>

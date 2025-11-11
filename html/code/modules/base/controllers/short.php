@@ -21,7 +21,6 @@
  *
 **/
 
-sys::import('xaraya.mapper.controllers.short');
 
 /**
  * Base short controller

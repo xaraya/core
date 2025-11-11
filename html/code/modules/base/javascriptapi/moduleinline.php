@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Base\JavascriptApi;
 
 use Xaraya\Modules\Base\MethodClass;
 use Xaraya\Modules\Base\JavascriptApi;
-use sys;
-
-sys::import('modules.base.method');
 
 /**
  * base javascriptapi moduleinline function

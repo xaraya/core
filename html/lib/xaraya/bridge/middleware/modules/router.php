@@ -14,10 +14,6 @@
 namespace Xaraya\Bridge\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;
-use sys;
-
-sys::import('xaraya.bridge.middleware.router');
-sys::import('xaraya.bridge.requests.module');
 use Xaraya\Bridge\Requests\ModuleRequestHandler;
 
 class ModuleRouter extends DefaultRouter implements DefaultRouterInterface

@@ -37,10 +37,6 @@
 
 namespace Xaraya\Modules;
 
-use sys;
-
-sys::import('xaraya.modules.adminguitrait');
-
 /**
  * Handle module admin gui functions
  *

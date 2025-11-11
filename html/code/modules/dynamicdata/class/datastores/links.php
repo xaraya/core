@@ -10,8 +10,6 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-sys::import('xaraya.datastores.factory');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**

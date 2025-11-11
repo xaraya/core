@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Blocks;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the blocks user API

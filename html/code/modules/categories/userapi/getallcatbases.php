@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Categories\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserApi;
 use CategoryWorker;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories userapi getallcatbases function
@@ -35,7 +32,6 @@ class GetallcatbasesMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $bases = $worker->getcatbases($args);
         return $bases;

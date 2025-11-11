@@ -222,12 +222,12 @@ function installer_intranet_readnoncore()
     xarPrivileges::register('DenyModules', 'All', 'modules', 'All', 'All', 'ACCESS_NONE', 'Deny access to the Modules module');
     xarPrivileges::register('DenyThemes', 'All', 'themes', 'All', 'All', 'ACCESS_NONE', 'Deny access to the Themes module');
     xarPrivileges::makeMember('ReadAccess', 'ReadNonCore');
-    xarPrivileges::makeMember('DenyPrivileges','ReadNonCore');
+    xarPrivileges::makeMember('DenyPrivileges', 'ReadNonCore');
     //    xarPrivileges::makeMember('DenyBlocks','ReadNonCore');
-    xarPrivileges::makeMember('DenyMail','ReadNonCore');
-    xarPrivileges::makeMember('DenyModules','ReadNonCore');
-    xarPrivileges::makeMember('DenyThemes','ReadNonCore');
-    xarPrivileges::makeMember('ViewAuthsystem','ReadNonCore');
+    xarPrivileges::makeMember('DenyMail', 'ReadNonCore');
+    xarPrivileges::makeMember('DenyModules', 'ReadNonCore');
+    xarPrivileges::makeMember('DenyThemes', 'ReadNonCore');
+    xarPrivileges::makeMember('ViewAuthsystem', 'ReadNonCore');
     //    xarPrivileges::makeMember('ViewRegistrationLogin','ReadNonCore');
     //xarPrivileges::makeMember('DenyDynamicData','ReadNonCore');
 }
@@ -245,5 +245,5 @@ function installer_intranet_readnoncore()
  */
 function installer_intranet_readaccess()
 {
-    xarPrivileges::register('ReadAccess','All','All','All','All','ACCESS_READ','Read access to all modules');
+    xarPrivileges::register('ReadAccess', 'All', 'All', 'All', 'All', 'ACCESS_READ', 'Read access to all modules');
 }

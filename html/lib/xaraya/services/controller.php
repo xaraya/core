@@ -21,12 +21,9 @@ use xarDispatcher;
 use xarRequest;
 use xarResponse;
 use xarRouter;
-use xarSystemVars;
 use xarDDObject;
 use sys;
 use Exception;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via ControllerTrait
@@ -214,7 +211,6 @@ trait ControllerTrait
         $params['module'] = 'object';
         $params['type'] = $objectName;
         $params['func'] = $methodName;
-        sys::import('xaraya.mapper.request');
         $request = new xarRequest($params);
         $router = $this->getRouter();
         $request->setRoute($router->getRoute());

@@ -11,22 +11,14 @@
 
 namespace Xaraya\Sessions;
 
+use Xaraya\Database\ConnectionInterface;
 use Xaraya\Services\WithServicesClass;
 use xarCore;
-use xarEvents;
 use xarObject;
 use SessionHandlerInterface;
 use Exception;
 use BadParameterException;
 use SQLException;
-use sys;
-use Xaraya\Database\ConnectionInterface;
-
-sys::import('xaraya.sessions.interface');
-sys::import('xaraya.sessions.exception');
-sys::import('xaraya.sessions.virtual');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 
 /**
  * Class to model the default session handler
@@ -78,7 +70,10 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      */
     protected function db()
     {
-        $this->xarDb ??= xar::db();
+        if (!isset($this->xarDb)) {
+            $xar = $this->getServicesClass();
+            $this->xarDb = $xar->db();
+        }
         return $this->xarDb;
     }
 
@@ -675,7 +670,8 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     public function clear($spared = [])
     {
         if (!is_array($spared)) {
-            $msg = xar::ml('Not an array: \'$spared\'');
+            $xar = $this->getServicesClass();
+            $msg = $xar->ml('Not an array: \'$spared\'');
             throw new BadParameterException(null, $msg);
         }
 

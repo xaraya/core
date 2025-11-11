@@ -13,9 +13,6 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-sys::import("xaraya.context.contexttrait");
-sys::import("xaraya.context.context");
-sys::import('xaraya.services.xar');
 use Xaraya\DataObject\Handlers\DefaultHandler;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;

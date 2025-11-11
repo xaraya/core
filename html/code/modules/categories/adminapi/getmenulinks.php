@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Categories\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories adminapi getmenulinks function

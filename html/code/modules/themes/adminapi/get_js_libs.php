@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use xarJS;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes adminapi get_js_libs function
@@ -40,7 +37,6 @@ class GetJsLibsMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        sys::import('modules.themes.class.xarjs');
         $instance = xarJS::getInstance();
         if (empty($args['scope']) || ($args['scope'] == 'local')) {
             $args['scope'] = 'local_libs';

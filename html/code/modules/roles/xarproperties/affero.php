@@ -1,7 +1,6 @@
 <?php
 
 /* Include the base class */
-sys::import('modules.base.xarproperties.textbox');
 
 /**
  * The Affero property is a basic wrapper for an Affero user name

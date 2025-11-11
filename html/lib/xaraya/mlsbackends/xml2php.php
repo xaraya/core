@@ -20,8 +20,6 @@
  * <marc> why? have changed this to be able to collapse common methods
  *
  */
-sys::import('xaraya.mlsbackends.reference');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend

@@ -17,7 +17,6 @@
  * @access  public
 */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class xarMask extends xarObject

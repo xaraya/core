@@ -16,9 +16,6 @@ namespace Xaraya\DataObject\DataStores;
 
 use PDODatabaseInfo;
 use PDOStatement;
-use sys;
-
-sys::import('xaraya.datastores.external');
 
 /**
  * External datastore for DD objects using PHP PDO connection from ExternalDatabase
@@ -33,7 +30,6 @@ sys::import('xaraya.datastores.external');
  * ];
  * $config['dbConnArgs'] = json_encode($config['dbConnArgs']);
  * ```
- * @uses \sys::autoload()
  */
 class PdoDataStore extends ExternalDataStore
 {

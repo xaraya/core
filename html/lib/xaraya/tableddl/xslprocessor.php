@@ -1,6 +1,5 @@
 <?php
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class XarayaXSLProcessor extends xarObject
@@ -17,7 +16,6 @@ class XarayaXSLProcessor extends xarObject
         $this->xslProc->registerPHPFunctions();
 
         // Set up the stylesheet
-        sys::import('xaraya.exceptions.handlers');
         xarDebug::setExceptionHandler(['ExceptionHandlers','bone']);
         $this->setStyleSheet($xslFile);
 
@@ -56,7 +54,6 @@ class XarayaXSLProcessor extends xarObject
         // Set the source document to what we prepped
         $this->setSourceFile($xml);
 
-        sys::import('xaraya.exceptions.handlers');
         xarDebug::setExceptionHandler(['ExceptionHandlers','defaulthandler']);
 
         // What should we initialize $result to?

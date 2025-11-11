@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Mail\SchedulerApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\SchedulerApi;
 use Xaraya\Modules\Mail\AdminApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * mail schedulerapi sendmail function

@@ -18,7 +18,6 @@
 /**
  * GUI type hook, observers should return array of $extrainfo
 **/
-sys::import('xaraya.structures.hooks.guisubject');
 class BaseItemWaitingcontentSubject extends GuiHookSubject
 {
     public $subject = 'ItemWaitingcontent';

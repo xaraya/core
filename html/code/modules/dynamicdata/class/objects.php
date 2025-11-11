@@ -20,8 +20,6 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-sys::import('modules.dynamicdata.class.properties');
-sys::import('modules.dynamicdata.class.datastores');
 
 /*
     As this file was very long in the 1.x series i've split it up into 3 parts
@@ -30,7 +28,3 @@ sys::import('modules.dynamicdata.class.datastores');
     Over time this will probably change. For now i just made sure that everyone
     can still reach the same stuff as before.
 */
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('modules.dynamicdata.class.objects.master');
-sys::import('modules.dynamicdata.class.objects.list');
-sys::import('modules.dynamicdata.class.objects.base');

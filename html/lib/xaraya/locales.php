@@ -16,7 +16,6 @@
  * @author Roger Raymond <roger@asphyxia.com>
 **/
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\MultiLanguageService;
 use Xaraya\Services\xar;
 

@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Mail\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminApi;
 use EmptyParameterException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * mail adminapi sendmail function

@@ -18,7 +18,6 @@
  * @access  public
  */
 // Inherit properties from MenuBlock class
-sys::import('xaraya.structures.containers.blocks.menublock');
 class Base_AdminmenuBlock extends MenuBlock implements iBlock
 {
     protected $type                = 'adminmenu';

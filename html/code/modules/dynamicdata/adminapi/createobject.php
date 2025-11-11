@@ -14,10 +14,6 @@ namespace Xaraya\Modules\DynamicData\AdminApi;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminApi;
 use DataObjectFactory;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata adminapi createobject function

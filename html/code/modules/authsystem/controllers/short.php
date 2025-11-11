@@ -23,7 +23,6 @@
  *
 **/
 
-sys::import('xaraya.mapper.controllers.short');
 
 /**
  * Authsystem Short Contrller implementation

@@ -17,9 +17,6 @@ namespace Xaraya\DataObject\HookObservers;
 use HookObserver;
 use ixarEventSubject;
 use ixarHookSubject;
-use sys;
-
-sys::import('xaraya.structures.hooks.observer');
 
 /**
  * DataObject Hook Observer for Item* and Module* ixarHookSubject events
@@ -38,7 +35,6 @@ class DataObjectHookObserver extends HookObserver
     public function notify(ixarEventSubject $subject)
     {
         // this is used in most run methods below, so we import it here
-        sys::import('modules.dynamicdata.class.objects.factory');
         $this->setContext($subject->getContext());
         return $this->run($subject->getExtrainfo());
     }

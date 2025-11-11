@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Installer;
 
 use Xaraya\Modules\AdminGuiClass;
-use sys;
-
-sys::import('xaraya.modules.admingui');
-sys::import('modules.installer.adminapi');
 
 /**
  * Handle the installer admin GUI
@@ -38,6 +34,6 @@ class AdminGui extends AdminGuiClass
     public function configure()
     {
         $this->setModType('admin');
-        // don't call xarMod:load() for xarInstall::func()
+        // don't call xar::mod()->load() for xarInstall::func()
     }
 }

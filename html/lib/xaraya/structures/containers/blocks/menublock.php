@@ -15,7 +15,6 @@
  *
  * @TODO: move all common menu functions here
 **/
-sys::import('xaraya.structures.containers.blocks.basicblock');
 // use ixarMod;
 
 abstract class MenuBlock extends BasicBlock implements iBlock

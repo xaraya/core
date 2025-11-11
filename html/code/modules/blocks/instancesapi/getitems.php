@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Blocks\InstancesApi;
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\InstancesApi;
 use BadParameterException;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks instancesapi getitems function

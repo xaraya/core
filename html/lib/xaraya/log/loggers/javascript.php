@@ -22,7 +22,6 @@
  * Make sure base class is available
  *
  */
-sys::import('xaraya.log.loggers.xarLogger');
 use Xaraya\Services\xar;
 
 /**
@@ -130,7 +129,6 @@ class xarLogger_javascript extends xarLogger
         $args['type']     = 'code';
         $args['index']    = null;
         $args['code']     = $this->buffer;
-        sys::import('modules.themes.class.xarjs');
         $javascript = xarJS::getInstance();
         $javascript->register($args);
         return true;

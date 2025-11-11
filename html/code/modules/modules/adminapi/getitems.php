@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use Query;
 use ixarMod;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules adminapi getitems function
@@ -55,7 +52,6 @@ class GetitemsMethod extends MethodClass
 
         // Determine the table we are going to use
         $tables = $this->db()->getTables();
-        sys::import('xaraya.structures.query');
         $q = new Query('SELECT', $tables['modules']);
         $q->addfields("id, regid, name, directory, version, class, category, state, user_capable, admin_capable");
 

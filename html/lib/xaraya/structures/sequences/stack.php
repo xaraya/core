@@ -9,8 +9,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
-sys::import('xaraya.structures.sequences.interfaces');
-sys::import('xaraya.structures.sequences.adapters.sequence_adapter');
 
 /**
  * A stack manipulates only the item at the head of the sequence

@@ -10,7 +10,6 @@
  * @link http://www.xaraya.info
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -42,7 +41,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
     {
         if (!empty($this->table)) {
             return $this->table;
-        } elseif (class_exists('xarDB')) {
+        } elseif (xarCore::isLoaded(xarCore::SYSTEM_DATABASE)) {
             $db = xar::db();
             $this->dbconn = $db->getConn();
             $this->table = $db->getPrefix() . '_cache_data';

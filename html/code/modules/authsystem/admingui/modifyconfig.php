@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Authsystem\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\AdminGui;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * authsystem admin modifyconfig function

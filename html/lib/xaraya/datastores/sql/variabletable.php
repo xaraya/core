@@ -18,9 +18,6 @@ use DataProperty;
 use DataPropertyMaster;
 use BadParameterException;
 use Exception;
-use sys;
-
-sys::import('xaraya.datastores.sql');
 
 /**
  * Data store is a variable SQL table

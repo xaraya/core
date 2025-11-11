@@ -1,7 +1,6 @@
 <?php
 
 /* include the parent class */
-sys::import('modules.base.xarproperties.dropdown');
 
 /**
  * @package modules\base

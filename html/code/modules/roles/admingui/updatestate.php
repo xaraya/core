@@ -15,11 +15,8 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\Roles\AdminApi;
-use BadParameterException;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
+use BadParameterException;
 
 /**
  * roles admin updatestate function

@@ -15,8 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminGui;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * mail admin modifyconfig function
  * @extends MethodClass<AdminGui>

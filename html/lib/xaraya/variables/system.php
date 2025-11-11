@@ -1,8 +1,7 @@
 <?php
 
-sys::import('xaraya.variables');
-use Xaraya\Services\xar;
 use Xaraya\Services\SystemService;
+use Xaraya\Services\xar;
 
 /**
  * Class to handle system variables
@@ -24,7 +23,6 @@ use Xaraya\Services\SystemService;
  **/
 class xarSystemVars extends xarVars implements IxarVars
 {
-    private static $KEY = 'System.Variables'; // const cannot be private :-(
     protected static ?SystemService $sysConfig = null;
 
     protected static function sysConfig()

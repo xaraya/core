@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Mail;
 
 use Xaraya\Modules\AdminGuiClass;
-use sys;
-
-sys::import('xaraya.modules.admingui');
-sys::import('modules.mail.adminapi');
 
 /**
  * Handle the mail admin GUI

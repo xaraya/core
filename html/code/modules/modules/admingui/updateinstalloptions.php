@@ -13,10 +13,6 @@ namespace Xaraya\Modules\Modules\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
 use Xaraya\Modules\InstallerTool;
 
 /**
@@ -48,7 +44,6 @@ class UpdateinstalloptionsMethod extends MethodClass
         // TODO: check under what conditions this is needed
         //    if (!$this->sec()->confirmAuthKey()) return;
         $this->var()->check('regid', $regid, 'int', null);
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();
         if (!$installer->installmodule($regid)) {
             return;

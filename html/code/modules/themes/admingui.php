@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Themes;
 
 use Xaraya\Modules\AdminGuiClass;
-use sys;
-
-sys::import('xaraya.modules.admingui');
-sys::import('modules.themes.adminapi');
 
 /**
  * Handle the themes admin GUI

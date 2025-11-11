@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Base\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\UserApi;
 use xarTplPager;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base userapi pager function
@@ -78,8 +75,6 @@ class PagerMethod extends MethodClass
         if ((empty($itemsperpage) || (empty($total) || !is_numeric($total))) || ($total <= $itemsperpage)) {
             return '';
         }
-
-        sys::import('modules.base.class.pager');
 
         if (empty($urlitemmatch)) {
             $urlitemmatch = '%%';

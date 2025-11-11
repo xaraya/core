@@ -35,7 +35,6 @@
  */
 
 /* include the base class */
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * This property models an array
@@ -498,7 +497,6 @@ class ArrayProperty extends DataProperty
 
         // We initialize the required properties here, for reuse in the template
         $data['column_types'] = [];
-        sys::import('modules.dynamicdata.class.properties.master');
         foreach ($types as $key => $thistype) {
             $data['column_types'][$key] = $this->prop()->getProperty(['type' => $thistype]);
         }

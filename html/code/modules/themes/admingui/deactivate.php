@@ -15,10 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
 use ixarTheme;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
 use Xaraya\Modules\InstallerTool;
 
 /**
@@ -77,7 +73,6 @@ class DeactivateMethod extends MethodClass
         }
 
         // See if we have lost any modules since last generation
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance('themes');
         if (!$installer->checkformissing()) {
             return;

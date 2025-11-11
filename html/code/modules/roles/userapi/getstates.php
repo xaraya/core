@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles userapi getstates function
@@ -36,7 +33,6 @@ class GetstatesMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        sys::import('modules.roles.class.roles');
         return [
             ['id' => xarRoles::ROLES_STATE_INACTIVE, 'name' => $this->ml('Inactive')],
             ['id' => xarRoles::ROLES_STATE_NOTVALIDATED, 'name'  => $this->ml('Not Validated')],

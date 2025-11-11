@@ -15,7 +15,6 @@
 /**
  * API type hook, observers should return array of $extrainfo
 **/
-sys::import('xaraya.structures.hooks.apisubject');
 class ModulesItemSubmitSubject extends ApiHookSubject
 {
     public $subject = 'ItemSubmit';

@@ -20,8 +20,6 @@
 /**
  * API type hook, observers should return array of $extrainfo
 **/
-sys::import('xaraya.structures.hooks.subject');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 abstract class ApiHookSubject extends HookSubject

@@ -17,8 +17,6 @@
 namespace Xaraya\Services;
 
 use xarCore;
-use xarSystemVars;
-use sys;
 use Exception;
 use VariableNotFoundException;
 

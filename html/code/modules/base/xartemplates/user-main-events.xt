@@ -280,7 +280,6 @@ xarEvents::registerObserver('MyGUIEvent', 'mymodule', 'gui', 'admin', 'alert');
             <h3>Class Type Event Subjects</h3>
             <p>As the name suggests, the event subject is contained in a class.</p>
 <code><pre>
-sys::import('xaraya.structures.descriptor');
 class EventSubject extends ObjectDescriptor implements ixarEventSubject
 {
     // protected $args = [];      // from descriptor    

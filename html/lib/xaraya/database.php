@@ -15,7 +15,6 @@
  * @author Marco Canini
 **/
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 $sysConfig = xar::sysConfig();
@@ -60,7 +59,6 @@ class xarDB
     {
         $sysConfig ??= xar::sysConfig();
         $middleware_name = $sysConfig->getVar('DB.Middleware');
-        sys::import('xaraya.database.' . strtolower($middleware_name));
         $class = 'xarDB_' . $middleware_name;
         $middleware_class = new $class();
         self::$mw = $middleware_class;
@@ -140,7 +138,7 @@ class xarDB
         switch ($args['databaseType']) {
             case 'sqlite3':
             case 'pdosqlite':
-                $args['location'] = $args['location'] ?? xar::sysConfig()->getVar('DB.Location');
+                $args['location'] ??= xar::sysConfig()->getVar('DB.Location');
                 $args['phptype']       = $args['databaseType'];
                 $args['database']      = $args['location'] . $args['databaseName'] ?? ':memory:';
                 $args['hostspec']    ??= '';

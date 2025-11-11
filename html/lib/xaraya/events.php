@@ -26,12 +26,9 @@
  * potential exception raising calls in try / catch clauses ?
 **/
 
-sys::import("xaraya.structures.events.subject");
-sys::import("xaraya.context.context");
-sys::import('xaraya.services.xar');
+// use ixarMod;
 use Xaraya\Context\Context;
 use Xaraya\Services\xar;
-// use ixarMod;
 
 /**
  * Exception raised by the events subsystem
@@ -203,13 +200,11 @@ class xarEvents extends xarObject implements ixarEvents
                                         break;
                                     case 'api':
                                         // wrap api function in apiclass observer
-                                        sys::import("xaraya.structures.events.apiobserver");
                                         $obsclass = "ApiEventObserver";
                                         $subject->attach(new $obsclass($obs));
                                         break;
                                     case 'gui':
                                         // wrap gui function in guiclass observer
-                                        sys::import("xaraya.structures.events.guiobserver");
                                         $obsclass = "GuiEventObserver";
                                         $subject->attach(new $obsclass($obs));
                                         break;
@@ -546,7 +541,6 @@ class xarEvents extends xarObject implements ixarEvents
                 $filename = strtolower($event);
                 // support namespaces in modules (and core someday) - we may detect or use $info['classname'] here
                 if (empty($info['classname'])) {
-                    sys::import('xaraya.classmap');
                     // for non-core modules we're only interested in hookobservers for now - this may extend to eventobservers later...
                     if (in_array($info['type'], static::$classtypes)) {
                         $result = xarClassMap::findHookObserver($module, $event);
@@ -682,7 +676,6 @@ class xarEvents extends xarObject implements ixarEvents
         $xar = xar::getServicesClass();
 
         // Assemble the query
-        sys::import('xaraya.structures.query');
         $tables = $xar->db()->getTables();
         $q = new Query('DELETE', $tables['eventsystem']);
         $q->eq('itemtype', $itemtype);

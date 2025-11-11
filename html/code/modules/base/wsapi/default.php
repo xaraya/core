@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Base\WsApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\WsApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base wsapi default function

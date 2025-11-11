@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\Categories\UserApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin new function
@@ -43,7 +40,6 @@ class NewMethod extends MethodClass
             return;
         }
 
-        sys::import('modules.dynamicdata.class.objects.factory');
         for ($i = 1;$i <= $data['repeat'];$i++) {
             $data['objects'][$i] = $this->data()->getObject(['name' => $this->mod()->getVar('categoriesobject'), 'fieldprefix' => $i]);
         }

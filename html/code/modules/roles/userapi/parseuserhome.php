@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use BadParameterException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles userapi parseuserhome function

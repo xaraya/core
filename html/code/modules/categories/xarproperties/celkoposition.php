@@ -12,7 +12,6 @@
  * @link http://xaraya.info/index.php/release/147.html
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * The CelkoPosition property
@@ -221,7 +220,6 @@ class CelkoPositionProperty extends DataProperty
                 // Add this itemid to the list of items to be resolved
                 $this->itemsunresolved[$itemid] = $params[0];
 
-                sys::import('xaraya.structures.query');
                 foreach ($this->itemsunresolved as $newkey => $oldkey) {
                     if (isset($this->itemindices[$oldkey])) {
                         $params = $this->itemindices[$oldkey];
@@ -595,7 +593,6 @@ class CelkoPositionProperty extends DataProperty
      */
     public function getItem($id)
     {
-        sys::import('xaraya.structures.query');
         $q = new Query('SELECT', $this->initialization_celkotable);
         $q->eq('id', $id);
         if (!$q->run()) {
@@ -667,7 +664,6 @@ class CelkoPositionProperty extends DataProperty
         $right_id = $left_id + 1;
 
         // Get all children of this node
-        sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $worker->setTable($this->initialization_celkotable);
         $result = $worker->getchildren($parent_id);
@@ -979,7 +975,6 @@ class CelkoPositionProperty extends DataProperty
     }
 }
 
-sys::import('modules.dynamicdata.class.properties.interfaces');
 
 class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDataPropertyInstall
 {

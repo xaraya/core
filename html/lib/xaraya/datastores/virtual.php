@@ -15,9 +15,6 @@
 namespace Xaraya\DataObject\DataStores;
 
 use BadParameterException;
-use sys;
-
-sys::import('xaraya.datastores.basic');
 
 /**
  * Dummy data store class

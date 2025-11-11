@@ -14,7 +14,6 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -97,7 +96,7 @@ class xarSecurity extends xarObject
         self::$rolestable = $xartable['roles'];
 
         // CHECKME: do we need to be careful during installation here or not ?
-        if (class_exists('xarModVars')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
             self::$realmcomparison = $xar->mod('privileges')->getVar('realmcomparison');
             self::$test = $xar->mod('privileges')->getVar('test');
             self::$testdeny = $xar->mod('privileges')->getVar('testdeny');
@@ -109,7 +108,6 @@ class xarSecurity extends xarObject
         }
 
         // @todo refactor callers to do this directly
-        sys::import('modules.privileges.class.securitylevel');
         // @todo get rid of securitylevel class - see xarSecurity::getLevel()
         self::$levels = SecurityLevel::$displayMap;
     }
@@ -168,7 +166,6 @@ class xarSecurity extends xarObject
         if (self::$maskbasedsecurity && !empty($mask) && empty($rolename)) { // $rolename must be empty
             $savedmask = $mask;
             if (empty(self::$maskbasedgrouplist)) {
-                sys::import('modules.roles.class.roles');
                 $role = xarRoles::get($userID);
                 $grouplist = [];
                 foreach ($role->getParents() as $parent) {
@@ -195,7 +192,6 @@ class xarSecurity extends xarObject
 
         $maskname = $mask;
         if (empty($maskname)) {
-            sys::import('modules.privileges.class.mask');
             $mask = new xarMask();
         } else {
             $mask =  self::getMask($mask);
@@ -246,7 +242,7 @@ class xarSecurity extends xarObject
             $mask->setLevel($level);
         }
 
-        $realmvalue = self::$realmvalue;
+        $realmvalue = self::$realmvalue ?? '';
         if (strpos($realmvalue, 'string:') === 0) {
             $textvalue = substr($realmvalue, 7);
             $realmvalue = 'string';
@@ -305,7 +301,6 @@ class xarSecurity extends xarObject
         $mask->normalize();
 
         // get the Roles class
-        sys::import('modules.roles.class.roles');
 
         // get the id of the role we will check against
         // an empty role means take the current user
@@ -330,7 +325,6 @@ class xarSecurity extends xarObject
                 //          That would save a lot of space for anonymous sessions...
 
                 // No go from cache. Try and get it from the session
-                sys::import('modules.privileges.class.privilege');
                 $privileges = unserialize($xar->session()->getVar('privilegeset') ?? '');
                 // Check that privileges haven't been changed since we last cached the privilegeset
                 $clearcache = $xar->mod('privileges')->getVar('clearcache');
@@ -437,7 +431,6 @@ class xarSecurity extends xarObject
         } else {
             $pargs = $xar->mem()->get('Security.Masks', $name);
         }
-        sys::import('modules.privileges.class.mask');
         return new xarMask($pargs);
     }
 
@@ -733,12 +726,12 @@ class xarSecurity extends xarObject
      * @param   string module of mask
      * @return  bool
      */
-    public static function hasMask($name,$module = "All",$component = "All")
+    public static function hasMask($name, $module = "All", $component = "All")
     {
         if ($module == "All") {
             $module = 0;
         }
-        $mask = self::getMask($name,$module,$component,true);
+        $mask = self::getMask($name, $module, $component, true);
         if ($mask) {
             return true;
         } else {

@@ -12,7 +12,6 @@
  * @link http://xaraya.info/index.php/release/13.html
  */
 
-sys::import('xaraya.structures.events.observer');
 
 /**
  * ModDeactivate Subject Observer

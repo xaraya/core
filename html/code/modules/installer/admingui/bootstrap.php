@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use Exception;
 use ixarTheme;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * installer admin bootstrap function

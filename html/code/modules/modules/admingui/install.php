@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use ModuleNotFoundException;
 use ixarMod;
-use sys;
-
-sys::import('xaraya.modules.method');
 use Xaraya\Modules\InstallerTool;
 
 /**

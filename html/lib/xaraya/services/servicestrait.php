@@ -19,10 +19,6 @@ namespace Xaraya\Services;
 use DataObjectList;
 use DataObject;
 use DataProperty;
-use sys;
-
-sys::import('xaraya.services.coreservicestrait');
-sys::import('xaraya.objects');
 
 /**
  * For documentation purposes only - available via ServicesTrait

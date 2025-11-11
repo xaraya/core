@@ -24,12 +24,6 @@ use DuplicateException;
 use EmptyParameterException;
 use Exception;
 use IValidation;
-use sys;
-
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('xaraya.validations');
-sys::import('modules.dynamicdata.class.import.generic');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -272,7 +266,6 @@ class XmlImporter extends DataObjectImporter
 
         if (!empty($xmlobject->links)) {
             // make sure that object links are initialized
-            sys::import('modules.dynamicdata.class.objects.links');
             $linklist = DataObjectLinks::initLinks();
             if (empty($linklist)) {
                 // no object links initialized, bail out

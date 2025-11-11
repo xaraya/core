@@ -14,16 +14,11 @@
 
 namespace Xaraya\DataObject\Import;
 
+use Xaraya\Services\xar;
 use DataObject;
 use DataObjectDescriptor;
 use DataObjectFactory;
 use DataPropertyMaster;
-use xarDB;
-use sys;
-
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 
 /**
  * DataObject Importer
@@ -71,9 +66,6 @@ class DataObjectImporter
      */
     public static function import($file = null, $content = null, $format = 'xml', $prefix = null, $overwrite = false, $keepitemid = false)
     {
-        sys::import('modules.dynamicdata.class.import.xmlimporter');
-        sys::import('modules.dynamicdata.class.import.jsonimporter');
-        sys::import('modules.dynamicdata.class.import.phpimporter');
         if (empty($format)) {
             $format = 'xml';
         }

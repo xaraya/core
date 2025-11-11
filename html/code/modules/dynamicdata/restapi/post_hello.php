@@ -13,10 +13,6 @@ namespace Xaraya\Modules\DynamicData\RestApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\RestApi;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata restapi post_hello function

@@ -3,10 +3,6 @@
 /**
  * Use Twig template engine for output in Xaraya
  */
-sys::import('xaraya.templates');
-sys::import('xaraya.bridge.templates.twigbridge');
-sys::import('xaraya.context.context');
-sys::import('xaraya.services.xar');
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 use Twig\TemplateWrapper;
@@ -18,7 +14,6 @@ use Xaraya\Services\xar;
 /**
  * Use Twig template engine to generate output in Xaraya
  *
- * @uses \sys::autoload()
  * @link https://twig.symfony.com/
  */
 class xarTwigTpl extends xarTpl
@@ -59,7 +54,6 @@ class xarTwigTpl extends xarTpl
 
     public static function hasTwigEnvironment()
     {
-        sys::autoload();
         if (class_exists('\Twig\Environment')) {
             return true;
         }
@@ -75,8 +69,6 @@ class xarTwigTpl extends xarTpl
      */
     public static function getTwigEnvironment(?Context $context = null, array $paths = [], array $options = [])
     {
-        sys::autoload();
-
         // support templates/twig or vendor/xaraya/twig/html directory for standard templates
         $twigDir = static::getTwigTemplatesDir();
         // support templates/custom directory for custom templates only

@@ -16,10 +16,6 @@ use Xaraya\Modules\Roles\AdminApi;
 use Xaraya\Modules\Roles\UserApi;
 use EmptyParameterException;
 use xarRoles;
-use xarTpl;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles adminapi senduseremail function
@@ -117,7 +113,6 @@ class SenduseremailMethod extends MethodClass
             // retrieve the dynamic properties (if any) for use in the e-mail too
 
             // get the DataObject defined for this module and item id
-            sys::import('modules.dynamicdata.class.objects.factory');
             $object = $this->data()->getObject(['name' => 'roles_users']);
             if (isset($object) && !empty($object->objectid)) {
                 // retrieve the item itself

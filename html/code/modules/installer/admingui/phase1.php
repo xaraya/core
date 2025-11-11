@@ -13,11 +13,8 @@ namespace Xaraya\Modules\Installer\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
-use Exception;
 use xarLocale;
-use sys;
-
-sys::import('xaraya.modules.method');
+use Exception;
 
 /**
  * installer admin phase1 function

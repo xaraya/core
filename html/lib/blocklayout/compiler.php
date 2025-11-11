@@ -20,8 +20,6 @@
  * @author Garrett Hunter <garrett@blacktower.com>
  * @todo  This is still the architecture of BL1, just stripped. We can do a lot better.
  */
-
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -169,7 +167,6 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
     {
         xar::log()->debug("BL: Creating a new XSLT processor");
 
-        sys::import('blocklayout.xsltransformer');
         if (empty($xslFile)) {
             $xslProc = new BlockLayoutXSLTProcessor();
         } else {

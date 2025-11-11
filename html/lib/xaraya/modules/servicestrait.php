@@ -19,10 +19,6 @@ namespace Xaraya\Modules;
 use Xaraya\Context\Context;
 use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\CoreServicesTrait;
-use Xaraya\Services\xar;
-use sys;
-
-sys::import('xaraya.services.servicestrait');
 
 /**
  * For documentation purposes only - available via ModuleServicesTrait

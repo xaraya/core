@@ -15,10 +15,6 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminApi;
 use Exception;
 use PropertyRegistration;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata adminapi importpropertytypes function
@@ -38,7 +34,6 @@ class ImportpropertytypesMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        sys::import('modules.dynamicdata.class.properties.registration');
         extract($args);
         if (!isset($flush)) {
             $flush = true;

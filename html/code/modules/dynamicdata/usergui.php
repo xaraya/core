@@ -16,9 +16,6 @@ namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Modules\DynamicData\Traits\UserGuiInterface;
 use Xaraya\Modules\DynamicData\Traits\UserGuiTrait;
-use sys;
-
-sys::import('modules.dynamicdata.traits.usergui');
 
 /**
  * Handle (traditional) DD user gui functions via module class

@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Categories\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserApi;
 use CategoryWorker;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories userapi getcatinfo function
@@ -48,7 +45,6 @@ class GetcatinfoMethod extends MethodClass
             return [];
         }
 
-        sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         if (isset($cid)) {
             $info = $worker->getInfo($cid);

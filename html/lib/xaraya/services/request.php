@@ -19,11 +19,8 @@ namespace Xaraya\Services;
 use Xaraya\Requests\RequestInterface as RequestFacade;
 use Xaraya\Requests\RequestHandler;
 use xarRequest;
-use xarSystemVars;
 use sys;
 use Exception;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via RequestTrait

@@ -16,10 +16,6 @@ use Xaraya\Modules\Mail\AdminApi;
 use BadParameterException;
 use EmptyParameterException;
 use IDNotFoundException;
-use xarTpl;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * mail adminapi hookmailcreate function

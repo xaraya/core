@@ -20,7 +20,6 @@ use Xaraya\Context\ContextInterface;
 use Xaraya\Modules\ModuleInterface;
 use Xaraya\Services\ServiceClass;
 use xarCore;
-use xarEvents;
 use ixarMod;
 use xarClassMap;
 use sys;

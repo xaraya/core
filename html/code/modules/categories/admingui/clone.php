@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
 use CategoryWorker;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin clone function
@@ -49,7 +46,6 @@ class CloneMethod extends MethodClass
         }
 
         // Setting up necessary data.
-        sys::import('modules.dynamicdata.class.objects.factory');
         $data['object'] = $this->data()->getObject(['name' => $this->mod()->getVar('categoriesobject')]);
         $data['object']->getItem(['itemid' => $data['itemid']]);
 
@@ -70,7 +66,6 @@ class CloneMethod extends MethodClass
             }
             $newname = str_ireplace(" ", "_", $newname);
 
-            sys::import('modules.categories.class.worker');
             $worker = new CategoryWorker();
             $toplevel = $worker->appendTree($data['itemid']);
 

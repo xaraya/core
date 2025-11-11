@@ -14,9 +14,6 @@
 namespace Xaraya\Modules\Installer;
 
 use Xaraya\Modules\InstallerClass;
-use sys;
-
-sys::import('xaraya.modules.installer');
 
 /**
  * Handle module installer functions - not used for installer module

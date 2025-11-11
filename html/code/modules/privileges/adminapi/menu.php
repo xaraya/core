@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Privileges\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges adminapi menu function

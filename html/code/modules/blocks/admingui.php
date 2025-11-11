@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Blocks;
 
 use Xaraya\Modules\AdminGuiClass;
-use sys;
-
-sys::import('xaraya.modules.admingui');
-sys::import('modules.blocks.adminapi');
 
 /**
  * Handle the blocks admin GUI

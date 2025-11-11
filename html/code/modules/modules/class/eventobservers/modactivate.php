@@ -12,7 +12,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/1.html
 **/
-sys::import('xaraya.structures.events.observer');
 
 class ModulesModActivateObserver extends EventObserver implements ixarEventObserver
 {
@@ -28,7 +27,7 @@ class ModulesModActivateObserver extends EventObserver implements ixarEventObser
             return;
         }
         $xar->prop()->importPropertyTypes(true, ['modules/' . $modInfo['directory'] . '/xarproperties']);
-        if ($xar->cache()->withOutput() && function_exists('xarMod::getName') && $xar->mod()->getName() != 'installer') {
+        if ($xar->cache()->withOutput() && $xar->req()->getModule() != 'installer') {
             $xar->cache()->flushPages('modules');
             // a status update might mean a new menulink and new base homepage
             $xar->cache()->flushPages('base');

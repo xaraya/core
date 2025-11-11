@@ -17,10 +17,6 @@ namespace Xaraya\DataObject\Export;
 use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
-use sys;
-
-sys::import('modules.dynamicdata.class.export.generic');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -120,7 +116,6 @@ class XmlExporter extends DataObjectExporter
         /* We don't use this
         // get object links for this object
         $name = $objectdef->properties['name']->value;
-        sys::import('modules.dynamicdata.class.objects.links');
         $links = DataObjectLinks::getLinks($name,'all');
         if (!empty($links) && !empty($links[$name])) {
             $xml .= "  <links>\n";

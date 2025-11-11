@@ -13,13 +13,8 @@ namespace Xaraya\Modules\Modules\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
-use Exception;
-use xarEvents;
-use xarMasks;
 use ixarMod;
-use sys;
-
-sys::import('xaraya.modules.method');
+use Exception;
 
 /**
  * modules adminapi remove function

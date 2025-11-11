@@ -14,7 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('modules.categories.xarproperties.categorytree');
 
 /**
  * This property displays a multitiered menu of categories
@@ -54,7 +53,6 @@ class CategoryMenuProperty extends CategoryTreeProperty
             // the top level of categories need not have a common parent
             $this->mod()->loadDbInfo('categories');
             $xartable = $this->db()->getTables();
-            sys::import('xaraya.structures.query');
             $q = new Query('SELECT', $xartable['categories']);
             $q->addfield('id');
             $q->addfield('name');

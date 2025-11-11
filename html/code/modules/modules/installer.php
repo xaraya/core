@@ -14,16 +14,10 @@
 namespace Xaraya\Modules\Modules;
 
 use Xaraya\Modules\InstallerClass;
-use Exception;
-use xarEvents;
-use xarHooks;
 use ixarMod;
-use xarSystemVars;
 use xarTableDDL;
 use xarXMLInstaller;
-use sys;
-
-sys::import('xaraya.modules.installer');
+use Exception;
 
 /**
  * Handle module installer functions
@@ -46,7 +40,6 @@ class Installer extends InstallerClass
 
         try {
             $dbconn->begin();
-            sys::import('xaraya.tableddl');
             xarXMLInstaller::createTable('table_schema-def', 'modules');
             // We're done, commit
             $dbconn->commit();
@@ -153,7 +146,6 @@ class Installer extends InstallerClass
                 $dbconn = $this->db()->getConn();
                 $xartable = $this->db()->getTables();
                 //Load Table Maintainance API
-                sys::import('xaraya.tableddl');
                 $hookstable = $xartable['hooks'];
                 $charset = $this->sysConfig()->getVar('DB.Charset');
                 $fieldargs = ['command' => 'add', 'field' => 't_file', 'type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset];

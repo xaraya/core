@@ -19,13 +19,10 @@ use BadParameterException;
 use ConfigurationException;
 use DataObjectLinks;
 use DataStoreLinks;
-use Exception;
 use xarCore;
 use xarCurl;
 use sys;
-
-sys::import('modules.dynamicdata.method');
-
+use Exception;
 
 /**
  * dynamicdata admin relations function
@@ -100,7 +97,6 @@ class RelationsMethod extends MethodClass
         $data['objects'] = $userapi->getobjects();
 
         // import the DataObjectLinks class
-        sys::import('modules.dynamicdata.class.objects.links');
 
         // get linktypes
         $data['linktypes'] = DataObjectLinks::$linktypes;
@@ -226,7 +222,6 @@ class RelationsMethod extends MethodClass
                         // chris: file_get_contents requires allow_url_fopen=1 in php.ini
                         // added support for retrieval using curl when available
                         try {
-                            sys::import('modules.base.class.xarCurl');
                             $curl = new xarCurl(['url' => $yuml_url]);
                             if ($curl->errno <> 0) {
                                 throw new BadParameterException(
@@ -341,8 +336,6 @@ class RelationsMethod extends MethodClass
             $data['fields'] = $object->properties;
 
             $this->tpl()->setPageTitle($this->ml('Links for #(1)', $object->label));
-
-            sys::import('modules.dynamicdata.class.datastores.links');
 
             // get all links, including 'info' for reverse one-way information
             $links = DataStoreLinks::getLinks($table, 'all');

@@ -19,10 +19,6 @@ use Xaraya\Database\ConnectionInterface;
 use Xaraya\Database\StatementInterface;
 use BadParameterException;
 use SQLException;
-use sys;
-
-sys::import('modules.dynamicdata.class.hookobservers.generic');
-sys::import('xaraya.database.interface');
 
 class ModuleRemove extends DataObjectHookObserver
 {

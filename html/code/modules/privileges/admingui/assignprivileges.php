@@ -16,9 +16,6 @@ use Xaraya\Modules\Privileges\AdminGui;
 use ixarMod;
 use xarPrivileges;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin assignprivileges function

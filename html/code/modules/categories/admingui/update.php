@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Categories\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin update function
@@ -54,7 +51,6 @@ class UpdateMethod extends MethodClass
         //Reverses the order of cids with the 'last children' option:
         //Look at bug #997
 
-        sys::import('modules.dynamicdata.class.objects.factory');
         $data['object'] = $this->data()->getObject(['name' => $this->mod()->getVar('categoriesobject')]);
         $isvalid = $data['object']->checkInput();
 

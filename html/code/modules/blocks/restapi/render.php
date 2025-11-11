@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Blocks\RestApi;
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\RestApi;
 use Exception;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks restapi render function

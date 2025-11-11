@@ -17,10 +17,8 @@ namespace Xaraya\DataObject\Properties;
 
 use ObjectDescriptor;
 use Exception;
-use sys;
 
 /* Include parent class */
-sys::import('modules.dynamicdata.xarproperties.callable');
 
 /**
  * This property displays the queued result of a callable function as value

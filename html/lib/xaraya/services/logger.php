@@ -17,9 +17,6 @@
 namespace Xaraya\Services;
 
 use xarLog;
-use sys;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via LoggerTrait

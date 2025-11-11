@@ -3,7 +3,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.dropdown');
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -16,7 +15,6 @@ sys::import('modules.base.xarproperties.dropdown');
  * @author mikespub <mikespub@xaraya.com>
  */
 
-sys::import('xaraya.datastores.factory');
 use Xaraya\DataObject\DataStores\DataStoreFactory;
 
 /**

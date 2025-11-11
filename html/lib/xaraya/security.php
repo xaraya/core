@@ -26,18 +26,16 @@
  *
  */
 
+use Xaraya\Services\xar;
+
+/**
+ * @deprecated 2.4.1 cachesecurity module = gone
 // @todo Maybe changing this touch to a centralized API would be a good idea?
 //Even if in the end it would use touched files too...
 if (file_exists(sys::varpath() . '/security/on.touch')) {
     sys::import('xaraya.xarCacheSecurity');
 }
-
-// FIXME: Can we reverse this? (i.e. the module loading the files from here?)
-//        said another way, can we move the two files to /includes (partially preferably)
-sys::import('modules.privileges.class.privileges');
-sys::import('modules.roles.class.roles');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
+ */
 
 // @todo move xarSecurity class from privileges to here or keep it modular?
 

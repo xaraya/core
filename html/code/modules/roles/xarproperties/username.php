@@ -1,7 +1,6 @@
 <?php
 
 /* Include the base class */
-sys::import('modules.base.xarproperties.textbox');
 
 /**
  * The UserName property handles a Xaraya user name

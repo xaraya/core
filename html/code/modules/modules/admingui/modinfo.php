@@ -13,11 +13,8 @@ namespace Xaraya\Modules\Modules\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
-use xarHooks;
 use xarTwigTpl;
 use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules admin modinfo function
@@ -94,7 +91,6 @@ class ModinfoMethod extends MethodClass
         $data['twigextension'] = $modinfo['twigextension'] ?? '.html.twig';
         $data['twigenabled'] = false;
         if (!empty($data['twigtemplates'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
             if (xarTwigTpl::hasTwigEnvironment()) {
                 $templatesDir = xarTwigTpl::getTwigTemplatesDir();
                 if (is_dir($templatesDir)) {

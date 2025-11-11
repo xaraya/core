@@ -20,8 +20,6 @@
  * @access  public
  * @return  void
 */
-sys::import('modules.themes.xarblocks.meta');
-sys::import('modules.themes.class.xarmeta');
 class Themes_MetaBlockConfig extends Themes_MetaBlock
 {
     /**

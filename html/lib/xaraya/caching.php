@@ -1,7 +1,5 @@
 <?php
 
-use Xaraya\Services\CachingService;
-
 /**
  * Xaraya Caching Configuration
  *
@@ -17,7 +15,7 @@ use Xaraya\Services\CachingService;
  * @author jsb
  */
 
-sys::import('xaraya.services.xar');
+use Xaraya\Services\CachingService;
 use Xaraya\Services\xar;
 
 /**

@@ -16,10 +16,8 @@ namespace Xaraya\DataObject\Properties\MongoDB;
 use DataProperty;
 use ObjectDescriptor;
 use JsonSerializable;
-use sys;
 
 /* Include parent class */
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * The MongoDB BSON property tries to deal with various MongoDB BSON data formats

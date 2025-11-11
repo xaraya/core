@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Categories\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserApi;
 use BadParameterException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories userapi leftjoin function

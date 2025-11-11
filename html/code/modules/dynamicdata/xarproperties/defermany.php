@@ -32,8 +32,6 @@
  */
 
 /* Include parent class */
-sys::import('modules.dynamicdata.xarproperties.deferitem');
-sys::import('modules.dynamicdata.class.objects.loader');
 
 /**
  * This property displays deferred related objects for an item

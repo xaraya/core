@@ -19,9 +19,6 @@ namespace Xaraya\Services;
 use Xaraya\Context\ContextTrait;
 use sys;
 
-sys::import('xaraya.context.contexttrait');
-sys::import('xaraya.services.servicestrait');
-
 /**
  * For documentation purposes only - available via ParentServicesTrait
  */

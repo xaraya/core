@@ -17,7 +17,6 @@
  * @todo
 **/
 
-sys::import('xaraya.mapper.controllers.default');
 
 /**
  * DynamicData default controller - classname is currently fixed in xarDispatcher::findController()

@@ -13,7 +13,6 @@
  * @link http://xaraya.info/index.php/release/70.html
 **/
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 use Xaraya\Services\WithServicesClass;
 

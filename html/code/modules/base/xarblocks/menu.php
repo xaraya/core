@@ -19,7 +19,6 @@
  * @return  void
 */
 // Inherit properties and methods from MenuBlock class
-sys::import('xaraya.structures.containers.blocks.menublock');
 
 /**
  * Base Menu Block

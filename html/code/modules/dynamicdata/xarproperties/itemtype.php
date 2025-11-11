@@ -3,7 +3,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.combobox');
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata

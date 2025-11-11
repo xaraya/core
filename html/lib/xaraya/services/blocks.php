@@ -21,14 +21,11 @@ use iBlockType;
 use ixarBlock;
 use xarClassMap;
 use ReflectionClass;
-use sys;
 use BadParameterException;
 use ClassNotFoundException;
 use EmptyParameterException;
 use FunctionNotFoundException;
 use Exception;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via BlocksTrait

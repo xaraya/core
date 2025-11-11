@@ -13,7 +13,6 @@
  * @todo get the var directory from the configured sys:varpath(), dont hardcode
 **/
 
-sys::import('xaraya.caching.interfaces');
 use Xaraya\Services\WithServicesClass;
 
 class xarCache_Storage extends xarObject
@@ -65,49 +64,39 @@ class xarCache_Storage extends xarObject
         }
         switch ($args['storage']) {
             case 'database':
-                sys::import('xaraya.caching.storage.database');
                 $classname = 'xarCache_Database_Storage';
                 break;
 
             case 'apcu':
                 if (function_exists('apcu_fetch')) {
-                    sys::import('xaraya.caching.storage.apcu');
                     $classname = 'xarCache_APCu_Storage';
                 } else {
-                    sys::import('xaraya.caching.storage.filesystem');
                     $classname = 'xarCache_FileSystem_Storage';
                 }
                 break;
 
             case 'doctrine':
-                /** @uses \sys::autoload() */
                 if (class_exists('Doctrine\\Common\\Cache\\CacheProvider')) {
-                    sys::import('xaraya.caching.storage.doctrine');
                     $classname = 'xarCache_Doctrine_Storage';
                 } else {
-                    sys::import('xaraya.caching.storage.filesystem');
                     $classname = 'xarCache_FileSystem_Storage';
                 }
                 break;
 
             case 'memcached':
                 if (class_exists('Memcache')) {
-                    sys::import('xaraya.caching.storage.memcached');
                     $classname = 'xarCache_MemCached_Storage';
                 } else {
-                    sys::import('xaraya.caching.storage.filesystem');
                     $classname = 'xarCache_FileSystem_Storage';
                 }
                 break;
 
             case 'dummy':
-                sys::import('xaraya.caching.storage.dummy');
                 $classname = 'xarCache_Dummy_Storage';
                 break;
 
             case 'filesystem':
             default:
-                sys::import('xaraya.caching.storage.filesystem');
                 $classname = 'xarCache_FileSystem_Storage';
                 break;
         }

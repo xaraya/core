@@ -13,9 +13,6 @@
 namespace Xaraya\Bridge\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;
-use sys;
-
-sys::import('xaraya.bridge.requests.bridge');
 use Xaraya\Bridge\Requests\BasicBridge;
 
 /**

@@ -16,9 +16,6 @@
 namespace Xaraya\DataObject\Handlers;
 
 use DataObjectList;
-use sys;
-
-sys::import('modules.dynamicdata.class.ui_handlers.default');
 
 /**
  * Dynamic Object User Interface Handler

@@ -20,7 +20,6 @@
  * <http://creole.phpdb.org>.
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**

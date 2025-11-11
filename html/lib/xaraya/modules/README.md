@@ -118,7 +118,6 @@ namespace Xaraya\Modules\MyFancyModule;
 use Xaraya\Modules\ModuleClass;
 use sys;
 
-sys::import('xaraya.modules.module');
 
 /**
  * Get myfancymodule module classes via xar::mod()->getModule()
@@ -147,7 +146,6 @@ use Xaraya\Modules\UserApiInterface;
 use Xaraya\Modules\UserApiTrait;
 use sys;
 
-sys::import('xaraya.modules.userapitrait');
 
 /**
  * Handle module user api functions
@@ -168,7 +166,6 @@ namespace Xaraya\Modules\MyFancyModule;
 use Xaraya\Modules\UserApiClass;
 use sys;
 
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle module user api functions
@@ -191,7 +188,6 @@ use Xaraya\Modules\DynamicData\Traits\UserApiInterface;
 use Xaraya\Modules\DynamicData\Traits\UserApiTrait;
 use sys;
 
-sys::import('modules.dynamicdata.traits.userapi');
 
 /**
  * Handle (traditional) DD user api functions via module class
@@ -238,7 +234,6 @@ use Xaraya\Modules\MyFancyModule\UserApi;
 use Xaraya\Modules\MethodClass;
 use sys;
 
-sys::import('xaraya.modules.method');
 
 /**
  * myfancymodule userapi get function

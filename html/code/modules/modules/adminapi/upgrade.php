@@ -16,9 +16,6 @@ use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
 use Exception;
 use ixarMod;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules adminapi upgrade function

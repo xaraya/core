@@ -47,7 +47,6 @@ interface iBlockType
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
-sys::import('xaraya.structures.descriptor');
 abstract class BlockType extends ObjectDescriptor implements iBlockType
 {
     // keep an internal count of all blocks instantiated
@@ -355,7 +354,6 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
             'level' => $access['level'],
         ];
         if (!isset(self::$access_property)) {
-            sys::import('modules.dynamicdata.class.properties.master');
             self::$access_property = DataPropertyMaster::getProperty(['name' => 'access']);
         }
         return self::$access_property->check($args);

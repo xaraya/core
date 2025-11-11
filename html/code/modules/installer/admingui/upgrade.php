@@ -15,10 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use xarCore;
 use xarVersion;
-use sys;
 use xarUpgrader;
-
-sys::import('xaraya.modules.method');
 
 /**
  * installer admin upgrade function
@@ -41,7 +38,6 @@ class UpgradeMethod extends MethodClass
         // Version information
         $fileversion = xarCore::VERSION_NUM;
         $dbversion = $this->config()->getVar('System.Core.VersionNum');
-        sys::import('xaraya.version');
 
         // Versions prior to 2.1.0 had the revision number as version number, or something else
         if (strlen($dbversion) == 41 || empty($dbversion) || $dbversion == 'unknown') {
@@ -84,7 +80,6 @@ class UpgradeMethod extends MethodClass
         if ($data['phase'] != 1) {
             // Get the password of the designated site administrator
             $adminid = $this->mod('roles')->getVar('admin');
-            sys::import('modules.dynamicdata.class.objects.factory');
             $role = $this->data()->getObject(['name' => 'roles_users']);
             $role->getItem(['itemid' => $adminid]);
             $adminpass = $role->properties['password']->value;
@@ -155,7 +150,6 @@ class UpgradeMethod extends MethodClass
             $this->config()->setVar('System.Core.VersionSub', xarCore::VERSION_SUB);
             $this->config()->setVar('System.Core.VersionRev', xarCore::$build);
 
-            sys::import('xaraya.version');
             // Get the list of version checks
             xarUpgrader::loadFile('checks/check_list.php');
             $check_list = \installer_adminapi_get_check_list();

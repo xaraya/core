@@ -15,10 +15,6 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminApi;
 use Xaraya\Modules\DynamicData\UserApi;
 use BadParameterException;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata adminapi createproperty function
@@ -90,7 +86,6 @@ class CreatepropertyMethod extends MethodClass
             }
         }
 
-        sys::import('modules.dynamicdata.class.objects.factory');
         $propertyobject = $this->data()->getObject(['name' => 'properties']);
         $propid = $propertyobject->createItem($values);
         return $propid;

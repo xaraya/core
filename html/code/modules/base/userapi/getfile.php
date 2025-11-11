@@ -19,8 +19,6 @@ use xarCore;
 use xarCurl;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * base userapi getfile function
  * @extends MethodClass<UserApi>
@@ -242,7 +240,6 @@ class GetfileMethod extends MethodClass
         } else {
             // TODO: we probably want some fancier error checking here too :-)
             // use curl instead of fopen method if we can (not supported by all hosts these days)
-            sys::import('modules.base.class.xarCurl');
             $curl = new xarCurl(['url' => $url]);
             // check that curl initialised ok
             if ($curl->errno <> 0) {

@@ -13,11 +13,6 @@ namespace Xaraya\Modules\DynamicData\UtilApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UtilApi;
-use xarDB;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata utilapi import function

@@ -22,9 +22,6 @@ use DataObjectFactory;
 use DataPropertyMaster;
 use Exception;
 
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('modules.authsystem.class.authtoken');
-
 /**
  * Class to build REST API
 **/

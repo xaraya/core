@@ -16,8 +16,6 @@ use Xaraya\Modules\Base\AdminApi;
 use Exception;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * base adminapi loadmenuarray function
  * @extends MethodClass<AdminApi>

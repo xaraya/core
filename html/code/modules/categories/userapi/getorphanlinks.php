@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserApi;
 use CategoryWorker;
 use Query;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories userapi getorphanlinks function
@@ -51,7 +48,6 @@ class GetorphanlinksMethod extends MethodClass
             $itemtype = 0;
         }
 
-        sys::import('xaraya.structures.query');
         $tables = $this->db()->getTables();
         $q = new Query();
         $q->addtable($tables['categories'], 'c');
@@ -62,7 +58,6 @@ class GetorphanlinksMethod extends MethodClass
         $q->addgroup('cl.category_id');
         $q->run();
         $q->qecho();
-        sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $catbases = $worker->getcatbases(
             ['module_id'    => $modid,

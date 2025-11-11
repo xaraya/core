@@ -16,7 +16,6 @@
  * Full Email Check -- Checks first thru the regexp and then by mx records
  *
 **/
-sys::import('xaraya.validations.email');
 class FullEmailValidation extends EmailValidation
 {
     public function validate(&$subject, array $parameters)

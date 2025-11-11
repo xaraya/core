@@ -14,10 +14,6 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use FunctionNotFoundException;
-use xarHooks;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules admin modify function

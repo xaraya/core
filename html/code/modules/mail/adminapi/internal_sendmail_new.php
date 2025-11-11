@@ -18,8 +18,6 @@ use FileNotFoundException;
 use sys;
 use Exception;
 
-sys::import('xaraya.modules.method');
-
 /**
  * mail adminapi internal_sendmail_new function
  * @extends MethodClass<AdminApi>

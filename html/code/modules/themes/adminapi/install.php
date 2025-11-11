@@ -14,10 +14,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
 use Xaraya\Modules\InstallerTool;
 
 /**
@@ -52,7 +48,6 @@ class InstallMethod extends MethodClass
             throw new EmptyParameterException('regid');
         }
         // See if we have lost any modules since last generation
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance('themes');
         if (!$installer->checkformissing()) {
             return;

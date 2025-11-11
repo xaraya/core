@@ -18,7 +18,6 @@
  * @access  public
  * @return  void
 */
-sys::import('modules.base.xarblocks.menu');
 class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 {
     /**
@@ -293,7 +292,6 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         }
 
         // handle modulelist input
-        sys::import('modules.dynamicdata.class.properties.master');
         $accessproperty = $this->prop()->getProperty(['name' => 'access']);
         foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];

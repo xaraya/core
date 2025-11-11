@@ -1,7 +1,6 @@
 <?php
 
 /* Include the base class */
-sys::import('modules.base.xarproperties.textbox');
 
 /**
  * The Email property manages an email address
@@ -66,7 +65,6 @@ class EmailProperty extends TextBoxProperty
             return false;
         }
         if (!empty($value)) {
-            sys::import('xaraya.validations');
             $boolean = ValueValidations::get('email');
             try {
                 $boolean->validate($value, []);

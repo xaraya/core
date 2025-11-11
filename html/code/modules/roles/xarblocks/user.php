@@ -17,7 +17,6 @@
  * @author Marco Canini
  */
 
-sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class Roles_UserBlock extends BasicBlock
 {

@@ -19,10 +19,6 @@ use Xaraya\Modules\UserApiTrait as CoreApiTrait;
 use Xaraya\Modules\ModuleInterface;
 use sys;
 
-sys::import('xaraya.modules.userapitrait');
-sys::import('modules.dynamicdata.traits.itemlinks');
-sys::import('modules.dynamicdata.traits.otherapi');
-
 /**
  * For documentation purposes only - available via UserApiTrait
  */

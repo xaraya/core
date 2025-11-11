@@ -23,8 +23,6 @@
  * Legacy way, supported for now, deprecated in future
  * xarModHooks::call('module', 'remove', $module, $item);
 **/
-sys::import('xaraya.structures.hooks.apisubject');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class ModulesModuleRemoveSubject extends ApiHookSubject

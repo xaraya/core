@@ -23,7 +23,6 @@ function sql_220_05()
     ");
 
     try {
-        sys::import('xaraya.hooks');
         /* Hook Events */
         // Register modules module hook subjects
         xarHooks::registerSubject('ModuleModifyconfig', 'module', 'modules');

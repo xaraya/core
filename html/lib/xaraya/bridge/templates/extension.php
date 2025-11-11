@@ -21,7 +21,6 @@ use Xaraya\Services\ServicesTrait;
  * 4. ModuleTagExtension - see modules.php
  * 5. PHPOtherExtension - see phpothers.php
  *
- * @uses \sys::autoload()
  */
 class XarayaTwigExtension extends AbstractExtension implements ServicesInterface
 {

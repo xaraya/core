@@ -18,7 +18,6 @@
  *
  * @author  Chris Powis <crisp@xaraya.com>
 */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 
 /**
  * Blocks Block Group Block

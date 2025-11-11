@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Mail;
 
 use Xaraya\Modules\UserGuiClass;
-use sys;
-
-sys::import('xaraya.modules.usergui');
-sys::import('modules.mail.userapi');
 
 /**
  * Handle the mail user GUI

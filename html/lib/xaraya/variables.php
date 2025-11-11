@@ -393,7 +393,6 @@ class xarVarPrep
             throw new EmptyParameterException('type');
         }
 
-        sys::import("xaraya.validations");
         $v = ValueValidations::get($type);
 
         try {

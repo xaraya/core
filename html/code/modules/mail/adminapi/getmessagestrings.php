@@ -17,8 +17,6 @@ use EmptyParameterException;
 use FileNotFoundException;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * mail adminapi getmessagestrings function
  * @extends MethodClass<AdminApi>

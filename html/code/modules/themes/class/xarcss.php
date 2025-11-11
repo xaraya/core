@@ -13,9 +13,9 @@
  * @link http://xaraya.info/index.php/release/70.html
 **/
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 use Xaraya\Services\WithServicesClass;
+
 // use ixarMod;
 // use ixarTheme;
 
@@ -283,7 +283,6 @@ class xarCSS extends xarObject
         // build an array of potential libraries
         // Below the lib directory we expect to find a directory with a library's name
         // Below that the next level must be one or more directories with different versions of the library
-        sys::import('xaraya.version');
         $libs = [];
         foreach ($paths as $path) {
             if (!is_dir($path)) {
@@ -1030,7 +1029,6 @@ class xarCSSLib extends xarObject
         }
 
         // Load the version class to check versions
-        sys::import('xaraya.version');
 
         // find files in all lib folders, all themes, all modules, all properties
         $this->scripts = [];

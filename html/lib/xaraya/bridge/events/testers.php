@@ -3,7 +3,7 @@
 /**
  * Tester for EventObserverBridge and HookObserverBridge
  *
- * By default, any call to xarEvents::notify or xarHooks::notify can trigger an event dispatch as well, so it's up
+ * By default, any call to xar::events()->notify or xar::hooked()->notify can trigger an event dispatch as well, so it's up
  * to the event/hook observer bridges and your event subscribers to select which events they want to listen to.
  * An example of a test event subscriber is available here:
  *
@@ -37,15 +37,8 @@
 namespace Xaraya\Bridge\Events;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Exception;
-use sys;
-
-sys::import('xaraya.events');
-sys::import('xaraya.hooks');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
-use xarEvents;
-use xarHooks;
+use Exception;
 
 /**
  * Test the event observer bridges in observers.php by subscribing to a few events and/or hooks here
@@ -119,7 +112,7 @@ class TestEventListeners extends EventListenerProvider
             return $this->attached;
         }
         $attached = [];
-        $eventlist = xarEvents::getObserverModules();
+        $eventlist = xar::events()->getObserverModules();
         foreach ($eventlist as $modname => $eventinfo) {
             foreach ($eventinfo as $event => $info) {
                 $attached[$info['scope']] ??= [];
@@ -191,7 +184,7 @@ class TestHookListeners extends HookListenerProvider
         }
         $attached = [];
         // start with the listeners (observer modules) and which events they listen to (hook observers)
-        $hooklist = xarHooks::getObserverModules();
+        $hooklist = xar::hooked()->getObserverModules();
         foreach ($hooklist as $modname => $hookinfo) {
             //echo "Hook list: $modname = " . var_export($hookinfo['scopes'], true) . "\n";
             foreach ($hookinfo['scopes'] as $scope => $events) {
@@ -201,7 +194,7 @@ class TestHookListeners extends HookListenerProvider
                 }
             }
             // find out which subject modules they're listening for (hooked)
-            $subjects = xarHooks::getObserverSubjects($modname);
+            $subjects = xar::hooked()->getObserverSubjects($modname);
             foreach ($subjects as $subject => $info) {
                 // itemtype 0 will also apply to all other itemtypes
                 foreach ($info as $itemtype => $scopes) {

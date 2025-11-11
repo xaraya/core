@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Categories\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminApi;
 use BadParameterException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories adminapi createhook function
@@ -48,7 +45,6 @@ class CreatehookMethod extends MethodClass
             throw new BadParameterException(null, $msg);
         }
 
-        sys::import('modules.dynamicdata.class.properties.master');
         $categories = $this->prop()->getProperty(['name' => 'categories']);
         if ($categories->checkInput('hookedcategories')) {
             // CHECKME: aren't we supposed to save the categories here ?

@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Blocks\AdminApi;
 
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\AdminApi;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks adminapi unregister_block_type function

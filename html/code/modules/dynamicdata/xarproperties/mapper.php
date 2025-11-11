@@ -17,10 +17,8 @@ namespace Xaraya\DataObject\Properties;
 
 use ObjectDescriptor;
 use Exception;
-use sys;
 
 /* Include parent class */
-sys::import('modules.dynamicdata.xarproperties.queued');
 
 /**
  * The mapper can be set to automatically load related object properties if the value contains its itemid

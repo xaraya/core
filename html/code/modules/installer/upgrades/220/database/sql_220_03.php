@@ -27,7 +27,6 @@ function sql_220_03()
     ");
 
     //Load Table Maintainance API
-    sys::import('xaraya.tableddl');
     // create eventsystem table
     $dbconn  = xarDB::getConn();
     try {

@@ -10,9 +10,6 @@
  * @link http://xaraya.info/index.php/release/27.html
  */
 
-sys::import('modules.dynamicdata.class.objects.base');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 
 /**
  * Role: class for the role object
@@ -115,7 +112,6 @@ class Role extends DataObject
             $data['parentid'] = (int) $this->mod('roles')->getVar('defaultgroup');
         }
         if (!empty($data['parentid'])) {
-            sys::import('modules.roles.class.roles');
             $parent = xarRoles::get($data['parentid']);
             if (!$parent->addMember($this)) {
                 throw new Exception('Unable to create a roles relation');
@@ -248,7 +244,6 @@ class Role extends DataObject
     {
         // Delete the relevant entry from the rolemembers table
         $xartables = $this->db()->getTables();
-        sys::import('xaraya.structures.query');
         $q = new Query('DELETE', $xartables['rolemembers']);
         $q->eq('role_id', $member->getID());
         $q->eq('parent_id', $this->getID());
@@ -323,7 +318,6 @@ class Role extends DataObject
             return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_sole_parent']);
         }
 
-        sys::import('modules.roles.class.roles');
         // go through the list, retrieving the roles and detaching each one
         // we need to do it this way because the method removeMember is more than just
         // a simple SQL DELETE
@@ -442,7 +436,6 @@ class Role extends DataObject
         }
         $result = $stmt->executeQuery([$this->properties['id']->value]);
 
-        sys::import('modules.privileges.class.privilege');
         $privileges = [];
         while ($result->next()) {
             [$id, $name, $realm, $module_id, $module, $component, $instance, $level,
@@ -784,7 +777,6 @@ class Role extends DataObject
     {
         $users = $this->getUsers($state);
 
-        sys::import('modules.roles.class.roles');
         $groups = xarRoles::getSubGroups($this->getID());
         $ua = [];
         foreach ($users as $user) {
@@ -1025,7 +1017,6 @@ class Role extends DataObject
     }
 }
 
-sys::import('modules.dynamicdata.class.objects.list');
 
 /**
  * RoleList: generic list class to handle getItems() etc. for roles

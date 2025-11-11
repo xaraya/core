@@ -15,9 +15,6 @@ use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\UserApi;
 use Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\InstancesApi;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks userapi getitemlinks function

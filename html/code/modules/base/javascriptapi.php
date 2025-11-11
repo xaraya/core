@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Base;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the base javascript API
@@ -35,6 +32,6 @@ class JavascriptApi extends UserApiClass
     public function configure()
     {
         $this->setModType('javascript');
-        // don't call xarMod:apiLoad() for base javascript API
+        // don't call xar::mod()->apiLoad() for base javascript API
     }
 }

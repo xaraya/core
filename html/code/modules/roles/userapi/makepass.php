@@ -14,10 +14,6 @@ namespace Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\Roles\Password;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.roles.class.password');
 
 /**
  * roles userapi makepass function

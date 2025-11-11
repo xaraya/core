@@ -15,10 +15,6 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UserGui;
 use Exception;
 use Query;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata user filtertag function
@@ -50,7 +46,6 @@ class FiltertagMethod extends MethodClass
             // Get an instance of the dataobject so that we can get at the dataproperties' checkInput() method
             $object = $this->data()->getObject(['name' => $objectname]);
 
-            sys::import('xaraya.structures.query');
             $q = new Query();
             foreach ($names as $name) {
                 // Get the value of a property from the template

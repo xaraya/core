@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Blocks;
 
 use Xaraya\Modules\UserGuiClass;
-use sys;
-
-sys::import('xaraya.modules.usergui');
-sys::import('modules.blocks.userapi');
 
 /**
  * Handle the blocks user GUI

@@ -13,8 +13,8 @@
  * @author mrb <marcel@xaraya.com>
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+
 // use ixarTheme;
 
 /**
@@ -45,7 +45,6 @@ class ThemeInitialization extends xarObject
      */
     public static function importConfigurations($flush = true, $dirs = [])
     {
-        sys::import('xaraya.structures.relativedirectoryiterator');
         $xar = xar::getServicesClass();
 
         $dbconn = $xar->db()->getConn(); // Need this for the transaction
@@ -94,7 +93,6 @@ class ThemeInitialization extends xarObject
 
     public static function inittheme($dir)
     {
-        sys::import('modules.dynamicdata.class.objects.descriptor');
         $class = UCFirst($dir) . 'Init';
         if (file_exists($dir . '/init.php')) {
             // Assume this theme has its own init routine

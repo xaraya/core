@@ -13,12 +13,9 @@ namespace Xaraya\Modules\Modules\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
+use xarCore;
 use ConfigurationException;
 use Exception;
-use xarCore;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules admin release function

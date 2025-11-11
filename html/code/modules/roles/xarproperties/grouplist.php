@@ -1,7 +1,6 @@
 <?php
 
 /* Include the base class */
-sys::import('modules.base.xarproperties.dropdown');
 
 /**
  * The Grouplist property displays a dropdown of Xaraya groups

@@ -13,10 +13,7 @@
 namespace Xaraya\Sessions\Storage;
 
 use Xaraya\Sessions\VirtualSession;
-use sys;
 use Exception;
-
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**

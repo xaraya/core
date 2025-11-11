@@ -27,10 +27,8 @@ use ObjectDescriptor;
 use SimpleXMLElement;
 use Exception;
 use JsonException;
-use sys;
 
 /* Include parent class */
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * This property displays the result of a callable function as value

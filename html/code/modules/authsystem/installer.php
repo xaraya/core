@@ -14,12 +14,8 @@
 namespace Xaraya\Modules\Authsystem;
 
 use Xaraya\Modules\InstallerClass;
-use xarEvents;
 use xarMasks;
 use xarPrivileges;
-use sys;
-
-sys::import('xaraya.modules.installer');
 
 /**
  * Handle module installer functions

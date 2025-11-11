@@ -10,7 +10,6 @@
  * @link http://xaraya.info/index.php/release/1098.html
  */
 
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * Handle Access property
@@ -228,7 +227,6 @@ class AccessProperty extends DataProperty
      */
     public function getleveloptions()
     {
-        sys::import('modules.privileges.class.securitylevel');
         $accesslevels = SecurityLevel::$displayMap;
         unset($accesslevels[-1]);
         $options = [];
@@ -577,7 +575,6 @@ class AccessProperty extends DataProperty
     }
 }
 
-sys::import('modules.dynamicdata.class.properties.interfaces');
 
 /**
  * @package modules\privileges

@@ -32,7 +32,6 @@ use Xaraya\Bridge\GraphQL\GraphQLHandler;
 
 /**
  * See xardocs/graphql.txt for class structure
- * @uses \sys::autoload()
  */
 class GraphQLObjects
 {

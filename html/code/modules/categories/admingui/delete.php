@@ -16,9 +16,6 @@ use Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\Categories\UserApi;
 use BadParameterException;
 use CategoryWorker;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin delete function
@@ -83,7 +80,6 @@ class DeleteMethod extends MethodClass
             return $this->ctl()->badRequest('bad_author');
         }
 
-        sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $result = $worker->delete($data['itemid']);
 

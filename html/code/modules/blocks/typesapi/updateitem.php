@@ -15,9 +15,6 @@ use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\TypesApi;
 use BadParameterException;
 use EmptyParameterException;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi updateitem function

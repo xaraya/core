@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Base\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\AdminApi;
 use Exception;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base adminapi read_file function

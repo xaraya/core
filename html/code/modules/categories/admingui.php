@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Categories;
 
 use Xaraya\Modules\AdminGuiClass;
-use sys;
-
-sys::import('xaraya.modules.admingui');
-sys::import('modules.categories.adminapi');
 
 /**
  * Handle the categories admin GUI

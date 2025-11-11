@@ -15,10 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
 use ModuleNotFoundException;
-use xarHooks;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules adminapi updatehooks function

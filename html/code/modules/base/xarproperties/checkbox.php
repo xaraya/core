@@ -1,7 +1,6 @@
 <?php
 
 /* Include the parent class  */
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * The Checkbox property models an HTML input of type checkbox

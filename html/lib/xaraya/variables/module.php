@@ -12,10 +12,8 @@
  * @link http://www.xaraya.info
  */
 
-sys::import('xaraya.variables');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 use Xaraya\Services\Modules\VarsHelper;
+use Xaraya\Services\xar;
 
 /**
  * Build upon IxarVars to define interface for ModVars

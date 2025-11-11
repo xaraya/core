@@ -17,15 +17,11 @@
 namespace Xaraya\Services;
 
 use ixarUser;
-use xarEvents;
-use sys;
 use BadParameterException;
 use EmptyParameterException;
 use IDNotFoundException;
 use NotLoggedInException;
 use SQLException;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via UserTrait

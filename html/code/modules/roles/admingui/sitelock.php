@@ -13,11 +13,8 @@ namespace Xaraya\Modules\Roles\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
-use Exception;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
+use Exception;
 
 /**
  * roles admin sitelock function

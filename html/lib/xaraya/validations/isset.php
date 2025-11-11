@@ -21,7 +21,6 @@
  * @return boolean true on isset, false on !isset
  * @throws VariableValidationException
 **/
-sys::import('xaraya.validations');
 class IssetValidation extends ValueValidations
 {
     public function validate(&$subject, array $parameters)

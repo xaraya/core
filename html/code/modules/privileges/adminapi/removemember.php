@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Privileges\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminApi;
 use xarPrivileges;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges adminapi removemember function
@@ -47,7 +44,6 @@ class RemovememberMethod extends MethodClass
         }
 
         // call the Privileges class and get the parent and child objects
-        sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getPrivilege($parentid);
         $member = xarPrivileges::getPrivilege($childid);
 

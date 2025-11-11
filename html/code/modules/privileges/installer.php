@@ -18,9 +18,6 @@ use Exception;
 use xarXMLInstaller;
 use xarPrivileges;
 use xarMasks;
-use sys;
-
-sys::import('xaraya.modules.installer');
 
 /**
  * Handle module installer functions
@@ -42,7 +39,6 @@ class Installer extends InstallerClass
         $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
-            sys::import('xaraya.tableddl');
             xarXMLInstaller::createTable('table_schema-def', 'privileges');
             // We're done, commit
             $dbconn->commit();
@@ -263,13 +259,13 @@ class Installer extends InstallerClass
         xarMasks::register('ViewPrivileges', 'All', 'privileges', 'All', 'All', 'ACCESS_OVERVIEW');
         xarMasks::register('EditPrivileges', 'All', 'privileges', 'All', 'All', 'ACCESS_EDIT');
         xarMasks::register('AddPrivileges', 'All', 'privileges', 'All', 'All', 'ACCESS_ADD');
-        xarMasks::register('ManagePrivileges','All','privileges','All','All','ACCESS_DELETE');
-        xarMasks::register('AdminPrivileges','All','privileges','All','All','ACCESS_ADMIN');
+        xarMasks::register('ManagePrivileges', 'All', 'privileges', 'All', 'All', 'ACCESS_DELETE');
+        xarMasks::register('AdminPrivileges', 'All', 'privileges', 'All', 'All', 'ACCESS_ADMIN');
 
-        xarMasks::register('ViewModules','All','modules','All','All','ACCESS_OVERVIEW');
-        xarMasks::register('EditModules','All','modules','All','All','ACCESS_EDIT');
-        xarMasks::register('ManageModules','All','modules','All','All','ACCESS_DELETE');
-        xarMasks::register('AdminModules','All','modules','All','All','ACCESS_ADMIN');
+        xarMasks::register('ViewModules', 'All', 'modules', 'All', 'All', 'ACCESS_OVERVIEW');
+        xarMasks::register('EditModules', 'All', 'modules', 'All', 'All', 'ACCESS_EDIT');
+        xarMasks::register('ManageModules', 'All', 'modules', 'All', 'All', 'ACCESS_DELETE');
+        xarMasks::register('AdminModules', 'All', 'modules', 'All', 'All', 'ACCESS_ADMIN');
 
         return true;
     }

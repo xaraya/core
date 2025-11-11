@@ -38,10 +38,6 @@
 namespace Xaraya\Modules;
 
 use ixarMod;
-use xarMod;
-use sys;
-
-sys::import('xaraya.modules.userguitrait');
 
 /**
  * Module class supports admin gui methods - available via AdminGuiTrait

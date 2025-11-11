@@ -13,13 +13,9 @@ namespace Xaraya\Modules\Modules\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
+use ixarMod;
 use EmptyParameterException;
 use Exception;
-use xarEvents;
-use ixarMod;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules adminapi activate function

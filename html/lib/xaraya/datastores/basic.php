@@ -18,10 +18,6 @@ use DataObject;
 use DataObjectList;
 use DataProperty;
 use DataPropertyMaster;
-use sys;
-
-sys::import('xaraya.datastores.factory');
-sys::import('xaraya.datastores.interface');
 
 /**
  * Base class for Dynamic Data Stores

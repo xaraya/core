@@ -3,7 +3,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.integerbox');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework

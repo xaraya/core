@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Mail\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\UserApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * mail userapi getqueuetypes function

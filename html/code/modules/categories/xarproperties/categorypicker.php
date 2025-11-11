@@ -22,7 +22,6 @@
         'initialization_basecategories' => array('Picker Dropdown',array(0=>array(0=>array(-1))),array(1=>true),array(1=>1)),
     );
 */
-sys::import('modules.base.xarproperties.array');
 
 /**
  * This property displays a configuration widget for a categories dropdown

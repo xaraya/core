@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Categories\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserApi;
 use Query;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories userapi getlinkages function
@@ -51,7 +48,6 @@ class GetlinkagesMethod extends MethodClass
         extract($args);
 
         $xartable = $this->db()->getTables();
-        sys::import('xaraya.structures.query');
         $q = new Query('SELECT', $xartable['categories_linkage']);
         if (!empty($module)) {
             $q->eq('module_id', $this->mod()->getID($module));

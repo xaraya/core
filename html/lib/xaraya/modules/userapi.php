@@ -37,10 +37,6 @@
 
 namespace Xaraya\Modules;
 
-use sys;
-
-sys::import('xaraya.modules.userapitrait');
-
 /**
  * Handle module user api functions
  *

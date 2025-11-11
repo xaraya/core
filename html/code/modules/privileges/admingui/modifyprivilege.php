@@ -15,10 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\Privileges\AdminApi;
 use xarPrivileges;
-use sys;
 use SecurityLevel;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin modifyprivilege function
@@ -58,7 +55,6 @@ class ModifyprivilegeMethod extends MethodClass
         $this->session()->delVar('privileges_statusmsg');
 
         //Call the Privileges class and get the privilege to be modified
-        sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getPrivilege($id);
         //Get the array of parents of this privilege
         $parents = [];

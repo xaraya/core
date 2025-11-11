@@ -16,9 +16,6 @@ namespace Xaraya\DataObject\DataStores;
 
 use DataProperty;
 use Exception;
-use sys;
-
-sys::import('xaraya.datastores.sql.relational');
 
 /**
  * Class to handle module variables datastores

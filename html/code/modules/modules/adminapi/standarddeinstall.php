@@ -14,13 +14,10 @@ namespace Xaraya\Modules\Modules\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use DataObjectFactory;
-use Exception;
 use xarMasks;
 use xarPrivileges;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
+use Exception;
 
 /**
  * modules adminapi standarddeinstall function

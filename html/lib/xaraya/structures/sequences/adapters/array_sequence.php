@@ -15,7 +15,6 @@
  * If the abstraction is proper, every method should have some
  * array specific part for the implementation. ;-)
  */
-sys::import('xaraya.structures.sequences.interfaces');
 
 class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
 {

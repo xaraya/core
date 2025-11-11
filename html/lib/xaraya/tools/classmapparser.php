@@ -65,7 +65,6 @@ class ClassMapParser
         $this->classmap['autoload']['updated'] = date('c', filemtime($file));
         if ($this->checkClass) {
             // we need this to check PSR-15 middleware classes, where autoload is default
-            sys::autoload();
         }
         $defined = require $file;
         // we are only looking for xaraya code here, not lib, themes etc.
@@ -196,7 +195,6 @@ class ClassMapParser
     protected function addBlock(string $className, string $filePath, string $modName, string $fileType): void
     {
         if ($this->checkClass) {
-            sys::import('xaraya.structures.containers.blocks.blocktype');
             $interface = \iBlockType::class;
             if (!$this->checkInterface($className, $interface)) {
                 return;
@@ -210,14 +208,12 @@ class ClassMapParser
     protected function addController(string $className, string $filePath, string $modName, string $fileType): void
     {
         if ($this->checkClass) {
-            sys::import('xaraya.mapper.controllers.interfaces');
             $interface = \iController::class;
             if ($this->checkInterface($className, $interface)) {
                 $classType = 'controllers';
                 $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }
-            sys::import('xaraya.bridge.routing.RoutesInterface');
             $interface = \Xaraya\Routing\RoutesInterface::class;
             if ($this->checkInterface($className, $interface)) {
                 $classType = 'routes';
@@ -225,7 +221,6 @@ class ClassMapParser
                 return;
             }
             // not really used, but see example in dynamicdata
-            sys::import('xaraya.bridge.routing.HandlerInterface');
             $interface = \Xaraya\Routing\HandlerInterface::class;
             if ($this->checkInterface($className, $interface)) {
                 $classType = 'handlers';
@@ -234,7 +229,6 @@ class ClassMapParser
             }
             /**
             // moved to html/lib/xaraya/bridge/middleware/...
-            sys::import('xaraya.bridge.middleware.router');
             $interface = \Xaraya\Bridge\Middleware\DefaultRouterInterface::class;
             if ($this->checkInterface($className, $interface)) {
                 $classType = 'middleware';
@@ -255,7 +249,6 @@ class ClassMapParser
             return;
         }
         if ($this->checkClass) {
-            sys::import('modules.dynamicdata.class.properties.interfaces');
             $interface = \iDataProperty::class;
             if (!$this->checkInterface($className, $interface)) {
                 return;
@@ -269,10 +262,8 @@ class ClassMapParser
     {
         if ($this->checkClass) {
             if ($fileType == 'module') {
-                sys::import('xaraya.modules.moduletrait');
                 $interface = \Xaraya\Modules\ModuleInterface::class;
             } else {
-                sys::import('xaraya.modules.servicestrait');
                 $interface = \Xaraya\Modules\ModuleServicesInterface::class;
             }
             if (!$this->checkInterface($className, $interface)) {
@@ -306,7 +297,6 @@ class ClassMapParser
     protected function addMethod(string $className, string $filePath, string $modName, string $modType, string $fileType): void
     {
         if ($this->checkClass) {
-            sys::import('xaraya.modules.method');
             $interface = \Xaraya\Modules\MethodServicesInterface::class;
             if (!$this->checkInterface($className, $interface)) {
                 // @todo put in others here?

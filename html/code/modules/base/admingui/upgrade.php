@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\AdminGui;
 use xarCore;
 use xarVersion;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base admin upgrade function
@@ -46,7 +43,6 @@ class UpgradeMethod extends MethodClass
 
         $fileversion = xarCore::VERSION_NUM;
         $dbversion = $this->config()->getVar('System.Core.VersionNum');
-        sys::import('xaraya.version');
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
         return $data;
     }

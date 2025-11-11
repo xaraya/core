@@ -17,8 +17,6 @@ use DirectoryIterator;
 use ixarMod;
 use sys;
 
-sys::import('modules.blocks.method');
-
 /**
  * blocks typesapi getfiles function
  * @extends MethodClass<TypesApi>

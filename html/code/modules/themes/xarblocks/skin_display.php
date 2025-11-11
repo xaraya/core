@@ -20,7 +20,6 @@
  * @author Marco Canini
  * initialise block
  */
-sys::import('modules.themes.xarblocks.skin');
 class Themes_SkinBlockDisplay extends Themes_SkinBlock implements iBlock
 {
     /**

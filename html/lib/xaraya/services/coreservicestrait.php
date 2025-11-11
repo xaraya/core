@@ -21,21 +21,6 @@ use Xaraya\Context\ContextTrait;
 use sys;
 use Exception;
 
-sys::import('xaraya.context.contexttrait');
-sys::import('xaraya.services.controller');
-sys::import('xaraya.services.logger');
-sys::import('xaraya.services.multilanguage');
-sys::import('xaraya.services.modules');
-sys::import('xaraya.services.security');
-sys::import('xaraya.services.templating');
-sys::import('xaraya.services.variables');
-sys::import('xaraya.services.blocks');
-sys::import('xaraya.services.dataobject');
-sys::import('xaraya.services.dataproperty');
-sys::import('xaraya.services.caching');
-sys::import('xaraya.services.request');
-sys::import('xaraya.objects');
-
 /**
  * For documentation purposes only - available via CoreServicesTrait
  */

@@ -3,13 +3,13 @@
 /**
  * Event Subscribers compatible with Symfony EventDispatcher (not PSR-14) to notify xarEvents or xarHooks
  *
- * App -> dispatch event with EventDispatcher -> receive with EventSubscriber -> call xarEvents::notify() -> Xaraya event observers
+ * App -> dispatch event with EventDispatcher -> receive with EventSubscriber -> call xar::events()->notify() -> Xaraya event observers
  *
  * Event names to be dispatched via the EventDispatcher are structured as:
  * - xarEvents.{scope}.{event} e.g. xarEvents.user.UserLogin
  * - xarHooks.{scope}.{event} e.g. xarHooks.item.ItemCreate
  *
- * By default, events dispatched via the EventDispatcher will trigger a xarEvents::notify or xarHooks::notify
+ * By default, events dispatched via the EventDispatcher will trigger a xar::events()->notify or xar::hooked()->notify
  * call in Xaraya. Any event/hook observers listening for that event are configured in Xaraya as before.
  * The EventDispatcher does not return any results, but the response to an event is available via the subscriber.
  * Optionally, specific callback functions can also be defined to react to certain events (see also listeners).
@@ -36,12 +36,12 @@
  *
  * // current context
  * $context = new Context(['requestId' => 'something']);
- * // create an event with $subject corresponding to the $args in xarEvents::notify()
+ * // create an event with $subject corresponding to the $args in xar::events()->notify()
  * $subject = ['module' => 'dynamicdata', 'itemtype' => 3, 'itemid' => 123];
  * $event = new DefaultEvent($subject);
  * // set context if available
  * $event->setContext($context);
- * // this will call xarHooks::notify('ItemCreate', $subject, $context) and save any response in the subscriber
+ * // this will call xar::hooked()->notify('ItemCreate', $subject, $context) and save any response in the subscriber
  * $dispatcher->dispatch($event, 'xarHooks.item.ItemCreate');
  * $responses = $subscriber->getResponses();
  */
@@ -49,13 +49,8 @@
 namespace Xaraya\Bridge\Events;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Xaraya\Services\xar;
 use Exception;
-use sys;
-
-sys::import('xaraya.events');
-sys::import('xaraya.hooks');
-use xarEvents;
-use xarHooks;
 
 class EventSubscriber implements EventSubscriberInterface
 {
@@ -82,7 +77,7 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function notify($type, $subject, $context = null)
     {
-        $response = xarEvents::notify($type, $subject, $context);
+        $response = xar::events()->notify($type, $subject, $context);
         return $response;
     }
 
@@ -108,7 +103,7 @@ class EventSubscriber implements EventSubscriberInterface
 
     public static function getEventList()
     {
-        return xarEvents::getSubjects();
+        return xar::events()->getSubjects();
     }
 
     public static function getSubscribedEvents()
@@ -141,13 +136,13 @@ class HookSubscriber extends EventSubscriber implements EventSubscriberInterface
 
     public function notify($type, $subject, $context = null)
     {
-        $response = xarHooks::notify($type, $subject, $context);
+        $response = xar::hooked()->notify($type, $subject, $context);
         return $response;
     }
 
     public static function getEventList()
     {
-        return xarHooks::getSubjects();
+        return xar::hooked()->getSubjects();
     }
 }
 
@@ -232,11 +227,11 @@ class HookCallbackSubscriber extends EventCallbackSubscriber implements EventSub
 
     public function notify($type, $subject, $context = null)
     {
-        xarHooks::notify($type, $subject, $context);
+        xar::hooked()->notify($type, $subject, $context);
     }
 
     public static function getEventList()
     {
-        return xarHooks::getSubjects();
+        return xar::hooked()->getSubjects();
     }
 }

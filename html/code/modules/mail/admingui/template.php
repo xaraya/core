@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminGui;
 use Xaraya\Modules\Mail\AdminApi;
 use Exception;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * mail admin template function

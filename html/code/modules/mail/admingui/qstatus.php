@@ -16,9 +16,6 @@ use Xaraya\Modules\Mail\AdminGui;
 use Xaraya\Modules\Mail\AdminApi;
 use Xaraya\Modules\Mail\UserApi;
 use Queue;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * mail admin qstatus function
@@ -75,7 +72,6 @@ class QstatusMethod extends MethodClass
             } else {
                 // We have some qInfo, retrieve details
                 // We have an object, so we can count the items in it.
-                sys::import('xaraya.structures.sequences.queue');
                 $q = new Queue('dd', ['name' => $qName]);
                 $queues[$index]['count'] = $q->size;
                 // Determine status

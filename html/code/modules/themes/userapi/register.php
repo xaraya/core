@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Themes\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\UserApi;
 use xarCSS;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes userapi register function
@@ -52,7 +49,6 @@ class RegisterMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        sys::import('modules.themes.class.xarcss');
         $css = xarCSS::getInstance();
         return $css->register($args);
     }

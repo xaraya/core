@@ -14,7 +14,6 @@
  * Cache data using APC [http://pecl.php.net/apc/]
  */
 
-sys::import('xaraya.caching.storage');
 class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storage
 {
     public ?string $lastkey = null;

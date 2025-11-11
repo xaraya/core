@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\BlocksApi;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi getblock function

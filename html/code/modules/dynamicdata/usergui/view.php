@@ -16,9 +16,6 @@ use Xaraya\Modules\DynamicData\UserGui;
 use Xaraya\Modules\DynamicData\AdminApi;
 use sys;
 
-sys::import('modules.dynamicdata.method');
-
-
 /**
  * dynamicdata user view function
  * @extends MethodClass<UserGui>

@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Installer\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use Exception;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * installer admin phase2 function

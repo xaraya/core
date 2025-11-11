@@ -25,13 +25,11 @@ class xarDispatcher extends xarObject
 
     public function findController(xarRequest $request): iController
     {
-        sys::import('xaraya.classmap');
         $result = xarClassMap::findController($request->getModule(), $request->getRoute());
         if (!empty($result)) {
             require_once($result['filepath']);
             $controllername = $result['classname'];
         } else {
-            sys::import('xaraya.mapper.controllers.' . $request->getRoute());
             $controllername = UCFirst($request->getRoute()) . 'ActionController';
         }
         /** @var iController $controller */
@@ -53,7 +51,6 @@ class xarDispatcher extends xarObject
         if (empty($module)) {
             return false;
         }
-        sys::import('xaraya.services.xar');
         $available = \Xaraya\Services\xar::mod()->isAvailable($module);
         return $available;
     }

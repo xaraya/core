@@ -17,9 +17,6 @@ use Xaraya\Modules\Roles\UserApi;
 use xarPrivileges;
 use xarRoles;
 use xarSecurity;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles admin showprivileges function
@@ -60,8 +57,6 @@ class ShowprivilegesMethod extends MethodClass
                 'parentname' => $parent->getName()];
         }
         $data['parents'] = $parents;
-
-        sys::import('modules.privileges.class.privileges');
 
         // -------------------------------------------------------------------
         // Get the inherited privileges

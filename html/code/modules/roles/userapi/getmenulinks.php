@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Roles\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles userapi getmenulinks function

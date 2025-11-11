@@ -10,7 +10,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
 **/
-sys::import('xaraya.structures.events.observer');
 
 class ApiEventObserver extends EventObserver
 {

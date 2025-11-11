@@ -16,8 +16,6 @@
  * @todo Document functions
 **/
 
-// @todo move functions to class methods and use Database Service
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -185,22 +183,18 @@ class xarTableDDL extends xarObject
         switch ($databaseType) {
             case 'mysqli':
             case 'pdomysqli':
-                sys::import('xaraya.tableddl.mysqli');
                 $sql = \Xaraya\Database\TableDDL\MysqliDDL::createTable($tableName, $fields, $charset);
                 break;
             case 'pgsql':
             case 'pdopgsql':
-                sys::import('xaraya.tableddl.postgres');
                 $sql = \Xaraya\Database\TableDDL\PostgresDDL::createTable($tableName, $fields, $charset);
                 break;
             case 'oci8':
             case 'oci8po':
-                sys::import('xaraya.tableddl.oracle');
                 $sql = \Xaraya\Database\TableDDL\OracleDDL::createTable($tableName, $fields, $charset);
                 break;
             case 'sqlite3':
             case 'pdosqlite':
-                sys::import('xaraya.tableddl.sqlite');
                 $sql = \Xaraya\Database\TableDDL\SqliteDDL::createTable($tableName, $fields, $charset);
                 break;
             case 'mssql':
@@ -250,22 +244,18 @@ class xarTableDDL extends xarObject
         switch ($databaseType) {
             case 'mysqli':
             case 'pdomysqli':
-                sys::import('xaraya.tableddl.mysqli');
                 $sql = \Xaraya\Database\TableDDL\MysqliDDL::alterTable($tableName, $args);
                 break;
             case 'pgsql':
             case 'pdopgsql':
-                sys::import('xaraya.tableddl.postgres');
                 $sql = \Xaraya\Database\TableDDL\PostgresDDL::alterTable($tableName, $args);
                 break;
             case 'oci8':
             case 'oci8po':
-                sys::import('xaraya.tableddl.oracle');
                 $sql = \Xaraya\Database\TableDDL\OracleDDL::alterTable($tableName, $args);
                 break;
             case 'sqlite3':
             case 'pdosqlite':
-                sys::import('xaraya.tableddl.sqlite');
                 $sql = \Xaraya\Database\TableDDL\SqliteDDL::alterTable($tableName, $args);
                 break;
             case 'mssql':
@@ -595,19 +585,16 @@ class xarXMLInstaller extends xarObject
         switch ($databaseType) {
             case 'sqlite3':
             case 'pdosqlite':
-                sys::import('creole.drivers.sqlite.SQLiteTypes');
                 self::$typesObject = new SQLiteTypes();
                 $databaseType = 'sqlite3';
                 break;
             case 'mysqli':
             case 'pdomysqli':
-                sys::import('creole.drivers.mysql.MySQLTypes');
                 self::$typesObject = new MySQLTypes();
                 $databaseType = 'mysqli';
                 break;
             case 'pgsql':
             case 'pdopgsql':
-                sys::import('creole.drivers.pgsql.PgSQLTypes');
                 self::$typesObject = new PgSQLTypes();
                 $databaseType = 'pgsql';
                 break;
@@ -622,7 +609,6 @@ class xarXMLInstaller extends xarObject
             $msg = $xar->mls()->translate('The file #(1) was not found', $xslFile);
             throw new BadParameterException(null, $msg);
         }
-        sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
         $xslProc->setParameter('', 'tableprefix', $xar->db()->getPrefix());
@@ -637,7 +623,6 @@ class xarXMLInstaller extends xarObject
     //       to use tabledll for the xsl stuff was one of convenience at the time.
     public static function getNativeType($creoleType)
     {
-        sys::import('creole.CreoleTypes');
         $code = (int) CreoleTypes::getCreoleCode(strtoupper($creoleType));
         if (null == $code) {
             xarCore::exit(xar::mls()->translate("Unknown Creole type: '#(1)'", $creoleType));

@@ -18,9 +18,6 @@ use Xaraya\Modules\Blocks\InstancesApi;
 use EmptyParameterException;
 use IDNotFoundException;
 use ixarBlock;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks admin delete_type function

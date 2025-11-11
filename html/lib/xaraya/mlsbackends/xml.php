@@ -13,8 +13,6 @@
  *
  * @author Marco Canini <marco@xaraya.com>
  */
-sys::import('xaraya.mlsbackends.reference');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -141,7 +139,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
                 $data = mb_convert_encoding($data, $currentcharset, $charset);
             }
             if (!xml_parse($this->parser, $data, feof($fp))) {
-                // NOTE: <marco> Of course don't use xarML here!
+                // NOTE: <marco> Of course don't use xar::ml here!
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
                 throw new XMLParseException([$fileName,$line,$errstr]);

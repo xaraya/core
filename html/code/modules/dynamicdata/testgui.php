@@ -14,10 +14,6 @@
 
 namespace Xaraya\Modules\DynamicData;
 
-use sys;
-
-sys::import('modules.dynamicdata.admingui');
-
 /**
  * Handle (traditional) DD test gui functions via module class
  *
@@ -29,7 +25,7 @@ class TestGui extends AdminGui
     public function configure()
     {
         $this->setModType('test');
-        // don't call xarMod:load() for dynamicdata test GUI
+        // don't call xar::mod()->load() for dynamicdata test GUI
     }
 
     /**

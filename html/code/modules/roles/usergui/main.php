@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles user main function

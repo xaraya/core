@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Base\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\UserApi;
 use xarCurl;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base userapi newcurl function
@@ -34,7 +31,6 @@ class NewcurlMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        sys::import('modules.base.class.xarCurl');
         return new xarCurl($args);
     }
 }

@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Blocks;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the blocks rest API
@@ -30,6 +27,6 @@ class RestApi extends UserApiClass
     public function configure()
     {
         $this->setModType('rest');
-        // don't call xarMod:apiLoad() for blocks rest API
+        // don't call xar::mod()->apiLoad() for blocks rest API
     }
 }

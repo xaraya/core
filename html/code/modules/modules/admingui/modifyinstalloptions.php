@@ -14,10 +14,6 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Exception;
-use sys;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
 use Xaraya\Modules\InstallerTool;
 
 /**
@@ -40,7 +36,6 @@ class ModifyinstalloptionsMethod extends MethodClass
             return;
         }
 
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();
         if (!$installer->getModuleStack()->size) {
             $this->var()->check('regid', $regid, 'int', null);

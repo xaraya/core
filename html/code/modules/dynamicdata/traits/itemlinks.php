@@ -18,9 +18,6 @@ use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use DataObjectFactory;
 use DataPropertyMaster;
-use sys;
-
-sys::import('modules.dynamicdata.class.objects.factory');
 
 /**
  * For documentation purposes only - available via ItemLinksTrait

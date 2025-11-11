@@ -16,11 +16,6 @@ namespace Xaraya\DataObject\DataStores;
 
 use DataProperty;
 use DataPropertyMaster;
-use sys;
-
-sys::import('xaraya.datastores.basic');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 
 /**
  * Class to handle hook datastore

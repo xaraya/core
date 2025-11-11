@@ -17,9 +17,6 @@ use Xaraya\Modules\Roles\UserApi;
 use DataObject;
 use DataObjectDescriptor;
 use DataObjectList;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles user search function

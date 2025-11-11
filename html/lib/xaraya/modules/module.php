@@ -48,10 +48,6 @@
 
 namespace Xaraya\Modules;
 
-use sys;
-
-sys::import('xaraya.modules.moduletrait');
-
 /**
  * Handle module classes via xar::mod()->getModule()
  *

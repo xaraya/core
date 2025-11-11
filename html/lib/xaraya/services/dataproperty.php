@@ -19,10 +19,6 @@ namespace Xaraya\Services;
 use DataPropertyMaster;
 use DataProperty;
 use PropertyRegistration;
-use sys;
-
-sys::import('xaraya.services.servicetrait');
-sys::import('modules.dynamicdata.class.objects.factory');
 
 /**
  * For documentation purposes only - available via DataPropertyTrait

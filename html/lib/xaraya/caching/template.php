@@ -14,7 +14,7 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 if (!class_exists('xarExceptions')) {
-    sys::import('xaraya.exceptions');
+    // Note: this will set exception handlers
 }
 
 /**

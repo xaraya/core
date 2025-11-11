@@ -15,9 +15,6 @@
  *
  **/
 
-sys::import('modules.dynamicdata.class.objects.master');
-sys::import('modules.dynamicdata.class.objects.interfaces');
-sys::import('xaraya.datastores.sql');
 use Xaraya\DataObject\DataStores\SQLDataStore;
 
 class DataObjectList extends DataObjectMaster implements iDataObjectList
@@ -712,7 +709,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $this->linkfunc = $args['linkfunc'];
         $this->urlparam = $args['param'];
 
-        sys::import('xaraya.objects');
 
         // get view options for each item
         if (empty($this->groupby)) {

@@ -15,7 +15,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
  * This property displays a dropdown of dataproperties

@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the dynamicdata rest API
@@ -29,6 +26,6 @@ class RestApi extends UserApiClass
     public function configure()
     {
         $this->setModType('rest');
-        // don't call xarMod:apiLoad() for dynamicdata rest API
+        // don't call xar::mod()->apiLoad() for dynamicdata rest API
     }
 }

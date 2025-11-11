@@ -27,7 +27,6 @@ function sql_220_07()
     ");
 
     //Load Table Maintainance API
-    sys::import('xaraya.tableddl');
     $dbconn  = xarDB::getConn();
     try {
         $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');

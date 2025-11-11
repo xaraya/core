@@ -19,9 +19,6 @@ use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\ServicesTrait;
 use DataObject;
 use DataObjectList;
-use sys;
-
-sys::import('xaraya.services.servicestrait');
 
 interface DataObjectServicesInterface extends ServicesInterface
 {

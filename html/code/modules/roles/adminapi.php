@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Roles;
 
 use Xaraya\Modules\AdminApiClass;
-use sys;
-
-sys::import('xaraya.modules.adminapi');
 
 /**
  * Handle the roles admin API

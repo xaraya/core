@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Base\UserGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\UserGui;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base user errors function

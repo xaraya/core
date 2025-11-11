@@ -31,13 +31,11 @@ function xarValidationLoader()
     /**
      * Set up caching
      */
-    sys::import('xaraya.caching');
     xar::cache()->init();
 
     /**
      * Load the Xaraya core
      */
-    sys::import('xaraya.core');
     xarCore::xarInit(xarCore::SYSTEM_ALL);
 }
 

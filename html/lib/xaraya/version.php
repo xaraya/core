@@ -46,7 +46,6 @@ class xarVersion extends xarObject
      */
     public static function parse($version = '')
     {
-        sys::import('xaraya.services.xar');
         if (empty($version)) {
             throw new Exception(\Xaraya\Services\xar::mls()->translate('Missing a version parameter'));
         }
@@ -181,10 +180,8 @@ class xarVersion extends xarObject
             return true;
         }
         if ($application == 'core') {
-            sys::import('xaraya.services.xar');
             $version2 = \Xaraya\Services\xar::config()->getVar('System.Core.VersionNum');
         } else {
-            sys::import('xaraya.services.xar');
             try {
                 $info = \Xaraya\Services\xar::mod()->getFileInfo($application);
                 $version2 = $info['version'];

@@ -191,12 +191,12 @@ function installer_public_readnoncore()
  */
 function installer_public_readnoncore2()
 {
-    xarPrivileges::register('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
-    xarPrivileges::register('ReadAccess','All','All','All','All','ACCESS_READ','Read access to all modules');
-    xarPrivileges::makeMember('ReadAccess','ReadNonCore');
-    xarPrivileges::makeMember('DenyPrivileges','ReadNonCore');
-    xarPrivileges::makeMember('ViewAuthsystem','ReadNonCore');
-    xarPrivileges::makeMember('DenyMail','ReadNonCore');
-    xarPrivileges::makeMember('DenyModules','ReadNonCore');
-    xarPrivileges::makeMember('DenyThemes','ReadNonCore');
+    xarPrivileges::register('ReadNonCore', 'All', null, 'All', 'All', 'ACCESS_NONE', 'Read access only to none-core modules');
+    xarPrivileges::register('ReadAccess', 'All', 'All', 'All', 'All', 'ACCESS_READ', 'Read access to all modules');
+    xarPrivileges::makeMember('ReadAccess', 'ReadNonCore');
+    xarPrivileges::makeMember('DenyPrivileges', 'ReadNonCore');
+    xarPrivileges::makeMember('ViewAuthsystem', 'ReadNonCore');
+    xarPrivileges::makeMember('DenyMail', 'ReadNonCore');
+    xarPrivileges::makeMember('DenyModules', 'ReadNonCore');
+    xarPrivileges::makeMember('DenyThemes', 'ReadNonCore');
 }

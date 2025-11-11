@@ -16,9 +16,6 @@ use Xaraya\Modules\DynamicData\UserGui;
 use Exception;
 use sys;
 
-sys::import('modules.dynamicdata.method');
-
-
 /**
  * dynamicdata user property function
  * @extends MethodClass<UserGui>

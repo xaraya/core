@@ -18,12 +18,9 @@ namespace Xaraya\Services;
 
 use ixarVar;
 use xarVarPrep;
-use sys;
 use EmptyParameterException;
 use ValidationExceptions;
 use VariableValidationException;
-
-sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via VariablesTrait

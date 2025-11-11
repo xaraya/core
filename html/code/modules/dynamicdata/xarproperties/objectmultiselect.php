@@ -11,7 +11,6 @@
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-sys::import('modules.dynamicdata.xarproperties.objectref');
 /**
  * This property displays a multiselect of items of a dataobject
  */

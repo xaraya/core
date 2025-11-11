@@ -20,8 +20,6 @@ use ixarCache_Storage;
 use xarCache_Storage;
 use sys;
 
-sys::import('xaraya.services.servicetrait');
-
 /**
  * For documentation purposes only - available via CachingTrait
  */

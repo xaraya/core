@@ -37,12 +37,6 @@
 
 namespace Xaraya\Modules;
 
-use ixarMod;
-use xarMod;
-use sys;
-
-sys::import('xaraya.modules.userapitrait');
-
 /**
  * Module class supports admin api methods - available via AdminApiTrait
  */

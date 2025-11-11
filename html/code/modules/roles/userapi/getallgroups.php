@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use Query;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles userapi getallgroups function
@@ -50,8 +47,6 @@ class GetallgroupsMethod extends MethodClass
         if (!isset($show_top)) {
             $show_top = 0;
         }
-
-        sys::import('xaraya.structures.query');
 
         if (!isset($ancestor)) {
             $q = new Query('SELECT');

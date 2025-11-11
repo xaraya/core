@@ -17,11 +17,7 @@ namespace Xaraya\Bridge\RestAPI;
 use Xaraya\Authentication\AuthToken;
 use Xaraya\Services\xar;
 use xarRoles;
-use sys;
 use UnauthorizedOperationException;
-
-sys::import('xaraya.context.context');
-sys::import('modules.authsystem.class.authtoken');
 
 /**
  * Class to handle Generic REST API calls

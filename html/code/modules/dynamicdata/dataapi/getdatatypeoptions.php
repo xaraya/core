@@ -13,10 +13,6 @@ namespace Xaraya\Modules\DynamicData\DataApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\DataApi;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata dataapi getdatatypeoptions function

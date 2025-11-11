@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminApi;
 use xarPrivilege;
 use xarPrivileges;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges adminapi returnprivilege function
@@ -60,13 +57,11 @@ class ReturnprivilegeMethod extends MethodClass
                 'level' => $level,
                 'parentid' => 0,
             ];
-            sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
             if ($priv->add()) {
                 return $priv->getID();
             }
         } else {
-            sys::import('modules.privileges.class.privileges');
             $priv = xarPrivileges::getPrivilege($pid);
             $priv->setName($name);
             $priv->setRealm($realm);

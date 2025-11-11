@@ -3,7 +3,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.textbox');
 
 /**
  * Handle the configuration property
@@ -143,7 +142,6 @@ class ThemeConfigurationProperty extends TextBoxProperty
         if ($this->mem()->has('Themes', 'Configurations')) {
             $allconfigurations = $this->mem()->get('Themes', 'Configurations');
         } else {
-            sys::import('xaraya.structures.query');
             $this->mod()->loadDbInfo('themes');
             $tables =  $this->db()->getTables();
             $q = new Query('SELECT', $tables['themes_configurations']);
@@ -157,7 +155,6 @@ class ThemeConfigurationProperty extends TextBoxProperty
                 $allconfigurations[$row['name']] = $row;
             }
 
-            sys::import('modules.themes.class.configurations');
             $config = new Configurations();
             $info = $this->theme()->getInfo($this->theme_id);
 

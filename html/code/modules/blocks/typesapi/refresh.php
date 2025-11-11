@@ -17,9 +17,6 @@ use Xaraya\Modules\Blocks\BlocksApi;
 use Exception;
 use FileNotFoundException;
 use ixarBlock;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi refresh function

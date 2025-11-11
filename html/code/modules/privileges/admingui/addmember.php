@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use DuplicateException;
 use xarPrivileges;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin addmember function
@@ -62,7 +59,6 @@ class AddmemberMethod extends MethodClass
         }
 
         // call the Privileges class and get the parent and child objects
-        sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getPrivilege($id);
         $member = xarPrivileges::getPrivilege($privid);
 

@@ -17,9 +17,6 @@ use Xaraya\Modules\Authsystem\UserApi;
 use Exception;
 use xarExceptions;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * authsystem user login function

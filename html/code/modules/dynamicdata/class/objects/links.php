@@ -10,8 +10,6 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**

@@ -15,7 +15,6 @@
  *
  * @author Patrick Kellum
  */
-sys::import('modules.base.xarblocks.finclude');
 class Base_FincludeBlockConfig extends Base_FincludeBlock implements iBlock
 {
     /**

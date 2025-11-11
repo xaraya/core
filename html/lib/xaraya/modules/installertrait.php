@@ -34,10 +34,6 @@
 
 namespace Xaraya\Modules;
 
-use sys;
-
-sys::import('xaraya.modules.servicestrait');
-
 /**
  * Module class supports installer (api) methods - available via InstallerTrait
  */

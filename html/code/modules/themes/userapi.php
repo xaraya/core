@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Themes;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the themes user API

@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Authsystem;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the authsystem rest API
@@ -28,6 +25,6 @@ class RestApi extends UserApiClass
     public function configure()
     {
         $this->setModType('rest');
-        // don't call xarMod:apiLoad() for authsystem rest API
+        // don't call xar::mod()->apiLoad() for authsystem rest API
     }
 }

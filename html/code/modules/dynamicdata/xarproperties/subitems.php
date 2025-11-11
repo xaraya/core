@@ -3,7 +3,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * @package modules\dynamicdata
@@ -70,7 +69,6 @@ class SubItemsProperty extends DataProperty
         $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         $this->fieldprefix    = $this->_fieldprefix . $this->propertyprefix . $this->id;
-        sys::import('modules.dynamicdata.class.objects.factory');
         // FIXME: properties should not be instantiated when being registered
         // In this case refreshing the property cache causes a failure which we have to catch
         try {

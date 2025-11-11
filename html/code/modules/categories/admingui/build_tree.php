@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
 use Query;
 use Stack;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin build_tree function
@@ -127,7 +124,6 @@ class BuildTreeMethod extends MethodClass
         # We do everything in memory for now
         # TODO: this is not scalable
         #
-        sys::import('xaraya.structures.query');
         $q = new Query('SELECT', $data['table']);
         $q->addfield('id');
         $q->addfield($data['parent_id']);
@@ -678,7 +674,6 @@ class BuildTreeMethod extends MethodClass
             # Now build the parent ID links
             #
             if ($no_errors) {
-                sys::import('xaraya.structures.query');
                 $q = new Query('UPDATE', $data['table']);
                 foreach ($all_rows as $row) {
                     $q->addfield($data['left_id'], $row[$data['left_id']]);

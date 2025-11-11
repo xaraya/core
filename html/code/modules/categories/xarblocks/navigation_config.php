@@ -13,7 +13,6 @@
  *
  */
 
-sys::import('modules.categories.xarblocks.navigation');
 
 class Categories_NavigationBlockConfig extends Categories_NavigationBlock implements iBlock
 {
@@ -39,7 +38,6 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
         // 4.       itemtype [base3]
         //          itemtype [base4]
 
-        sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $allcatbases = $worker->getcatbases(['order' => 'module', 'format' => 'tree']);
 

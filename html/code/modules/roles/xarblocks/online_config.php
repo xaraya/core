@@ -20,7 +20,6 @@
  * @author Michael Makushev
  * @author Marc Lutolf
  */
-sys::import('modules.roles.xarblocks.online');
 class Roles_OnlineBlockConfig extends Roles_OnlineBlock
 {
     /**

@@ -9,10 +9,6 @@ use Xaraya\Requests\RequestHandler;
 use Xaraya\Context\SessionContext;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Services\TestHelper as ServicesHelper;
-use xarCache;
-use xarDatabase;
-use xarEvents;
-use xarLog;
 use sys;
 use LogicException;
 

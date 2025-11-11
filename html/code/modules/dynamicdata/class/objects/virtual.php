@@ -10,10 +10,6 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-sys::import('modules.dynamicdata.class.objects.descriptor');
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('modules.dynamicdata.utilapi');
-sys::import('xaraya.services.xar');
 use Xaraya\Modules\DynamicData\UtilApi;
 use Xaraya\Services\xar;
 

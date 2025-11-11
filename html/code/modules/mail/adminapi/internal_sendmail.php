@@ -18,8 +18,6 @@ use sys;
 use Exception;
 use PHPMailer;
 
-sys::import('xaraya.modules.method');
-
 /**
  * mail adminapi internal_sendmail function
  * @extends MethodClass<AdminApi>
@@ -116,7 +114,6 @@ class InternalSendmailMethod extends MethodClass
         // so it be commented out for the time being.
         //ini_set("sendmail_from", $from);
 
-        sys::import('modules.mail.class.phpmailer');
 
         $mail = new PHPMailer();
         $mail->PluginDir = sys::code() . 'modules/mail/class/';

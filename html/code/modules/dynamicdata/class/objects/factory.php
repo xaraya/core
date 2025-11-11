@@ -11,8 +11,6 @@
  */
 
 // this is used in most methods below, so we import it here
-sys::import('modules.dynamicdata.class.objects.descriptor');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -195,7 +193,6 @@ class DataObjectFactory extends xarObject
 
         $xar->mod()->loadDbInfo('dynamicdata');
         $xartable = $xar->db()->getTables();
-        sys::import('xaraya.structures.query');
         $q = new Query();
 
         $q->addtable($xartable['dynamic_objects'], 'o');
@@ -358,7 +355,6 @@ class DataObjectFactory extends xarObject
         $context?->tracePath(__METHOD__, $args);
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
         if (!empty($args['table']) && empty($args['objectid']) && empty($args['name'])) {
-            sys::import('modules.dynamicdata.class.objects.virtual');
             $descriptor = new TableObjectDescriptor($args);
             if (!empty($context)) {
                 $descriptor->setArgs(['context' => $context]);
@@ -383,7 +379,6 @@ class DataObjectFactory extends xarObject
         if (!empty($data['filepath']) && ($data['filepath'] != 'auto')) {
             include_once(sys::code() . $data['filepath']);
         } else {
-            sys::import('modules.dynamicdata.class.objects.base');
         }
         $xar = xar::getServicesClass();
 
@@ -443,7 +438,6 @@ class DataObjectFactory extends xarObject
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
         // Complete the info if this is a known object
         if (!empty($args['table']) && empty($args['objectid']) && empty($args['name'])) {
-            sys::import('modules.dynamicdata.class.objects.virtual');
             $descriptor = new TableObjectDescriptor($args);
             if (!empty($context)) {
                 $descriptor->setArgs(['context' => $context]);
@@ -471,7 +465,6 @@ class DataObjectFactory extends xarObject
         }
         $data = $args + $data;
         // Make sure the class for this object is loaded
-        sys::import('modules.dynamicdata.class.objects.list');
         $class = 'DataObjectList';
         if (!empty($data['filepath']) && ($data['filepath'] != 'auto')) {
             include_once(sys::code() . $data['filepath']);
@@ -554,7 +547,6 @@ class DataObjectFactory extends xarObject
     **/
     public static function &getObjectInterface(array $args = [], $context = null)
     {
-        sys::import('modules.dynamicdata.class.userinterface');
 
         $class = 'DataObjectUserInterface';
         // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
@@ -660,7 +652,6 @@ class DataObjectFactory extends xarObject
         $xar->mod()->loadDbInfo('dynamicdata');
         $tables = $xar->db()->getTables();
 
-        sys::import('xaraya.structures.query');
         // TODO: delete all the (dynamic ?) data for this object
 
         $xar->log()->info("Deleting an object with ID " . $args['objectid']);

@@ -15,13 +15,8 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use DuplicateException;
 use ixarTheme;
-use sys;
 use Xaraya\Modules\InstallerTool;
 use ThemeInitialization;
-
-sys::import('xaraya.modules.method');
-sys::import('modules.modules.class.installer');
-sys::import('modules.themes.class.initialization');
 
 /**
  * themes adminapi regenerate function
@@ -47,7 +42,6 @@ class RegenerateMethod extends MethodClass
         }
 
         //Finds and updates missing themes
-        sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance('themes');
         if (!$installer->checkformissing()) {
             return;
@@ -138,7 +132,6 @@ class RegenerateMethod extends MethodClass
             }
         }
         // Reinit the theme configurations
-        sys::import('modules.themes.class.initialization');
         ThemeInitialization::importConfigurations();
 
         return true;

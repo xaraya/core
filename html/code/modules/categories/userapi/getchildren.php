@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Categories\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserApi;
 use CategoryWorker;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories userapi getchildren function
@@ -44,7 +41,6 @@ class GetchildrenMethod extends MethodClass
             return false;
         }
         $myself = $args['return_itself'] ?? 0;
-        sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         if (isset($cid)) {
             $children = $worker->getchildren($cid, $myself);

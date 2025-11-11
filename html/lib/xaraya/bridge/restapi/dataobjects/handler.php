@@ -22,7 +22,6 @@ use Exception;
 
 /**
  * Class to handle DataObject REST API calls
- * @uses \sys::autoload()
  */
 class DataObjectAPIHandler extends RestAPIHandler
 {

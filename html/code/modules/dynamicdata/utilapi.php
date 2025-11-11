@@ -24,12 +24,6 @@ use DataPropertyMaster;
 use TableObjectDescriptor;
 use BadParameterException;
 use Exception;
-use sys;
-
-sys::import('xaraya.database.databasetrait');
-sys::import('modules.dynamicdata.class.objects.virtual');
-sys::import('modules.dynamicdata.class.import.generic');
-sys::import('modules.dynamicdata.userapi');
 
 /**
  * Class to handle the dynamicdata util API
@@ -73,7 +67,7 @@ class UtilApi extends UserApi implements DatabaseInterface
     public function configure()
     {
         $this->setModType('util');
-        // don't call xarMod:apiLoad() for dynamicdata util API
+        // don't call xar::mod()->apiLoad() for dynamicdata util API
     }
 
     /**
@@ -479,7 +473,6 @@ class UtilApi extends UserApi implements DatabaseInterface
             return static::$propTypeIds;
         }
         // Get the default property types
-        sys::import('modules.dynamicdata.class.properties.master');
         $proptypes = DataPropertyMaster::getPropertyTypes();
         static::$propTypeIds = [];
         foreach ($proptypes as $proptype) {

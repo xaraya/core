@@ -1,7 +1,6 @@
 <?php
 
 /* Include the parent class */
-sys::import('modules.base.xarproperties.dropdown');
 
 /**
  * The Userlist property displays a dropdown of available Xaraya users
@@ -215,7 +214,6 @@ class UserListProperty extends SelectProperty
 }
 
 /* Include the parent class */
-sys::import('modules.dynamicdata.class.properties.interfaces');
 
 /**
  * This class loads the configuration data of the userlist property

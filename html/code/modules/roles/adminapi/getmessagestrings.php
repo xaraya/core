@@ -16,8 +16,6 @@ use Xaraya\Modules\Roles\AdminApi;
 use EmptyParameterException;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * roles adminapi getmessagestrings function
  * @extends MethodClass<AdminApi>

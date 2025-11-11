@@ -16,10 +16,6 @@ use Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\UserApi;
 use Xaraya\Modules\DynamicData\AdminApi;
 use Exception;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata admin update function

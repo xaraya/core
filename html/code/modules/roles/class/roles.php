@@ -12,7 +12,6 @@
  * @link http://xaraya.info/index.php/release/27.html
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**
@@ -232,7 +231,6 @@ class xarRoles extends xarObject
         // create the parent object
         [$id, $name, $itemtype, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module] = $result->fields;
-        sys::import('modules.dynamicdata.class.objects.factory');
         switch ($itemtype) {
             case 1: $name = "roles_users";
                 break;
@@ -251,7 +249,6 @@ class xarRoles extends xarObject
         // create the child object
         [$id, $name, $itemtype, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module] = $result->fields;
-        sys::import('modules.roles.class.role');
         switch ($itemtype) {
             case 1: $name = "roles_users";
                 break;
@@ -398,7 +395,6 @@ class xarRoles extends xarObject
         if ($xar->mem()->has($cacheKey, $row['id'])) {
             return $xar->mem()->get($cacheKey, $row['id']);
         }
-        sys::import('modules.dynamicdata.class.objects.factory');
         $role = DataObjectFactory::getObject(['name' => $name]);
         $role->getItem(['itemid' => $row['id']]);
         $xar->mem()->set($cacheKey, $row['id'], $role);

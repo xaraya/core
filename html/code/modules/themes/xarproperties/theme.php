@@ -1,6 +1,5 @@
 <?php
 
-sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
  * The theme property displays a dropdown of available themes

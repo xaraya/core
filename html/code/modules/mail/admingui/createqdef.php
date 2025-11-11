@@ -17,8 +17,6 @@ use Xaraya\Modules\Mail\UserApi;
 use DataObjectFactory;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * mail admin createqdef function
  * @extends MethodClass<AdminGui>

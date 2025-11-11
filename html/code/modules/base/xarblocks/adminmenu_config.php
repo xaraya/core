@@ -17,7 +17,6 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  */
-sys::import('modules.base.xarblocks.adminmenu');
 
 class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockModify
 {

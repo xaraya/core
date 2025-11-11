@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\UserApi;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles admin delete function
@@ -44,7 +41,6 @@ class DeleteMethod extends MethodClass
         $id = $itemid ?? $id;
 
         // Call the Roles class
-        sys::import('modules.roles.class.roles');
         // get the role to be deleted
         $role = xarRoles::get($id);
         if (empty($role)) {

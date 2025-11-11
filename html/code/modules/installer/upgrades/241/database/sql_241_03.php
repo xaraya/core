@@ -27,7 +27,6 @@ function sql_241_03()
     ");
 
     //Load Table Maintainance API
-    sys::import('xaraya.tableddl');
     // alter block_types table
     $dbconn  = xarDB::getConn();
     try {

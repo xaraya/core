@@ -14,8 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.services.xar');
-use Xaraya\Requests\RequestInterface;
 use Xaraya\Services\ControllerService;
 use Xaraya\Services\RequestService;
 use Xaraya\Services\xar;

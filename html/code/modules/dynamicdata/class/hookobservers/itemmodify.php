@@ -15,10 +15,6 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
-use sys;
-
-sys::import('modules.dynamicdata.class.hookobservers.generic');
-
 class ItemModify extends DataObjectHookObserver
 {
     /**

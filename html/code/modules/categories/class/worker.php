@@ -14,7 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class CategoryWorker extends xarObject
@@ -56,7 +55,6 @@ class CategoryWorker extends xarObject
      */
     public function __construct()
     {
-        sys::import('xaraya.structures.query');
         $this->mod()->loadDbInfo('categories');
         $tables = $this->db()->getTables();
         $this->table     = $tables['categories'];
@@ -384,7 +382,6 @@ class CategoryWorker extends xarObject
         extract($args);
         if (isset($object)) {
             // We are getting the base categories of an object
-            sys::import('modules.dynamicdata.class.objects.factory');
             $object = DataObjectFactory::getObject(['name' => $object]);
 
             if (!isset($property) && isset($object->properties['categories'])) {
@@ -407,7 +404,6 @@ class CategoryWorker extends xarObject
             // We are getting the base categories of a module
             $xartable = $this->db()->getTables();
 
-            sys::import('xaraya.structures.query');
             $q = new Query('SELECT');
             $q->addtable($xartable['categories_basecategories'], 'base');
             $q->addtable($xartable['categories'], 'category');
@@ -469,7 +465,6 @@ class CategoryWorker extends xarObject
     public function appendTree($itemid, $args = [])
     {
         // Find the last top level category. We'll add the subtree after it
-        sys::import('xaraya.structures.query');
         $q = new Query('SELECT', $this->table);
         $q->eq($this->parent, 0);       // These two conditions define the root
         $q->eq($this->left, 1);         // These two conditions define the root

@@ -28,8 +28,6 @@
  */
 
 /* Include parent class */
-sys::import('modules.dynamicdata.class.properties.base');
-sys::import('modules.dynamicdata.class.objects.loader');
 
 /**
  * This property displays a deferred item for a value

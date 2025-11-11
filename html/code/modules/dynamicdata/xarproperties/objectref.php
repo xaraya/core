@@ -17,7 +17,6 @@
  * @todo make the different loops a bit more efficient.
  */
 
-sys::import('modules.base.xarproperties.dropdown');
 
 /**
  * This property displays a dropdown of items of a dataproperty
@@ -123,7 +122,6 @@ class ObjectRefProperty extends SelectProperty
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
 
-        sys::import('modules.dynamicdata.class.objects.factory');
         if ($this->initialization_refobject == 'objects') {
             // In this case need to go directly (rather than get a DD object) to avoid recursion
             if ($this->initialization_display_prop == 'id') {

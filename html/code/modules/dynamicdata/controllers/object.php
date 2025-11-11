@@ -17,7 +17,6 @@
  * @todo
 **/
 
-sys::import('xaraya.mapper.controllers.default');
 
 /**
  * DynamicData object controller - @todo class is currently unreachable from xarDispatcher::findController()

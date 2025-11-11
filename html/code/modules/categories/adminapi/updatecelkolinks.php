@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminApi;
 use BadParameterException;
 use CategoryWorker;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories adminapi updatecelkolinks function
@@ -45,7 +42,6 @@ class UpdatecelkolinksMethod extends MethodClass
         }
 
         //Get the information on the category and its parent
-        sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $cat = $worker->getInfo($cid);
         $catparent = $worker->getInfo($cat['parent_id']);

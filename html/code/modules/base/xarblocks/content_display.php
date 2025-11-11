@@ -19,7 +19,6 @@
  * @author Jason Judge
  * @author Marc Lutolf
  */
-sys::import('modules.base.xarblocks.content');
 class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
 {
     /**
@@ -50,7 +49,6 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
         } elseif ($data['content_type'] == 'bl') {
             // Run the markup through the BL compiler
             // Assemble the string to be compiled for the input template
-            sys::import('xaraya.templating.compiler');
             $blCompiler = XarayaCompiler::instance();
             $tplInputString  = '<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">';
             $tplInputString .= $data['content_text'];

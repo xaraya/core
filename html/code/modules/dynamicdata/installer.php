@@ -15,15 +15,11 @@ namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Modules\InstallerClass;
 use DataPropertyMaster;
-use Exception;
-use xarHooks;
 use xarMasks;
 use xarModHooks;
 use xarPrivileges;
 use xarXMLInstaller;
-use sys;
-
-sys::import('xaraya.modules.installer');
+use Exception;
 
 /**
  * Handle module installer functions
@@ -46,7 +42,6 @@ class Installer extends InstallerClass
         $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
-            sys::import('xaraya.tableddl');
             xarXMLInstaller::createTable('table_schema-def', 'dynamicdata');
             // We're done, commit
             $dbconn->commit();
@@ -141,7 +136,6 @@ class Installer extends InstallerClass
                 VALUES (?,?,?,?,?,?,?,?,?)";
             $stmt = $dbconn->prepareStatement($sql);
             // TEMP FIX for the constants, rewrite this
-            sys::import('modules.dynamicdata.class.properties');
             $properties = [
                 // Properties for the Objects DD object
                 ['objectid','Id',$objectid[1],21,'','dynamic_objects.id',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1,''],
@@ -276,6 +270,7 @@ class Installer extends InstallerClass
                     xarModHooks::unregister('item', 'display', 'GUI', 'dynamicdata', 'user', 'displayhook');
                 */
                 // fall through to next upgrade
+                // no break
             case '2.4.1':
                 // @todo change namespace to DD module + move out of class subdir
                 $namespace = 'Xaraya\DataObject\HookObservers';
@@ -300,6 +295,7 @@ class Installer extends InstallerClass
                     $this->hooked()->registerObserver('ItemDisplay', 'dynamicdata', $namespace . '\ItemDisplay');
                 */
                 // fall through to next upgrade
+                // no break
             case '2.8.1':
                 // fall through to next upgrade
             default:

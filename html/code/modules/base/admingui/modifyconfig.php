@@ -25,8 +25,6 @@ use xarCore;
 use xarLog;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * base admin modifyconfig function
  * @extends MethodClass<AdminGui>
@@ -306,7 +304,6 @@ class ModifyconfigMethod extends MethodClass
         $this->var()->find('secureserver', $secureServer, 'checkbox', true);
         $this->var()->find('sslport', $sslport, 'int', 443);
         $this->var()->find('cookietimeout', $cookietimeout, 'int:1:', '');
-        sys::import('modules.dynamicdata.class.properties.master');
         /** @var OrderSelectProperty $orderselect */
         $orderselect = $this->prop()->getProperty(['name' => 'orderselect']);
         $orderselect->checkInput('authmodules');
@@ -404,7 +401,6 @@ class ModifyconfigMethod extends MethodClass
         $this->var()->find('defaultlocale', $defaultLocale, 'str:1:');
         $this->var()->find('mlsmode', $MLSMode, 'str:1:', 'SINGLE');
 
-        sys::import('modules.dynamicdata.class.properties.master');
         $locales = $this->prop()->getProperty(['name' => 'checkboxlist']);
         $locales->checkInput('active');
         $localesList = $locales->getValue();

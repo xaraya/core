@@ -24,7 +24,6 @@
  * Legacy way, supported for now, deprecated in future
  * xarModHooks::call('item', 'create', $itemid, $item);
 **/
-sys::import('xaraya.structures.hooks.apisubject');
 class ModulesItemCreateSubject extends ApiHookSubject
 {
     protected $subject = 'ItemCreate';

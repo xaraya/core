@@ -20,7 +20,6 @@
 /**
  * GUI type hook, observers should return string template data
 **/
-sys::import('xaraya.structures.hooks.subject');
 
 abstract class GuiHookSubject extends HookSubject
 {

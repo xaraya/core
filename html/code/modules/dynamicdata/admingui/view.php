@@ -17,9 +17,6 @@ use Xaraya\Modules\DynamicData\AdminApi;
 use Exception;
 use sys;
 
-sys::import('modules.dynamicdata.method');
-
-
 /**
  * dynamicdata admin view function
  * @extends MethodClass<AdminGui>

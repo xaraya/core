@@ -21,11 +21,6 @@ use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
 use Xaraya\Services\xar;
 use Exception;
-use sys;
-
-sys::import('xaraya.bridge.middleware.router');
-sys::import('xaraya.bridge.middleware.staticfiles.router');
-sys::import('xaraya.bridge.requests.staticfile');
 use Xaraya\Bridge\Requests\StaticFileHandler;
 
 /**

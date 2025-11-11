@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\Privileges\AdminApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin removemember function

@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Roles;
 
 use Xaraya\Modules\UserGuiClass;
-use sys;
-
-sys::import('xaraya.modules.usergui');
-sys::import('modules.roles.userapi');
 
 /**
  * Handle the roles user GUI

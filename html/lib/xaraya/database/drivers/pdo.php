@@ -14,11 +14,8 @@
 
 namespace Xaraya\Database\Drivers;
 
-use sys;
-
 /**
  * Provide an external database connection via PHP PDO
- * @uses \sys::autoload()
  */
 class PdoDriver
 {
@@ -124,7 +121,6 @@ class PdoDriver
      */
     public static function listTableNames($dbconn)
     {
-        sys::import('xaraya.database.pdo');
         /** @var \PDO $dbconn */
         $dbInfo = new \PDODatabaseInfo($dbconn);
         $tables = $dbInfo->getTables();
@@ -144,7 +140,6 @@ class PdoDriver
      */
     public static function listTableColumns($dbconn, $tablename)
     {
-        sys::import('xaraya.database.pdo');
         /** @var \PDO $dbconn */
         $dbInfo = new \PDODatabaseInfo($dbconn);
         $tblInfo = $dbInfo->getTable($tablename);

@@ -19,10 +19,6 @@ namespace Xaraya\DataObject\DataStores;
 
 use Xaraya\Database\ExternalDatabase;
 use DataPropertyMaster;
-use sys;
-
-sys::import('xaraya.datastores.sql');
-sys::import('xaraya.database.external');
 
 /**
  * External SQL-like datastore for DD objects unrelated to Xaraya database(s) or DB methods
@@ -30,7 +26,6 @@ sys::import('xaraya.database.external');
  * This can be extended for database access using PHP PDO, Doctrine DBAL, MongoDB, ...
  * as long as ExternalDatabase can provide the connection and you adapt the
  * do*() methods below to use the native methods for that connection type
- * @uses \sys::autoload()
  */
 abstract class ExternalDataStore extends SQLDataStore implements \Stringable
 {
@@ -725,13 +720,11 @@ abstract class ExternalDataStore extends SQLDataStore implements \Stringable
      * @param string $name
      * @param int|string|null $dbConnIndex connection index of the database if different from Xaraya DB
      * @param ?array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB
-     * @uses \sys::autoload()
      * @return IBasicDataStore
      */
     public static function getDataStore($name = 'external', $dbConnIndex = '', $dbConnArgs = [])
     {
         // use autoload for external database connections
-        sys::autoload();
         // re-use external db connection
         if (!empty($dbConnIndex) && !is_numeric($dbConnIndex)) {
             $driver = ExternalDatabase::getDriverName($dbConnIndex);

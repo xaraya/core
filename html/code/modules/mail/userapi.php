@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Mail;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the mail user API

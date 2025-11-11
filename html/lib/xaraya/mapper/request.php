@@ -291,7 +291,6 @@ class xarRequest extends xarObject
         $params = $xar->ctl()->parseQuery($url);
         $regex = null;
         if (!empty($params)) {
-            sys::import('xaraya.validations');
             $regex = ValueValidations::get('regexp');
         }
         if (isset($params['module'])) {

@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminApi;
 use BadParameterException;
 use Query;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories adminapi unlinkcids function
@@ -54,7 +51,6 @@ class UnlinkcidsMethod extends MethodClass
 
         // Set up the DELETE query and run
         $xartable = $this->db()->getTables();
-        sys::import('xaraya.structures.query');
         $q = new Query('DELETE', $xartable['categories_linkage']);
         $q->eq('module_id', (int) $modid);
         if (!empty($itemtype)) {

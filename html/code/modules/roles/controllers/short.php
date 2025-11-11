@@ -32,7 +32,6 @@
  * /roles/settings/form (deprecated)
 **/
 
-sys::import('xaraya.mapper.controllers.short');
 
 class RolesShortController extends ShortActionController
 {

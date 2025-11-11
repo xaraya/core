@@ -9,7 +9,6 @@
  * @link http://xaraya.info/index.php/release/68.html
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class xarTplPager extends xarObject

@@ -18,7 +18,6 @@
  * @access  public
  * @return  void
 */
-sys::import('modules.base.xarblocks.menu');
 
 class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
 {

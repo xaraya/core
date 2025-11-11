@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles user display function
@@ -76,7 +73,6 @@ class DisplayMethod extends MethodClass
             $data['name'] = $name;
             //get the data for a user
             if ($data['itemtype'] == xarRoles::ROLES_USERTYPE) {
-                sys::import('modules.dynamicdata.class.objects.factory');
                 $object = $this->data()->getObject(['name' => 'roles_users']);
                 $object->tplmodule = $args['tplmodule'];   // roles/xartemplates/objects/
                 $object->template = $args['template'];  // showdisplay-account.xt

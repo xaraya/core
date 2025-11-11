@@ -16,7 +16,6 @@
  * @todo <marco> user status field
  */
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\UserService;
 use Xaraya\Services\xar;
 

@@ -14,8 +14,6 @@
  * @author Michel Dalle <mikespub@xaraya.com>
  */
 
-sys::import("xaraya.context.context");
-sys::import("xaraya.services.xar");
 use Xaraya\Context\Context;
 use Xaraya\Services\xar;
 
@@ -81,7 +79,6 @@ class xarDDObject extends xarObject implements ixarDDObject
             }
         }
 
-        sys::import('modules.dynamicdata.class.userinterface');
 
         $interface = new DataObjectUserInterface($args);
         return $interface->handle($args, $context);

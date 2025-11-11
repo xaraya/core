@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Base;
 
 use Xaraya\Modules\UserGuiClass;
-use sys;
-
-sys::import('xaraya.modules.usergui');
-sys::import('modules.base.userapi');
 
 /**
  * Handle the base user GUI

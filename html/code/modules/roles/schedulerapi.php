@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Roles;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the roles scheduler API
@@ -27,6 +24,6 @@ class SchedulerApi extends UserApiClass
     public function configure()
     {
         $this->setModType('scheduler');
-        // don't call xarMod:apiLoad() for roles scheduler API
+        // don't call xar::mod()->apiLoad() for roles scheduler API
     }
 }

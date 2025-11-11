@@ -14,11 +14,7 @@ namespace Xaraya\Context;
 
 use Xaraya\Requests\RequestInterface;
 use Xaraya\Services\xar;
-use sys;
 use RuntimeException;
-
-sys::import('xaraya.server');
-sys::import('xaraya.context.contexttrait');
 
 /**
  * Request instance with context for use with xar::req()->setInstance() etc.

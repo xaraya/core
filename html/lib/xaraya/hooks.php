@@ -19,9 +19,8 @@
  * @author Chris Powis <crisp@xaraya.com>
  */
 
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 // use ixarMod;
+use Xaraya\Services\xar;
 
 /**
  * @see xar::hooked()

@@ -17,7 +17,6 @@ $savedir = getcwd();
 chdir('/var/mt/xar/core/core.2.x/html');
 
 include_once('bootstrap.php');
-sys::import('xaraya.core');
 
 xarCore::xarInit(xarCore::SYSTEM_ALL);
 
@@ -28,8 +27,6 @@ if(!xar::user()->logIn('Admin','12345')) {
 }
 
 
-sys::import('xaraya.structures.sequences.queue');
-sys::import('xaraya.structures.sequences.stack');
 xar_m('WHY IS THIS NOT USING THE LOVELY UNITTESTS?');
 $l=0;
 xar_m('Testing DD queue',$l++);
@@ -90,6 +87,6 @@ function xar_tests($seq, $l = 0)
     xar_m("Getting items back", $l++);
     xar_m($seq->pop(), $l);
     xar_m($seq->pop(), $l);
-    xar_m($seq->pop(),$l);
+    xar_m($seq->pop(), $l);
     $l--;
 }

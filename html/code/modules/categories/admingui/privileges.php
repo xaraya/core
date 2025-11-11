@@ -14,12 +14,9 @@ namespace Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\Categories\UserApi;
+use xarPrivileges;
 use CategoryWorker;
 use Exception;
-use xarPrivileges;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin privileges function
@@ -60,8 +57,7 @@ class PrivilegesMethod extends MethodClass
         $this->var()->check('extinstance', $extinstance);
         $this->var()->check('extlevel', $extlevel);
 
-        sys::import('modules.dynamicdata.class.properties.master');
-        /** @var CategoriesProperty $categories */
+        /** @var \CategoriesProperty $categories */
         $categories = $this->prop()->getProperty(['name' => 'categories']);
         // @checkme is this what you need here?
         //$cids = $categories->returnInput('privcategories');
@@ -308,7 +304,6 @@ class PrivilegesMethod extends MethodClass
         if (!empty($moduleid)) {
             $modinfo = $this->mod()->getInfo($moduleid);
             $modname = $modinfo['name'];
-            sys::import('modules.categories.class.worker');
             $worker = new CategoryWorker();
             if (!empty($itemtype)) {
                 $basecats = $worker->getcatbases(

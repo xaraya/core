@@ -14,8 +14,6 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 
-sys::import('blocklayout.template.compiled');
-
 /**
  * Abstract class to model the source template
  *

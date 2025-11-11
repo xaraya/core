@@ -15,7 +15,6 @@
  */
 
 
-sys::import('xaraya.datastores.interface');
 
 /*
     As this file was long in the 1.x series i've split it up into 2 parts
@@ -24,5 +23,3 @@ sys::import('xaraya.datastores.interface');
     Over time this will probably change. For now i just made sure that everyone
     can still reach the same stuff as before.
 */
-sys::import('xaraya.datastores.factory');
-sys::import('xaraya.datastores.basic');

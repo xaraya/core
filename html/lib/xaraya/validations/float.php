@@ -20,7 +20,6 @@
  * @return true on success (value is validated as a float number
  * @throws VariableValidationException, BadParameterException
 **/
-sys::import('xaraya.validations');
 class FloatValidation extends ValueValidations
 {
     public function validate(&$subject, array $parameters)

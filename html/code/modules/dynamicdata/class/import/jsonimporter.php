@@ -17,10 +17,6 @@ namespace Xaraya\DataObject\Import;
 use VirtualObjectDescriptor;
 use VirtualObjectFactory;
 use BadParameterException;
-use sys;
-
-sys::import('modules.dynamicdata.class.objects.virtual');
-sys::import('modules.dynamicdata.class.import.generic');
 
 /**
  * DataObject JSON Importer

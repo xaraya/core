@@ -13,10 +13,6 @@ namespace Xaraya\Modules\DynamicData\UserApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UserApi;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata userapi getobjectlist function
@@ -41,10 +37,8 @@ class GetobjectlistMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         if (empty($args['objectid']) && empty($args['name'])) {
-            sys::import('modules.dynamicdata.class.objects.descriptor');
             $args = $this->data()->getObjectID($args);
         }
-        sys::import('modules.dynamicdata.class.objects.factory');
         // set context if available in function
         $list = $this->data()->getObjectList($args);
         return $list;

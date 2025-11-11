@@ -38,14 +38,12 @@ class SequenceAdapter extends xarObject implements iAdapter, iSequenceAdapter
                 // Sequence stored as plain array, volatile
                 $adapter   = 'array_sequence';
                 $class = 'ArraySequence';
-                sys::import('xaraya.structures.sequences.adapters.' . $adapter);
                 $this->implementor = new $class();
                 break;
             case 'dd':
                 // Sequence stored in dd object, persistent
                 $adapter   = 'dd_sequence';
                 $class = 'DynamicDataSequence';
-                sys::import('xaraya.structures.sequences.adapters.' . $adapter);
                 $this->implementor = new $class($args);
                 break;
             default:

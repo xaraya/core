@@ -15,7 +15,6 @@
  * @author Vladimirs Metenchuks <voll@xaraya.com>
 **/
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**

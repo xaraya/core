@@ -3,8 +3,6 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.dropdown');
-sys::import('xaraya.structures.relativedirectoryiterator');
 
 
 /**

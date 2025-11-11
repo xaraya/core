@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use VariableValidationException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles userapi getactive function

@@ -16,8 +16,6 @@ use Xaraya\Modules\Mail\AdminApi;
 use DirectoryNotFoundException;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * mail adminapi getmessagetemplates function
  * @extends MethodClass<AdminApi>

@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Privileges\UserGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\UserGui;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges user errors function

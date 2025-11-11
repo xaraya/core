@@ -16,7 +16,6 @@
  *
  * @author Jim McDonald
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 
 /**
  * Authsystem Login Block

@@ -14,7 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 class xarRouter extends xarObject
@@ -38,11 +37,9 @@ class xarRouter extends xarObject
         if (empty($this->routes['default'])) {
             $dispatcher = xar::ctl()->getDispatcher();
 
-            sys::import('xaraya.mapper.routers.routes.default');
             $route = new DefaultRoute([], $dispatcher);
             $this->routes['default'] = $route;
 
-            sys::import('xaraya.mapper.routers.routes.short');
             $route = new ShortRoute([], $dispatcher);
             $this->routes['short'] = $route;
 

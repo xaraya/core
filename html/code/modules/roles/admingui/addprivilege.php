@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use xarPrivileges;
 use xarRoles;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles admin addprivilege function
@@ -54,7 +51,6 @@ class AddprivilegeMethod extends MethodClass
         $role = xarRoles::get($roleid);
 
         // Call the Privileges class and get the privilege
-        sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getPrivilege($privid);
 
         // Security

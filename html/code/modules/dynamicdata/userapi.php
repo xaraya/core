@@ -16,13 +16,8 @@ namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Modules\DynamicData\Traits\UserApiInterface;
 use Xaraya\Modules\DynamicData\Traits\UserApiTrait;
-use xarController;
-use FunctionNotFoundException;
-use sys;
-
-sys::import('modules.dynamicdata.traits.userapi');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+use FunctionNotFoundException;
 
 /**
  * Handle (traditional) DD user api functions via module class

@@ -19,8 +19,6 @@
  *
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
-sys::import('xaraya.database.interface');
-sys::import('xaraya.services.xar');
 use Xaraya\Database\xarDB_Interface;
 use Xaraya\Database\ConnectionInterface;
 use Xaraya\Database\StatementInterface;

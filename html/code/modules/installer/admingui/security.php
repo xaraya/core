@@ -14,10 +14,6 @@ namespace Xaraya\Modules\Installer\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use Exception;
-use xarTpl;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * installer admin security function

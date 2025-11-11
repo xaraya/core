@@ -18,7 +18,6 @@
  *
  * @author Jason Judge
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 class Base_ContentBlock extends BasicBlock implements iBlock
 {
     protected $type                = 'content';

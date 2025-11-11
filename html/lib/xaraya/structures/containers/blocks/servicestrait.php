@@ -17,9 +17,6 @@ namespace Xaraya\Blocks;
 
 use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\ServicesTrait;
-use sys;
-
-sys::import('xaraya.services.servicestrait');
 
 interface BlockServicesInterface extends ServicesInterface
 {

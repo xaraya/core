@@ -17,7 +17,6 @@
  *
  * Validates as integer larger than or equal than 1 'int:1'
 **/
-sys::import("xaraya.validations.int");
 class IdValidation extends IntValidation
 {
     public function validate(&$subject, array $parameters)

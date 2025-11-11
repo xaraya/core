@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Base\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\AdminApi;
 use Exception;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * base adminapi getmodulesettings function
@@ -39,7 +36,6 @@ class GetmodulesettingsMethod extends MethodClass
         if (empty($args['module'])) {
             throw new Exception($this->ml('The getmodulesettings function requires a module parameter'));
         }
-        sys::import('modules.dynamicdata.class.objects.factory');
         $object = $this->data()->getObject(['name' => 'module_settings']);
 
         foreach ($object->properties as $name => $property) {

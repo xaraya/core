@@ -21,7 +21,6 @@
  * Make sure the base class is available
  *
  */
-sys::import('xaraya.log.loggers.xarLogger');
 
 /**
  */

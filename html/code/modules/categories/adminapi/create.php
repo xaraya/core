@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Categories\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories adminapi create function
@@ -44,7 +41,6 @@ class CreateMethod extends MethodClass
             $args['relative_position'] = 3;
         }
 
-        sys::import('modules.dynamicdata.class.objects.factory');
         $category = $this->data()->getObject(['name' => 'categories']);
         $id = $category->createItem($args);
         return $id;

@@ -20,10 +20,7 @@
 
 namespace Xaraya\Database\TableDDL;
 
-use sys;
 use BadParameterException;
-
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 // PRIVATE FUNCTIONS BELOW - do not call directly

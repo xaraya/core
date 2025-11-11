@@ -17,8 +17,6 @@
  *
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
-sys::import('xaraya.database.interface');
-sys::import('creole.Creole');
 use Xaraya\Database\xarDB_Interface;
 
 class xarDB_Creole extends xarObject implements xarDB_Interface
@@ -189,7 +187,6 @@ class xarDB_Creole extends xarObject implements xarDB_Interface
      */
     public static function getTypeMap()
     {
-        sys::import('creole.CreoleTypes');
         return [
             CreoleTypes::getCreoleCode('BOOLEAN')       => 'boolean',
             CreoleTypes::getCreoleCode('VARCHAR')       => 'text',

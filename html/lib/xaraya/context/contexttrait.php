@@ -36,10 +36,6 @@
 
 namespace Xaraya\Context;
 
-use sys;
-
-sys::import("xaraya.context.context");
-
 /**
  * For documentation purposes only - available via ContextTrait
  */

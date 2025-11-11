@@ -15,8 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use sys;
 
-sys::import('xaraya.modules.method');
-
 /**
  * roles userapi getdefaultauthdata function
  * @extends MethodClass<UserApi>

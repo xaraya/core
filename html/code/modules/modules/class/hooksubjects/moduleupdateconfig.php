@@ -22,7 +22,6 @@
  * Legacy way, supported for now, deprecated in future
  * xarModHooks::call('module', 'updateconfig', $module, $item);
 **/
-sys::import('xaraya.structures.hooks.apisubject');
 class ModulesModuleUpdateconfigSubject extends ApiHookSubject
 {
     public $subject = 'ModuleUpdateconfig';

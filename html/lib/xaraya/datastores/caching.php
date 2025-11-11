@@ -18,9 +18,6 @@ namespace Xaraya\DataObject\DataStores;
 
 use ixarCache_Storage;
 use Exception;
-use sys;
-
-sys::import('xaraya.datastores.basic');
 
 /**
  * Class for cache datastore

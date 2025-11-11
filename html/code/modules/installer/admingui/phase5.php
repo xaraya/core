@@ -13,8 +13,6 @@ namespace Xaraya\Modules\Installer\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
-use Exception;
-use SQLException;
 use SQLite3;
 use xarClassMap;
 use xarDB;
@@ -23,8 +21,8 @@ use xarInst;
 use xarInstall;
 use xarTableDDL;
 use sys;
-
-sys::import('xaraya.modules.method');
+use Exception;
+use SQLException;
 
 /**
  * installer admin phase5 function
@@ -56,7 +54,6 @@ class Phase5Method extends MethodClass
         $this->mem()->set('installer', 'installing', true);
 
         // Get the database connection configuration from the configuration file
-        sys::import('xaraya.database');
         $init_args = xarDatabase::getConfig();
 
         //    $this->var()->find('install_create_database', $createDB, 'checkbox', false);
@@ -225,7 +222,6 @@ class Phase5Method extends MethodClass
         //---------------------------------------------------------------------------
         // Try creating the database if it doesn't exist
         // We already did sqlite3 and pdosqlite
-        sys::import('xaraya.tableddl');
 
         if (!$dbExists) {
 
@@ -303,12 +299,6 @@ class Phase5Method extends MethodClass
 
         // Install the security stuff here, but disable the registerMask and
         // and xarSecurity::check functions until we've finished the installation process
-        sys::import('xaraya.security');
-        sys::import('xaraya.modules');
-        sys::import('xaraya.hooks');
-        sys::import('xaraya.blocks');
-        // load events so register functions work
-        sys::import('xaraya.events');
 
         // 1. Load base and modules module
         $modules = ['base','modules'];
@@ -321,7 +311,6 @@ class Phase5Method extends MethodClass
         }
 
         // 2. Create some variables we'll need in installing modules
-        sys::import('xaraya.variables');
         $a = [];
         $this->var()->init($a);
         $this->config()->setVar('System.ModuleAliases', []);
@@ -341,7 +330,6 @@ class Phase5Method extends MethodClass
                         VALUES (?,?,?,?,?,?,?,?,?)";
         $newStmt     = $dbconn->prepareStatement($newModSql);
 
-        sys::import('xaraya.classmap');
         $modules = ['authsystem','roles','privileges','installer','blocks','themes','dynamicdata','mail','categories'];
         // Series of updates, begin transaction
         try {

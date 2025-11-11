@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Blocks\AdminGui;
 
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\AdminGui;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks admin main function

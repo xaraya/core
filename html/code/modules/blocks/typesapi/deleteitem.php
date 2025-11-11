@@ -17,9 +17,6 @@ use Xaraya\Modules\Blocks\InstancesApi;
 use EmptyParameterException;
 use Exception;
 use IDNotFoundException;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi deleteitem function

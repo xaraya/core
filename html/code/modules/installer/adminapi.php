@@ -19,8 +19,6 @@ use FileNotFoundException;
 use FunctionNotFoundException;
 use sys;
 
-sys::import('xaraya.modules.adminapi');
-
 /**
  * Handle the installer admin API
  * @extends AdminApiClass<Module>

@@ -15,10 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use Query;
 use xarRoles;
-use xarTpl;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles admin sendmail function
@@ -59,7 +55,6 @@ class SendmailMethod extends MethodClass
         }
         // Get user information
         // Get the current query
-        sys::import('xaraya.structures.query');
         $q = new Query();
         $q = unserialize((string) $this->session()->getVar('rolesquery'));
 

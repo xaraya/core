@@ -9,15 +9,14 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+
+use Xaraya\Services\Modules\UserVarsHelper;
+use Xaraya\Services\xar;
+
 /**
  * Interface declaration for module user vars
  *
  */
-sys::import('xaraya.variables');
-sys::import('xaraya.variables.moditem');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
-use Xaraya\Services\Modules\UserVarsHelper;
 
 /**
  * Class to implement the interface to module user vars

@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use xarPrivileges;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin viewroles function
@@ -47,7 +44,6 @@ class ViewrolesMethod extends MethodClass
         $this->session()->delVar('privileges_statusmsg');
 
         //Call the Privileges class and get the privilege
-        sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getPrivilege($id);
 
         //Get the array of current roles this privilege is assigned to

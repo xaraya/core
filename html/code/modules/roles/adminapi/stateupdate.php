@@ -16,9 +16,6 @@ use Xaraya\Modules\Roles\AdminApi;
 use Xaraya\Modules\Roles\UserApi;
 use EmptyParameterException;
 use IDNotFoundException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles adminapi stateupdate function

@@ -36,8 +36,6 @@
  * @return string containing the HTML (or other) text to output in the BL template
  */
 
-sys::import('modules.base.xarproperties.dropdown');
-sys::import('modules.categories.xarproperties.categorytree');
 
 /**
  * This property displays a widget that allows the user to navigate objects by their categories
@@ -140,7 +138,6 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get base cids for this module + item type
         // CHECKME: getcatbases has changed result format !
-        sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $basecats = $worker->getcatbases(
             ['module'    => $modname,
@@ -1241,7 +1238,7 @@ class CategoryNavigationProperty extends SelectProperty
             }
             return null;
         }
-        $result = $this->mod()->apiFunc('categories','user','getcatinfo',['cid' => $this->value]);
+        $result = $this->mod()->apiFunc('categories', 'user', 'getcatinfo', ['cid' => $this->value]);
         if (!empty($result)) {
             if ($check) {
                 return true;

@@ -18,9 +18,6 @@ use Xaraya\Modules\DynamicData\AdminGui;
 use sys;
 use Exception;
 
-sys::import('modules.dynamicdata.method');
-
-
 /**
  * dynamicdata admin test_apis function
  * @extends MethodClass<AdminGui>
@@ -31,7 +28,6 @@ class TestApisMethod extends MethodClass
 
     /**
      * Test APIs
-     * @uses \sys::autoload()
      * @see AdminGui::testApis()
      */
     public function __invoke(array $args = [])
@@ -171,7 +167,6 @@ class TestApisMethod extends MethodClass
             $cacheData = $this->mod()->getVar('graphql_cache_data');
             $cacheOperation = $this->mod()->getVar('graphql_cache_operation');
         }
-        sys::import('xaraya.bridge.restapi.builder');
 
         RestAPIBuilder::init();
         $this->var()->check('create_rst', $create_rst, 'notempty', 0);
@@ -183,8 +178,6 @@ class TestApisMethod extends MethodClass
         }
         $this->var()->check('create_gql', $create_gql, 'notempty', 0);
         if (!empty($create_gql)) {
-            sys::autoload();
-            sys::import('xaraya.bridge.graphql.builder');
             $graphQLBuilder = new GraphQLBuilder();
             $graphQLBuilder->dumpSchema($graphqllist, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
             $this->clearCacheFiles();

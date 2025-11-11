@@ -12,10 +12,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('xaraya.structures.tree');
-sys::import('modules.privileges.class.privileges');
-sys::import('modules.dynamicdata.class.properties.base');
-sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
 /**

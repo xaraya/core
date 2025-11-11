@@ -15,12 +15,10 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\Roles\AdminApi;
-use DirectoryNotFoundException;
 use Query;
 use xarRoles;
 use sys;
-
-sys::import('xaraya.modules.method');
+use DirectoryNotFoundException;
 
 /**
  * roles admin createmail function
@@ -65,7 +63,6 @@ class CreatemailMethod extends MethodClass
             $type  = ($role->getType() == xarRoles::ROLES_GROUPTYPE) ? 'selection' : 'single';
         }
 
-        sys::import('xaraya.structures.query');
         $xartable = $this->db()->getTables();
         if ($type == 'single') {
             $id = $role->getID();

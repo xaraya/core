@@ -10,7 +10,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/42.html
  */
-sys::import('xaraya.structures.events.subject');
 
 /**
  * Authsystem User Subject for logout events

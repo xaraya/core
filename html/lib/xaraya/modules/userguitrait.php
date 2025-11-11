@@ -50,10 +50,6 @@
 namespace Xaraya\Modules;
 
 use ixarMod;
-use xarMod;
-use sys;
-
-sys::import('xaraya.modules.servicestrait');
 
 /**
  * Module class supports user gui methods - available via UserGuiTrait

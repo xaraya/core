@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\Categories\UserApi;
 use Exception;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories admin stats function

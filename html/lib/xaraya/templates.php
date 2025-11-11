@@ -19,6 +19,9 @@
  * 10. complain (later on)
 **/
 
+use Xaraya\Services\TemplatingService;
+use Xaraya\Services\xar;
+
 /**
  * Exception raised by the templating subsystem
  *
@@ -50,11 +53,6 @@ class BLException extends xarExceptions
 {
     protected $message = 'Unknown blocklayout exception (TODO)';
 }
-
-sys::import('xaraya.variables.config');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\TemplatingService;
-use Xaraya\Services\xar;
 
 /**
  * BlockLayout Template Engine

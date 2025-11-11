@@ -22,11 +22,6 @@ use VirtualObjectDescriptor;
 use DataObject;
 //use DataObjectList;
 use DataProperty;
-use sys;
-
-sys::import('xaraya.services.parentservicestrait');
-sys::import('modules.dynamicdata.class.objects.servicestrait');
-sys::import('modules.dynamicdata.class.objects.virtual');
 
 /**
  * For documentation purposes only - available via DataPropertyServicesTrait
@@ -65,7 +60,6 @@ trait DataPropertyServicesTrait
     {
         if (!isset(static::$dummyObject)) {
             // needed for installation after phase 5
-            sys::import('modules.dynamicdata.class.objects.base');
             $descriptor = new VirtualObjectDescriptor(['name' => 'dummy']);
             static::$dummyObject = new DataObject($descriptor);
         }

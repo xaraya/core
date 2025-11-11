@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Roles\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles adminapi getgroupmenulinks function

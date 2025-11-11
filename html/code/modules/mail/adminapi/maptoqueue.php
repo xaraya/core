@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Mail\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminApi;
 use Queue;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * mail adminapi maptoqueue function
@@ -44,7 +41,6 @@ class MaptoqueueMethod extends MethodClass
             return;
         }
 
-        sys::import('xaraya.structures.sequences.queue');
         // Test mapping, map em all to the masterq
         $q = new Queue('dd', ['name' => 'masterq']);
         return $q;

@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Modules;
 
 use Xaraya\Modules\AdminApiClass;
-use sys;
-
-sys::import('xaraya.modules.adminapi');
 
 /**
  * Handle the modules admin API

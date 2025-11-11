@@ -13,7 +13,6 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 
 /**
  * Initialise block info

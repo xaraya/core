@@ -19,9 +19,6 @@ use AccessProperty;
 use EmptyParameterException;
 use Exception;
 use IDNotFoundException;
-use sys;
-
-sys::import('modules.blocks.method');
 
 /**
  * blocks admin delete_instance function

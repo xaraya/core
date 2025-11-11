@@ -12,9 +12,6 @@
 namespace Xaraya\Modules\Blocks;
 
 use Xaraya\Modules\UserApiClass;
-use sys;
-
-sys::import('xaraya.modules.userapi');
 
 /**
  * Handle the blocks instances API
@@ -35,6 +32,6 @@ class InstancesApi extends UserApiClass
     public function configure()
     {
         $this->setModType('instances');
-        // don't call xarMod:apiLoad() for blocks instances API
+        // don't call xar::mod()->apiLoad() for blocks instances API
     }
 }

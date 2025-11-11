@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Categories\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminApi;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories adminapi updateconfighook function
@@ -35,7 +32,6 @@ class UpdateconfighookMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        sys::import('modules.dynamicdata.class.properties.master');
         $picker = $this->prop()->getProperty(['name' => 'categorypicker']);
         $picker->checkInput('basecid');
 

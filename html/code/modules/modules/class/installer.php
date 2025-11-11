@@ -17,8 +17,8 @@
 namespace Xaraya\Modules;
 
 use Xaraya\Services\ServicesClass;
-use xarCore;
 use ixarMod;
+use xarCore;
 use xarVersion;
 use sys;
 use Stack;
@@ -68,7 +68,6 @@ class InstallerTool extends ServicesClass
             throw new ModuleNotFoundException();
         }
 
-        sys::import('xaraya.structures.sequences.stack');
         $this->modulestack = new Stack();
     }
 
@@ -183,7 +182,6 @@ class InstallerTool extends ServicesClass
                     throw new ModuleNotFoundException($module_id, 'Required module missing (ID #(1))');
                 }
 
-                sys::import('xaraya.version');
                 if (xarVersion::compare($conditions['minversion'], $dbMods[$module_id]['version']) > 0) {
                     $msg = $this->ml('Stopped installation of module #(1). ', $extInfo['name']);
                     $msg .= $this->ml('The current version of the module #(1) is #(2). The required version is #(3).', $dbMods[$module_id]['name'], $dbMods[$module_id]['version'], $conditions['minversion']);
@@ -595,7 +593,6 @@ class InstallerTool extends ServicesClass
         if ($this->extType == 'themes') {
             // Reinit the theme configurations
             // @todo: this belongs in the ThemeActivate observer
-            sys::import('modules.themes.class.initialization');
             ThemeInitialization::importConfigurations();
             // Show the theme list
             $this->ctl()->redirect($return_url);
@@ -722,12 +719,10 @@ class InstallerTool extends ServicesClass
             $valid_ge = true;
             $valid_le = true;
             if (!empty($info['dependencyinfo'][0]['version_ge'])) {
-                sys::import('xaraya.version');
                 $result = xarVersion::compare(xarCore::VERSION_NUM, $info['dependencyinfo'][0]['version_ge']);
                 $valid_ge = $result >= 0;
             }
             if (!empty($info['dependencyinfo'][0]['version_le'])) {
-                sys::import('xaraya.version');
                 $result = xarVersion::compare(xarCore::VERSION_NUM, $info['dependencyinfo'][0]['version_le']);
                 $valid_le = $result <= 0;
             }

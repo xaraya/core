@@ -18,10 +18,6 @@ use Xaraya\Modules\DynamicData\UserApi;
 use Xaraya\Modules\DynamicData\UtilApi;
 use DataPropertyMaster;
 use Exception;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata admin modifyprop function

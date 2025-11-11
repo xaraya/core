@@ -14,8 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('modules.dynamicdata.class.properties.base');
-sys::import('modules.categories.xarproperties.categorytree');
 
 /**
  * This property displays a series of 1 or more category selectors.
@@ -187,7 +185,6 @@ class CategoriesProperty extends DataProperty
             // This property is bound
             return $this->updateLinks($itemid);
         }
-        sys::import('xaraya.structures.query');
         $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
 
@@ -255,7 +252,6 @@ class CategoriesProperty extends DataProperty
      */
     public function deleteValue($itemid = 0)
     {
-        sys::import('xaraya.structures.query');
         $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
 
@@ -418,7 +414,6 @@ class CategoriesProperty extends DataProperty
                 $data['value'] = [];
                 $this->mod()->loadDbInfo('categories');
                 $xartable = $this->db()->getTables();
-                sys::import('xaraya.structures.query');
                 foreach ($data['base_category'] as $key => $value) {
                     $q = new Query('SELECT', $xartable['categories_linkage']);
                     $q->eq('basecategory', (int) $value);
@@ -548,7 +543,6 @@ class CategoriesProperty extends DataProperty
      */
     public function mountValue($itemid = 0)
     {
-        sys::import('xaraya.structures.query');
         $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
         $q = new Query('SELECT');
@@ -710,7 +704,6 @@ class CategoriesProperty extends DataProperty
      */
     private function getLinks($itemid = 0)
     {
-        sys::import('xaraya.structures.query');
         $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
 
@@ -738,7 +731,6 @@ class CategoriesProperty extends DataProperty
      */
     private function updateLinks($itemid = 0)
     {
-        sys::import('xaraya.structures.query');
         $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
 

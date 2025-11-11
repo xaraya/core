@@ -12,10 +12,6 @@
 namespace Xaraya\Modules\Categories;
 
 use Xaraya\Modules\UserGuiClass;
-use sys;
-
-sys::import('xaraya.modules.usergui');
-sys::import('modules.categories.userapi');
 
 /**
  * Handle the categories user GUI

@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use xarPrivileges;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * privileges admin deleteprivilege function
@@ -40,7 +37,6 @@ class DeleteprivilegeMethod extends MethodClass
         $this->session()->delVar('privileges_statusmsg');
 
         //Call the Privileges class and get the privilege to be deleted
-        sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getprivilege($id);
         if (empty($priv)) {
             return $this->ctl()->notFound();

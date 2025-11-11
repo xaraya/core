@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use ForbiddenOperationException;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * themes adminapi remove function

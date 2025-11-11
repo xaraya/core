@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserGui;
 use Xaraya\Modules\Categories\UserApi;
 use Exception;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * categories user main function

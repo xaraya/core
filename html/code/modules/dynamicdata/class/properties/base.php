@@ -10,9 +10,6 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-sys::import('modules.dynamicdata.class.properties.master');
-sys::import('modules.dynamicdata.class.properties.interfaces');
-sys::import('modules.dynamicdata.class.properties.servicestrait');
 use Xaraya\DataProperty\DataPropertyServicesInterface;
 use Xaraya\DataProperty\DataPropertyServicesTrait;
 

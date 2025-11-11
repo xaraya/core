@@ -18,9 +18,6 @@ use xarMasks;
 use xarPrivileges;
 use xarRoles;
 use xarSecurity;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * roles admin testprivileges function

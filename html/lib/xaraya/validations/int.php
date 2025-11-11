@@ -17,7 +17,6 @@
  *
  * @throws VariableValidationException, BadParameterException
 **/
-sys::import("xaraya.validations");
 class IntValidation extends ValueValidations
 {
     public function validate(&$subject, array $parameters)

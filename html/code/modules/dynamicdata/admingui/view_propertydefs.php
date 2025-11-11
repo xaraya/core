@@ -16,10 +16,6 @@ use Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\AdminApi;
 use DataObjectDescriptor;
 use FieldTypeProperty;
-use sys;
-
-sys::import('modules.dynamicdata.method');
-
 
 /**
  * dynamicdata admin view_propertydefs function
@@ -58,7 +54,6 @@ class ViewPropertydefsMethod extends MethodClass
 
         // FIXME: This may not work when moving property classes around manually !
         //$data['fieldtypeprop'] =& $this->prop()->getProperty(array('type' => 'fieldtype'));
-        sys::import('modules.dynamicdata.xarproperties.fieldtype');
 
         $descriptor = new DataObjectDescriptor(['type' => 'fieldtype']);
         $data['fieldtypeprop'] = new FieldTypeProperty($descriptor);

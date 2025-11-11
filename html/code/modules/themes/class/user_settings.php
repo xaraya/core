@@ -12,7 +12,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
 **/
-sys::import('modules.dynamicdata.class.objects.base');
 
 class ThemesUserSettings extends DataObject
 {

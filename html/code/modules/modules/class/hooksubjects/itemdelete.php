@@ -23,7 +23,6 @@
  * Legacy way, supported for now, deprecated in future
  * xarModHooks::call('item', 'delete', $itemid, $item);
 **/
-sys::import('xaraya.structures.hooks.apisubject');
 class ModulesItemDeleteSubject extends ApiHookSubject
 {
     public $subject = 'ItemDelete';

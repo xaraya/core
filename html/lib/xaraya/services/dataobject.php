@@ -22,10 +22,6 @@ use DataObject;
 use DataObjectList;
 use DataObjectLoader;
 use xarDDObject;
-use sys;
-
-sys::import('xaraya.services.servicetrait');
-sys::import('modules.dynamicdata.class.objects.factory');
 
 /**
  * For documentation purposes only - available via DataObjectTrait

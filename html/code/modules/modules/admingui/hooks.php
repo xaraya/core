@@ -15,10 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
 use FunctionNotFoundException;
-use xarHooks;
-use sys;
-
-sys::import('xaraya.modules.method');
 
 /**
  * modules admin hooks function
