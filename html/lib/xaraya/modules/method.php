@@ -9,9 +9,6 @@
  * namespace Xaraya\Modules\MyFancyModule\UserApi;
  *
  * use Xaraya\Modules\MethodClass;
- * use sys;
- *
- * sys::import('xaraya.modules.method');
  *
  * class GetMethod extends MethodClass
  * {

@@ -92,7 +92,6 @@ class Context extends ArrayObject implements ContextObjectInterface
     public function setUserId($userId)
     {
         $this->offsetSet('userId', $userId);
-        //sys::import('xaraya.sessions.context');
         // @todo let session middleware update session if available?
         //$session = $this->getSession();
         //if (!empty($session)) {

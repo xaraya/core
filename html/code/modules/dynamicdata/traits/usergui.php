@@ -46,9 +46,6 @@ interface UserGuiInterface extends CoreGuiInterface
  * ```
  * use Xaraya\Modules\DynamicData\Traits\UserGuiInterface;
  * use Xaraya\Modules\DynamicData\Traits\UserGuiTrait;
- * use sys;
- *
- * sys::import('modules.dynamicdata.traits.usergui');
  *
  * class MyClassGui implements UserGuiInterface
  * {

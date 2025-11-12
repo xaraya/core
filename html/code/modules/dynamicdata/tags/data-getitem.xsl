@@ -51,7 +51,6 @@
           </xsl:when>
           <xsl:otherwise>
             <!-- This a string. we assume it's an object name -->
-            <xsl:text>sys::import('modules.dynamicdata.class.objects.factory');</xsl:text>
             <xsl:text>$__</xsl:text>
             <xsl:value-of select="@objectname"/>
             <xsl:text> = DataObjectFactory::getObject(array('name' => '</xsl:text>

@@ -49,8 +49,6 @@ class SequenceAdapter extends xarObject implements iAdapter, iSequenceAdapter
             default:
                 throw new Exception("Sequence type $type is not supported");
         }
-        //sys::import('xaraya.structures.sequences.adapters.'.$adapter);
-        //$this->implementor = new $class($args);
     }
 
     // iSequenceAdapter implementation

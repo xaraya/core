@@ -314,6 +314,7 @@ class xarCore extends xarObject
         }
 
         if ($xar->cache()->withVariables()) {
+            // already using autoload
         }
 
         /**

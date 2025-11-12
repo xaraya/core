@@ -19,11 +19,7 @@ namespace Xaraya\Services;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
-use sys;
 
-/**
- * @todo find out why sys::import() has an issue with autoload of xarDatabase() in gql.php
- */
 if (interface_exists('Xaraya\Services\ServiceInterface', false)) {
     return;
 }

@@ -26,8 +26,6 @@ use Xaraya\Services\xar;
  *
  * function mymodule_user_test($args = [])
  * {
- *     sys::import('modules.dynamicdata.class.userinterface');
- *
  *     // Add some extra arguments for the interface, e.g. for a non-standard method handler
  *     //$args['mapper'] = ['myname' => ['classname'  => 'MyMethodHandler',
  *     //                                'classfunc'  => 'run',

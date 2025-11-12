@@ -47,7 +47,6 @@ trait BasicBridgeTrait
         $sysLayout->setVar('BaseModURL', $entryPoint);
         $ctl->setEntryPoint($entryPoint);
         // @todo get $ctl->getBaseURL() working correctly for ReactPHP etc.
-        //sys::import('xaraya.bridge.middleware.modules.router');
         //ModuleRouter::setBaseUri($baseUri);
         $ctl->setCallback('buildUri', [$this, 'buildUri']);
         //$ctl->setCallback('redirectTo', [$this, 'redirectTo']);

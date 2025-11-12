@@ -10,7 +10,6 @@
 
 <!--
   <xsl:template match="xar:select">
-    <xsl:text>sys::import('xaraya.structures.query')</xsl:text>
     <xsl:text>=new Query()</xsl:text>
   </xsl:template>
 -->
@@ -34,7 +33,6 @@
           <xsl:text>;</xsl:text>
         </xsl:when>
         <xsl:when test="@objectname">
-         <xsl:text>sys::import('modules.dynamicdata.class.objects.factory');</xsl:text>
           <xsl:text>$__object=DataObjectFactory::getObjectList(array('name'=>'</xsl:text>
           <xsl:value-of select="@objectname"/>
           <xsl:text>'), $context);</xsl:text>

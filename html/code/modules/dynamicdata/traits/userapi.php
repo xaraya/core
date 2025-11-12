@@ -38,9 +38,6 @@ interface UserApiInterface extends CoreApiInterface, ItemLinksInterface
  * ```
  * use Xaraya\Modules\DynamicData\Traits\UserApiInterface;
  * use Xaraya\Modules\DynamicData\Traits\UserApiTrait;
- * use sys;
- *
- * sys::import('modules.dynamicdata.traits.userapi');
  *
  * class MyClassApi implements UserApiInterface
  * {

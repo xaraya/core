@@ -152,9 +152,6 @@ interface DatabaseInterface
  *
  * use Xaraya\Database\DatabaseInterface;
  * use Xaraya\Database\DatabaseTrait;
- * use sys;
- *
- * sys::import('xaraya.database.databasetrait');
  *
  * class UserApi implements DatabaseInterface
  * {

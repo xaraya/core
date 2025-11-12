@@ -41,8 +41,8 @@ class XarayaTwigExtension extends AbstractExtension implements ServicesInterface
     {
         $this->setContext($context);
         // initialize modname etc. based on context or request
-        $this->moduleName = $context['module'] ?? $this->ctl()->getRequest()->getModule();
-        $this->moduleType = $context['modtype'] ?? $this->ctl()->getRequest()->getType();
+        $this->moduleName = $context['module'] ?? $this->req()->getRequest()->getModule();
+        $this->moduleType = $context['modtype'] ?? $this->req()->getRequest()->getType();
         $this->itemtype = $context['itemtype'] ?? 0;
         //$this->object = $context['object'] ?? null;
     }

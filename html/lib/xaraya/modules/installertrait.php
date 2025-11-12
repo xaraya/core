@@ -10,9 +10,6 @@
  *
  * use Xaraya\Modules\InstallerInterface;
  * use Xaraya\Modules\InstallerTrait;
- * use sys;
- *
- * sys::import('xaraya.modules.installertrait');
  *
  * class Installer implements InstallerInterface
  * {

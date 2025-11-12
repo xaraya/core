@@ -326,7 +326,6 @@ class ClassMapParser
                 return;
             }
             unset($contents);
-            //sys::import('modules.dynamicdata.class.objects.interfaces');
             //$interface = \iDataObject::class;
             //if ($this->checkInterface($className, $interface)) {
             //    $classType = 'dataobjects';

@@ -7,7 +7,6 @@
  * If you want to work the other way around and report xarLog messages to a PSR-3 logger,
  * please extend one of the xarLogger classes in lib/xaraya/log/loggers
  *
- * sys::import('xaraya.bridge.logging');
  * use Xaraya\Bridge\Logging\LoggerBridge;
  *
  * $logger = new LoggerBridge();

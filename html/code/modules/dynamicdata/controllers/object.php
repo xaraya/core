@@ -72,14 +72,12 @@ class DynamicdataObjectController extends DefaultActionController
     {
         // Now get the output - @todo we'll never get here atm when xarDispatcher::findController() is looking for the 'object' module :-)
         //if ($request->getModule() == 'object') {
-        //    sys::import('xaraya.objects');
         //    $response->output = xarDDObject::guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs());
         //}
         // From xarDDObject::guiMethod:
         // Pass the object name and method to the userinterface class
         //$args['object'] = $objectName;
         //$args['method'] = $methodName;
-        //sys::import('modules.dynamicdata.class.userinterface');
         //$interface = new DataObjectUserInterface($args);
         //return $interface->handle($args);
         // From DataObjectUserInterface:

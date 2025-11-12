@@ -9,9 +9,6 @@
  * namespace Xaraya\Modules\MyFancyModule;
  *
  * use Xaraya\Modules\ModuleClass;
- * use sys;
- *
- * sys::import('xaraya.modules.module');
  *
  * class Module extends ModuleClass
  * {

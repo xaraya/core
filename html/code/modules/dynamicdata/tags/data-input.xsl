@@ -13,7 +13,7 @@
     <xsl:choose>
       <xsl:when test="not(@property)">
         <!-- No property, gotta make one -->
-        <xsl:text>try{sys::import('modules.dynamicdata.class.properties');</xsl:text>
+        <xsl:text>try{</xsl:text>
         <xsl:text>$property =&amp; DataPropertyMaster::getProperty(</xsl:text>
         <xsl:call-template name="atts2args">
           <xsl:with-param name="nodeset" select="@*[name() != 'hidden' and name() != 'preset']"/>

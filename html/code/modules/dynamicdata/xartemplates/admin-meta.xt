@@ -171,7 +171,6 @@
             <a href="#xarController::URL('dynamicdata','admin','meta',['showdb'=>1])#">Show other databases</a></p>
         <xar:elseif condition="$export eq 'view'"/>
             <!-- example of using virtual object descriptor to show database table -->
-            <xar:set name="dummy">sys::import('modules.dynamicdata.class.objects.virtual')</xar:set>
             <xar:set name="descriptor">new TableObjectDescriptor(['table' => $table, 'fields' => $tables[$table], 'dbConnIndex' => $dbConnIndex])</xar:set>
             <xar:set name="object">new DataObjectList($descriptor)</xar:set>
             <xar:set name="dummy">$object->getItems()</xar:set>
@@ -187,7 +186,6 @@
             <xar:data-view object="$object" table="$table" layout="meta" newlink=""/>
         <xar:elseif condition="$export eq 'display'"/>
             <!-- example of using virtual object descriptor to show database table -->
-            <xar:set name="dummy">sys::import('modules.dynamicdata.class.objects.virtual')</xar:set>
             <xar:set name="descriptor">new TableObjectDescriptor(['table' => $table, 'fields' => $tables[$table], 'dbConnIndex' => $dbConnIndex])</xar:set>
             <xar:set name="object">new DataObject($descriptor)</xar:set>
             <xar:set name="dummy">xarVar::fetch('itemid', 'notempty', $itemid, 1, xarVar::NOT_REQUIRED)</xar:set>

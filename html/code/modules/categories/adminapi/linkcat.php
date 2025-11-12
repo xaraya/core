@@ -131,8 +131,6 @@ class LinkcatMethod extends MethodClass
         }
 
         foreach ($args['iids'] as $iid) {
-            // @checkme where is this coming from?
-            //sys::import('modules.categories.class.tag');
             $i = 0;
             foreach ($args['cids'] as $cid) {
                 // Security check

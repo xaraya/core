@@ -34,9 +34,6 @@ interface AdminApiInterface extends CoreApiInterface
  * ```
  * use Xaraya\Modules\DynamicData\Traits\AdminApiInterface;
  * use Xaraya\Modules\DynamicData\Traits\AdminApiTrait;
- * use sys;
- *
- * sys::import('modules.dynamicdata.traits.adminapi');
  *
  * class MyClassApi implements AdminApiInterface
  * {

@@ -34,9 +34,6 @@ interface AdminGuiInterface extends CoreGuiInterface
  * ```
  * use Xaraya\Modules\DynamicData\Traits\AdminGuiInterface;
  * use Xaraya\Modules\DynamicData\Traits\AdminGuiTrait;
- * use sys;
- *
- * sys::import('modules.dynamicdata.traits.admingui');
  *
  * class MyClassGui implements AdminGuiInterface
  * {
