@@ -117,7 +117,7 @@ class MainMethod extends MethodClass
                 $category[$id] = $name . '@';
             }
 
-            $result->Close();
+            $result->close();
         */
 
         $data['letters'] = [];

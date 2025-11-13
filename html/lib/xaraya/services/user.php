@@ -623,7 +623,7 @@ trait UserTrait
                 $authModName = 'authsystem';
             }
         }
-        $result->Close();
+        $result->close();
 
         if (!$xar->mod()->apiLoad($authModName, 'user')) {
             return null;

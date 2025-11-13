@@ -113,6 +113,7 @@ class DataPropertyMaster extends xarObject
                 $properties[$name] = $property;
             }
         }
+        $result->close();
         return $properties;
     }
 
@@ -359,6 +360,7 @@ class DataPropertyMaster extends xarObject
             $item = $result->fields;
             $allconfigproperties[$item['name']] = $item;
         }
+        $result->close();
         $xar->mem()->set('DynamicData', 'Configurations', $allconfigproperties);
         return $allconfigproperties;
     }

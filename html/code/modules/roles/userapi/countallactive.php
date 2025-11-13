@@ -96,7 +96,7 @@ class CountallactiveMethod extends MethodClass
         // Obtain the number of users
         [$numroles] = $result->fields;
 
-        $result->Close();
+        $result->close();
 
         // Return the number of users
         return $numroles;

@@ -117,7 +117,7 @@ class CountitemsMethod extends MethodClass
         $result->first();
         [$count] = $result->fields;
 
-        $result->Close();
+        $result->close();
 
         return $count;
     }

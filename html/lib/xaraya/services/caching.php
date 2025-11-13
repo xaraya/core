@@ -880,7 +880,7 @@ trait CachingTrait
         while ($result->next()) {
             $gidlist[] = $result->getInt(1);
         }
-        $result->Close();
+        $result->close();
         $mem->set('User.Variables.' . $currentid, 'parentlist', $gidlist);
         return $gidlist;
     }

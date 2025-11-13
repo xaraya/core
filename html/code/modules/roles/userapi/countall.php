@@ -89,7 +89,7 @@ class CountallMethod extends MethodClass
         $result->first();
         [$numroles] = $result->fields;
 
-        $result->Close();
+        $result->close();
 
         // Return the number of users
         return $numroles;

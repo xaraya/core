@@ -452,6 +452,7 @@ class Role extends DataObject
                 'parentid' => 0]);
             array_push($privileges, $perm);
         }
+        $result->close();
         $mem->set($cacheKey, $this->properties['id']->value, $privileges);
         return $privileges;
     }
@@ -603,6 +604,7 @@ class Role extends DataObject
             $role->getItem(['itemid' => $id]);
             $users[] = $role;
         }
+        $result->close();
         // done
         return $users;
     }
@@ -712,6 +714,7 @@ class Role extends DataObject
             $role->getItem(['itemid' => $id]);
             $parents[] = $role;
         }
+        $result->close();
         // done
         $mem->set($cacheKey, $this->properties['id']->value, $parents);
         return $parents;

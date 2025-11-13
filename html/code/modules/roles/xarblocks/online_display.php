@@ -68,7 +68,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
         try {
             $result = $dbconn->Execute($sql, [$activetime,2]);
             [$data['numusers']] = $result->fields;
-            $result->Close();
+            $result->close();
             if (empty($data['numusers'])) {
                 $data['numusers'] = 0;
             }
@@ -141,7 +141,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
         try {
             $result2 = $dbconn->Execute($query2, [$activetime,2]);
             [$data['numguests']] = $result2->fields;
-            $result2->Close();
+            $result2->close();
             if (empty($data['numguests'])) {
                 $data['numguests'] = 0;
             }

@@ -646,7 +646,7 @@ class CelkoPositionProperty extends DataProperty
         }
         $result->first();
         $num = $result->fields[0];
-        $result->Close();
+        $result->close();
         return $num;
     }
 
@@ -873,7 +873,7 @@ class CelkoPositionProperty extends DataProperty
                     ];
                 }
             }
-            $result->Close();
+            $result->close();
         }
 
         if (!empty($dropdown)) {

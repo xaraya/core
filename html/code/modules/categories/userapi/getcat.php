@@ -328,7 +328,7 @@ class GetcatMethod extends MethodClass
                     ];
                 }
             }
-            $result->Close();
+            $result->close();
         }
 
         if (!empty($dropdown)) {

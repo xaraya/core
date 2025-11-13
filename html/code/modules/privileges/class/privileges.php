@@ -318,6 +318,7 @@ class xarPrivileges extends xarMasks
                 'level' => $level,
                 'description' => $description];
         }
+        $result->close();
         return $allprivileges;
 
     }
@@ -385,6 +386,7 @@ class xarPrivileges extends xarMasks
                 ];
             }
         }
+        $result->close();
         $alltoplevelprivileges = $privileges;
         return $privileges;
     }
@@ -422,6 +424,7 @@ class xarPrivileges extends xarMasks
                     'name' => $result->getString(2),
                 ];
             }
+            $result->close();
         }
         return $allrealms;
     }
@@ -465,6 +468,7 @@ class xarPrivileges extends xarMasks
                     'display' => ucfirst($result->getString(2)),
                 ];
             }
+            $result->close();
         }
         return $allmodules;
     }
@@ -614,7 +618,7 @@ class xarPrivileges extends xarMasks
             $privileges[] = new xarPrivilege($pargs);
         }
         // Close result set
-        $result->Close();
+        $result->close();
         return $privileges;
     }
 

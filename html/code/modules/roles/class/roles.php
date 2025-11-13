@@ -83,6 +83,7 @@ class xarRoles extends xarObject
             while ($result->next()) {
                 $allgroups[] = $result->fields;
             }
+            $result->close();
         }
         return $allgroups;
     }
@@ -377,6 +378,7 @@ class xarRoles extends xarObject
             if ($result->next()) {
                 $row = $result->fields;
             }
+            $result->close();
             if (empty($row)) {
                 return;
             }

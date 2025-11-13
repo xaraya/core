@@ -145,7 +145,7 @@ class GetorphanlinksMethod extends MethodClass
             $answer[$iid][] = $fields[0];
         }
 
-        $result->Close();
+        $result->close();
 
         // Return Array with linkage
         return $answer;

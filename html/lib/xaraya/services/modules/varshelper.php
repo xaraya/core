@@ -227,7 +227,7 @@ class VarsHelper extends ServiceClass
 
         // Return the ID
         $modvarid = $result->getInt(1);
-        $result->Close();
+        $result->close();
 
         $mem->set($cacheScope, $modName . $varName, $modvarid);
         return $modvarid;

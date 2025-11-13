@@ -82,7 +82,7 @@ class CountcatsMethod extends MethodClass
         $result->first();
         [$num] = $result->fields;
 
-        $result->Close();
+        $result->close();
 
         return $num;
     }

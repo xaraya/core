@@ -123,6 +123,7 @@ class UserApi implements UserApiInterface
                     'url' => $xar->mod()->getURL('user', 'view', ['itemtype' => $row['itemtype']], 'dynamicdata'),
                 ];
             }
+            $result->close();
         }
         return $types;
     }

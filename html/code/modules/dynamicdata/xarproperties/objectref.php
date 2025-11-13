@@ -151,6 +151,7 @@ class ObjectRefProperty extends SelectProperty
                     'config'   => $config,
                     'isalias'   => $isalias];
             }
+            $result->close();
             $object = $this->data()->getObject(['name' => 'objects']);
         } else {
             $object = $this->data()->getObjectList(['name' => $this->initialization_refobject]);

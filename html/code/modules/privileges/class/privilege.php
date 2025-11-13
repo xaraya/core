@@ -311,6 +311,7 @@ class xarPrivilege extends xarMask
             */
             $roles[] = $role;
         }
+        $result->close();
         // done
         return $roles;
     }
@@ -370,6 +371,7 @@ class xarPrivilege extends xarMask
                 'parentid' => $id];
             $parents[] = new xarPrivilege($pargs);
         }
+        $result->close();
         // done
         return $parents;
     }
@@ -457,6 +459,7 @@ class xarPrivilege extends xarMask
                 'parentid'   => $parentid];
             $children[$parentid][] = new xarPrivilege($pargs);
         }
+        $result->close();
         // done
         foreach (array_keys($children) as $parentid) {
             $mem->set('Privileges.getChildren', $parentid, $children[$parentid]);

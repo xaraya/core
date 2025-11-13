@@ -113,7 +113,7 @@ class GetlinksMethod extends MethodClass
             }
         }
 
-        $result->Close();
+        $result->close();
 
         if (!empty($sort) && $sort == 'numlinks' && count($answer) > 0) {
             // TODO: find some way to sort first on count, and then on itemid

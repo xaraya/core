@@ -192,6 +192,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
                     $properties[$field]->setItemValue($itemid, $value);
                 }
             }
+            $result->close();
             // add the itemids to the list
             $this->_itemids = array_keys($itemidlist);
             $result->close();

@@ -31,7 +31,7 @@ class Query
     public $sorts               = [];      // Array of fields used in the sort clause of the statement
     public $groups              = [];      // Normalized array of fields used in the group clause of the statement
     public $having              = [];      // Normalized array of fields used in the having clause of the statement
-    public $result              = [];      // Holds the result object of a query
+    public $result              = null;    // Holds the result object of a query
     public $bindvars            = [];      // An array of bindvars in this statement
     public $rows                = 0;
     public $rowfields           = 0;
@@ -297,7 +297,9 @@ class Query
 
     public function close()
     {
-        return $this->result->close();
+        if (isset($this->result)) {
+            $this->result->close();
+        }
     }
 
     public function open()

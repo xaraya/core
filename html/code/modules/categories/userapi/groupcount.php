@@ -110,7 +110,7 @@ class GroupcountMethod extends MethodClass
             $count[$id] = (int) $num;
         }
 
-        $result->Close();
+        $result->close();
 
         return $count;
     }

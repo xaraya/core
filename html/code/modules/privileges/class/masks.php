@@ -97,6 +97,7 @@ class xarMasks extends xarSecurity
                 'description' => $description];
             array_push($masks, new xarMask($pargs));
         }
+        $result->close();
         return $masks;
     }
 

@@ -78,7 +78,7 @@ class CountitemsMethod extends MethodClass
 
         $num = $result->fields[0];
 
-        $result->Close();
+        $result->close();
 
         return $num;
     }
