@@ -19,6 +19,7 @@
 
 namespace Xaraya\Services;
 
+use Xaraya\Database\ExternalDatabase;
 use xarDatabase;
 use xarDB;
 
@@ -31,6 +32,13 @@ interface DatabaseInterface extends ServiceInterface
 {
     public const SLICE = 'database';
 
+    /** @param array<string, mixed> $dbConnArgs */
+    public function checkDbConnection(mixed $dbConnIndex = 0, array $dbConnArgs = []): mixed;
+
+    public function isIndexExternal(mixed $index): bool;
+
+    public function setMiddleware(string $middlewareName): void;
+
     public function &getConn(int|string $index = 0): object;
 
     public function getFetchAssoc(): int;
@@ -40,6 +48,10 @@ interface DatabaseInterface extends ServiceInterface
     public function getName(): string;
 
     public function getPrefix(): string;
+
+    public function setPrefix(string $prefix): void;
+
+    public function getHost(): string;
 
     public function getType(): string;
 
@@ -59,8 +71,13 @@ interface DatabaseInterface extends ServiceInterface
     /** @param array<string, mixed> $dsn */
     public function getConnection(array $dsn, mixed $flags): object;
 
+    public function removeConn(int|string $index = 0): bool;
+
     /** @return array<mixed> */
     public function getTypeMap(): array;
+
+    /** @return array<mixed> */
+    public function getDrivers(): array;
 
     public function withPDO(): bool;
 }
@@ -90,6 +107,24 @@ trait DatabaseTrait
     public function getConfig(): array
     {
         return xarDatabase::getConfig();
+    }
+
+    /**
+     * @param array<string, mixed> $dbConnArgs
+     */
+    public function checkDbConnection(mixed $dbConnIndex = 0, array $dbConnArgs = []): mixed
+    {
+        return ExternalDatabase::checkDbConnection($dbConnIndex, $dbConnArgs);
+    }
+
+    public function isIndexExternal(mixed $index): bool
+    {
+        return ExternalDatabase::isIndexExternal($index);
+    }
+
+    public function setMiddleware(string $middlewareName): void
+    {
+        xarDB::setMiddleware($middlewareName);
     }
 
     /**
@@ -131,6 +166,16 @@ trait DatabaseTrait
     public function getPrefix(): string
     {
         return xarDB::getPrefix();
+    }
+
+    public function setPrefix(string $prefix): void
+    {
+        xarDB::setPrefix($prefix);
+    }
+
+    public function getHost(): string
+    {
+        return xarDB::getHost();
     }
 
     /**
@@ -196,6 +241,11 @@ trait DatabaseTrait
         return xarDB::getConnection($dsn, $flags);
     }
 
+    public function removeConn(int|string $index = 0): bool
+    {
+        return xarDB::removeConn($index);
+    }
+
     /**
      * Summary of getTypeMap
      * @return array<mixed>
@@ -203,6 +253,14 @@ trait DatabaseTrait
     public function getTypeMap(): array
     {
         return xarDB::getTypeMap();
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getDrivers(): array
+    {
+        return xarDB::getDrivers();
     }
 
     public function withPDO(): bool

@@ -289,7 +289,8 @@ trait DatabaseTrait
         } catch (BadParameterException $e) {
             return null;
         }
-        $dbConnIndex = ExternalDatabase::checkDbConnection(null, $args);
+        $xar = $this->getServicesClass();
+        $dbConnIndex = $xar->db()->checkDbConnection(null, $args);
         $this->_connections[$name] = $dbConnIndex;
         // return the connection index
         return $dbConnIndex;

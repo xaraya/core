@@ -130,8 +130,6 @@ namespace Xaraya\Modules\Library;
 
 use Xaraya\Database\DatabaseInterface;
 use Xaraya\Database\DatabaseTrait;
-use sys;
-
 
 class UserApi implements DatabaseInterface
 {

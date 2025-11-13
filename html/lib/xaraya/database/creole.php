@@ -54,6 +54,7 @@ class xarDB_Creole extends xarObject implements xarDB_Interface
      * @param ?int $flags
      * @param string $prefix
      * @return void
+     * @deprecated 2.4.1 not used
      */
     public static function configure($dsn, $flags = Creole::COMPAT_ASSOC_LOWER, $prefix = 'xar')
     {

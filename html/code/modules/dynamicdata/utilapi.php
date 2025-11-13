@@ -154,9 +154,9 @@ class UtilApi extends UserApi implements DatabaseInterface
             return [$table => $propertybag[$table]];
         }
 
-        $dbConnIndex = ExternalDatabase::checkDbConnection($dbConnIndex, $dbConnArgs);
+        $dbConnIndex = $this->db()->checkDbConnection($dbConnIndex, $dbConnArgs);
         // use external database connection
-        if (ExternalDatabase::isIndexExternal($dbConnIndex)) {
+        if ($this->db()->isIndexExternal($dbConnIndex)) {
             return $this->getExternalMeta($table, $dbConnIndex);
         }
         $dbconn = $this->db()->getConn($dbConnIndex);

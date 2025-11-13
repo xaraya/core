@@ -228,10 +228,9 @@ class DataStoreFactory extends xarObject
             return $sources;
         }
 
-        // @todo add support/combine with Database Service
-        $object->dbConnIndex = ExternalDatabase::checkDbConnection($object->dbConnIndex, $object->dbConnArgs);
+        $object->dbConnIndex = $xar->db()->checkDbConnection($object->dbConnIndex, $object->dbConnArgs);
         // use external database connection
-        if (ExternalDatabase::isIndexExternal($object->dbConnIndex)) {
+        if ($xar->db()->isIndexExternal($object->dbConnIndex)) {
             return static::getExternalDataSources($object->datasources, $object->dbConnIndex);
         }
 

@@ -17,6 +17,8 @@
 
 use Xaraya\Services\xar;
 
+// Define FETCHMODE_* depending on middleware here
+// @done remove all references in modules code + use xar::db()->getFetch*()
 $sysConfig = xar::sysConfig();
 switch ($sysConfig->getVar('DB.Middleware')) {
     case 'Creole':
@@ -33,6 +35,7 @@ switch ($sysConfig->getVar('DB.Middleware')) {
     default:
         break;
 }
+// See also xarDB::setMiddleware() below
 
 class xarDB
 {
@@ -55,10 +58,8 @@ class xarDB
     private static $latest        = null;
 
 
-    public static function getInstance($sysConfig = null)
+    public static function setMiddleware($middleware_name = 'PDO')
     {
-        $sysConfig ??= xar::sysConfig();
-        $middleware_name = $sysConfig->getVar('DB.Middleware');
         $class = 'xarDB_' . $middleware_name;
         $middleware_class = new $class();
         self::$mw = $middleware_class;
@@ -119,6 +120,9 @@ class xarDB
         self::$tables = array_merge(self::$tables, $tables);
     }
 
+    /**
+     * @deprecated 2.4.1 not used
+     */
     public static function configure($dsn, $flags = [PDO::CASE_LOWER])
     {
         return self::$mw::configure($dsn, $flags);
@@ -387,28 +391,11 @@ class xarDB
     }
 }
 
-xarDB::getInstance($sysConfig);
-
-function xarDB_init(array &$args)
-{
-    xarDB::setPrefix($args['prefix']);
-
-    // Register postgres driver, since Creole uses a slightly different alias
-    // We do this here so we can remove customisation from creole lib.
-    // @deprecated 2.4.0 postgres hasn't been supported for a long time now
-    // Creole::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
-
-    // If doConnect is null we connect. Not very intuitive
-    $args['doConnect'] ??= true;
-    if ($args['doConnect']) {
-        try {
-            xarDB::newConn($args);
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-    return true;
-}
+/**
+ * Set middleware for DB connections (Creole or PDO)
+ */
+$middlewareName = $sysConfig->getVar('DB.Middleware');
+xarDB::setMiddleware($middlewareName);
 
 class xarDatabase extends xarObject
 {
@@ -518,7 +505,7 @@ class xarDatabase extends xarObject
             foreach ($localhosts as $local) {
                 $systemArgs['databaseHost'] = $local;
                 try {
-                    return xarDB_init($systemArgs);
+                    return self::xarDB_init($systemArgs);
                 } catch (Exception $e) {
                 }
                 if ($connected) {
@@ -530,12 +517,33 @@ class xarDatabase extends xarObject
             }
         } else {
             try {
-                return xarDB_init($systemArgs);
+                return self::xarDB_init($systemArgs);
             } catch (Exception $e) {
                 // Catch the error here rather than in the subsystem, because we might be connecting to different databases
                 // and want to cater to possible errors in each
                 throw new Exception("Connection error: a database connection could not be established");
             }
         }
+    }
+
+    protected static function xarDB_init(array &$args)
+    {
+        xarDB::setPrefix($args['prefix']);
+
+        // Register postgres driver, since Creole uses a slightly different alias
+        // We do this here so we can remove customisation from creole lib.
+        // @deprecated 2.4.0 postgres hasn't been supported for a long time now
+        // Creole::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
+
+        // If doConnect is null we connect. Not very intuitive
+        $args['doConnect'] ??= true;
+        if ($args['doConnect']) {
+            try {
+                xarDB::newConn($args);
+            } catch (Exception $e) {
+                throw $e;
+            }
+        }
+        return true;
     }
 }
