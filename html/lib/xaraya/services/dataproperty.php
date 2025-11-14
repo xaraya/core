@@ -67,7 +67,7 @@ trait DataPropertyTrait
      */
     public function getPropertyTypes(): array
     {
-        return DataPropertyMaster::getPropertyTypes();
+        return DataPropertyMaster::getPropertyTypes($this->getParent());
     }
 
     /**
@@ -77,7 +77,7 @@ trait DataPropertyTrait
      */
     public function getProperties(array $args = []): array
     {
-        return DataPropertyMaster::getProperties($args);
+        return DataPropertyMaster::getProperties($args, $this->getParent());
     }
 
     /**
@@ -86,7 +86,7 @@ trait DataPropertyTrait
      */
     public function getProperty(array $args = []): DataProperty
     {
-        return DataPropertyMaster::getProperty($args);
+        return DataPropertyMaster::getProperty($args, $this->getParent());
     }
 
     /**

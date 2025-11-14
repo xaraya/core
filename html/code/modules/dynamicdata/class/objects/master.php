@@ -588,7 +588,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     public function addDataStore($name = '_dynamic_data_', $type = 'data', $storage = null)
     {
         // get the data store
-        $this->datastore = DataStoreFactory::getDataStore($name, $type, $storage, $this->dbConnIndex, $this->dbConnArgs);
+        $this->datastore = DataStoreFactory::getDataStore($name, $type, $storage, $this->dbConnIndex, $this->dbConnArgs, $this);
 
         // Pass along a reference to this object
         $this->datastore->object = $this;

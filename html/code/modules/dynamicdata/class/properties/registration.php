@@ -167,9 +167,9 @@ class PropertyRegistration extends DataContainer
         return $res;
     }
 
-    public static function Retrieve()
+    public static function Retrieve($xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         if ($xar->mem()->has('DynamicData', 'PropertyTypes')) {
             return $xar->mem()->get('DynamicData', 'PropertyTypes');
         }

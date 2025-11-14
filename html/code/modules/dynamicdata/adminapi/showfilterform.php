@@ -39,7 +39,7 @@ class ShowfilterformMethod extends MethodClass
         }
 
         $args['fallbackmodule'] = 'current';
-        $descriptor = new DataObjectDescriptor($args);
+        $descriptor = new DataObjectDescriptor($args, $this->getParent());
         $args = $descriptor->getArgs();
 
         // optional layout for the template

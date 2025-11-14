@@ -35,7 +35,7 @@ class ShowdisplayMethod extends MethodClass
         extract($args);
 
         $args['fallbackmodule'] = 'current';
-        $descriptor = new DataObjectDescriptor($args);
+        $descriptor = new DataObjectDescriptor($args, $this->getParent());
         $args = $descriptor->getArgs();
         if (empty($template)) {
             $template = '';

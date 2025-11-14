@@ -55,7 +55,7 @@ class ViewPropertydefsMethod extends MethodClass
         // FIXME: This may not work when moving property classes around manually !
         //$data['fieldtypeprop'] =& $this->prop()->getProperty(array('type' => 'fieldtype'));
 
-        $descriptor = new DataObjectDescriptor(['type' => 'fieldtype']);
+        $descriptor = new DataObjectDescriptor(['type' => 'fieldtype'], $this->getParent());
         $data['fieldtypeprop'] = new FieldTypeProperty($descriptor);
 
         $data['labels'] = [

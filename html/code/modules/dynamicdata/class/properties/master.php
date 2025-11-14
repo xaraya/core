@@ -44,9 +44,9 @@ class DataPropertyMaster extends xarObject
      *     $args['objectref'] a reference to the object to add those properties to (optional)
      *     $args['allprops'] skip disabled properties by default
      */
-    public static function getProperties(array $args = [])
+    public static function getProperties(array $args = [], $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $xar->log()->debug("DataPropertyMaster::getProperties: Getting all properties");
         // we can't use our own classes here, because we'd have an endless loop :-)
 
@@ -70,7 +70,7 @@ class DataPropertyMaster extends xarObject
             }
             $doargs['moduleid'] = $args['moduleid'];
             $doargs['itemtype'] = $args['itemtype'];
-            $info = DataObjectDescriptor::getObjectID($doargs);
+            $info = DataObjectDescriptor::getObjectID($doargs, $xar);
         }
 
         $query .= " WHERE object_id = ?";
@@ -141,7 +141,7 @@ class DataPropertyMaster extends xarObject
         if (!self::isPropertyEnabled($args)) {
             return;
         }
-        $xar = xar::getServicesClass();
+        $xar = $objectref->getStaticServices() ?? xar::getServicesClass();
 
         $xar->log()->debug("DataPropertyMaster::addProperty: Adding a new property " . $args['name']);
 
@@ -156,7 +156,7 @@ class DataPropertyMaster extends xarObject
         $args['objectref'] = $objectref;
 
         // Get a new property
-        $property = &self::getProperty($args);
+        $property = &self::getProperty($args, $xar);
 
         if (method_exists($objectref, 'getItems')) {
             // for dynamic object lists, put a reference to the $items array in the property
@@ -199,12 +199,12 @@ class DataPropertyMaster extends xarObject
      * Class method to get a new dynamic property of the right type
      * @return DataProperty
      */
-    public static function &getProperty(array $args = [])
+    public static function &getProperty(array $args = [], $xar = null)
     {
         if (!isset($args['name']) && !isset($args['type'])) {
             throw new BadParameterException(null, xar::mls()->translate('The getProperty method needs either a name or type parameter.'));
         }
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
 
         if (isset($args['name']) || !is_numeric($args['type'])) {
             // TODO: type takes precedence if it exists. should this be changed?
@@ -213,7 +213,7 @@ class DataPropertyMaster extends xarObject
                     $args['type'] = $args['name'];
                 }
             }
-            $proptypes = self::getPropertyTypes();
+            $proptypes = self::getPropertyTypes($xar);
             if (!isset($proptypes)) {
                 $proptypes = [];
             }
@@ -225,7 +225,7 @@ class DataPropertyMaster extends xarObject
                 }
             }
         } else {
-            $proptypes = self::getPropertyTypes();
+            $proptypes = self::getPropertyTypes($xar);
         }
         if (!class_exists('DataProperty', true)) {
             // oops
@@ -318,21 +318,21 @@ class DataPropertyMaster extends xarObject
      * Class method listing all defined property types
      * @return array<int, mixed>
      */
-    public static function getPropertyTypes()
+    public static function getPropertyTypes($xar = null)
     {
         if (!class_exists('PropertyRegistration', true)) {
             // oops
         }
-        return PropertyRegistration::Retrieve();
+        return PropertyRegistration::Retrieve($xar);
     }
 
     /**
      * Class method listing all configuration properties
      * @return array<string, mixed>
      */
-    public static function getAllConfigProperties()
+    public static function getAllConfigProperties($xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         // cache configuration for all properties
         if ($xar->mem()->has('DynamicData', 'Configurations')) {
             return $xar->mem()->get('DynamicData', 'Configurations');

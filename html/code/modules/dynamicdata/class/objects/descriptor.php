@@ -17,15 +17,15 @@ use Xaraya\Services\xar;
 */
 class DataObjectDescriptor extends ObjectDescriptor
 {
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $xar = null)
     {
-        $args = self::getObjectID($args);
+        $args = self::getObjectID($args, $xar);
         parent::__construct($args);
     }
 
-    public static function getModID(array $args = [])
+    public static function getModID(array $args = [], $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         foreach ($args as $key => &$value) {
             if (in_array($key, ['module','modid','module','moduleid'])) {
                 if (empty($value)) {
@@ -61,10 +61,10 @@ class DataObjectDescriptor extends ObjectDescriptor
      *
      * @return array<mixed> all parts necessary to describe a DataObject
      */
-    public static function getObjectID(array $args = [])
+    public static function getObjectID(array $args = [], $xar = null)
     {
         // @todo remove overlap with DataObjectFactory::*getObjectInfo()
-        $row = static::findObject($args);
+        $row = static::findObject($args, $xar);
 
         if (empty($row) || count($row) < 1) {
             $args['moduleid'] = isset($args['moduleid']) ? (int) $args['moduleid'] : null;
@@ -101,9 +101,9 @@ class DataObjectDescriptor extends ObjectDescriptor
      *     some other module + itemtype variation supported by getModID()
      * @return array<mixed> minimal information about object or empty array
      */
-    public static function findObject(array $args = [])
+    public static function findObject(array $args = [], $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $cacheKey = 'DynamicData.FindObject';
         if (!empty($args['objectid']) && $xar->mem()->has($cacheKey, $args['objectid'])) {
             return $xar->mem()->get($cacheKey, $args['objectid']);
@@ -132,7 +132,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             $query .= " WHERE id = ? ";
             $bindvars[] = (int) $args['objectid'];
         } else {
-            $args = self::getModID($args);
+            $args = self::getModID($args, $xar);
             $query .= " WHERE module_id = ?
                           AND itemtype = ? ";
             $bindvars[] = (int) $args['moduleid'];

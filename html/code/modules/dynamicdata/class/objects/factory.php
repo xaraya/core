@@ -24,10 +24,10 @@ class DataObjectFactory extends xarObject
      * @param array<string, mixed> $args
      * @return array<mixed> of object definitions
     **/
-    public static function &getObjects(array $args = [])
+    public static function &getObjects(array $args = [], $xar = null)
     {
         extract($args);
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $dbconn = $xar->db()->getConn();
         $xar->mod()->loadDbInfo('dynamicdata');
         $xartable = $xar->db()->getTables();
@@ -79,12 +79,12 @@ class DataObjectFactory extends xarObject
      * @return array<mixed>|null containing the name => value pairs for the object
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
     **/
-    public static function getObjectInfo(array $args = [])
+    public static function getObjectInfo(array $args = [], $xar = null)
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
             throw new Exception(xar::mls()->translate('Cannot get object information without an objectid or a name'));
         }
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
 
         $cacheKey = 'DynamicData.ObjectInfo';
         if (!empty($args['name'])) {
@@ -94,7 +94,7 @@ class DataObjectFactory extends xarObject
         } else {
             if (empty($args['moduleid'])) {
                 // try to get the current module from elsewhere
-                $args = DataObjectDescriptor::getModID($args);
+                $args = DataObjectDescriptor::getModID($args, $xar);
             }
             if (empty($args['itemtype'])) {
                 // set default itemtype
@@ -176,12 +176,12 @@ class DataObjectFactory extends xarObject
      * @throws \Exception
      * @return mixed
      */
-    protected static function _getObjectInfo(array $args = [])
+    protected static function _getObjectInfo(array $args = [], $xar = null)
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
             throw new Exception(xar::mls()->translate('Cannot get object information without an objectid or a name'));
         }
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
 
         $cacheKey = 'DynamicData._ObjectInfo';
         if (isset($args['objectid']) && $xar->mem()->has($cacheKey, $args['objectid'])) {
@@ -350,7 +350,7 @@ class DataObjectFactory extends xarObject
      * @param mixed $context optional context for the DataObject (default = none)
      * @return DataObject|null the requested data object instance
     **/
-    public static function getObject(array $args = [], $context = null)
+    public static function getObject(array $args = [], $context = null, $xar = null)
     {
         $context?->tracePath(__METHOD__, $args);
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
@@ -361,7 +361,8 @@ class DataObjectFactory extends xarObject
             }
             return new DataObject($descriptor);
         }
-        $info = static::_getObjectInfo($args);
+        $xar ??= xar::getServicesClass();
+        $info = static::_getObjectInfo($args, $xar);
         // If we have no such object, just return null for now
         if (empty($info)) {
             return null;
@@ -380,7 +381,6 @@ class DataObjectFactory extends xarObject
             include_once(sys::code() . $data['filepath']);
         } else {
         }
-        $xar = xar::getServicesClass();
 
         /* with autoload and variable caching activated */
         // Do we allow caching?
@@ -407,7 +407,7 @@ class DataObjectFactory extends xarObject
         $xar->log()->info("DataObjectFactory::getObject: Getting a new object " . $data['class']);
 
         // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
-        $descriptor = new DataObjectDescriptor($data);
+        $descriptor = new DataObjectDescriptor($data, $xar);
         if (!empty($context)) {
             $descriptor->setArgs(['context' => $context]);
         }
@@ -432,7 +432,7 @@ class DataObjectFactory extends xarObject
      * @return DataObjectList|null the requested object list instance
      * @todo   get rid of the classname munging, use typing
     **/
-    public static function getObjectList(array $args = [], $context = null)
+    public static function getObjectList(array $args = [], $context = null, $xar = null)
     {
         $context?->tracePath(__METHOD__, $args);
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
@@ -444,7 +444,8 @@ class DataObjectFactory extends xarObject
             }
             return new DataObjectList($descriptor);
         }
-        $info = static::_getObjectInfo($args);
+        $xar ??= xar::getServicesClass();
+        $info = static::_getObjectInfo($args, $xar);
         if (empty($info)) {
             $identifier = '';
             if (isset($args['name'])) {
@@ -469,7 +470,6 @@ class DataObjectFactory extends xarObject
         if (!empty($data['filepath']) && ($data['filepath'] != 'auto')) {
             include_once(sys::code() . $data['filepath']);
         }
-        $xar = xar::getServicesClass();
 
         /* with autoload and variable caching activated */
         // Do we allow caching?
@@ -498,7 +498,7 @@ class DataObjectFactory extends xarObject
                 $class = $data['class'];
             }
         }
-        $descriptor = new DataObjectDescriptor($data);
+        $descriptor = new DataObjectDescriptor($data, $xar);
         if (!empty($context)) {
             $descriptor->setArgs(['context' => $context]);
         }

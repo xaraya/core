@@ -234,7 +234,7 @@ class VirtualObjectFactory extends xarObject
      * @param mixed $context optional context for the DataObject (default = none)
      * @return DataObject|null the requested data object instance
      */
-    public static function getObject(array $args = [], $context = null)
+    public static function getObject(array $args = [], $context = null, $xar = null)
     {
         if (static::isObject($args)) {
             $filepath = static::$definitions[$args['name']];
@@ -249,7 +249,7 @@ class VirtualObjectFactory extends xarObject
             }
             return new DataObject($descriptor);
         }
-        return DataObjectFactory::getObject($args, $context);
+        return DataObjectFactory::getObject($args, $context, $xar);
     }
 
     /**
@@ -261,7 +261,7 @@ class VirtualObjectFactory extends xarObject
      * @param mixed $context optional context for the DataObjectList (default = none)
      * @return DataObjectList|null the requested object list definition
      */
-    public static function getObjectList(array $args = [], $context = null)
+    public static function getObjectList(array $args = [], $context = null, $xar = null)
     {
         if (static::isObject($args)) {
             $filepath = static::$definitions[$args['name']];
@@ -276,7 +276,7 @@ class VirtualObjectFactory extends xarObject
             }
             return new DataObjectList($descriptor);
         }
-        return DataObjectFactory::getObjectList($args, $context);
+        return DataObjectFactory::getObjectList($args, $context, $xar);
     }
 
     /**

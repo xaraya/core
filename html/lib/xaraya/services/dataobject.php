@@ -155,7 +155,7 @@ trait DataObjectTrait
     public function guiMethod(?string $objectName = null, string $methodName = 'view', array $args = []): string
     {
         $objectName ??= $this->getObjectName();
-        return xarDDObject::guiMethod($objectName, $methodName, $args, $this->getContext());
+        return xarDDObject::guiMethod($objectName, $methodName, $args, $this->getContext(), $this->getParent());
     }
 
     /**
@@ -164,7 +164,7 @@ trait DataObjectTrait
      */
     public function getObject(array $args = []): ?DataObject
     {
-        return DataObjectFactory::getObject($args, $this->getContext());
+        return DataObjectFactory::getObject($args, $this->getContext(), $this->getParent());
     }
 
     /**
@@ -173,7 +173,7 @@ trait DataObjectTrait
      */
     public function getObjectList(array $args = []): ?DataObjectList
     {
-        return DataObjectFactory::getObjectList($args, $this->getContext());
+        return DataObjectFactory::getObjectList($args, $this->getContext(), $this->getParent());
     }
 
     /**
@@ -193,7 +193,7 @@ trait DataObjectTrait
      */
     public function getObjectInfo(array $args = [])
     {
-        return DataObjectFactory::getObjectInfo($args);
+        return DataObjectFactory::getObjectInfo($args, $this->getParent());
     }
 
     /**
@@ -203,7 +203,7 @@ trait DataObjectTrait
      */
     public function getObjectInterface(array $args = [])
     {
-        return DataObjectFactory::getObjectInterface($args);
+        return DataObjectFactory::getObjectInterface($args, $this->getContext());
     }
 
     /**
@@ -213,7 +213,7 @@ trait DataObjectTrait
      */
     public function getObjects(array $args = [])
     {
-        return DataObjectFactory::getObjects($args);
+        return DataObjectFactory::getObjects($args, $this->getParent());
     }
 
     /**
@@ -223,7 +223,7 @@ trait DataObjectTrait
      */
     public function getObjectID(array $args = [])
     {
-        return DataObjectDescriptor::getObjectID($args);
+        return DataObjectDescriptor::getObjectID($args, $this->getParent());
     }
 
     /**
@@ -232,7 +232,7 @@ trait DataObjectTrait
      */
     public function getObjectDescriptor(array $args = []): DataObjectDescriptor
     {
-        return new DataObjectDescriptor($args);
+        return new DataObjectDescriptor($args, $this->getParent());
     }
 }
 

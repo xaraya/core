@@ -226,7 +226,7 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
      * @param ?Context<string, mixed> $context optional context for the handler call (default = none)
      * @return string|void output of the handler->run() method
      */
-    public function handle(array $args = [], ?Context $context = null)
+    public function handle(array $args = [], ?Context $context = null, $xar = null)
     {
         // set the context before checking any variables
         if (isset($context)) {
@@ -234,7 +234,7 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
         } else {
             $context = $this->getContext();
         }
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         // Set module name in Services Class for templates
         $xar->setModName('object');
         $xar->var()->check('method', $args['method']);
