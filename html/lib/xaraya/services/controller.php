@@ -211,7 +211,7 @@ trait ControllerTrait
         $params['module'] = 'object';
         $params['type'] = $objectName;
         $params['func'] = $methodName;
-        $request = new xarRequest($params);
+        $request = new xarRequest($params, $this->getParent());
         $router = $this->getRouter();
         $request->setRoute($router->getRoute());
 
@@ -745,7 +745,7 @@ trait ControllerTrait
         $params['module'] = $modName;
         $params['type'] = $modType;
         $params['func'] = $funcName;
-        $request = new xarRequest($params);
+        $request = new xarRequest($params, $this->getParent());
         // <chris/> wrt to the problem of xaraya not obeying a particular route
         // when the main entry point, sans params, is accessed...
         // Here's an example using the shorturls setting in base module

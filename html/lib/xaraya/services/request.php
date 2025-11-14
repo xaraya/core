@@ -504,7 +504,7 @@ trait RequestTrait
 
     public function setRequest(mixed $url = null): void
     {
-        $this->request = new xarRequest($url);
+        $this->request = new xarRequest($url, $this->getParent());
     }
 
     /**

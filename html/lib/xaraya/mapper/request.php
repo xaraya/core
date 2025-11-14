@@ -57,9 +57,9 @@ class xarRequest extends xarObject
     /**
      * @param ?string $url
      */
-    public function __construct($url = null)
+    public function __construct($url = null, $xar = null)
     {
-        $xar = $this->getServicesClass();
+        $xar = $this->getServicesClass($xar);
         // Make this load lazily
         //$this->setModule($xar->mod('modules')->getVar('defaultmodule'));
         //$this->setType($xar->mod('modules')->getVar('defaultmoduletype'));
