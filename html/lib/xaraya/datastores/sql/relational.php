@@ -41,9 +41,9 @@ class RelationalDataStore extends SQLDataStore
      * @param mixed $name
      * @param int|string $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      */
-    public function __construct($name = null, $dbConnIndex = 0)
+    public function __construct($name = null, $dbConnIndex = 0, $xar = null)
     {
-        parent::__construct($name, $dbConnIndex);
+        parent::__construct($name, $dbConnIndex, $xar);
 
         /**
          * @deprecated in PHP 7.1.0 and removed in PHP 7.2.0 - see https://www.php.net/manual/en/intro.mcrypt.php

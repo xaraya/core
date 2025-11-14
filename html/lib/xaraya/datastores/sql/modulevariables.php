@@ -28,9 +28,9 @@ class ModuleVariablesDataStore extends RelationalDataStore
     /** @var string */
     public $variablename;
 
-    public function __construct($name = null, $dbConnIndex = 0)
+    public function __construct($name = null, $dbConnIndex = 0, $xar = null)
     {
-        parent::__construct($name, $dbConnIndex);
+        parent::__construct($name, $dbConnIndex, $xar);
         $this->setModvarName($name);
     }
 

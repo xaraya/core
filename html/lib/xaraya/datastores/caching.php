@@ -34,9 +34,9 @@ class CachingDataStore extends BasicDataStore
      * @param ?string $name
      * @param ?string $storage
      */
-    public function __construct($name = null, $storage = null)
+    public function __construct($name = null, $storage = null, $xar = null)
     {
-        parent::__construct($name);
+        parent::__construct($name, $xar);
         $this->storageType = $storage ?? 'apcu';
     }
 

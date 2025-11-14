@@ -41,9 +41,9 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param mixed $name
      * @param int|string $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      */
-    public function __construct($name = null, $dbConnIndex = 0)
+    public function __construct($name = null, $dbConnIndex = 0, $xar = null)
     {
-        parent::__construct($name);
+        parent::__construct($name, $xar);
         $this->dbConnIndex = $dbConnIndex;
         // lazy connection
     }

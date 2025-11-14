@@ -39,9 +39,12 @@ class DDObject extends xarObject implements IDDObject
      * Summary of __construct
      * @param ?string $name
      */
-    public function __construct($name = null)
+    public function __construct($name = null, $xar = null)
     {
         $this->name = $name ?? self::toString();
+        if (isset($xar)) {
+            $this->setServicesClass($xar);
+        }
     }
 
     /**
@@ -162,33 +165,33 @@ class DataStoreFactory extends xarObject
      * @param ?array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB (optional)
      * @return IBasicDataStore
      */
-    public static function &getDataStore($name = '_dynamic_data_', $type = 'data', $storage = null, $dbConnIndex = 0, $dbConnArgs = [])
+    public static function &getDataStore($name = '_dynamic_data_', $type = 'data', $storage = null, $dbConnIndex = 0, $dbConnArgs = [], $xar = null)
     {
         switch ($type) {
             case 'relational':
-                $datastore = new RelationalDataStore(null, $dbConnIndex);
+                $datastore = new RelationalDataStore(null, $dbConnIndex, $xar);
                 break;
             case 'data':
-                $datastore = new VariableTableDataStore($name);
+                $datastore = new VariableTableDataStore($name, 0, $xar);
                 break;
             case 'hook':
-                $datastore = new HookDataStore($name);
+                $datastore = new HookDataStore($name, $xar);
                 break;
             case 'modulevars':
                 // TODO: integrate module variable handling with DD
-                $datastore = new ModuleVariablesDataStore($name);
+                $datastore = new ModuleVariablesDataStore($name, 0, $xar);
                 break;
             case 'none':
-                $datastore = new DummyDataStore($name);
+                $datastore = new DummyDataStore($name, $xar);
                 break;
             case 'cache':
-                $datastore = new CachingDataStore($name, $storage);
+                $datastore = new CachingDataStore($name, $storage, $xar);
                 break;
             case 'external':
                 $datastore = ExternalDataStore::getDataStore($name, $dbConnIndex, $dbConnArgs);
                 break;
             default:
-                $datastore = new VariableTableDataStore($name);
+                $datastore = new VariableTableDataStore($name, 0, $xar);
                 break;
         }
         return $datastore;

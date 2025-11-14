@@ -44,9 +44,10 @@ abstract class ExternalDataStore extends SQLDataStore implements \Stringable
      * @param int|string $dbConnIndex connection index of the external database (if already connected)
      * @param array<string, mixed> $dbConnArgs connection parameters to the external database
      */
-    public function __construct($name = null, $dbConnIndex = '', $dbConnArgs = [])
+    public function __construct($name = null, $dbConnIndex = '', $dbConnArgs = [], $xar = null)
     {
-        parent::__construct($name, $dbConnIndex);
+        // $xar is not used anywhere in external datastores
+        parent::__construct($name, $dbConnIndex, $xar);
         $this->dbConnArgs = $dbConnArgs;
     }
 
@@ -732,6 +733,7 @@ abstract class ExternalDataStore extends SQLDataStore implements \Stringable
             $driver = $dbConnArgs['external'];
             $dbConnIndex = '';
         }
+        // $xar is not used anywhere in external datastores
         $datastore = match ($driver) {
             'dbal' => new DbalDataStore($name, $dbConnIndex, $dbConnArgs),
             'mongodb' => new MongoDBDataStore($name, $dbConnIndex, $dbConnArgs),
