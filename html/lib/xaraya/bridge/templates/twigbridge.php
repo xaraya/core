@@ -45,6 +45,8 @@ use Twig\Loader\LoaderInterface;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
+use Xaraya\Services\ServicesInterface;
+use Xaraya\Services\WithServicesClass;
 use xarConst;
 use sys;
 
@@ -62,6 +64,7 @@ use sys;
 class TwigBridge implements ContextInterface
 {
     use ContextTrait;
+    use WithServicesClass;
 
     /** @var array<string, string> */
     private array $paths = [];
@@ -74,12 +77,16 @@ class TwigBridge implements ContextInterface
      * @param array<string, string> $paths
      * @param array<string, mixed> $options
      * @param ?Context<string, mixed> $context
+     * @param ?ServicesInterface $xar
      */
-    public function __construct(array $paths = [], array $options = [], ?Context $context = null)
+    public function __construct(array $paths = [], array $options = [], ?Context $context = null, $xar = null)
     {
         $this->setPaths($paths);
         $this->setOptions($options);
         $this->setContext($context);
+        if (isset($xar)) {
+            $this->setServicesClass($xar);
+        }
     }
 
     /**
@@ -162,14 +169,16 @@ class TwigBridge implements ContextInterface
      */
     public function addXarayaExtensions()
     {
+        $context = $this->getContext();
         // add context as global variable - @todo do we want this here?
-        $this->twig->addGlobal('context', $this->getContext());
+        $this->twig->addGlobal('context', $context);
 
-        $this->twig->addExtension(new XarayaCoreExtension($this->getContext()));
-        $this->twig->addExtension(new BlocklayoutTagExtension($this->getContext()));
-        $this->twig->addExtension(new DynamicDataTagExtension($this->getContext()));
-        $this->twig->addExtension(new ModuleTagExtension($this->getContext()));
-        $this->twig->addExtension(new PHPOtherExtension($this->getContext()));
+        $xar = $this->getServicesClass();
+        $this->twig->addExtension(new XarayaCoreExtension($context, $xar));
+        $this->twig->addExtension(new BlocklayoutTagExtension($context, $xar));
+        $this->twig->addExtension(new DynamicDataTagExtension($context, $xar));
+        $this->twig->addExtension(new ModuleTagExtension($context, $xar));
+        $this->twig->addExtension(new PHPOtherExtension($context, $xar));
 
         return $this;
     }

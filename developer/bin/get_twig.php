@@ -11,6 +11,7 @@
 
 $baseDir = dirname(__DIR__, 2);
 require_once $baseDir . '/vendor/autoload.php';
+use Xaraya\Bridge\TemplateEngine\TwigConfig;
 use Xaraya\Services\xar;
 chdir($baseDir . '/html');
 
@@ -21,4 +22,4 @@ xar::cache()->init();
 xar::db()->init();
 
 // return Twig environment
-return xarTwigTpl::getTwigEnvironment();
+return TwigConfig::getTwigEnvironment();

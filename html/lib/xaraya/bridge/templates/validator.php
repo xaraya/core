@@ -3,7 +3,6 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\Environment;
-use xarTwigTpl;
 use Exception;
 
 /**
@@ -93,7 +92,7 @@ class TwigValidator
     public function validateDir(string $targetPath)
     {
         $this->basePath = $targetPath;
-        $twig = xarTwigTpl::getTwigEnvironment();
+        $twig = TwigConfig::getTwigEnvironment();
 
         echo "Directory $targetPath:\n";
         $paths = $this->getDirPaths($targetPath);

@@ -16,6 +16,7 @@
 
 namespace Xaraya\Services;
 
+use Xaraya\Bridge\TemplateEngine\TwigConfig;
 use CompiledTemplate;
 use DataPropertyMaster;
 use XarayaCompiler;
@@ -131,6 +132,7 @@ trait TemplatingTrait
     protected $isHeaderContent;
     protected $showPHPCommentBlockInTemplates;
     protected $showTemplateFilenames;
+    protected ?xarTwigTpl $twigTpl = null;
     protected bool $initialized = false;
 
     /**
@@ -215,6 +217,14 @@ trait TemplatingTrait
         $this->getContext()?->setSliceValue(static::SLICE, $varName, $value);
     }
 
+    protected function getTwigTpl()
+    {
+        if (!isset($this->twigTpl)) {
+            $this->twigTpl = new xarTwigTpl($this->getParent());
+        }
+        return $this->twigTpl;
+    }
+
     /**
      * Render output with module template
      * @param string $modName
@@ -236,8 +246,8 @@ trait TemplatingTrait
         }
 
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            if (xarTwigTpl::isModuleSupported($modName)) {
-                return xarTwigTpl::module($modName, $modType, $funcName, $tplData, $templateName);
+            if (TwigConfig::isModuleSupported($modName)) {
+                return $this->getTwigTpl()->module($modName, $modType, $funcName, $tplData, $templateName);
             }
         }
         // Basename of module template is apitype-functioname
@@ -293,8 +303,8 @@ trait TemplatingTrait
         // use name of blocktype as base unless over-ridden
         $tplBase = empty($tplBase) ? $blockType : $tplBase;
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            if (xarTwigTpl::isBlockSupported($tplBase, $modName)) {
-                return xarTwigTpl::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
+            if (TwigConfig::isBlockSupported($tplBase, $modName)) {
+                return $this->getTwigTpl()->block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
             }
         }
         if (!empty($modName)) {
@@ -327,8 +337,8 @@ trait TemplatingTrait
         $tplData['context'] ??= $this->getContext();
 
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            if (xarTwigTpl::isObjectSupported($objectName, $modName)) {
-                return xarTwigTpl::object($modName, $objectName, $tplType, $tplData);
+            if (TwigConfig::isObjectSupported($objectName, $modName)) {
+                return $this->getTwigTpl()->object($modName, $objectName, $tplType, $tplData);
             }
         }
         $xar = $this->getParent();
@@ -375,8 +385,8 @@ trait TemplatingTrait
 
         // @todo check and handle stand-alone properties with module 'auto' + adapt includes path
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            if (xarTwigTpl::isPropertySupported($propertyName, $modName)) {
-                return xarTwigTpl::property($modName, $propertyName, $tplType, $tplData, $tplBase);
+            if (TwigConfig::isPropertySupported($propertyName, $modName)) {
+                return $this->getTwigTpl()->property($modName, $propertyName, $tplType, $tplData, $tplBase);
             }
         }
         $xar = $this->getParent();
@@ -1032,8 +1042,9 @@ trait TemplatingTrait
         }
         $context = $this->getContext();
         if (!empty($context) && !empty($context['twig'])) {
-            if (xarTwigTpl::isThemeSupported($context)) {
-                return xarTwigTpl::renderPage($mainModuleOutput, $pageTemplate, $context);
+            $themeName = $context['theme'] ?? $this->getThemeName();
+            if (TwigConfig::isThemeSupported($themeName)) {
+                return $this->getTwigTpl()->renderPage($mainModuleOutput, $pageTemplate, $context);
             }
         }
 
@@ -1065,8 +1076,9 @@ trait TemplatingTrait
     public function renderBlockBox(array $blockInfo, ?string $templateName = null): string
     {
         if (!empty($blockInfo['context']) && !empty($blockInfo['context']['twig'])) {
-            if (xarTwigTpl::isThemeSupported($blockInfo['context'])) {
-                return xarTwigTpl::renderBlockBox($blockInfo, $templateName);
+            $themeName = $blockInfo['context']['theme'] ?? $this->getThemeName();
+            if (TwigConfig::isThemeSupported($themeName)) {
+                return $this->getTwigTpl()->renderBlockBox($blockInfo, $templateName);
             }
         }
         // look for specific templateName.xt (current > common)

@@ -36,10 +36,14 @@ class XarayaTwigExtension extends AbstractExtension implements ServicesInterface
 
     /**
      * @param ?Context<string, mixed> $context
+     * @param ?ServicesInterface $xar
      */
-    public function __construct(?Context $context = null)
+    public function __construct(?Context $context = null, $xar = null)
     {
         $this->setContext($context);
+        if (isset($xar)) {
+            $this->setStaticServices($xar->getStaticServices());
+        }
         // initialize modname etc. based on context or request
         $this->moduleName = $context['module'] ?? $this->req()->getRequest()->getModule();
         $this->moduleType = $context['modtype'] ?? $this->req()->getRequest()->getType();
