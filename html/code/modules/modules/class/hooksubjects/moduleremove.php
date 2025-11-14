@@ -29,10 +29,10 @@ class ModulesModuleRemoveSubject extends ApiHookSubject
 {
     public $subject = 'ModuleRemove';
 
-    public function __construct($args = [])
+    public function __construct($args = [], $xar = null)
     {
         // pass args to parent constructor, it validates module and extrainfo values
-        parent::__construct($args);
+        parent::__construct($args, $xar);
         // get args populated by constuctor array('objectid', 'extrainfo')
         $args = $this->getArgs();
         // Legacy Module observers expect an objectid with the name of the module

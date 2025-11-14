@@ -147,14 +147,14 @@ class xarEvents extends xarObject implements ixarEvents
      * @param ?Context<string, mixed> $context
      * @return mixed response from subject notify method
     **/
-    public static function notify($event, $args = [], $context = null)
+    public static function notify($event, $args = [], $context = null, $xar = null)
     {
         $info = [];
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         // Attempt to load subject
         try {
             // get info for specified event
-            $info = static::getSubject($event);
+            $info = static::getSubject($event, $xar);
             if (empty($info)) {
                 return;
             }
@@ -165,7 +165,7 @@ class xarEvents extends xarObject implements ixarEvents
                 $context = $xar->getContext();
             }
             // file load takes care of validation for us
-            if (!self::fileLoad($info, $context)) {
+            if (!self::fileLoad($info, $context, $xar)) {
                 return;
             }
             $module = $info['module'];
@@ -174,8 +174,8 @@ class xarEvents extends xarObject implements ixarEvents
                 case 'class':
                     // define class (loadFile already checked it exists)
                     $classname = $info['classname'] ?: ucfirst($module) . $info['event'] . "Subject";
-                    // create subject instance, passing $args from caller
-                    $subject = new $classname($args);
+                    // create subject instance, passing $args from caller + $xar services class
+                    $subject = new $classname($args, $xar);
                     // set context if available in notify call
                     $subject->setContext($context);
                     // get observer info from subject
@@ -184,7 +184,7 @@ class xarEvents extends xarObject implements ixarEvents
                         foreach ($obsinfo as $obs) {
                             // Attempt to load observer
                             try {
-                                if (!self::fileLoad($obs, $context)) {
+                                if (!self::fileLoad($obs, $context, $xar)) {
                                     continue;
                                 }
                                 $obsmod = $obs['module'];
@@ -265,7 +265,7 @@ class xarEvents extends xarObject implements ixarEvents
         // (these are generic listeners that observe every event raised)
         // We only do this if this isn't the generic Event itself...
         if ($event != 'Event') {
-            xarEvents::notify('Event', $info, $context);
+            xarEvents::notify('Event', $info, $context, $xar);
         }
 
         // return the response
@@ -387,7 +387,7 @@ class xarEvents extends xarObject implements ixarEvents
 
         if ($itemtype == static::getSubjectType()) {
             // see if subject is already registered
-            $subject = static::getSubject($event);
+            $subject = static::getSubject($event, $xar);
             // event subjects must be unique! (event, module, itemtype)
             if (!empty($subject)) {
                 if ($subject['module'] == $module) {
@@ -456,7 +456,7 @@ class xarEvents extends xarObject implements ixarEvents
         return $info;
     }
 
-    public static function fileLoad($info, $context = null)
+    public static function fileLoad($info, $context = null, $xar = null)
     {
         extract($info);
 
@@ -467,7 +467,7 @@ class xarEvents extends xarObject implements ixarEvents
         if (empty($event) || !is_string($event) || strlen($event) > 255) {
             $invalid[] = 'event';
         }
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
 
         // Check we have a valid module
         /** @var string $module */
@@ -718,10 +718,10 @@ class xarEvents extends xarObject implements ixarEvents
      * @return mixed array of subject info or bool false
      * used internally by the event system, must not be overloaded
     **/
-    final public static function getSubject($event)
+    final public static function getSubject($event, $xar = null)
     {
         // init the cache, if it isn't already init'ed
-        $subjects = static::getSubjects();
+        $subjects = static::getSubjects($xar);
         if (!isset($subjects[$event])) {
             $subjects[$event] = [];
         }
@@ -734,10 +734,10 @@ class xarEvents extends xarObject implements ixarEvents
      * @return array<mixed>|void containing subjects, indexed by event name
      * used internally by the event system, must not be overloaded
     **/
-    final public static function getSubjects()
+    final public static function getSubjects($xar = null)
     {
         $subjecttype = static::getSubjectType();
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         // Cached event subjects and observers
         $cacheScope = 'Events.Subjects';
         $cacheName = $subjecttype;
@@ -805,8 +805,9 @@ class xarEvents extends xarObject implements ixarEvents
     **/
     public static function getObservers(ixarEventSubject $subject)
     {
+        $xar = $subject->getServicesClass();
         $event = $subject->getSubject();
-        $info = static::getSubject($event);
+        $info = static::getSubject($event, $xar);
         $subjecttype = static::getSubjectType();
         if (empty($info) || $info['itemtype'] != $subjecttype) {
             return [];
@@ -816,7 +817,6 @@ class xarEvents extends xarObject implements ixarEvents
         $cacheScope = 'Events.Observers';
         $cacheName = $observertype;
         $observers = [];
-        $xar = xar::getServicesClass();
         if ($xar->mem()->has($cacheScope, $cacheName)) {
             $observers = $xar->mem()->get($cacheScope, $cacheName);
             if (isset($observers[$event])) {

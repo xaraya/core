@@ -52,12 +52,12 @@ class xarDDObject extends xarObject implements ixarDDObject
      * @return string The output of the method, or raise an exception
      * @throws EmptyParameterException
      */
-    public static function guiMethod($objectName, $methodName = 'view', $args = [], $context = null)
+    public static function guiMethod($objectName, $methodName = 'view', $args = [], $context = null, $xar = null)
     {
         if (empty($objectName)) {
             throw new EmptyParameterException('objectName');
         }
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
 
         // Pass the object name and method to the userinterface class
         $args['object'] = $objectName;
@@ -81,7 +81,7 @@ class xarDDObject extends xarObject implements ixarDDObject
 
 
         $interface = new DataObjectUserInterface($args);
-        return $interface->handle($args, $context);
+        return $interface->handle($args, $context, $xar);
     }
 
     /**

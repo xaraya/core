@@ -89,9 +89,10 @@ class xarHooks extends xarEvents
      */
     public static function getObservers(ixarEventSubject $subject)
     {
+        $xar = $subject->getServicesClass();
         $event = $subject->getSubject();
         $args = $subject->getExtrainfo();
-        $info = static::getSubject($event);
+        $info = static::getSubject($event, $xar);
         if (empty($info)) {
             return;
         }
@@ -99,7 +100,6 @@ class xarHooks extends xarEvents
         $subject_module = $args['module'];
         $subject_itemtype = empty($args['itemtype']) ? 0 : $args['itemtype'];
 
-        $xar = xar::getServicesClass();
         $cacheScope = 'Hooks.Observers';
         $cacheName = $subject_module . '.' . $subject_itemtype;
         $observers = [];

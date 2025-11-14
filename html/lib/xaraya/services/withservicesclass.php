@@ -37,13 +37,26 @@ namespace Xaraya\Services;
  */
 trait WithServicesClass
 {
+    // aligned with CoreServicesTrait if both are used, e.g. DD UtilApi or Library = UserApiTrait + DatabaseTrait
     protected ?StaticServicesClass $xarServices = null;
 
-    public function getServicesClass(): StaticServicesClass
+    /**
+     * Get services class, possibly preset with parent for methods (e.g. xarCSS::getInstance())
+     */
+    public function getServicesClass(?ServicesInterface $xar = null): StaticServicesClass
     {
+        if (isset($xar)) {
+            $this->setServicesClass($xar);
+        }
         if (!isset($this->xarServices)) {
             $this->xarServices = xar::getServicesClass();
         }
         return $this->xarServices;
+    }
+
+    public function setServicesClass(ServicesInterface $xar): void
+    {
+        // set static services from the parent, e.g. UserGui()
+        $this->xarServices = $xar->getStaticServices();
     }
 }

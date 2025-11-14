@@ -19,8 +19,8 @@ class ModulesModApiLoadSubject extends EventSubject implements ixarEventSubject
      *
      * @param string $modName name of loaded api module
     **/
-    public function __construct($modName)
+    public function __construct($modName, $xar = null)
     {
-        parent::__construct($modName);
+        parent::__construct($modName, $xar);
     }
 }

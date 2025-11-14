@@ -19,8 +19,8 @@ class ModulesModInitialiseSubject extends EventSubject implements ixarEventSubje
      *
      * @param string $modName name of initialised module
     **/
-    public function __construct($modName)
+    public function __construct($modName, $xar = null)
     {
-        parent::__construct($modName);
+        parent::__construct($modName, $xar);
     }
 }

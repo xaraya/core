@@ -78,9 +78,12 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * @return void
      * @access public
     **/
-    public function __construct($args = null)
+    public function __construct($args = null, $xar = null)
     {
         $this->setArgs($args);
+        if (isset($xar)) {
+            $this->setServicesClass($xar);
+        }
     }
     /**
      * notify method

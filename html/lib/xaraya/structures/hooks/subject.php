@@ -40,7 +40,7 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
      * @return void
      * @throws BadParameterException
     **/
-    public function __construct($args = [])
+    public function __construct($args = [], $xar = null)
     {
         // The basic premise here is to support legacy hooks using (array('objectid', 'extrainfo'))
         // whilst allowing a more sane approach for hook observers written as classes
@@ -60,7 +60,7 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
             throw new BadParameterException('extrainfo');
         }
 
-        $xar = $this->getServicesClass();
+        $xar = $this->getServicesClass($xar);
         if (empty($module)) {
             if (!empty($extrainfo['module'])) {
                 $module = $extrainfo['module'];
@@ -120,7 +120,7 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
             'extrainfo' => $extrainfo,
         ];
         // Call the parent constructor
-        parent::__construct($args);
+        parent::__construct($args, $xar);
     }
 
     /**

@@ -31,10 +31,10 @@ class ModulesItemNewSubject extends GuiHookSubject
 {
     public $subject = 'ItemNew';
 
-    public function __construct($args = [])
+    public function __construct($args = [], $xar = null)
     {
         // pass args to parent constructor, it validates module and extrainfo values
-        parent::__construct($args);
+        parent::__construct($args, $xar);
         // get args populated by constuctor array('objectid', 'extrainfo')
         $args = $this->getArgs();
         // Item observers expect an objectid, if it isn't valid it's pointless notifying them, bail

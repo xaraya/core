@@ -121,6 +121,11 @@ trait CoreServicesTrait
         return $this->xarServices;
     }
 
+    public function setStaticServices(?StaticServicesClass $xar)
+    {
+        $this->xarServices = $xar;
+    }
+
     /**
      * Summary of getLocalService
      */

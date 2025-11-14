@@ -64,7 +64,7 @@ class HooksHelper extends ServiceClass
         $info['itemid'] ??= null;
         // @todo check if we'll have context here
         $context ??= $this->getContext();
-        return xarHooks::notify($event, $info, $context);
+        return xarHooks::notify($event, $info, $context, $this->getParent());
     }
 
     public function getList($callerModName, $hookScope, $hookAction, $callerItemType = '')
