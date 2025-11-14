@@ -45,7 +45,7 @@ class ViewCsslibsMethod extends MethodClass
         }
         $data['properties'] = $data['object']->getProperties();
 
-        $libobject = xarCSS::getInstance();
+        $libobject = xarCSS::getInstance($this->getParent());
         // CHECKME: is this the right place to do it?
         $libobject->refresh();
 

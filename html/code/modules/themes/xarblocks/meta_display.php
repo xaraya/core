@@ -61,7 +61,7 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
         // determined by the page template, in our current setup compiled too
         // late to pull it in here, this is addressed in the tpl_order
         // scenario, no choice but to leave or delete, leaving it for now
-        $xarmeta = xarMeta::getInstance();
+        $xarmeta = xarMeta::getInstance($this);
         $xarmeta->register([
             'type' => 'http-equiv',
             'value' => 'Content-Type',

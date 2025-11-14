@@ -36,7 +36,7 @@ class DeliverMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $css = xarCSS::getInstance();
+        $css = xarCSS::getInstance($this->getParent());
         return $css->render($args);
     }
 }

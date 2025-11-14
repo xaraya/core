@@ -40,7 +40,7 @@ class RegistermetaMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $meta = xarMeta::getInstance();
+        $meta = xarMeta::getInstance($this->getParent());
         return $meta->register($args);
     }
 }

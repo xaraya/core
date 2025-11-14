@@ -14,6 +14,7 @@
 **/
 
 use Xaraya\Services\xar;
+use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\WithServicesClass;
 
 // use ixarMod;
@@ -93,12 +94,12 @@ class xarCSS extends xarObject
      *
      * @author Chris Powis <crisp@xaraya.com>
      * @access private prevents direct creation of this singleton, use getInstance()
+     * @param ?ServicesInterface $xar
      * @return void
     **/
-
-    private function __construct()
+    private function __construct($xar = null)
     {
-        $xar = $this->getServicesClass();
+        $xar = $this->getServicesClass($xar);
         $xar->log()->debug('xarCSS::__construct: hello world');
         $this->combined   = $xar->mod('themes')->getVar('css.combined');
         $this->compressed = $xar->mod('themes')->getVar('css.compressed');
@@ -193,11 +194,12 @@ class xarCSS extends xarObject
      *
      * @author Chris Powis <crisp@xaraya.com>
      * @access public
+     * @param ?ServicesInterface $xar
      * @return object current instance
      */
-    public static function getInstance()
+    public static function getInstance($xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         if ($xar->mem()->has(self::CACHE_SCOPE, 'instance')) {
             $instance = $xar->mem()->get(self::CACHE_SCOPE, 'instance');
             $xar->log()->info('xarCSS::getInstance: modvars already loaded');
@@ -209,7 +211,7 @@ class xarCSS extends xarObject
             if (empty($instance)) {
                 $c = __CLASS__;
                 // this is the one and only time the __construct() method will be run
-                $instance = new $c();
+                $instance = new $c($xar);
             }
             $xar->mem()->set(self::CACHE_SCOPE, 'instance', $instance);
         }
@@ -312,7 +314,7 @@ class xarCSS extends xarObject
                 $libs[$lib] = 1;
                 // init lib if necessary
                 if (!isset($this->local_libs[$lib])) {
-                    $this->local_libs[$lib] = new xarCSSLib($lib);
+                    $this->local_libs[$lib] = new xarCSSLib($lib, $xar);
                 }
 
                 // refresh lib
@@ -962,12 +964,18 @@ class xarCSSLib extends xarObject
     public $templates;
     public $scripts;
 
-    public function __construct($name)
+    /**
+     * Summary of __construct
+     * @param string $name
+     * @param ?ServicesInterface $xar
+     * @throws \BadParameterException
+     */
+    public function __construct($name, $xar = null)
     {
         if (empty($name)) {
             throw new BadParameterException($name, 'Invalid name "#(1)" for xarCSSLib');
         }
-        $xar = $this->getServicesClass();
+        $xar = $this->getServicesClass($xar);
         // first run, populate the library meta data
         $this->name = $name;
         $this->displayname = ucfirst($this->name);

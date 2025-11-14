@@ -49,7 +49,7 @@ class RegisterMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $css = xarCSS::getInstance();
+        $css = xarCSS::getInstance($this->getParent());
         return $css->register($args);
     }
 }

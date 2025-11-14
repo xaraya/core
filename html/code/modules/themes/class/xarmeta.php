@@ -14,6 +14,7 @@
 **/
 
 use Xaraya\Services\xar;
+use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\WithServicesClass;
 
 /**
@@ -30,12 +31,16 @@ class xarMeta extends xarObject
     private $meta;
 
     // prevent direct creation of this object
-    private function __construct()
+    /**
+     * Summary of __construct
+     * @param ?ServicesInterface $xar
+     */
+    private function __construct($xar = null)
     {
         // Get list of tags from meta block and populate queue
         // NOTE: we CAN'T do this in the meta block when it's rendered, it's too
         // late to cater for content appended dynamically by other xar:meta tags
-        $xar = $this->getServicesClass();
+        $xar = $this->getServicesClass($xar);
         $meta = @unserialize($xar->mod('themes')->getVar('meta.tags') ?? '');
         if (!empty($meta)) {
             foreach ($meta as $tag) {
@@ -49,17 +54,18 @@ class xarMeta extends xarObject
      *
      * @author Chris Powis <crisp@xaraya.com>
      * @access public
+     * @param ?ServicesInterface $xar
      * @return object current instance
      *
     **/
-    public static function getInstance()
+    public static function getInstance($xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         if ($xar->mem()->has(self::CACHE_SCOPE, 'instance')) {
             $instance = $xar->mem()->get(self::CACHE_SCOPE, 'instance');
         } else {
             $c = __CLASS__;
-            $instance = new $c();
+            $instance = new $c($xar);
             $xar->mem()->set(self::CACHE_SCOPE, 'instance', $instance);
         }
         return $instance;
