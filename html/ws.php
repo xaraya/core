@@ -32,13 +32,6 @@ function xarWSLoader()
     set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 
     /**
-     * Set up caching
-     * Note: this happens first so we can serve cached pages to first-time visitors
-     *       without loading the core
-     */
-    xar::cache()->init();
-
-    /**
      * Load the Xaraya core
      */
     xar::load();
@@ -362,7 +355,6 @@ function xarModernWebServices(string $type)
             require_once dirname(__DIR__) . '/vendor/xaraya/webhooks/public/index.php';
             return;
         case 'htmx':
-            xar::cache()->init();
             // try out request context class
             //xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
             // try out session context class

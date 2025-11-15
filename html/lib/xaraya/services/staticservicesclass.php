@@ -21,6 +21,7 @@ use Xaraya\Requests\RequestInterface as RequestFacade;
 use Xaraya\Sessions\SessionInterface as SessionFacade;
 use xarConst;
 use xarCore;
+use Exception;
 
 /**
  * Core Services for static classes (WIP)

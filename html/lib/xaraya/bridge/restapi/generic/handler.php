@@ -15,7 +15,7 @@
 namespace Xaraya\Bridge\RestAPI;
 
 use Xaraya\Authentication\AuthToken;
-use Xaraya\Services\xar;
+use ixarUser;
 use xarRoles;
 use UnauthorizedOperationException;
 
@@ -34,9 +34,10 @@ class GenericAPIHandler extends RestAPIHandler
     public function whoami($args = [])
     {
         $userId = $this->checkUser();
-        //return array('id' => xar::user()->getVar('id'), 'name' => xar::user()->getVar('name'));
-        xar::mod()->init();
-        xar::user()->init();
+        $xar = $this->getServicesClass();
+        //return array('id' => $xar->user()->getVar('id'), 'name' => $xar->user()->getVar('name'));
+        $xar->mod()->init();
+        $xar->user()->init();
         $role = xarRoles::getRole($userId);
         $user = $role->getFieldValues();
         $context = $this->getContext();
@@ -54,9 +55,10 @@ class GenericAPIHandler extends RestAPIHandler
     public function showContext($args = [])
     {
         $context = $this->getContext();
-        $userId = $context->getUserId();
+        $xar = $this->getServicesClass();
+        $userId = $context->getUserId($xar);
         // return restricted version for non-site admin
-        if (empty($userId) || !xar::user($userId)->isSiteAdmin()) {
+        if (empty($userId) || !$xar->user($userId)->isSiteAdmin()) {
             return ['userId' => $userId, 'error' => 'Restricted to site admin'];
         }
         $context['args'] ??= $args;
@@ -95,13 +97,14 @@ class GenericAPIHandler extends RestAPIHandler
             throw new UnauthorizedOperationException();
         }
         $context = $this->getContext();
-        //xar::session()->init();
-        xar::mod()->init();
-        xar::user()->init();
-        // @checkme unset xarSession role_id if needed, otherwise xar::user()->logIn will hit xar::user()->isLoggedIn first!?
+        $xar = $this->getServicesClass();
+        //$xar->session()->init();
+        $xar->mod()->init();
+        $xar->user()->init();
+        // @checkme unset xarSession role_id if needed, otherwise $xar->user()->logIn will hit $xar->user()->isLoggedIn first!?
         // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
-        $userId = xar::mod()->apiFunc('authsystem', 'user', 'authenticate_user', $args['input']);
-        if (empty($userId) || $userId == xar::user()::AUTH_FAILED) {
+        $userId = $xar->mod()->apiFunc('authsystem', 'user', 'authenticate_user', $args['input']);
+        if (empty($userId) || $userId == ixarUser::AUTH_FAILED) {
             if (!headers_sent()) {
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
                 header('WWW-Authenticate: Token realm="Xaraya Site Login"');

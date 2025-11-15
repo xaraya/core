@@ -32,9 +32,9 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
     /** @var Memcache */
     public $memcache   = null;
 
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $xar = null)
     {
-        parent::__construct($args);
+        parent::__construct($args, $xar);
 
         if (!empty($args['host'])) {
             $this->host = $args['host'];

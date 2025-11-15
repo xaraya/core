@@ -57,7 +57,7 @@ class xarCache_Storage extends xarObject
      *     object  $provider an instantiated Doctrine CacheProvider (for doctrine)
      * @return ixarCache_Storage the specified cache storage
      */
-    public static function getCacheStorage(array $args = [])
+    public static function getCacheStorage(array $args = [], $xar = null)
     {
         if (empty($args['storage'])) {
             $args['storage'] = 'filesystem';
@@ -100,7 +100,7 @@ class xarCache_Storage extends xarObject
                 $classname = 'xarCache_FileSystem_Storage';
                 break;
         }
-        return new $classname($args);
+        return new $classname($args, $xar);
     }
 
     /**
@@ -109,8 +109,9 @@ class xarCache_Storage extends xarObject
      * @param array<string, mixed> $args
      * @todo using an args array here is taking the easy way out, lets define a proper interface
      */
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $xar = null)
     {
+        $this->setServicesClass($xar);
         if (!empty($args['type'])) {
             $this->type = strtolower($args['type']);
         }

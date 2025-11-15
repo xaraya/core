@@ -84,9 +84,7 @@ class TwigBridge implements ContextInterface
         $this->setPaths($paths);
         $this->setOptions($options);
         $this->setContext($context);
-        if (isset($xar)) {
-            $this->setServicesClass($xar);
-        }
+        $this->setServicesClass($xar);
     }
 
     /**

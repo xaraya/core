@@ -845,7 +845,7 @@ trait CachingTrait
      */
     public function getStorage(array $args = []): ixarCache_Storage
     {
-        return xarCache_Storage::getCacheStorage($args);
+        return xarCache_Storage::getCacheStorage($args, $this->getParent());
     }
 
     /**

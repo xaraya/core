@@ -91,6 +91,11 @@ abstract class ConnectionCommon
         }
         return $this->xarLog;
     }
+
+    public function setLog($xarLog)
+    {
+        $this->xarLog = $xarLog;
+    }
     /* END XARAYA MODIFICATION */
 
     /**

@@ -14,10 +14,13 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
 **/
 
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Services\xar;
 
 class BlockLayoutXSLTProcessor extends xarObject
 {
+    use WithServicesClass;
+
     /** @var ?XSLTProcessor */
     protected $xslProc = null;    // Object representing the processor.
     /** @var ?DOMDocument */
@@ -36,8 +39,9 @@ class BlockLayoutXSLTProcessor extends xarObject
      * Summary of __construct
      * @param ?string $xslFile
      */
-    public function __construct($xslFile = null)
+    public function __construct($xslFile = null, $xar = null)
     {
+        $this->setServicesClass($xar);
         // Set up the xsl processor
         $this->xslProc = new XSLTProcessor();
         $this->xslProc->registerPHPFunctions();
@@ -76,24 +80,25 @@ class BlockLayoutXSLTProcessor extends xarObject
      */
     protected function setSourceDocument(&$xml)
     {
-        xar::log()->debug("XSL: Creating a DOM document for the template code");
+        $xar = $this->getServicesClass();
+        $xar->log()->debug("XSL: Creating a DOM document for the template code");
         $this->xmlDoc = new DOMDocument();
         // Setting this to false makes it 2 times faster, what do we lose?
         $this->xmlDoc->resolveExternals = false;
         // We're still a long way from validating
         // $this->xmlDoc->validateOnParse = true;
         $file = $this->xmlFile ?? 'unknown';
-        xar::log()->debug("XSL: Loading the template code");
+        $xar->log()->debug("XSL: Loading the template code");
         $this->xmlDoc->loadXML($xml);
 
         // Set up additional parameters related to the input
         // @todo wrong here.
         if (isset($this->xmlFile)) {
-            xar::log()->debug("XSL: Adding parameters to the processor");
+            $xar->log()->debug("XSL: Adding parameters to the processor");
             // Set up the parameters
             $this->xslProc->setParameter('', 'bl_filename', basename($this->xmlFile));
             $this->xslProc->setParameter('', 'bl_dirname', dirname($this->xmlFile));
-            $this->xslProc->setParameter('', 'bl_doctype', xar::tpl()->getDocType());
+            $this->xslProc->setParameter('', 'bl_doctype', $xar->tpl()->getDocType());
         }
     }
 
@@ -125,14 +130,15 @@ class BlockLayoutXSLTProcessor extends xarObject
      */
     public function importStyleSheet($xslDoc)
     {
-        xar::log()->debug("XSL: Importing the stylesheet");
+        $xar = $this->getServicesClass();
+        $xar->log()->debug("XSL: Importing the stylesheet");
         if (!$this->xslProc->importStyleSheet($xslDoc)) {
-            $halt = xar::mls()->translate('Could not load the stylesheet #(1)', $xslDoc->saveXML());
+            $halt = $xar->mls()->translate('Could not load the stylesheet #(1)', $xslDoc->saveXML());
             echo $halt;
             xarCore::exit();
             return;
         }
-        xar::log()->debug("XSL: The stylesheet was successfully imported");
+        $xar->log()->debug("XSL: The stylesheet was successfully imported");
     }
 
     /**
@@ -154,12 +160,13 @@ class BlockLayoutXSLTProcessor extends xarObject
      */
     public function transformToXML($xmlDoc)
     {
+        $xar = $this->getServicesClass();
         $transform = null;
-        xar::log()->debug("XSL: Running the transform to XML");
+        $xar->log()->debug("XSL: Running the transform to XML");
         try {
             $transform = $this->xslProc->transformToXML($xmlDoc);
         } catch (Exception $e) {
-            xar::log()->warning("XSL: huh? " . $e->getMessage());
+            $xar->log()->warning("XSL: huh? " . $e->getMessage());
         }
         return $transform;
     }
@@ -171,7 +178,8 @@ class BlockLayoutXSLTProcessor extends xarObject
      */
     public function transformToDoc($xmlNode)
     {
-        xar::log()->debug("XSL: Running the transform to Doc");
+        $xar = $this->getServicesClass();
+        $xar->log()->debug("XSL: Running the transform to Doc");
         return $this->xslProc->transformToDoc($xmlNode);
     }
 
@@ -182,10 +190,11 @@ class BlockLayoutXSLTProcessor extends xarObject
      */
     public function transform(&$xml)
     {
+        $xar = $this->getServicesClass();
         // Save the original XML
         $this->origXml = $xml;
 
-        xar::log()->debug("XSL: Running the preprocess code");
+        $xar->log()->debug("XSL: Running the preprocess code");
         // Preprocess it.
         $this->preProcess();
 
@@ -193,17 +202,17 @@ class BlockLayoutXSLTProcessor extends xarObject
         $this->setSourceDocument($this->prepXml);
 
         // Transform it
-        xar::log()->debug("XSL: Running the XML transform");
+        $xar->log()->debug("XSL: Running the XML transform");
         xarDebug::setExceptionHandler(['ExceptionHandlers','defaulthandler']);
         // What should we initialize $result to?
         try {
             $this->postXml = $this->transformToXML($this->xmlDoc) ?? '';
         } catch (Exception $e) {
-            xar::log()->warning("XSL: rolling");
+            $xar->log()->warning("XSL: rolling");
         }
 
         // Postprocess it
-        xar::log()->debug("XSL: Running the postprocess code");
+        $xar->log()->debug("XSL: Running the postprocess code");
         $this->postProcess();
         return $this->postXml;
     }

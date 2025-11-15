@@ -32,6 +32,7 @@ use Xaraya\Bridge\GraphQL\Types\GraphQLTypes;
 use Xaraya\Caching\CacheInterface;
 use Xaraya\Caching\CacheTrait;
 use Xaraya\Context\RequestContext;
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
@@ -61,6 +62,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     use ContextTrait;
     use TimerTrait;  // activate with self::enableTimer(true)
     use CacheTrait;  // activate with self::enableCache(true)
+    use WithServicesClass;
 
     /** @var array<string, mixed> */
     public static $config = [];
@@ -78,11 +80,14 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     public static bool $cacheOperation = false;
     public static int $queryComplexity = 0;
     public static int $queryDepth = 0;
+    protected static $fixedServices;
 
-    public function __construct()
+    public function __construct($xar = null)
     {
+        $xar = $this->getServicesClass($xar);
         // use request context for query params etc.
-        xar::req()->setRequestClass(RequestContext::class);
+        $xar->req()->setRequestClass(RequestContext::class);
+        self::$fixedServices = $xar;
     }
 
     /**
@@ -389,21 +394,25 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function setRequestContext(&$request = null)
     {
+        $xar = $this->getServicesClass();
         // $request from RoutingBridge overrides any existing context here
         if (isset($request)) {
             $context = ContextFactory::fromRequest($request, __METHOD__);
             // Set context for core services here first
+            //xar::setServicesContext($context);
+            $xar->setContext($context);
             xar::setServicesContext($context);
         } elseif (empty($this->getContext())) {
             $context = ContextFactory::fromGlobals(__METHOD__);
             // Set context for core services here first
-            xar::setServicesContext($context);
+            //xar::setServicesContext($context);
+            $xar->setContext($context);
         } else {
             $context = $this->getContext();
             // Assume context for core services is already set here
         }
         // Initialize server - not really needed since xar::req()->getInstance() is on demand
-        //xar::req()->init();
+        //$xar->req()->init();
         return $context;
     }
 
@@ -475,7 +484,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public static function checkUser($context)
     {
-        return $context->getUserId();
+        return $context->getUserId(self::$fixedServices);
     }
 
     /**

@@ -12,6 +12,7 @@ final class BridgeRequestsTest extends TestCase
 {
     protected static Psr17Factory $psr17Factory;
     protected static ServerRequestCreator $requestCreator;
+    protected static $xarServices;
 
     public static function setUpBeforeClass(): void
     {
@@ -20,6 +21,7 @@ final class BridgeRequestsTest extends TestCase
         static::$psr17Factory = $psr17Factory;
         static::$requestCreator = $requestCreator;
         xar::ctl()->setCallback('buildUri', null);
+        static::$xarServices = xar::getServicesClass();
     }
 
     protected function getServerVars()
@@ -189,7 +191,7 @@ final class BridgeRequestsTest extends TestCase
 
         $params = ['object' => 'sample'];
         $context = new Xaraya\Context\Context(['source' => __METHOD__]);
-        $handler = new DataObjectGuiHandler();
+        $handler = new DataObjectGuiHandler(static::$xarServices);
         $handler->setContext($context);
         $output = $handler->runDataObjectRequest($params);
         $output = preg_replace('/<!--.*?-->/s', '', $output);
@@ -212,7 +214,7 @@ final class BridgeRequestsTest extends TestCase
 
         $params = ['object' => 'sample'];
         $context = null;
-        $handler = new DataObjectApiHandler();
+        $handler = new DataObjectApiHandler(static::$xarServices);
         $handler->setContext($context);
         $output = $handler->runDataObjectRequest($params);
         if (!file_exists($filename)) {

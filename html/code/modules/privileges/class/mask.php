@@ -17,10 +17,13 @@
  * @access  public
 */
 
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Services\xar;
 
 class xarMask extends xarObject
 {
+    use WithServicesClass;
+
     public const PRIVILEGES_PRIVILEGETYPE = 2;
     public const PRIVILEGES_MASKTYPE = 3;
 
@@ -41,6 +44,21 @@ class xarMask extends xarObject
     public $acltable;
     public $realmstable;
     public $modulestable;
+    public static $moduleIds = [];
+
+    protected function initialize($xar = null)
+    {
+        if (!empty($this->privilegestable)) {
+            return;
+        }
+        $xartable = $xar->db()->getTables();
+        $this->privilegestable = $xartable['privileges'];
+        $this->privmemberstable = $xartable['privmembers'];
+        $this->rolestable = $xartable['roles'];
+        $this->acltable = $xartable['security_acl'];
+        $this->realmstable = $xartable['security_realms'];
+        $this->modulestable = $xartable['modules'];
+    }
 
     /**
      * xarMask: constructor for the class
@@ -52,17 +70,12 @@ class xarMask extends xarObject
      * @param   array of values
      * @return  void
     */
-    public function __construct($pargs = [])
+    public function __construct($pargs = [], $xar = null)
     {
         extract($pargs);
 
-        $xartable = xar::db()->getTables();
-        $this->privilegestable = $xartable['privileges'];
-        $this->privmemberstable = $xartable['privmembers'];
-        $this->rolestable = $xartable['roles'];
-        $this->acltable = $xartable['security_acl'];
-        $this->realmstable = $xartable['security_realms'];
-        $this->modulestable = $xartable['modules'];
+        $xar = $this->getServicesClass($xar);
+        $this->initialize($xar);
 
         $this->id           = isset($id) ? (int) $id : 0;
         $this->name         = $name ?? 'EmptyMask';
@@ -120,10 +133,11 @@ class xarMask extends xarObject
             $thisinstance = strtolower($this->getInstance());
             $instancearray = $this->getInstanceArray($thisinstance);
 
+            $xar = $this->getServicesClass();
             // Cater to the myself role
             $normalinstance = [];
             foreach ($instancearray as $key => $value) {
-                $normalinstance[$key] = $value == 'myself' ? xar::session()->getUserId() : $value;
+                $normalinstance[$key] = $value == 'myself' ? $xar->session()->getUserId() : $value;
             }
 
             $normalform['instance']   = $normalinstance;
@@ -241,8 +255,9 @@ class xarMask extends xarObject
         } else {
             $p2 = $mask->normalize();
         }
+        $xar = $this->getServicesClass();
         // match realm. bail if no match.
-        switch (xar::mod('privileges')->getVar('realmcomparison')) {
+        switch ($xar->mod('privileges')->getVar('realmcomparison')) {
             case "contains":
                 $fails = $p1[1] != $p2[1];
                 break;
@@ -359,8 +374,12 @@ class xarMask extends xarObject
             $this->module_id = xarSecurity::PRIVILEGES_ALL;
         } elseif (($var === null) || (strtolower($var ?? '') == 'empty')) {
             $this->module_id = null;
+        } elseif (isset(self::$moduleIds[$var])) {
+            $this->module_id = self::$moduleIds[$var];
         } else {
-            $this->module_id = xar::mod()->getID($var);
+            $xar = $this->getServicesClass();
+            self::$moduleIds[$var] = $xar->mod()->getID($var);
+            $this->module_id = self::$moduleIds[$var];
         }
     }
     public function setComponent($var)

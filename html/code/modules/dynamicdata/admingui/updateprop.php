@@ -79,7 +79,7 @@ class UpdatepropMethod extends MethodClass
                 if (!empty($itemtype)) {
                     $name .= '_' . $itemtype;
                 }
-                $objectid = DataObjectFactory::createObject(
+                $objectid = $this->data()->createObject(
                     ['moduleid' => $module_id,
                         'itemtype' => $itemtype,
                         'name' => $name,
@@ -199,7 +199,7 @@ class UpdatepropMethod extends MethodClass
         }
 
         // CHECKME: flush the variable cache if necessary
-        DataObjectFactory::flushVariableCache(['objectid' => $objectid]);
+        DataObjectFactory::flushVariableCache(['objectid' => $objectid], $this->getParent());
 
         if ($isprimary) {
             $modinfo = $this->mod()->getInfo($module_id);

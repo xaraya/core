@@ -67,6 +67,14 @@ trait ParentServicesTrait
     }
 
     /**
+     * Set static services class for shared service instances
+     */
+    public function setStaticServices(?StaticServicesClass $xar): void
+    {
+        $this->getParent()->setStaticServices($xar);
+    }
+
+    /**
      * Get local service by key
      */
     public function getLocalService(string $key): ServiceInterface|callable|null

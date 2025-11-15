@@ -43,9 +43,11 @@ namespace Xaraya\Modules;
 use Xaraya\Context\Context;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
+use Xaraya\Services\ServicesInterface;
+use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\xar;
 use sys;
 use Exception;
-use Xaraya\Services\xar;
 
 /**
  * For documentation purposes only - available via ModuleTrait
@@ -81,6 +83,7 @@ interface ModuleInterface extends ContextInterface
 trait ModuleTrait
 {
     use ContextTrait;
+    use WithServicesClass;
 
     protected string $moduleName;          // set in constructor by xar::mod()->getModule()
 
@@ -91,11 +94,13 @@ trait ModuleTrait
 
     /**
      * @param ?Context<string, mixed> $context
+     * @param ?ServicesInterface $xar
      */
-    public function __construct(string $modName, ?Context $context = null)
+    public function __construct(string $modName, ?Context $context = null, $xar = null)
     {
         $this->setModName($modName);
         $this->setContext($context);
+        $this->setServicesClass($xar);
         $this->configure();
     }
 
@@ -127,7 +132,7 @@ trait ModuleTrait
      */
     protected function createComponent(string $className): ModuleServicesInterface
     {
-        return new $className($this->getModName(), $this, $this->context);
+        return new $className($this->getModName(), $this, $this->context, $this->getServicesClass());
     }
 
     /**

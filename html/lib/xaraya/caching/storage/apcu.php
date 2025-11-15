@@ -19,9 +19,9 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
     public ?string $lastkey = null;
     public mixed $value = null;
 
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $xar = null)
     {
-        parent::__construct($args);
+        parent::__construct($args, $xar);
         $this->storage = 'apcu';
     }
 

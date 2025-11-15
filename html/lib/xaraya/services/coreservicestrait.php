@@ -29,6 +29,7 @@ interface CoreServicesInterface extends ContextInterface
     /** @param array<string, mixed> $args */
     public function setCoreServices(array $args = []): void;
     public function getStaticServices(): StaticServicesClass;
+    public function setStaticServices(?StaticServicesClass $xar): void;
     public function getLocalService(string $key): ServiceInterface|callable|null;
     public function setLocalService(string $key, ServiceInterface|callable $service): void;
     public function hasLocalService(string $key): bool;
@@ -121,7 +122,10 @@ trait CoreServicesTrait
         return $this->xarServices;
     }
 
-    public function setStaticServices(?StaticServicesClass $xar)
+    /**
+     * Set the static services class instance for this request
+     */
+    public function setStaticServices(?StaticServicesClass $xar): void
     {
         $this->xarServices = $xar;
     }

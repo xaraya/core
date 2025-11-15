@@ -122,12 +122,16 @@ trait ModuleServicesTrait
      * Summary of __construct
      * @param TModule $parent
      * @param ?Context<string, mixed> $context
+     * @param ?ServicesInterface $xar
      */
-    public function __construct(string $modName, ?ModuleInterface $parent = null, ?Context $context = null)
+    public function __construct(string $modName, ?ModuleInterface $parent = null, ?Context $context = null, $xar = null)
     {
         $this->setModName($modName);
         $this->setModule($parent);
         $this->setContext($context);
+        if (isset($xar)) {
+            $this->setStaticServices($xar->getStaticServices());
+        }
         // call configure() after setting the context
         $this->configure();
     }

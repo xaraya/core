@@ -61,6 +61,7 @@ trait DataPropertyServicesTrait
         if (!isset(static::$dummyObject)) {
             // needed for installation after phase 5
             $descriptor = new VirtualObjectDescriptor(['name' => 'dummy']);
+            // not using $xar = $this->getParent() here - we're still creating it
             static::$dummyObject = new DataObject($descriptor);
         }
         $object = clone static::$dummyObject;

@@ -354,7 +354,11 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
             'level' => $access['level'],
         ];
         if (!isset(self::$access_property)) {
-            self::$access_property = DataPropertyMaster::getProperty(['name' => 'access']);
+            if (method_exists($this, 'getStaticServices')) {
+                self::$access_property = DataPropertyMaster::getProperty(['name' => 'access'], $this->getStaticServices());
+            } else {
+                self::$access_property = DataPropertyMaster::getProperty(['name' => 'access']);
+            }
         }
         return self::$access_property->check($args);
     }

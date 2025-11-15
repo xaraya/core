@@ -86,12 +86,12 @@ class ShowusersMethod extends MethodClass
 
         // Check if we already have a selection
         $q = new Query();
-        $q = $q->sessiongetvar('rolesquery');
+        $q = $q->sessiongetvar('rolesquery', $this->getParent());
         $q = '';
 
         if (empty($q) || isset($reload)) {
             $xartable = $this->db()->getTables();
-            $q = new Query('SELECT');
+            $q = new Query('SELECT', '', '', 0, $this->getParent());
             $q->addtable($xartable['roles'], 'r');
             $q->addfields(['r.id AS id','r.name AS name']);
 
@@ -121,7 +121,7 @@ class ShowusersMethod extends MethodClass
             }
 
             // Save the query so we can reuse it somewhere
-            $q->sessionsetvar('rolesquery');
+            $q->sessionsetvar('rolesquery', $this->getParent());
         }
 
         // Sort ye

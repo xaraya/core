@@ -108,8 +108,9 @@ class ModuleAPIHandler extends RestAPIHandler
         if (empty($func)) {
             return ['method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
-        xar::mod()->init();
-        xar::user()->init();
+        $xar = $this->getServicesClass();
+        $xar->mod()->init();
+        $xar->user()->init();
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = $this->checkUser();
@@ -150,7 +151,7 @@ class ModuleAPIHandler extends RestAPIHandler
             }
         }
         // context for core services is set in handler
-        return xar::mod()->apiFunc($func['module'], $func['type'], $func['name'], $params);
+        return $xar->mod()->apiFunc($func['module'], $func['type'], $func['name'], $params);
     }
 
     /**
@@ -175,8 +176,9 @@ class ModuleAPIHandler extends RestAPIHandler
         if (empty($args['input'])) {
             $args['input'] = [];
         }
-        xar::mod()->init();
-        xar::user()->init();
+        $xar = $this->getServicesClass();
+        $xar->mod()->init();
+        $xar->user()->init();
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = $this->checkUser();
@@ -207,7 +209,7 @@ class ModuleAPIHandler extends RestAPIHandler
             $params = array_merge($params, $func['args']);
         }
         // context for core services is set in handler
-        return xar::mod()->apiFunc($func['module'], $func['type'], $func['name'], $params);
+        return $xar->mod()->apiFunc($func['module'], $func['type'], $func['name'], $params);
     }
 
     /**

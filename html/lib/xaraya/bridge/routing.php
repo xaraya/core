@@ -6,7 +6,6 @@
  * require_once dirname(__DIR__).'/vendor/autoload.php';
  * use Xaraya\Services\xar;
  * sys::init();
- * xar::cache()->init();
  * xar::load(xarCore::SYSTEM_USER);
  *
  * // use some routing bridge
@@ -304,8 +303,8 @@ class RoutingBridge extends BasicBridge
                 // @todo instantiate handler[0] for subclasses like RoutingApiBridge?
                 $handler[0] = new $handler[0]();
             } elseif (is_subclass_of($handler[0], BasicBridge::class)) {
-                // @todo instantiate handler[0] for subclasses of BasicRequest with router?
-                $handler[0] = new $handler[0]($this->getRouter());
+                // @todo instantiate handler[0] for subclasses of BasicRequest with $xar?
+                $handler[0] = new $handler[0]($this->getServicesClass());
             } else {
                 // leave it for someone else to take care of...
             }
@@ -378,7 +377,7 @@ class RoutingBridge extends BasicBridge
      */
     public function getRestApiHandler()
     {
-        $this->restAPIHandler ??= new RestAPIHandler();
+        $this->restAPIHandler ??= new RestAPIHandler($this->getServicesClass());
         return $this->restAPIHandler;
     }
 
@@ -430,7 +429,7 @@ class RoutingBridge extends BasicBridge
      */
     public function getGraphQLHandler()
     {
-        $this->graphQLHandler ??= new GraphQLHandler();
+        $this->graphQLHandler ??= new GraphQLHandler($this->getServicesClass());
         return $this->graphQLHandler;
     }
 

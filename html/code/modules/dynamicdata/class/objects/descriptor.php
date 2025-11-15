@@ -63,6 +63,7 @@ class DataObjectDescriptor extends ObjectDescriptor
      */
     public static function getObjectID(array $args = [], $xar = null)
     {
+        $xar ??= xar::getServicesClass();
         // @todo remove overlap with DataObjectFactory::*getObjectInfo()
         $row = static::findObject($args, $xar);
 
@@ -80,7 +81,7 @@ class DataObjectDescriptor extends ObjectDescriptor
         // object property is called module_id now instead of moduleid for whatever reason !?
         $args['module_id'] = $args['moduleid'];
         if (xarCore::isLoaded(xarCore::SYSTEM_TEMPLATES) && empty($args['tplmodule'])) {
-            $args['tplmodule'] = xar::mod()->getName($args['moduleid']);
+            $args['tplmodule'] = $xar->mod()->getName($args['moduleid']);
         }
         if (empty($args['template'])) {
             $args['template'] = $args['name'];

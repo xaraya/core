@@ -59,7 +59,7 @@ class SessionContext implements ContextInterface, SessionInterface
      * @param ?Context<string, mixed> $context
      * @return void
      **/
-    public function __construct($args = [], $context = null)
+    public function __construct($args = [], $context = null, $xar = null)
     {
         $this->args = $args;
         $this->context = $context;

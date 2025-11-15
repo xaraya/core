@@ -33,7 +33,7 @@ class DeleteobjectMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $objectid = DataObjectFactory::deleteObject($args);
+        $objectid = $this->data()->deleteObject($args);
         return $objectid;
     }
 }

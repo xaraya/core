@@ -269,6 +269,14 @@ class xarCore extends xarObject
         self::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT, $xar);
 
         /**
+         * Set up caching
+         * Note: this happens first so we can serve cached pages to first-time visitors
+         *       without loading the full core
+         */
+        // Note: we may already exit here if session-less page caching is enabled
+        $xar->cache()->init();
+
+        /**
          * Load system variables
         **/
 
@@ -299,22 +307,9 @@ class xarCore extends xarObject
             $whatToLoad ^= self::BIT_DATABASE;
         }
 
-        /**
-         * Start autoload
-         *
-         * Note: we only need this for variable caching for now, but if we generalize autoloading
-         *       of Xaraya classes someday, we could initialize this earlier, e.g. in bootstrap ?
-         */
-        /* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
-        $xar->cache()->init();
-
         // Check that the database was installed before we activate variable caching (we don't need to load it yet)
         if ($xar->sysConfig()->getVar('DB.Installation') != 3) {
             $xar->cache()->variableCache = null;
-        }
-
-        if ($xar->cache()->withVariables()) {
-            // already using autoload
         }
 
         /**

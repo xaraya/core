@@ -45,17 +45,18 @@ trait WithServicesClass
      */
     public function getServicesClass(?ServicesInterface $xar = null): StaticServicesClass
     {
-        if (isset($xar)) {
-            $this->setServicesClass($xar);
-        }
+        $this->setServicesClass($xar);
         if (!isset($this->xarServices)) {
             $this->xarServices = xar::getServicesClass();
         }
         return $this->xarServices;
     }
 
-    public function setServicesClass(ServicesInterface $xar): void
+    public function setServicesClass(?ServicesInterface $xar): void
     {
+        if (!isset($xar)) {
+            return;
+        }
         // set static services from the parent, e.g. UserGui()
         $this->xarServices = $xar->getStaticServices();
     }

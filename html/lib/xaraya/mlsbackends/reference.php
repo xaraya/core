@@ -146,7 +146,7 @@ abstract class xarMLS__ReferencesBackend extends xarObject implements ITranslati
                 // CHECKME: save $this->domainlocation here instead ?
                 //$this->domaincache["$dnType.$dnName"] = true;
                 return true;
-            } elseif (xar::mls()->getBackendName() == 'xml2php') {
+            } elseif ($this::class == xarMLS__XML2PHPTranslationsBackend::class) {
                 $this->locale = $locale;
                 // CHECKME: save $this->domainlocation here instead ?
                 //$this->domaincache["$dnType.$dnName"] = true;

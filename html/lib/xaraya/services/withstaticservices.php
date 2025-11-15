@@ -43,6 +43,7 @@ trait WithStaticServices
     public static $storageClass = StaticServiceStorage::class;
     /** @var ?ServiceStorageInterface */
     protected static $serviceStorage = null;  // Access core services with static methods
+    public static $callers = [];
 
     /**
      * Set the storage class and reset the storage - see reactphp.php or swoole coroutine

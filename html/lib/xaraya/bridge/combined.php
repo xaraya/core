@@ -8,7 +8,6 @@
  * require_once dirname(__DIR__).'/vendor/autoload.php';
  * use Xaraya\Services\xar;
  * sys::init();
- * xar::cache()->init();
  * xar::load(xarCore::SYSTEM_USER);
  *
  * // use some PSR-7 factory
@@ -74,6 +73,7 @@ class RoutingHandler implements MiddlewareInterface, RequestHandlerInterface
     {
         $this->responseUtil = new ResponseUtil($responseFactory, $options);
         $this->bridge = new RoutingBridge();
+        $this->bridge->setServicesClass(xar::getServicesClass());
         if (empty($router)) {
             $router = $this->getRouter();
         }

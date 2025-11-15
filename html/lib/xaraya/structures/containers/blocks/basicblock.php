@@ -125,16 +125,21 @@ abstract class BasicBlock extends BlockType implements iBlock
      * @param array<string, mixed> $blockinfo
      * @param ?Context<string, mixed> $context
      */
-    final public function __construct(array $blockinfo = [], $context = null)
+    final public function __construct(array $blockinfo = [], $context = null, $xar = null)
     {
         // set context before calling parent constructor
         $this->setContext($context);
         parent::__construct($blockinfo);
         // move runUpgrade() and init() to BasicBlock constructor - see iBlock interface
         // check for upgrade and run if necessary
-        $this->runUpgrade();
+        if (isset($xar)) {
+            $this->setStaticServices($xar->getStaticServices());
+        } else {
+            $xar = $this->getStaticServices();
+        }
+        $this->runUpgrade($xar);
         // run any additional initialisation supplied by this block type
-        if ($this->block()->hasMethod($this, 'init', true)) {
+        if ($xar->block()->hasMethod($this, 'init', true)) {
             $this->init();
         }
     }
@@ -148,9 +153,13 @@ abstract class BasicBlock extends BlockType implements iBlock
     // specific to this type immediately after the object is initialised
     public function init() {}
 
-    final protected function runUpgrade()
+    final protected function runUpgrade($xar = null)
     {
-        if ($this->xarversion != $this->type_version && $this->block()->hasMethod($this, 'upgrade', true)) {
+        if ($this->xarversion == $this->type_version) {
+            return true;
+        }
+        $xar ??= $this->getStaticServices();
+        if ($xar->block()->hasMethod($this, 'upgrade', true)) {
             if (!empty($this->type_version)) {
                 if (xarVersion::compare($this->type_version, $this->xarversion, 3) >= 0) {
                     // 1st version is bigger, can't downgrade blocks

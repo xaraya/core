@@ -18,6 +18,7 @@ use LogicException;
 class TestHelper extends TestCase
 {
     protected static string $oldDir;
+    protected static $xarServices;
 
     public static function setUpBeforeClass(): void
     {
@@ -51,6 +52,8 @@ class TestHelper extends TestCase
         $xar->session()->init([]);
         // initialize users
         $xar->user()->init();
+
+        static::$xarServices = $xar;
 
         // file paths are relative to html directory here
         static::$oldDir = (string) getcwd();

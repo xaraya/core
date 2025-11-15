@@ -15,8 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use SQLite3;
 use xarClassMap;
-use xarDB;
-use xarDatabase;
 use xarInst;
 use xarInstall;
 use xarTableDDL;
@@ -54,7 +52,7 @@ class Phase5Method extends MethodClass
         $this->mem()->set('installer', 'installing', true);
 
         // Get the database connection configuration from the configuration file
-        $init_args = xarDatabase::getConfig();
+        $init_args = $this->db()->getConfig();
 
         //    $this->var()->find('install_create_database', $createDB, 'checkbox', false);
         //    $this->var()->find('confirmDB', $confirmDB, 'bool', false);
@@ -108,7 +106,7 @@ class Phase5Method extends MethodClass
         // Initialise xarDatabase and xarDB
         // We are not yet trying to connect.
         $init_args['doConnect'] = false;
-        xarDatabase::init($init_args);
+        $this->db()->init($init_args);
 
         //---------------------------------------------------------------------------
         // Create a connection and check if a database already exists
@@ -116,7 +114,7 @@ class Phase5Method extends MethodClass
         switch ($init_args['databaseType']) {
             case 'sqlite3':
             case 'pdosqlite':
-                $dbconn = xarDB::newConn($init_args);
+                $dbconn = $this->db()->newConn($init_args);
                 $dbExists = true;
                 break;
             case 'mysqli':
@@ -127,7 +125,7 @@ class Phase5Method extends MethodClass
                     $init_args['doConnect'] = true;
 
                     // Try to connect
-                    $dbconn = xarDB::newConn($init_args);
+                    $dbconn = $this->db()->newConn($init_args);
 
                     // Found a database
                     $dbExists = true;
@@ -140,7 +138,7 @@ class Phase5Method extends MethodClass
                         $init_args['databaseName'] = '';
 
                         // Try to connect
-                        $dbconn = xarDB::newConn($init_args);
+                        $dbconn = $this->db()->newConn($init_args);
 
                         // Restore the previous values
                         $init_args['databaseName'] = $name;
@@ -161,7 +159,7 @@ class Phase5Method extends MethodClass
                     $init_args['doConnect'] = true;
 
                     // Try to connect
-                    $dbconn = xarDB::newConn($init_args);
+                    $dbconn = $this->db()->newConn($init_args);
                     // Found a database
                     $dbExists = true;
                 } catch (Exception $e) {
@@ -175,7 +173,7 @@ class Phase5Method extends MethodClass
                         // Try to connect
                         $init_args['databaseName'] = 'postgres';
                         $init_args['userName'] = '';
-                        $dbconn = xarDB::newConn($init_args);
+                        $dbconn = $this->db()->newConn($init_args);
 
                         // Restore the previous values
                         $init_args['databaseName'] = $name;
@@ -249,8 +247,8 @@ class Phase5Method extends MethodClass
             // Now that we have a database and a full set of $init_args, remove the connection we created above
             // and replace it with a new proper one.
             // From here on $this->db()->getConn() will always get this new one
-            xarDB::removeConn();
-            $dbconn = xarDB::newConn($init_args);
+            $this->db()->removeConn();
+            $dbconn = $this->db()->newConn($init_args);
 
             // We just created an empty database. There are no tables yet.
             $removetables = false;

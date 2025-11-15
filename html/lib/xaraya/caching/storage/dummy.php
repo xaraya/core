@@ -19,9 +19,9 @@ class xarCache_Dummy_Storage extends xarCache_Storage implements ixarCache_Stora
     /** @var array<string, mixed> */
     public static $varcache = [];
 
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $xar = null)
     {
-        parent::__construct($args);
+        parent::__construct($args, $xar);
         // use the prefix as array key in self::$varcache here
         if (!isset(self::$varcache[$this->prefix])) {
             self::$varcache[$this->prefix] = [];

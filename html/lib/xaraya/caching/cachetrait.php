@@ -152,10 +152,10 @@ trait CacheTrait
     public static ?string $_cacheKey = null;
     protected static ?CachingService $_cacheService = null;
 
-    protected static function _cache(): CachingService
+    protected static function _cache($xar = null): CachingService
     {
         if (!isset(self::$_cacheService)) {
-            $xar = xar::getServicesClass();
+            $xar ??= xar::getServicesClass();
             self::$_cacheService = $xar->cache();
         }
         return self::$_cacheService;
@@ -164,10 +164,13 @@ trait CacheTrait
     /**
      * Get or set enableCache
      */
-    public static function enableCache(?bool $enable = null): bool
+    public static function enableCache(?bool $enable = null, $xar = null): bool
     {
         if (isset($enable)) {
             static::$enableCache = $enable;
+            if ($enable) {
+                self::_cache($xar);
+            }
         }
         return static::$enableCache;
     }

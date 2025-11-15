@@ -51,10 +51,11 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     /** @var array<string, mixed> */
     public static $config = [];
 
-    public function __construct()
+    public function __construct($xar = null)
     {
+        $this->setServicesClass($xar);
         // @todo use request context for query params etc.
-        //xar::req()->setRequestClass(RequestContext::class);
+        //$xar->req()->setRequestClass(RequestContext::class);
     }
 
     /**
@@ -66,7 +67,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     {
         $openapi = sys::varpath() . '/cache/api/openapi.json';
         if (!file_exists($openapi)) {
-            xar::db()->init();
+            $xar = $this->getServicesClass();
+            $xar->db()->init();
             RestAPIBuilder::init();
             return ['TODO' => 'generate var/cache/api/openapi.json with builder'];
         }
@@ -122,7 +124,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         }
         // use xarCacheTrait
         if (isset(self::$config['cache'])) {
-            self::enableCache(!empty(self::$config['cache']) ? true : false);
+            self::enableCache(!empty(self::$config['cache']) ? true : false, $this->getServicesClass());
         }
         if (self::enableCache()) {
             $cacheScope = 'RestAPI.Operation';
@@ -154,7 +156,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     protected function checkUser()
     {
         $context = $this->getContext();
-        $userId = $context->getUserId();
+        $xar = $this->getServicesClass();
+        $userId = $context->getUserId($xar);
         // return the userId if we have one
         if (!empty($userId)) {
             return $userId;
@@ -194,21 +197,24 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function setRequestContext(&$request = null)
     {
+        $xar = $this->getServicesClass();
         // $request from RoutingBridge overrides any existing context here
         if (isset($request)) {
             $context = ContextFactory::fromRequest($request, __METHOD__);
             // Set context for core services here first
-            xar::setServicesContext($context);
+            //xar::setServicesContext($context);
+            $xar->setContext($context);
         } elseif (empty($this->getContext())) {
             $context = ContextFactory::fromGlobals(__METHOD__);
             // Set context for core services here first
-            xar::setServicesContext($context);
+            //xar::setServicesContext($context);
+            $xar->setContext($context);
         } else {
             $context = $this->getContext();
             // Assume context for core services is already set here
         }
-        // Initialize server - not really needed since xar::req()->getInstance() is on demand
-        //xar::req()->init([], $context);
+        // Initialize server - not really needed since $xar->req()->getInstance() is on demand
+        //$xar->req()->init([], $context);
         return $context;
     }
 
@@ -290,8 +296,9 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function getResult($handler, $params, &$request = null)
     {
+        $xar = $this->getServicesClass();
         // initialize caching - delay until we need results
-        xar::cache()->init();
+        $xar->cache()->init();
         $this->loadConfig();
         $tryCachedResult = false;
         // this expects a class name or instance in $handler[0]
@@ -324,11 +331,11 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             }
         }
         // initialize database - delay until caching fails
-        xar::db()->init();
+        $xar->db()->init();
         // initialize modules
-        //xar::mod()->init();
+        //$xar->mod()->init();
         // initialize users
-        //xar::user()->init();
+        //$xar->user()->init();
         $this->setTimer('handle');
         // get handler instance with context
         $handler = $this->resolveHandler($handler);
@@ -381,7 +388,11 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             // create handler instance for this class name
             $routeClassName = $handler[0];
             $routeMethod = $handler[1];
-            $callInstance = new $routeClassName();
+            if (is_a($routeClassName, self::class, true)) {
+                $callInstance = new $routeClassName($this->getServicesClass());
+            } else {
+                $callInstance = new $routeClassName();
+            }
         }
         // set the context in the handler instance
         $callInstance->setContext($this->getContext());

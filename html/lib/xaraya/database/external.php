@@ -321,7 +321,7 @@ class ExternalDatabase implements xarDB_Interface
      * @param array<string, mixed> $dbConnArgs
      * @return mixed
      */
-    public static function checkDbConnection($dbConnIndex = 0, $dbConnArgs = [])
+    public static function checkDbConnection($dbConnIndex = 0, $dbConnArgs = [], $xar = null)
     {
         // see if we already have a valid connection (external or not)
         if (!empty($dbConnIndex) && static::hasConn($dbConnIndex)) {
@@ -335,7 +335,7 @@ class ExternalDatabase implements xarDB_Interface
             $dbConnIndex = static::getConnIndex();
         } elseif (!empty($dbConnArgs['databaseType'])) {
             // open a new database connection
-            $conn = xarDB::newConn($dbConnArgs);
+            $conn = xarDB::newConn($dbConnArgs, $xar);
             // save the connection index
             $dbConnIndex = xarDB::getConnIndex();
         }

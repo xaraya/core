@@ -232,12 +232,12 @@ final class ClassMapTest extends TestCase
         //$this->expectExceptionMessage($expected);
 
         // set context for core services here too
-        $context = new Xaraya\Context\Context(['source' => __METHOD__]);
-        Xaraya\Services\xar::setServicesContext($context);
+        $context = new \Xaraya\Context\Context(['source' => __METHOD__]);
+        $xar = \Xaraya\Services\xar::setServicesContext($context);
 
         // we can instantiate hooksubject instance without database here thanks to xar::mod()->getRegID($module)
         $item = ['module' => 'dynamicdata', 'itemtype' => 4, 'itemid' => 1];
-        $instance = new $classname($item);
+        $instance = new $classname($item, $xar);
         $this->assertInstanceOf($classname, $instance);
 
         $expected = $event;
@@ -574,11 +574,15 @@ final class ClassMapTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
+        // set context for core services here too
+        $context = new \Xaraya\Context\Context(['source' => __METHOD__]);
+        $xar = \Xaraya\Services\xar::setServicesContext($context);
+
         // we can instantiate controller instance without database (but not without request)
         $expected = $result['classname'];
         $page = 'docs';
         $url = 'index.php?module=' . $modName . '&type=user&func=main&page=' . $page;
-        $request = new xarRequest($url);
+        $request = new xarRequest($url, $xar);
         $instance = new $result['classname']($request);
         $this->assertInstanceOf($expected, $instance);
 

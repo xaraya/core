@@ -33,9 +33,7 @@ class xarTwigTpl
 
     public function __construct($xar = null)
     {
-        if (isset($xar)) {
-            $this->setServicesClass($xar);
-        }
+        $this->setServicesClass($xar);
     }
 
     public function getTwigEnvironment($context)

@@ -56,14 +56,6 @@ class WebEntryPoint
         set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 
         /**
-         * Set up caching
-         * Note: this happens first so we can serve cached pages to first-time visitors
-         *       without loading the core
-         */
-        // Note: we may already exit here if session-less page caching is enabled
-        xar::cache()->init();
-
-        /**
          * Load the Xaraya core (global context)
          */
         $xar = xar::load();
@@ -165,7 +157,7 @@ class WebEntryPoint
 
             // We're all done, one ServerRequest made
             $xar->log()->notice('Notifying listeners of this request');
-            $xar->events()->notify('ServerRequest', [], $context);
+            $xar->events()->notify('ServerRequest', [], $context, $xar);
 
             // Render page with the output + pass along the current context
             $xar->log()->notice('Creating the page output');
@@ -193,7 +185,7 @@ class WebEntryPoint
             return $this->xarRequest;
         }
         // Get Xaraya Services Class
-        $xar = xar::getServicesClass();
+        $xar = $this->getServicesClass();
 
         // Create the object that models this request
         $request = $xar->req()->getRequest();

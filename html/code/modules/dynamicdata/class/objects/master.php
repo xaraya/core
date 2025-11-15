@@ -194,7 +194,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             }
         }
 
-        $this->dataquery = new Query();
+        $this->dataquery = new Query('SELECT', '', '', 0, $this->getStaticServices());
         if ($descriptor->exists('datastore')) {
             $this->datastore = $descriptor->get('datastore');
             if ($this->datastore == 'relational' || $this->datastore == 'external') {
@@ -1196,7 +1196,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         }
         // use context to get roleid if needed
         if (empty($roleid) && !empty($this->context)) {
-            $roleid = $this->context->getUserId();
+            $roleid = $this->context->getUserId($this->getStaticServices());
         }
 
         // DD specific access scheme
@@ -1253,7 +1253,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     public function setWhere($where, $transform = 1)
     {
         // Note this helper property is only defined in this method and the methods called from here
-        $this->conditions = new Query();
+        $this->conditions = new Query('SELECT', '', '', 0, $this->getStaticServices());
 
         if ($transform) {
             $wherestring = $this->transformClause($where);

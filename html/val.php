@@ -29,11 +29,6 @@ function xarValidationLoader()
     set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 
     /**
-     * Set up caching
-     */
-    xar::cache()->init();
-
-    /**
      * Load the Xaraya core
      */
     xar::load();

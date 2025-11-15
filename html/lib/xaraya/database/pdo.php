@@ -142,6 +142,11 @@ class PDOConnection extends PDO implements ConnectionInterface
         return $this->xarLog;
     }
 
+    public function setLog($xarLog)
+    {
+        $this->xarLog = $xarLog;
+    }
+
     /**
      * Summary of __construct
      * @param mixed $dsn

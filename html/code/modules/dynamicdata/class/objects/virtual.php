@@ -247,7 +247,7 @@ class VirtualObjectFactory extends xarObject
             if (!empty($context)) {
                 $descriptor->setArgs(['context' => $context]);
             }
-            return new DataObject($descriptor);
+            return new DataObject($descriptor, $xar);
         }
         return DataObjectFactory::getObject($args, $context, $xar);
     }
@@ -274,7 +274,7 @@ class VirtualObjectFactory extends xarObject
             if (!empty($context)) {
                 $descriptor->setArgs(['context' => $context]);
             }
-            return new DataObjectList($descriptor);
+            return new DataObjectList($descriptor, $xar);
         }
         return DataObjectFactory::getObjectList($args, $context, $xar);
     }

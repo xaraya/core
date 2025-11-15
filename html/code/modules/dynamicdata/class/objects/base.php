@@ -25,8 +25,11 @@ class DataObject extends DataObjectMaster implements iDataObject
      * @param DataObjectDescriptor $descriptor
      * with $args['itemid'] item id of the object to get
     **/
-    public function __construct(DataObjectDescriptor $descriptor)
+    public function __construct(DataObjectDescriptor $descriptor, $xar = null)
     {
+        if (isset($xar)) {
+            $this->setStaticServices($xar->getStaticServices());
+        }
         // get the object type information from our parent class
         $this->loader($descriptor);
         unset($descriptor);
@@ -523,7 +526,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // CHECKME: flush the variable cache if necessary
         if ($this->objectid == 1) {
-            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid]);
+            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid], $this->getStaticServices());
         }
 
         // call update hooks for this item - for stand-alone DD objects and virtual DD objects for now
@@ -594,7 +597,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // CHECKME: flush the variable cache if necessary
         if ($this->objectid == 1) {
-            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid]);
+            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid], $this->getStaticServices());
         }
 
         // call delete hooks for this item - for stand-alone DD objects and virtual DD objects for now

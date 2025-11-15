@@ -235,7 +235,7 @@ class xarLocale extends xarObject
      * @throws LocaleNotFoundException
      * @todo   figure out why we go through this function for xar::mod()->isAvailable
      */
-    public static function &loadData($locale = null)
+    public static function &loadData($locale = null, $siteLocales = null)
     {
         static $loaded = []; // keep track of files we have loaded
         if (!isset($locale)) {
@@ -250,7 +250,7 @@ class xarLocale extends xarObject
         }
 
         // check for locale availability
-        $siteLocales = self::mls()->listSiteLocales();
+        $siteLocales ??= self::mls()->listSiteLocales();
 
         $nullreturn = null;
         $falsereturn = false;

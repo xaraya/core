@@ -58,12 +58,12 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
     /**
      * Index result set by field name.
      */
-    public const FETCHMODE_ASSOC = 1;
+    public const FETCHMODE_ASSOC = 1;  // corresponds to MYSQLI_ASSOC = 1, not PDO::FETCH_ASSOC = 2
 
     /**
      * Index result set numerically.
      */
-    public const FETCHMODE_NUM = 2;
+    public const FETCHMODE_NUM = 2;  // corresponds to MYSQLI_NUM = 2, not PDO::FETCH_NUM = 3
 
     /**
      * Get the PHP native resource for the result.

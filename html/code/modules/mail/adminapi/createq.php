@@ -59,7 +59,7 @@ class CreateqMethod extends MethodClass
         } // prevent the 0 value
         // Create a new itemtype by creating a new object in dd
         $params = ['objectid' => $qdataObjectId, 'itemtype' => $newItemtype];
-        $itemid = DataObjectFactory::updateObject($params);
+        $itemid = $this->data()->updateObject($params);
 
         return true;
     }

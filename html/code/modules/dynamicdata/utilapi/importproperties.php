@@ -79,7 +79,7 @@ class ImportpropertiesMethod extends MethodClass
                 if (!empty($itemtype)) {
                     $name .= '_' . $itemtype;
                 }
-                $objectid = DataObjectFactory::createObject(
+                $objectid = $this->data()->createObject(
                     ['moduleid' => $module_id,
                         'itemtype' => $itemtype,
                         'name' => $name,

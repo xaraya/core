@@ -42,9 +42,9 @@ class xarRoles extends xarObject
     public $allgroups = [];
     public $users = [];
 
-    public static function initialize()
+    public static function initialize($xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         self::$dbconn = $xar->db()->getConn();
         $xar->mod()->loadDbInfo('roles');
         $xartable = $xar->db()->getTables();
@@ -322,11 +322,20 @@ class xarRoles extends xarObject
 
     public static function isParent($name1, $name2)
     {
+        static $parent = [];
+
+        $combo = $name1 . ':' . $name2;
+        if (isset($parent[$combo])) {
+            return $parent[$combo];
+        }
         $role1 = self::findRole($name1);
         $role2 = self::ufindRole($name2);
         if (is_object($role1) && is_object($role2)) {
-            return $role2->isParent($role1);
+            $result = $role2->isParent($role1);
+            $parent[$combo] = $result;
+            return $result;
         }
+        $parent[$combo] = false;
         return false;
     }
 
@@ -359,7 +368,7 @@ class xarRoles extends xarObject
         } else {
             // retrieve the object's data from the repository
             // set up and execute the query
-            self::initialize();
+            self::initialize($xar);
             $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = ?";
             $params = [$value];
 
@@ -397,7 +406,7 @@ class xarRoles extends xarObject
         if ($xar->mem()->has($cacheKey, $row['id'])) {
             return $xar->mem()->get($cacheKey, $row['id']);
         }
-        $role = DataObjectFactory::getObject(['name' => $name]);
+        $role = DataObjectFactory::getObject(['name' => $name], null, $xar);
         $role->getItem(['itemid' => $row['id']]);
         $xar->mem()->set($cacheKey, $row['id'], $role);
         return $role;

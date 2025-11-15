@@ -43,10 +43,10 @@ class XarayaCompiler extends xarBLCompiler
      * Summary of instance
      * @return IxarBLCompiler
      */
-    public static function &instance()
+    public static function &instance($xar = null)
     {
         if (self::$instance == null) {
-            self::$instance = new XarayaCompiler();
+            self::$instance = new XarayaCompiler($xar);
         }
         return self::$instance;
     }
@@ -120,9 +120,10 @@ class XarayaCompiler extends xarBLCompiler
             // Make it an XSL processor
             $xslProc = $this->getProcessor($xslFile);
 
+            $xar = $this->getServicesClass();
             // Get the value for the framework tag, which is defined in a modvar
             if (method_exists('xarModVars', 'get')) {
-                $framework = xar::mod()->getVar('themeworks', 'framework');
+                $framework = $xar->mod()->getVar('themeworks', 'framework');
             } else {
                 $framework = '';
             }
@@ -143,8 +144,9 @@ class XarayaCompiler extends xarBLCompiler
 
     private function getModuleTagPaths()
     {
-        if (method_exists('xarMod', 'apiFunc') && empty(xar::mem()->get('installer', 'installing'))) {
-            $activeMods = xar::mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => ixarMod::STATE_ACTIVE]]);
+        $xar = $this->getServicesClass();
+        if (method_exists('xarMod', 'apiFunc') && empty($xar->mem()->get('installer', 'installing'))) {
+            $activeMods = $xar->mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => ixarMod::STATE_ACTIVE]]);
         } else {
             return [];
         }
@@ -224,8 +226,9 @@ class XarayaCompiler extends xarBLCompiler
 
     private function getBlockTagPaths()
     {
-        if (method_exists('xarMod', 'apiFunc') && empty(xar::mem()->get('installer', 'installing'))) {
-            $activeBlocks = xar::mod()->apiFunc('blocks', 'instances', 'getitems', ['state' => 2]);
+        $xar = $this->getServicesClass();
+        if (method_exists('xarMod', 'apiFunc') && empty($xar->mem()->get('installer', 'installing'))) {
+            $activeBlocks = $xar->mod()->apiFunc('blocks', 'instances', 'getitems', ['state' => 2]);
         } else {
             return [];
         }

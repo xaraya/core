@@ -13,6 +13,8 @@ use Xaraya\Services\xar;
 #[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 final class UserContextTest extends TestCase
 {
+    protected $xarServices;
+
     protected function setUp(): void
     {
         xar::cache()->init();
@@ -20,7 +22,7 @@ final class UserContextTest extends TestCase
 
         // Set context for core services here first
         $context = new Context();
-        xar::setServicesContext($context);
+        $this->xarServices = xar::setServicesContext($context);
     }
 
     protected function tearDown(): void
@@ -31,13 +33,19 @@ final class UserContextTest extends TestCase
         }
     }
 
+    protected function getServicesClass()
+    {
+        return $this->xarServices;
+    }
+
     public function testEmptyContext(): void
     {
         $context = new Context([
             'server' => [],
         ]);
+        $xar = $this->getServicesClass();
         $expected = null;
-        $userId = $context->getUserId();
+        $userId = $context->getUserId($xar);
         $this->assertEquals($expected, $userId);
 
         $expected = null;
@@ -57,7 +65,8 @@ final class UserContextTest extends TestCase
         $context = new Context([
             'server' => ['REMOTE_USER' => $role->getUser()],
         ]);
-        $userId = $context->getUserId();
+        $xar = $this->getServicesClass();
+        $userId = $context->getUserId($xar);
         $this->assertEquals($expected, $userId);
         $expected = VirtualSession::class;
         $this->assertEquals($expected, $context->getSession()::class);
@@ -79,7 +88,8 @@ final class UserContextTest extends TestCase
         $context = new Context([
             'server' => ['HTTP_X_AUTH_TOKEN' => $token],
         ]);
-        $userId = $context->getUserId();
+        $xar = $this->getServicesClass();
+        $userId = $context->getUserId($xar);
         $this->assertEquals($expected, $userId);
         $expected = VirtualSession::class;
         $this->assertEquals($expected, $context->getSession()::class);
@@ -96,7 +106,7 @@ final class UserContextTest extends TestCase
         $query = "SELECT id, role_id, ip_addr, last_use, vars FROM $sessionTable WHERE role_id = ? AND id NOT LIKE '%:%' ORDER BY last_use DESC";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->setLimit(1);
-        $result = $stmt->executeQuery([$userId], xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery([$userId], xarDB::getFetchAssoc());
         $result->first();
         $sessionInfo = $result->getRow();
         return $sessionInfo;
@@ -114,9 +124,10 @@ final class UserContextTest extends TestCase
         $context = new Context([
             'cookie' => $_COOKIE,
         ]);
+        $xar = $this->getServicesClass();
         // expecting no userId in context here
         $expected = null;
-        $userId = $context->getUserId();
+        $userId = $context->getUserId($xar);
         $this->assertEquals($expected, $userId);
 
         // @todo expecting session in context here
@@ -143,8 +154,9 @@ final class UserContextTest extends TestCase
         $context = new Context([
             'cookie' => $_COOKIE,
         ]);
+        $xar = $this->getServicesClass();
         // expecting userId and session in context here
-        $userId = $context->getUserId();
+        $userId = $context->getUserId($xar);
         $this->assertEquals($expected, $userId);
         $expected = VirtualSession::class;
         $this->assertEquals($expected, $context->getSession()::class);

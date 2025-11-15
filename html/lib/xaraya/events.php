@@ -116,12 +116,12 @@ class xarEvents extends xarObject implements ixarEvents
     protected static $callbackFunctions = [];
     protected static bool $initialized = false;
 
-    public static function init(array $args = [])
+    public static function init(array $args = [], $xar = null)
     {
         if (empty($args) && self::$initialized) {
             return true;
         }
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         // Register tables this subsystem uses
         $tables = ['eventsystem' => $xar->db()->getPrefix() . '_eventsystem'];
         $xar->db()->importTables($tables);

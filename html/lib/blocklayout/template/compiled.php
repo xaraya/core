@@ -13,6 +13,7 @@
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Services\xar;
 
 /**
@@ -24,6 +25,8 @@ use Xaraya\Services\xar;
 **/
 class CompiledTemplate extends xarObject
 {
+    use WithServicesClass;
+
     /** @var ?string */
     protected $fileName = null;   // where is it stored?
     /** @var ?string */
@@ -37,13 +40,14 @@ class CompiledTemplate extends xarObject
      * @param ?string $source
      * @param ?string $type
      */
-    public function __construct($fileName, $source = null, $type = 'module')
+    public function __construct($fileName, $source = null, $type = 'module', $xar = null)
     {
         // @todo keep here?
         //if (!file_exists($fileName))  throw new FileNotFoundException($fileName); // we only do files atm
         $this->fileName = $fileName;
         $this->source   = $source;
         $this->type     = $type;
+        $this->setServicesClass($xar);
     }
 
     /**
@@ -66,6 +70,7 @@ class CompiledTemplate extends xarObject
         if ($this->type == 'page') {
             xarDebug::setExceptionHandler(['ExceptionHandlers','bone']);
         }
+        $xar = $this->getServicesClass();
 
         // Executing means generating output, start a buffer for it
         ob_start();
@@ -78,7 +83,7 @@ class CompiledTemplate extends xarObject
                 // This variable will hold the stream contents
                 global $_compiler_output;
 
-                $mem = xar::mem();
+                $mem = $xar->mem();
                 // Have we already cached this template?
                 if (!$mem->has('template', $this->source)) {
                     // Get the compiled template from the template cache
@@ -116,7 +121,7 @@ class CompiledTemplate extends xarObject
             ob_start();
             // this outputs the template and deals with start comments accordingly.
             // @todo bring this in here, not pull in from xarTemplate
-            echo xar::tpl()->outputTemplate($this->source, $prelimOut);
+            echo $xar->tpl()->outputTemplate($this->source, $prelimOut);
         }
 
         // Fetch output and clean buffer

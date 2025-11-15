@@ -128,6 +128,8 @@ interface xarDB_Interface
 interface ConnectionInterface
 {
     // from Xaraya modifications in ConnectionCommon
+    public function setLog($xarLog);
+
     /**
      * Summary of Execute
      * @param string $sql

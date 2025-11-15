@@ -222,6 +222,8 @@ class xarJS extends xarObject
                 $c = __CLASS__;
                 // this is the one and only time the __construct() method will be run
                 $instance = new $c($xar);
+            } else {
+                $instance->setServicesClass($xar);
             }
             $xar->mem()->set(self::CACHE_SCOPE, 'instance', $instance);
         }

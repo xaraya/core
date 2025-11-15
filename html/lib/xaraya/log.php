@@ -74,10 +74,13 @@ class xarLog extends xarObject
      * @return bool
      * @see \Xaraya\Services\LoggerService::init()
      */
-    public static function init(array $args = [])
+    public static function init(array $args = [], $xar = null)
     {
         if (empty($args) && self::$initialized) {
             return true;
+        }
+        if (isset($xar)) {
+            self::$sysConfig = $xar->sysConfig();
         }
         // Only log if logging is enabled and if the config.system file is present
         // Of course, if this file doesn't exist then Xaraya is already kaputt :)

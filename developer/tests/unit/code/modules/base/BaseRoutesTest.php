@@ -15,6 +15,7 @@ final class BaseRoutesTest extends TestHelper
     {
         parent::setUpBeforeClass();
         $dispatcher = new Dispatcher();
+        $dispatcher->setServicesClass(static::$xarServices);
         self::$router = $dispatcher->getRouter();
     }
 
@@ -98,6 +99,7 @@ final class BaseRoutesTest extends TestHelper
     public function testDispatcher(): void
     {
         $dispatcher = new Dispatcher();
+        $dispatcher->setServicesClass(static::$xarServices);
 
         $path = '/base/docs';
         $params = [];

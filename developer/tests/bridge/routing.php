@@ -14,7 +14,6 @@ use Xaraya\Bridge\Routing\RoutingStaticBridge;
 use Xaraya\Services\xar;
 
 sys::init();
-xar::cache()->init();
 // try out request context class
 xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class

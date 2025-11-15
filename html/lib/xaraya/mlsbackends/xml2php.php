@@ -30,12 +30,12 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
     public $basePHPDir;
     public $baseXMLDir;
 
-    public function __construct($locales)
+    public function __construct($locales, $currentLocale)
     {
         parent::__construct($locales);
         $this->backendtype = "php";
 
-        $this->gen = new PHPBackendGenerator(xar::mls()->getCurrentLocale());
+        $this->gen = new PHPBackendGenerator($currentLocale);
         if (!isset($this->gen)) {
             return;
         }

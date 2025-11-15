@@ -545,7 +545,7 @@ class CategoriesProperty extends DataProperty
     {
         $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
-        $q = new Query('SELECT');
+        $q = new Query('SELECT', '', '', 0, $this->getParent());
         $q->addtable($xartable['categories'], 'c');
         $q->addtable($xartable['categories_linkage'], 'cl');
         $q->join('c.id', 'cl.category_id');

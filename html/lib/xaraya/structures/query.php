@@ -10,6 +10,7 @@
  * @link http://www.xaraya.info
  */
 
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Services\xar;
 
 /**
@@ -18,6 +19,8 @@ use Xaraya\Services\xar;
  */
 class Query
 {
+    use WithServicesClass;
+
     public $version             = "3.6";
     public $id;                                 // A unique identifier for this query
     public $type                = 'SELECT';     // Normalized array of tables used in the statement
@@ -78,13 +81,15 @@ class Query
     public $andoperator = 'AND';
     public $oroperator = 'OR';
     private $operatorarray = [];
+    private $xarDB = null;
     //---------------------------------------------------------
     // Constructor
     //---------------------------------------------------------
-    public function __construct($type = 'SELECT', $tables = '', $fields = '', $dbConnIndex = 0)
+    public function __construct($type = 'SELECT', $tables = '', $fields = '', $dbConnIndex = 0, $xar = null)
     {
+        $xar = $this->getServicesClass($xar);
         // Set the debugflag
-        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xar::config()->getVar('Site.BL.ShowQueries', false) && xar::user()->isDebugAdmin()) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && $xar->config()->getVar('Site.BL.ShowQueries', false) && $xar->user()->isDebugAdmin()) {
             $this->debugflag = true;
         }
 
@@ -114,12 +119,21 @@ class Query
         $this->operatorarray['ge'] = '>=';
     }
 
+    protected function db()
+    {
+        if (!isset($this->xarDB)) {
+            $xar = $this->getServicesClass();
+            $this->xarDB = $xar->db();
+        }
+        return $this->xarDB;
+    }
+
     /**
      * Get database connection for $this->dbConnIndex
      */
     protected function &getDbConn(): object
     {
-        return xar::db()->getConn($this->dbConnIndex);
+        return $this->db()->getConn($this->dbConnIndex);
     }
 
     public function setDbConnIndex($dbConnIndex = 0)
@@ -136,7 +150,7 @@ class Query
         if (!isset($this->dbconn)) {
             $this->dbconn = $this->getDbConn();
         }
-        if ($this->debugflag && xar::db()->withPDO()) {
+        if ($this->debugflag && $this->db()->withPDO()) {
             $this->dbconn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         if (empty($statement) && ($this->optimize == true)) {
@@ -176,7 +190,7 @@ class Query
                 return $result;
             }
             // This is a select
-            if (xar::db()->withPDO()) {
+            if ($this->db()->withPDO()) {
                 if ($this->rowstodo != 0 && $this->limits == 1) {
                     $begin = $this->startat - 1;
                     if ($this->usebinding) {
@@ -228,7 +242,7 @@ class Query
         } // Better than the private var, fields should still be protected
         $this->output = [];
         if ($display == 1) {
-            if (xar::db()->withPDO()) {
+            if ($this->db()->withPDO()) {
                 $this->output = $result->getall();
             } elseif (!empty($this->dbConnIndex) && get_class($result) === 'PdoSQLiteResultSet') {
                 // PDO ResultSet doesn't handle EOF very well in Creole
@@ -251,7 +265,7 @@ class Query
             } else {
                 if (!$this->israwstatement) {
                     if ($this->fields == [] && $numfields > 0) {
-                        $result->setFetchMode(xar::db()->getFetchAssoc());
+                        $result->setFetchMode($this->db()->getFetchAssoc());
                         $result->first();
                         for ($i = 0;$i < $numfields;$i++) {
                             $tmp = array_slice($result->fields, $i, 1);
@@ -259,7 +273,7 @@ class Query
                             $this->fields[$namefield]['name'] = strtolower($namefield ?? '');
                         }
                     }
-                    $result->setFetchMode(xar::db()->getFetchNum());
+                    $result->setFetchMode($this->db()->getFetchNum());
                     $result->first();
                     while ($result->next()) {
                         $i = 0;
@@ -359,7 +373,8 @@ class Query
     public function createto($newtablename = null)
     {
         if (!isset($newtablename)) {
-            $newtablename = "temp" . xar::session()->getUserId() . time();
+            $xar = $this->getServicesClass();
+            $newtablename = "temp" . $xar->session()->getUserId() . time();
         }
         $this->createtablename = $newtablename;
         $this->settype("CREATE");
@@ -2004,20 +2019,22 @@ class Query
             echo $statement;
         }
     }
-    public function sessiongetvar($x)
+    public function sessiongetvar($x, $xar = null)
     {
-        $q = xar::session()->getVar($x);
+        $xar = $this->getServicesClass($xar);
+        $q = $xar->session()->getVar($x);
         if (empty($q)) {
             return;
         }
         $this->open();
         return $this;
     }
-    public function sessionsetvar($x)
+    public function sessionsetvar($x, $xar = null)
     {
         $q = $this;
         unset($q->dbconn);
-        xar::session()->setVar($x, serialize($q));
+        $xar = $this->getServicesClass($xar);
+        $xar->session()->setVar($x, serialize($q));
     }
     public function setdistinct($x = 1)
     {

@@ -8,7 +8,6 @@
  * require_once dirname(__DIR__).'/vendor/autoload.php';
  * use Xaraya\Services\xar;
  * sys::init();
- * xar::cache()->init();
  * xar::load(xarCore::SYSTEM_USER);
  *
  * // use some PSR-7 factory and PSR-15 dispatcher

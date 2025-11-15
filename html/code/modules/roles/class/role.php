@@ -43,9 +43,9 @@ class Role extends DataObject
      * @param array<mixed> $pargs
      * @return object role
      */
-    public function __construct(DataObjectDescriptor $descriptor)
+    public function __construct(DataObjectDescriptor $descriptor, $xar = null)
     {
-        parent::__construct($descriptor);
+        parent::__construct($descriptor, $xar);
 
         $this->mod()->loadDbInfo('roles');
         $this->mod()->loadDbInfo('privileges');
@@ -449,7 +449,9 @@ class Role extends DataObject
                 'instance' => $instance,
                 'level' => $level,
                 'description' => $description,
-                'parentid' => 0]);
+                'parentid' => 0],
+                $this->getStaticServices()
+            );
             array_push($privileges, $perm);
         }
         $result->close();
@@ -600,7 +602,7 @@ class Role extends DataObject
         while ($result->next()) {
             [$id] = $result->fields;
 
-            $role = DataObjectFactory::getObject(['name' => 'roles_users']);
+            $role = DataObjectFactory::getObject(['name' => 'roles_users'], $this->getContext(), $this->getStaticServices());
             $role->getItem(['itemid' => $id]);
             $users[] = $role;
         }
@@ -710,7 +712,7 @@ class Role extends DataObject
         while ($result->next()) {
             [$id] = $result->fields;
 
-            $role = DataObjectFactory::getObject(['name' => 'roles_groups']);
+            $role = DataObjectFactory::getObject(['name' => 'roles_groups'], $this->getContext(), $this->getStaticServices());
             $role->getItem(['itemid' => $id]);
             $parents[] = $role;
         }

@@ -42,7 +42,7 @@ class StandardinstallMethod extends MethodClass
             $existing_objects  = $this->data()->getObjects();
             foreach ($existing_objects as $objectid => $objectinfo) {
                 if (in_array($objectinfo['name'], $objects)) {
-                    if (!DataObjectFactory::deleteObject(['objectid' => $objectid])) {
+                    if (!$this->data()->deleteObject(['objectid' => $objectid])) {
                         return;
                     }
                 }

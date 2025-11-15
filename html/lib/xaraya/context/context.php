@@ -13,7 +13,6 @@
 namespace Xaraya\Context;
 
 use ArrayObject;
-use sys;
 
 /**
  * Context object for request etc.
@@ -74,10 +73,10 @@ class Context extends ArrayObject implements ContextObjectInterface
      * @return int|null
      * @see \Xaraya\Context\UserContext::getUserId()
      */
-    public function getUserId()
+    public function getUserId($xar = null)
     {
         if (!$this->offsetExists('userId')) {
-            $userContext = new UserContext($this);
+            $userContext = new UserContext($this, $xar);
             $userId = $userContext->getUserId();
             $this->offsetSet('userId', $userId);
         }

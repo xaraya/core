@@ -31,7 +31,7 @@ class XarayaSourceTemplate extends SourceTemplate
     public function &compile()
     {
         assert(isset($this->fileName));
-        $compiler = XarayaCompiler::instance();
+        $compiler = XarayaCompiler::instance($this->getServicesClass());
         $templateCode = $compiler->compileFile($this->fileName);
 
         $out = '';

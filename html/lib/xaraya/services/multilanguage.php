@@ -320,7 +320,7 @@ trait MultiLanguageTrait
         } else {
             $timezone = $this->defaultTimeZone;
         }
-        $this->formatter = new LocaleFormatter($locale, $timezone);
+        $this->formatter = new LocaleFormatter($locale, $timezone, $this->listSiteLocales());
 
         $mode = $this->getMode();
         switch ($mode) {
@@ -373,7 +373,7 @@ trait MultiLanguageTrait
                 $this->backend = new \xarMLS__PHPTranslationsBackend($alternatives);
                 break;
             case 'xml2php':
-                $this->backend = new \xarMLS__XML2PHPTranslationsBackend($alternatives);
+                $this->backend = new \xarMLS__XML2PHPTranslationsBackend($alternatives, $locale);
                 break;
         }
 
@@ -441,7 +441,7 @@ trait MultiLanguageTrait
                 $timezone = $this->defaultTimeZone;
             }
         }
-        $this->formatter = new LocaleFormatter($locale, $timezone);
+        $this->formatter = new LocaleFormatter($locale, $timezone, $this->listSiteLocales());
         return $this->formatter;
     }
 

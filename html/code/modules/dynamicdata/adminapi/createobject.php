@@ -40,7 +40,7 @@ class CreateobjectMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $objectid = DataObjectFactory::createObject($args);
+        $objectid = $this->data()->createObject($args);
         return $objectid;
     }
 }

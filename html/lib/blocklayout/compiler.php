@@ -20,6 +20,7 @@
  * @author Garrett Hunter <garrett@blacktower.com>
  * @todo  This is still the architecture of BL1, just stripped. We can do a lot better.
  */
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Services\xar;
 
 /**
@@ -55,6 +56,8 @@ interface IxarBLCompiler
  */
 class xarBLCompiler extends xarObject implements IxarBLCompiler
 {
+    use WithServicesClass;
+
     /** @var ?xarBLCompiler */
     public static $instance  = null;
     /** @var ?string */
@@ -68,16 +71,19 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
     /**
      * Private constructor, since this is a Singleton
      */
-    public function __construct() {}
+    public function __construct($xar = null)
+    {
+        $this->setServicesClass($xar);
+    }
 
     /**
      * Implementation of the interface
      * @return IxarBLCompiler
      */
-    public static function &instance()
+    public static function &instance($xar = null)
     {
         if (self::$instance == null) {
-            self::$instance = new xarBLCompiler();
+            self::$instance = new xarBLCompiler($xar);
         }
         return self::$instance;
     }
@@ -100,7 +106,8 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
      */
     public function compileFile($fileName)
     {
-        xar::log()->debug("BL: Compiling the file '$fileName'");
+        $xar = $this->getServicesClass();
+        $xar->log()->debug("BL: Compiling the file '$fileName'");
         $this->lastFile = $fileName;
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
@@ -151,7 +158,8 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
     {
         // Compressing excess whitespace
         try {
-            $this->compresswhitespace = xar::config()->getVar('Site.BL.CompressWhitespace');
+            $xar = $this->getServicesClass();
+            $this->compresswhitespace = $xar->config()->getVar('Site.BL.CompressWhitespace');
         } catch (Exception $e) {
             $this->compresswhitespace = 1;
         }
@@ -165,12 +173,13 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
      */
     protected function getProcessor($xslFile = '')
     {
-        xar::log()->debug("BL: Creating a new XSLT processor");
+        $xar = $this->getServicesClass();
+        $xar->log()->debug("BL: Creating a new XSLT processor");
 
         if (empty($xslFile)) {
-            $xslProc = new BlockLayoutXSLTProcessor();
+            $xslProc = new BlockLayoutXSLTProcessor(null, $xar);
         } else {
-            $xslProc = new BlockLayoutXSLTProcessor($xslFile);
+            $xslProc = new BlockLayoutXSLTProcessor($xslFile, $xar);
         }
         return $xslProc;
     }
@@ -244,18 +253,19 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
      */
     protected function compile(&$templateSource)
     {
-        xar::log()->debug("BL: Checking for an XSLT processor");
+        $xar = $this->getServicesClass();
+        $xar->log()->debug("BL: Checking for an XSLT processor");
         if (!isset($this->processor)) {
             $this->processor = $this->getProcessor();
             $xslDoc = new DOMDocument();
-            xar::log()->debug("BL: Creating the compiler as a stylesheet");
+            $xar->log()->debug("BL: Creating the compiler as a stylesheet");
             $xslDoc->loadXML($this->boot());
             $this->processor->importStyleSheet($xslDoc);
         }
 
         // This is confusing, don't do this here.
         $this->processor->xmlFile = $this->lastFile;
-        xar::log()->debug("BL: Preparing the transform");
+        $xar->log()->debug("BL: Preparing the transform");
         $outDoc = $this->processor->transform($templateSource);
 
         return $outDoc;

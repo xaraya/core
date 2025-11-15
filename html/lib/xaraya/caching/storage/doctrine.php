@@ -16,9 +16,9 @@
  */
 class xarCache_Doctrine_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $xar = null)
     {
-        parent::__construct($args);
+        parent::__construct($args, $xar);
         if (empty($this->provider)) {
             throw new EmptyParameterException('provider');
         }

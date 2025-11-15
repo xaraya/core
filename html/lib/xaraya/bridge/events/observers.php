@@ -16,7 +16,6 @@
  * require_once dirname(__DIR__).'/vendor/autoload.php';
  * use Xaraya\Services\xar;
  * sys::init();
- * xar::cache()->init();
  * xar::load(xarCore::SYSTEM_USER);
  *
  * use Symfony\Component\EventDispatcher\EventDispatcher;

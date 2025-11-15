@@ -66,7 +66,7 @@ class TwigConfig
         // support templates/custom directory for custom templates only
         $customDir = static::getXarayaRootDir() . '/templates/custom';
 
-        $namespaces = static::getNamespaces();
+        $namespaces = static::getNamespaces($xar);
 
         $basePaths = [];
         foreach ($namespaces as $namespace => $path) {
@@ -141,7 +141,7 @@ class TwigConfig
         return $rootDir;
     }
 
-    public static function getNamespaces()
+    public static function getNamespaces($xar = null)
     {
         if (!empty(static::$namespaces)) {
             return static::$namespaces;
@@ -157,10 +157,11 @@ class TwigConfig
                 }
             }
         }
+        $xar ??= xar::getServicesClass();
         $twigDir = static::getTwigTemplatesDir();
         static::addCoreTemplates();
-        static::addModuleTemplates();
-        static::addThemeTemplates();
+        static::addModuleTemplates($xar);
+        static::addThemeTemplates($xar);
         static::addPropertyTemplates($twigDir);
         static::addBlockTemplates($twigDir);
         // @todo use cache trait if/when variable caching is enabled by default
@@ -197,10 +198,11 @@ class TwigConfig
         ];
     }
 
-    public static function addModuleTemplates()
+    public static function addModuleTemplates($xar = null)
     {
+        $xar ??= xar::getServicesClass();
         // make other modules configurable based on fileinfo from version.php
-        $fileModules = xar::mod()->apiFunc('modules', 'admin', 'getfilemodules');
+        $fileModules = $xar->mod()->apiFunc('modules', 'admin', 'getfilemodules');
         // support templates/twig or vendor/xaraya/twig/html directory for standard templates
         $twigDir = static::getTwigTemplatesDir();
         foreach ($fileModules as $name => $fileInfo) {
@@ -227,11 +229,12 @@ class TwigConfig
         }
     }
 
-    public static function addThemeTemplates()
+    public static function addThemeTemplates($xar = null)
     {
+        $xar ??= xar::getServicesClass();
         // @todo this assumes we're running in sys::web() because it looks for 'themes'
         // make other themes configurable based on fileinfo from xartheme.php
-        $fileThemes = xar::mod()->apiFunc('themes', 'admin', 'getfilethemes');
+        $fileThemes = $xar->mod()->apiFunc('themes', 'admin', 'getfilethemes');
         foreach ($fileThemes as $name => $fileInfo) {
             $name = strtolower($name);
             // no namespace for themes

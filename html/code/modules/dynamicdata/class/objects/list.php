@@ -51,8 +51,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      *     $args['startnum'] start number
      *     $args['count'] count items first before you get them (on demand only)
      */
-    public function __construct(DataObjectDescriptor $descriptor)
+    public function __construct(DataObjectDescriptor $descriptor, $xar = null)
     {
+        if (isset($xar)) {
+            $this->setStaticServices($xar->getStaticServices());
+        }
         // get the object type information from our parent class
         $this->loader($descriptor);
 

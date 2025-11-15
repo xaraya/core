@@ -157,7 +157,7 @@ trait SessionTrait
     public function newInstance(): SessionFacade
     {
         // Set up the session instance with current context
-        return new self::$sessionClass($this->args, $this->getContext());
+        return new self::$sessionClass($this->args, $this->getContext(), $this->getParent());
     }
 
     public function getId(?string $id = null): mixed

@@ -264,7 +264,7 @@ trait BlocksTrait
                 throw new FunctionNotFoundException($classname . '::' . $method . ' translations');
             }
 
-            $object = new $classname($blockinfo, $this->getContext());
+            $object = new $classname($blockinfo, $this->getContext(), $xar);
 
             return $object;
         }

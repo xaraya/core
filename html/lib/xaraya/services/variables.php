@@ -138,7 +138,7 @@ trait VariablesTrait
         $db->importTables($tables);
 
         // Initialise the variable cache
-        xarVarPrep::init($config);
+        xarVarPrep::init($config, $this->getParent());
 
         $this->initialized = true;
         return true;

@@ -30,9 +30,10 @@ class UserContext
     /**
      * @param Context<string, mixed> $context
      */
-    public function __construct(Context $context)
+    public function __construct(Context $context, $xar = null)
     {
         $this->context = $context;
+        $this->setServicesClass($xar);
     }
 
     /**

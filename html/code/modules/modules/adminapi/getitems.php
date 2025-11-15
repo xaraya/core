@@ -52,7 +52,7 @@ class GetitemsMethod extends MethodClass
 
         // Determine the table we are going to use
         $tables = $this->db()->getTables();
-        $q = new Query('SELECT', $tables['modules']);
+        $q = new Query('SELECT', $tables['modules'], '', 0, $this->getParent());
         $q->addfields("id, regid, name, directory, version, class, category, state, user_capable, admin_capable");
 
         if (!empty($regid)) {

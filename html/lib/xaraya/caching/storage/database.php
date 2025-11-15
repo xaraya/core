@@ -27,9 +27,9 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
     /** @var array<string, mixed> */
     private $lastinfo = null;
 
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $xar = null)
     {
-        parent::__construct($args);
+        parent::__construct($args, $xar);
         $this->storage = 'database';
     }
 
@@ -42,7 +42,8 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         if (!empty($this->table)) {
             return $this->table;
         } elseif (xarCore::isLoaded(xarCore::SYSTEM_DATABASE)) {
-            $db = xar::db();
+            $xar = $this->getServicesClass();
+            $db = $xar->db();
             $this->dbconn = $db->getConn();
             $this->table = $db->getPrefix() . '_cache_data';
             return $this->table;

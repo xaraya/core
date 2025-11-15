@@ -27,10 +27,10 @@ class LocaleFormatter
     protected string $locale = '';
     protected string $timezone = '';
 
-    public function __construct(string $locale, string $timezone)
+    public function __construct(string $locale, string $timezone, $siteLocales = null)
     {
         $this->locale = $locale ?: 'en_US.utf-8';
-        $this->localeData = & xarLocale::loadData($locale);
+        $this->localeData = & xarLocale::loadData($locale, $siteLocales);
         $this->timezone = $timezone;
     }
 

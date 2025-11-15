@@ -96,7 +96,8 @@ trait DatabaseTrait
      */
     public function init(array $config = []): bool
     {
-        return xarDatabase::init($config);
+        // @todo set sysConfig() defines here instead of auto-loaded file?
+        return xarDatabase::init($config, $this->getParent());
     }
 
     /**
@@ -106,7 +107,7 @@ trait DatabaseTrait
      */
     public function getConfig(): array
     {
-        return xarDatabase::getConfig();
+        return xarDatabase::getConfig($this->getParent());
     }
 
     /**
@@ -114,7 +115,7 @@ trait DatabaseTrait
      */
     public function checkDbConnection(mixed $dbConnIndex = 0, array $dbConnArgs = []): mixed
     {
-        return ExternalDatabase::checkDbConnection($dbConnIndex, $dbConnArgs);
+        return ExternalDatabase::checkDbConnection($dbConnIndex, $dbConnArgs, $this->getParent());
     }
 
     public function isIndexExternal(mixed $index): bool
@@ -141,7 +142,7 @@ trait DatabaseTrait
      */
     public function getFetchAssoc(): int
     {
-        return xarDB::FETCHMODE_ASSOC;
+        return xarDB::getFetchAssoc();
     }
 
     /**
@@ -149,7 +150,7 @@ trait DatabaseTrait
      */
     public function getFetchNum(): int
     {
-        return xarDB::FETCHMODE_NUM;
+        return xarDB::getFetchNum();
     }
 
     /**
@@ -220,7 +221,7 @@ trait DatabaseTrait
     public function newConn(?array $args = null): object
     {
         // @todo support/combine external database as well
-        return xarDB::newConn($args);
+        return xarDB::newConn($args, $this->getParent());
     }
 
     /**

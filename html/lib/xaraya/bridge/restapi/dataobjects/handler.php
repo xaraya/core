@@ -183,8 +183,9 @@ class DataObjectAPIHandler extends RestAPIHandler
         $fieldlist = $this->getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
         $context = $this->getContext();
+        $xar = $this->getServicesClass();
         // set context if available in handler
-        $objectitem = DataObjectFactory::getObject($params, $context);
+        $objectitem = DataObjectFactory::getObject($params, $context, $xar);
         if (empty($objectitem)) {
             throw new BadParameterException('object');
         }
@@ -268,8 +269,9 @@ class DataObjectAPIHandler extends RestAPIHandler
         }
         $params = ['name' => $object];
         $context = $this->getContext();
+        $xar = $this->getServicesClass();
         // set context if available in handler
-        $objectitem = DataObjectFactory::getObject($params, $context);
+        $objectitem = DataObjectFactory::getObject($params, $context, $xar);
         if (empty($objectitem)) {
             throw new BadParameterException('object');
         }
@@ -314,8 +316,9 @@ class DataObjectAPIHandler extends RestAPIHandler
         }
         $params = ['name' => $object, 'itemid' => $itemid];
         $context = $this->getContext();
+        $xar = $this->getServicesClass();
         // set context if available in handler
-        $objectitem = DataObjectFactory::getObject($params, $context);
+        $objectitem = DataObjectFactory::getObject($params, $context, $xar);
         if (empty($objectitem)) {
             throw new BadParameterException('object');
         }
@@ -352,8 +355,9 @@ class DataObjectAPIHandler extends RestAPIHandler
         $userId = $this->checkUser();
         $params = ['name' => $object, 'itemid' => $itemid];
         $context = $this->getContext();
+        $xar = $this->getServicesClass();
         // set context if available in handler
-        $objectitem = DataObjectFactory::getObject($params, $context);
+        $objectitem = DataObjectFactory::getObject($params, $context, $xar);
         if (empty($objectitem)) {
             throw new BadParameterException('object');
         }

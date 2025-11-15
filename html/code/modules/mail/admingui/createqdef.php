@@ -96,7 +96,7 @@ class CreateqdefMethod extends MethodClass
             } // prevent the 0 value
 
             $params = ['objectid' => $qdefObjectId, 'itemtype' => $newItemtype];
-            $itemid = DataObjectFactory::updateObject($params);
+            $itemid = $this->data()->updateObject($params);
 
         } else {
             // All went well, we can set the modvar now

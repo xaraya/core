@@ -73,6 +73,9 @@ $data = GraphQLHandler::getData($query, $variables, $operationName);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
 //$data = GraphQLHandler::getData($query, $variables, $operationName, $extraTypes, $schemaFile);
  */
-$graphQLHandler = new GraphQLHandler();
+// Get Xaraya Services Class
+$xar = xar::getServicesClass();
+// Get GraphQL handler
+$graphQLHandler = new GraphQLHandler($xar);
 [$data, $context] = $graphQLHandler->handleRequest();
 $graphQLHandler->output($data);

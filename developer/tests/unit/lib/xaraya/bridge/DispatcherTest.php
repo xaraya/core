@@ -15,6 +15,7 @@ final class DispatcherTest extends TestHelper
     public function testInRoot(): void
     {
         $dispatcher = new Dispatcher('http://localhost/');
+        $dispatcher->setServicesClass(static::$xarServices);
 
         $path = '/';
         $params = [];
@@ -37,6 +38,7 @@ final class DispatcherTest extends TestHelper
     public function testWithEntrypoint(): void
     {
         $dispatcher = new Dispatcher('http://localhost/dispatch.php');
+        $dispatcher->setServicesClass(static::$xarServices);
 
         // use PATH_INFO or path component of REQUEST_URI here
         $path = '/';
@@ -60,6 +62,7 @@ final class DispatcherTest extends TestHelper
     public function testInSubdir(): void
     {
         $dispatcher = new Dispatcher('http://localhost/xaraya/');
+        $dispatcher->setServicesClass(static::$xarServices);
 
         $path = '/xaraya/';
         $params = [];
@@ -82,6 +85,7 @@ final class DispatcherTest extends TestHelper
     public function testInSubdirWithEntrypoint(): void
     {
         $dispatcher = new Dispatcher('http://localhost/xaraya/dispatch.php');
+        $dispatcher->setServicesClass(static::$xarServices);
 
         // use PATH_INFO or path component of REQUEST_URI here
         $path = '/';
@@ -105,6 +109,7 @@ final class DispatcherTest extends TestHelper
     public function testWrapOutputInPage(): void
     {
         $dispatcher = new Dispatcher('http://localhost/');
+        $dispatcher->setServicesClass(static::$xarServices);
 
         $path = '/';
         $params = [];

@@ -71,7 +71,11 @@ trait DataObjectBridgeTrait
 
     public function data(): DataObjectInterface
     {
-        $this->xarData ??= ServiceFactory::getDataObjectService($this);
+        if (!isset($this->xarData)) {
+            // from BasicBridgeTrait -> WithServicesClass
+            $xar = $this->getServicesClass();
+            $this->xarData = $xar->data();
+        }
         return $this->xarData;
     }
 
@@ -278,7 +282,8 @@ trait DataObjectBridgeTrait
             throw new Exception("Missing object parameter");
         }
         $interface = new DataObjectUserInterface($params);
-        return $interface->handle($params, $this->getContext());
+        // from BasicBridgeTrait -> WithServicesClass
+        return $interface->handle($params, $this->getContext(), $this->getServicesClass());
         // From DataObjectUserInterface:
         //...
     }

@@ -31,5 +31,5 @@ interface RoutesInterface
      * Get route handler for module UserGui class instance
      * @param ?Context<string, mixed> $context
      */
-    public static function getHandler(string $route, ?Context $context): HandlerInterface;
+    public static function getHandler(string $route, ?Context $context, $xar = null): HandlerInterface;
 }

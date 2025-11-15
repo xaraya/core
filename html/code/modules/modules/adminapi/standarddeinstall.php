@@ -48,7 +48,7 @@ class StandarddeinstallMethod extends MethodClass
         try {
             $dd_objects = unserialize($this->mod($module)->getVar('dd_objects'));
             foreach ($dd_objects as $key => $value) {
-                $result = DataObjectFactory::deleteObject(['objectid' => $value]);
+                $result = $this->data()->deleteObject(['objectid' => $value]);
             }
         } catch (Exception $e) {
         }

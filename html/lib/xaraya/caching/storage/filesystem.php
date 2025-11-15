@@ -20,9 +20,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
     public int $blksize = 0;
     public bool $bsknown = false;
 
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $xar = null)
     {
-        parent::__construct($args);
+        parent::__construct($args, $xar);
 
         if ($this->type == 'template') {
             // CHECKME: this assumes that we create this instance after loading xarTemplate.php

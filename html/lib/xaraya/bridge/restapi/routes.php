@@ -145,10 +145,10 @@ class RestAPIRoutes implements RoutesInterface
      * @param ?Context<string, mixed> $context
      * @return HandlerInterface
      */
-    public static function getHandler(string $route, ?Context $context): HandlerInterface
+    public static function getHandler(string $route, ?Context $context, $xar = null): HandlerInterface
     {
         // we could provide different instance or handler based on route here
-        $handler = new RestAPIHandler();
+        $handler = new RestAPIHandler($xar);
         $handler->setContext($context);
         return $handler;
     }

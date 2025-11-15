@@ -31,8 +31,6 @@ LocalTimer::enableTimer(true);
 //LocalTimer::setTimer('autoload');
 sys::init();
 LocalTimer::setTimer('sys');
-xar::cache()->init();
-LocalTimer::setTimer('cache');
 // try out request context class
 xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class

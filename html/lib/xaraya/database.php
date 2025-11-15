@@ -7,7 +7,7 @@
  * @package core
  * @subpackage database
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.7
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -17,34 +17,17 @@
 
 use Xaraya\Services\xar;
 
-// Define FETCHMODE_* depending on middleware here
-// @done remove all references in modules code + use xar::db()->getFetch*()
-$sysConfig = xar::sysConfig();
-switch ($sysConfig->getVar('DB.Middleware')) {
-    case 'Creole':
-        // As per creole.ResultSet.php
-        define('FETCHMODE_ASSOC', 1);
-        define('FETCHMODE_NUM', 2);
-        //		define('FETCHMODE_BOTH',  3);
-        break;
-    case 'PDO':
-        define('FETCHMODE_ASSOC', PDO::FETCH_ASSOC);
-        define('FETCHMODE_NUM', PDO::FETCH_NUM);
-        //		define('FETCHMODE_BOTH',  PDO::FETCH_BOTH);
-        break;
-    default:
-        break;
-}
-// See also xarDB::setMiddleware() below
-
+/**
+ * Summary of xarDB
+ */
 class xarDB
 {
     private static $mw;   				// We store the applicable middleware class here
     private static $mwName;
 
-    // Get fetch modes associaiated with the middleware
-    public const FETCHMODE_ASSOC = FETCHMODE_ASSOC;   // Index result set by field name.
-    public const FETCHMODE_NUM   = FETCHMODE_NUM;     // Index result set numerically.
+    // @deprecated 2.8.7 Get fetch modes associated with the middleware
+    public const FETCHMODE_ASSOC = -1;   // Index result set by field name.
+    public const FETCHMODE_NUM   = -1;   // Index result set numerically.
 
     // Instead of the globals, we save our db info here.
     private static $firstDSN      = null;
@@ -69,6 +52,22 @@ class xarDB
     public static function withPDO()
     {
         return self::$mwName == 'PDO';
+    }
+
+    public static function getFetchAssoc()
+    {
+        if (self::withPDO()) {
+            return PDO::FETCH_ASSOC;
+        }
+        return ResultSet::FETCHMODE_ASSOC;
+    }
+
+    public static function getFetchNum()
+    {
+        if (self::withPDO()) {
+            return PDO::FETCH_NUM;
+        }
+        return ResultSet::FETCHMODE_NUM;
     }
 
     // Not all database types have more than one driver
@@ -136,13 +135,14 @@ class xarDB
      *
      * @return Connection|PDOConnection object
      */
-    public static function newConn(?array $args = null)
+    public static function newConn(?array $args = null, $xar = null)
     {
+        $xar ??= xar::getServicesClass();
         // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
         switch ($args['databaseType']) {
             case 'sqlite3':
             case 'pdosqlite':
-                $args['location'] ??= xar::sysConfig()->getVar('DB.Location');
+                $args['location'] ??= $xar->sysConfig()->getVar('DB.Location');
                 $args['phptype']       = $args['databaseType'];
                 $args['database']      = $args['location'] . $args['databaseName'] ?? ':memory:';
                 $args['hostspec']    ??= '';
@@ -174,7 +174,7 @@ class xarDB
                     'encoding'  => $args['databaseCharset']];
                 break;
             default:
-                throw new Exception(xar::mls()->translate("Unknown database type: '#(1)'", $args['databaseType']));
+                throw new Exception($xar->mls()->translate("Unknown database type: '#(1)'", $args['databaseType']));
         }
 
         // Get the flags
@@ -187,11 +187,12 @@ class xarDB
         // If it is new it will be added to the connectionMap
         try {
             $conn = self::getConnection($dsn, $flags); // cached on dsn hash, so no worries
+            $conn->setLog($xar->log());
         } catch (Exception $e) {
             throw $e;
         }
         $count = count(self::$connectionMap);
-        xar::log()->notice("New connection created, now serving " . $count . " connections");
+        $xar->log()->notice("New connection created, now serving " . $count . " connections");
         return $conn;
     }
 
@@ -391,32 +392,27 @@ class xarDB
     }
 }
 
-/**
- * Set middleware for DB connections (Creole or PDO)
- */
-$middlewareName = $sysConfig->getVar('DB.Middleware');
-xarDB::setMiddleware($middlewareName);
-
 class xarDatabase extends xarObject
 {
     /**
      * @see \Xaraya\Services\DatabaseService::init()
      */
-    public static function init(array $args = [])
+    public static function init(array $args = [], $xar = null)
     {
         if (empty($args)) {
             // If no $args were passed then get then from the configuration file.
-            $args = self::getConfig();
+            $args = self::getConfig($xar);
         }
-        return self::connect($args);
+        return self::connect($args, $xar);
     }
 
     /**
      * @see \Xaraya\Services\DatabaseService::getConfig()
      */
-    public static function getConfig()
+    public static function getConfig($xar = null)
     {
-        $sysConfig = xar::sysConfig();
+        $xar ??= xar::getServicesClass();
+        $sysConfig = $xar->sysConfig();
         //---------------------------------------------------------------------------
         // Assemble the args from the config file
         // Host name
@@ -457,6 +453,12 @@ class xarDatabase extends xarObject
             $persistent = null;
         }
 
+        /**
+         * Set middleware for DB connections (Creole or PDO)
+         */
+        $middleware = $sysConfig->getVar('DB.Middleware');
+        xarDB::setMiddleware($middleware);
+
         //---------------------------------------------------------------------------
         // Create the systemargs from the args
         switch ($databaseType) {
@@ -478,7 +480,7 @@ class xarDatabase extends xarObject
                 break;
 
             default:
-                throw new Exception(xar::mls()->translate("Unknown database type: '#(1)'", $databaseType));
+                throw new Exception($xar->mls()->translate("Unknown database type: '#(1)'", $databaseType));
         }
         $systemArgs = ['databaseHost'    => $host,
             'databasePort'    => $port,
@@ -490,11 +492,12 @@ class xarDatabase extends xarObject
             'databaseCharset' => $databaseCharset,
             'persistent'      => $persistent,
             'location'        => $location,
+            'middleware'      => $middleware,
         ];
         return $systemArgs;
     }
 
-    protected static function connect(array $systemArgs = [])
+    protected static function connect(array $systemArgs = [], $xar = null)
     {
         $host = $systemArgs['databaseHost'];
         // Connect to the database
@@ -505,7 +508,7 @@ class xarDatabase extends xarObject
             foreach ($localhosts as $local) {
                 $systemArgs['databaseHost'] = $local;
                 try {
-                    return self::xarDB_init($systemArgs);
+                    return self::xarDB_init($systemArgs, $xar);
                 } catch (Exception $e) {
                 }
                 if ($connected) {
@@ -517,7 +520,7 @@ class xarDatabase extends xarObject
             }
         } else {
             try {
-                return self::xarDB_init($systemArgs);
+                return self::xarDB_init($systemArgs, $xar);
             } catch (Exception $e) {
                 // Catch the error here rather than in the subsystem, because we might be connecting to different databases
                 // and want to cater to possible errors in each
@@ -526,7 +529,7 @@ class xarDatabase extends xarObject
         }
     }
 
-    protected static function xarDB_init(array &$args)
+    protected static function xarDB_init(array &$args, $xar = null)
     {
         xarDB::setPrefix($args['prefix']);
 
@@ -539,7 +542,7 @@ class xarDatabase extends xarObject
         $args['doConnect'] ??= true;
         if ($args['doConnect']) {
             try {
-                xarDB::newConn($args);
+                xarDB::newConn($args, $xar);
             } catch (Exception $e) {
                 throw $e;
             }

@@ -8,6 +8,7 @@
 
 namespace Xaraya\Routing;
 
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Services\xar;
 
 /**
@@ -25,13 +26,16 @@ use Xaraya\Services\xar;
  */
 class DefaultHandler extends ModuleHandler
 {
+    use WithServicesClass;
+
     // parent for modules service here
     protected string $modName = '';
     protected string $modType = '';
     protected int $itemType = 0;
 
-    public function __construct()
+    public function __construct($xar = null)
     {
+        $this->setServicesClass($xar);
         // ... no module class instance here
     }
 

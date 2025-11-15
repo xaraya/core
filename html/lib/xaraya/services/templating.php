@@ -978,7 +978,7 @@ trait TemplatingTrait
         xarTemplateCache::saveEntry('memory', $templateCode);
 
         // Execute the cache file
-        $compiled = new CompiledTemplate(xarTemplateCache::cacheFile('memory'));
+        $compiled = new CompiledTemplate(xarTemplateCache::cacheFile('memory'), null, 'module', $xar);
         try {
             $caching = $xar->config()->getVar('Site.BL.MemCacheTemplates');
         } catch (Exception $e) {
@@ -1165,7 +1165,7 @@ trait TemplatingTrait
             // Determine if we need to compile this template
             if (xarTemplateCache::isDirty($sourceFileName)) {
                 // Get an instance of SourceTemplate
-                $srcTemplate = new XarayaSourceTemplate($sourceFileName);
+                $srcTemplate = new XarayaSourceTemplate($sourceFileName, null, 'module', $xar);
 
                 // Compile it
                 // @todo return a CompiledTemplate object here?
@@ -1184,7 +1184,7 @@ trait TemplatingTrait
 
         // Execute the compiled template from the cache file
         // @todo the tplType should be irrelevant
-        $compiled = new CompiledTemplate($cachedFileName, $sourceFileName, $tplType);
+        $compiled = new CompiledTemplate($cachedFileName, $sourceFileName, $tplType, $xar);
         try {
             $caching = $xar->config()->getVar('Site.BL.MemCacheTemplates');
         } catch (Exception $e) {

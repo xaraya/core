@@ -8,12 +8,13 @@ use Xaraya\Services\xar;
 
 final class BridgeRoutingTest extends TestCase
 {
+    protected static $xarServices;
+
     public static function setUpBeforeClass(): void
     {
-        xar::cache()->init();
         xar::req()->setRequestClass(RequestHandler::class);
         xar::session()->setSessionClass(SessionContext::class);
-        xar::load(xarCore::SYSTEM_USER);
+        static::$xarServices = xar::load(xarCore::SYSTEM_USER);
     }
 
     public static function tearDownAfterClass(): void
@@ -42,6 +43,7 @@ final class BridgeRoutingTest extends TestCase
     public function testDispatchRequest(string $method = 'GET', string $path = '/', array $query = [], string $output = ''): void
     {
         $bridge = new RoutingBridge();
+        $bridge->setServicesClass(static::$xarServices);
         $expected = $output;
         if ($method == 'POST' && str_starts_with($path, '/graphql')) {
             if (!empty($query)) {

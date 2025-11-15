@@ -58,9 +58,9 @@ final class DatabaseTest extends TestCase
         $this->assertTrue($conn instanceof \Connection);
         // @todo align FETCHMODE constants between Creole & PDO interfaces
         $expected = ResultSet::FETCHMODE_ASSOC;
-        $this->assertEquals($expected, xarDB::FETCHMODE_ASSOC);
+        $this->assertEquals($expected, xarDB::getFetchAssoc());
         $expected = ResultSet::FETCHMODE_NUM;
-        $this->assertEquals($expected, xarDB::FETCHMODE_NUM);
+        $this->assertEquals($expected, xarDB::getFetchNum());
 
         // check database connection works
         $expected = 'xar_eventsystem';
@@ -114,9 +114,9 @@ final class DatabaseTest extends TestCase
         $this->assertTrue($conn instanceof \PDOConnection);
         // @todo align FETCHMODE constants between Creole & PDO interfaces
         $expected = PDO::FETCH_ASSOC;
-        $this->assertEquals($expected, xarDB::FETCHMODE_ASSOC);
+        $this->assertEquals($expected, xarDB::getFetchAssoc());
         $expected = PDO::FETCH_NUM;
-        $this->assertEquals($expected, xarDB::FETCHMODE_NUM);
+        $this->assertEquals($expected, xarDB::getFetchNum());
 
         // check database connection works
         $expected = 'xar_eventsystem';

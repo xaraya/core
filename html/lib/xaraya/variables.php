@@ -320,12 +320,12 @@ class xarVarPrep
      * @return boolean
      * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
     **/
-    public static function init(array $args = [])
+    public static function init(array $args = [], $xar = null)
     {
         if (empty($args) && self::$initialized) {
             return true;
         }
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
 
         self::$dbCharSet = $xar->sysConfig()->getVar('DB.Charset');
         self::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);

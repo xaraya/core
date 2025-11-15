@@ -291,9 +291,9 @@ class ExecHelper extends ServiceClass
 
         // Module loaded successfully, trigger the proper event
         if (preg_match('/(.*)?api$/', $modType)) {
-            $xar->events()->notify('ModApiLoad', $modName, $this->getContext());
+            $xar->events()->notify('ModApiLoad', $modName, $this->getContext(), $xar);
         } else {
-            $xar->events()->notify('ModLoad', $modName, $this->getContext());
+            $xar->events()->notify('ModLoad', $modName, $this->getContext(), $xar);
         }
         return true;
     }
@@ -343,7 +343,7 @@ class ExecHelper extends ServiceClass
             if (!empty($result) && class_exists($result['classname'])) {
                 $class = $result['classname'];
                 try {
-                    $this->moduleClasses[$modName] = new $class($modName, $this->getContext());
+                    $this->moduleClasses[$modName] = new $class($modName, $this->getContext(), $this->getParent());
                 } catch (Throwable $e) {
                     $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext());
                     $xar = $this->getParent();

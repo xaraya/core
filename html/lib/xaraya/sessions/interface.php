@@ -27,7 +27,7 @@ interface SessionInterface
      * @param mixed $context not used in default session handler
      * @return void
      **/
-    public function __construct($args, $context = null);
+    public function __construct($args, $context = null, $xar = null);
 
     /**
      * Initialize the session after setup

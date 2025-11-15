@@ -85,12 +85,13 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      * @return void
      * @throws SessionException
      **/
-    public function __construct($args, $context = null)
+    public function __construct($args, $context = null, $xar = null)
     {
         if (session_status() == PHP_SESSION_ACTIVE) {
             debug_print_backtrace();
             return;
         }
+        $this->setServicesClass($xar);
         // Register tables this subsystem uses
         $tables = ['session_info' => $this->db()->getPrefix() . '_session_info'];
         $this->db()->importTables($tables);

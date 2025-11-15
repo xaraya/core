@@ -49,7 +49,7 @@ class CountitemsMethod extends MethodClass
 
         // Determine the tables we are going to use
         $tables = $this->db()->getTables();
-        $q = new Query('SELECT', $tables['modules']);
+        $q = new Query('SELECT', $tables['modules'], '', 0, $this->getParent());
 
         if (!empty($regid)) {
             $q->eq('regid', $regid);

@@ -150,6 +150,8 @@ function try_handler($restHandler)
 }
 
 //try_builder();
-// move away from static methods for context
-$restHandler = new RestAPIHandler();
+// Get Xaraya Services Class
+$xar = xar::getServicesClass();
+// Get RestAPI handler
+$restHandler = new RestAPIHandler($xar);
 try_handler($restHandler);

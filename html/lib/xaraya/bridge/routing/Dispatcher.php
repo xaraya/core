@@ -35,7 +35,7 @@ class Dispatcher implements ContextInterface
     /** @var ?Context<string, mixed> */
     protected $context = null;
 
-    public function __construct(string $baseUri = 'http://localhost/', ?RouterInterface $router = null)
+    public function __construct(string $baseUri = 'http://localhost/', ?RouterInterface $router = null, $xar = null)
     {
         $this->baseUri = $baseUri;
         $this->router = $router;
@@ -44,6 +44,7 @@ class Dispatcher implements ContextInterface
             // for http://localhost/xaraya/dispatch.php this becomes /xaraya/dispatch.php
             $this->basePath = $basePath ? rtrim($basePath, '/') : '';
         }
+        $this->setServicesClass($xar);
     }
 
     /**
@@ -138,12 +139,13 @@ class Dispatcher implements ContextInterface
     public function wrapOutputInPage(string $body): string
     {
         $this->context?->tracePath(__METHOD__);
-        $tpl = $this->getServicesClass()->tpl();
+        $xar = $this->getServicesClass();
+        $tpl = $xar->tpl();
         // Set page template based on modType if logged in - see index.php
         if (is_a($this->handler, ModuleHandler::class)) {
             $modType = $this->handler->getModType();
             // we need $context['cookie'] and/or $context['server'] for this - see ContextFactory::fromGlobals()
-            if (!empty($this->context?->getUserId())) {
+            if (!empty($this->context?->getUserId($xar))) {
                 $tpl->setPageTemplateName($modType);
             }
         }
@@ -204,10 +206,15 @@ class Dispatcher implements ContextInterface
         if (is_subclass_of($routesClass, RoutesInterface::class)) {
             /** @var class-string<RoutesInterface> $routesClass */
             $route = $vars[RouterInterface::ROUTE_PARAM] ?? '';
-            $this->handler = $routesClass::getHandler($route, $this->context);
+            $xar = $this->getServicesClass();
+            $this->handler = $routesClass::getHandler($route, $this->context, $xar);
         } else {
             $this->handler = is_object($routesClass) ? $routesClass : new $routesClass();
             $this->handler->setContext($this->context);
+        }
+        if (method_exists($this->handler, 'setServicesClass')) {
+            $xar = $this->getServicesClass();
+            $this->handler->setServicesClass($xar);
         }
         try {
             [$result, $context] = $this->handler->callHandler($handler, $vars);

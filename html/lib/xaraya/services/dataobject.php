@@ -88,6 +88,27 @@ interface DataObjectInterface extends ServiceInterface
     public function getObjects(array $args = []);
 
     /**
+     * Summary of createObject
+     * @param array<string, mixed> $args
+     * @return int
+     */
+    public function createObject(array $args = []);
+
+    /**
+     * Summary of updateObject
+     * @param array<string, mixed> $args
+     * @return int|mixed
+     */
+    public function updateObject(array $args = []);
+
+    /**
+     * Summary of deleteObject
+     * @param array<string, mixed> $args
+     * @return bool
+     */
+    public function deleteObject(array $args = []);
+
+    /**
      * Identify data object via DataObjectDescriptor
      * @param array<string, mixed> $args
      * @return array<mixed> all parts necessary to describe a DataObject
@@ -214,6 +235,36 @@ trait DataObjectTrait
     public function getObjects(array $args = [])
     {
         return DataObjectFactory::getObjects($args, $this->getParent());
+    }
+
+    /**
+     * Summary of createObject
+     * @param array<string, mixed> $args
+     * @return int
+     */
+    public function createObject(array $args = [])
+    {
+        return DataObjectFactory::createObject($args, $this->getParent());
+    }
+
+    /**
+     * Summary of updateObject
+     * @param array<string, mixed> $args
+     * @return int|mixed
+     */
+    public function updateObject(array $args = [])
+    {
+        return DataObjectFactory::updateObject($args, $this->getParent());
+    }
+
+    /**
+     * Summary of deleteObject
+     * @param array<string, mixed> $args
+     * @return bool
+     */
+    public function deleteObject(array $args = [])
+    {
+        return DataObjectFactory::deleteObject($args, $this->getParent());
     }
 
     /**

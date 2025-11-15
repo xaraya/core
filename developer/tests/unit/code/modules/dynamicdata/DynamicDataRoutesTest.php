@@ -16,15 +16,17 @@ final class DynamicDataRoutesTest extends TestHelper
     {
         parent::setUpBeforeClass();
         $dispatcher = new Dispatcher();
+        $dispatcher->setServicesClass(static::$xarServices);
         $dispatcher->resetController();
         self::$router = $dispatcher->getRouter();
     }
 
     public static function tearDownAfterClass(): void
     {
-        parent::setUpBeforeClass();
+        parent::tearDownAfterClass();
         // make sure we reset the Controller here for later tests
         $dispatcher = new Dispatcher();
+        $dispatcher->setServicesClass(static::$xarServices);
         $dispatcher->resetController();
     }
 
@@ -194,6 +196,7 @@ final class DynamicDataRoutesTest extends TestHelper
     public function testDispatcher(): void
     {
         $dispatcher = new Dispatcher();
+        $dispatcher->setServicesClass(static::$xarServices);
 
         $path = '/dynamicdata/';
         $params = [];
@@ -213,6 +216,7 @@ final class DynamicDataRoutesTest extends TestHelper
     public function testUserGuiViewSample(): void
     {
         $dispatcher = new Dispatcher();
+        $dispatcher->setServicesClass(static::$xarServices);
 
         $path = '/dynamicdata/view/sample';
         $params = [];

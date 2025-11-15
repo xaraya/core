@@ -42,9 +42,7 @@ class DDObject extends xarObject implements IDDObject
     public function __construct($name = null, $xar = null)
     {
         $this->name = $name ?? self::toString();
-        if (isset($xar)) {
-            $this->setServicesClass($xar);
-        }
+        $this->setServicesClass($xar);
     }
 
     /**

@@ -264,10 +264,10 @@ class ModuleRoutes implements RoutesInterface
      * @param ?Context<string, mixed> $context
      * @return HandlerInterface
      */
-    public static function getHandler(string $route, ?Context $context): HandlerInterface
+    public static function getHandler(string $route, ?Context $context, $xar = null): HandlerInterface
     {
         // we could provide different instance or handler based on route here
-        $instance = static::getInstance($context);
+        $instance = static::getInstance($context, $xar);
         $handler = new ModuleHandler($instance, $context);
         return $handler;
     }
@@ -276,9 +276,9 @@ class ModuleRoutes implements RoutesInterface
      * Get module UserGui class instance like \Xaraya\Modules\Base\UserGui()
      * @param ?Context<string, mixed> $context
      */
-    public static function getInstance(?Context $context): ModuleServicesInterface
+    public static function getInstance(?Context $context, $xar = null): ModuleServicesInterface
     {
-        $module = static::getModule($context);
+        $module = static::getModule($context, $xar);
         $instance = new (static::$handlerClass)(static::$moduleName, $module, $context);
         return $instance;
     }
@@ -287,11 +287,11 @@ class ModuleRoutes implements RoutesInterface
      * Get module class like \Xaraya\Modules\Base\Module()
      * @param ?Context<string, mixed> $context
      */
-    public static function getModule(?Context $context): ModuleInterface
+    public static function getModule(?Context $context, $xar = null): ModuleInterface
     {
         $result = xarClassMap::findModuleClass(static::$moduleName);
         /** @var ModuleInterface $module */
-        $module = new $result['classname'](static::$moduleName, $context);
+        $module = new $result['classname'](static::$moduleName, $context, $xar);
         return $module;
     }
 }

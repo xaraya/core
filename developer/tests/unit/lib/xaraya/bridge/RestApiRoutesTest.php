@@ -18,6 +18,7 @@ final class RestApiRoutesTest extends TestHelper
     {
         parent::setUpBeforeClass();
         $dispatcher = new Dispatcher();
+        $dispatcher->setServicesClass(static::$xarServices);
         self::$router = $dispatcher->getRouter();
     }
 
@@ -83,6 +84,10 @@ final class RestApiRoutesTest extends TestHelper
         // @todo $routesClass is already handler class for restapi here
         if (is_subclass_of($routesClass, RoutesInterface::class)) {
             $moduleHandler = $routesClass::getHandler($route, $context);
+        } elseif (is_a($routesClass, RestAPIHandler::class, true)) {
+            $moduleHandler = is_object($routesClass) ? $routesClass : new $routesClass();
+            $moduleHandler->setContext($context);
+            $moduleHandler->setServicesClass(static::$xarServices);
         } else {
             $moduleHandler = is_object($routesClass) ? $routesClass : new $routesClass();
             $moduleHandler->setContext($context);
@@ -121,6 +126,10 @@ final class RestApiRoutesTest extends TestHelper
         // @todo $routesClass is already handler class for restapi here
         if (is_subclass_of($routesClass, RoutesInterface::class)) {
             $moduleHandler = $routesClass::getHandler($route, $context);
+        } elseif (is_a($routesClass, RestAPIHandler::class, true)) {
+            $moduleHandler = is_object($routesClass) ? $routesClass : new $routesClass();
+            $moduleHandler->setContext($context);
+            $moduleHandler->setServicesClass(static::$xarServices);
         } else {
             $moduleHandler = is_object($routesClass) ? $routesClass : new $routesClass();
             $moduleHandler->setContext($context);
@@ -138,6 +147,7 @@ final class RestApiRoutesTest extends TestHelper
     {
         // @todo add restapi to Dispatcher routes
         $dispatcher = new Dispatcher();
+        $dispatcher->setServicesClass(static::$xarServices);
 
         $path = '/restapi/v1/objects/sample';
         $params = [];

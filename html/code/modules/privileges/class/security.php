@@ -76,13 +76,13 @@ class xarSecurity extends xarObject
      * @access  public
      * @return  void
     */
-    public static function initialize()
+    public static function initialize($xar = null)
     {
         if (!empty(self::$dbconn)  && !empty(self::$privilegestable)) {
             return;
         }
 
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         self::$dbconn = $xar->db()->getConn();
         $xar->mod()->loadDbInfo('privileges');
         $xartable = $xar->db()->getTables();
@@ -146,14 +146,14 @@ class xarSecurity extends xarObject
      * @param int $level
      * @return bool
     */
-    public static function check($mask, $catch = 1, $component = '', $instance = '', $module = '', $rolename = '', $realm = 0, $level = 0)
+    public static function check($mask, $catch = 1, $component = '', $instance = '', $module = '', $rolename = '', $realm = 0, $level = 0, $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $installing = $xar->mem()->get('installer', 'installing');
         if (isset($installing) && ($installing == true)) {
             return true;
         }
-        self::initialize();
+        self::initialize($xar);
         $userID = $xar->session()->getUserId();
 
         $xar->log()->info("xarSecurity::check: Testing user $userID against mask $mask");
@@ -192,9 +192,9 @@ class xarSecurity extends xarObject
 
         $maskname = $mask;
         if (empty($maskname)) {
-            $mask = new xarMask();
+            $mask = new xarMask([], $xar);
         } else {
-            $mask =  self::getMask($mask);
+            $mask =  self::getMask($mask, 0, "All", false, $xar);
         }
         if (!$mask) {
             // <mikespub> moved this whole $module thing where it's actually used, i.e. for
@@ -310,7 +310,11 @@ class xarSecurity extends xarObject
             if (empty($userID)) {
                 $userID = $xar->session()->getAnonId();
             }
-            $role = xarRoles::get($userID);
+            if ($xar->mem()->has('Roles.ById', $userID)) {
+                $role = $xar->mem()->get('Roles.ById', $userID);
+            } else {
+                $role = xarRoles::get($userID);
+            }
         } else {
             $role = xarRoles::findRole($rolename);
         }
@@ -353,7 +357,7 @@ class xarSecurity extends xarObject
             $privileges = self::irreducibleset(['roles' => [$role]], $mask->module);
         }
 
-        $pass = self::testprivileges($mask->normalform, $privileges, false, $role);
+        $pass = self::testprivileges($mask->normalform, $privileges, false, $role, $xar);
 
         //$pass = self::testprivileges($mask,self::getprivset($role),false);
 
@@ -396,10 +400,10 @@ class xarSecurity extends xarObject
      * @param   string
      * @return  xarMask|void object
     */
-    public static function getMask($name, $modid = 0, $component = "All", $suppresscache = false)
+    public static function getMask($name, $modid = 0, $component = "All", $suppresscache = false, $xar = null)
     {
-        self::initialize();
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
+        self::initialize($xar);
         if ($suppresscache || !$xar->mem()->has('Security.Masks', $name)) {
             $bindvars = [];
             $query = "SELECT masks.id AS id, masks.name AS name, realms.name AS realm,
@@ -431,7 +435,7 @@ class xarSecurity extends xarObject
         } else {
             $pargs = $xar->mem()->get('Security.Masks', $name);
         }
-        return new xarMask($pargs);
+        return new xarMask($pargs, $xar);
     }
 
     /**
@@ -502,9 +506,9 @@ class xarSecurity extends xarObject
      * @param   mixed $role
      * @return  bool false if check fails, privilege object if check succeeds
     */
-    public static function testprivileges($mask, $privilegeset, $pass, $role = '')
+    public static function testprivileges($mask, $privilegeset, $pass, $role = '', $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $candebug = $xar->user()->isDebugAdmin();
         $test = self::$test && $candebug;
         $testdeny = self::$testdeny && $candebug;
@@ -622,7 +626,7 @@ class xarSecurity extends xarObject
             }
         }
         if (!$matched && ($privilegeset['children'] != [])) {
-            $pass = self::testprivileges($mask, $privilegeset['children'], $pass, $role);
+            $pass = self::testprivileges($mask, $privilegeset['children'], $pass, $role, $xar);
         }
         return $pass;
     }
