@@ -473,7 +473,7 @@ trait TemplatingTrait
         $xar->log()->info("xar::tpl()->setPageTitle: Setting pageTitle to $title");
 
         // @checkme: modules is a dependency of templates, redundant check?
-        if (!method_exists('\xarModVars', 'get') || !empty($xar->mem()->get('installer', 'installing'))) {
+        if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES) || !empty($xar->mem()->get('installer', 'installing'))) {
             $this->pageTitle = $title;
         } else {
             $order      = $xar->mod('themes')->getVar('SiteTitleOrder');
@@ -657,7 +657,7 @@ trait TemplatingTrait
         }
         // If it is not set, set it return the default theme.
         // @checkme: modules is a depency of templates, redundant check?
-        if (method_exists('\xarModVars', 'get')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
             $xar = $this->getParent();
             $themeName = $xar->mod('themes')->getVar('default_theme');
             if (!empty($themeName)) {
@@ -780,7 +780,7 @@ trait TemplatingTrait
                     $package = $xar->mod()->getName();
                 }
                 // @checkme: modules is a depency of templates, redundant check?
-                if (method_exists('\xarMod', 'getBaseInfo')) {
+                if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
                     $modBaseInfo = $xar->mod()->getBaseInfo($package);
                     if (empty($modBaseInfo)) {
                         return null;
@@ -902,7 +902,7 @@ trait TemplatingTrait
                     $package = $xar->mod()->getName();
                 }
                 // @checkme: modules is a depency of templates, redundant check?
-                if (method_exists('\xarMod', 'getBaseInfo')) {
+                if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
                     $modBaseInfo = $xar->mod()->getBaseInfo($package);
                     if (empty($modBaseInfo)) {
                         return null;
@@ -1250,7 +1250,7 @@ trait TemplatingTrait
                 // Default to not show the comments
                 $this->showPHPCommentBlockInTemplates = 0;
                 // @checkme: modules is a depency of templates, redundant check?
-                if (method_exists('\xarModVars', 'get')) {
+                if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
                     $showphpcbit = $xar->mod('themes')->getVar('ShowPHPCommentBlockInTemplates');
                     if (!empty($showphpcbit)) {
                         $this->showPHPCommentBlockInTemplates = 1;
@@ -1280,7 +1280,7 @@ trait TemplatingTrait
             // Default to not showing it
             $this->showTemplateFilenames = 0;
             // @checkme: modules is a depency of templates, redundant check?
-            if (method_exists('\xarModVars', 'get')) {
+            if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
                 $showtemplates = $xar->mod('themes')->getVar('ShowTemplates');
                 if (!empty($showtemplates)) {
                     $this->showTemplateFilenames = 1;

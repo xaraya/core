@@ -62,4 +62,9 @@ class xar extends xarConst
         }
         return $xar;
     }
+
+    public static function isLoaded($checkLevel)
+    {
+        return xarCore::isLoaded($checkLevel);
+    }
 }

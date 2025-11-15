@@ -522,6 +522,11 @@ class StaticServicesClass extends ServicesClass
         return xarCore::load($whatToLoad, $this);
     }
 
+    public function isLoaded($checkLevel)
+    {
+        return xarCore::isLoaded($checkLevel);
+    }
+
     /**
      * Check if the debugger is active
      */
