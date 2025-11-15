@@ -14,6 +14,7 @@
 namespace Xaraya\Modules\Roles;
 
 use Xaraya\Modules\InstallerClass;
+use DataObjectFactory;
 use Exception;
 use xarRoles;
 use xarXMLInstaller;
@@ -95,7 +96,8 @@ class Installer extends InstallerClass
             'valcode' => 'createdbysystem',
             'authmodule' => (int) $this->mod()->getID('roles'),
         ];
-        $group = $this->data()->getObject(['name' => 'roles_groups']);
+        // @todo check why $this->data() fails here
+        $group = DataObjectFactory::getObject(['name' => 'roles_groups']);
         $rolefields['role_type'] = xarRoles::ROLES_GROUPTYPE;
         $this->mod()->setVar('defaultgroup', 0);
         // The top level group Everybody
@@ -129,7 +131,8 @@ class Installer extends InstallerClass
         $rolefields['parentid'] = $topid;
         $usergroup = $group->createItem($rolefields);
         $this->mod()->setVar('defaultgroup', $usergroup);
-        $user = $this->data()->getObject(['name' => 'roles_users']);
+        // @todo check why $this->data() fails here
+        $user = DataObjectFactory::getObject(['name' => 'roles_users']);
         $rolefields['role_type'] = xarRoles::ROLES_USERTYPE;
         // The Anonymous user
         $rolefields['name'] = 'Anonymous';

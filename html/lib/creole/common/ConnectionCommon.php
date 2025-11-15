@@ -358,6 +358,9 @@ abstract class ConnectionCommon
                 try {
                     $res = $stmt->executeUpdate($bindvars);
                 } catch (Exception $e) {
+                    if (method_exists($e, 'getNativeError')) {
+                        throw new SQLException("CREOLE: query $sql failed to execute - " . $e->getNativeError());
+                    }
                     throw new SQLException("CREOLE: query $sql failed to execute");
                 }
                 // Save it, for adodb compat for the the method Affected_Rows

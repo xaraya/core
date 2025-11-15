@@ -71,7 +71,7 @@ interface DatabaseInterface extends ServiceInterface
     /** @param array<string, mixed> $dsn */
     public function getConnection(array $dsn, mixed $flags): object;
 
-    public function removeConn(int|string $index = 0): bool;
+    public function removeConn($index = null): bool;
 
     /** @return array<mixed> */
     public function getTypeMap(): array;
@@ -242,7 +242,7 @@ trait DatabaseTrait
         return xarDB::getConnection($dsn, $flags);
     }
 
-    public function removeConn(int|string $index = 0): bool
+    public function removeConn($index = null): bool
     {
         return xarDB::removeConn($index);
     }
