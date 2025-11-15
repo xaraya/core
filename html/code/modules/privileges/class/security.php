@@ -96,7 +96,7 @@ class xarSecurity extends xarObject
         self::$rolestable = $xartable['roles'];
 
         // CHECKME: do we need to be careful during installation here or not ?
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
+        if ($xar->mod()->isLoaded()) {
             self::$realmcomparison = $xar->mod('privileges')->getVar('realmcomparison');
             self::$test = $xar->mod('privileges')->getVar('test');
             self::$testdeny = $xar->mod('privileges')->getVar('testdeny');

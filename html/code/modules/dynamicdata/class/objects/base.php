@@ -402,7 +402,7 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         $this->log()->info("DataObject::createItem: Creating an item of object " . $this->name);
 
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod('dynamicdata')->getVar('suppress_updates')) {
+        if ($this->mod()->isLoaded() && $this->mod('dynamicdata')->getVar('suppress_updates')) {
             // We are testing/debugging: return a zero
             return 0;
         }
@@ -496,7 +496,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->itemid = $this->properties[$this->primary]->getValue();
         }
 
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod('dynamicdata')->getVar('suppress_updates')) {
+        if ($this->mod()->isLoaded() && $this->mod('dynamicdata')->getVar('suppress_updates')) {
             // We are testing/debugging: return the ID of this item
             return $this->itemid;
         }
@@ -561,7 +561,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
 
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod('dynamicdata')->getVar('suppress_updates')) {
+        if ($this->mod()->isLoaded() && $this->mod('dynamicdata')->getVar('suppress_updates')) {
             // Call delete hooks for this item
             $this->callHooks('delete');
 

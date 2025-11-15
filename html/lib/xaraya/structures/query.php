@@ -89,7 +89,7 @@ class Query
     {
         $xar = $this->getServicesClass($xar);
         // Set the debugflag
-        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && $xar->config()->getVar('Site.BL.ShowQueries', false) && $xar->user()->isDebugAdmin()) {
+        if ($xar->user()->isLoaded() && $xar->config()->getVar('Site.BL.ShowQueries', false) && $xar->user()->isDebugAdmin()) {
             $this->debugflag = true;
         }
 

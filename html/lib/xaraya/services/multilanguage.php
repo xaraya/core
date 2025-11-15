@@ -264,6 +264,11 @@ trait MultiLanguageTrait
         return $systemArgs;
     }
 
+    public function isLoaded(): bool
+    {
+        return $this->initialized;
+    }
+
     /**
      * Returns the site locale if running in SINGLE mode,
      * returns the site default locale if running in BOXED or UNBOXED mode

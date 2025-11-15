@@ -137,6 +137,11 @@ trait SessionTrait
         return $systemArgs;
     }
 
+    public function isLoaded(): bool
+    {
+        return $this->initialized;
+    }
+
     public function getInstance(): ?SessionFacade
     {
         // moved to static services class

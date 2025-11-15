@@ -122,7 +122,7 @@ class XarayaCompiler extends xarBLCompiler
 
             $xar = $this->getServicesClass();
             // Get the value for the framework tag, which is defined in a modvar
-            if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
+            if ($xar->mod()->isLoaded()) {
                 $framework = $xar->mod()->getVar('themeworks', 'framework');
             } else {
                 $framework = '';
@@ -145,7 +145,7 @@ class XarayaCompiler extends xarBLCompiler
     private function getModuleTagPaths()
     {
         $xar = $this->getServicesClass();
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && empty($xar->mem()->get('installer', 'installing'))) {
+        if ($xar->mod()->isLoaded() && empty($xar->mem()->get('installer', 'installing'))) {
             $activeMods = $xar->mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => ixarMod::STATE_ACTIVE]]);
         } else {
             return [];
@@ -227,7 +227,7 @@ class XarayaCompiler extends xarBLCompiler
     private function getBlockTagPaths()
     {
         $xar = $this->getServicesClass();
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && empty($xar->mem()->get('installer', 'installing'))) {
+        if ($xar->mod()->isLoaded() && empty($xar->mem()->get('installer', 'installing'))) {
             $activeBlocks = $xar->mod()->apiFunc('blocks', 'instances', 'getitems', ['state' => 2]);
         } else {
             return [];

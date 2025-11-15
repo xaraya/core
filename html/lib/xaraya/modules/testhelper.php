@@ -70,7 +70,9 @@ class TestHelper extends TestCase
         // use default session handler
         $xar->session()->setSessionClass(SessionHandler::class);
 
-        chdir(static::$oldDir);
+        if (isset(static::$oldDir)) {
+            chdir(static::$oldDir);
+        }
     }
 
     protected function setUp(): void {}

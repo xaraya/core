@@ -144,6 +144,11 @@ trait VariablesTrait
         return true;
     }
 
+    public function isLoaded(): bool
+    {
+        return $this->initialized;
+    }
+
     /**
      * Fetch variable by name, with validation, variable, defaultValue, flags and prep
      *

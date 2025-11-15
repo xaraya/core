@@ -350,7 +350,7 @@ trait DatabaseTrait
         }
         $xar = $this->getServicesClass();
         // we need 'module_itemvars' and/or 'module_vars' tables below
-        if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
+        if (!$xar->mod()->isLoaded()) {
             $xar->mod()->loadDbInfo('modules');
         }
         $modName = $this->getDbModName();

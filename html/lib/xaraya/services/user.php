@@ -115,6 +115,11 @@ trait UserTrait
         return $systemArgs;
     }
 
+    public function isLoaded(): bool
+    {
+        return $this->initialized;
+    }
+
     /**
      * Get user variable
      */

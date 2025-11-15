@@ -34,6 +34,7 @@ interface ServiceInterface extends ContextInterface
     public function init(array $config = []): bool;
     /** @return array<string, mixed> */
     public function getConfig(): array;
+    public function isLoaded(): bool;
     public function getParent(): mixed;
     public function setParent(mixed $parent): void;
     /**
@@ -81,6 +82,11 @@ trait ServiceTrait
     public function getConfig(): array
     {
         return [];
+    }
+
+    public function isLoaded(): bool
+    {
+        return true;
     }
 
     /**

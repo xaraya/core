@@ -204,6 +204,11 @@ trait ModulesTrait
         return $systemArgs;
     }
 
+    public function isLoaded(): bool
+    {
+        return $this->initialized;
+    }
+
     /**
      * Get module variable for this module
      */

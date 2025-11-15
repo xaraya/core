@@ -80,7 +80,7 @@ class DataObjectDescriptor extends ObjectDescriptor
         }
         // object property is called module_id now instead of moduleid for whatever reason !?
         $args['module_id'] = $args['moduleid'];
-        if (xarCore::isLoaded(xarCore::SYSTEM_TEMPLATES) && empty($args['tplmodule'])) {
+        if ($xar->tpl()->isLoaded() && empty($args['tplmodule'])) {
             $args['tplmodule'] = $xar->mod()->getName($args['moduleid']);
         }
         if (empty($args['template'])) {

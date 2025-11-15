@@ -385,7 +385,7 @@ class DataObjectFactory extends xarObject
         /* with autoload and variable caching activated */
         // Do we allow caching?
         $cacheKey = null;
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $xar->mod('dynamicdata')->getVar('caching')) {
+        if ($xar->mod()->isLoaded() && $xar->mod('dynamicdata')->getVar('caching')) {
             $cacheKey = static::getVariableCacheKey('DataObject', $args, $xar);
             // Check if the variable is cached
             if ($xar->cache()->hasVariable($cacheKey)) {
@@ -473,7 +473,7 @@ class DataObjectFactory extends xarObject
 
         /* with autoload and variable caching activated */
         // Do we allow caching?
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $xar->mod('dynamicdata')->getVar('caching')) {
+        if ($xar->mod()->isLoaded() && $xar->mod('dynamicdata')->getVar('caching')) {
             $cacheKey = static::getVariableCacheKey('DataObjectList', $args, $xar);
             // Check if the variable is cached
             if ($xar->cache()->hasVariable($cacheKey)) {

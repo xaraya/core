@@ -127,6 +127,11 @@ trait RequestTrait
         $this->args = $config;
     }
 
+    public function isLoaded(): bool
+    {
+        return $this->initialized;
+    }
+
     /**
      * Get the request class instance (on demand)
      */

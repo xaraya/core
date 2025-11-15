@@ -317,6 +317,11 @@ trait CachingTrait
         return $cachingConfiguration;
     }
 
+    public function isLoaded(): bool
+    {
+        return $this->initialized;
+    }
+
     public function withOutput(): bool
     {
         return empty($this->outputCache) ? false : true;

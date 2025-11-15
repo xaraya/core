@@ -176,7 +176,7 @@ class PropertyRegistration extends DataContainer
         $dbconn = $xar->db()->getConn();
         $xar->mod()->loadDbInfo('dynamicdata');
         // CHECKME: $tables[modules] is defined in xar::mod()->init()
-        if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
+        if (!$xar->mod()->isLoaded()) {
             $xar->mod()->loadDbInfo('modules', 'modules');
         }
         $tables = $xar->db()->getTables();

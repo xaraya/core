@@ -301,7 +301,7 @@ class xarMasks extends xarSecurity
      */
     public static function clearCache()
     {
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
+        if (xar::mod()->isLoaded()) {
             xar::mod('privileges')->setVar('clearcache', time());
         }
     }

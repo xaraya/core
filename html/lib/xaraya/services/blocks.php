@@ -78,6 +78,11 @@ trait BlocksTrait
         return true;
     }
 
+    public function isLoaded(): bool
+    {
+        return $this->initialized;
+    }
+
     /**
      * Summary of render
      * @param array<string, mixed> $blockinfo
