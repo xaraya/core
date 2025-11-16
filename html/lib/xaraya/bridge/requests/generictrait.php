@@ -13,6 +13,7 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
+use Xaraya\Bridge\Routing\RoutingBridge;
 
 /**
  * For documentation purposes only - available via GenericBridgeTrait
@@ -78,6 +79,7 @@ trait GenericBridgeTrait
         $handler ??= static::class;
         $routes = [];
 
+        // @todo depends on who actually called this
         $path = $pathPrefix . '/routes';
         $name = $namePrefix . 'routes';
         $routes[$name] = ['GET', $path, [$handler, 'handleRoutesRequest'], $extra];
@@ -170,8 +172,11 @@ trait GenericBridgeTrait
      */
     public function runRoutesGuiRequest($vars)
     {
+        // @todo depends on who actually called this
+        $bridge = new RoutingBridge();
+        $router = $bridge->getRouter();
         $result = "<ul>";
-        foreach ($this->getRouter()->getRoutes() as $name => $route) {
+        foreach ($router->getRoutes() as $name => $route) {
             $result .= "<li>" . $name . " [" . json_encode($route, JSON_UNESCAPED_SLASHES) . "]</li>";
         }
         $result .= "</ul>";
@@ -185,8 +190,11 @@ trait GenericBridgeTrait
      */
     public function runRoutesApiRequest($vars)
     {
+        // @todo depends on who actually called this
+        $bridge = new RoutingBridge();
+        $router = $bridge->getRouter();
         $result = [];
-        foreach ($this->getRouter()->getRoutes() as $name => $route) {
+        foreach ($router->getRoutes() as $name => $route) {
             $result[$name] = $route;
         }
         return $result;

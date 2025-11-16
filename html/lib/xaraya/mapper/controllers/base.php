@@ -14,8 +14,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-use Xaraya\Services\xar;
-
 class BaseActionController extends xarObject
 {
     private xarRequest $request;
@@ -52,11 +50,12 @@ class BaseActionController extends xarObject
         $request->getServerContext()?->withQueryParams($args);
         // Get context of the request if available
         //$context = $request->getServerContext()?->getContext();
+        $xar = $request->getServicesClass();
         // Now get the output
         if ($request->getModule() == 'object') {
-            $response->output = xar::data()->guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs());
+            $response->output = $xar->data()->guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs());
         } else {
-            $response->output = xar::mod()->guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getFunctionArgs());
+            $response->output = $xar->mod()->guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getFunctionArgs());
         }
     }
 

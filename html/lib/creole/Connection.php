@@ -220,4 +220,5 @@ interface Connection extends ConnectionInterface
      */
     public function getUpdateCount();
 
+    public function log();
 }

@@ -18,6 +18,7 @@ namespace Xaraya\Services;
 
 use ixarMLS;
 use xarCore;
+use XarDateTime;
 use xarLocale;
 use xarMLSContext;
 use BadParameterException;
@@ -223,6 +224,8 @@ trait MultiLanguageTrait
 
         // Set the timezone
         date_default_timezone_set($this->defaultTimeZone);
+        // Set the default server timezone for XarDateTime
+        XarDateTime::$defaulttz = $this->defaultTimeZone;
 
         // FIXME: this was previously conditional on User subsystem initialisation,
         // but in the 2.x flow we need it earlier apparently, so made this unconditional

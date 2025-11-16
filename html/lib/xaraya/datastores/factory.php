@@ -207,9 +207,9 @@ class DataStoreFactory extends xarObject
      * @param DataObject|null $object
      * @return list<array<string, string>>
      */
-    public static function &getDataSources($object = null)
+    public static function &getDataSources($object = null, $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $sources = [];
         $sources[] = ['id' => '', 'name' => $xar->mls()->translate('None')];
 
@@ -232,7 +232,7 @@ class DataStoreFactory extends xarObject
         $object->dbConnIndex = $xar->db()->checkDbConnection($object->dbConnIndex, $object->dbConnArgs);
         // use external database connection
         if ($xar->db()->isIndexExternal($object->dbConnIndex)) {
-            return static::getExternalDataSources($object->datasources, $object->dbConnIndex);
+            return static::getExternalDataSources($object->datasources, $object->dbConnIndex, $xar);
         }
 
         $dbconn = $xar->db()->getConn($object->dbConnIndex);
@@ -268,9 +268,9 @@ class DataStoreFactory extends xarObject
      * @param string $dbConnIndex connection index of the database if different from Xaraya DB (required)
      * @return list<array<string, string>>
      */
-    public static function &getExternalDataSources($datasources = [], $dbConnIndex = '')
+    public static function &getExternalDataSources($datasources = [], $dbConnIndex = '', $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $sources = [];
         $sources[] = ['id' => '', 'name' => $xar->mls()->translate('None')];
 

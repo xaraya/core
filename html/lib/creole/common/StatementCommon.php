@@ -82,7 +82,7 @@ abstract class StatementCommon
 
     protected $xarLog = null;
 
-    protected function log()
+    public function log()
     {
         if (!isset($this->xarLog)) {
             $this->xarLog = xar::log();
@@ -98,6 +98,7 @@ abstract class StatementCommon
     public function __construct(Connection $conn)
     {
         $this->conn = $conn;
+        $this->xarLog = $conn->log();
     }
 
     /**

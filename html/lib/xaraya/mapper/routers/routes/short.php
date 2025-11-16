@@ -75,7 +75,7 @@ class ShortRoute extends xarRoute
 
         // Get the module part and validate it. Can be an alias; the dispatcher should know
         $path = explode($this->delimiter, $path);
-        if ($this->dispatcher && $this->dispatcher->isValidModule($path[0])) {
+        if ($request->isValidModule($path[0])) {
             $request->setModule(array_shift($path));
             $parts[$this->moduleKey] = $request->getModule();
             $this->validModule = true;

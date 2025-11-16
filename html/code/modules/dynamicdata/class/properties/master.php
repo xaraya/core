@@ -270,25 +270,27 @@ class DataPropertyMaster extends xarObject
 
         return $property;
     }
-    public static function createProperty(array $args = [])
+    public static function createProperty(array $args = [], $xar = null)
     {
         $object = DataObjectFactory::getObject(
             [
                 'name' => 'properties',
                 'itemid'   => $args['itemid'],
-            ]
+            ],
+            null,
+            $xar
         );
         $objectid = $object->createItem($args);
         unset($object);
         return $objectid;
     }
 
-    public static function updateProperty(array $args = [])
+    public static function updateProperty(array $args = [], $xar = null)
     {
         // TODO: what if the property type changes to something incompatible ?
     }
 
-    public static function deleteProperty(array $args = [])
+    public static function deleteProperty(array $args = [], $xar = null)
     {
         if (empty($args['itemid'])) {
             return;
@@ -299,7 +301,9 @@ class DataPropertyMaster extends xarObject
             [
                 'name'   => 'properties', // the Dynamic Properties = 2
                 'itemid' => $args['itemid'],
-            ]
+            ],
+            null,
+            $xar
         );
         if (!class_exists('DataObject', true)) {
             // oops
@@ -368,12 +372,12 @@ class DataPropertyMaster extends xarObject
     /**
      * Class method to check if a property is available
      */
-    public static function isAvailable($name = null)
+    public static function isAvailable($name = null, $xar = null)
     {
         if (empty($name)) {
             return false;
         }
-        $types = self::getPropertyTypes();
+        $types = self::getPropertyTypes($xar);
         foreach ($types as $type) {
             if ($type['name'] == $name) {
                 return true;

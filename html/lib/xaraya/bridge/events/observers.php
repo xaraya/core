@@ -50,43 +50,49 @@ namespace Xaraya\Bridge\Events;
 
 //use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 
 interface ObserverBridgeInterface
 {
-    public static function setDispatcher(EventDispatcherInterface $dispatcher): void;
-    public static function setEventList(array $eventList = []): void;
-    public static function callbackEvent($info, $context = null): void;
-    public static function register(): void;
-    public static function unregister(): void;
-    public static function getEventList(): array;
+    public function setDispatcher(EventDispatcherInterface $dispatcher): void;
+    public function setEventList(array $eventList = []): void;
+    public function callbackEvent($info, $context = null): void;
+    public function register(): void;
+    public function unregister(): void;
+    public function getEventList(): array;
     public static function getEventName(string $eventScope, string $eventType): string;
     public static function getObservedEvents(): array;
 }
 
 class EventObserverBridge implements ObserverBridgeInterface
 {
+    use WithServicesClass;
+
     protected static $eventNamePrefix = 'xarEvents';
     protected static $observedEvents = [];
-    protected static $dispatcher;
+    protected $dispatcher;
 
-    public function __construct(EventDispatcherInterface $dispatcher, array $eventList = [])
+    public function __construct(EventDispatcherInterface $dispatcher, array $eventList = [], $xar = null)
     {
-        static::setDispatcher($dispatcher);
-        static::setEventList($eventList);
+        $this->setServicesClass($xar);
+        $this->setDispatcher($dispatcher);
+        $this->setEventList($eventList);
     }
 
-    public static function setDispatcher(EventDispatcherInterface $dispatcher): void
+    public function setDispatcher(EventDispatcherInterface $dispatcher): void
     {
-        static::$dispatcher = $dispatcher;
+        $this->dispatcher = $dispatcher;
     }
 
-    public static function setEventList(array $eventList = []): void
+    public function setEventList(array $eventList = []): void
     {
         if (empty($eventList)) {
-            static::getObservedEvents();
+            foreach ($this->getEventList() as $event => $info) {
+                $eventName = static::getEventName($info['scope'], $event);
+                static::$observedEvents[$event] = $eventName;
+            }
         } else {
-            foreach (static::getEventList() as $event => $info) {
+            foreach ($this->getEventList() as $event => $info) {
                 if (in_array($event, $eventList)) {
                     $eventName = static::getEventName($info['scope'], $event);
                     static::$observedEvents[$event] = $eventName;
@@ -94,12 +100,12 @@ class EventObserverBridge implements ObserverBridgeInterface
             }
         }
         // register all observed events here?
-        static::register();
+        $this->register();
     }
 
-    public static function callbackEvent($info, $context = null): void
+    public function callbackEvent($info, $context = null): void
     {
-        if (empty(static::$dispatcher)) {
+        if (empty($this->dispatcher)) {
             return;
         }
         $event = $info['event'] ?? 'Event';
@@ -112,48 +118,47 @@ class EventObserverBridge implements ObserverBridgeInterface
         // set context if available in callback
         $tosend->setContext($context);
         // observers may, or may not return a response, but EventDispatcher doesn't anyway
-        (static::$dispatcher)->dispatch($tosend, static::$observedEvents[$event]);
+        $this->dispatcher->dispatch($tosend, static::$observedEvents[$event]);
     }
 
-    public static function register(): void
+    public function register(): void
     {
+        $xar = $this->getServicesClass();
         foreach (static::getObservedEvents() as $event => $eventName) {
-            xar::events()->registerCallback($event, [static::class, 'callbackEvent']);
+            $xar->events()->registerCallback($event, [$this, 'callbackEvent']);
         }
     }
 
-    public static function unregister(): void
+    public function unregister(): void
     {
+        $xar = $this->getServicesClass();
         foreach (static::getObservedEvents() as $event => $eventName) {
             // @todo
         }
     }
 
-    public static function getEventList(): array
+    public function getEventList(): array
     {
-        return xar::events()->getSubjects();
+        $xar = $this->getServicesClass();
+        return $xar->events()->getSubjects();
     }
 
     public static function getEventName(string $eventScope, string $eventType): string
     {
-        //xarEvents.scope.event
+        //xarEvents.scope.event or xarHooks.scope.event
         $eventName = implode('.', [static::$eventNamePrefix, $eventScope, $eventType]);
         return $eventName;
     }
 
+    /**
+     * Use static method here by analogy with EventSubscriberInterface::getSubscribedEvents()
+     * @return array<string, string>
+     */
     public static function getObservedEvents(): array
     {
         //return [
         //    'event' => 'xarEvents.scope.event',
         //];
-        if (!empty(static::$observedEvents)) {
-            return static::$observedEvents;
-        }
-        $eventList = static::getEventList();
-        foreach ($eventList as $event => $info) {
-            $eventName = static::getEventName($info['scope'], $event);
-            static::$observedEvents[$event] = $eventName;
-        }
         return static::$observedEvents;
     }
 }
@@ -162,24 +167,27 @@ class HookObserverBridge extends EventObserverBridge implements ObserverBridgeIn
 {
     protected static $eventNamePrefix = 'xarHooks';
     protected static $observedEvents = [];
-    protected static $dispatcher;
+    protected $dispatcher;
 
-    public static function register(): void
+    public function register(): void
     {
+        $xar = $this->getServicesClass();
         foreach (static::getObservedEvents() as $event => $eventName) {
-            xar::hooked()->registerCallback($event, [static::class, 'callbackEvent']);
+            $xar->hooked()->registerCallback($event, [$this, 'callbackEvent']);
         }
     }
 
-    public static function unregister(): void
+    public function unregister(): void
     {
+        $xar = $this->getServicesClass();
         foreach (static::getObservedEvents() as $event => $eventName) {
             // @todo
         }
     }
 
-    public static function getEventList(): array
+    public function getEventList(): array
     {
-        return xar::hooked()->getSubjects();
+        $xar = $this->getServicesClass();
+        return $xar->hooked()->getSubjects();
     }
 }

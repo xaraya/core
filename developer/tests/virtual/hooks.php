@@ -11,6 +11,7 @@ use Xaraya\Bridge\Events\EventObserverBridge;
 use Xaraya\Bridge\Events\HookObserverBridge;
 use Xaraya\Bridge\Events\TestObserverBridgeSubscriber;
 use Xaraya\Context\Context;
+use Xaraya\Services\SecurityService;
 use Xaraya\Services\xar;
 
 // initialize bootstrap
@@ -24,8 +25,24 @@ xar::db()->init();
 xar::mod()->init();
 // for event system - if not already loaded
 xar::events()->init();
+// for security checks in hooked modules - if not already loaded
+//xar::user()->init();
 // for showOutput
 //xar::tpl()->init();
+
+/**
+ * Allow free access for all here
+ */
+class FreeAccess extends SecurityService
+{
+    public function checkAccess(string $mask, string|int $action = '', ?string $modName = null): bool
+    {
+        return true;
+    }
+}
+$xar = xar::getServicesClass();
+$freeAccess = new FreeAccess($xar);
+$xar->setCoreServices(['sec' => $freeAccess]);
 
 function test_crud()
 {

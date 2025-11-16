@@ -31,16 +31,17 @@ class XarayaSourceTemplate extends SourceTemplate
     public function &compile()
     {
         assert(isset($this->fileName));
-        $compiler = XarayaCompiler::instance($this->getServicesClass());
+        $xar = $this->getServicesClass();
+        $compiler = XarayaCompiler::instance($xar);
         $templateCode = $compiler->compileFile($this->fileName);
 
         $out = '';
-        if (xar::tpl()->outputPHPCommentBlockInTemplates()) {
+        if ($xar->tpl()->outputPHPCommentBlockInTemplates()) {
             // FIXME: this is weird stuff:
             // theme is irrelevant, date is seen in the filesystem, sourcefile in CACHEKEYS, why? it complicates the system a lot.
             $commentBlock = "<?php\n/*"
                           . "\n * Source:     " . $this->fileName         // redundant
-                          . "\n * Theme:      " . xar::tpl()->getThemeName()  // confusing (can be any theme now, it's the theme during compilation, which is also shown on the above line)
+                          . "\n * Theme:      " . $xar->tpl()->getThemeName()  // confusing (can be any theme now, it's the theme during compilation, which is also shown on the above line)
                           . "\n * Compiled: ~ " . date('Y-m-d H:i:s T')   // redundant
                           . "\n */\n?>\n";
             $out .= $commentBlock;

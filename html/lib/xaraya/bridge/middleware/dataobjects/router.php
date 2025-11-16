@@ -24,9 +24,10 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
     public static string $prefix = '/object';
     protected DataObjectRequestHandler $handler;
 
-    public function __construct()
+    public function __construct($xar = null)
     {
-        $this->handler = new DataObjectRequestHandler();
+        $this->setServicesClass($xar);
+        $this->handler = new DataObjectRequestHandler($xar);
     }
 
     /**

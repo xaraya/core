@@ -70,7 +70,7 @@ class DefaultHandler extends ModuleHandler
         $this->modName = $modName;
         $this->modType = $modType;
         $this->funcName = $funcName;
-        $xar = xar::getServicesClass();
+        $xar = $this->getServicesClass();
         $xar->setModName($this->getModName());
         // @todo (re-)set request here for MenuBlock::setRequestInfo() in admin menu!?
         $xar->req()->setRequest(['module' => $this->getModName(), 'type' => $this->getModType(), 'func' => $this->funcName]);

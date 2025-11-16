@@ -51,7 +51,7 @@ interface DataPropertyInterface extends ServiceInterface
      * @param array<string> $dirs
      * @return array<mixed> an array of the property types currently available
      */
-    public static function importPropertyTypes(bool $flush = true, array $dirs = []): array;
+    public function importPropertyTypes(bool $flush = true, array $dirs = []): array;
 }
 
 /**
@@ -95,9 +95,9 @@ trait DataPropertyTrait
      * @return array<mixed> an array of the property types currently available
      * @todo flush seems to be unused
      */
-    public static function importPropertyTypes(bool $flush = true, array $dirs = []): array
+    public function importPropertyTypes(bool $flush = true, array $dirs = []): array
     {
-        return PropertyRegistration::importPropertyTypes($flush, $dirs);
+        return PropertyRegistration::importPropertyTypes($flush, $dirs, $this->getParent());
     }
 }
 

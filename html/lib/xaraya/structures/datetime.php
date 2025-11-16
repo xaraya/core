@@ -27,6 +27,8 @@ class XarDateTime extends DateTime
     public $second;
     public $timestamp;
     public $servertz;
+    // Set in MultiLanguageService::init()
+    public static $defaulttz = 'UTC';
 
     public function __construct($hour = 0, $minute = 0, $second = 0, $month = 0, $day = 0, $year = 0, $timezone = null)
     {
@@ -38,7 +40,7 @@ class XarDateTime extends DateTime
         $this->hour = $hour;
         $this->minute = $minute;
         $this->second = $second;
-        $this->servertz = empty($timezone) ? xar::config()->getVar('Site.Core.TimeZone') : $timezone;
+        $this->servertz = empty($timezone) ? self::$defaulttz : $timezone;
         $this->setISODate($this->year, $this->month, $this->day);
         $this->setTime($this->hour, $this->minute, $this->second);
     }

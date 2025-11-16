@@ -529,6 +529,16 @@ class xarRequest extends xarObject
     }
 
     /**
+     * Moved from xarDispatcher for ShortRoute
+     */
+    public function isValidModule(string $module)
+    {
+        $xar = $this->getServicesClass();
+        $available = $xar->mod()->isAvailable($module);
+        return $available;
+    }
+
+    /**
      * Summary of isDispatched
      * @return bool
      */

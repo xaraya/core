@@ -26,6 +26,8 @@ class Context extends ArrayObject implements ContextObjectInterface
     protected float $startTrace = 0;
     /** @var array<mixed> */
     protected array $tracePaths = [];
+    // @todo check use in GraphQL field resolvers!?
+    public mixed $handler = null;
 
     /**
     public function __construct(array|object $array = [], int $flags = 0, string $iteratorClass = \ArrayIterator::class) {

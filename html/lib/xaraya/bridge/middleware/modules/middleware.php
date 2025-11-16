@@ -34,9 +34,9 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
     /**
      * Initialize the middleware with response factory (or container, ...) and options
      */
-    public function __construct(?ResponseFactoryInterface $responseFactory = null, bool $wrapPage = false)
+    public function __construct(?ResponseFactoryInterface $responseFactory = null, bool $wrapPage = false, $xar = null)
     {
-        $this->handler = new ModuleRequestHandler();
+        parent::__construct($xar);
         $this->responseUtil = new ResponseUtil($responseFactory);
         $this->wrapPage = $wrapPage;
     }

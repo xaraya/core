@@ -22,9 +22,10 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
     public static string $prefix = '';
     protected ModuleRequestHandler $handler;
 
-    public function __construct()
+    public function __construct($xar = null)
     {
-        $this->handler = new ModuleRequestHandler();
+        $this->setServicesClass($xar);
+        $this->handler = new ModuleRequestHandler($xar);
     }
 
     /**

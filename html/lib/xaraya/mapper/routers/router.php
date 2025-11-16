@@ -32,10 +32,10 @@ class xarRouter extends xarObject
      * Summary of addDefaultRoutes
      * @return static
      */
-    public function addDefaultRoutes()
+    public function addDefaultRoutes(?xarDispatcher $dispatcher = null)
     {
         if (empty($this->routes['default'])) {
-            $dispatcher = xar::ctl()->getDispatcher();
+            $dispatcher ??= xar::ctl()->getDispatcher();
 
             $route = new DefaultRoute([], $dispatcher);
             $this->routes['default'] = $route;
@@ -57,7 +57,8 @@ class xarRouter extends xarObject
      */
     public function route(xarRequest $request)
     {
-        $this->addDefaultRoutes();
+        // handled in ControllerService::getRouter()
+        // $this->addDefaultRoutes();
         foreach (array_reverse($this->routes) as $name => $route) {
             if ($route->match($request)) {
                 $publicproperties = array_keys($request->getPublicProperties());

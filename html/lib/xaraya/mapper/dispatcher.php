@@ -46,13 +46,12 @@ class xarDispatcher extends xarObject
         return $response->getOutput();
     }
 
-    public function isValidModule(string $module): bool
+    /**
+     * @deprecated 2.8.8 moved to xarRequest for ShortRoute
+     */
+    public function isValidModule(xarRequest $request, string $module): bool
     {
-        if (empty($module)) {
-            return false;
-        }
-        $available = \Xaraya\Services\xar::mod()->isAvailable($module);
-        return $available;
+        return $request->isValidModule($module);
     }
 
     public function getController(): iController

@@ -214,9 +214,9 @@ trait ModuleBridgeTrait
         if ($vars['module'] == 'object') {
             // @todo figure out if we need GUI or API DataObject request handler here
             if ($this instanceof ModuleApiHandler) {
-                $handler = new DataObjectApiHandler($this->getRouter());
+                $handler = new DataObjectApiHandler($this->getServicesClass());
             } else {
-                $handler = new DataObjectGuiHandler($this->getRouter());
+                $handler = new DataObjectGuiHandler($this->getServicesClass());
             }
             return $handler->handleObjectRequest($vars, $request);
         }

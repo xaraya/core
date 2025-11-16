@@ -601,6 +601,18 @@ class xarEvents extends xarObject implements ixarEvents
                 }
                 // use name of func as filename
                 $filename = strtolower($func);
+
+                // see xar::mod()->callFunc() - pass modType . funcType as modType here for module classes
+                $modType = $type . $area;
+                // old-style module_type_func() hook function called via module class
+                $callable = $xar->mod()->getModuleClassMethod($module, $modType, $filename, 'api');
+                if (!empty($callable)) {
+                    // one function file loaded :)
+                    $loaded = true;
+                    break;
+                }
+                // let's fall through until we find the function (or not)
+
                 // determine the type folder to look in (xartype|xartypeapi)
                 $type = $area == 'gui' ? $type : $type . $area;
                 // define the function name (module_xartype(api)_func);
@@ -618,20 +630,12 @@ class xarEvents extends xarObject implements ixarEvents
                     try {
                         sys::import("modules.{$module}.xar{$type}");
                     } catch (Exception $e) {
-                        // context for core services is set in handler
-                        $instance = $xar->mod()->getModule($module);
-                        // let's fall through until we find the function (or not)
+                        throw new FunctionNotFoundException($func);
                     }
                 }
                 // check function exists
                 if (!function_exists($func)) {
-                    // see xar::mod()->callFunc() - pass modType . funcType as modType here for module classes
-                    $type = ($area != 'gui') ? $type : $type . $area;
-                    // old-style module_type_func() hook function called via module class
-                    $callable = $xar->mod()->getModuleClassMethod($module, $type, $filename, 'api');
-                    if (empty($callable)) {
-                        throw new FunctionNotFoundException($func);
-                    }
+                    throw new FunctionNotFoundException($func);
                 }
                 // one function file loaded :)
                 $loaded = true;

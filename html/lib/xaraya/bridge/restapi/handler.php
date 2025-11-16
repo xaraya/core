@@ -213,6 +213,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             $context = $this->getContext();
             // Assume context for core services is already set here
         }
+        // @todo check use in RestAPI handlers!?
+        //$context->handler = $this;
         // Initialize server - not really needed since $xar->req()->getInstance() is on demand
         //$xar->req()->init([], $context);
         return $context;

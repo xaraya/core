@@ -269,6 +269,7 @@ class BlockLayoutXSLTProcessor extends xarObject
      * Summary of phpexpression
      * @param string $expr
      * @return string
+     * @deprecated 2.4.1 use XsltCallbacks::phpexpressions() instead
      */
     public static function phpexpression($expr)
     {
@@ -335,7 +336,7 @@ class XsltCallbacks extends xarObject
         $raw = self::reverseXMLEntities($raw);
         // Return the first match too, to ensure not changing the input
         $res = '<?php echo ' . $raw . ';?>';
-        //        xar::log()->debug('XsltCallbacks::attributes: '. $matches[0] . ' => ' . $res);
+        //xar::log()->debug('XsltCallbacks::attributes: '. $matches[0] . ' => ' . $res);
         return $res;
     }
 
@@ -403,7 +404,7 @@ class XsltCallbacks extends xarObject
                 // &xar-session-varname;
                 // &xar-url-modname-type-func-args;
         }
-        xar::log()->debug('XsltCallbacks::entities: found in xml source:' . $entityName);
+        //xar::log()->debug('XsltCallbacks::entities: found in xml source:' . $entityName);
         return $matches[0];
     }
 }

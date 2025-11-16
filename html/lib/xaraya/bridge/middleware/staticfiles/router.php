@@ -28,9 +28,10 @@ class StaticFileRouter extends DefaultRouter implements DefaultRouterInterface
         'var' => '/var',
     ];
 
-    public function __construct()
+    public function __construct($xar = null)
     {
-        $this->handler = new StaticFileHandler();
+        $this->setServicesClass($xar);
+        $this->handler = new StaticFileHandler($xar);
     }
 
     /**

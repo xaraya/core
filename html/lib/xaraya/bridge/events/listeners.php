@@ -46,7 +46,7 @@
 namespace Xaraya\Bridge\Events;
 
 use Psr\EventDispatcher\ListenerProviderInterface;
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 use ixarEventSubject;
 use ixarHookSubject;
 use Exception;
@@ -56,16 +56,24 @@ use Exception;
  */
 class EventListenerProvider implements ListenerProviderInterface
 {
+    use WithServicesClass;
+
     public $type = 'xarEvents';
     public $attached = [];
     public $responses = [];
+
+    public function __construct($xar = null)
+    {
+        $this->setServicesClass($xar);
+    }
 
     public function getListenersForEvent(object $subject): iterable
     {
         if (!($this->checkSubject($subject))) {
             return [];
         }
-        //$info = xar::events()->getSubject($event);
+        //$xar = $this->getServicesClass();
+        //$info = $xar->events()->getSubject($event);
         //$subject = new $classname($args);
         //$event = $subject->getSubject();
         $obsinfo = $this->getObservers($subject);
@@ -105,24 +113,27 @@ class EventListenerProvider implements ListenerProviderInterface
 
     public function getObservers($subject)
     {
-        $obsinfo = xar::events()->getObservers($subject);
+        $xar = $this->getServicesClass();
+        $obsinfo = $xar->events()->getObservers($subject);
         return $obsinfo;
     }
 
     public function getEventList()
     {
-        return xar::events()->getSubjects();
+        $xar = $this->getServicesClass();
+        return $xar->events()->getSubjects();
     }
 
     public function getEventInfo($event)
     {
+        $xar = $this->getServicesClass();
         // get info for specified event
-        $info = xar::events()->getSubject($event);
+        $info = $xar->events()->getSubject($event);
         if (empty($info)) {
             return;
         }
         // file load takes care of validation for us
-        if (!xar::events()->fileLoad($info)) {
+        if (!$xar->events()->fileLoad($info)) {
             return;
         }
         return $info;
@@ -133,10 +144,11 @@ class EventListenerProvider implements ListenerProviderInterface
      */
     public function getEventSubject($event, $args = [])
     {
+        $xar = $this->getServicesClass();
         // get info for specified event
         $info = $this->getEventInfo($event);
         // @checkme getEventInfo already returns $info['module']
-        $module = xar::mod()->getName($info['module_id']);
+        $module = $xar->mod()->getName($info['module_id']);
         switch (strtolower($info['area'])) {
             // support namespaces in modules (and core someday) - we may use $info['classname'] here
             case 'class':
@@ -153,7 +165,7 @@ class EventListenerProvider implements ListenerProviderInterface
                     return;
                 }
                 // get observer info from subject
-                //$obsinfo = xar::events()->getObservers($subject);
+                //$obsinfo = $xar->events()->getObservers($subject);
                 // ...
                 //$method = !empty($info['func']) ? $info['func'] : 'notify';
                 // always notify the subject, even if there are no observers
@@ -161,7 +173,7 @@ class EventListenerProvider implements ListenerProviderInterface
                 return $subject;
 
             case 'api':
-                //$response = xar::mod()->apiFunc($module, $info['type'], $info['func'], $args);
+                //$response = $xar->mod()->apiFunc($module, $info['type'], $info['func'], $args);
                 break;
 
             case 'gui':
@@ -178,12 +190,13 @@ class EventListenerProvider implements ListenerProviderInterface
      */
     public function getObserverCallables($obsinfo)
     {
+        $xar = $this->getServicesClass();
         $callables = [];
         foreach ($obsinfo as $obs) {
-            if (!xar::events()->fileLoad($obs)) {
+            if (!$xar->events()->fileLoad($obs)) {
                 continue;
             }
-            $obsmod = xar::mod()->getName($obs['module_id']);
+            $obsmod = $xar->mod()->getName($obs['module_id']);
             $obs['module'] = $obsmod;
             $obsclass = match (strtolower($obs['area'])) {
                 // wrap api function in apiclass observer
@@ -223,7 +236,8 @@ class HookListenerProvider extends EventListenerProvider implements ListenerProv
         if (!($this->checkSubject($subject))) {
             return [];
         }
-        //$info = xar::hooked()->getSubject($event);
+        //$xar = $this->getServicesClass();
+        //$info = $xar->hooked()->getSubject($event);
         //$subject = new $classname($args);
         //$event = $subject->getSubject();
         $obsinfo = $this->getObservers($subject);
@@ -238,24 +252,27 @@ class HookListenerProvider extends EventListenerProvider implements ListenerProv
 
     public function getObservers($subject)
     {
-        $obsinfo = xar::hooked()->getObservers($subject);
+        $xar = $this->getServicesClass();
+        $obsinfo = $xar->hooked()->getObservers($subject);
         return $obsinfo;
     }
 
     public function getEventList()
     {
-        return xar::hooked()->getSubjects();
+        $xar = $this->getServicesClass();
+        return $xar->hooked()->getSubjects();
     }
 
     public function getEventInfo($event)
     {
+        $xar = $this->getServicesClass();
         // get info for specified event
-        $info = xar::hooked()->getSubject($event);
+        $info = $xar->hooked()->getSubject($event);
         if (empty($info)) {
             return;
         }
         // file load takes care of validation for us
-        if (!xar::hooked()->fileLoad($info)) {
+        if (!$xar->hooked()->fileLoad($info)) {
             return;
         }
         return $info;

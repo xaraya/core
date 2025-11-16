@@ -36,23 +36,26 @@
 namespace Xaraya\Bridge\Events;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Xaraya\Services\xar;
 use Exception;
+use Xaraya\Services\WithServicesClass;
 
 /**
  * Test the event observer bridges in observers.php by subscribing to a few events and/or hooks here
  */
 class TestObserverBridgeSubscriber implements EventSubscriberInterface
 {
+    use WithServicesClass;
+
     public static $subscribedEvents = [];
 
-    public function __construct(array $eventList = ['Event'], array $hookList = ['ItemUpdate'])
+    public function __construct(array $eventList = ['Event'], array $hookList = ['ItemUpdate'], $xar = null)
     {
-        static::addEventList($eventList);
-        static::addHookList($hookList);
+        $this->setServicesClass($xar);
+        $this->addEventList($eventList);
+        $this->addHookList($hookList);
     }
 
-    public static function onDispatchedEvent($event, string $eventName = '')
+    public function onDispatchedEvent($event, string $eventName = '')
     {
         $subject = $event->getSubject();
         echo "Dispatched Event $eventName: " . var_export($subject, true) . "\n";
@@ -60,7 +63,7 @@ class TestObserverBridgeSubscriber implements EventSubscriberInterface
         echo "Dispatched Context: " . var_export($context, true) . "\n";
     }
 
-    public static function onDispatchedHook($event, string $eventName = '')
+    public function onDispatchedHook($event, string $eventName = '')
     {
         $subject = $event->getSubject();
         echo "Dispatched Hook $eventName: " . var_export($subject, true) . "\n";
@@ -68,27 +71,33 @@ class TestObserverBridgeSubscriber implements EventSubscriberInterface
         echo "Dispatched Context: " . var_export($context, true) . "\n";
     }
 
-    public static function addEventList(array $eventList = [])
+    public function addEventList(array $eventList = [])
     {
-        $infoList = EventObserverBridge::getEventList();
+        $xar = $this->getServicesClass();
+        //$infoList = EventObserverBridge::getEventList();
+        $infoList = $xar->events()->getSubjects();
         foreach ($eventList as $event) {
             if (!array_key_exists($event, $infoList)) {
                 throw new Exception("Unknown event '$event'");
             }
             $info = $infoList[$event];
+            //xarEvents.scope.event
             $eventName = EventObserverBridge::getEventName($info['scope'], $event);
             static::$subscribedEvents[$eventName] = 'onDispatchedEvent';
         }
     }
 
-    public static function addHookList(array $hookList = [])
+    public function addHookList(array $hookList = [])
     {
-        $infoList = HookObserverBridge::getEventList();
+        $xar = $this->getServicesClass();
+        //$infoList = HookObserverBridge::getEventList();
+        $infoList = $xar->hooked()->getSubjects();
         foreach ($hookList as $event) {
             if (!array_key_exists($event, $infoList)) {
                 throw new Exception("Unknown hook '$event'");
             }
             $info = $infoList[$event];
+            //xarHooks.scope.event
             $eventName = HookObserverBridge::getEventName($info['scope'], $event);
             static::$subscribedEvents[$eventName] = 'onDispatchedHook';
         }
@@ -111,7 +120,8 @@ class TestEventListeners extends EventListenerProvider
             return $this->attached;
         }
         $attached = [];
-        $eventlist = xar::events()->getObserverModules();
+        $xar = $this->getServicesClass();
+        $eventlist = $xar->events()->getObserverModules();
         foreach ($eventlist as $modname => $eventinfo) {
             foreach ($eventinfo as $event => $info) {
                 $attached[$info['scope']] ??= [];
@@ -182,8 +192,9 @@ class TestHookListeners extends HookListenerProvider
             return $this->attached;
         }
         $attached = [];
+        $xar = $this->getServicesClass();
         // start with the listeners (observer modules) and which events they listen to (hook observers)
-        $hooklist = xar::hooked()->getObserverModules();
+        $hooklist = $xar->hooked()->getObserverModules();
         foreach ($hooklist as $modname => $hookinfo) {
             //echo "Hook list: $modname = " . var_export($hookinfo['scopes'], true) . "\n";
             foreach ($hookinfo['scopes'] as $scope => $events) {
@@ -193,7 +204,7 @@ class TestHookListeners extends HookListenerProvider
                 }
             }
             // find out which subject modules they're listening for (hooked)
-            $subjects = xar::hooked()->getObserverSubjects($modname);
+            $subjects = $xar->hooked()->getObserverSubjects($modname);
             foreach ($subjects as $subject => $info) {
                 // itemtype 0 will also apply to all other itemtypes
                 foreach ($info as $itemtype => $scopes) {
@@ -236,8 +247,9 @@ class TestHookListeners extends HookListenerProvider
         if ($info['scope'] == 'module') {
             $args['objectid'] = $modname;
         }
+        $xar = $this->getServicesClass();
         $args['extrainfo']['module'] = $modname;
-        $args['extrainfo']['module_id'] = xar::mod()->getRegID($modname);
+        $args['extrainfo']['module_id'] = $xar->mod()->getRegID($modname);
         $args['extrainfo']['itemtype'] = $itemtype;
         // get an event subject relevant to the subject module
         $subject = $this->getEventSubject($event, $args);

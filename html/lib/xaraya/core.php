@@ -207,6 +207,7 @@ class xarCore extends xarObject
      * @param integer $whatToLoad What optional systems to load.
      * @param mixed $context initialize server & session with context
      * @return boolean true
+     * @deprecated 2.8.8 use xar::load() instead
     **/
     public static function xarInit($whatToLoad = self::SYSTEM_ALL, $context = null)
     {

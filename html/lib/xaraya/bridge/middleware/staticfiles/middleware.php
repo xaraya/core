@@ -43,9 +43,9 @@ class StaticFileMiddleware extends StaticFileRouter implements DefaultRouterInte
     /**
      * Initialize the middleware with response factory (or container, ...)
      */
-    public function __construct(?ResponseFactoryInterface $responseFactory = null)
+    public function __construct(?ResponseFactoryInterface $responseFactory = null, $xar = null)
     {
-        $this->handler = new StaticFileHandler();
+        parent::__construct($xar);
         $this->responseUtil = new ResponseUtil($responseFactory);
     }
 

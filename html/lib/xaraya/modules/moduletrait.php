@@ -202,14 +202,15 @@ trait ModuleTrait
      */
     public function getFileInfo(): array
     {
+        $xar = $this->getServicesClass();
         // Xaraya\Modules\MyFancyModule\Version
         $className = $this->getNamespace() . '\\Version';
         if (class_exists($className)) {
             $versionCall = new $className();
             $modversion = $versionCall();
-            return xar::mod()->parseFileInfo($modversion);
+            return $xar->mod()->parseFileInfo($modversion);
         }
-        return xar::mod()->getFileInfo($this->getModName());
+        return $xar->mod()->getFileInfo($this->getModName());
     }
 
     /**
@@ -218,12 +219,13 @@ trait ModuleTrait
      */
     public function getTables(): array
     {
+        $xar = $this->getServicesClass();
         // Xaraya\Modules\MyFancyModule\Tables
         $className = $this->getNamespace() . '\\Tables';
         if (class_exists($className)) {
             $tablesCall = new $className();
             // pass along the DB prefix to $tablesCall
-            return $tablesCall(xar::db()->getPrefix());
+            return $tablesCall($xar->db()->getPrefix());
         }
 
         // Load the database definition if required
@@ -235,7 +237,7 @@ trait ModuleTrait
         $tablefunc = $this->getModName() . '_' . 'xartables';
         if (function_exists($tablefunc)) {
             // pass along the DB prefix to $tablefunc
-            $prefix = xar::db()->getPrefix();
+            $prefix = $xar->db()->getPrefix();
             return $tablefunc($prefix);
         }
         return [];

@@ -15,7 +15,6 @@
 **/
 
 use Xaraya\Requests\RequestURL;
-use Xaraya\Services\xar;
 
 class DefaultActionController extends BaseActionController implements iController
 {
@@ -29,7 +28,7 @@ class DefaultActionController extends BaseActionController implements iControlle
     public function decode(array $data = []): array
     {
         $request = $this->getRequest();
-        $xar = xar::getServicesClass();
+        $xar = $request->getServicesClass();
         // @todo avoid duplication of param parsing - see xarRequest::setURL()
         $xar->var()->find('module', $module, 'regexp:/^[a-z][a-z_0-9]*$/');
         if (null != $module) {

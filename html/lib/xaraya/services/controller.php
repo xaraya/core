@@ -281,6 +281,7 @@ trait ControllerTrait
     {
         if (null == $this->router) {
             $this->setRouter(new xarRouter());
+            $this->router->addDefaultRoutes($this->getDispatcher());
         }
         return $this->router;
     }

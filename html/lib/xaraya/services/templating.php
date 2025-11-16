@@ -1016,7 +1016,7 @@ trait TemplatingTrait
      */
     public function compileString(string $templateSource): string
     {
-        $compiler = XarayaCompiler::instance();
+        $compiler = XarayaCompiler::instance($this->getParent());
         return $compiler->compileString($templateSource);
     }
 

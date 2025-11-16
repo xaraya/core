@@ -48,11 +48,13 @@
 namespace Xaraya\Bridge\Events;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 use Exception;
 
 class EventSubscriber implements EventSubscriberInterface
 {
+    use WithServicesClass;
+
     protected static $eventNamePrefix = 'xarEvents';
     protected static $subscribedEvents = [];
     // could be used to extend with other methods like workflow
@@ -62,6 +64,20 @@ class EventSubscriber implements EventSubscriberInterface
         ],
     ];
     protected $responses = [];
+
+    public function __construct($xar = null)
+    {
+        $this->setServicesClass($xar);
+        $this->setEventList();
+    }
+
+    public function setEventList()
+    {
+        foreach ($this->getEventList() as $event => $info) {
+            $eventName = static::getEventName($info['scope'], $event);
+            static::$subscribedEvents[$eventName] = 'onScopeEvent';
+        }
+    }
 
     public function onScopeEvent($event, string $eventName = '')
     {
@@ -76,13 +92,20 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function notify($type, $subject, $context = null)
     {
-        $response = xar::events()->notify($type, $subject, $context);
+        $xar = $this->getServicesClass();
+        $response = $xar->events()->notify($type, $subject, $context);
         return $response;
     }
 
     public function getResponses()
     {
         return $this->responses;
+    }
+
+    public function getEventList()
+    {
+        $xar = $this->getServicesClass();
+        return $xar->events()->getSubjects();
     }
 
     public static function getEventName(string $eventScope, string $eventType)
@@ -100,24 +123,11 @@ class EventSubscriber implements EventSubscriberInterface
         return $eventName;
     }
 
-    public static function getEventList()
-    {
-        return xar::events()->getSubjects();
-    }
-
     public static function getSubscribedEvents()
     {
         //return [
         //    'xarEvents.scope.event' => ['onScopeEvent'],
         //];
-        if (!empty(static::$subscribedEvents)) {
-            return static::$subscribedEvents;
-        }
-        $eventList = static::getEventList();
-        foreach ($eventList as $event => $info) {
-            $eventName = static::getEventName($info['scope'], $event);
-            static::$subscribedEvents[$eventName] = 'onScopeEvent';
-        }
         return static::$subscribedEvents;
     }
 }
@@ -135,13 +145,15 @@ class HookSubscriber extends EventSubscriber implements EventSubscriberInterface
 
     public function notify($type, $subject, $context = null)
     {
-        $response = xar::hooked()->notify($type, $subject, $context);
+        $xar = $this->getServicesClass();
+        $response = $xar->hooked()->notify($type, $subject, $context);
         return $response;
     }
 
-    public static function getEventList()
+    public function getEventList()
     {
-        return xar::hooked()->getSubjects();
+        $xar = $this->getServicesClass();
+        return $xar->hooked()->getSubjects();
     }
 }
 
@@ -168,7 +180,8 @@ class EventCallbackSubscriber extends EventSubscriber implements EventSubscriber
             try {
                 $callbackFunc($event, $eventName);
             } catch (Exception $e) {
-                //xar::log()->info("Error in callback for $eventName: " . $e->getMessage());
+                //$xar = $this->getServicesClass();
+                //$xar->log()->info("Error in callback for $eventName: " . $e->getMessage());
                 echo "Error in callback for $eventName: " . $e->getMessage();
             }
         }
@@ -226,11 +239,13 @@ class HookCallbackSubscriber extends EventCallbackSubscriber implements EventSub
 
     public function notify($type, $subject, $context = null)
     {
-        xar::hooked()->notify($type, $subject, $context);
+        $xar = $this->getServicesClass();
+        $xar->hooked()->notify($type, $subject, $context);
     }
 
-    public static function getEventList()
+    public function getEventList()
     {
-        return xar::hooked()->getSubjects();
+        $xar = $this->getServicesClass();
+        return $xar->hooked()->getSubjects();
     }
 }

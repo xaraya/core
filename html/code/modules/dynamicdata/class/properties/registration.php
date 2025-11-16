@@ -55,17 +55,6 @@ class PropertyRegistration extends DataContainer
         }
     }
 
-    public static function clearCache()
-    {
-        $xar = xar::getServicesClass();
-        $dbconn = $xar->db()->getConn();
-        $xar->mod()->loadDbInfo('dynamicdata');
-        $tables = $xar->db()->getTables();
-        $sql = "DELETE FROM $tables[dynamic_properties_def]";
-        $res = $dbconn->ExecuteUpdate($sql);
-        return $res;
-    }
-
     public function getRegistrationInfo(DataProperty $class)
     {
         $this->id   = $class->id;
@@ -193,7 +182,7 @@ class PropertyRegistration extends DataContainer
         $result = $dbconn->executeQuery($query);
         $proptypes = [];
         if ($result->getRecordCount() === 0) {
-            $proptypes = self::importPropertyTypes(false);
+            $proptypes = self::importPropertyTypes(false, [], $xar);
         } else {
             while ($result->next()) {
                 [
@@ -234,9 +223,9 @@ class PropertyRegistration extends DataContainer
      * @return array<mixed> an array of the property types currently available
      * @todo flush seems to be unused
      */
-    public static function importPropertyTypes($flush = true, $dirs = [])
+    public static function importPropertyTypes($flush = true, $dirs = [], $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $xar->log()->notice('DynamicData: Flushing the property cache');
 
         $dbconn = $xar->db()->getConn(); // Need this for the transaction
@@ -300,7 +289,7 @@ class PropertyRegistration extends DataContainer
                 }
 
                 // Clear the cache
-                self::clearCache();
+                self::clearCache($xar);
             }
             $xar->log()->notice('DynamicData: Retrieved the list of directories to be searched');
 
@@ -553,6 +542,17 @@ class PropertyRegistration extends DataContainer
             }
             $installer->install();
         }
+    }
+
+    public static function clearCache($xar = null)
+    {
+        $xar ??= xar::getServicesClass();
+        $dbconn = $xar->db()->getConn();
+        $xar->mod()->loadDbInfo('dynamicdata');
+        $tables = $xar->db()->getTables();
+        $sql = "DELETE FROM $tables[dynamic_properties_def]";
+        $res = $dbconn->ExecuteUpdate($sql);
+        return $res;
     }
 
     // Taken from http://www.calcatraz.com/blog/php-topological-sort-function-384

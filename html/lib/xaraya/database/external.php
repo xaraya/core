@@ -394,6 +394,8 @@ abstract class ExternalConnection implements ConnectionInterface
     }
 
     // from Xaraya modifications in ConnectionCommon
+    abstract public function log();
+    abstract public function setLog($xarLog);
     /** @return \ResultSet|\PDOResultSet|object */
     abstract public function Execute($sql, $bindvars = [], $fetchmode = null);
     /** @return resource|object */

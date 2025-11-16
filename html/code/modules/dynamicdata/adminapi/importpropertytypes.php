@@ -42,7 +42,7 @@ class ImportpropertytypesMethod extends MethodClass
             $dirs = [];
         }
         try {
-            $proptypes = PropertyRegistration::importPropertyTypes($flush, $dirs);
+            $proptypes = PropertyRegistration::importPropertyTypes($flush, $dirs, $this->getParent());
         } catch (Exception $e) {
             throw $e;
         }

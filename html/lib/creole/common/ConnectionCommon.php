@@ -84,7 +84,7 @@ abstract class ConnectionCommon
 
     protected $xarLog = null;
 
-    protected function log()
+    public function log()
     {
         if (!isset($this->xarLog)) {
             $this->xarLog = xar::log();

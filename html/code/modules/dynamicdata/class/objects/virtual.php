@@ -72,7 +72,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
      * @param bool $offline do we want to work offline = without database connection (need to export cache first)
      * @return object virtual object descriptor for use in $object = new DataObject($descriptor); or $objectlist = new DataObjectList($descriptor);
     **/
-    public function __construct(array $args = [], bool $offline = false)
+    public function __construct(array $args = [], bool $offline = false, $xar = null)
     {
         $args['moduleid'] ??= 182;
         $args['module_id'] = $args['moduleid'];
@@ -80,7 +80,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         //$args = self::getObjectID($args);
         ObjectDescriptor::__construct($args);
         if ($offline) {
-            VirtualObjectFactory::loadCoreCache();
+            VirtualObjectFactory::loadCoreCache($xar);
         }
     }
 
@@ -163,12 +163,12 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
      *     $args['dbConnArgs'] connection params of the database if different from Xaraya DB (optional)
      * @param bool $offline do we want to work offline = without database connection (need to export cache first)
      */
-    public function __construct(array $args = [], bool $offline = false)
+    public function __construct(array $args = [], bool $offline = false, $xar = null)
     {
         $args['name'] ??= $args['table'] ?? 'unknown';
         $args['label'] ??= 'Table ' . $args['name'];
         //$args = self::getObjectID($args);
-        parent::__construct($args, $offline);
+        parent::__construct($args, $offline, $xar);
         if (!empty($args['table'])) {
             $args['fields'] ??= [];
             $args['dbConnIndex'] ??= 0;
@@ -239,11 +239,11 @@ class VirtualObjectFactory extends xarObject
         if (static::isObject($args)) {
             $filepath = static::$definitions[$args['name']];
             $args = include $filepath;
-            $descriptor = static::getObjectDescriptor($args, static::$offline);
-            return static::makeObject($descriptor, $context);
+            $descriptor = static::getObjectDescriptor($args, static::$offline, $xar);
+            return static::makeObject($descriptor, $context, $xar);
         }
         if (static::isTable($args)) {
-            $descriptor = new TableObjectDescriptor($args, static::$offline);
+            $descriptor = new TableObjectDescriptor($args, static::$offline, $xar);
             if (!empty($context)) {
                 $descriptor->setArgs(['context' => $context]);
             }
@@ -266,11 +266,11 @@ class VirtualObjectFactory extends xarObject
         if (static::isObject($args)) {
             $filepath = static::$definitions[$args['name']];
             $args = include $filepath;
-            $descriptor = static::getObjectDescriptor($args, static::$offline);
-            return static::makeObjectList($descriptor, $context);
+            $descriptor = static::getObjectDescriptor($args, static::$offline, $xar);
+            return static::makeObjectList($descriptor, $context, $xar);
         }
         if (static::isTable($args)) {
-            $descriptor = new TableObjectDescriptor($args, static::$offline);
+            $descriptor = new TableObjectDescriptor($args, static::$offline, $xar);
             if (!empty($context)) {
                 $descriptor->setArgs(['context' => $context]);
             }
@@ -312,7 +312,7 @@ class VirtualObjectFactory extends xarObject
      * @param mixed $context optional context for the DataObject (default = none)
      * @return DataObject|null the requested data object instance
      */
-    public static function makeObject($descriptor, $context = null)
+    public static function makeObject($descriptor, $context = null, $xar = null)
     {
         // Make sure the class for this object is loaded
         if ($descriptor->exists('filepath') && ($descriptor->get('filepath') != 'auto')) {
@@ -326,7 +326,7 @@ class VirtualObjectFactory extends xarObject
         if (!empty($context)) {
             $descriptor->setArgs(['context' => $context]);
         }
-        $object = new $class($descriptor);
+        $object = new $class($descriptor, $xar);
 
         return $object;
     }
@@ -338,7 +338,7 @@ class VirtualObjectFactory extends xarObject
      * @param mixed $context optional context for the DataObjectList (default = none)
      * @return DataObjectList|null the requested object list instance
      */
-    public static function makeObjectList($descriptor, $context = null)
+    public static function makeObjectList($descriptor, $context = null, $xar = null)
     {
         // Make sure the class for this object is loaded
         if ($descriptor->exists('filepath') && ($descriptor->get('filepath') != 'auto')) {
@@ -358,7 +358,7 @@ class VirtualObjectFactory extends xarObject
         if (!empty($context)) {
             $descriptor->setArgs(['context' => $context]);
         }
-        $object = new $class($descriptor);
+        $object = new $class($descriptor, $xar);
 
         return $object;
     }
@@ -379,10 +379,10 @@ class VirtualObjectFactory extends xarObject
      * @param bool $offline
      * @return VirtualObjectDescriptor
      */
-    public static function getObjectDescriptor($args, $offline = false)
+    public static function getObjectDescriptor($args, $offline = false, $xar = null)
     {
         $args = static::prepareDescriptorArgs($args);
-        $descriptor = new VirtualObjectDescriptor($args, $offline);
+        $descriptor = new VirtualObjectDescriptor($args, $offline, $xar);
         return $descriptor;
     }
 
@@ -446,12 +446,12 @@ class VirtualObjectFactory extends xarObject
      * Load core cache with property types and configurations
      * @return void
      */
-    public static function loadCoreCache()
+    public static function loadCoreCache($xar = null)
     {
         if (static::$loaded) {
             return;
         }
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         if (!$xar->mem()->load('DynamicData', 'PropertyTypes')) {
             throw new Exception('No property types cached yet - you need to export at least 1 object to php');
         }
@@ -473,9 +473,9 @@ class VirtualObjectFactory extends xarObject
      * @return void
      * @see \Xaraya\DataObject\Export\PhpExporter::exportObjectDef()
      */
-    public static function saveCoreCache()
+    public static function saveCoreCache($xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $xar->mem()->save('DynamicData', 'PropertyTypes', __METHOD__);
         $xar->mem()->save('DynamicData', 'Configurations', __METHOD__);
         // Saved in DD > Utilities > DB Connections = modules/dynamicdata/admingui/dbconfig.php
@@ -513,13 +513,13 @@ trait VirtualDescriptorTrait
      * @param array<string, mixed> $params extra params to pass to descriptor/object
      * @param mixed $context optional context for the DataObject (default = none)
      */
-    public function getVirtualDescriptor(array $params = [], $context = null)
+    public function getVirtualDescriptor(array $params = [], $context = null, $xar = null)
     {
         $args = include sys::varpath() . '/cache/variables/' . static::$configFile;
         if (!empty($params)) {
             $args = array_replace($args, $params);
         }
-        $descriptor = VirtualObjectFactory::getObjectDescriptor($args, true);
+        $descriptor = VirtualObjectFactory::getObjectDescriptor($args, true, $xar);
         if (!empty($context)) {
             $descriptor->setArgs(['context' => $context]);
         }

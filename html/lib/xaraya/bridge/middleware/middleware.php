@@ -92,8 +92,9 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
      * Initialize the middleware with response factory (or container, ...) and options
      * @param array<string, mixed> $options
      */
-    public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
+    public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [], $xar = null)
     {
+        parent::__construct($xar);
         $this->responseUtil = new ResponseUtil($responseFactory, $options);
     }
 

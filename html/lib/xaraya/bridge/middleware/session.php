@@ -23,7 +23,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
@@ -38,6 +38,8 @@ use xarEvents;
  */
 class SessionMiddleware implements MiddlewareInterface
 {
+    use WithServicesClass;
+
     private readonly string $cookieName;
     private readonly string $prefix;
     private readonly int $anonId;
@@ -52,12 +54,13 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * @param array<string, mixed> $config
      */
-    public function __construct(array $config = [])
+    public function __construct(array $config = [], $xar = null)
     {
-        $this->config = array_replace(xar::session()->getConfig(), $config);
+        $xar = $this->getServicesClass($xar);
+        $this->config = array_replace($xar->session()->getConfig(), $config);
         $this->cookieName = $this->config['cookieName'] ?? SessionHandler::COOKIE;
         $this->prefix = SessionHandler::PREFIX;
-        $this->anonId = intval(xar::config()->getVar('Site.User.AnonymousUID', 5));
+        $this->anonId = intval($xar->config()->getVar('Site.User.AnonymousUID', 5));
         //$this->storage = new SessionDatabaseStorage($this->config);
         $this->storage = new SessionCacheStorage($this->config);
         // register callback functions for UserLogin and UserLogout events - to update userId in request
@@ -288,13 +291,14 @@ class SessionMiddleware implements MiddlewareInterface
             unset($_SESSION[$this->prefix . 'role_id']);
         }
         if ($sendCookie && !empty($sessionId)) {
+            $xar = $this->getServicesClass();
             $cookieString = $this->cookieName . '=' . $sessionId;
             $cookieString .= '; expires=' . gmdate('D, d M Y H:i:s T', intval($this->config['duration']) * 86400 + time());
-            $basePath = $this->config['cookiePath'] ?: xar::req()->getBaseURI();
+            $basePath = $this->config['cookiePath'] ?: $xar->req()->getBaseURI();
             if (!empty($basePath)) {
                 $cookieString .= '; path=' . $basePath;
             }
-            //$domain = $this->config['cookieDomain'] ?: xar::req()->getHost();
+            //$domain = $this->config['cookieDomain'] ?: $xar->req()->getHost();
             //if (!empty($domain)) {
             //    $cookieString .= '; domain=' . $domain;
             //}
