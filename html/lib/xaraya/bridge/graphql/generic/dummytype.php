@@ -12,8 +12,6 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
-use Xaraya\Services\xar;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -113,12 +111,13 @@ class DummyType extends ObjectType
                 'type' => GraphQLTypes::getType('user'),
                 'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
                     $context->tracePath(__CLASS__ . '::get_query_fields: resolve whoami');
-                    $userId = GraphQLHandler::checkUser($context);
+                    $userId = $context->handler->checkUser($context);
                     if (empty($userId)) {
                         return;
                     }
-                    xar::mod()->init();
-                    xar::user()->init();
+                    $xar = $context->handler->getServicesClass();
+                    $xar->mod()->init();
+                    $xar->user()->init();
                     $role = xarRoles::getRole($userId);
                     $fields = $role->getFieldValues();
                     return ['id' => $fields['id'], 'name' => $fields['name']];
@@ -130,9 +129,13 @@ class DummyType extends ObjectType
                 'type' => GraphQLTypes::getType('mixed'),
                 'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
                     $context->tracePath(__CLASS__ . '::get_query_fields: resolve context');
-                    $userId = GraphQLHandler::checkUser($context);
+                    $userId = $context->handler->checkUser($context);
                     // return restricted version for non-site admin
-                    if (empty($userId) || !xar::user($userId)->isSiteAdmin()) {
+                    if (empty($userId)) {
+                        return ['userId' => $userId, 'error' => 'Restricted to site admin'];
+                    }
+                    $xar = $context->handler->getServicesClass();
+                    if (!$xar->user($userId)->isSiteAdmin()) {
                         return ['userId' => $userId, 'error' => 'Restricted to site admin'];
                     }
                     return $context->getArrayCopy();

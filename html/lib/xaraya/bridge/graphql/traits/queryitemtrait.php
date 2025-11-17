@@ -12,7 +12,6 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use DataObjectFactory;
@@ -84,7 +83,7 @@ trait QueryItemTrait
         $object ??= GraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
-            if (GraphQLHandler::hasCachedData($typename . '_item', $rootValue, $args, $context, $info)) {
+            if ($context->handler->hasCachedData($typename . '_item', $rootValue, $args, $context, $info)) {
                 return;
             }
             $context->tracePath(__CLASS__ . '::item_query_resolver: ' . $typename, $info->path);
@@ -97,8 +96,8 @@ trait QueryItemTrait
             //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
             //}
             $userId = 0;
-            if (GraphQLHandler::hasSecurity($object)) {
-                $userId = GraphQLHandler::checkUser($context);
+            if (GraphQLObjects::hasSecurity($object)) {
+                $userId = $context->handler->checkUser($context);
                 if (empty($userId)) {
                     throw new Exception('Invalid user');
                 }
@@ -106,7 +105,7 @@ trait QueryItemTrait
             $params = ['name' => $object, 'itemid' => $args['id']];
             // set context if available in resolver
             $objectitem = DataObjectFactory::getObject($params, $context);
-            if (GraphQLHandler::hasSecurity($object) && !$objectitem->checkAccess('display', $params['itemid'], $userId)) {
+            if (GraphQLObjects::hasSecurity($object) && !$objectitem->checkAccess('display', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
             }
             $itemid = $objectitem->getItem();

@@ -20,23 +20,26 @@ use Xaraya\Bridge\Middleware\ModuleApiMiddleware;
 use Xaraya\Bridge\Middleware\ResponseUtil;
 use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Services\xar;
 
 class LocalTimer implements TimerInterface
 {
-    use TimerTrait;  // activate with self::enableTimer(true)
+    use TimerTrait;  // activate with $this->enableTimer(true)
+    use WithServicesClass;
 }
+$timer = new LocalTimer();
 
-LocalTimer::enableTimer(true);
-//LocalTimer::setTimer('autoload');
+$timer->enableTimer(true);
+//$timer->setTimer('autoload');
 sys::init();
-LocalTimer::setTimer('sys');
+$timer->setTimer('sys');
 // try out request context class
 xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class
 xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
 $xar = xar::load(xarCore::SYSTEM_USER);
-LocalTimer::setTimer('core');
+$timer->setTimer('core');
 
 // Concatenate and parse string into $_GET: php psr.php object=sample ...
 if (php_sapi_name() === 'cli') {
@@ -48,11 +51,10 @@ function getRequest($psr17Factory)
 {
     $requestCreator = new ServerRequestCreator($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
     $request = $requestCreator->fromGlobals();
-    LocalTimer::setTimer('request');
     return $request;
 }
 
-function getStack($psr17Factory, $api = false, $wrapPage = false)
+function getStack($psr17Factory, $api = false, $wrapPage = false, $timer = null)
 {
     // the Xaraya PSR-15 middleware here (with option to wrap output in page)
     if ($api) {
@@ -62,37 +64,37 @@ function getStack($psr17Factory, $api = false, $wrapPage = false)
         $objects = new DataObjectMiddleware($psr17Factory, $wrapPage);
         $modules = new ModuleMiddleware($psr17Factory, $wrapPage);
     }
-    LocalTimer::setTimer('middleware');
+    $timer->setTimer('middleware');
 
     // some other middleware before or after...
-    $filter = function ($request, $next) use ($modules) {
-        LocalTimer::setTimer('filter_in');
+    $filter = function ($request, $next) use ($modules, $timer) {
+        $timer->setTimer('filter_in');
         // @checkme strip baseUrl from request path here?
         $request = $modules->stripBaseUri($request);
-        LocalTimer::setTimer('filter_stripped');
+        $timer->setTimer('filter_stripped');
         $response = $next->handle($request->withHeader('X-Request-Before', 'Bar'));
-        LocalTimer::setTimer('filter_handled');
+        $timer->setTimer('filter_handled');
         return $response->withHeader('X-Response-Before', 'Bar');
     };
     // page wrapper for object requests in response output (if not specified above)
     $responseUtil = new ResponseUtil($psr17Factory);
-    $wrapper = function ($request, $next) use ($responseUtil) {
-        LocalTimer::setTimer('wrapper_in');
+    $wrapper = function ($request, $next) use ($responseUtil, $timer) {
+        $timer->setTimer('wrapper_in');
         $response = $next->handle($request->withAddedHeader('X-Middleware-Seen', 'Wrapper'));
-        LocalTimer::setTimer('wrapper_handled');
+        $timer->setTimer('wrapper_handled');
         $response = $responseUtil->wrapResponse($response);
-        LocalTimer::setTimer('wrapper_wrapped');
+        $timer->setTimer('wrapper_wrapped');
         return $response->withAddedHeader('X-Middleware-Seen', 'Wrapper');
     };
     // ...
-    $notfound = function ($request, $next) {
-        LocalTimer::setTimer('notfound_in');
+    $notfound = function ($request, $next) use ($timer) {
+        $timer->setTimer('notfound_in');
         $response = $next->handle($request->withHeader('X-Request-After', 'Baz'));
-        LocalTimer::setTimer('notfound_handled');
+        $timer->setTimer('notfound_handled');
         $server = $request->getServerParams();
         $attribs = $request->getAttributes();
         $response->getBody()->write('Nothing to see here: ' . $request->getUri()->getPath() . "\n<pre>" . var_export($server, true) . "</pre>" . "\n<pre>" . var_export($attribs, true) . "</pre>");
-        LocalTimer::setTimer('notfound_write');
+        $timer->setTimer('notfound_write');
         return $response->withHeader('X-Response-After', 'Baz');
     };
 
@@ -107,13 +109,14 @@ function getStack($psr17Factory, $api = false, $wrapPage = false)
     // Warning: we never get here if there's a module to be handled
     //$stack[] = $fastroute;
     $stack[] = $notfound;
-    LocalTimer::setTimer('stack');
+    $timer->setTimer('stack');
     return $stack;
 }
 
 // get server request from somewhere
 $psr17Factory = new Psr17Factory();
 $request = getRequest($psr17Factory);
+$timer->setTimer('request');
 
 /**
 $middleware = new class () implements Psr\Http\Server\MiddlewareInterface {
@@ -132,17 +135,17 @@ $middleware = new class () implements Psr\Http\Server\MiddlewareInterface {
 
 $api = false;
 $wrapPage = false;
-$stack = getStack($psr17Factory, $api, $wrapPage);
+$stack = getStack($psr17Factory, $api, $wrapPage, $timer);
 
 $response = Dispatcher::run($stack, $request);
 //$response = $fastroute->handle($request);
-LocalTimer::setTimer('run');
+$timer->setTimer('run');
 ResponseUtil::emitResponse($response);
-LocalTimer::setTimer('emit');
+$timer->setTimer('emit');
 
 if (php_sapi_name() === 'cli') {
     //echo "Path: " . $request->getUri()->getPath() . "\n";
     //echo "Request: " . var_export($request, true) . "\n";
     //echo "Response: " . var_export($response, true) . "\n";
-    echo "Timers: " . json_encode(LocalTimer::getTimers(), JSON_PRETTY_PRINT);
+    echo "Timers: " . json_encode($timer->getTimers(), JSON_PRETTY_PRINT);
 }

@@ -13,7 +13,6 @@
 namespace Xaraya\Bridge\GraphQL\Types;
 
 use Xaraya\Bridge\GraphQL\GraphQLHandler;
-use Xaraya\Services\xar;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InputObjectType;
@@ -56,7 +55,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     public function __construct()
     {
         $config = $this->get_type_config('Module_Api');
-        GraphQLHandler::setTimer('new ' . $config['name']);
+        // GraphQLHandler::setTimer('new ' . $config['name']);
         parent::__construct($config);
     }
 
@@ -194,7 +193,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
             } elseif (empty($args['module']) || $args['module'] != $func['module']) {
                 throw new Exception("Invalid module for $func[module] $func[type] $func[func] function");
             }
-            $userId = GraphQLHandler::checkUser($context);
+            $userId = $context->handler->checkUser($context);
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }
@@ -399,7 +398,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
             } elseif (empty($args['module']) || $args['module'] != $func['module']) {
                 throw new Exception("Invalid module for $func[module] $func[type] $func[func] function");
             }
-            $userId = GraphQLHandler::checkUser($context);
+            $userId = $context->handler->checkUser($context);
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }
@@ -428,12 +427,13 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
      */
     public static function call_module_function($module, $type, $func, $args, $context, $userId, $fields)
     {
+        $xar = $context->handler->getServicesClass();
         //$role = xarRoles::getRole($userId);
         //$rolename = $role->getName();
-        xar::mod()->init();
-        xar::user()->init();
+        $xar->mod()->init();
+        $xar->user()->init();
         $context->tracePath(__CLASS__ . '::call_module_function: ' . "$module $type $func for user $userId", ['args' => $args, 'fields' => $fields]);
-        return xar::mod()->apiFunc($module, $type, $func, $args);
+        return $xar->mod()->apiFunc($module, $type, $func, $args);
         //$values = ['func_args' => $args];
         //return $values;
     }

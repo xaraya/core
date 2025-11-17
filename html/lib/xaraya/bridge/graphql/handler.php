@@ -41,7 +41,6 @@ use Xaraya\Context\ContextFactory;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
-use Xaraya\Services\xar;
 use GraphQL\GraphQL;
 use GraphQL\Error\DebugFlag;
 use GraphQL\Type\Definition\Type;
@@ -61,33 +60,31 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     use CommonRequestTrait;
     use ContextTrait;
     use TimerTrait;  // activate with self::enableTimer(true)
-    use CacheTrait;  // activate with self::enableCache(true)
+    use CacheTrait;  // activate with $this->enableCache(true)
     use WithServicesClass;
 
     /** @var array<string, mixed> */
     public static $config = [];
-    /** @var string|null */
-    public static $schemaFile = null;
-    public static bool $tracePath = false;
-    /** @var array<string> */
-    public static $paths = [];
-    /** @var mixed */
-    public static $queryPlan = null;
-    /** @var array<string, mixed> */
-    public static $queryFields = [];
-    public static bool $cachePlan = false;
-    public static bool $cacheData = false;
-    public static bool $cacheOperation = false;
     public static int $queryComplexity = 0;
     public static int $queryDepth = 0;
-    protected static $fixedServices;
+    /** @var string|null */
+    public static $schemaFile = null;
+    public bool $tracePath = false;
+    /** @var array<string> */
+    public $paths = [];
+    /** @var mixed */
+    public $queryPlan = null;
+    /** @var array<string, mixed> */
+    public $queryFields = [];
+    public bool $cachePlan = false;
+    public bool $cacheData = false;
+    public bool $cacheOperation = false;
 
     public function __construct($xar = null)
     {
         $xar = $this->getServicesClass($xar);
         // use request context for query params etc.
         $xar->req()->setRequestClass(RequestContext::class);
-        self::$fixedServices = $xar;
     }
 
     /**
@@ -101,12 +98,12 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function getData($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null)
     {
-        self::setTimer('start');
+        $this->setTimer('start');
         if (!empty($schemaFile)) {
             self::$schemaFile = $schemaFile;
         }
         $cacheOperationKey = null;
-        if (self::$cacheOperation) {
+        if ($this->cacheOperation) {
             $queryId = md5($queryString) . '-' . ($operationName ?? 'null');
             if (!empty($variableValues) && is_array($variableValues)) {
                 ksort($variableValues);
@@ -116,15 +113,15 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
             } else {
                 $queryId .= '-empty';
             }
-            $cacheOperationKey = self::getCacheKey($queryId);
-            if (!empty($cacheOperationKey) && self::isCached($cacheOperationKey)) {
-                $serializableResult = self::getCached($cacheOperationKey);
+            $cacheOperationKey = $this->getCacheKey($queryId);
+            if (!empty($cacheOperationKey) && $this->isCached($cacheOperationKey)) {
+                $serializableResult = $this->getCached($cacheOperationKey);
                 $extensions = [];
-                $extensions['cached'] = self::keyCached($cacheOperationKey);
+                $extensions['cached'] = $this->keyCached($cacheOperationKey);
                 // $extensions['cached'] = true;
-                self::setTimer('cache');
-                if (self::enableTimer()) {
-                    $extensions['times'] = self::getTimers();
+                $this->setTimer('cache');
+                if ($this->enableTimer()) {
+                    $extensions['times'] = $this->getTimers();
                 }
                 if (!empty($extensions)) {
                     $serializableResult['extensions'] = $extensions;
@@ -145,7 +142,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
             $schema = $graphQLBuilder->getSchema($extraTypes);
             $fieldResolver = null;
         }
-        self::setTimer('schema');
+        $this->setTimer('schema');
         if ($queryString == '{schema}') {
             return $graphQLBuilder->printSchema($schema);
         }
@@ -170,7 +167,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
         //     ]
         // );
 
-        self::setTimer('ready');
+        $this->setTimer('ready');
         $result = GraphQL::executeQuery(
             $schema,
             $queryString,
@@ -181,37 +178,37 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
             $fieldResolver,
             $validationRules
         );
-        self::setTimer('query');
+        $this->setTimer('query');
         //$serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
         $serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE);
-        self::setTimer('array');
+        $this->setTimer('array');
         $extensions = [];
-        if (self::$cacheData && self::hasCacheKey()) {
-            $cacheKey = self::getCacheKey();
-            if (self::isCached($cacheKey)) {
-                $serializableResult = self::getCached($cacheKey);
-                $extensions['cached'] = self::keyCached($cacheKey);
+        if ($this->cacheData && $this->hasCacheKey()) {
+            $cacheKey = $this->getCacheKey();
+            if ($this->isCached($cacheKey)) {
+                $serializableResult = $this->getCached($cacheKey);
+                $extensions['cached'] = $this->keyCached($cacheKey);
                 // $extensions['cached'] = true;
-                self::setTimer('cache');
+                $this->setTimer('cache');
             } else {
-                self::setCached($cacheKey, $serializableResult);
+                $this->setCached($cacheKey, $serializableResult);
             }
         }
-        //if (self::$tracePath) {
-        //    $extensions['paths'] = self::$paths;
+        //if ($this->tracePath) {
+        //    $extensions['paths'] = $this->paths;
         //}
         if ($this->context->enableTrace()) {
             $extensions['paths'] = $this->context->getTrace();
         }
-        self::setTimer('stop');
-        if (self::enableTimer()) {
-            $extensions['times'] = self::getTimers();
+        $this->setTimer('stop');
+        if ($this->enableTimer()) {
+            $extensions['times'] = $this->getTimers();
         }
         if (!empty($extensions)) {
             $serializableResult['extensions'] = $extensions;
         }
-        if (self::$cacheOperation && !empty($cacheOperationKey)) {
-            self::setCached($cacheOperationKey, $serializableResult);
+        if ($this->cacheOperation && !empty($cacheOperationKey)) {
+            $this->setCached($cacheOperationKey, $serializableResult);
         }
         return $serializableResult;
     }
@@ -282,16 +279,17 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      * @param string $message
      * @param mixed $infoPath
      * @return void
+     * @deprecated 2.6.3 use $context->tracePath() instead
      */
-    public static function tracePath($message, $infoPath = null)
+    public function tracePath($message, $infoPath = null)
     {
-        if (!self::$tracePath) {
+        if (!$this->tracePath) {
             return;
         }
         if (isset($infoPath)) {
-            self::$paths[] = $infoPath;
+            $this->paths[] = $infoPath;
         }
-        self::$paths[] = $message;
+        $this->paths[] = $message;
     }
 
     /**
@@ -303,54 +301,56 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      * @param ResolveInfo $info
      * @return bool
      */
-    public static function hasCachedData($queryType, $rootValue, $args, $context, ResolveInfo $info)
+    public function hasCachedData($queryType, $rootValue, $args, $context, ResolveInfo $info)
     {
-        if (!empty(self::$queryPlan)) {
+        if (!empty($this->queryPlan)) {
             return false;
         }
-        self::setTimer('check');
+        $this->setTimer('check');
         // disable caching for mutations
         if ($info->operation->operation === 'mutation') {
-            self::enableCache(false);
-            self::$cachePlan = false;
-            self::$cacheData = false;
+            $this->enableCache(false);
+            $this->cachePlan = false;
+            $this->cacheData = false;
         }
         $operationName = '';
         if ($info->operation->name) {
             $operationName = $info->operation->name->value;
         }
         $queryPlan = $info->lookAhead();
-        self::$queryPlan = $queryPlan;
-        self::$queryFields = [];
+        $this->queryPlan = $queryPlan;
+        $this->queryFields = [];
         foreach ($queryPlan->getReferencedTypes() as $type) {
-            self::$queryFields[strtolower($type)] = array_values($queryPlan->subFields($type));
+            $this->queryFields[strtolower($type)] = array_values($queryPlan->subFields($type));
         }
-        //self::$paths[] = self::$queryFields;
+        //$this->paths[] = $this->queryFields;
         $dumpPlan = self::dumpQueryPlan($queryPlan->queryPlan());
         $queryId = $queryType . '-' . md5(json_encode($dumpPlan));
         if (!empty($args) && is_array($args)) {
             ksort($args);
         }
         // @checkme cache query plan + (later) perhaps result based on args
-        if (self::$cachePlan) {
-            $cacheKey = self::getCacheKey($queryId);
+        if ($this->cachePlan) {
+            $cacheKey = $this->getCacheKey($queryId);
             if (!empty($cacheKey)) {
-                if (!self::isCached($cacheKey)) {
-                    self::setCached($cacheKey, $dumpPlan);
+                if (!$this->isCached($cacheKey)) {
+                    $this->setCached($cacheKey, $dumpPlan);
                 }
-                if (self::$cacheData) {
+                if ($this->cacheData) {
                     // @checkme add current arguments to cacheKey to cache results
                     if (!empty($args)) {
                         $cacheKey .= '-' . md5(json_encode($args));
                     } else {
                         $cacheKey .= '-result';
                     }
-                    self::setCacheKey($cacheKey);
+                    $this->setCacheKey($cacheKey);
                 }
             }
         }
-        if (self::$tracePath) {
-            self::$paths[] = [
+        /**
+         * @deprecated 2.6.3 use $context->tracePath() instead
+        if ($this->tracePath) {
+            $this->paths[] = [
                 'queryId' => $queryId,
                 'queryType' => $queryType,
                 'queryPlan' => $dumpPlan,
@@ -359,9 +359,10 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
                 'args' => $args,
             ];
         }
-        self::setTimer('plan');
+         */
+        $this->setTimer('plan');
         // @checkme don't try to resolve anything further if the result is already cached?
-        if (self::$cacheData && self::hasCacheKey() && self::isCached(self::getCacheKey())) {
+        if ($this->cacheData && $this->hasCacheKey() && $this->isCached($this->getCacheKey())) {
             return true;
         }
         return false;
@@ -372,9 +373,9 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      * @param string $typeName
      * @return bool
      */
-    public static function hasQueryFields($typeName)
+    public function hasQueryFields($typeName)
     {
-        return array_key_exists($typeName, self::$queryFields);
+        return array_key_exists($typeName, $this->queryFields);
     }
 
     /**
@@ -382,9 +383,9 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      * @param string $typeName
      * @return array<mixed>
      */
-    public static function getQueryFields($typeName)
+    public function getQueryFields($typeName)
     {
-        return self::$queryFields[$typeName];
+        return $this->queryFields[$typeName];
     }
 
     /**
@@ -410,9 +411,9 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
             $context = $this->getContext();
             // Assume context for core services is already set here
         }
-        // @todo check use in GraphQL field resolvers!?
+        // Used in GraphQL field resolvers
         $context->handler = $this;
-        // Initialize server - not really needed since xar::req()->getInstance() is on demand
+        // Initialize server - not really needed since $xar->req()->getInstance() is on demand
         //$xar->req()->init();
         return $context;
     }
@@ -447,7 +448,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
         // load config before updating the context
         $this->loadConfig();
         $context['mediatype'] = '';
-        $context->enableTrace(self::$tracePath);
+        $context->enableTrace($this->tracePath);
         // @todo check if we already have a context? (via request or from elsewhere)
         $this->setContext($context);
         $result = $this->getData($query, $variables, $operationName);
@@ -483,9 +484,9 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      * @param Context<string, mixed> $context
      * @return int
      */
-    public static function checkUser($context)
+    public function checkUser($context)
     {
-        return $context->getUserId(self::$fixedServices);
+        return $context->getUserId($this->getServicesClass());
     }
 
     /**
@@ -493,6 +494,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      * @param string $object
      * @param ?string $method
      * @return bool
+     * @deprecated 2.8.8 use GraphQLObjects::hasSecurity() instead
      */
     public static function hasSecurity($object, $method = null)
     {
@@ -505,62 +507,61 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function loadConfig()
     {
-        if (!empty(self::$config)) {
-            return;
+        if (empty(self::$config)) {
+            self::$config = [];
+            $configFile = sys::varpath() . '/cache/api/graphql_config.json';
+            if (file_exists($configFile)) {
+                $contents = file_get_contents($configFile);
+                self::$config = json_decode($contents, true);
+            }
+            if (!empty(self::$config['extraTypes'])) {
+                GraphQLTypes::setExtraTypes(self::$config['extraTypes']);
+            }
+            if (!empty(self::$config['queryComplexity'])) {
+                self::$queryComplexity = self::$config['queryComplexity'];
+            }
+            if (!empty(self::$config['queryDepth'])) {
+                self::$queryDepth = self::$config['queryDepth'];
+            }
+            /**
+            if (!empty(self::$config['tokenExpires'])) {
+                AuthToken::$tokenExpires = self::$config['tokenExpires'];
+            }
+            if (!empty(self::$config['storageType'])) {
+                AuthToken::$storageType = self::$config['storageType'];
+            }
+            */
+            self::$schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         }
-        self::$config = [];
-        $configFile = sys::varpath() . '/cache/api/graphql_config.json';
-        if (file_exists($configFile)) {
-            $contents = file_get_contents($configFile);
-            self::$config = json_decode($contents, true);
-        }
-        if (!empty(self::$config['extraTypes'])) {
-            GraphQLTypes::setExtraTypes(self::$config['extraTypes']);
-        }
-        if (!empty(self::$config['queryComplexity'])) {
-            self::$queryComplexity = self::$config['queryComplexity'];
-        }
-        if (!empty(self::$config['queryDepth'])) {
-            self::$queryDepth = self::$config['queryDepth'];
-        }
-        /**
-        if (!empty(self::$config['tokenExpires'])) {
-            AuthToken::$tokenExpires = self::$config['tokenExpires'];
-        }
-        if (!empty(self::$config['storageType'])) {
-            AuthToken::$storageType = self::$config['storageType'];
-        }
-         */
         // use xarTimerTrait
         if (!empty(self::$config['enableTimer'])) {
-            self::enableTimer(true);
+            $this->enableTimer(true);
         }
         if (!empty(self::$config['tracePath'])) {
-            self::$tracePath = true;
+            $this->tracePath = true;
         }
         // use xarCacheTrait
         if (!empty(self::$config['enableCache'])) {
-            self::enableCache(true);
+            $this->enableCache(true);
         }
         if (!empty(self::$config['cachePlan'])) {
-            self::$cachePlan = true;
+            $this->cachePlan = true;
         }
         if (!empty(self::$config['cacheData'])) {
-            self::$cacheData = true;
+            $this->cacheData = true;
             // this is needed for cache_data to work
-            self::$cachePlan = true;
+            $this->cachePlan = true;
         }
         if (!empty(self::$config['cacheOperation'])) {
-            self::$cacheOperation = true;
+            $this->cacheOperation = true;
         }
-        if (self::$cachePlan || self::$cacheData || self::$cacheOperation) {
-            self::enableCache(true);
+        if ($this->cachePlan || $this->cacheData || $this->cacheOperation) {
+            $this->enableCache(true);
         }
-        if (self::enableCache()) {
+        if ($this->enableCache()) {
             $cacheScope = 'GraphQLAPI.QueryPlan';
-            self::setCacheScope($cacheScope);
+            $this->setCacheScope($cacheScope);
         }
-        self::$schemaFile = sys::varpath() . '/cache/api/schema.graphql';
-        self::setTimer('config');
+        $this->setTimer('config');
     }
 }

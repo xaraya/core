@@ -12,7 +12,6 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use DataObjectFactory;
@@ -83,13 +82,13 @@ trait MutationDeleteTrait
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations
-            GraphQLHandler::enableCache(false);
+            $context->handler->enableCache(false);
             $context->tracePath(__CLASS__ . '::delete_mutation_resolver: ' . $typename, $info->path);
             $fields = $info->getFieldSelection(1);
             if (empty($args['id'])) {
                 throw new Exception('Unknown id for type ' . $typename);
             }
-            $userId = GraphQLHandler::checkUser($context);
+            $userId = $context->handler->checkUser($context);
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }

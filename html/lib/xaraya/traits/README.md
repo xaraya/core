@@ -19,21 +19,21 @@ use Xaraya\Caching\CacheTrait;
 
 class myFancyClass implements CacheInterface
 {
-    use CacheTrait;  // activate with self::enableCache(true)
+    use CacheTrait;  // activate with $this->$enableCache(true)
 
     public function __construct()
     {
         // ...
-        self::enableCache(true);
-        self::setCacheScope('myFancyItems');
+        $this->enableCache(true);
+        $this->setCacheScope('myFancyItems');
     }
 
     public function getItemCached($id)
     {
         // ... get item from cache ...
-        $cacheKey = self::getCacheKey($id);
-        if (self::isCached($cacheKey)) {
-            return self::getCached($cacheKey);
+        $cacheKey = $this->getCacheKey($id);
+        if ($this->isCached($cacheKey)) {
+            return $this->getCached($cacheKey);
         }
 
         // ... retrieve item here in myFancyClass ...
@@ -41,10 +41,10 @@ class myFancyClass implements CacheInterface
 
         // ... set item in cache ...
         // if you don't know the $cacheKey for item from before (e.g. because it was defined with $id elsewhere)
-        // if (self::hasCacheKey()) {
-        //     $cacheKey = self::getCacheKey();
+        // if ($this->hasCacheKey()) {
+        //     $cacheKey = $this->getCacheKey();
         // }
-        self::setCached($cacheKey, $item);
+        $this->setCached($cacheKey, $item);
         return $item;
     }
 }
@@ -61,26 +61,26 @@ use Xaraya\Tools\TimerTrait;
 
 class myFancyClass implements TimerInterface
 {
-    use TimerTrait;  // activate with self::enableTimer(true)
+    use TimerTrait;  // activate with $this->enableTimer(true)
 
     public function __construct()
     {
-        self::enableTimer(true);
+        $this->enableTimer(true);
         // ...
-        self::setTimer('contructed');
+        $this->setTimer('contructed');
     }
 
     public function getResultWithTimer($what)
     {
         // ... get result with timer ...
-        self::setTimer('start result');
+        $this->setTimer('start result');
         // some lengthy operation(s) in myFancyClass
         $result = $this->getResult($what);
-        self::setTimer('stop result');
+        $this->setTimer('stop result');
 
         // ... add timer information to result ...
-        if (self::enableTimer()) {
-            $result['timer'] = self::getTimers();
+        if ($this->enableTimer()) {
+            $result['timer'] = $this->getTimers();
         }
         return $result;
     }

@@ -15,7 +15,6 @@ namespace Xaraya\Bridge\Requests;
 // use some Xaraya classes
 use Xaraya\Services\ModulesInterface;
 use Xaraya\Context\ContextFactory;
-use Xaraya\Services\xar;
 
 /**
  * For documentation purposes only - available via ModuleBridgeTrait
@@ -71,7 +70,10 @@ trait ModuleBridgeTrait
 
     public function mod(): ModulesInterface
     {
-        $this->xarMod ??= xar::mod();
+        if (!isset($this->xarMod)) {
+            $xar = $this->getServicesClass();
+            $this->xarMod = $xar->mod();
+        }
         return $this->xarMod;
     }
 

@@ -19,7 +19,6 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
-use Xaraya\Services\xar;
 use Exception;
 use Xaraya\Bridge\Requests\StaticFileHandler;
 

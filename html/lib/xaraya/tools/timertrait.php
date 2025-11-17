@@ -10,26 +10,26 @@
  *
  * class myFancyClass implements TimerInterface
  * {
- *     use TimerTrait;  // activate with self::enableTimer(true)
+ *     use TimerTrait;  // activate with $this->enableTimer(true)
  *
  *     public function __construct()
  *     {
- *         self::enableTimer(true);
+ *         $this->enableTimer(true);
  *         // ...
- *         self::setTimer('contructed');
+ *         $this->setTimer('contructed');
  *     }
  *
  *     public function getResultWithTimer($what)
  *     {
  *         // ... get result with timer ...
- *         self::setTimer('start result');
+ *         $this->setTimer('start result');
  *         // some lengthy operation(s) in myFancyClass
  *         $result = $this->getResult($what);
- *         self::setTimer('stop result');
+ *         $this->setTimer('stop result');
  *
  *         // ... add timer information to result ...
- *         if (self::enableTimer()) {
- *             $result['timer'] = self::getTimers();
+ *         if ($this->enableTimer()) {
+ *             $result['timer'] = $this->getTimers();
  *         }
  *         return $result;
  *     }
@@ -48,19 +48,19 @@
 
 namespace Xaraya\Tools;
 
-use Xaraya\Services\xar;
+use Xaraya\Services\RequestService;
 
 /**
  * For documentation purposes only - available via TimerTrait
  */
 interface TimerInterface
 {
-    public static function enableTimer(?bool $enable = null): bool;
-    public static function setTimer(string $label): void;
+    public function enableTimer(?bool $enable = null): bool;
+    public function setTimer(string $label): void;
     /** @return list<array<string, float>> */
-    public static function getTimers(): array;
+    public function getTimers(): array;
     /** @param array<mixed> $args */
-    public static function wrapTimer(string $label, callable $callback, ...$args): mixed;
+    public function wrapTimer(string $label, callable $callback, ...$args): mixed;
 }
 
 /**
@@ -68,52 +68,63 @@ interface TimerInterface
  */
 trait TimerTrait
 {
-    public static bool $enableTimer = false;  // activate with self::enableTimer(true)
+    public bool $enableTimer = false;  // activate with $this->enableTimer(true)
     /** @var list<array<string, float>> */
-    protected static array $_timerKeep = [];
-    protected static float $_timerPrev = 0.0;
-    protected static float $_timerMult = 1000.0;  // in milliseconds
-    protected static int $_timerPrec = 3;
+    protected array $_timerKeep = [];
+    protected float $_timerPrev = 0.0;
+    protected float $_timerMult = 1000.0;  // in milliseconds
+    protected int $_timerPrec = 3;
+    protected ?RequestService $_reqService = null;
+
+    protected function _req(): RequestService
+    {
+        if (!isset($this->_reqService)) {
+            // @checkme assume WithServicesClass here
+            $xar = $this->getServicesClass();
+            $this->_reqService = $xar->req();
+        }
+        return $this->_reqService;
+    }
 
     /**
      * Get or set enableTimer
      */
-    public static function enableTimer(?bool $enable = null): bool
+    public function enableTimer(?bool $enable = null): bool
     {
         if (isset($enable)) {
-            static::$enableTimer = $enable;
+            $this->enableTimer = $enable;
         }
-        return static::$enableTimer;
+        return $this->enableTimer;
     }
 
-    public static function setTimer(string $label): void
+    public function setTimer(string $label): void
     {
-        if (!static::$enableTimer) {
+        if (!$this->enableTimer) {
             return;
         }
         $now = microtime(true);
-        if (empty(static::$_timerPrev)) {
-            $start = xar::req()->getServerVar('REQUEST_TIME_FLOAT');
-            static::$_timerPrev = !empty($start) ? (float) $start : 0.0;
-            static::$_timerKeep[] = ['request' => static::$_timerPrev];
+        if (empty($this->_timerPrev)) {
+            $start = $this->_req()->getServerVar('REQUEST_TIME_FLOAT');
+            $this->_timerPrev = !empty($start) ? (float) $start : 0.0;
+            $this->_timerKeep[] = ['request' => $this->_timerPrev];
         }
-        static::$_timerKeep[] = [$label => round(($now - static::$_timerPrev) * self::$_timerMult, self::$_timerPrec)];
-        static::$_timerPrev = $now;
+        $this->_timerKeep[] = [$label => round(($now - $this->_timerPrev) * $this->_timerMult, $this->_timerPrec)];
+        $this->_timerPrev = $now;
     }
 
     /**
      * Summary of getTimers
      * @return list<array<string, float>>
      */
-    public static function getTimers(): array
+    public function getTimers(): array
     {
-        if (!static::$enableTimer) {
+        if (!$this->enableTimer) {
             return [];
         }
-        $start = xar::req()->getServerVar('REQUEST_TIME_FLOAT');
-        static::$_timerPrev = !empty($start) ? (float) $start : 0.0;
-        static::setTimer('elapsed');
-        return static::$_timerKeep;
+        $start = $this->_req()->getServerVar('REQUEST_TIME_FLOAT');
+        $this->_timerPrev = !empty($start) ? (float) $start : 0.0;
+        $this->setTimer('elapsed');
+        return $this->_timerKeep;
     }
 
     /**
@@ -123,11 +134,11 @@ trait TimerTrait
      * @param array<mixed> $args
      * @return mixed
      */
-    public static function wrapTimer(string $label, callable $callback, ...$args): mixed
+    public function wrapTimer(string $label, callable $callback, ...$args): mixed
     {
-        static::setTimer("start $label");
+        $this->setTimer("start $label");
         $result = call_user_func($callback, ...$args);
-        static::setTimer("stop $label");
+        $this->setTimer("stop $label");
         return $result;
     }
 }

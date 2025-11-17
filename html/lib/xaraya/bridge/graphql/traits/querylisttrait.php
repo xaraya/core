@@ -12,7 +12,6 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use DataObjectFactory;
@@ -95,13 +94,13 @@ trait QueryListTrait
         $object ??= GraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
-            if (GraphQLHandler::hasCachedData($typename . '_list', $rootValue, $args, $context, $info)) {
+            if ($context->handler->hasCachedData($typename . '_list', $rootValue, $args, $context, $info)) {
                 return;
             }
             $context->tracePath(__CLASS__ . '::list_query_resolver: ' . $typename, $info->path);
             $fields = $info->getFieldSelection(1);
-            if (GraphQLHandler::hasQueryFields($typename)) {
-                $fieldlist = GraphQLHandler::getQueryFields($typename);
+            if ($context->handler->hasQueryFields($typename)) {
+                $fieldlist = $context->handler->getQueryFields($typename);
             } else {
                 $fieldlist = array_keys($fields);
             }
@@ -110,8 +109,8 @@ trait QueryListTrait
             //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
             //}
             $userId = 0;
-            if (GraphQLHandler::hasSecurity($object)) {
-                $userId = GraphQLHandler::checkUser($context);
+            if (GraphQLObjects::hasSecurity($object)) {
+                $userId = $context->handler->checkUser($context);
                 if (empty($userId)) {
                     throw new Exception('Invalid user');
                 }
@@ -121,7 +120,7 @@ trait QueryListTrait
             $loader->setContext($context);
             $loader->parseQueryArgs($args);
             $objectlist = $loader->getObjectList();
-            if (GraphQLHandler::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
+            if (GraphQLObjects::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
                 throw new Exception('Invalid user access');
             }
             $params = $loader->addPagingParams();

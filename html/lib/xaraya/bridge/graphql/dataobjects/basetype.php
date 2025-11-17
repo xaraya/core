@@ -46,7 +46,7 @@ class BaseObjectType extends ObjectType implements QueriesInterface, MutationsIn
         if (empty($config)) {
             $config = $this->get_type_config(static::$_xar_name, static::$_xar_object);
         }
-        GraphQLHandler::setTimer('new ' . $config['name']);
+        // GraphQLHandler::setTimer('new ' . $config['name']);
         // you need to pass the type config to the parent here, if you want to override the constructor
         parent::__construct($config);
     }

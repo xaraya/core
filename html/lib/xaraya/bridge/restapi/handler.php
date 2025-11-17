@@ -41,8 +41,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
 {
     use CommonRequestTrait;
     use ContextTrait;
-    use TimerTrait;  // activate with self::enableTimer(true)
-    use CacheTrait;  // activate with self::enableCache(true)
+    use TimerTrait;  // activate with $this->enableTimer(true)
+    use CacheTrait;  // activate with $this->enableCache(true)
     use WithServicesClass;
 
     public static string $endpoint = 'rst.php/v1';
@@ -101,32 +101,31 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function loadConfig()
     {
-        if (!empty(self::$config)) {
-            return;
+        if (empty(self::$config)) {
+            self::$config = [];
+            $configFile = sys::varpath() . '/cache/api/restapi_config.json';
+            if (file_exists($configFile)) {
+                $contents = file_get_contents($configFile);
+                self::$config = json_decode($contents, true);
+            }
+            /**
+            if (!empty(self::$config['storage'])) {
+                AuthToken::$storageType = self::$config['storage'];
+            }
+            if (!empty(self::$config['expires'])) {
+                AuthToken::$tokenExpires = intval(self::$config['expires']);
+            }
+            */
         }
-        self::$config = [];
-        $configFile = sys::varpath() . '/cache/api/restapi_config.json';
-        if (file_exists($configFile)) {
-            $contents = file_get_contents($configFile);
-            self::$config = json_decode($contents, true);
-        }
-        /**
-        if (!empty(self::$config['storage'])) {
-            AuthToken::$storageType = self::$config['storage'];
-        }
-        if (!empty(self::$config['expires'])) {
-            AuthToken::$tokenExpires = intval(self::$config['expires']);
-        }
-         */
         // use xarTimerTrait
         if (isset(self::$config['timer'])) {
-            self::enableTimer(!empty(self::$config['timer']) ? true : false);
+            $this->enableTimer(!empty(self::$config['timer']) ? true : false);
         }
         // use xarCacheTrait
         if (isset(self::$config['cache'])) {
-            self::enableCache(!empty(self::$config['cache']) ? true : false, $this->getServicesClass());
+            $this->enableCache(!empty(self::$config['cache']) ? true : false);
         }
-        if (self::enableCache()) {
+        if ($this->enableCache()) {
             $cacheScope = 'RestAPI.Operation';
             $this->setCacheScope($cacheScope);
         }
@@ -213,8 +212,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             $context = $this->getContext();
             // Assume context for core services is already set here
         }
-        // @todo check use in RestAPI handlers!?
-        //$context->handler = $this;
+        // Used in GraphQL field resolvers - only needed in RestAPI to disable cache
+        $context->handler = $this;
         // Initialize server - not really needed since $xar->req()->getInstance() is on demand
         //$xar->req()->init([], $context);
         return $context;
@@ -307,7 +306,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         if (is_array($handler) && is_string($handler[0]) && is_a($handler[0], RestAPIHandler::class, true) && str_starts_with($handler[1], "get")) {
             $tryCachedResult = true;
         }
-        if ($tryCachedResult && self::enableCache()) {
+        if ($tryCachedResult && $this->enableCache()) {
             $queryId = $this->getQueryId($handler[1], $params);
             $cacheKey = $this->getCacheKey($queryId);
             // @checkme we need to initialize the database here too if variable caching uses database instead of apcu
@@ -414,7 +413,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             return;
         }
         $context = $this->getContext();
-        if (is_array($result) && self::enableTimer()) {
+        if (is_array($result) && $this->enableTimer()) {
             $result['x-times'] = $this->getTimers();
         }
         if (!headers_sent() && $status !== 200) {

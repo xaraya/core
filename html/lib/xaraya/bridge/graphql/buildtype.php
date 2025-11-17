@@ -47,7 +47,7 @@ class BuildType
      */
     public static function make_type($name, $type = null, $object = null)
     {
-        GraphQLHandler::setTimer('make type ' . $name);
+        // GraphQLHandler::setTimer('make type ' . $name);
         // name=Property, type=property, object=properties
         [$name, $type, $object] = GraphQLInflector::sanitize($name, $type, $object);
         $description = "$object item";
@@ -303,7 +303,7 @@ class BuildType
         if (GraphQLObjects::hasFieldSpecs($object) && !$refresh) {
             return GraphQLObjects::getFieldSpecs($object);
         }
-        GraphQLHandler::setTimer('find object fieldspecs ' . $object);
+        // GraphQLHandler::setTimer('find object fieldspecs ' . $object);
         //$args = array('name' => $object, 'numitems' => 1);
         //$objectlist = DataObjectFactory::getObjectList($args);
         //print_r($objectlist->getItems());
@@ -366,7 +366,7 @@ class BuildType
             }
         }
         GraphQLObjects::setFieldSpecs($object, $fieldspecs);
-        GraphQLHandler::setTimer('found object fieldspecs ' . $object);
+        // GraphQLHandler::setTimer('found object fieldspecs ' . $object);
         return $fieldspecs;
     }
 

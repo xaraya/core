@@ -224,7 +224,7 @@ class GraphQLObjects
             self::$objectSecurity[$object] = $info['security'];
             self::$objectFieldSpecs[$object] = $info['fieldspecs'] ?? false;
         }
-        GraphQLHandler::setTimer('objects');
+        // GraphQLHandler::setTimer('objects');
     }
 
     /**

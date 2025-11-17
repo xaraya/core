@@ -94,7 +94,7 @@ function get_router($restHandler)
  */
 function handle_request($method, $path, $router, $restHandler)
 {
-    // $restHandler::setTimer('register');
+    // $restHandler->setTimer('register');
     [$handler, $vars] = $router->match($path, $method);
     if (empty($handler)) {
         switch ((string) $vars['status']) {
@@ -112,7 +112,7 @@ function handle_request($method, $path, $router, $restHandler)
         }
         return;
     }
-    // $restHandler::setTimer('dispatch');
+    // $restHandler->setTimer('dispatch');
     // ... call $handler with $vars
     try {
         [$result, $context] = $restHandler->callHandler($handler, $vars);
@@ -142,8 +142,8 @@ function try_handler($restHandler)
     if (empty($req->getServerVar('PATH_INFO'))) {
         send_openapi($restHandler);
     } else {
-        // $restHandler::enableTimer(true);
-        // $restHandler::setTimer('start');
+        // $restHandler->enableTimer(true);
+        // $restHandler->setTimer('start');
         $router = get_router($restHandler);
         handle_request($req->getServerVar('REQUEST_METHOD'), $req->getServerVar('PATH_INFO'), $router, $restHandler);
     }

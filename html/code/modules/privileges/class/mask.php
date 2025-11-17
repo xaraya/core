@@ -18,7 +18,6 @@
 */
 
 use Xaraya\Services\WithServicesClass;
-use Xaraya\Services\xar;
 
 class xarMask extends xarObject
 {

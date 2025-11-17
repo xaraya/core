@@ -12,7 +12,7 @@ use Xaraya\Context\Context;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Modules\GuiModuleServicesInterface;
 use Xaraya\Modules\ModuleServicesInterface;
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 use FunctionNotFoundException;
 
 /**
@@ -35,6 +35,7 @@ use FunctionNotFoundException;
 class ModuleHandler implements HandlerInterface
 {
     use ContextTrait;
+    use WithServicesClass;
 
     protected ModuleServicesInterface $instance;
     protected string $funcName;
@@ -65,7 +66,7 @@ class ModuleHandler implements HandlerInterface
         unset($vars['_route']);
         // DefaultHandler has no module class instance
         if (!isset($this->instance)) {
-            $xar = xar::getServicesClass();
+            $xar = $this->getServicesClass();
         } else {
             $xar = $this->instance;
         }

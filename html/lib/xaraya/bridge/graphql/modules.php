@@ -87,7 +87,7 @@ class GraphQLModules
         foreach (self::$modules as $itemid => $info) {
             self::parseModuleInfo($info);
         }
-        GraphQLHandler::setTimer('modules');
+        // GraphQLHandler::setTimer('modules');
     }
 
     /**

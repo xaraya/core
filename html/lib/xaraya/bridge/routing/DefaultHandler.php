@@ -8,9 +8,6 @@
 
 namespace Xaraya\Routing;
 
-use Xaraya\Services\WithServicesClass;
-use Xaraya\Services\xar;
-
 /**
  * Default handler class for routing & dispatching outside Xaraya
  *
@@ -26,8 +23,6 @@ use Xaraya\Services\xar;
  */
 class DefaultHandler extends ModuleHandler
 {
-    use WithServicesClass;
-
     // parent for modules service here
     protected string $modName = '';
     protected string $modType = '';

@@ -687,7 +687,7 @@ trait CachingTrait
     /**
      * Set the value of a cached variable
      */
-    public function setVariable(?string $cacheKey, string|object $value): void
+    public function setVariable(?string $cacheKey, string|object $value, ?int $expire = null): void
     {
         if (empty($cacheKey)) {
             return;
@@ -695,7 +695,7 @@ trait CachingTrait
         if (empty($this->variableCache)) {
             return;
         }
-        $this->variableCache->setCached($cacheKey, $value);
+        $this->variableCache->setCached($cacheKey, $value, $expire);
     }
 
     /**

@@ -85,8 +85,10 @@ class DataObjectAPIHandler extends RestAPIHandler
             $userId = $this->checkUser();
             //$args['access'] = 'view';
         }
+        $context = $this->getContext();
         if (!$this->hasCaching($object, $method)) {
-            self::enableCache(false);
+            // disable cache in RestAPI handler
+            $context->handler->enableCache(false);
         }
         $args = $args['query'] ?? [];
         // @checkme always count here
@@ -95,7 +97,6 @@ class DataObjectAPIHandler extends RestAPIHandler
             $args['limit'] = 100;
         }
         $fieldlist = $this->getViewProperties($object, $args);
-        $context = $this->getContext();
         // set context if available in handler
         $loader = DataObjectFactory::getObjectLoader($object, $fieldlist, $context);
         $loader->parseQueryArgs($args);
@@ -176,13 +177,14 @@ class DataObjectAPIHandler extends RestAPIHandler
             $userId = $this->checkUser();
             //$args['access'] = 'display';
         }
+        $context = $this->getContext();
         if (!$this->hasCaching($object, $method)) {
-            self::enableCache(false);
+            // disable cache in RestAPI handler
+            $context->handler->enableCache(false);
         }
         $args = $args['query'] ?? [];
         $fieldlist = $this->getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
-        $context = $this->getContext();
         $xar = $this->getServicesClass();
         // set context if available in handler
         $objectitem = DataObjectFactory::getObject($params, $context, $xar);
@@ -549,7 +551,9 @@ class DataObjectAPIHandler extends RestAPIHandler
             $item = array_intersect_key($item, $allowed);
             self::$objects[(string) $name] = $item;
         }
-        $this->setTimer('objects');
+        $context = $this->getContext();
+        // set timer in RestAPI handler
+        $context->handler->setTimer('objects');
     }
 
     /**

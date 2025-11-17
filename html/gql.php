@@ -62,12 +62,6 @@ $context = new \Xaraya\Context\Context(['request' => $_REQUEST, 'server' => $_SE
 //$query = '{samples { name, age } }';
 //$query = '{sample(id: 0) { name, age } }';
 //$query = '{schema}';
-//GraphQLHandler::$tracePath = true;
-//GraphQLHandler::enableTimer(true);
-//GraphQLHandler::$cachePlan = true;
-//GraphQLHandler::$cacheData = true;
-//GraphQLHandler::enableCache(true);
-$data = GraphQLHandler::getData($query, $variables, $operationName);
 //$extraTypes = ['module', 'theme', 'category', 'configuration'];
 //$data = GraphQLHandler::getData($query, $variables, $operationName, $extraTypes);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';

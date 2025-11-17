@@ -13,6 +13,8 @@
 namespace Xaraya\Context;
 
 use ArrayObject;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
+use Xaraya\Bridge\RestAPI\RestAPIHandler;
 
 /**
  * Context object for request etc.
@@ -26,7 +28,8 @@ class Context extends ArrayObject implements ContextObjectInterface
     protected float $startTrace = 0;
     /** @var array<mixed> */
     protected array $tracePaths = [];
-    // @todo check use in GraphQL field resolvers!?
+    // Used in GraphQL field resolvers - only needed in RestAPI to disable cache
+    /** @var GraphQLHandler|RestAPIHandler|object */
     public mixed $handler = null;
 
     /**

@@ -14,7 +14,6 @@
 
 namespace Xaraya\Bridge\RestAPI;
 
-use Xaraya\Services\xar;
 use xarRoles;
 use xarSecurity;
 use sys;
@@ -127,10 +126,11 @@ class ModuleAPIHandler extends RestAPIHandler
                 throw new ForbiddenOperationException();
             }
         }
-        if (empty($func['caching'])) {
-            self::enableCache(false);
-        }
         $context = $this->getContext();
+        if (empty($func['caching'])) {
+            // disable cache in RestAPI handler
+            $context->handler->enableCache(false);
+        }
         // @checkme how to save this in case of caching?
         if (!empty($func['mediatype'])) {
             $context['mediatype'] = $func['mediatype'];
@@ -361,9 +361,11 @@ class ModuleAPIHandler extends RestAPIHandler
         if (!empty(self::$modules)) {
             return;
         }
-        self::$config['modules'] = self::loadModuleConfig($config);
+        self::$config['modules'] = $this->loadModuleConfig($config);
         self::$modules = self::$config['modules'];
-        $this->setTimer('modules');
+        $context = $this->getContext();
+        // set timer in RestAPI handler
+        $context->handler->setTimer('modules');
     }
 
     /**
@@ -371,7 +373,7 @@ class ModuleAPIHandler extends RestAPIHandler
      * @param array<string, mixed> $config
      * @return array<string, mixed>
      */
-    public static function loadModuleConfig($config = [])
+    public function loadModuleConfig($config = [])
     {
         $configFile = sys::varpath() . '/cache/api/restapi_modules.json';
         if (empty($config) && file_exists($configFile)) {
@@ -381,7 +383,7 @@ class ModuleAPIHandler extends RestAPIHandler
         if (!empty($config['modules'])) {
             return $config['modules'];
         }
-        return self::getDefaultModules();
+        return $this->getDefaultModules();
     }
 
     /**
@@ -389,15 +391,16 @@ class ModuleAPIHandler extends RestAPIHandler
      * @uses xar::mod()->init()
      * @return array<string, mixed>
      */
-    public static function getDefaultModules()
+    public function getDefaultModules()
     {
         $modulelist = ['dynamicdata'];
         $default = [];
-        xar::mod()->init();
+        $xar = $this->getServicesClass();
+        $xar->mod()->init();
         foreach ($modulelist as $module) {
             $default[$module] = [
                 'module' => $module,
-                'apilist' => xar::mod()->apiFunc($module, 'rest', 'getlist'),
+                'apilist' => $xar->mod()->apiFunc($module, 'rest', 'getlist'),
             ];
         }
         return $default;

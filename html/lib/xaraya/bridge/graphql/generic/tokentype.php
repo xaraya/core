@@ -12,8 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
-use Xaraya\Services\xar;
+use ixarUser;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -110,7 +109,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
         //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
         $resolver = function ($rootValue, $args, $context) {
             // disable caching for mutations
-            GraphQLHandler::enableCache(false);
+            $context->handler->enableCache(false);
             $context->tracePath(__CLASS__ . '::create_mutation_resolver: getToken');
             if (empty($args['uname']) || empty($args['pass'])) {
                 throw new Exception('Invalid username or password');
@@ -118,14 +117,15 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
             if (empty($args['access']) || !in_array($args['access'], AuthToken::ACCESS_LEVELS)) {
                 throw new Exception('Invalid access');
             }
+            $xar = $context->handler->getServicesClass();
             // @todo use $context
-            //xar::session()->init();
-            xar::mod()->init();
-            xar::user()->init();
-            // @checkme unset xarSession role_id if needed, otherwise xar::user()->logIn will hit xar::user()->isLoggedIn first!?
+            //$xar->session()->init();
+            $xar->mod()->init();
+            $xar->user()->init();
+            // @checkme unset $xar->session() role_id if needed, otherwise $xar->user()->logIn will hit $xar->user()->isLoggedIn first!?
             // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
-            $userId = xar::mod()->apiFunc('authsystem', 'user', 'authenticate_user', $args);
-            if (empty($userId) || $userId == xar::user()::AUTH_FAILED) {
+            $userId = $xar->mod()->apiFunc('authsystem', 'user', 'authenticate_user', $args);
+            if (empty($userId) || $userId == ixarUser::AUTH_FAILED) {
                 throw new Exception('Invalid username or password');
             }
             $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];
@@ -162,7 +162,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
         //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
         $resolver = function ($rootValue, $args, $context) {
             // disable caching for mutations
-            GraphQLHandler::enableCache(false);
+            $context->handler->enableCache(false);
             $context->tracePath(__CLASS__ . '::delete_mutation_resolver: deleteToken');
             if (empty($args['confirm'])) {
                 return false;

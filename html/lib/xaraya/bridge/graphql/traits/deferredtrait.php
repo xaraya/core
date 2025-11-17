@@ -12,7 +12,6 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Deferred;
 use DataObjectFactory;
@@ -142,8 +141,8 @@ trait DeferredTrait
                 // only looking for id's here
             } elseif (GraphQLObjects::hasType($property->objectname)) {
                 $objtype = strtolower(GraphQLObjects::getType($property->objectname));
-                if (GraphQLHandler::hasQueryFields($objtype)) {
-                    $fieldlist = GraphQLHandler::getQueryFields($objtype);
+                if ($context->handler->hasQueryFields($objtype)) {
+                    $fieldlist = $context->handler->getQueryFields($objtype);
                 }
             } else {
                 throw new Exception('Unknown object ' . $property->objectname);
@@ -210,8 +209,8 @@ trait DeferredTrait
             if (array_key_exists('id', $fields) && count($fields) < 2) {
                 return ['id' => $values[$fieldname]];
             }
-            if (GraphQLHandler::hasQueryFields($typename)) {
-                $fieldlist = GraphQLHandler::getQueryFields($typename);
+            if ($context->handler->hasQueryFields($typename)) {
+                $fieldlist = $context->handler->getQueryFields($typename);
             } else {
                 $fieldlist = array_keys($fields);
             }

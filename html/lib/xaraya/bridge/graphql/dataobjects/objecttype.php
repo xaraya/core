@@ -12,7 +12,6 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -145,8 +144,8 @@ class DataObjectType extends BaseObjectType
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             $context->tracePath(__CLASS__ . '::list_query_resolver: ' . $type, $info->path);
             $fields = $info->getFieldSelection(1);
-            if (GraphQLHandler::hasQueryFields($type)) {
-                $fieldlist = GraphQLHandler::getQueryFields($type);
+            if ($context->handler->hasQueryFields($type)) {
+                $fieldlist = $context->handler->getQueryFields($type);
             } else {
                 $fieldlist = array_keys($fields);
             }
@@ -158,8 +157,8 @@ class DataObjectType extends BaseObjectType
             //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
             //}
             $userId = 0;
-            if (GraphQLHandler::hasSecurity($object)) {
-                $userId = GraphQLHandler::checkUser($context);
+            if (GraphQLObjects::hasSecurity($object)) {
+                $userId = $context->handler->checkUser($context);
                 if (empty($userId)) {
                     throw new Exception('Invalid user');
                 }
@@ -169,7 +168,7 @@ class DataObjectType extends BaseObjectType
             $loader->setContext($context);
             $loader->parseQueryArgs($args);
             $objectlist = $loader->getObjectList();
-            if (GraphQLHandler::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
+            if (GraphQLObjects::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
                 throw new Exception('Invalid user access');
             }
             $params = $loader->addPagingParams();
@@ -235,8 +234,8 @@ class DataObjectType extends BaseObjectType
             //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
             //}
             $userId = 0;
-            if (GraphQLHandler::hasSecurity($object)) {
-                $userId = GraphQLHandler::checkUser($context);
+            if (GraphQLObjects::hasSecurity($object)) {
+                $userId = $context->handler->checkUser($context);
                 if (empty($userId)) {
                     throw new Exception('Invalid user');
                 }
@@ -244,7 +243,7 @@ class DataObjectType extends BaseObjectType
             $params = ['name' => $object, 'itemid' => $args['id']];
             // set context if available in resolver
             $objectref = DataObjectFactory::getObject($params, $context);
-            if (GraphQLHandler::hasSecurity($object) && !$objectref->checkAccess('display', $params['itemid'], $userId)) {
+            if (GraphQLObjects::hasSecurity($object) && !$objectref->checkAccess('display', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
             }
             $itemid = $objectref->getItem();

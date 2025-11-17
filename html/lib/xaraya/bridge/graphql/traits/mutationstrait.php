@@ -12,7 +12,6 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Exception;
@@ -106,7 +105,7 @@ trait MutationsTrait
         // call the right mutation resolver based on the first part of the field name <action><Object>
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
             // disable caching for mutations
-            GraphQLHandler::enableCache(false);
+            $context->handler->enableCache(false);
             $context->tracePath(__CLASS__ . '::mutation_field_resolver: mutation', $info->path);
             // @todo check if type class corresponding to fieldname has overridden *_mutation_resolver
             $name = $info->fieldName;
