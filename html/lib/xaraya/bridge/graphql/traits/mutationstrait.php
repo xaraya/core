@@ -14,6 +14,7 @@ namespace Xaraya\Bridge\GraphQL\Types;
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
+use Xaraya\Context\Context;
 use Exception;
 
 /**
@@ -104,6 +105,7 @@ trait MutationsTrait
     {
         // call the right mutation resolver based on the first part of the field name <action><Object>
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
+            /** @var Context $context */
             // disable caching for mutations
             $context->handler->enableCache(false);
             $context->tracePath(__CLASS__ . '::mutation_field_resolver: mutation', $info->path);

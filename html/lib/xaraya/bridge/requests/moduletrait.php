@@ -60,7 +60,7 @@ interface ModuleBridgeInterface extends CommonRequestInterface
 
 /**
  * Handle Module requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
 trait ModuleBridgeTrait
 {

@@ -14,6 +14,7 @@ namespace Xaraya\Bridge\GraphQL\Types;
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
+use Xaraya\Context\Context;
 use DataObjectFactory;
 use Exception;
 
@@ -81,6 +82,7 @@ trait MutationDeleteTrait
     public static function delete_mutation_resolver($typename, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
+            /** @var Context $context */
             // disable caching for mutations
             $context->handler->enableCache(false);
             $context->tracePath(__CLASS__ . '::delete_mutation_resolver: ' . $typename, $info->path);

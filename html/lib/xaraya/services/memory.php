@@ -102,7 +102,7 @@ class MemoryService implements MemoryInterface
         $this->cacheCollection[$scope] ??= [];
         $this->cacheCollection[$scope][$name] = $value;
         if ($this->hasPreload($scope, $name)) {
-            $this->saveCached($scope, $name);
+            $this->save($scope, $name);
         }
         if (isset($this->cacheStorage)) {
             // save the value to second-level cache here

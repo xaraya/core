@@ -345,7 +345,7 @@ class Phase5Method extends MethodClass
                     include sys::code() . "modules/$modName/xarversion.php";
                 }
                 if (empty($modversion)) {
-                    throw new \ConfigurationException($modname, 'Invalid version.php or xarversion.php file for module #(1)', $this->getContext());
+                    throw new \ConfigurationException($modName, 'Invalid version.php or xarversion.php file for module #(1)', $this->getContext());
                 }
                 $bindvars = [$modName,
                     $modversion['id'],       // regid, from version.php

@@ -28,7 +28,6 @@ namespace Xaraya\Bridge\GraphQL\Types;
 
 use GraphQL\Type\Definition\ObjectType;
 use sys;
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 
 /**
  * See xardocs/graphql.txt for class structure

@@ -15,6 +15,7 @@ namespace Xaraya\Bridge\GraphQL\Types;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use Xaraya\Context\Context;
 use xarRoles;
 use Exception;
 
@@ -110,6 +111,7 @@ class DummyType extends ObjectType
                 'description' => 'Display current user',
                 'type' => GraphQLTypes::getType('user'),
                 'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                    /** @var Context $context */
                     $context->tracePath(__CLASS__ . '::get_query_fields: resolve whoami');
                     $userId = $context->handler->checkUser($context);
                     if (empty($userId)) {
@@ -128,6 +130,7 @@ class DummyType extends ObjectType
                 'description' => 'Show current context',
                 'type' => GraphQLTypes::getType('mixed'),
                 'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                    /** @var Context $context */
                     $context->tracePath(__CLASS__ . '::get_query_fields: resolve context');
                     $userId = $context->handler->checkUser($context);
                     // return restricted version for non-site admin

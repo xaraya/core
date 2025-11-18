@@ -14,6 +14,7 @@ namespace Xaraya\Bridge\GraphQL\Types;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Deferred;
+use Xaraya\Context\Context;
 use DataObjectFactory;
 use DeferredItemProperty;
 use Exception;
@@ -111,6 +112,7 @@ trait DeferredTrait
     {
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname, $object) {
+            /** @var Context $context */
             $context->tracePath(__CLASS__ . '::deferred_property_resolver: ' . $typename . '.' . $fieldname, $info->path);
             // @checkme this will be empty for defermany properties, since we use the id to defer
             // if (empty($values[$fieldname])) {
@@ -201,6 +203,7 @@ trait DeferredTrait
             }
         }
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
+            /** @var Context $context */
             $context->tracePath(__CLASS__ . '::deferred_field_resolver: ' . $typename . '.' . $fieldname, $info->path);
             if (empty($values[$fieldname])) {
                 return;

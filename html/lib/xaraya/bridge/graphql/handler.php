@@ -275,24 +275,6 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     }
 
     /**
-     * Summary of tracePath
-     * @param string $message
-     * @param mixed $infoPath
-     * @return void
-     * @deprecated 2.6.3 use $context->tracePath() instead
-     */
-    public function tracePath($message, $infoPath = null)
-    {
-        if (!$this->tracePath) {
-            return;
-        }
-        if (isset($infoPath)) {
-            $this->paths[] = $infoPath;
-        }
-        $this->paths[] = $message;
-    }
-
-    /**
      * Summary of hasCachedData
      * @param mixed $queryType
      * @param mixed $rootValue
@@ -303,6 +285,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function hasCachedData($queryType, $rootValue, $args, $context, ResolveInfo $info)
     {
+        // only check top-level queryPlan
         if (!empty($this->queryPlan)) {
             return false;
         }
@@ -347,19 +330,16 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
                 }
             }
         }
-        /**
-         * @deprecated 2.6.3 use $context->tracePath() instead
         if ($this->tracePath) {
-            $this->paths[] = [
+            $context->tracePath(__METHOD__, [
                 'queryId' => $queryId,
                 'queryType' => $queryType,
                 'queryPlan' => $dumpPlan,
                 'operationName' => $operationName,
                 'rootValue' => $rootValue,
                 'args' => $args,
-            ];
+            ]);
         }
-         */
         $this->setTimer('plan');
         // @checkme don't try to resolve anything further if the result is already cached?
         if ($this->cacheData && $this->hasCacheKey() && $this->isCached($this->getCacheKey())) {

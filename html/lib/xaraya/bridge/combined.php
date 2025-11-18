@@ -46,7 +46,6 @@ use sys;
 use Xaraya\Bridge\Routing\RoutingBridge;
 use Xaraya\Bridge\Routing\RoutingApiBridge;
 use Xaraya\Routing\RouterInterface;
-use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use Xaraya\Services\xar;
 
 /**

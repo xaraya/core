@@ -12,11 +12,11 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use Xaraya\Context\Context;
 use Exception;
 
 /**
@@ -184,6 +184,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     public static function call_query_resolver($func)
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($func) {
+            /** @var Context $context */
             $context->tracePath(__CLASS__ . '::call_query_resolver: ' . $func['module'] . ' ' . $func['type'] . ' ' . $func['func'], $info->path);
             $fields = $info->getFieldSelection(1);
             // @checkme we only get the relevant 'args' values via the input type here
@@ -383,6 +384,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     public static function call_mutation_resolver($func)
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($func) {
+            /** @var Context $context */
             $context->tracePath(__CLASS__ . '::call_mutation_resolver: ' . $func['module'] . ' ' . $func['type'] . ' ' . $func['func'], $info->path);
             $fields = $info->getFieldSelection(1);
             if (empty($args['input'])) {
@@ -427,6 +429,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
      */
     public static function call_module_function($module, $type, $func, $args, $context, $userId, $fields)
     {
+        /** @var Context $context */
         $xar = $context->handler->getServicesClass();
         //$role = xarRoles::getRole($userId);
         //$rolename = $role->getName();

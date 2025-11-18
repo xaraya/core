@@ -223,6 +223,7 @@ class WebEntryPoint
     {
         $xar = $this->getServicesClass();
         $request = $this->getRequest();
+        $themeName = '';
         $xar->var()->find('theme', $themeName, 'str:1:');
         if (!empty($themeName)) {
             $themeName = $xar->prep()->path($themeName);
@@ -282,6 +283,7 @@ class WebEntryPoint
             }
         }
 
+        $pageName = '';
         // User override for the page template
         $xar->var()->find('pageName', $pageName, 'str:1:');
         if (!empty($pageName)) {

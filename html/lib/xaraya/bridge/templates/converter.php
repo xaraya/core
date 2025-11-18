@@ -2,7 +2,6 @@
 
 namespace Xaraya\Bridge\TemplateEngine;
 
-use xarTwigTpl;
 use Exception;
 
 /**
@@ -389,7 +388,8 @@ class BlocklayoutToTwigConverter extends TwigConverter
         // default: <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
         // rss theme: <xar:blocklayout version="1.0" content="text/xml" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="rss">
         $pattern = '~<xar:blocklayout ([^>]+)>~i';
-        $this->content = preg_replace_callback($pattern, function ($matches) {
+        $dtd = 'xhtml1-strict';
+        $this->content = preg_replace_callback($pattern, function ($matches) use ($dtd) {
             $attrib = $this->parseAttributes($matches[1]);
             if (empty($attrib['content'])) {
                 throw new Exception('Missing content in xar:blocklayout tag: ' . $matches[0]);
@@ -398,7 +398,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             // @checkme replace this once at conversion
             if (empty($attrib['dtd'])) {
                 // see BlockLayoutXSLTProcessor::setSourceDocument()
-                $attrib['dtd'] = xarTwigTpl::getDoctype();
+                $attrib['dtd'] = $dtd;
             }
             $doctype = $this->getDocType($attrib['dtd']);
             $content = $this->buildTwigParam($attrib['content']);

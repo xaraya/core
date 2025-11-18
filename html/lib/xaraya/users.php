@@ -43,6 +43,9 @@ class NotLoggedInException extends xarExceptions
  * ...
  */
 
+/**
+ * Summary of ixarUser
+ */
 interface ixarUser
 {
     public const AUTH_FAILED = -1;

@@ -15,6 +15,7 @@ namespace Xaraya\Bridge\GraphQL\Types;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use Xaraya\Context\Context;
 use DataObjectFactory;
 use DataPropertyMaster;
 use Exception;
@@ -49,6 +50,7 @@ class DataObjectType extends BaseObjectType
             'keys' => [
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
+                    /** @var Context $context */
                     $context->tracePath(__CLASS__ . '::get_object_fields: resolve keys', $info->path);
                     if (empty($object['_objectref'])) {
                         return array_keys($object);
@@ -68,6 +70,7 @@ class DataObjectType extends BaseObjectType
             'access' => [
                 'type' => GraphQLTypes::getType("access"),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
+                    /** @var Context $context */
                     $context->tracePath(__CLASS__ . '::get_object_fields: resolve access');
                     if (empty($object['access'])) {
                         return null;
@@ -81,6 +84,7 @@ class DataObjectType extends BaseObjectType
             'config_kv' => [
                 'type' => GraphQLTypes::getTypeList("keyval"),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
+                    /** @var Context $context */
                     $context->tracePath(__CLASS__ . '::get_object_fields: resolve config_kv', $info->path);
                     // Note: this may not be filled in by object(s) resolve above
                     if (empty($object['config'])) {
@@ -110,6 +114,7 @@ class DataObjectType extends BaseObjectType
             '_objectref' => [
                 'type' => Type::string(),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
+                    /** @var Context $context */
                     $context->tracePath(__CLASS__ . '::get_object_fields: resolve _objectref');
                     return $object['_objectref']::class;
                 },
@@ -142,6 +147,7 @@ class DataObjectType extends BaseObjectType
     public static function list_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            /** @var Context $context */
             $context->tracePath(__CLASS__ . '::list_query_resolver: ' . $type, $info->path);
             $fields = $info->getFieldSelection(1);
             if ($context->handler->hasQueryFields($type)) {
@@ -224,6 +230,7 @@ class DataObjectType extends BaseObjectType
     public static function item_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            /** @var Context $context */
             $context->tracePath(__CLASS__ . '::item_query_resolver: ' . $type, $info->path);
             $fields = $info->getFieldSelection(1);
             if (empty($args['id'])) {

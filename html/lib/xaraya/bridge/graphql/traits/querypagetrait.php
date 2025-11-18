@@ -14,6 +14,7 @@ namespace Xaraya\Bridge\GraphQL\Types;
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
+use Xaraya\Context\Context;
 use DataObjectFactory;
 use Exception;
 
@@ -89,6 +90,7 @@ trait QueryPageTrait
         // when using type config decorator and object_query_resolver
         $object ??= GraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
+            /** @var Context $context */
             // @checkme don't try to resolve anything further if the result is already cached?
             if ($context->handler->hasCachedData($typename . '_page', $rootValue, $args, $context, $info)) {
                 return;

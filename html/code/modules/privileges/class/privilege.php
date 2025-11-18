@@ -255,6 +255,7 @@ class xarPrivilege extends xarMask
                 role_id = ? AND privilege_id = ?";
         $bindvars = [$role->getID(), $this->getID()];
         if (!isset($stmt)) {
+            $xar = $this->getServicesClass();
             $dbconn = $xar->db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
         }

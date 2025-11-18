@@ -1,10 +1,28 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '''
+				#^Call to method translate\(\) of deprecated class xarMLS\:
+				2\.8\.6 use xar\:\:mls\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: developer/tools/bermuda_cleanup.php
+
+		-
 			message: '#^Use of constant FILTER_SANITIZE_STRING is deprecated\.$#'
 			identifier: constant.deprecated
 			count: 1
 			path: html/code/modules/base/xarproperties/textbox.php
+
+		-
+			message: '''
+				#^Call to method register\(\) of deprecated class xarModHooks\:
+				2\.8\.5 use xar\:\:hooked\(\) or xar\:\:mod\(\)\-\>\*Hooks instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 8
+			path: html/code/modules/categories/installer.php
 
 		-
 			message: '#^Undefined variable\: \$maxlength$#'
@@ -31,16 +49,22 @@ parameters:
 			path: html/code/modules/dynamicdata/class/objects/master.php
 
 		-
-			message: '#^Path in include_once\(\) "code/modules/authsystem/xartables\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: html/code/modules/installer/admingui/phase5.php
+			message: '''
+				#^Call to method unregister\(\) of deprecated class xarModHooks\:
+				2\.8\.5 use xar\:\:hooked\(\) or xar\:\:mod\(\)\-\>\*Hooks instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 8
+			path: html/code/modules/dynamicdata/installer.php
 
 		-
-			message: '#^Path in include_once\(\) "code/modules/mail/xartables\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
+			message: '''
+				#^Call to method get\(\) of deprecated class xarModVars\:
+				2\.8\.4 use xar\:\:mod\(\)\-\>\*Var\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
 			count: 1
-			path: html/code/modules/installer/admingui/phase5.php
+			path: html/code/modules/installer/checks/210/database/sql_210_roles_roles.php
 
 		-
 			message: '#^Parameter \$event of method xarInstallComposer\:\:createModuleSymLinks\(\) has invalid type Composer\\Script\\Event\.$#'
@@ -97,22 +121,118 @@ parameters:
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: '#^Function getcomponents not found\.$#'
-			identifier: function.notFound
+			message: '''
+				#^Call to method getID\(\) of deprecated class xarMod\:
+				2\.8\.5 use xar\:\:mod\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
 			count: 1
-			path: html/code/modules/privileges/adminapi/getcomponents.php
+			path: html/code/modules/installer/upgrades/211/database/sql_211_02.php
+
+		-
+			message: '''
+				#^Call to method get\(\) of deprecated class xarSystemVars\:
+				2\.8\.6 use xar\:\:sysConfig\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/220/database/sql_220_03.php
+
+		-
+			message: '''
+				#^Call to method get\(\) of deprecated class xarSystemVars\:
+				2\.8\.6 use xar\:\:sysConfig\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/220/database/sql_220_07.php
+
+		-
+			message: '''
+				#^Call to method apiFunc\(\) of deprecated class xarMod\:
+				2\.8\.5 use xar\:\:mod\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/220/database/sql_220_09.php
+
+		-
+			message: '''
+				#^Call to method get\(\) of deprecated class xarSystemVars\:
+				2\.8\.6 use xar\:\:sysConfig\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/220/database/sql_220_09.php
+
+		-
+			message: '''
+				#^Call to method delete\(\) of deprecated class xarModVars\:
+				2\.8\.4 use xar\:\:mod\(\)\-\>\*Var\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/220/database/sql_220_10.php
+
+		-
+			message: '''
+				#^Call to method get\(\) of deprecated class xarSystemVars\:
+				2\.8\.6 use xar\:\:sysConfig\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/230/database/sql_230_03.php
+
+		-
+			message: '''
+				#^Call to method apiFunc\(\) of deprecated class xarMod\:
+				2\.8\.5 use xar\:\:mod\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/230/database/sql_230_04.php
+
+		-
+			message: '''
+				#^Call to method get\(\) of deprecated class xarSystemVars\:
+				2\.8\.6 use xar\:\:sysConfig\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/230/database/sql_230_07.php
+
+		-
+			message: '''
+				#^Call to method get\(\) of deprecated class xarSystemVars\:
+				2\.8\.6 use xar\:\:sysConfig\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/241/database/sql_241_02.php
+
+		-
+			message: '''
+				#^Call to method get\(\) of deprecated class xarSystemVars\:
+				2\.8\.6 use xar\:\:sysConfig\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/upgrades/241/database/sql_241_03.php
+
+		-
+			message: '''
+				#^Call to method getID\(\) of deprecated class xarMod\:
+				2\.8\.5 use xar\:\:mod\(\) instead$#
+			'''
+			identifier: staticMethod.deprecatedClass
+			count: 1
+			path: html/code/modules/installer/xarconfigurations/intranet.conf.php
 
 		-
 			message: '#^Undefined variable\: \$show$#'
 			identifier: variable.undefined
 			count: 1
 			path: html/code/modules/privileges/admingui/modifyprivilege.php
-
-		-
-			message: '#^Undefined variable\: \$value$#'
-			identifier: variable.undefined
-			count: 1
-			path: html/code/properties/date/main.php
 
 		-
 			message: '#^Path in include\(\) "var\://_compiler_output" is not a file or it does not exist\.$#'
@@ -125,24 +245,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: html/lib/xaraya/bridge/requests/block.php
-
-		-
-			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\CommonBridge\:\:runBlockRequest\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: html/lib/xaraya/bridge/requests/common.php
-
-		-
-			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\CommonBridge\:\:runDataObjectRequest\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: html/lib/xaraya/bridge/requests/common.php
-
-		-
-			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\CommonBridge\:\:runModuleRequest\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: html/lib/xaraya/bridge/requests/common.php
 
 		-
 			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\DataObjectRequestHandler\:\:runDataObjectRequest\(\)\.$#'
@@ -161,114 +263,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: html/lib/xaraya/bridge/requests/module.php
-
-		-
-			message: '#^Call to method __construct\(\) of deprecated class xarCache_MMCache_Storage\.$#'
-			identifier: method.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/caching/storage.php
-
-		-
-			message: '#^Call to method __construct\(\) of deprecated class xarCache_MemCached_Storage\.$#'
-			identifier: method.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/caching/storage.php
-
-		-
-			message: '#^Call to method __construct\(\) of deprecated class xarCache_XCache_Storage\.$#'
-			identifier: method.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/caching/storage.php
-
-		-
-			message: '#^Call to method __construct\(\) of deprecated class xarCache_eAccelerator_Storage\.$#'
-			identifier: method.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/caching/storage.php
-
-		-
-			message: '#^Instantiation of deprecated class xarCache_MMCache_Storage\.$#'
-			identifier: new.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/caching/storage.php
-
-		-
-			message: '#^Instantiation of deprecated class xarCache_MemCached_Storage\.$#'
-			identifier: new.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/caching/storage.php
-
-		-
-			message: '#^Instantiation of deprecated class xarCache_XCache_Storage\.$#'
-			identifier: new.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/caching/storage.php
-
-		-
-			message: '#^Instantiation of deprecated class xarCache_eAccelerator_Storage\.$#'
-			identifier: new.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/caching/storage.php
-
-		-
-			message: '#^Function eaccelerator not found\.$#'
-			identifier: function.notFound
-			count: 1
-			path: html/lib/xaraya/caching/storage/eaccelerator.php
-
-		-
-			message: '#^Function eaccelerator_gc not found\.$#'
-			identifier: function.notFound
-			count: 1
-			path: html/lib/xaraya/caching/storage/eaccelerator.php
-
-		-
-			message: '#^Function eaccelerator_get not found\.$#'
-			identifier: function.notFound
-			count: 2
-			path: html/lib/xaraya/caching/storage/eaccelerator.php
-
-		-
-			message: '#^Function eaccelerator_put not found\.$#'
-			identifier: function.notFound
-			count: 2
-			path: html/lib/xaraya/caching/storage/eaccelerator.php
-
-		-
-			message: '#^Function eaccelerator_rm not found\.$#'
-			identifier: function.notFound
-			count: 1
-			path: html/lib/xaraya/caching/storage/eaccelerator.php
-
-		-
-			message: '#^Function mmcache not found\.$#'
-			identifier: function.notFound
-			count: 1
-			path: html/lib/xaraya/caching/storage/mmcache.php
-
-		-
-			message: '#^Function mmcache_gc not found\.$#'
-			identifier: function.notFound
-			count: 1
-			path: html/lib/xaraya/caching/storage/mmcache.php
-
-		-
-			message: '#^Function mmcache_get not found\.$#'
-			identifier: function.notFound
-			count: 2
-			path: html/lib/xaraya/caching/storage/mmcache.php
-
-		-
-			message: '#^Function mmcache_put not found\.$#'
-			identifier: function.notFound
-			count: 2
-			path: html/lib/xaraya/caching/storage/mmcache.php
-
-		-
-			message: '#^Function mmcache_rm not found\.$#'
-			identifier: function.notFound
-			count: 1
-			path: html/lib/xaraya/caching/storage/mmcache.php
 
 		-
 			message: '''
@@ -311,6 +305,96 @@ parameters:
 			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/encryptor.php
+
+		-
+			message: '''
+				#^Access to static property \$delimiter of deprecated class xarController\:
+				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
+			'''
+			identifier: staticProperty.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/mapper/controllers/default.php
+
+		-
+			message: '''
+				#^Access to static property \$delimiter of deprecated class xarController\:
+				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
+			'''
+			identifier: staticProperty.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/mapper/controllers/short.php
+
+		-
+			message: '''
+				#^Access to static property \$separator of deprecated class xarController\:
+				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
+			'''
+			identifier: staticProperty.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/mapper/controllers/short.php
+
+		-
+			message: '''
+				#^Access to static property \$delimiter of deprecated class xarController\:
+				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
+			'''
+			identifier: staticProperty.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/mapper/request.php
+
+		-
+			message: '''
+				#^Access to static property \$func of deprecated class xarController\:
+				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
+			'''
+			identifier: staticProperty.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/mapper/routers/routes/base.php
+
+		-
+			message: '''
+				#^Access to static property \$module of deprecated class xarController\:
+				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
+			'''
+			identifier: staticProperty.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/mapper/routers/routes/base.php
+
+		-
+			message: '''
+				#^Access to static property \$type of deprecated class xarController\:
+				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
+			'''
+			identifier: staticProperty.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/mapper/routers/routes/base.php
+
+		-
+			message: '''
+				#^Access to static property \$separator of deprecated class xarController\:
+				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
+			'''
+			identifier: staticProperty.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/mapper/routers/routes/default.php
+
+		-
+			message: '#^Undefined variable\: \$fragment$#'
+			identifier: variable.undefined
+			count: 1
+			path: html/lib/xaraya/services/controller.php
+
+		-
+			message: '#^Access to undefined constant static\(Xaraya\\Services\\ServiceClass\)\:\:SLICE\.$#'
+			identifier: classConstant.notFound
+			count: 1
+			path: html/lib/xaraya/services/servicetrait.php
+
+		-
+			message: '#^Undefined variable\: \$tplBase$#'
+			identifier: variable.undefined
+			count: 1
+			path: html/lib/xaraya/services/templating.php
 
 		-
 			message: '#^Method Xaraya\\Services\\TestHelper\:\:__construct\(\) overrides @final method PHPUnit\\Framework\\TestCase\:\:__construct\(\)\.$#'

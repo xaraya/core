@@ -7,7 +7,6 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Xaraya\Services\xar;
-use xarTwigTpl;
 use sys;
 
 if (php_sapi_name() !== 'cli') {
@@ -118,7 +117,7 @@ class TestConverter
 
 $tester = new TestConverter($baseDir);
 
-$namespaces = xarTwigTpl::getNamespaces();
+$namespaces = TwigConfig::getNamespaces();
 foreach ($namespaces as $module => $path) {
     if (!str_contains($path, 'code/modules/')) {
         continue;

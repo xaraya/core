@@ -7,7 +7,6 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Xaraya\Services\xar;
-use xarTwigTpl;
 use sys;
 
 if (php_sapi_name() !== 'cli') {
@@ -89,7 +88,7 @@ class TestValidator
 
 $tester = new TestValidator($baseDir);
 
-$namespaces = xarTwigTpl::getNamespaces();
+$namespaces = TwigConfig::getNamespaces();
 foreach ($namespaces as $module => $path) {
     if (!str_contains($path, 'code/modules/')) {
         continue;

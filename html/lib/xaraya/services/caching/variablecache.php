@@ -19,6 +19,7 @@ namespace Xaraya\Services\Caching;
 use Xaraya\Services\CachingService;
 use Xaraya\Services\ServiceClass;
 use ixarCache_Storage;
+use Exception;
 
 /**
  * Variable caching (class instance or data)
