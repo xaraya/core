@@ -27,7 +27,6 @@ use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
 use Xaraya\Authentication\AuthToken;
-use Xaraya\Services\xar;
 use xarObject;
 use sys;
 use ForbiddenOperationException;

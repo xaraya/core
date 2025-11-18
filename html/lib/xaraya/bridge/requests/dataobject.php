@@ -14,9 +14,9 @@ namespace Xaraya\Bridge\Requests;
 
 /**
  * Handle DataObject requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
-class DataObjectRequestHandler extends BasicBridge implements DataObjectBridgeInterface
+class DataObjectRequestHandler extends BridgeRequest implements DataObjectBridgeInterface
 {
     use DataObjectBridgeTrait;
 
@@ -35,6 +35,9 @@ class DataObjectRequestHandler extends BasicBridge implements DataObjectBridgeIn
 
     public function setContext($context)
     {
+        if (isset($context)) {
+            $context->handler = $this;
+        }
         parent::setContext($context);
         $this->data()->setContext($context);
     }

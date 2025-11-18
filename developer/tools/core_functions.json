@@ -6,7 +6,7 @@
             "$anything"
         ],
         "namespace": "",
-        "lines": "63-66",
+        "lines": "61-64",
         "docs": {}
     },
     "xar_m": {
@@ -17,7 +17,7 @@
             "$level = 0"
         ],
         "namespace": "",
-        "lines": "56-60",
+        "lines": "54-58",
         "docs": {}
     },
     "xar_tests": {
@@ -28,7 +28,7 @@
             "$l = 0"
         ],
         "namespace": "",
-        "lines": "62-95",
+        "lines": "60-93",
         "docs": null
     },
     "xaraya\\bridge\\test\\graphql_client": {
@@ -99,18 +99,6 @@
         "class": "xarBoot",
         "check": "getPublicObjectProperties"
     },
-    "xardb_init": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/database.php",
-        "name": "xarDB_init",
-        "args": [
-            "array &$args"
-        ],
-        "namespace": "",
-        "lines": "390-409",
-        "docs": null,
-        "class": "xarDB",
-        "check": "init"
-    },
     "xardbaltertable": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl.php",
         "name": "xarDBAlterTable",
@@ -120,7 +108,7 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "58-61",
+        "lines": "56-59",
         "docs": {},
         "uses": "xarTableDDL::alterTable()",
         "class": "xarTableDDL",
@@ -137,7 +125,7 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "76-79",
+        "lines": "74-77",
         "docs": {},
         "uses": "xarTableDDL::createColumn()",
         "class": "xarTableDDL",
@@ -153,7 +141,7 @@
             "$databaseCharset = 'utf-8'"
         ],
         "namespace": "",
-        "lines": "40-43",
+        "lines": "38-41",
         "docs": {},
         "uses": "xarTableDDL::createDatabase()",
         "class": "xarTableDDL",
@@ -169,7 +157,7 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "85-88",
+        "lines": "83-86",
         "docs": {},
         "uses": "xarTableDDL::createIndex()",
         "class": "xarTableDDL",
@@ -186,7 +174,7 @@
             "$charset = \"\""
         ],
         "namespace": "",
-        "lines": "49-52",
+        "lines": "47-50",
         "docs": {},
         "uses": "xarTableDDL::createTable()",
         "class": "xarTableDDL",
@@ -202,7 +190,7 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "94-97",
+        "lines": "92-95",
         "docs": {},
         "uses": "xarTableDDL::dropIndex()",
         "class": "xarTableDDL",
@@ -217,7 +205,7 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "67-70",
+        "lines": "65-68",
         "docs": {},
         "uses": "xarTableDDL::dropTable()",
         "class": "xarTableDDL",
@@ -243,7 +231,7 @@
         "name": "xarLog__shutdown_handler",
         "args": [],
         "namespace": "",
-        "lines": "381-412",
+        "lines": "404-440",
         "docs": {},
         "class": "xarLog",
         "check": "_shutdown_handler"
@@ -270,7 +258,7 @@
             "...$args"
         ],
         "namespace": "",
-        "lines": "1041-1044",
+        "lines": "486-489",
         "docs": {}
     },
     "xarvarprepemaildisplay": {
@@ -280,7 +268,7 @@
             "...$args"
         ],
         "namespace": "",
-        "lines": "647-650",
+        "lines": "667-670",
         "docs": {},
         "class": "xarVar",
         "check": "PrepEmailDisplay",
@@ -296,7 +284,7 @@
             "...$args"
         ],
         "namespace": "",
-        "lines": "629-632",
+        "lines": "649-652",
         "docs": {},
         "class": "xarVar",
         "check": "PrepForDisplay",
@@ -312,7 +300,7 @@
             "...$args"
         ],
         "namespace": "",
-        "lines": "656-659",
+        "lines": "676-679",
         "docs": {},
         "class": "xarVar",
         "check": "PrepForOS",
@@ -328,7 +316,7 @@
             "...$args"
         ],
         "namespace": "",
-        "lines": "638-641",
+        "lines": "658-661",
         "docs": {},
         "class": "xarVar",
         "check": "PrepHTMLDisplay",

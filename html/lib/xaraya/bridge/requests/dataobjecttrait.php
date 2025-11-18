@@ -61,7 +61,7 @@ interface DataObjectBridgeInterface extends CommonRequestInterface
 
 /**
  * Handle DataObject requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
 trait DataObjectBridgeTrait
 {

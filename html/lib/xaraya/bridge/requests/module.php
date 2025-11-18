@@ -16,9 +16,9 @@ namespace Xaraya\Bridge\Requests;
  * Handle Module requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  *
  * Note: requests with module = object or prefix = /object are handed off to DataObjectRequestHandler
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
-class ModuleRequestHandler extends BasicBridge implements ModuleBridgeInterface
+class ModuleRequestHandler extends BridgeRequest implements ModuleBridgeInterface
 {
     use ModuleBridgeTrait;
 
@@ -37,6 +37,9 @@ class ModuleRequestHandler extends BasicBridge implements ModuleBridgeInterface
 
     public function setContext($context)
     {
+        if (isset($context)) {
+            $context->handler = $this;
+        }
         parent::setContext($context);
         $this->mod()->setContext($context);
     }

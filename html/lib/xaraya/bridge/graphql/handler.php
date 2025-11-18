@@ -59,7 +59,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
 {
     use CommonRequestTrait;
     use ContextTrait;
-    use TimerTrait;  // activate with self::enableTimer(true)
+    use TimerTrait;  // activate with $this->enableTimer(true)
     use CacheTrait;  // activate with $this->enableCache(true)
     use WithServicesClass;
 

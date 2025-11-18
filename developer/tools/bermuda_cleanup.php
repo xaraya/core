@@ -199,7 +199,19 @@ class XarayaCodeAnalyzer
     {
         $args = [];
         foreach ($func_or_meth->getArguments() as $arg) {
-            $args[] = ($arg->getType() != 'mixed' ? $arg->getType() . ' ' : '') . ($arg->isVariadic() ? '...' : '') . ($arg->isByReference() ? '&' : '') . '$' . $arg->getName() . ($arg->getDefault() !== null ? ' = ' . $arg->getDefault() : '');
+            $default = $arg->getDefault(false);
+            if (!is_null($default)) {
+                // @fixme this returns ...\\null for default null values etc.
+                $default = (string) $default;
+                if (str_contains($default, '\\')) {
+                    $parts = explode('\\', $default);
+                    $last = end($parts);
+                    if (in_array($last, ['null', 'true', 'false'])) {
+                        $default = $last;
+                    }
+                }
+            }
+            $args[] = ($arg->getType() != 'mixed' ? $arg->getType() . ' ' : '') . ($arg->isVariadic() ? '...' : '') . ($arg->isByReference() ? '&' : '') . '$' . $arg->getName() . ($default !== null ? ' = ' . $default : '');
         }
         return $args;
     }
@@ -224,7 +236,8 @@ class XarayaCodeAnalyzer
         if (array_key_exists(strtolower($lname), $this->constants)) {
             $this->log('Constant Conflict: ' . $name, true);
         }
-        $this->constants[$lname] = ['file' => $fpath, 'name' => $name, 'value' => $constant->getValue()];
+        $value = (string) $constant->getValue(false);
+        $this->constants[$lname] = ['file' => $fpath, 'name' => $name, 'value' => $value];
         $this->constants[$lname]['namespace'] = substr($name, 0, strlen($name) - strlen($constant->getName()));
     }
 
@@ -252,7 +265,8 @@ class XarayaCodeAnalyzer
         }
         foreach ($class->getConstants() as $constant) {
             $cname = $constant->getName();
-            $this->classes[$lname]['const'][strtolower($cname)] = ['name' => $cname, 'value' => $constant->getValue()];
+            $value = (string) $constant->getValue(false);
+            $this->classes[$lname]['const'][strtolower($cname)] = ['name' => $cname, 'value' => $value];
         }
         foreach ($class->getUsedTraits() as $trait) {
             $tname = substr((string) $trait, 1);
@@ -284,7 +298,8 @@ class XarayaCodeAnalyzer
         }
         foreach ($trait->getConstants() as $constant) {
             $cname = $constant->getName();
-            $this->traits[$lname]['const'][strtolower($cname)] = ['name' => $cname, 'value' => $constant->getValue()];
+            $value = (string) $constant->getValue(false);
+            $this->traits[$lname]['const'][strtolower($cname)] = ['name' => $cname, 'value' => $value];
         }
         foreach ($trait->getUsedTraits() as $use) {
             $tname = substr((string) $use, 1);

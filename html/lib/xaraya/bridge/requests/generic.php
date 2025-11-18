@@ -14,9 +14,9 @@ namespace Xaraya\Bridge\Requests;
 
 /**
  * Handle Generic requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
-class GenericRequestHandler extends BasicBridge implements GenericBridgeInterface
+class GenericRequestHandler extends BridgeRequest implements GenericBridgeInterface
 {
     use GenericBridgeTrait;
 
@@ -35,6 +35,9 @@ class GenericRequestHandler extends BasicBridge implements GenericBridgeInterfac
 
     public function setContext($context)
     {
+        if (isset($context)) {
+            $context->handler = $this;
+        }
         parent::setContext($context);
         //$this->mod()->setContext($context);
     }

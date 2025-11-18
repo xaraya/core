@@ -34,8 +34,7 @@ use Xaraya\Routing\RouterInterface;
 // use some Xaraya classes
 use sys;
 use JsonException;
-use Xaraya\Bridge\Requests\BasicBridge;
-use Xaraya\Bridge\Requests\BasicRequest;
+use Xaraya\Bridge\Requests\BridgeRequest;
 use Xaraya\Bridge\Requests\DataObjectGuiHandler;
 use Xaraya\Bridge\Requests\DataObjectApiHandler;
 use Xaraya\Bridge\Requests\ModuleGuiHandler;
@@ -50,9 +49,9 @@ use Xaraya\Bridge\GraphQL\GraphQLHandler;
 
 /**
  * Routing bridge to handle Xaraya object, module and block GUI calls + REST API and GraphQL API requests
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
-class RoutingBridge extends BasicBridge
+class RoutingBridge extends BridgeRequest
 {
     public const ROUTING_CACHE_FILE = 'routing_cache.php';
 
@@ -302,7 +301,7 @@ class RoutingBridge extends BasicBridge
             } elseif (is_subclass_of($handler[0], static::class)) {
                 // @todo instantiate handler[0] for subclasses like RoutingApiBridge?
                 $handler[0] = new $handler[0]();
-            } elseif (is_subclass_of($handler[0], BasicBridge::class)) {
+            } elseif (is_subclass_of($handler[0], BridgeRequest::class)) {
                 // @todo instantiate handler[0] for subclasses of BasicRequest with $xar?
                 $handler[0] = new $handler[0]($this->getServicesClass());
             } else {
@@ -456,7 +455,7 @@ class RoutingBridge extends BasicBridge
  *
  * Note: if you really want to use APIs for DataObject please have a look at the REST API or GraphQL API instead
  * They can be configured via the admin Back End > Dynamic Data > Utilities > Test APIs
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
 class RoutingApiBridge extends RoutingBridge
 {
@@ -489,7 +488,7 @@ class RoutingApiBridge extends RoutingBridge
  * Same as RoutingBridge but handles static files too
  *
  * Note: static files should really be handled by a web server or reverse proxy in front of the application
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
 class RoutingStaticBridge extends RoutingBridge
 {

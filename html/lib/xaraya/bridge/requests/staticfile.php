@@ -14,9 +14,9 @@ namespace Xaraya\Bridge\Requests;
 
 /**
  * Handle static file requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
-class StaticFileHandler extends BasicBridge implements StaticFileBridgeInterface
+class StaticFileHandler extends BridgeRequest implements StaticFileBridgeInterface
 {
     use StaticFileBridgeTrait;
 
@@ -31,5 +31,13 @@ class StaticFileHandler extends BasicBridge implements StaticFileBridgeInterface
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = 'static-', ?string $handler = null, ?array $extra = null): array
     {
         return static::getStaticFileRoutes($pathPrefix, $namePrefix, $handler, $extra);
+    }
+
+    public function setContext($context)
+    {
+        if (isset($context)) {
+            $context->handler = $this;
+        }
+        parent::setContext($context);
     }
 }

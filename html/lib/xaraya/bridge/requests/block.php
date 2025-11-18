@@ -14,9 +14,9 @@ namespace Xaraya\Bridge\Requests;
 
 /**
  * Handle Block requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
-class BlockRequestHandler extends BasicBridge implements BlockBridgeInterface
+class BlockRequestHandler extends BridgeRequest implements BlockBridgeInterface
 {
     use BlockBridgeTrait;
 
@@ -35,6 +35,9 @@ class BlockRequestHandler extends BasicBridge implements BlockBridgeInterface
 
     public function setContext($context)
     {
+        if (isset($context)) {
+            $context->handler = $this;
+        }
         parent::setContext($context);
         $this->block()->setContext($context);
     }

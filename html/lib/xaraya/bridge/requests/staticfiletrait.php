@@ -13,6 +13,8 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
+use Xaraya\Context\ContextFactory;
+use Xaraya\Context\Context;
 use Exception;
 use sys;
 
@@ -52,7 +54,7 @@ interface StaticFileBridgeInterface extends CommonRequestInterface
 
 /**
  * Handle static file requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
- * @phpstan-import-type RouteDef from BasicBridge
+ * @phpstan-import-type RouteDef from BridgeRequest
  */
 trait StaticFileBridgeTrait
 {
@@ -236,6 +238,25 @@ trait StaticFileBridgeTrait
     }
 
     /**
+     * Summary of setRequestContext
+     * @param mixed $request
+     * @return Context<string, mixed>
+     */
+    public function setRequestContext(&$request = null)
+    {
+        $context = ContextFactory::fromRequest($request, __METHOD__);
+        // Set context for core services here first!?
+        // xar::setServicesContext($context);
+        //$context['mediatype'] = '';
+        //static::$baseUri = $this->getBaseUri($request) . static::$prefix;
+        //$context['baseuri'] = static::$baseUri;
+        // set current module to 'module' for Xaraya controller - used e.g. in xar::mod()->getName()
+        //$this->prepareController($vars['module'] ?? 'base', static::$baseUri);
+        //$context['module'] = $vars['module'] ?? 'base';
+        return $context;
+    }
+
+    /**
      * Summary of handleThemeFileRequest
      * @param array<string, mixed> $vars
      * @param mixed $request
@@ -254,6 +275,10 @@ trait StaticFileBridgeTrait
         //if (!empty($request)) {
         //    $request = $request->withAttribute('mediaType', '...');
         //}
+        //$context = $this->setRequestContext($request);
+        // @todo check if we already have a context? (via request or from elsewhere)
+        //$this->setContext($context);
+
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
         return [var_export($vars, true), null];
     }
@@ -277,6 +302,10 @@ trait StaticFileBridgeTrait
         //if (!empty($request)) {
         //    $request = $request->withAttribute('mediaType', '...');
         //}
+        //$context = $this->setRequestContext($request);
+        // @todo check if we already have a context? (via request or from elsewhere)
+        //$this->setContext($context);
+
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
         return [var_export($vars, true), null];
     }
@@ -300,6 +329,10 @@ trait StaticFileBridgeTrait
         //if (!empty($request)) {
         //    $request = $request->withAttribute('mediaType', '...');
         //}
+        //$context = $this->setRequestContext($request);
+        // @todo check if we already have a context? (via request or from elsewhere)
+        //$this->setContext($context);
+
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
         return [var_export($vars, true), null];
     }
@@ -402,8 +435,8 @@ trait StaticFileBridgeTrait
         if (!in_array($ext, static::$extensions)) {
             throw new Exception("Invalid file extension");
         }
-        $theme = realpath(sys::varpath() . '/' . $params['source'] . '/');
-        if (empty($theme) || !str_starts_with($real, $theme)) {
+        $var = realpath(sys::varpath() . '/' . $params['source'] . '/');
+        if (empty($var) || !str_starts_with($real, $var)) {
             throw new Exception("Invalid file path");
         }
         return $real;
