@@ -19,14 +19,8 @@
  */
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-// use the nikic FastRoute library here
-//use Xaraya\Routing\FastRouter;
-// use the Symfony Routing component here
-use Xaraya\Routing\Routing;
-use Xaraya\Routing\RouterInterface;
 use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
-use Xaraya\Bridge\RestAPI\RestAPIRoutes;
 use Xaraya\Services\xar;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -36,14 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // initialize bootstrap
 sys::init();
+// get Xaraya Services Class
+$xar = xar::getServicesClass();
 // initialize caching - delay until we need results
-//xar::cache()->init();
+//$xar->cache()->init();
 // initialize database - delay until caching fails
-//xar::db()->init();
+//$xar->db()->init();
 // initialize modules
-//xar::mod()->init();
+//$xar->mod()->init();
 // initialize users
-//xar::user()->init();
+//$xar->user()->init();
 
 /**
  * Summary of try_builder
@@ -58,100 +54,14 @@ function try_builder()
     echo json_encode($objects, JSON_PRETTY_PRINT);
 }
 
-/**
- * Summary of send_openapi
- * @param RestAPIHandler $restHandler
- * @return void
- */
-function send_openapi($restHandler)
-{
-    // move away from static methods for context
-    $result = $restHandler->getOpenAPI();
-    $restHandler->output($result);
-}
-
-/**
- * Summary of get_router
- * @param RestAPIHandler $restHandler
- * @return RouterInterface
- */
-function get_router($restHandler)
-{
-    //$cacheFile = sys::varpath() . '/cache/api/restapi_fastroute.php';
-    //$router = new FastRouter(RestAPIRoutes::getRoutes(...));
-    $cacheFile = sys::varpath() . '/cache/api/url_matching_routes.php';
-    $router = new Routing(RestAPIRoutes::getRoutes(...), $cacheFile);
-    return $router;
-}
-
-/**
- * Summary of handle_request
- * @param string $method
- * @param string $path
- * @param RouterInterface $router
- * @param RestAPIHandler $restHandler
- * @return void
- */
-function handle_request($method, $path, $router, $restHandler)
-{
-    // $restHandler->setTimer('register');
-    [$handler, $vars] = $router->match($path, $method);
-    if (empty($handler)) {
-        switch ((string) $vars['status']) {
-            case '404':
-                // ... 404 Not Found
-                http_response_code(404);
-                break;
-            case '405':
-                // ... 405 Method Not Allowed
-                if (!empty($vars['methods'])) {
-                    header('Allow: ' . implode(', ', $vars['methods']));
-                }
-                http_response_code(405);
-                break;
-        }
-        return;
-    }
-    // $restHandler->setTimer('dispatch');
-    // ... call $handler with $vars
-    try {
-        [$result, $context] = $restHandler->callHandler($handler, $vars);
-        $restHandler->output($result);
-    } catch (UnauthorizedOperationException $e) {
-        $restHandler->output('This operation is unauthorized, please authenticate.', 401);
-    } catch (ForbiddenOperationException $e) {
-        $restHandler->output('This operation is forbidden.', 403);
-    } catch (Throwable $e) {
-        $result = "Exception: " . $e->getMessage();
-        if ($e->getPrevious() !== null) {
-            $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
-        }
-        $result .= "\nTrace:\n" . $e->getTraceAsString();
-        $restHandler->output($result, 422);
-    }
-}
-
-/**
- * Summary of try_handler
- * @param RestAPIHandler $restHandler
- * @return void
- */
-function try_handler($restHandler)
-{
-    $req = xar::req();
-    if (empty($req->getServerVar('PATH_INFO'))) {
-        send_openapi($restHandler);
-    } else {
-        // $restHandler->enableTimer(true);
-        // $restHandler->setTimer('start');
-        $router = get_router($restHandler);
-        handle_request($req->getServerVar('REQUEST_METHOD'), $req->getServerVar('PATH_INFO'), $router, $restHandler);
-    }
-}
-
 //try_builder();
-// Get Xaraya Services Class
-$xar = xar::getServicesClass();
+
 // Get RestAPI handler
 $restHandler = new RestAPIHandler($xar);
-try_handler($restHandler);
+// $restHandler->enableTimer(true);
+
+// Handle request
+$req = $xar->req();
+$method = $req->getServerVar('REQUEST_METHOD') ?? 'GET';
+$path = $req->getServerVar('PATH_INFO') ?? '';
+$restHandler->handleRequest($method, $path);

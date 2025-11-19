@@ -27,11 +27,17 @@ use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
 use Xaraya\Authentication\AuthToken;
+// use the nikic FastRoute library here
+//use Xaraya\Routing\FastRouter;
+// use the Symfony Routing component here
+use Xaraya\Routing\Routing;
+use Xaraya\Routing\RouterInterface;
 use xarObject;
 use sys;
 use ForbiddenOperationException;
 use UnauthorizedOperationException;
 use JsonException;
+use Throwable;
 
 /**
  * Class to handle REST API calls
@@ -117,11 +123,11 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             */
         }
         // use xarTimerTrait
-        if (isset(self::$config['timer'])) {
+        if (isset(self::$config['timer']) && !$this->enableTimer()) {
             $this->enableTimer(!empty(self::$config['timer']) ? true : false);
         }
         // use xarCacheTrait
-        if (isset(self::$config['cache'])) {
+        if (isset(self::$config['cache']) && !$this->enableCache()) {
             $this->enableCache(!empty(self::$config['cache']) ? true : false);
         }
         if ($this->enableCache()) {
@@ -186,6 +192,76 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     {
         //$restHandler ??= static::class;
         return RestAPIRoutes::getRoutes($pathPrefix, $namePrefix, $restHandler);
+    }
+
+    /**
+     * Summary of handleRequest
+     * @param string $method
+     * @param string $path
+     * @return void
+     */
+    public function handleRequest($method, $path)
+    {
+        if ($method == 'OPTIONS') {
+            self::sendCORSOptions();
+            return;
+        }
+        if (empty($path)) {
+            $result = $this->getOpenAPI();
+            $this->output($result);
+            return;
+        }
+        // $this->enableTimer(true);
+        $this->setTimer('start');
+        $router = $this->getRouter();
+        $this->setTimer('router');
+        [$handler, $vars] = $router->match($path, $method);
+        if (empty($handler)) {
+            switch ((string) $vars['status']) {
+                case '404':
+                    // ... 404 Not Found
+                    http_response_code(404);
+                    break;
+                case '405':
+                    // ... 405 Method Not Allowed
+                    if (!empty($vars['methods'])) {
+                        header('Allow: ' . implode(', ', $vars['methods']));
+                    }
+                    http_response_code(405);
+                    break;
+            }
+            return;
+        }
+        $this->setTimer('matched');
+        // ... call $handler with $vars
+        try {
+            [$result, $context] = $this->callHandler($handler, $vars);
+            $this->output($result);
+        } catch (UnauthorizedOperationException $e) {
+            $this->output('This operation is unauthorized, please authenticate.', 401);
+        } catch (ForbiddenOperationException $e) {
+            $this->output('This operation is forbidden.', 403);
+        } catch (Throwable $e) {
+            $result = "Exception: " . $e->getMessage();
+            if ($e->getPrevious() !== null) {
+                $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
+            }
+            $result .= "\nTrace:\n" . $e->getTraceAsString();
+            $this->output($result, 422);
+        }
+    }
+
+    /**
+     * Summary of getRouter
+     * @return RouterInterface
+     */
+    protected function getRouter()
+    {
+        //$cacheFile = sys::varpath() . '/cache/api/restapi_fastroute.php';
+        //$router = new FastRouter(RestAPIRoutes::getRoutes(...));
+        $cacheFile = sys::varpath() . '/cache/api/url_matching_routes.php';
+        $router = new Routing(RestAPIRoutes::getRoutes(...), $cacheFile);
+        return $router;
     }
 
     /**
