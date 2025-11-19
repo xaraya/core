@@ -94,9 +94,9 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
         }
 
         // pass through the current request info
-        $data['thismodname'] = self::$thismodname;
-        $data['thismodtype'] = self::$thismodtype;
-        $data['thisfuncname'] = self::$thisfuncname;
+        $data['thismodname'] = $this->thismodname;
+        $data['thismodtype'] = $this->thismodtype;
+        $data['thisfuncname'] = $this->thisfuncname;
 
         if (!empty($data['displayrss']) && !$this->mod()->isAvailable('rss')) {
             $data['displayrss'] = 0;
@@ -134,7 +134,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
                     if (!$link) {
                         continue;
                     }
-                } elseif (self::$currenturl == $link['url']) {
+                } elseif ($this->currenturl == $link['url']) {
                     $link['url'] = '';
                     $link['isactive'] = 1;
                 } else {
@@ -155,7 +155,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
                                 $sublink[$k] = $v;
                             }
                         }
-                        if (self::$currenturl == $sublink['url']) {
+                        if ($this->currenturl == $sublink['url']) {
                             $sublink['url'] = '';
                             $sublink['isactive'] = 1;
                         } elseif (empty($link['ismodlink'])) {

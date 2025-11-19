@@ -21,6 +21,8 @@ class xarRequest extends xarObject
 {
     use WithServicesClass;
 
+    public static string $delimiter = '?';    // This character divides the URL into action part and parameters
+    public static string $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route
     protected string $url          = '';
     protected string $actionstring = '';
     protected bool $dispatched   = false;
@@ -46,7 +48,6 @@ class xarRequest extends xarObject
     public bool $isObjectURL     = false;
 
     public string $entryPoint;
-    public string $separator    = '&';
 
     /** @var ?bool */
     private $isAjax   = null;
@@ -187,7 +188,7 @@ class xarRequest extends xarObject
                 // @todo let router do its job - see xar::ctl()->normalizeRequest()
                 // Else assume a form of short urls. The module name or the object keyword will be the first item
                 if (null == $modName && str_starts_with($url, $this->getBaseURL() . $this->entryPoint)) {
-                    $path = substr($url, strlen($this->getBaseURL() . $this->entryPoint . xarController::$delimiter));
+                    $path = substr($url, strlen($this->getBaseURL() . $this->entryPoint . self::$delimiter));
                     $tokens = explode('/', $path);
                     $modName = array_shift($tokens);
 

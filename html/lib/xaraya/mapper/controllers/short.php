@@ -54,7 +54,7 @@ class ShortActionController extends BaseActionController implements iController
         $path = $this->getInitialPath($request);
         $path .= self::$delimiter;
         foreach ($request->getFunctionArgs() as $key => $value) {
-            $path .= $key . '=' . $value . xarController::$separator;
+            $path .= $key . '=' . $value . xarRequest::$separator;
         }
         $path = substr($path, 0, strlen($path) - 1);
         return $this->separator . $path;
@@ -68,7 +68,7 @@ class ShortActionController extends BaseActionController implements iController
         } else {
             $actionstring = '';
         }
-        $delimiterposition = strpos($actionstring, xarController::$delimiter);
+        $delimiterposition = strpos($actionstring, xarRequest::$delimiter);
         if ($delimiterposition) {
             $actionstring = substr($actionstring, 0, $delimiterposition);
         }

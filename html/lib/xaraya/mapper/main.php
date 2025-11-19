@@ -23,17 +23,6 @@ use Xaraya\Services\xar;
  */
 class xarController extends xarObject
 {
-    public static string $delimiter = '?';    // This character divides the URL into action part and parameters
-    public static string $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route
-    public static string $moduleKey = 'module';
-    public static string $typeKey   = 'type';
-    public static string $funcKey   = 'func';
-    public static string $module    = 'base';
-    public static string $type      = 'user';
-    public static string $func      = 'main';
-    public static string $object    = 'objects';
-    public static string $method    = 'view';
-    public static string $entryPoint = 'index.php';
     protected static ?ControllerService $ctlService = null;
     protected static ?RequestService $reqService = null;
 

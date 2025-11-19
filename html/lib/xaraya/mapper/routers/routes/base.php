@@ -65,10 +65,11 @@ class xarRoute extends xarObject implements iRoute
             }
         }
 
+        // @todo these are actually never updated - see xarRequest->defaultRequestInfo for configurable defaults
         $this->defaults += [
-            $this->moduleKey   => xarController::$module,
-            $this->typeKey     => xarController::$type,
-            $this->funcKey     => xarController::$func,
+            $this->moduleKey   => 'base',  // xarController::$module,
+            $this->typeKey     => 'user',  // xarController::$type,
+            $this->funcKey     => 'main',  // xarController::$func,
         ];
 
         $this->keysSet = true;

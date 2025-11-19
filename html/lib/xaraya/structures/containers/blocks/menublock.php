@@ -27,12 +27,12 @@ abstract class MenuBlock extends BasicBlock implements iBlock
     protected $menumodtypes    = [];      // optional array of valid modtypes
     protected $xarmodules      = [];      // list of $menumodtype capable modules
 
-    // @todo FIXME store current request info as static properties
-    public static $thismodname;
-    public static $thismodtype;
-    public static $thisfuncname;
-    public static $currenturl;
-    public static $truecurrenturl;
+    // store current request info as instance properties
+    public $thismodname;
+    public $thismodtype;
+    public $thisfuncname;
+    public $currenturl;
+    public $truecurrenturl;
 
     public $modulelist      = [];      // settings for $xarmodules list
 
@@ -87,15 +87,15 @@ abstract class MenuBlock extends BasicBlock implements iBlock
 
     public function setRequestInfo()
     {
-        if (!isset(self::$thismodname) || !isset(self::$thismodtype) || !isset(self::$thisfuncname)) {
+        if (!isset($this->thismodname) || !isset($this->thismodtype) || !isset($this->thisfuncname)) {
             // set current request info properties
-            [self::$thismodname, self::$thismodtype, self::$thisfuncname] = $this->ctl()->getRequest()->getInfo();
+            [$this->thismodname, $this->thismodtype, $this->thisfuncname] = $this->ctl()->getRequest()->getInfo();
         }
-        if (!isset(self::$currenturl)) {
-            self::$currenturl = $this->ctl()->getCurrentURL();
+        if (!isset($this->currenturl)) {
+            $this->currenturl = $this->ctl()->getCurrentURL();
         }
-        if (!isset(self::$truecurrenturl)) {
-            self::$truecurrenturl = $this->ctl()->getCurrentURL([], false);
+        if (!isset($this->truecurrenturl)) {
+            $this->truecurrenturl = $this->ctl()->getCurrentURL([], false);
         }
     }
 
@@ -142,7 +142,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
             $link['title'] = $this->modulelist[$modname]['displaydescription'];
         }
         $link['url'] = $this->ctl()->getModuleURL($modname, $this->menumodtype, 'main', []);
-        if ($link['url'] == self::$currenturl) {
+        if ($link['url'] == $this->currenturl) {
             $link['url'] = '';
         }
 
@@ -151,8 +151,8 @@ abstract class MenuBlock extends BasicBlock implements iBlock
         }
 
         // see if module is active
-        $isactive = ($modname == self::$thismodname
-                    && (self::$thismodtype == $this->menumodtype || !empty($this->menumodtypes) && in_array(self::$thismodtype, $this->menumodtypes)));
+        $isactive = ($modname == $this->thismodname
+                    && ($this->thismodtype == $this->menumodtype || !empty($this->menumodtypes) && in_array($this->thismodtype, $this->menumodtypes)));
         $menulinks = [];
         // get menulinks if module is active or calling function requested expand(ed) list
         if ($isactive || $expand) {

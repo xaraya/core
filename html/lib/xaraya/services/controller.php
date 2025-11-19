@@ -739,13 +739,17 @@ trait ControllerTrait
                 $modType = $entrypoint['action'];
                 $entrypoint = $entrypoint['entry'];
             }
-            $this->entryPoint = $entrypoint;
+            // @checkme do *not* overwrite default entryPoint for one URL() here
+            //$this->entryPoint = $entrypoint;
+        } else {
+            $entrypoint = $this->entryPoint;
         }
 
         // Create a new request and make its route the current route
         $params['module'] = $modName;
         $params['type'] = $modType;
         $params['func'] = $funcName;
+        // Note: using default entrypoint to start here
         $request = new xarRequest($params, $this->getParent());
         // <chris/> wrt to the problem of xaraya not obeying a particular route
         // when the main entry point, sans params, is accessed...
@@ -776,7 +780,8 @@ trait ControllerTrait
         $path = $controller->encode($request);
 
         // Use Xaraya default (index.php) or BaseModURL if provided in config.system.php
-        $path = $this->entryPoint . $path;
+        // Note: using custom entrypoint here if specified
+        $path = $entrypoint . $path;
 
         // Remove the leading / from the path (if any).
         $path = preg_replace('/^\//', '', $path);
