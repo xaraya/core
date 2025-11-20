@@ -93,7 +93,7 @@ interface PreparedStatement extends StatementInterface
      * implementations of this class can override this method if they actually
      * support multiple result sets.
      *
-     * @return boolean True if there is another result set, otherwise false.
+     * @return bool True if there is another result set, otherwise false.
      */
     public function getMoreResults();
 
@@ -185,7 +185,7 @@ interface PreparedStatement extends StatementInterface
      * Sets a boolean value.
      * Default behavior is true = 1, false = 0.
      * @param int $paramIndex
-     * @param boolean $value
+     * @param bool $value
      * @return void
      */
     public function setBoolean($paramIndex, $value);

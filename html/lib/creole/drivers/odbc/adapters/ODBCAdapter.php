@@ -34,7 +34,7 @@ class ODBCAdapter
      * is first created. Returns false if table does not preserve case (i.e.
      * ProductID => PRODUCTID).
      *
-     * @return boolean
+     * @return bool
      */
     public function preservesColumnCase()
     {
@@ -46,7 +46,7 @@ class ODBCAdapter
      * might be useful if your driver does not support (or has trouble with)
      * prepared statements.
      *
-     * @return boolean
+     * @return bool
      */
     public function emulatePrepareStmt()
     {
@@ -56,7 +56,7 @@ class ODBCAdapter
     /**
      * Returns true if ODBC driver supports LIMIT/OFFSET via SQL.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasLimitOffset()
     {
@@ -81,7 +81,7 @@ class ODBCAdapter
     /**
      * Returns an instance of the default resultset.
      *
-     * @return boolean
+     * @return bool
      */
     public function createResultSet($conn, $odbcresult, $fetchmode)
     {
@@ -103,7 +103,7 @@ class ODBCAdapter
     /**
      * Returns true if driver support transactions.
      *
-     * @return boolean
+     * @return bool
      */
     public function supportsTransactions()
     {

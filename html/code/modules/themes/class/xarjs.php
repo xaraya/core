@@ -431,7 +431,7 @@ class xarJS extends xarObject
      *         string  $args[property] name of property to look for src in
      *         string  $args[module] name of module to look for file(s) in, optional, default current module<br/>
      *         string  $args[index] optional index in queue relative to other scripts<br/>
-     * @return boolean true on success
+     * @return bool true on success
     **/
     /**
      * Catch the following xar:javascript declarations
@@ -790,7 +790,7 @@ class xarJS extends xarObject
      * @param string  $url url to file, or source code to include
      * @param mixed   $data tag data to queue
      * @param string  $index index to use, optional
-     * @return boolean|void true on success
+     * @return bool|void true on success
     **/
     public function queue($position, $type, $scope, $data, $tag, $index = '')
     {

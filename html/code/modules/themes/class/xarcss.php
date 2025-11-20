@@ -412,7 +412,7 @@ class xarCSS extends xarObject
      *         string $args[property] standalone property name, required for property scope
      *         string $args[block] standalone block name, required for block scope
      * @todo: support other W3C standard attributes of link and style tags?
-     * @return boolean|void true on success
+     * @return bool|void true on success
      *
     **/
     public function register($args)
@@ -630,7 +630,7 @@ class xarCSS extends xarObject
      * @param string  $method the method to use (link, import, embed)
      * @param string  $url source, either code to embed or url of file to link or import
      * @param array<string, mixed> $data tag data to cache
-     * @return boolean|void true on success
+     * @return bool|void true on success
      * @todo make private once xarTpl functions are deprecated
     **/
     public function queue($method, $scope, $url, $data)

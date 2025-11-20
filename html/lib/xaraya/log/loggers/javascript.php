@@ -41,7 +41,7 @@ class xarLogger_javascript extends xarLogger
      * @param array<string, mixed> $conf               Configuration options for the specific driver.
      *
      *
-     * @return boolean
+     * @return bool
      */
     public function __construct(array $conf)
     {
@@ -86,7 +86,7 @@ class xarLogger_javascript extends xarLogger
      *
      * @param string $message Log message
      * @param int $level level of priority of the message
-     * @return boolean  True on success or false on failure.
+     * @return bool  True on success or false on failure.
      *
      */
     public function notify($message, $level)

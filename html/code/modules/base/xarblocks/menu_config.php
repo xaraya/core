@@ -50,7 +50,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
      * Update the configuration of the menu block
      *
      * @param array<string, mixed> $data Data array
-     * @return boolean|void Returns true on success, false on failure
+     * @return bool|void Returns true on success, false on failure
      */
     public function configupdate(array $data = [])
     {

@@ -180,7 +180,7 @@ abstract class TableInfo
     /**
      * Return whether table contains specified column.
      * @param string $name The column name.
-     * @return boolean
+     * @return bool
      */
     public function hasColumn($name)
     {

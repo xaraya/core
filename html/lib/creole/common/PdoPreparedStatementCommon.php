@@ -228,7 +228,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      * Sets a boolean value.
      * Default behavior is true = 1, false = 0.
      * @param int $paramIndex
-     * @param boolean $value
+     * @param bool $value
      * @return void
      */
     public function setBoolean($paramIndex, $value)
@@ -260,7 +260,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
 
     /**
      * @param int $paramIndex
-     * @param double $value
+     * @param float $value
      * @return void
      */
     public function setDecimal($paramIndex, $value)
@@ -276,7 +276,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
 
     /**
      * @param int $paramIndex
-     * @param double $value
+     * @param float $value
      * @return void
      */
     public function setDouble($paramIndex, $value)

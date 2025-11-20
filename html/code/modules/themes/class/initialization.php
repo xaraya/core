@@ -41,7 +41,7 @@ class ThemeInitialization extends xarObject
      *
      * @param bool $flush
      * @param array dirs
-     * @return boolean true if the table is loaded, else false
+     * @return bool true if the table is loaded, else false
      */
     public static function importConfigurations($flush = true, $dirs = [])
     {

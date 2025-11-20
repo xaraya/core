@@ -177,7 +177,7 @@ class CategoriesProperty extends DataProperty
      * Create Value
      *
      * @param int $itemid
-     * @return boolean Returns true
+     * @return bool Returns true
      */
     public function createValue($itemid = 0)
     {
@@ -231,7 +231,7 @@ class CategoriesProperty extends DataProperty
     /**
      * Updates value for the given item id.
      * @param int $itemid ID of the item to be updated
-     * @return boolean Returns true on success, false on failure
+     * @return bool Returns true on success, false on failure
      *
      * This method also maintains integrity by updating module_id, itemtype etc. if these have changed
      */
@@ -721,7 +721,7 @@ class CategoriesProperty extends DataProperty
     /**
      * Updates category links for a given item id.
      * @param int $itemid ID of the item to be updated
-     * @return boolean Returns true on success, false on failure
+     * @return bool Returns true on success, false on failure
      *
      * A property can have 0 to many category links
      * The method compares categories to be added and removed,
@@ -845,7 +845,7 @@ class CategoriesPropertyInstall extends CategoriesProperty implements iDataPrope
      * Install method
      *
      * @param array<string, mixed> $data Parameter data array
-     * @return boolean Returns true.
+     * @return bool Returns true.
      */
     public function install(array $data = [])
     {

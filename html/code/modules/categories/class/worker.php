@@ -188,7 +188,7 @@ class CategoryWorker extends xarObject
      * Fetch the children of a category
      *
      * @param int $id ID of the parent category
-     * @param boolean $myself
+     * @param bool $myself
      * @return array<mixed>|null Data array containing children of the given category, null if no children were found
      */
     public function getchildren($id = 0, $myself = 0)
@@ -227,7 +227,7 @@ class CategoryWorker extends xarObject
      * Fetch the descendents of a category
      *
      * @param int $id ID of the parent category
-     * @param boolean $myself
+     * @param bool $myself
      * @param string $order
      * @return array<mixed>|null Data array containing descendents of the given category, null if no children were found
      */
@@ -266,7 +266,7 @@ class CategoryWorker extends xarObject
      * Delete a category and its children
      *
      * @param int $id ID of the category to be deleted (along with its children
-     * @param boolean $myself
+     * @param bool $myself
      * @return array<mixed>|bool|null Data array containing descendents of the given category, null if no children were found
      */
     public function delete($id = 0)

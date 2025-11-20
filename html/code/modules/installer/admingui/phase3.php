@@ -170,7 +170,7 @@ class Phase3Method extends MethodClass
      *
      * @access private
      * @param string dirname directory name
-     * @return boolean true if directory is writable, readable and executable
+     * @return bool true if directory is writable, readable and executable
      */
     public function check_dir($dirname)
     {

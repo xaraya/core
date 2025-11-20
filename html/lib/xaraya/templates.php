@@ -93,7 +93,7 @@ class xarTpl extends xarObject
      *         boolean $args[generateXMLURLs] flag to indicate if XML URLs are to be used<br/>
      *         boolean $args[enableTemplatesCaching] flag to indicate if templates should be cached
      * @throws FileNotFoundException
-     * @return boolean true
+     * @return bool true
      * @todo remove the unnecessary generateXMLURLs arg and static var
     **/
     public static function init(array $args = [])
@@ -116,7 +116,7 @@ class xarTpl extends xarObject
      *
      * @access public
      * @param  string $themesDir
-     * @return boolean
+     * @return bool
     **/
     public static function setBaseDir($themesDir)
     {
@@ -139,7 +139,7 @@ class xarTpl extends xarObject
      *
      * @access public
      * @param  string $themeName Themename to set
-     * @return boolean
+     * @return bool
      * @todo see checkme's
      */
     public static function setThemeName($themeName)
@@ -153,7 +153,7 @@ class xarTpl extends xarObject
      * @access public
      * @param  string $themeDir
      * @throws DirectoryNotFoundException
-     * @return boolean
+     * @return bool
      * @todo   see checkme's
      */
     public static function setThemeDir($themeDir)
@@ -200,7 +200,7 @@ class xarTpl extends xarObject
      *
      * @access public
      * @param  string $templateName Name of the page template
-     * @return boolean
+     * @return bool
      */
     public static function setPageTemplateName($templateName)
     {
@@ -223,7 +223,7 @@ class xarTpl extends xarObject
      *
      * @access public
      * @param  string $doctypeName Identifier string of the doctype
-     * @return boolean
+     * @return bool
      */
     public static function setDoctype($doctypeName)
     {
@@ -248,7 +248,7 @@ class xarTpl extends xarObject
      * @param  ?string $title
      * @param  ?string $module
      * @todo   this needs to be moved into the templating domain somehow
-     * @return boolean
+     * @return bool
      */
     public static function setPageTitle($title = null, $module = null)
     {

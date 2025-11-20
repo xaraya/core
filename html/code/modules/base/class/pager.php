@@ -236,10 +236,10 @@ class xarTplPager extends xarObject
      *
      * @since 1.13 - 2003/10/09
      *
-     * @param integer $startnum     start item
-     * @param integer $total        total number of items present
+     * @param int $startnum     start item
+     * @param int $total        total number of items present
      * @param string  $urltemplate  template for url, will replace '%%' with item number
-     * @param integer $itemsPerPage number of links to display (default=10)
+     * @param int $itemsPerPage number of links to display (default=10)
      * @param int|array $blockOptions number of pages to display at once (default=10) or array of advanced options
      * @param string $template     alternative template name within $tplmodule/user (default 'pager')
      * @param string  $tplmodule    alternative module to look for templates in (default 'base')

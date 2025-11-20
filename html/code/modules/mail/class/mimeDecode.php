@@ -136,19 +136,19 @@ class Mail_mimeDecode extends PEAR
     /**
      * Flag to determine whether to include bodies in the
      * returned object.
-     * @var    boolean
+     * @var    bool
      */
     public $_include_bodies;
 
     /**
      * Flag to determine whether to decode bodies
-     * @var    boolean
+     * @var    bool
      */
     public $_decode_bodies;
 
     /**
      * Flag to determine whether to decode headers
-     * @var    boolean
+     * @var    bool
      */
     public $_decode_headers;
 
@@ -778,7 +778,7 @@ class Mail_mimeDecode extends PEAR
      *
      * @param  object  Input to convert to xml. This is a mimepart object.
      *                 It may or may not contain subparts.
-     * @param  integer Number of tabs to indent
+     * @param  int Number of tabs to indent
      * @return string  XML version of input
      * @access private
      */
@@ -822,7 +822,7 @@ class Mail_mimeDecode extends PEAR
      *
      * @param  string  Name of header
      * @param  string  Value of header
-     * @param  integer Number of tabs to indent
+     * @param  int Number of tabs to indent
      * @return string  XML version of input
      * @access private
      */

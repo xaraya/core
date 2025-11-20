@@ -33,7 +33,7 @@ class Base_FincludeBlockConfig extends Base_FincludeBlock implements iBlock
      * Updates the Block config from the Blocks Admin
      *
      * @param array<string, mixed> $data Config data array
-     * @return boolean|void Returns true on success, false on failure.
+     * @return bool|void Returns true on success, false on failure.
      */
     public function configupdate(array $data = [])
     {

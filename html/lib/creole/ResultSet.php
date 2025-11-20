@@ -101,14 +101,14 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * based on a PHP ini value; it would not be possible to change the behavior from the ResultSet
      * (since query has already been executed).
      *
-     * @return boolean
+     * @return bool
      */
     public function isLowerAssocCase();
 
     /**
      * Moves the internal cursor to the next position and fetches the row at that position.
      *
-     * @return boolean <tt>true</tt> if success, <tt>false</tt> if no next record.
+     * @return bool <tt>true</tt> if success, <tt>false</tt> if no next record.
      * @throws SQLException on any driver-level errors.
      */
     public function next();
@@ -117,7 +117,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Moves the internal cursor to the previous position and fetches the
      * row at that position.
      *
-     * @return boolean <tt>true</tt> if success, <tt>false</tt> if no previous record.
+     * @return bool <tt>true</tt> if success, <tt>false</tt> if no previous record.
      * @throws SQLException - if unable to move to previous position
      *                      - if ResultSet doesn't support reverse scrolling
      */
@@ -131,8 +131,8 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * the first/last row and issues a Warning. Calling relative(0) is valid, but does not change the cursor
      * position.
      *
-     * @param integer $offset
-     * @return boolean <tt>true</tt> if cursor is on a row, <tt>false</tt> otherwise.
+     * @param int $offset
+     * @return bool <tt>true</tt> if cursor is on a row, <tt>false</tt> otherwise.
      * @throws SQLException - if unable to move to relative position
      *                      - if rel pos is negative & ResultSet doesn't support reverse scrolling
      */
@@ -145,8 +145,8 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Attempting to move beyond the first/last row in the result set positions the cursor before/after
      * the first/last row and issues a Warning.
      *
-     * @param integer $pos cursor position, first position is 1.
-     * @return boolean <tt>true</tt> if cursor is on a row, <tt>false</tt> otherwise.
+     * @param int $pos cursor position, first position is 1.
+     * @return bool <tt>true</tt> if cursor is on a row, <tt>false</tt> otherwise.
      * @throws SQLException - if unable to move to absolute position
      *                      - if position is before current pos & ResultSet doesn't support reverse scrolling
      */
@@ -173,7 +173,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * whether a specific rec position is valid.</strong>
      *
      * @param int $rownum The cursor pos to seek to.
-     * @return boolean true on success, false if unable to seek to specified record.
+     * @return bool true on success, false if unable to seek to specified record.
      * @throws SQLException if trying to seek backwards with a driver that doesn't
      *                      support reverse-scrolling
      */
@@ -181,7 +181,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
 
     /**
      * Move cursor to beginning of recordset.
-     * @return boolean <tt>true</tt> on success or <tt>false</tt> if not found.
+     * @return bool <tt>true</tt> on success or <tt>false</tt> if not found.
      * @throws SQLException - if unable to move to first position
      *                      - if not at first pos & ResultSet doesn't support reverse scrolling
      */
@@ -189,7 +189,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
 
     /**
      * Move cursor to end of recordset.
-     * @return boolean <tt>true</tt> on success or <tt>false</tt> if not found.
+     * @return bool <tt>true</tt> on success or <tt>false</tt> if not found.
      * @throws SQLException - if unable to move to last position
      *                      - if unable to get num rows
      */
@@ -216,14 +216,14 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
 
     /**
      * Checks whether cursor is after the last record.
-     * @return boolean
+     * @return bool
      * @throws SQLException on any driver-level error.
      */
     public function isAfterLast();
 
     /**
      * Checks whether cursor is before the first record.
-     * @return boolean
+     * @return bool
      * @throws SQLException on any driver-level error.
      */
     public function isBeforeFirst();
@@ -287,7 +287,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Returns value translated to boolean.
      * Default is to map 0 => false, 1 => true, but some database drivers may override this behavior.
      * @param mixed $column Column name (string) or index (int) starting with 1 (if ResultSet::FETCHMODE_NUM was used).
-     * @return boolean|null value or null if database returned null.
+     * @return bool|null value or null if database returned null.
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
     // XARAYA MODIFICATION

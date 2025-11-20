@@ -63,7 +63,7 @@ function installer_core_privilegeoptions()
  * Load the configuration
  *
  * @access public
- * @return boolean
+ * @return bool
  */
 /**
  * @package modules\installer\installer

@@ -50,7 +50,7 @@ interface CallableStatement extends PreparedStatement
     /**
      *
      * @param mixed $paramIndex Parameter name (e.g. "@var1").
-     * @return boolean
+     * @return bool
      * @throws SQLException if $paramIndex was not bound as output variable.
      */
     public function getBoolean($paramIndex);

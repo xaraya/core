@@ -76,7 +76,7 @@ function installer_public_privilegeoptions()
  * Load the configuration
  *
  * @access public
- * @return boolean
+ * @return bool
  */
 /**
  * @package modules\installer\installer

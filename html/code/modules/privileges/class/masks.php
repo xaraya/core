@@ -110,7 +110,7 @@ class xarMasks extends xarSecurity
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string $name array of mask values
-     * @return  boolean
+     * @return  bool
      * @todo    almost the same as privileges register method
     */
     public static function register($name, $realm, $module, $component, $instance, $level, $description = '')
@@ -181,7 +181,7 @@ class xarMasks extends xarSecurity
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string representing a mask name
-     * @return  boolean
+     * @return  bool
      */
     public static function unregister($name)
     {
@@ -197,7 +197,7 @@ class xarMasks extends xarSecurity
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string module name
-     * @return  boolean
+     * @return  bool
     */
     public static function removemasks($module)
     {
@@ -225,7 +225,7 @@ class xarMasks extends xarSecurity
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string
-     * @return  boolean
+     * @return  bool
     */
     public static function forgetprivsets()
     {

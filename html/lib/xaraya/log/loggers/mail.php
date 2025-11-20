@@ -65,7 +65,7 @@ class xarLogger_mail extends xarLogger
     private $message = '';
 
     /**
-     * @var boolean Holds wether the message was already opened or not.
+     * @var bool Holds wether the message was already opened or not.
      */
     private $opened = false;
 
@@ -150,7 +150,7 @@ class xarLogger_mail extends xarLogger
      * Writes $message to the currently open mail message.
      * Calls open(), if necessary.
      *
-     * @return boolean  True on success or false on failure.
+     * @return bool  True on success or false on failure.
      *
      */
     public function notify($message, $level)

@@ -91,7 +91,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
      * This method is called by the BasicBlock class constructor
      *
      * @param string $oldversion Version to upgrade from (old version)
-     * @return boolean Returns true on success, false/null on failure
+     * @return bool Returns true on success, false/null on failure
      */
     public function upgrade($oldversion)
     {
@@ -199,7 +199,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
      * Method to decode urls
      *
      * @param string $url Url string to decode
-     * @param boolean $infoarray Boolean value to determine wether or not to return
+     * @param bool $infoarray Boolean value to determine wether or not to return
      *                           the decoded url as an array
      * @return string[]|string Returns either decoded url as a string or parts array
      */

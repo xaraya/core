@@ -60,7 +60,7 @@ public function mozConsole(msg, level)
      *
      * @param string $message Log message
      * @param int $level Level of priority of the message
-     * @return boolean  True on success or false on failure.
+     * @return bool  True on success or false on failure.
      *
      */
     public function notify($message, $level)

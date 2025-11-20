@@ -344,7 +344,7 @@ class xarRequest extends xarObject
     /**
      * Check to see if this request is an object URL
      *
-     * @return boolean true if object URL, false if not
+     * @return bool true if object URL, false if not
      */
     public function isObjectURL()
     {

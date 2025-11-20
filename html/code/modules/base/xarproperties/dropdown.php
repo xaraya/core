@@ -440,7 +440,7 @@ class SelectProperty extends DataProperty
      * configurations don't (or shouldn't) impact the result of the getOptions() function...
      *
      * @param $type string the type of configuration you want to check (typically only initialization)
-     * @return boolean true if the configuration is the same as last time we checked, false otherwise
+     * @return bool true if the configuration is the same as last time we checked, false otherwise
      */
     public function isSameConfiguration($type = 'initialization')
     {

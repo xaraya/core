@@ -36,8 +36,8 @@ interface VariablesInterface extends ServiceInterface
      * @param string $validation the validation to be performed
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param mixed $defaultValue the default value (default null)
-     * @param integer $flags bitmask which modify the behaviour of function (default ixarVar::GET_OR_POST)
-     * @param integer $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
+     * @param int $flags bitmask which modify the behaviour of function (default ixarVar::GET_OR_POST)
+     * @param int $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
      * @return true
      */
     public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = ixarVar::GET_OR_POST, $prep = xarVarPrep::NOTHING): true;
@@ -192,8 +192,8 @@ trait VariablesTrait
      * @param string $validation the validation to be performed
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param mixed $defaultValue the default value (default null)
-     * @param integer $flags bitmask which modify the behaviour of function (default ixarVar::GET_OR_POST)
-     * @param integer $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
+     * @param int $flags bitmask which modify the behaviour of function (default ixarVar::GET_OR_POST)
+     * @param int $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
      * @return true
      */
     public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = ixarVar::GET_OR_POST, $prep = xarVarPrep::NOTHING): true

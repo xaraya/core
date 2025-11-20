@@ -38,7 +38,7 @@ class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBloc
     /**
      * Updates the Block config from the Blocks Admin
      *
-     * @return boolean|void Returns true if configuation was updated successfully
+     * @return bool|void Returns true if configuation was updated successfully
      */
     public function configupdate()
     {

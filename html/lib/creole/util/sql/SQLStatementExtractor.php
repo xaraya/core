@@ -172,7 +172,7 @@ class SQLStatementExtractor
      * Tests if a string starts with a given string.
      * @param string $check The substring to check.
      * @param string $string The string to check in (haystack).
-     * @return boolean True if $string starts with $check, or they are equal, or $check is empty.
+     * @return bool True if $string starts with $check, or they are equal, or $check is empty.
      */
     protected static function startsWith($check, $string)
     {
@@ -187,7 +187,7 @@ class SQLStatementExtractor
      * Tests if a string ends with a given string.
      * @param string $check The substring to check.
      * @param string $string The string to check in (haystack).
-     * @return boolean True if $string ends with $check, or they are equal, or $check is empty.
+     * @return bool True if $string ends with $check, or they are equal, or $check is empty.
      */
     protected static function endsWith($check, $string)
     {

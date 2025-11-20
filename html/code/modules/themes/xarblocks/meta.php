@@ -60,7 +60,7 @@ class Themes_MetaBlock extends BasicBlock
      * This method is called by the BasicBlock class constructor
      *
      * @param string $oldversion Version to upgrade from (old version)
-     * @return boolean Returns true on success, false/null on failure
+     * @return bool Returns true on success, false/null on failure
      */
     public function upgrade($oldversion)
     {

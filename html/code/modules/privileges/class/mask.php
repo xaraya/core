@@ -111,7 +111,7 @@ class xarMask extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   integer   adds  Number of additional instance parts to add to the array
+     * @param   int   adds  Number of additional instance parts to add to the array
      * @return array<mixed> of strings
     */
     public function normalize($adds = 0)
@@ -197,7 +197,7 @@ class xarMask extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   xarMask object
-     * @return  boolean
+     * @return  bool
     */
     public function matches($mask)
     {
@@ -223,7 +223,7 @@ class xarMask extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   xarMask object
-     * @return  boolean
+     * @return  bool
     */
     public function matchesexactly($mask)
     {
@@ -240,7 +240,7 @@ class xarMask extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   xarMask object
-     * @return  boolean
+     * @return  bool
     */
     public function includes($mask)
     {
@@ -310,7 +310,7 @@ class xarMask extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   xarMask object
-     * @return  boolean
+     * @return  bool
     */
     public function implies($mask)
     {

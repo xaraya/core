@@ -84,7 +84,7 @@ interface Statement
      * the appropriate method, as this one will incurr overhead to check the SQL.
      *
      * @param int $fetchmode Fetchmode (only applies to queries).
-     * @return boolean True if it is a result set, false if not or if no more results (this is identical to JDBC return val).
+     * @return bool True if it is a result set, false if not or if no more results (this is identical to JDBC return val).
      * @throws SQLException
      */
     public function execute($sql, $fetchmode = null);
@@ -135,7 +135,7 @@ interface Statement
      * implementations of this class can override this method if they actually
      * support multiple result sets.
      *
-     * @return boolean True if there is another result set, otherwise false.
+     * @return bool True if there is another result set, otherwise false.
      */
     public function getMoreResults();
 

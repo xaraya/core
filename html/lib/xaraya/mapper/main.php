@@ -166,7 +166,7 @@ class xarController extends xarObject
     /**
      * Check to see if this is a local referral
      *
-     * @return boolean true if locally referred, false if not
+     * @return bool true if locally referred, false if not
      */
     public static function isLocalReferer()
     {

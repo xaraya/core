@@ -452,7 +452,7 @@ class PHPBackendGenerator extends xarObject
      * Create directories tree
      *
      * @author Volodymyr Metenchuk <voll@xaraya.com>
-     * @return boolean true
+     * @return bool true
      */
     public static function mkdirr($path)
     {

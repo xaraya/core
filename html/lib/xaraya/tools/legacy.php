@@ -20,7 +20,7 @@ class Legacy
      * echo \strftime('%A %e %B %Y %X', strtotime('2021-09-28 00:00:00'));
      *
      * @param  string $format Date format
-     * @param  integer|string|\DateTime $timestamp Timestamp
+     * @param  int|string|\DateTime $timestamp Timestamp
      * @return string
      * @author BohwaZ <https://bohwaz.net/>
      */

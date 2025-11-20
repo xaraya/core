@@ -545,7 +545,7 @@ class FileUploadProperty extends DataProperty
     * This method can take an extension or a full file name
     *
     * @param string $filename Extension or full file name
-    * @return boolean
+    * @return bool
     */
     public function validateExtension($filenames = '')
     {

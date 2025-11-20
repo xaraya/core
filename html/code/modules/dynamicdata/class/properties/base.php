@@ -379,7 +379,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      *
      * @param int $itemid
      * @param mixed $value
-     * @param integer $fordisplay
+     * @param int $fordisplay
      * @return void
      */
     public function setItemValue($itemid, $value, $fordisplay = 0)
@@ -1005,7 +1005,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      *     $data['name'] name of the field (default is 'dd_NN' with NN the property id)
      *     $data['configuration'] configuration rule (default is the current configuration)
      *     $data['id'] id of the field
-     * @return boolean true if the configuration rule could be processed, false otherwise
+     * @return bool true if the configuration rule could be processed, false otherwise
      */
     public function updateConfiguration(array $data = [])
     {

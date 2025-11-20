@@ -133,10 +133,10 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
     /**
      * PHP error handler bridge to Xaraya exceptions
      *
-     * @param  integer $errorRaised level of the error raised by PHP
+     * @param  int $errorRaised level of the error raised by PHP
      * @param  string  $errorString errormessage issued
      * @param  string  $file file is which the error occurred
-     * @param  integer $line linenumber on which the error occurred
+     * @param  int $line linenumber on which the error occurred
      * @param array<mixed> $errorContext information on the context of the error
      * @author Marco Canini <marco@xaraya.com>
      *

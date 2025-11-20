@@ -185,7 +185,7 @@ abstract class ConnectionCommon
     /**
      * Driver classes should override this if they support transactions.
      *
-     * @return boolean
+     * @return bool
      */
     public function supportsNestedTrans()
     {
@@ -293,7 +293,7 @@ abstract class ConnectionCommon
      *
      * If auto-commit is being set to TRUE, then the current transaction will be committed immediately.
      *
-     * @param boolean $bit New value for auto commit.
+     * @param bool $bit New value for auto commit.
      * @return void
      */
     public function setAutoCommit($bit)
@@ -312,7 +312,7 @@ abstract class ConnectionCommon
     /**
      * Get auto-commit status.
      *
-     * @return boolean
+     * @return bool
      */
     public function getAutoCommit()
     {
@@ -463,7 +463,7 @@ abstract class ConnectionCommon
 
     /**
      * Returns false if connection is closed.
-     * @return boolean
+     * @return bool
      */
     public function isConnected()
     {

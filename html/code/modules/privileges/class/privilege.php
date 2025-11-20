@@ -45,7 +45,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  boolean
+     * @return  bool
     */
     public function add()
     {
@@ -95,7 +95,7 @@ class xarPrivilege extends xarMask
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   xarPrivilege object
-     * @return  boolean
+     * @return  bool
      * @todo    check to make sure the child is not a parent of the parent
     */
     public function addMember($member)
@@ -118,7 +118,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  boolean
+     * @return  bool
     */
     public function removeMember($member)
     {
@@ -150,7 +150,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  boolean
+     * @return  bool
     */
     public function update()
     {
@@ -188,7 +188,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  boolean
+     * @return  bool
      * @todo    reverse the order of deletion, i.e. first delete the related parts then the master (foreign key compat)
      * @todo    even better, do it in a transaction.
     */
@@ -245,7 +245,7 @@ class xarPrivilege extends xarMask
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   role object
-     * @return  boolean
+     * @return  bool
     */
     public function isassigned($role)
     {
@@ -317,7 +317,7 @@ class xarPrivilege extends xarMask
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   role object
-     * @return  boolean
+     * @return  bool
     */
     public function removeRole($role)
     {
@@ -501,7 +501,7 @@ class xarPrivilege extends xarMask
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   xarPrivilege object
-     * @return  boolean
+     * @return  bool
     */
     public function isEqual($privilege)
     {
@@ -515,7 +515,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  boolean
+     * @return  bool
     */
     public function getID()
     {
@@ -529,7 +529,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  boolean
+     * @return  bool
     */
     public function isEmpty()
     {
@@ -544,7 +544,7 @@ class xarPrivilege extends xarMask
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   xarPrivilege object
-     * @return  boolean
+     * @return  bool
     */
     public function isParentPrivilege($privilege)
     {
@@ -564,7 +564,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  boolean
+     * @return  bool
     */
     public function isRootPrivilege()
     {

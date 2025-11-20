@@ -47,7 +47,7 @@ interface InstallerInterface extends ApiModuleServicesInterface
      * Upgrade this module from an old version - override this method
      *
      * @param string $oldversion
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public function upgrade($oldversion);
 }
@@ -91,7 +91,7 @@ trait InstallerTrait
      * Upgrade this module from an old version - override this method
      *
      * @param string $oldversion
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public function upgrade($oldversion)
     {
@@ -113,7 +113,7 @@ trait InstallerTrait
      * Initialise this module
      *
      * @access public
-     * @return  boolean true on success or false on failure
+     * @return  bool true on success or false on failure
      */
     public function init()
     {
@@ -138,7 +138,7 @@ trait InstallerTrait
      * Activate this module
      *
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function activate()
     {
@@ -149,7 +149,7 @@ trait InstallerTrait
      * Deactivate this module
      *
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function deactivate()
     {
@@ -159,7 +159,7 @@ trait InstallerTrait
     /**
      * Delete this module
      *
-     * @return boolean
+     * @return bool
      */
     public function delete()
     {

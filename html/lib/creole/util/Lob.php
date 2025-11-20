@@ -55,7 +55,7 @@ abstract class Lob
      * Initially it is NULL.  Once first call to setContents() is made
      * it is FALSE, because this will be initial state of Lob.  Once
      * a subsequent call to setContents() is made it is TRUE.
-     * @var boolean
+     * @var bool
      */
     private $modified = null;
 
@@ -158,7 +158,7 @@ abstract class Lob
     /**
      * Returns whether this Lob is loaded from file.
      * This is useful for bypassing need to read in the contents of the Lob.
-     * @return boolean Whether this LOB is to be read from a file.
+     * @return bool Whether this LOB is to be read from a file.
      */
     public function isFromFile()
     {
@@ -224,7 +224,7 @@ abstract class Lob
 
     /**
      * Set whether LOB contents have been modified after initial setting.
-     * @param boolean $b
+     * @param bool $b
      */
     public function setModified($b)
     {
@@ -233,7 +233,7 @@ abstract class Lob
 
     /**
      * Whether LOB contents have been modified after initial setting.
-     * @return boolean TRUE if the contents have been modified after initial setting.
+     * @return bool TRUE if the contents have been modified after initial setting.
      *                  FALSE if contents have not been modified or if no contents have bene set.
      */
     public function isModified()

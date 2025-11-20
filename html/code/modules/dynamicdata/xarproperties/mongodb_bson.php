@@ -119,7 +119,7 @@ class BSONProperty extends DataProperty
      *
      * @param int $itemid
      * @param mixed $value
-     * @param integer $fordisplay
+     * @param int $fordisplay
      */
     public function setItemValue($itemid, $value, $fordisplay = 0)
     {

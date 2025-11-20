@@ -91,7 +91,7 @@ class xarLogger extends xarObject
      *
      * @param array<string, mixed> $conf               Configuration options for the specific driver.
      *
-     * @return boolean
+     * @return bool
      */
     public function __construct(array $conf)
     {
@@ -161,7 +161,7 @@ class xarLogger extends xarObject
      * Returns if the logger should log the given level or not.
      *
      * @param int $level        A xarLog::$LEVEL_* integer constant mix.
-     * @return boolean         Should it be logger or not
+     * @return bool         Should it be logger or not
      */
     public function doLogLevel($level)
     {

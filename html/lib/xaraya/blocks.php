@@ -72,7 +72,7 @@ class xarBlock extends xarObject implements ixarBlock
      * @author Paul Rosania
      *
      * @param  array<string, mixed> $args
-     * @return boolean
+     * @return bool
      */
     public static function init(array $args = [])
     {
@@ -176,7 +176,7 @@ class xarBlock extends xarObject implements ixarBlock
      * @param iBlock $block the block we want to check access for
      * @param string $action the action we want to take on this block (display/modify/delete)
      * @param mixed $roleid override the current user or null
-     * @return boolean true if access
+     * @return bool true if access
      */
     public static function checkAccess(iBlock $block, $action, $roleid = null)
     {

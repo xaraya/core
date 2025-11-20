@@ -199,7 +199,7 @@ class xarLogger_simple extends xarLogger
      * Prepare the logfile for writing
      *
      * @throws LoggerException
-     * @return boolean true on success
+     * @return bool true on success
      **/
     protected function prepareLogfile()
     {
@@ -233,7 +233,7 @@ class xarLogger_simple extends xarLogger
      * if it did not
      *
      * @throws LoggerException
-     * @return boolean true on succes, false on failure
+     * @return bool true on succes, false on failure
      **/
     private function openLogfile()
     {
@@ -309,7 +309,7 @@ class xarLogger_simple extends xarLogger
 
     /**
      * Add a message, applying appropriate formatting, to the output buffer.
-     * @return boolean true on success or false on failure.
+     * @return bool true on success or false on failure.
      */
     public function notify($message, $level)
     {
@@ -327,7 +327,7 @@ class xarLogger_simple extends xarLogger
     /**
      * Format a message.
      * @param string $message The message detail text
-     * @param integer $level The priority level of this record
+     * @param int $level The priority level of this record
      * @return string The formatted log record
      */
     public function formatMessage($message, $level)

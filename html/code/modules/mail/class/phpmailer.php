@@ -364,7 +364,7 @@ class PHPMailer extends xarObject
      * Creates message and assigns Mailer. If the message is
      * not sent successfully then it returns false.  Use the ErrorInfo
      * variable to view description of the error.
-     * @return boolean
+     * @return bool
      */
     public function Send()
     {
@@ -414,7 +414,7 @@ class PHPMailer extends xarObject
     /**
      * Sends mail using the $Sendmail program.
      * @access private
-     * @return boolean
+     * @return bool
      */
     public function SendmailSend($header, $body)
     {
@@ -444,7 +444,7 @@ class PHPMailer extends xarObject
     /**
      * Sends mail using the PHP mail() function.
      * @access private
-     * @return boolean
+     * @return bool
      */
     public function MailSend($header, $body)
     {
@@ -498,7 +498,7 @@ class PHPMailer extends xarObject
      * Chris Ryan).  Returns bool.  Returns false if there is a
      * bad MAIL FROM, RCPT, or DATA input.
      * @access private
-     * @return boolean
+     * @return bool
      */
     public function SmtpSend($header, $body)
     {
@@ -567,7 +567,7 @@ class PHPMailer extends xarObject
      * Initiates a connection to an SMTP server.  Returns false if the
      * operation failed.
      * @access private
-     * @return boolean
+     * @return bool
      */
     public function SmtpConnect()
     {
@@ -638,7 +638,7 @@ class PHPMailer extends xarObject
      * @param string $lang_type Type of language (e.g. Portuguese: "br")
      * @param string $lang_path Path to the language file directory
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function SetLanguage($lang_type, $lang_path = "./")
     {
@@ -1102,7 +1102,7 @@ class PHPMailer extends xarObject
      * @param string $name Overrides the attachment name.
      * @param string $encoding File encoding (see $Encoding).
      * @param string $type File extension (MIME) type.
-     * @return boolean
+     * @return bool
      */
     public function AddAttachment($path, $name = "", $encoding = "base64", $type = "application/octet-stream")
     {
@@ -1442,7 +1442,7 @@ class PHPMailer extends xarObject
      * @param string $name Overrides the attachment name.
      * @param string $encoding File encoding (see $Encoding).
      * @param string $type File extension (MIME) type.
-     * @return boolean
+     * @return bool
      */
     public function AddEmbeddedImage($path, $cid, $name = "", $encoding = "base64", $type = "application/octet-stream")
     {
@@ -1474,7 +1474,7 @@ class PHPMailer extends xarObject
     /**
      * Returns true if an inline attachment is present.
      * @access private
-     * @return boolean
+     * @return bool
      */
     public function InlineImageExists()
     {
@@ -1658,7 +1658,7 @@ class PHPMailer extends xarObject
 
     /**
      * Returns true if an error occurred.
-     * @return boolean
+     * @return bool
      */
     public function IsError()
     {

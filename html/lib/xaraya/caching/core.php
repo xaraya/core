@@ -38,7 +38,7 @@ class xarCoreCache extends xarObject
      * Initialise the caching options
      *
      * @param array<string, mixed> $config caching configuration from config.caching.php
-     * @return boolean
+     * @return bool
      * @todo configure optional second-level cache here ?
     **/
     public static function init(array $config = [])
@@ -51,7 +51,7 @@ class xarCoreCache extends xarObject
      *
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param string $name  the name of the variable in that particular scope
-     * @return boolean true if the variable is cached, false if not
+     * @return bool true if the variable is cached, false if not
     **/
     public static function isCached($scope, $name)
     {
@@ -111,7 +111,7 @@ class xarCoreCache extends xarObject
      *
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param ?string $name  the name of the variable in that particular scope
-     * @return boolean
+     * @return bool
     **/
     public static function hasPreload($scope, $name = null)
     {
@@ -123,7 +123,7 @@ class xarCoreCache extends xarObject
      *
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param ?string $name  the name of the variable in that particular scope
-     * @return boolean
+     * @return bool
     **/
     public static function loadCached($scope, $name = null)
     {
@@ -136,7 +136,7 @@ class xarCoreCache extends xarObject
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param ?string $name  the name of the variable in that particular scope
      * @param ?string $source the source requester for saving this scope and name
-     * @return boolean
+     * @return bool
     **/
     public static function saveCached($scope, $name = null, $source = null)
     {

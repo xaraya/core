@@ -76,7 +76,7 @@ class xarUser extends xarObject implements ixarUser
      *
      *
      * @param array<string, mixed> $args[authenticationModules] array
-     * @return boolean true on success
+     * @return bool true on success
      */
     public static function init(array $args = [])
     {
@@ -99,8 +99,8 @@ class xarUser extends xarObject implements ixarUser
      *
      * @param  string  $userName the name of the user logging in
      * @param  string  $password the password of the user logging in
-     * @param  integer $rememberMe whether or not to remember this login
-     * @return boolean|void true if the user successfully logged in
+     * @param  int $rememberMe whether or not to remember this login
+     * @return bool|void true if the user successfully logged in
      * @throws EmptyParameterException, SQLException
      * @todo <marco> #1 here we could also set a last_logon timestamp
      */
@@ -113,7 +113,7 @@ class xarUser extends xarObject implements ixarUser
      * Log the user out
      *
      *
-     * @return boolean|void true if the user successfully logged out
+     * @return bool|void true if the user successfully logged out
      */
     public static function logOut($context = null)
     {
@@ -125,7 +125,7 @@ class xarUser extends xarObject implements ixarUser
      *
      * @todo see UserContext::getUserId() for userId without session
      * @param ?int $userId
-     * @return boolean true if the user is logged in, false if they are not
+     * @return bool true if the user is logged in, false if they are not
      */
     public static function isLoggedIn($userId = null)
     {
@@ -191,7 +191,7 @@ class xarUser extends xarObject implements ixarUser
      *
      *
      * @param  string $locale
-     * @return boolean true if the navigation locale is set, false if not
+     * @return bool true if the navigation locale is set, false if not
      */
     public static function setNavigationLocale($locale)
     {
@@ -207,7 +207,7 @@ class xarUser extends xarObject implements ixarUser
      *
      *
      * @param  string  $name the name of the variable
-     * @param  integer $userId integer the user to get the variable for
+     * @param  int $userId integer the user to get the variable for
      * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
      * @throws EmptyParameterException, NotLoggedInException, BadParameterException, IDNotFoundException
      * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xar::session()->getUserId()) {
@@ -229,8 +229,8 @@ class xarUser extends xarObject implements ixarUser
      *
      * @param  string  $name  the name of the variable
      * @param  mixed   $value the value of the variable
-     * @param  integer $userId integer user's ID
-     * @return boolean|void true if the set was successful, false if validation fails
+     * @param  int $userId integer user's ID
+     * @return bool|void true if the set was successful, false if validation fails
      * @throws EmptyParameterException, BadParameterException, NotLoggedInException, xarExceptions, IDNotFoundException
      * @todo redesign the delegation to auth* modules for handling user variables
      * @todo some securitycheck for retrieving at least other users variables ?
@@ -248,7 +248,7 @@ class xarUser extends xarObject implements ixarUser
      * @param  string $realPassword   the reference password to compare to
      * @param  string $userName       name of the corresponding user?
      * @param  string $cryptSalt      ?
-     * @return boolean true if the passwords match, false otherwise
+     * @return bool true if the passwords match, false otherwise
      * @todo   weird duckling here
      * @todo   consider something strong than md5 here (not trivial wrt upgrading though)
      */

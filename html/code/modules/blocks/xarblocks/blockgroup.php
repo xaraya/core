@@ -53,7 +53,7 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
      * Detach the given block instance
      *
      * @param string $block_id block id to be detached
-     * @return boolean Returns true if $block_id not in group instances array
+     * @return bool Returns true if $block_id not in group instances array
      */
     public function detachInstance($block_id)
     {

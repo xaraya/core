@@ -146,7 +146,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      *     $args['securityLevel'] the current security level
      *     $args['duration'] duration of the session
      *     $args['inactivityTimeout']
-     * @return boolean
+     * @return bool
      */
     private function setup($args)
     {

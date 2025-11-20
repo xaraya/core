@@ -204,9 +204,9 @@ class xarCore extends xarObject
     /**
      * Initializes the core engine
      *
-     * @param integer $whatToLoad What optional systems to load.
+     * @param int $whatToLoad What optional systems to load.
      * @param mixed $context initialize server & session with context
-     * @return boolean true
+     * @return bool true
      * @deprecated 2.8.8 use xar::load() instead
     **/
     public static function xarInit($whatToLoad = self::SYSTEM_ALL, $context = null)
@@ -480,7 +480,7 @@ class xarCore extends xarObject
     /**
      * Check if a particular subsystem is loaded based on the runLevel
      *
-     * @return boolean true if the subsystem is loaded, false otherwise
+     * @return bool true if the subsystem is loaded, false otherwise
     **/
     public static function isLoaded($checkLevel = self::SYSTEM_ALL)
     {
@@ -490,7 +490,7 @@ class xarCore extends xarObject
     /**
      * Activates the debugger.
      *
-     * @param integer $flags bit mask for the debugger flags
+     * @param int $flags bit mask for the debugger flags
      * @return void
      * @todo  a big part of this should be in the exception (error handling) subsystem.
     **/
@@ -524,7 +524,7 @@ class xarCore extends xarObject
     /**
      * Check if the debugger is active
      *
-     * @return boolean true if the debugger is active, false otherwise
+     * @return bool true if the debugger is active, false otherwise
     **/
     public static function isDebuggerActive()
     {
@@ -534,8 +534,8 @@ class xarCore extends xarObject
     /**
      * Check for specified debugger flag.
      *
-     * @param integer $flag the debugger flag to check for activity
-     * @return boolean true if the flag is active, false otherwise
+     * @param int $flag the debugger flag to check for activity
+     * @return bool true if the flag is active, false otherwise
     **/
     public static function isDebugFlagSet($flag)
     {

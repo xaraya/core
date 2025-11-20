@@ -42,7 +42,7 @@ class Themes_SkinBlockConfig extends Themes_SkinBlock implements iBlock
     /**
      * Update the configuration of the skin block
      *
-     * @return boolean Returns true
+     * @return bool Returns true
      */
     public function configupdate()
     {

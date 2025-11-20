@@ -170,14 +170,14 @@ interface Connection extends ConnectionInterface
 
     /**
      * Returns false if connection is closed.
-     * @return boolean
+     * @return bool
      */
     public function isConnected();
 
     /**
      * Get auto-commit status.
      *
-     * @return boolean
+     * @return bool
      */
     public function getAutoCommit();
 
@@ -189,7 +189,7 @@ interface Connection extends ConnectionInterface
      *
      * If auto-commit is being set to TRUE, then the current transaction will be committed immediately.
      *
-     * @param boolean $bit New value for auto commit.
+     * @param bool $bit New value for auto commit.
      * @return void
      */
     public function setAutoCommit($bit);

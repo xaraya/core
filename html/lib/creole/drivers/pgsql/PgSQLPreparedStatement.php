@@ -88,7 +88,7 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
     /**
      * For setting value of Postgres BOOLEAN column.
      * @param int $paramIndex
-     * @param boolean $value
+     * @param bool $value
      * @return void
      */
     public function setBoolean($paramIndex, $value)

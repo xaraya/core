@@ -203,7 +203,7 @@ class PgSQLResultSet extends ResultSetCommon implements ResultSet
 
     /**
      * @param mixed $column Column name (string) or index (int) starting with 1.
-     * @return boolean
+     * @return bool
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
     public function getBoolean($column)

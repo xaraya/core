@@ -87,7 +87,7 @@ class SMTP extends xarObject
      * SMTP CODE SUCCESS: 220
      * SMTP CODE FAILURE: 421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Connect($host, $port = 0, $tval = 30)
     {
@@ -151,7 +151,7 @@ class SMTP extends xarObject
      * Performs SMTP authentication.  Must be run after running the
      * Hello() method.  Returns true if successfully authenticated.
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Authenticate($username, $password)
     {
@@ -215,7 +215,7 @@ class SMTP extends xarObject
     /**
      * Returns true if connected to a server otherwise false
      * @access private
-     * @return boolean
+     * @return bool
      */
     public function Connected()
     {
@@ -276,7 +276,7 @@ class SMTP extends xarObject
      * SMTP CODE FAILURE: 451,554
      * SMTP CODE ERROR  : 500,501,503,421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Data($msg_data)
     {
@@ -467,7 +467,7 @@ class SMTP extends xarObject
      * SMTP CODE SUCCESS: 250
      * SMTP CODE ERROR  : 500, 501, 504, 421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Hello($host = "")
     {
@@ -500,7 +500,7 @@ class SMTP extends xarObject
     /**
      * Sends a HELO/EHLO command.
      * @access private
-     * @return boolean
+     * @return bool
      */
     public function SendHello($hello, $host)
     {
@@ -596,7 +596,7 @@ class SMTP extends xarObject
      * SMTP CODE SUCCESS: 552,451,452
      * SMTP CODE SUCCESS: 500,501,421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Mail($from)
     {
@@ -639,7 +639,7 @@ class SMTP extends xarObject
      * SMTP CODE SUCCESS: 250
      * SMTP CODE ERROR  : 500, 421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Noop()
     {
@@ -683,7 +683,7 @@ class SMTP extends xarObject
      * SMTP CODE SUCCESS: 221
      * SMTP CODE ERROR  : 500
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Quit($close_on_error = true)
     {
@@ -738,7 +738,7 @@ class SMTP extends xarObject
      * SMTP CODE FAILURE: 550,551,552,553,450,451,452
      * SMTP CODE ERROR  : 500,501,503,421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Recipient($to)
     {
@@ -783,7 +783,7 @@ class SMTP extends xarObject
      * SMTP CODE SUCCESS: 250
      * SMTP CODE ERROR  : 500,501,504,421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Reset()
     {
@@ -833,7 +833,7 @@ class SMTP extends xarObject
      * SMTP CODE SUCCESS: 552,451,452
      * SMTP CODE SUCCESS: 500,501,502,421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Send($from)
     {
@@ -882,7 +882,7 @@ class SMTP extends xarObject
      * SMTP CODE SUCCESS: 552,451,452
      * SMTP CODE SUCCESS: 500,501,502,421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function SendAndMail($from)
     {
@@ -931,7 +931,7 @@ class SMTP extends xarObject
      * SMTP CODE SUCCESS: 552,451,452
      * SMTP CODE SUCCESS: 500,501,502,421
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function SendOrMail($from)
     {
@@ -977,7 +977,7 @@ class SMTP extends xarObject
      * SMTP CODE FAILURE: 502
      * SMTP CODE ERROR  : 500, 503
      * @access public
-     * @return boolean
+     * @return bool
      */
     public function Turn()
     {

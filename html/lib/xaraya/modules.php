@@ -379,7 +379,7 @@ class xarMod extends xarObject implements ixarMod
     /**
      * Check the version of this module against the core version
      *
-     * @return boolean
+     * @return bool
      */
     public static function checkVersion($modName)
     {
@@ -405,7 +405,7 @@ class xarMod extends xarObject implements ixarMod
      * @param string $moduleName the module we want to check access for
      * @param string $action the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
      * @param mixed $roleid override the current user or null
-     * @return boolean true if access
+     * @return bool true if access
      * @throws BadParameterException
      */
     public static function checkAccess($moduleName, $action, $roleid = null)

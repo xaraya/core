@@ -187,7 +187,7 @@ class CelkoPositionProperty extends DataProperty
      * Create Value
      *
      * @param int $itemid
-     * @return boolean Returns true or false
+     * @return bool Returns true or false
      */
     public function createValue($itemid = 0)
     {
@@ -331,7 +331,7 @@ class CelkoPositionProperty extends DataProperty
      * Updates value for the given item id.
      *
      * @param int $itemid ID of the item to be updated
-     * @return boolean|void Returns true on success, false on failure
+     * @return bool|void Returns true on success, false on failure
      */
     public function updateValue($itemid = 0)
     {
@@ -982,7 +982,7 @@ class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDat
      * Install method
      *
      * @param array<string, mixed> $data Parameter data array
-     * @return boolean Returns true.
+     * @return bool Returns true.
      */
     public function install(array $data = [])
     {

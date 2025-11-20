@@ -189,7 +189,7 @@ class xarCurl extends xarObject
      *
      * @param mixed $option Option to set
      * @param mixed $value Value to set to the option
-     * @return boolean Returns true on success false on failure
+     * @return bool Returns true on success false on failure
      */
     public function setopt($option, $value)
     {
@@ -206,7 +206,7 @@ class xarCurl extends xarObject
      * @param string|array $name
      * @param string $value
      * @param string $type
-     * @return boolean
+     * @return bool
      */
     private function param($name = '', $value = '', $type = '')
     {
@@ -261,7 +261,7 @@ class xarCurl extends xarObject
      *
      * @param string $name Post variable name
      * @param mixed $value Post variable value
-     * @return boolean
+     * @return bool
      */
     public function post($name = '', $value = '')
     {
@@ -274,7 +274,7 @@ class xarCurl extends xarObject
      *
      * @param string $name Get variable name
      * @param mixed $value Get variable value
-     * @return boolean
+     * @return bool
      */
     public function get($name = '', $value = '')
     {
@@ -300,7 +300,7 @@ class xarCurl extends xarObject
     /**
      * Execute curl fetch
      *
-     * @return boolean Returns true on on success, false on failure
+     * @return bool Returns true on on success, false on failure
      */
     public function exec()
     {
@@ -475,7 +475,7 @@ class xarCurl extends xarObject
     /**
      * Close curl call
      *
-     * @return boolean Return true on success false on failure
+     * @return bool Return true on success false on failure
      */
     public function close()
     {

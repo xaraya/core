@@ -148,7 +148,7 @@ abstract class DatabaseInfo
     /**
      * Return whether database contains specified table.
      * @param string $name The table name.
-     * @return boolean
+     * @return bool
      */
     public function hasTable($name)
     {
@@ -193,7 +193,7 @@ abstract class DatabaseInfo
     abstract protected function initSequences();
 
     /**
-     * @return boolean
+     * @return bool
      * @throws SQLException
      */
     public function isSequence($key)

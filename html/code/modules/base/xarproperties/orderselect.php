@@ -57,7 +57,7 @@ class OrderSelectProperty extends MultiSelectProperty
      * Validates the order of values
      *
      * @param string $order Order of the values
-     * @return boolean Returns true on success, false on failure
+     * @return bool Returns true on success, false on failure
      */
     public function validateOrder($order = null)
     {

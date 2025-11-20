@@ -79,9 +79,9 @@ class ColumnInfo
      * @param string $nativeType Native type name.
      * @param int $size Column length.
      * @param int $scale Column scale (number of digits after decimal).
-     * @param boolean $is_nullable Whether col is nullable.
+     * @param bool $is_nullable Whether col is nullable.
      * @param mixed $default Default value.
-     * @param boolean $is_auto_increment Whether col is of autoIncrement type.
+     * @param bool $is_auto_increment Whether col is of autoIncrement type.
      */
     public function __construct(
         TableInfo
@@ -196,7 +196,7 @@ class ColumnInfo
 
     /**
      * Is column nullable?
-     * @return boolean
+     * @return bool
      */
     public function isNullable()
     {
@@ -205,7 +205,7 @@ class ColumnInfo
 
     /**
      * Is column of autoincrement type?
-     * @return boolean
+     * @return bool
      */
     public function isAutoIncrement()
     {

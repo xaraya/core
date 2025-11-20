@@ -75,7 +75,7 @@ class xarSec extends xarObject
      *
      * @param ?string $modName
      * @param string $varName
-     * @return boolean $catch true if the key is valid, false if it is not
+     * @return bool $catch true if the key is valid, false if it is not
      * @throws ForbiddenOperationException
      * @todo bring back possibility of time authorized keys
      */

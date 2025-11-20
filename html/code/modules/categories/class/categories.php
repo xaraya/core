@@ -166,7 +166,7 @@ class CategoryTreeNode extends TreeNode
      * Check if a CategoryTreeNode is a descendant
      *
      * @param CategoryTreeNode $n Node to look up
-     * @return boolean|void True if the given CategoryTreeNode is a decendant
+     * @return bool|void True if the given CategoryTreeNode is a decendant
      */
     public function isDescendant(CategoryTreeNode $n)
     {

@@ -37,7 +37,7 @@ class AdminApi extends AdminApiClass
      * @author Marc Lutolf
      * @param array<string, mixed> $args array of optional parameters<br/>
      * @param string args['variables'] = array($name => $value,...)
-     * @return boolean
+     * @return bool
      */
     public function modifysystemvars(array $args = [])
     {
@@ -85,7 +85,7 @@ class AdminApi extends AdminApiClass
      * @param array<string, mixed> $args array of optional parameters<br/>
      *        string   $args['directory'] the directory to include<br/>
      *        string   $args['initfunc'] init|upgrade|remove|...
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      * @throws EmptyParameterException
      * @throws FileNotFoundException
      */

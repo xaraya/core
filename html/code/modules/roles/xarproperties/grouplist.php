@@ -105,7 +105,7 @@ class GroupListProperty extends SelectProperty
      * Create Value
      *
      * @param int $itemid
-     * @return boolean|void Returns true
+     * @return bool|void Returns true
      */
     public function createValue($itemid = 0)
     {
@@ -158,7 +158,7 @@ class GroupListProperty extends SelectProperty
      * Updates value for the given item id.
      *
      * @param int $itemid ID of the item to be updated
-     * @return boolean Returns true on success, false on failure
+     * @return bool Returns true on success, false on failure
      */
     public function updateValue($itemid = 0)
     {

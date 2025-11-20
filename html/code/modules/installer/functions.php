@@ -119,7 +119,7 @@ class xarInstall extends xarObject
      * @access public
      * @param string modName registered name of the module
      * @param string modType type of functions to load
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      * @throws FileNotFoundException
      */
     public static function apiLoad()
@@ -145,7 +145,7 @@ class xarInstall extends xarObject
      * Loads the modType of installer identified by modName.
      *
      * @access public
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      * @throws EmptyParameterException
      */
     public static function load($func)

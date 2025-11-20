@@ -64,7 +64,7 @@ class InstallerClass implements InstallerInterface
      * Upgrade this module from an old version - override this method
      *
      * @param string $oldversion
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public function upgrade($oldversion)
     {

@@ -61,7 +61,7 @@ class xarModVars extends xarVars implements IxarModVars
      * PreLoad all module variables for a particular module
      *
      * @param  string $scope Module name
-     * @return boolean|void true on success
+     * @return bool|void true on success
      * @throws EmptyParameterException
      * @todo  This has some duplication with config.php
      */
@@ -87,7 +87,7 @@ class xarModVars extends xarVars implements IxarModVars
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @param  mixed  $value The value of the variable
-     * @return boolean true on success
+     * @return bool true on success
      * @throws EmptyParameterException
      * @todo  We could delete the item vars for the module with the new value to save space?
      */
@@ -101,7 +101,7 @@ class xarModVars extends xarVars implements IxarModVars
      *
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
-     * @return boolean true on success
+     * @return bool true on success
      * @throws EmptyParameterException
      * @todo Add caching for item variables?
      */
@@ -114,7 +114,7 @@ class xarModVars extends xarVars implements IxarModVars
      * Delete all module variables
      *
      * @param  string $scope The name of the module
-     * @return boolean true on success
+     * @return bool true on success
      * @throws EmptyParameterException, SQLException
      * @todo Add caching for item variables?
      */
@@ -131,7 +131,7 @@ class xarModVars extends xarVars implements IxarModVars
      *
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
-     * @return integer|void identifier for the variable
+     * @return int|void identifier for the variable
      * @throws EmptyParameterException
      * @see xar::mod()->getUserVar(), xar::mod()->setUserVar(), xar::mod()->delUserVar()
      */

@@ -594,7 +594,7 @@ class DataObjectFactory extends xarObject
      *     $args['config'] some configuration for the object (free to define and use)
      *     $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
      *     $args['class'] optional classname (e.g. <module>_DataObject)
-     * @return integer object id of the created item
+     * @return int object id of the created item
     **/
     public static function createObject(array $args = [], $xar = null)
     {

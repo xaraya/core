@@ -30,7 +30,7 @@ class xarPrivileges extends xarMasks
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @param   string $module
-     * @return  boolean
+     * @return  bool
      * @todo remove table2 argument
      */
     public static function defineInstance($module, $type, $instances, $propagate = 0, $table2 = '', $childID = '', $parentID = '', $description = '')
@@ -103,7 +103,7 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string $module name
-     * @return  boolean
+     * @return  bool
     */
     public static function removeInstances($module)
     {
@@ -132,7 +132,7 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string $name
-     * @return  boolean
+     * @return  bool
      * @todo    duplicates parts of $privilege->add() method
     */
     public static function register($name, $realm, $module, $component, $instance, $level, $description = '')
@@ -184,7 +184,7 @@ class xarPrivileges extends xarMasks
      * @access  public
      * @param   string
      * @param   string
-     * @return  boolean
+     * @return  bool
     */
     public static function assign($privilegename, $rolename)
     {
@@ -490,7 +490,7 @@ class xarPrivileges extends xarMasks
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   integer
+     * @param   int
      * @return  xarPrivilege|void object
     */
     public static function getPrivilege($id)
@@ -649,7 +649,7 @@ class xarPrivileges extends xarMasks
      * @access  public
      * @param   string
      * @param   string
-     * @return  boolean
+     * @return  bool
      * @todo    create exceptions for bad input
     */
     public static function makeMember($childname, $parentname)
@@ -667,7 +667,7 @@ class xarPrivileges extends xarMasks
      *
      * This is a wrapper function
      *
-     * @param   integer pid,level
+     * @param   int pid,level
      * @param   string name,realm,module,component
      * @param   array instance
      * @return  mixed

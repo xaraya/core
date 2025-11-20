@@ -513,7 +513,7 @@ class PDOConnection extends PDO implements ConnectionInterface
 
     /**
      * Returns false if connection is closed.
-     * @return boolean
+     * @return bool
      * @see https://www.php.net/manual/en/pdo.connections.php
      */
     public function isConnected()

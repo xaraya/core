@@ -309,7 +309,7 @@ class xarDDObject extends xarObject implements ixarDDObject
      * @param string $action the action we want to take on this object (display/update/create/delete/config)
      * @param mixed $itemid the specific item id or null
      * @param mixed $roleid override the current user or null
-     * @return boolean true if access
+     * @return bool true if access
      */
     public static function checkAccess($object, $action, $itemid = null, $roleid = null)
     {

@@ -75,7 +75,7 @@ function installer_intranet_privilegeoptions()
  * Load the configuration
  *
  * @access public
- * @return boolean
+ * @return bool
  */
 /**
  * Public configuration

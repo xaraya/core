@@ -711,7 +711,7 @@ class xarSecurity extends xarObject
      * hasPrivilege: checks whether a privilege exists.
      *
      * @param   string name of privilege
-     * @return  boolean
+     * @return  bool
      */
     public static function hasPrivilege($name)
     {

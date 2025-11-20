@@ -19,7 +19,7 @@ interface IdGenerator
      * Convenience method that returns TRUE if id is generated
      * before an INSERT statement.  This is the same as checking
      * whether the generator type is SEQUENCE.
-     * @return boolean TRUE if gen id method is SEQUENCE
+     * @return bool TRUE if gen id method is SEQUENCE
      * @see getIdMethod()
      */
     public function isBeforeInsert();
@@ -28,7 +28,7 @@ interface IdGenerator
      * Convenience method that returns TRUE if id is generated
      * after an INSERT statement.  This is the same as checking
      * whether the generator type is AUTOINCREMENT.
-     * @return boolean TRUE if gen id method is AUTOINCREMENT
+     * @return bool TRUE if gen id method is AUTOINCREMENT
      * @see getIdMethod()
      */
     public function isAfterInsert();

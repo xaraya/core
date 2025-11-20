@@ -61,7 +61,7 @@ class xarMLS extends xarObject implements ixarMLS
      * Initializes the Multi Language System
      *
      * @throws Exception
-     * @return boolean true
+     * @return bool true
      */
     public static function init(array $args = [])
     {
@@ -260,7 +260,7 @@ class xarMLS extends xarObject implements ixarMLS
      * Load relevant translations for a specified relatvive path (be it file or directory)
      *
      * @author Marcel van der Boom <mrb@hsdev.com>
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      * @todo slowly add more intelligence for more scopes. (core, version, init?)
      * @todo static hash on path to prevent double loading?
      * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
@@ -302,7 +302,7 @@ class xarMLS extends xarObject implements ixarMLS
      * Create directories tree
      *
      * @author Volodymyr Metenchuk <voll@xaraya.com>
-     * @return boolean true
+     * @return bool true
      * @deprecated 2.8.6 moved to \PHPBackendGenerator::mkdirr()
      */
     public static function mkdirr($path)
@@ -351,7 +351,7 @@ class xarMLSContext extends xarObject
      * Initializes the Context Class
      *
      * @throws Exception
-     * @return boolean true
+     * @return bool true
      */
     public static function init(array $args = [])
     {

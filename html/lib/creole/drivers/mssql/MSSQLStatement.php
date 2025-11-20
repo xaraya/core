@@ -62,7 +62,7 @@ class MSSQLStatement extends StatementCommon implements Statement
      * implementations of this class can override this method if they actually
      * support multiple result sets.
      *
-     * @return boolean True if there is another result set, otherwise false.
+     * @return bool True if there is another result set, otherwise false.
      */
     public function getMoreResults()
     {

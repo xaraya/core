@@ -42,7 +42,7 @@ class xarConfigVars extends xarVars implements IxarVars
      * @param string|null $scope not used
      * @param  string $name the name of the variable
      * @param  mixed  $value (array,integer or string) the value of the variable
-     * @return boolean true on success, or false if you're trying to set unallowed variables
+     * @return bool true on success, or false if you're trying to set unallowed variables
      * @todo return states that it should return false if we're setting
      *       unallowed variables.. there is no such code to do that in the function
      */

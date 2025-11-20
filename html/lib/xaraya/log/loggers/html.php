@@ -100,7 +100,7 @@ class xarLogger_html extends xarLogger_simple
      * Writes a line to the logfile
      *
      * @param  string  $message   The line to write
-     * @param  integer $level     The level of priority of this line/msg
+     * @param  int $level     The level of priority of this line/msg
      *
     **/
     public function formatMessage($message, $level)

@@ -95,7 +95,7 @@ class xarRoles extends xarObject
      * The repository contains an entry for each user and group.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param integer $id
+     * @param int $id
      * @return array<mixed>|void representing the group
      */
     public static function getgroup($id)
@@ -151,7 +151,7 @@ class xarRoles extends xarObject
      * Retrieves a single role (user or group) from the roles repository
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param integer $id
+     * @param int $id
      * @return object role
      */
     public static function get($id)
@@ -213,7 +213,7 @@ class xarRoles extends xarObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param string $childname
      * @param string $parentname
-     * @return boolean
+     * @return bool
      * @todo create exceptions for bad input
      * @todo seems we could do this in one query instead of two?
      */
@@ -271,7 +271,7 @@ class xarRoles extends xarObject
      *
      * @param  string child uname
      * @param  string parent uname
-     * @return boolean
+     * @return bool
      */
     public static function makeMemberByUname($childName, $parentName)
     {
@@ -288,7 +288,7 @@ class xarRoles extends xarObject
      *
      * @param  string child ID
      * @param  string parent ID
-     * @return boolean
+     * @return bool
      */
     public static function makeMemberByID($childId, $parentId)
     {
@@ -305,7 +305,7 @@ class xarRoles extends xarObject
      *
      * @param  string child ID
      * @param  string parent ID
-     * @return boolean
+     * @return bool
      */
     public static function removeMemberByID($childId, $parentId)
     {

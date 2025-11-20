@@ -36,7 +36,7 @@ class Roles_OnlineBlockConfig extends Roles_OnlineBlock
     /**
      * Update the configuration of the online block
      *
-     * @return boolean|void Returns true on success, false on failure
+     * @return bool|void Returns true on success, false on failure
      */
     public function configupdate(array $args = [])
     {

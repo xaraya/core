@@ -97,7 +97,7 @@ class GetfaviconMethod extends MethodClass
      * Get the favicon URL for any given URL
      *
      * @param string $url
-     * @return boolean|string Returns false if url is not valid, else it returns the favicon url for the given url.
+     * @return bool|string Returns false if url is not valid, else it returns the favicon url for the given url.
      */
     protected function getFaviconURL($url)
     {

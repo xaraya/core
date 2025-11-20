@@ -211,7 +211,7 @@ class xarLog extends xarObject
 
     /**
      * Will check if the fallback mechanism can be used
-     * @return boolean
+     * @return bool
      */
     public static function fallbackPossible()
     {

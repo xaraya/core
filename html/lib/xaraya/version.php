@@ -172,7 +172,7 @@ class xarVersion extends xarObject
      *
      * @param $version string version number to check
      * @param $application string the application to check against
-     * @return boolean indicating whether the application is at least version $version
+     * @return bool indicating whether the application is at least version $version
      */
     public static function assert($version, $application = 'core')
     {

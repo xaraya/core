@@ -55,7 +55,7 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
     /**
      * True if ODBC driver supports odbc_num_rows().
      *
-     * @var boolean
+     * @var bool
      */
     protected $hasRowCount = false;
 

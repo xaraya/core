@@ -93,13 +93,13 @@ abstract class ResultSetCommon
 
     /**
      * Whether to convert assoc col case.
-     * @var boolean
+     * @var bool
      */
     protected $lowerAssocCase = false;
 
     /**
      * Whether to apply rtrim() to strings.
-     * @var boolean
+     * @var bool
      */
     protected $rtrimString = false;
 

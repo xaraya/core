@@ -113,7 +113,7 @@ class xarLogger_sql extends xarLogger
      *                  PEAR_LOG_CRIT, PEAR_LOG_ERR, PEAR_LOG_WARNING,
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
-     * @return boolean  True on success or false on failure.
+     * @return bool  True on success or false on failure.
      *
      */
     public function notify($message, $level)

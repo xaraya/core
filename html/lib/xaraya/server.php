@@ -55,7 +55,7 @@ class xarServer extends xarObject
      * Initialise the Server Support (required)
      * @param array<string, mixed> $args
      * @param mixed $context
-     * @return boolean true
+     * @return bool true
      */
     public static function init(array $args = [], $context = null)
     {

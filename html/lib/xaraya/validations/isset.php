@@ -18,7 +18,7 @@
  * When not set, the function will also throw the BAD_PARAM exception
  * @param mixed subject The parameter to check for
  * @param array parameters
- * @return boolean true on isset, false on !isset
+ * @return bool true on isset, false on !isset
  * @throws VariableValidationException
 **/
 class IssetValidation extends ValueValidations

@@ -55,7 +55,7 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
      * Updates the Block config from the Blocks Admin
      *
      * @param array<string, mixed> $data Data array continaing title, content
-     * @return boolean|void Returns true on success, false on failure
+     * @return bool|void Returns true on success, false on failure
      */
     public function configupdate(array $data = [])
     {

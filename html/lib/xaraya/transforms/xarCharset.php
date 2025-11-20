@@ -215,8 +215,8 @@ class xarCharset extends xarObject
      * Converts a UTF-8 multibyte character to a UNICODE number
      *
      * @param   string   $utf8char  UTF-8 multibyte character string
-     * @param   integer  $returnHex If set, then a hex. number is returned.
-     * @return  integer  UNICODE integer
+     * @param   int  $returnHex If set, then a hex. number is returned.
+     * @return  int  UNICODE integer
      **/
     public function utf8CharToUnicodeNumber($utf8char, $returnHex = 0)
     {
@@ -340,7 +340,7 @@ class xarCharset extends xarObject
      * @param string  $inString       The input string you want to change.
      * @param string  $fromCharset    Source charset.
      * @param string  $toCharset      Target charset.
-     * @param boolean $turnOnEntities Set to true or 1 if you want to use numeric entities insted of regular chars.
+     * @param bool $turnOnEntities Set to true or 1 if you want to use numeric entities insted of regular chars.
      * @return string Converted string
      **/
     public function convertByTable($inString, $fromCharset = '', $toCharset = '', $turnOnEntities = false)
@@ -438,7 +438,7 @@ class xarCharset extends xarObject
      * @param string  $inString       The input string you want to change.
      * @param string  $fromCharset    Source charset.
      * @param string  $toCharset      Target charset.
-     * @param boolean $turnOnEntities Set to true or 1 if you want to use numeric entities insted of regular chars.
+     * @param bool $turnOnEntities Set to true or 1 if you want to use numeric entities insted of regular chars.
      * @return string Converted string
      **/
     public function convert($inString, $fromCharset, $toCharset, $turnOnEntities = false)

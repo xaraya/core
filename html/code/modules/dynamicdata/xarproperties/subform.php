@@ -834,7 +834,7 @@ class SubFormProperty extends DataProperty
      *     $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      *     $args['configuration'] configuration rule (default is the current configuration)
      *     $args['id'] id of the field
-     * @return boolean true if the configuration rule could be processed, false otherwise
+     * @return bool true if the configuration rule could be processed, false otherwise
      */
     public function updateConfiguration(array $args = [])
     {

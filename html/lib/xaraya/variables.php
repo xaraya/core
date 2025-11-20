@@ -146,7 +146,7 @@ class xarVar extends xarObject implements ixarVar
      * Sets up allowable html and htmlentities options
      *
      * @param array<mixed> $args
-     * @return boolean
+     * @return bool
      * @todo revisit naming of config_vars table
     **/
     public static function init(array $args = [])
@@ -197,8 +197,8 @@ class xarVar extends xarObject implements ixarVar
      * @param string $validation the validation to be performed
      * @param mixed $value contains the converted value of fetched variable
      * @param mixed $defaultValue the default value
-     * @param integer $flags bitmask which modify the behaviour of function
-     * @param integer $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
+     * @param int $flags bitmask which modify the behaviour of function
+     * @param int $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
      * @throws EmptyParameterException
      * @throws VariableValidationException
      * @return true
@@ -218,7 +218,7 @@ class xarVar extends xarObject implements ixarVar
      * @param string $subject the subject on which the validation must be performed, will be where the validated value will be returned
      * @throws EmptyParameterException
      * @throws VariableValidationException
-     * @return boolean true if the $subject validates correctly, false otherwise
+     * @return bool true if the $subject validates correctly, false otherwise
      * @deprecated 2.8.4 use xarVarPrep::validate() instead
      */
     public static function validate($validation, &$subject, $supress = false, $name = '')
@@ -317,7 +317,7 @@ class xarVarPrep
      * Sets up allowable html and htmlentities options
      *
      * @param array<mixed> $args
-     * @return boolean
+     * @return bool
      * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
     **/
     public static function init(array $args = [], $xar = null)

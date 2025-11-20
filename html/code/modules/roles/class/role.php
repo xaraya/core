@@ -67,7 +67,7 @@ class Role extends DataObject
      * Creates an entry in the repository for a role object that has been created
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return boolean|void
+     * @return bool|void
      */
     public function createItem(array $data = [])
     {
@@ -156,7 +156,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $member
-     * @return boolean|void
+     * @return bool|void
      */
     public function addMember($member)
     {
@@ -237,7 +237,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $member
-     * @return boolean|void
+     * @return bool|void
      * @todo add transaction around the delete and the update
      */
     public function removeMember($member)
@@ -293,7 +293,7 @@ class Role extends DataObject
      * deleteItem: make a role deleted
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return boolean|string|void
+     * @return bool|string|void
      * @todo flag illegal deletes
      */
     public function deleteItem(array $data = [])
@@ -367,7 +367,7 @@ class Role extends DataObject
      * purge: make a role purged
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return boolean
+     * @return bool
      */
     public function purge()
     {
@@ -484,7 +484,7 @@ class Role extends DataObject
      * Checks whether this role has a specific privilege assigned or inherited.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return boolean
+     * @return bool
      */
     public function hasPrivilege($privname)
     {
@@ -508,7 +508,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $privilege
-     * @return boolean
+     * @return bool
      */
     public function assignPrivilege($privilege)
     {
@@ -528,7 +528,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $privilege
-     * @return boolean
+     * @return bool
      */
     public function removePrivilege($privilege)
     {
@@ -548,9 +548,9 @@ class Role extends DataObject
      * getUsers: get the members of a group that are users
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param integer state get users in this state
-     * @param integer startnum get users beyond this number
-     * @param integer numitems get a defined number of users
+     * @param int state get users in this state
+     * @param int startnum get users beyond this number
+     * @param int numitems get a defined number of users
      * @param string order order the result (name, uname, itemtype, email, date_reg, state...)
      * @param string selection get users within this selection criteria
      * @return array<mixed>
@@ -615,10 +615,10 @@ class Role extends DataObject
      * countChildren: count the members of a group
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param integer state count user in this state
+     * @param int state count user in this state
      * @param string selection count user within this selection criteria
-     * @param integer itemtype group or user
-     * @return integer|void
+     * @param int itemtype group or user
+     * @return int|void
      */
     public function countChildren($state = xarRoles::ROLES_STATE_CURRENT, $selection = null, $itemtype = null)
     {
@@ -667,7 +667,7 @@ class Role extends DataObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int    $state count user in this state
      * @param string $selection count user within this selection criteria
-     * @return integer
+     * @return int
      */
     public function countUsers($state = xarRoles::ROLES_STATE_CURRENT, $selection = null)
     {
@@ -809,7 +809,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role
-     * @return boolean
+     * @return bool
      * @todo replace this with the hash object equality check?
      */
     public function isEqual($role)
@@ -824,7 +824,7 @@ class Role extends DataObject
      * Groups have itemtype = 2.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return boolean
+     * @return bool
      */
     public function isUser()
     {
@@ -836,7 +836,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role
-     * @return boolean
+     * @return bool
      */
     public function isParent($role)
     {
@@ -854,7 +854,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role
-     * @return boolean
+     * @return bool
      */
     public function isAncestor($role)
     {
@@ -872,7 +872,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int $adjust
-     * @return boolean|void
+     * @return bool|void
      */
     public function adjustParentUsers($adjust)
     {

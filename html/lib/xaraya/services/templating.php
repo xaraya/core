@@ -1305,7 +1305,7 @@ trait TemplatingTrait
      * found.
      * @param  string $sourceFileName
      * @param  string $tplOutput
-     * @return boolean found header content
+     * @return bool found header content
      * @todo it is possible that the first regex <!DOCTYPE[^>].*]> is too
      *       greedy in more complex xml documents and others.
      * @todo The doctype of the output belongs in a template somewhere (probably the xar:blocklayout tag, as an attribute

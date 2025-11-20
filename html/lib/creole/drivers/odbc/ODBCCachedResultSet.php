@@ -59,13 +59,13 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
 
     /**
      * Tracks the last cursor position of the recordset.
-     * @var integer
+     * @var int
      */
     protected $lastPos = -1;
 
     /**
      * True if blobs/clobs should also be cached.
-     * @var boolean
+     * @var bool
      */
     protected $cacheLobs = false;
 
@@ -93,7 +93,7 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
     /**
      * Caches specified records up to and including the specified 1-based
      * record position. If -1 is specified, all records will be cached.
-     * @param integer Maximum record position to cache.
+     * @param int Maximum record position to cache.
      * @return void
      * @throws SQLException
      */

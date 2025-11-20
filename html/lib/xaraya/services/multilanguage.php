@@ -701,7 +701,7 @@ trait MultiLanguageTrait
      * Loads translations for the specified context
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return boolean|void
+     * @return bool|void
      */
     protected function _loadTranslations($domainType, $domainName, $contextType, $contextName)
     {
