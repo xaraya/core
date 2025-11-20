@@ -146,7 +146,6 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
             }
         }
 
-        xml_parser_free($this->parser);
         return true;
     }
 

@@ -91,7 +91,6 @@ class xarMLS__LocaleDataLoader extends xarObject
             }
         }
 
-        xml_parser_free($this->parser);
         return true;
     }
 

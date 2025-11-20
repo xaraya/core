@@ -216,7 +216,6 @@ class SelectProperty extends DataProperty
                 xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
                 xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
                 xml_parse_into_struct($parser, $data, $value, $index);
-                xml_parser_free($parser);
                 $limit = count($index['id']);
                 while (count($index['id'])) {
                     $options[] = ['id' => $value[array_shift($index['id'])]['value'], 'name' => $value[array_shift($index['name'])]['value']];

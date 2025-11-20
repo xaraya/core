@@ -564,7 +564,6 @@ class feedParser extends xarObject
         $p = xml_parser_create();
         xml_parser_set_option($p, XML_OPTION_SKIP_WHITE, 1);
         xml_parse_into_struct($p, $this->xmldata, $vals, $index);
-        xml_parser_free($p);
 
         $this->data = [];
         $i = 0;

@@ -366,7 +366,6 @@ class PHPBackendGenerator extends xarObject
             fclose($fp1);
             $xml_parser = xml_parser_create();
             xml_parse_into_struct($xml_parser, $data, $vals, $index);
-            xml_parser_free($xml_parser);
             $xmlFileExists = true;
         } else {
             $xar->log()->error("Context Type: " . $ctxType . " Context Name: " . $ctxName);
