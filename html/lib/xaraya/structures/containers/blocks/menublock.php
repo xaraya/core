@@ -35,6 +35,8 @@ abstract class MenuBlock extends BasicBlock implements iBlock
     public $truecurrenturl;
 
     public $modulelist      = [];      // settings for $xarmodules list
+    /** @var ?AccessProperty */
+    protected $accessProperty = null;
 
     public function init()
     {
@@ -82,7 +84,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
                 $this->modulelist[$modname]['displaydescription'] = $mod['displaydescription'];
             }
         }
-        self::setRequestInfo();
+        $this->setRequestInfo();
     }
 
     public function setRequestInfo()
@@ -113,10 +115,9 @@ abstract class MenuBlock extends BasicBlock implements iBlock
         }
 
         $modname = $link['modname'];
-        /** @var AccessProperty $accessproperty */
-        $accessproperty = $this->prop()->getProperty(['name' => 'access']);
         // check access defined in the module list
         if (!empty($this->modulelist[$modname]['view_access'])) {
+            $this->accessProperty ??= $this->prop()->getProperty(['name' => 'access']);
             // Decide whether this menu item is displayable to the current user
             $args = [
                 'module' => 'base',
@@ -125,7 +126,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
                 'group' => $this->modulelist[$modname]['view_access']['group'],
                 'level' => $this->modulelist[$modname]['view_access']['level'],
             ];
-            if (!$accessproperty->check($args)) {
+            if (!$this->accessProperty->check($args)) {
                 return false;
             }
         }

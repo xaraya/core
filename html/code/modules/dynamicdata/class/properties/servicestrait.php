@@ -49,20 +49,21 @@ trait DataPropertyServicesTrait
      */
     public function getParent(): DataObjectServicesInterface
     {
-        return $this->objectref ?? $this->getDummyObject();
+        $this->objectref ??= $this->getDummyObject();
+        return $this->objectref;
     }
 
     /**
      * Get dummy virtual object as parent for stand-alone property
      * @return DataObject
      */
-    protected function getDummyObject()
+    public function getDummyObject($xar = null)
     {
         if (!isset(static::$dummyObject)) {
             // needed for installation after phase 5
             $descriptor = new VirtualObjectDescriptor(['name' => 'dummy']);
             // not using $xar = $this->getParent() here - we're still creating it
-            static::$dummyObject = new DataObject($descriptor);
+            static::$dummyObject = new DataObject($descriptor, $xar);
         }
         $object = clone static::$dummyObject;
         $object->setContext($this->getContext());

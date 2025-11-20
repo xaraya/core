@@ -62,7 +62,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
         }
 
         // get userlinks using dedicated method
-        $data['userlinks'] = self::getUserLinks();
+        $data['userlinks'] = $this->getUserLinks();
 
         // Handle modulelist
         $modlinks = [];
@@ -73,7 +73,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
             }
             $link = $this->modulelist[$modname];
             $link['modname'] = $modname;
-            $link = self::getModuleLink($link);
+            $link = $this->getModuleLink($link);
             if (!$link) {
                 continue;
             }
@@ -124,13 +124,13 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
                 }
                 // handle links not yet using encode/decode settings
                 if (!isset($link['encodedurl'])) {
-                    $check = self::_decodeURL($link['url'], true);
+                    $check = $this->_decodeURL($link['url'], true);
                     foreach ($check as $k => $v) {
                         $link[$k] = $v;
                     }
                 }
                 if (!empty($link['ismodlink'])) {
-                    $link = self::getModuleLink($link);
+                    $link = $this->getModuleLink($link);
                     if (!$link) {
                         continue;
                     }
@@ -150,7 +150,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
                         }
                         // handle links not yet using encode/decode settings
                         if (!isset($sublink['encodedurl'])) {
-                            $subcheck = self::_decodeURL($sublink['url'], true);
+                            $subcheck = $this->_decodeURL($sublink['url'], true);
                             foreach ($subcheck as $k => $v) {
                                 $sublink[$k] = $v;
                             }

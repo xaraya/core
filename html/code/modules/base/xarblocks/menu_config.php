@@ -41,7 +41,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         $data = $this->getContent();
 
         $data['modules'] = $this->xarmodules;
-        $data['userlinks'] = self::getUserLinks();
+        $data['userlinks'] = $this->getUserLinks();
 
         return $data;
     }
@@ -107,7 +107,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         // Build new link if we have any values for it
         if (!empty($new_url) || !empty($new_label) || !empty($new_title) || !empty($new_blank)) {
             $modlinks = [];
-            $new_link = self::_decodeURL($new_url, true);
+            $new_link = $this->_decodeURL($new_url, true);
             $new_link['visible'] = 1;
             if (!empty($new_blank)) {
                 $new_link['url'] = $new_label = $new_title = '';
@@ -153,7 +153,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 // Perform operations on current link
                 // decode the link url
                 $link['encodedurl'] = $link['url'];
-                $check = self::_decodeURL($link['url'], true);
+                $check = $this->_decodeURL($link['url'], true);
                 foreach ($check as $k => $v) {
                     $link[$k] = $v;
                 }
@@ -176,7 +176,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                     foreach ($modlinks as $key => $sublink) {
                         $name = $link['modname'] . '_' . $link['modtype'] . '_' . $key;
                         $sublink['isvisible'] = true;
-                        $sublink += self::_decodeURL($sublink['url'], true);
+                        $sublink += $this->_decodeURL($sublink['url'], true);
                         $modlinks[$name] = $sublink;
                     }
                     */
@@ -221,7 +221,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                                 $sublink += $this->userlinks[$order]['menulinks'][$suborder];
                             }
                             // decode the link url
-                            $subcheck = self::_decodeURL($sublink['url'], true);
+                            $subcheck = $this->_decodeURL($sublink['url'], true);
                             foreach ($subcheck as $k => $v) {
                                 $sublink[$k] = $v;
                             }
@@ -345,7 +345,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                     $linkid = $i - 1;
                 }
                 if (!isset($link['encodedurl'])) {
-                    $check = self::_decodeURL($link['url'], true);
+                    $check = $this->_decodeURL($link['url'], true);
                     foreach ($check as $k => $v) {
                         $link[$k] = $v;
                     }
@@ -373,7 +373,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                     $j = 1;
                     foreach ($link['menulinks'] as $sublinkid => $sublink) {
                         if (!isset($sublink['encodedurl'])) {
-                            $check = self::_decodeURL($sublink['url'], true);
+                            $check = $this->_decodeURL($sublink['url'], true);
                             foreach ($check as $k => $v) {
                                 $sublink[$k] = $v;
                             }

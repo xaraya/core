@@ -334,7 +334,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     }
 
     // @param access (display|modify|delete)
-    // this method is called by blocks_admin_modify|update|delete functions
+    // this method is (not) called by blocks_admin_modify|update|delete functions
     // and by xar::block()->render() method to determine access for current user
     // @return boolean true if access allowed
     public function checkAccess($access)
@@ -349,13 +349,16 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         $args = [
             'module' => $this->module,
             'component' => 'Block',
-            'instance' => $this->type . ":" . $this->name . ":" . $this->bid,
+            'instance' => $this->type . ":" . $this->name . ":" . $this->block_id,
             'group' => $access['group'],
             'level' => $access['level'],
         ];
         if (!isset(self::$access_property)) {
             if (method_exists($this, 'getStaticServices')) {
-                self::$access_property = DataPropertyMaster::getProperty(['name' => 'access'], $this->getStaticServices());
+                $xar = $this->getStaticServices();
+                self::$access_property = DataPropertyMaster::getProperty(['name' => 'access'], $xar);
+                // set dummy object as parent for this property
+                self::$access_property->objectref = self::$access_property->getDummyObject($xar);
             } else {
                 self::$access_property = DataPropertyMaster::getProperty(['name' => 'access']);
             }

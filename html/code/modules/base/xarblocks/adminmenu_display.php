@@ -43,7 +43,7 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
             }
             $link = $this->modulelist[$modname];
             $link['modname'] = $modname;
-            $link = self::getModuleLink($link);
+            $link = $this->getModuleLink($link);
             if (!$link) {
                 continue;
             }

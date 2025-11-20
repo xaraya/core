@@ -103,6 +103,7 @@ trait ContextTrait
      */
     public function __clone()
     {
-        $this->context = null;
+        // @todo check context in concurrent environment
+        // $this->context = null;
     }
 }
