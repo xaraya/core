@@ -74,10 +74,9 @@ class xarMLS__LocaleDataLoader extends xarObject
         } else {
             $this->parser = xml_parser_create('iso-8859-1');
         }
-        xml_set_object($this->parser, $this);
         xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 0);
-        xml_set_element_handler($this->parser, "beginElement", "endElement");
-        xml_set_character_data_handler($this->parser, "characterData");
+        xml_set_element_handler($this->parser, [$this, "beginElement"], [$this, "endElement"]);
+        xml_set_character_data_handler($this->parser, [$this, "characterData"]);
 
         if (!($fp = fopen($fileName, 'r'))) {
             return false;

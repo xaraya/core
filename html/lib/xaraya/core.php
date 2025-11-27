@@ -501,7 +501,11 @@ class xarCore extends xarObject
             // Turn off error reporting
             error_reporting(0);
             // Turn off assertion evaluation
-            assert_options(ASSERT_ACTIVE, 0);
+            //assert_options(ASSERT_ACTIVE, 0);
+            // PHP Warning:  zend.assertions may be completely enabled or disabled only in php.ini
+            //if (!self::funcIsDisabled('ini_set')) {
+            //    ini_set('zend.assertions', -1);
+            //}
         } elseif ($flags & xarConst::DBG_ACTIVE) {
             // See if config.system.php has info for us on the errorlevel, but dont break if it has not
             try {
@@ -513,9 +517,13 @@ class xarCore extends xarObject
 
             error_reporting($errLevel);
             // Activate assertions
-            assert_options(ASSERT_ACTIVE, 1);    // Activate when debugging
-            assert_options(ASSERT_WARNING, 1);    // Issue a php warning
-            assert_options(ASSERT_BAIL, 0);    // Stop processing?
+            //assert_options(ASSERT_ACTIVE, 1);    // Activate when debugging
+            //assert_options(ASSERT_WARNING, 1);    // Issue a php warning
+            //assert_options(ASSERT_BAIL, 0);    // Stop processing?
+            // PHP Warning:  zend.assertions may be completely enabled or disabled only in php.ini
+            //if (!self::funcIsDisabled('ini_set')) {
+            //    ini_set('zend.assertions', 1);
+            //}
             xarDebug::$sqlCalls = 0;
             xarDebug::$startTime = microtime(true);
         }

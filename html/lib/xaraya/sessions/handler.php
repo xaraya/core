@@ -106,14 +106,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         $this->setup($args);
 
         // Assign the handlers
-        session_set_save_handler(
-            [&$this,"open"],
-            [&$this,"close"],
-            [&$this,"read"],
-            [&$this,"write"],
-            [&$this,"destroy"],
-            [&$this,"gc"]
-        );
+        session_set_save_handler($this);
 
         // Check for pollution
         if (ini_get('register_globals')) {
