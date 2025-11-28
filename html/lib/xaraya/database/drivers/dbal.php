@@ -120,7 +120,7 @@ class DbalDriver
         $primaryKey = $table->getPrimaryKeyConstraint();
         $primary = '';
         if (!empty($primaryKey) && count($primaryKey->getColumnNames()) ==  1) {
-            $primary = $primaryKey->getColumnNames()[0];
+            $primary = $primaryKey->getColumnNames()[0]->toString();
         }
         $result = [];
         foreach ($columns as $column) {
