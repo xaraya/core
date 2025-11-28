@@ -115,13 +115,12 @@ class DbalDriver
         /** @var \Doctrine\DBAL\Connection $dbconn */
         $sm = $dbconn->createSchemaManager();
         $columns = $sm->listTableColumns($tablename);
-        $indexes = $sm->listTableIndexes($tablename);
+        // use primary key constraint instead of indexes
+        $table = $sm->introspectTable($tablename);
+        $primaryKey = $table->getPrimaryKeyConstraint();
         $primary = '';
-        foreach ($indexes as $index) {
-            if ($index->isPrimary() && count($index->getColumns()) == 1) {
-                $primary = $index->getColumns()[0];
-                break;
-            }
+        if (!empty($primaryKey) && count($primaryKey->getColumnNames()) ==  1) {
+            $primary = $primaryKey->getColumnNames()[0];
         }
         $result = [];
         foreach ($columns as $column) {

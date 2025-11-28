@@ -10,12 +10,6 @@ parameters:
 			path: developer/tools/bermuda_cleanup.php
 
 		-
-			message: '#^Use of constant FILTER_SANITIZE_STRING is deprecated\.$#'
-			identifier: constant.deprecated
-			count: 1
-			path: html/code/modules/base/xarproperties/textbox.php
-
-		-
 			message: '''
 				#^Call to method register\(\) of deprecated class xarModHooks\:
 				2\.8\.5 use xar\:\:hooked\(\) or xar\:\:mod\(\)\-\>\*Hooks instead$#
@@ -45,6 +39,12 @@ parameters:
 		-
 			message: '#^Call to an undefined method DataObjectMaster\:\:checkInput\(\)\.$#'
 			identifier: method.notFound
+			count: 1
+			path: html/code/modules/dynamicdata/class/objects/master.php
+
+		-
+			message: '#^Cannot unset property DataObjectMaster\:\:\$propertyargs because it might have hooks in a subclass\.$#'
+			identifier: unset.possiblyHookedProperty
 			count: 1
 			path: html/code/modules/dynamicdata/class/objects/master.php
 
@@ -265,24 +265,6 @@ parameters:
 			path: html/lib/xaraya/bridge/requests/module.php
 
 		-
-			message: '''
-				#^Call to deprecated method getColumns\(\) of class Doctrine\\DBAL\\Schema\\Index\:
-				Use \{@see getIndexedColumns\(\)\} instead\.$#
-			'''
-			identifier: method.deprecated
-			count: 2
-			path: html/lib/xaraya/database/drivers/dbal.php
-
-		-
-			message: '''
-				#^Call to deprecated method isPrimary\(\) of class Doctrine\\DBAL\\Schema\\Index\:
-				Use \{@see PrimaryKeyConstraint\} instead\.$#
-			'''
-			identifier: method.deprecated
-			count: 1
-			path: html/lib/xaraya/database/drivers/dbal.php
-
-		-
 			message: '#^Function mcrypt_generic not found\.$#'
 			identifier: function.notFound
 			count: 1
@@ -307,78 +289,6 @@ parameters:
 			path: html/lib/xaraya/encryptor.php
 
 		-
-			message: '''
-				#^Access to static property \$delimiter of deprecated class xarController\:
-				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
-			'''
-			identifier: staticProperty.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/mapper/controllers/default.php
-
-		-
-			message: '''
-				#^Access to static property \$delimiter of deprecated class xarController\:
-				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
-			'''
-			identifier: staticProperty.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/mapper/controllers/short.php
-
-		-
-			message: '''
-				#^Access to static property \$separator of deprecated class xarController\:
-				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
-			'''
-			identifier: staticProperty.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/mapper/controllers/short.php
-
-		-
-			message: '''
-				#^Access to static property \$delimiter of deprecated class xarController\:
-				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
-			'''
-			identifier: staticProperty.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/mapper/request.php
-
-		-
-			message: '''
-				#^Access to static property \$func of deprecated class xarController\:
-				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
-			'''
-			identifier: staticProperty.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/mapper/routers/routes/base.php
-
-		-
-			message: '''
-				#^Access to static property \$module of deprecated class xarController\:
-				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
-			'''
-			identifier: staticProperty.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/mapper/routers/routes/base.php
-
-		-
-			message: '''
-				#^Access to static property \$type of deprecated class xarController\:
-				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
-			'''
-			identifier: staticProperty.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/mapper/routers/routes/base.php
-
-		-
-			message: '''
-				#^Access to static property \$separator of deprecated class xarController\:
-				2\.8\.4 use xar\:\:ctl\(\) or xar\:\:req\(\) instead$#
-			'''
-			identifier: staticProperty.deprecatedClass
-			count: 1
-			path: html/lib/xaraya/mapper/routers/routes/default.php
-
-		-
 			message: '#^Undefined variable\: \$fragment$#'
 			identifier: variable.undefined
 			count: 1
@@ -397,10 +307,10 @@ parameters:
 			path: html/lib/xaraya/services/templating.php
 
 		-
-			message: '#^Method Xaraya\\Services\\TestHelper\:\:__construct\(\) overrides @final method PHPUnit\\Framework\\TestCase\:\:__construct\(\)\.$#'
-			identifier: method.parentMethodFinalByPhpDoc
+			message: '#^Cannot unset property Query\:\:\$dbconn because it might have hooks in a subclass\.$#'
+			identifier: unset.possiblyHookedProperty
 			count: 1
-			path: html/lib/xaraya/services/testhelper.php
+			path: html/lib/xaraya/structures/query.php
 
 		-
 			message: '#^Instantiated class soap_fault not found\.$#'

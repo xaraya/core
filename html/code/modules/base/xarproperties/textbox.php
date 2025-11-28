@@ -62,7 +62,9 @@ class TextBoxProperty extends DataProperty
 
         // Remove any unwanted characters
         if ($this->initialization_sanitize) {
-            $value = filter_var($value, FILTER_SANITIZE_STRING);
+            // @todo not quite the same as FILTER_SANITIZE_STRING - check actual use cases
+            $value = strip_tags($value);
+            $value = htmlspecialchars($value);
         }
 
         if (isset($this->validation_max_length)  && strlen($value) > $this->display_maxlength) {

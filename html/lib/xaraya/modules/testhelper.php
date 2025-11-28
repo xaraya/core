@@ -163,7 +163,7 @@ class TestHelper extends TestCase
         $args = $this->getConstructorArgs($modName, $className);
         $mock = new $className(...$args);
         // override core security service class with mock too
-        $helper = new ServicesHelper();
+        $helper = new ServicesHelper('services');
         $helper->createMockSecurityWithAccess($mock, $count);
         return $mock;
     }
@@ -180,7 +180,7 @@ class TestHelper extends TestCase
         $args = $this->getConstructorArgs($modName, $className);
         $mock = new $className(...$args);
         // override core security service class with mock too
-        $helper = new ServicesHelper();
+        $helper = new ServicesHelper('services');
         $helper->createMockSecurityWithoutAccess($mock, $count);
         return $mock;
     }
@@ -197,7 +197,7 @@ class TestHelper extends TestCase
         $args = $this->getConstructorArgs($modName, $className);
         $mock = new $className(...$args);
         // override core controller service class with mock too
-        $helper = new ServicesHelper();
+        $helper = new ServicesHelper('services');
         $helper->createMockControllerWithoutRedirect($mock, $count);
         return $mock;
     }
@@ -224,7 +224,7 @@ class TestHelper extends TestCase
                 throw new LogicException("Called exit('$status')");
             });
         // override core exit service class with callable too
-        $helper = new ServicesHelper();
+        $helper = new ServicesHelper('services');
         $helper->createMockServicesWithoutExit($mock, $count);
         return $mock;
     }

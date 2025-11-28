@@ -152,10 +152,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             $errThreshold = xar::sysConfig()->getVar('Exception.ErrorLevel');
         } catch (Exception $e) {
             // Oh well, show everything so construct the maximum bitmask
-            // Note that E_ALL is already a summed bitmask value (2047) while E_STRICT is *NOT* (2048)
-            // MrB: if there are actually E_STRICT errors, this is known to break *some* installs ( mine ;-) )
-            $errThreshold = E_STRICT + E_ALL;
-            // @todo E_STRICT is deprecated in PHP 8.4+
+            $errThreshold = E_ALL;
         }
         // Only continue rendering if:
         // 1. the level was not 0 or equivalent for PHP 8.0+ (either explicitly set or due to an @ on the line causing the error)

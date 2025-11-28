@@ -20,11 +20,6 @@ class TestHelper extends TestCase
 
     public static function tearDownAfterClass(): void {}
 
-    public function __construct($name = 'services')
-    {
-        parent::__construct($name);
-    }
-
     protected function setUp(): void {}
 
     protected function tearDown(): void {}
