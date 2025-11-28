@@ -134,6 +134,9 @@ final class BridgeRequestsTest extends TestCase
         string $prefix = '',
         array $params = [],
         // ignore the rest
+        string $object = 'sample',
+        ?string $method = null,
+        string|int|null $itemid = null
     ): void {
         $expected = $params;
         $handler = new DataObjectGuiHandler();
