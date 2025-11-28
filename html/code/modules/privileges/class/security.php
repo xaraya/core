@@ -308,7 +308,8 @@ class xarSecurity extends xarObject
             // mrb: again?
             $userID = $xar->session()->getUserId();
             if (empty($userID)) {
-                $userID = $xar->session()->getAnonId();
+                // add fallback in case we have no session e.g. for unit tests
+                $userID = $xar->session()->getAnonId() ?? 0;
             }
             if ($xar->mem()->has('Roles.ById', $userID)) {
                 $role = $xar->mem()->get('Roles.ById', $userID);
