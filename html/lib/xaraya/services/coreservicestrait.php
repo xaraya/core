@@ -652,4 +652,20 @@ trait CoreServicesTrait
     {
         return $this->getStaticServices()->mls()->translate($rawstring, ...$args);
     }
+
+    public function __serialize()
+    {
+        $data = xar::getPublicProperties($this);
+        //if ($this->hasContext()) {
+        //    $data['context'] ??= $this->getContext();
+        //}
+        return $data;
+    }
+
+    public function __unserialize($data)
+    {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
+    }
 }

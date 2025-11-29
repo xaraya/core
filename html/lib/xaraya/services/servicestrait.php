@@ -150,4 +150,25 @@ class ServicesClass implements ServicesInterface
     {
         $this->moduleType = $modType;
     }
+
+    public function __serialize()
+    {
+        // nothing to see here
+        return [
+            'moduleName' => $this->moduleName ?? null,
+            'moduleType' => $this->moduleType,
+            'itemtype'   => $this->itemtype,
+        ];
+    }
+
+    public function __unserialize($data)
+    {
+        // nothing to see here
+        foreach ($data as $name => $value) {
+            if (is_null($value)) {
+                continue;
+            }
+            $this->{$name} = $value;
+        }
+    }
 }

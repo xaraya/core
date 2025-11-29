@@ -153,6 +153,24 @@ trait ServiceTrait
         }
         return new static($parent);
     }
+
+    public function __serialize()
+    {
+        $data = xar::getPublicProperties($this);
+        // add any protected/private properties that are relevent here
+        return $data;
+    }
+
+    public function __unserialize($data)
+    {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
+        // Reconnect to current static services
+        if (isset($this->parent) && $this->parent instanceof StaticServicesClass) {
+            $this->parent = xar::getServicesClass();
+        }
+    }
 }
 
 /**

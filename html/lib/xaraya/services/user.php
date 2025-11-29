@@ -710,4 +710,13 @@ class UserService implements UserInterface
     {
         $this->currentId = null;
     }
+
+    public function __serialize()
+    {
+        $data = xar::getPublicProperties($this);
+        // add any protected/private properties that are relevent here
+        $data['initialized'] = $this->initialized;
+        $data['currentId'] = $this->currentId ?? null;
+        return $data;
+    }
 }

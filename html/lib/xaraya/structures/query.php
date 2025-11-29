@@ -1125,7 +1125,7 @@ class Query
 
         // Strip out the variables we don't want serialized, but don't
         // destroy anything yet, as this object may still be needed.
-        foreach (['dbconn', 'result', 'output'] as $var) {
+        foreach (['dbconn', 'result', 'output', 'xarDB', 'xarServices'] as $var) {
             unset($vars[$var]);
         }
         return $vars;
@@ -1139,7 +1139,7 @@ class Query
     public function __unserialize($data)
     {
         foreach ($data as $name => $value) {
-            if (in_array($name, ['dbconn', 'result', 'output'])) {
+            if (in_array($name, ['dbconn', 'result', 'output', 'xarDB', 'xarServices'])) {
                 continue;
             }
             $this->{$name} = $value;

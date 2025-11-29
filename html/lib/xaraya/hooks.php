@@ -115,6 +115,10 @@ class xarHooks extends xarEvents
         // Get database info
         $dbconn   = $xar->db()->getConn();
         $xartable = $xar->db()->getTables();
+        if (empty($xartable['hooks'])) {
+            $xar->mod()->init();
+            $xartable = $xar->db()->getTables();
+        }
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
@@ -255,6 +259,10 @@ class xarHooks extends xarEvents
         // Get database info
         $dbconn   = $xar->db()->getConn();
         $xartable = $xar->db()->getTables();
+        if (empty($xartable['hooks'])) {
+            $xar->mod()->init();
+            $xartable = $xar->db()->getTables();
+        }
         $htable = $xartable['hooks'];
         // Insert hook
         try {
@@ -313,6 +321,10 @@ class xarHooks extends xarEvents
         // Get database info
         $dbconn   = $xar->db()->getConn();
         $xartable = $xar->db()->getTables();
+        if (empty($xartable['hooks'])) {
+            $xar->mod()->init();
+            $xartable = $xar->db()->getTables();
+        }
         $htable = $xartable['hooks'];
         // Delete hook
         try {
@@ -384,6 +396,10 @@ class xarHooks extends xarEvents
         // Get database info
         $dbconn   = $xar->db()->getConn();
         $xartable = $xar->db()->getTables();
+        if (empty($xartable['hooks'])) {
+            $xar->mod()->init();
+            $xartable = $xar->db()->getTables();
+        }
         $htable = $xartable['hooks'];
         $query = "SELECT observer, subject, itemtype, scope
                   FROM $htable
@@ -468,6 +484,10 @@ class xarHooks extends xarEvents
         // Get database info
         $dbconn   = $xar->db()->getConn();
         $xartable = $xar->db()->getTables();
+        if (empty($xartable['hooks'])) {
+            $xar->mod()->init();
+            $xartable = $xar->db()->getTables();
+        }
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
@@ -525,6 +545,10 @@ class xarHooks extends xarEvents
         // Get database info
         $dbconn   = $xar->db()->getConn();
         $xartable = $xar->db()->getTables();
+        if (empty($xartable['hooks'])) {
+            $xar->mod()->init();
+            $xartable = $xar->db()->getTables();
+        }
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];

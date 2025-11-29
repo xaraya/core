@@ -573,6 +573,22 @@ trait ParentServicesTrait
         assert($this->parent instanceof ServicesInterface);
         return $this->parent;
     }
+
+    public function __serialize()
+    {
+        $data = xar::getPublicProperties($this);
+        //if ($this->getParent()->hasContext()) {
+        //    $data['context'] ??= $this->getParent()->getContext();
+        //}
+        return $data;
+    }
+
+    public function __unserialize($data)
+    {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
+    }
 }
 
 /**

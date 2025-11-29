@@ -756,6 +756,10 @@ class xarEvents extends xarObject implements ixarEvents
         // Get database info
         $dbconn   = $xar->db()->getConn();
         $xartable = $xar->db()->getTables();
+        if (empty($xartable['modules'])) {
+            $xar->mod()->init();
+            $xartable = $xar->db()->getTables();
+        }
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
         $bindvars = [];
@@ -831,6 +835,10 @@ class xarEvents extends xarObject implements ixarEvents
         // Get database info
         $dbconn   = $xar->db()->getConn();
         $xartable = $xar->db()->getTables();
+        if (empty($xartable['modules'])) {
+            $xar->mod()->init();
+            $xartable = $xar->db()->getTables();
+        }
         //$htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
@@ -907,6 +915,10 @@ class xarEvents extends xarObject implements ixarEvents
         // Get database info
         $dbconn   = $xar->db()->getConn();
         $xartable = $xar->db()->getTables();
+        if (empty($xartable['modules'])) {
+            $xar->mod()->init();
+            $xartable = $xar->db()->getTables();
+        }
         //$htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];

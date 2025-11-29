@@ -159,6 +159,17 @@ trait ModulesTrait
         return $this->aliasHelper;
     }
 
+    private function resetHelpers(): void
+    {
+        $this->varsHelper = null;
+        $this->userVarsHelper = null;
+        $this->itemVarsHelper = null;
+        $this->infoHelper = null;
+        $this->execHelper = null;
+        $this->hooksHelper = null;
+        $this->aliasHelper = null;
+    }
+
     /**
      * Initialize service class
      * @param array<string, mixed> $config
@@ -824,5 +835,16 @@ class ModulesService implements ModulesInterface
     public function __clone()
     {
         $this->currentModName = null;
+    }
+
+    public function __serialize()
+    {
+        $data = xar::getPublicProperties($this);
+        // add any protected/private properties that are relevent here
+        $data['initialized'] = $this->initialized;
+        $data['currentModName'] = $this->currentModName ?? null;
+        // reset private helpers for comparison
+        $this->resetHelpers();
+        return $data;
     }
 }

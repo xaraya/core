@@ -67,4 +67,14 @@ class xar extends xarConst
     {
         return xarCore::isLoaded($checkLevel);
     }
+
+    /**
+     * Get the public properties of an object (this must be done outside the class)
+     * @param object $object
+     * @return array<string, mixed>
+     */
+    public static function getPublicProperties($object)
+    {
+        return get_object_vars($object);
+    }
 }

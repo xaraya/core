@@ -83,6 +83,27 @@ trait WrapperTrait
         return $callable($method, ...$args);
     }
 
+    public function __serialize()
+    {
+        $data = xar::getPublicProperties($this);
+        // Serialization of 'Closure' is not allowed
+        unset($data['callable']);
+        return $data;
+    }
+
+    public function __unserialize($data)
+    {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
+        // Reconnect to current static services
+        $this->parent = xar::getServicesClass();
+        // Re-create callable based on className (static only)
+        $this->callable = function ($method, ...$args) {
+            return $this->className::$method(...$args);
+        };
+    }
+
     /**
      * Summary of create
      * @param ?class-string $className
