@@ -123,7 +123,7 @@ class EventSubscriber implements EventSubscriberInterface
         return $eventName;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         //return [
         //    'xarEvents.scope.event' => ['onScopeEvent'],
