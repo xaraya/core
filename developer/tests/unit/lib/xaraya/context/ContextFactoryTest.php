@@ -79,13 +79,13 @@ final class ContextFactoryTest extends TestCase
 
         // check that serializing dropped most of the context
         $serialized = serialize($context);
-        $expected = 'O:22:"Xaraya\Context\Context":1:{s:6:"source";s:35:"Xaraya\Context\Context::__serialize";}';
+        $expected = 'O:22:"Xaraya\Context\Context":1:{s:6:"source";s:33:"ContextFactoryTest::testSerialize";}';
         $this->assertEquals($expected, $serialized);
 
-        // check that unserializing doesn't return the same context
+        // check that unserializing doesn't return the same context except source
         $unserialized = unserialize($serialized);
         $this->assertNotEquals($context, $unserialized);
-        $expected = 'Xaraya\Context\Context::__serialize';
+        $expected = 'ContextFactoryTest::testSerialize';
         $this->assertEquals($expected, $unserialized['source']);
     }
 

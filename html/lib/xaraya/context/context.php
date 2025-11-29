@@ -211,7 +211,10 @@ class Context extends ArrayObject implements ContextObjectInterface
     {
         //$vars = $this->getArrayCopy();
         //return array_diff_key($vars, ['twig' => false]);
-        return ['source' => __METHOD__];
+        if ($this->offsetExists('source')) {
+            return ['source' => $this->offsetGet('source')];
+        }
+        return [];
     }
 
     /**
