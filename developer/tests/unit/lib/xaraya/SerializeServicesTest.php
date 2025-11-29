@@ -36,12 +36,13 @@ final class SerializeServicesTest extends TestCase
         $query = new Query();
         // unserialize() will call this too
         $query->openconnection();
+        $expected = $query;
 
         // this creates an equivalent Query() = not same but equal
-        $serialized = serialize($query);
+        $serialized = serialize($expected);
         $unserialized = unserialize($serialized);
-        $this->assertNotSame($query, $unserialized);
-        $this->assertEquals($query, $unserialized);
+        $this->assertNotSame($expected, $unserialized);
+        $this->assertEquals($expected, $unserialized);
 
         // this will use the same StaticServicesClass = same
         $expected = $query->getServicesClass();
@@ -60,7 +61,8 @@ final class SerializeServicesTest extends TestCase
         // initialize mod()
         $xar->mod()->init();
         // get specialized mod() for dynanicdata
-        $expected = $xar->mod('dynamicdata');
+        $mod = $xar->mod('dynamicdata');
+        $expected = $mod;
 
         // this creates an equivalent ModulesService() = not same but equal
         $serialized = serialize($expected);
@@ -69,8 +71,13 @@ final class SerializeServicesTest extends TestCase
         $this->assertEquals($expected, $unserialized);
 
         // this will return the same currentModName = same
-        $expected = $expected->getModName();
+        $expected = $mod->getModName();
         $result = $unserialized->getModName();
+        $this->assertSame($expected, $result);
+
+        // this will return the same base info = same
+        $expected = $mod->getBaseInfo();
+        $result = $unserialized->getBaseInfo();
         $this->assertSame($expected, $result);
     }
 
@@ -79,7 +86,8 @@ final class SerializeServicesTest extends TestCase
         $xar = xar::getServicesClass();
         // initialize events()
         $xar->events()->init();
-        $expected = $xar->events();
+        $events = $xar->events();
+        $expected = $events;
 
         // this creates an equivalent WrapperService() = not same and not equal, but same behaviour for closure
         $serialized = serialize($expected);
@@ -88,7 +96,7 @@ final class SerializeServicesTest extends TestCase
         $this->assertNotEquals($expected, $unserialized);
 
         // this will return the same subjects = same
-        $expected = $expected->getSubjects();
+        $expected = $events->getSubjects();
         $result = $unserialized->getSubjects();
         $this->assertSame($expected, $result);
     }
@@ -105,6 +113,7 @@ final class SerializeServicesTest extends TestCase
         $this->assertNotSame($expected, $unserialized);
         $this->assertNotEquals($expected, $unserialized);
 
+        // the dataobject will have an equivalent object descriptor = not same but equal
         $this->assertNotSame($expected->descriptor, $unserialized->descriptor);
         $this->assertEquals($expected->descriptor, $unserialized->descriptor);
 
@@ -122,6 +131,8 @@ final class SerializeServicesTest extends TestCase
     public function testParentServicesTrait(): void
     {
         $xar = xar::getServicesClass();
+        //$dataproperty = $xar->prop()->getProperty(['name' => 'access']);
+        //$dataobject = $dataproperty->getParent();
         $dataobject = $xar->data()->getObject(['name' => 'sample']);
         $dataobject->getItem(['itemid' => 1]);
         $dataproperty = $dataobject->properties['name'];
@@ -145,7 +156,50 @@ final class SerializeServicesTest extends TestCase
         $this->assertNotSame($expected, $result);
         $this->assertNotEquals($expected, $result);
 
+        // the parent will have an equivalent object descriptor = not same but equal
         $this->assertNotSame($expected->descriptor, $result->descriptor);
         $this->assertEquals($expected->descriptor, $result->descriptor);
+    }
+
+    public function testModuleClass(): void
+    {
+        $xar = xar::getServicesClass();
+        $module = $xar->mod()->getModule('dynamicdata');
+        $expected = $module;
+
+        // this creates an equivalent ModuleClass() = not same but equal
+        $serialized = serialize($expected);
+        $unserialized = unserialize($serialized);
+        $this->assertNotSame($expected, $unserialized);
+        $this->assertEquals($expected, $unserialized);
+
+        // this will return an equivalent RestApi() = not same but equal
+        $expected = $module->restapi();
+        $result = $unserialized->restapi();
+        $this->assertNotSame($expected, $result);
+        $this->assertEquals($expected, $result);
+
+        // this will return the same restapi list = same
+        $expected = $module->restapi()->getlist();
+        $result = $unserialized->restapi()->getlist();
+        $this->assertSame($expected, $result);
+    }
+
+    public function testModuleServicesTrait(): void
+    {
+        $xar = xar::getServicesClass();
+        $restapi = $xar->mod()->getModule('dynamicdata')->restapi();
+        $expected = $restapi;
+
+        // this creates an equivalent ModuleServicesTrait() = not same but equal
+        $serialized = serialize($expected);
+        $unserialized = unserialize($serialized);
+        $this->assertNotSame($expected, $unserialized);
+        $this->assertEquals($expected, $unserialized);
+
+        // this will return the same restapi list = same
+        $expected = $restapi->getlist();
+        $result = $unserialized->getlist();
+        $this->assertSame($expected, $result);
     }
 }

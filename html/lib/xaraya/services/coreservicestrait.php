@@ -656,6 +656,7 @@ trait CoreServicesTrait
     public function __serialize()
     {
         $data = xar::getPublicProperties($this);
+        // add any protected/private properties that are relevent here
         //if ($this->hasContext()) {
         //    $data['context'] ??= $this->getContext();
         //}

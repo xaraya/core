@@ -385,4 +385,27 @@ trait ModuleServicesTrait
     {
         return null;
     }
+
+    public function __serialize()
+    {
+        // reset methods for comparison - see SerializeServicesTest::testModuleServicesTrait()
+        $this->methods = [];
+        // add any protected/private properties that are relevent here
+        return [
+            'moduleName' => $this->moduleName ?? null,
+            'moduleType' => $this->moduleType ?? null,
+            'itemtype'   => $this->itemtype,
+            'parent'     => $this->getModule(),
+            'context'    => $this->getContext(),
+        ];
+    }
+
+    public function __unserialize($data)
+    {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
+        // Reconnect to current static services
+        $this->getStaticServices();
+    }
 }

@@ -354,4 +354,25 @@ trait ModuleTrait
         }
         return null;
     }
+
+    public function __serialize()
+    {
+        // reset components for comparison - see SerializeServicesTest::testModuleClass()
+        $this->components = [];
+        // add any protected/private properties that are relevent here
+        return [
+            'moduleName' => $this->moduleName ?? null,
+            'classtypes' => $this->classtypes,
+            'context'    => $this->getContext(),
+        ];
+    }
+
+    public function __unserialize($data)
+    {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
+        // Reconnect to current static services
+        $this->getServicesClass();
+    }
 }

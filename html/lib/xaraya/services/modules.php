@@ -843,7 +843,7 @@ class ModulesService implements ModulesInterface
         // add any protected/private properties that are relevent here
         $data['initialized'] = $this->initialized;
         $data['currentModName'] = $this->currentModName ?? null;
-        // reset private helpers for comparison
+        // reset private helpers for comparison - see SerializeServicesTest::testModulesService()
         $this->resetHelpers();
         return $data;
     }
