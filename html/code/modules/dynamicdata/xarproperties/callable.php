@@ -604,7 +604,7 @@ class CallableProperty extends DataProperty
         return $this->getPublicProperties();
     }
 
-    public function __unserialize(array $data)
+    public function __unserialize($data)
     {
         foreach ($data as $name => $value) {
             $this->{$name} = $value;
