@@ -170,13 +170,7 @@ class ExecHelper extends ServiceClass
                     // Note: pass modType . funcType as modType here for module classes, and use funcType to identify the callType (api or not)
                     $callable = $this->getModuleClassMethod($modName, $modType . $funcType, $funcName, $funcType);
                     if (!empty($callable)) {
-                        // this expects an instance in $callable[0]
-                        if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
-                            $this->getContext()?->tracePath($callable[0]::class . '::' . $callable[1], $args);
-                            $callable[0]->setContext($this->getContext());
-                        }
-                        $funcResult = $callable($args);
-                        return $funcResult;
+                        return $this->callMethod($callable, $args);
                     }
                     // Valid syntax, but the function doesn't exist
                     if ($funcType == "api") {
@@ -377,10 +371,37 @@ class ExecHelper extends ServiceClass
     }
 
     /** @param array<string, mixed> $args */
+    public function apiMethod(string $modName, string $modType, string $funcName, array $args): mixed
+    {
+        if (empty($modName)) {
+            throw new EmptyParameterException('modName');
+        }
+        $callable = $this->getModuleClassMethod($modName, $modType, $funcName, 'api');
+        if (empty($callable)) {
+            throw new FunctionNotFoundException($funcName);
+        }
+        return $this->callMethod($callable, $args);
+    }
+
+    /** @param array<string, mixed> $args */
+    public function guiMethod(string $modName, string $modType, string $funcName, array $args): mixed
+    {
+        if (empty($modName)) {
+            throw new EmptyParameterException('modName');
+        }
+        $callable = $this->getModuleClassMethod($modName, $modType, $funcName, 'gui');
+        if (empty($callable)) {
+            throw new FunctionNotFoundException($funcName);
+        }
+        return $this->callMethod($callable, $args);
+    }
+
+    /** @param array<string, mixed> $args */
     public function callMethod(callable $callable, array $args): mixed
     {
         // this expects an instance in $callable[0]
         if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
+            $this->getContext()?->tracePath($callable[0]::class . '::' . $callable[1], $args);
             $callable[0]->setContext($this->getContext());
         }
         return $callable($args);

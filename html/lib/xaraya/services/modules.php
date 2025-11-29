@@ -598,14 +598,11 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
+        // @todo make sure apiMethod() calls always use full $modType . $funcType
         if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
             $modType .= 'api';
         }
-        $callable = $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, 'api');
-        if (empty($callable)) {
-            throw new FunctionNotFoundException($funcName);
-        }
-        return $this->getExecHelper()->callMethod($callable, $args);
+        return $this->getExecHelper()->apiMethod($modName, $modType, $funcName, $args);
     }
 
     /**
@@ -625,11 +622,7 @@ trait ModulesTrait
         //if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
         //    $modType .= 'gui';
         //}
-        $callable = $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, 'gui');
-        if (empty($callable)) {
-            throw new FunctionNotFoundException($funcName);
-        }
-        return $this->getExecHelper()->callMethod($callable, $args);
+        return $this->getExecHelper()->guiMethod($modName, $modType, $funcName, $args);
     }
 
     /**

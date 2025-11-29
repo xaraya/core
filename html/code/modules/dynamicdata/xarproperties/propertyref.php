@@ -100,7 +100,7 @@ class PropertyRefProperty extends SelectProperty
                 // try table name
                 $fields = $this->mod()->apiMethod(
                     'dynamicdata',
-                    'util',
+                    'utilapi',
                     'getmeta',
                     ['table' => $objectname],
                 );
