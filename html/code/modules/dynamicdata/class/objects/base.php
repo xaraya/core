@@ -63,7 +63,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
         if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
             $this->properties[$this->primary]->value = $this->itemid;
-            $primarystore = $this->properties[$this->primary]->datastore;
         }
 
         /* General sequence:

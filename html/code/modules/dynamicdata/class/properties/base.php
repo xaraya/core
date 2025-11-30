@@ -63,15 +63,10 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
     public $tplmodule = 'dynamicdata';
     /** @var mixed */
     public $configuration = 'a:0:{}';
-    /** @var string deprecated */
-    public $dependancies = '';           // semi-colon seperated list of files that must be present for this property to be available (optional)
     /** @var mixed */
     public $args         = [];      //args that hold alias info
     /** @var int|bool */
     public $anonymous = 0;               // if true the name, rather than the dd_xx designation is used in displaying the property
-
-    /** @var string deprecated */
-    public $datastore = '';              // name of the data store where this property comes from
 
     /** @var mixed */
     public $value          = null;       // value of this property for a particular DataObject

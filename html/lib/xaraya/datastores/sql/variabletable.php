@@ -356,10 +356,16 @@ class VariableTableDataStore extends SQLDataStore
         if (count($propids) < 1) {
             return;
         }
+        $groupby = [];
+        if (!empty($this->object->groupby)) {
+            foreach ($this->object->groupby as $propname) {
+                $groupby[] = $this->object->properties[$propname]->id;
+            }
+        }
 
         $process = [];
         foreach ($propids as $propid) {
-            if (!empty($this->object->groupby) && in_array($propid, $this->object->groupby)) {
+            if (!empty($groupby) && in_array($propid, $groupby)) {
                 continue;
             } elseif (empty($properties[$propid]->operation)) {
                 continue; // all fields should be either GROUP BY or have some operation
@@ -382,7 +388,7 @@ class VariableTableDataStore extends SQLDataStore
             // TODO: make sure this is portable !
             // more difficult case where we need to create a pivot table, basically
         } elseif ($this->object->numitems > 0 || !empty($this->object->sort) || !empty($this->object->where) || !empty($this->object->groupby) || (property_exists($this->object, 'ddwhere') && !empty($this->object->ddwhere)) || (property_exists($this->object, 'ddsort') && !empty($this->object->ddsort))) {
-            $this->getItemsLimit($properties, $startnum);
+            $this->getItemsLimit($properties, $startnum, $groupby);
 
             // ------------------------------------------------------
             // here we grab everyting and process it - TODO: better way to do this ?
@@ -589,9 +595,10 @@ class VariableTableDataStore extends SQLDataStore
      * @todo make sure this is portable !
      * @param mixed $properties
      * @param mixed $startnum
+     * @param mixed $groupby
      * @return void
      */
-    public function getItemsLimit($properties, $startnum)
+    public function getItemsLimit($properties, $startnum, $groupby = [])
     {
         $dynamicdata = $this->getTable($this->table);
         $propids = array_keys($properties);
@@ -697,12 +704,12 @@ class VariableTableDataStore extends SQLDataStore
         $isgrouped = 0;
         $id = 0;
         $process = [];
-        if (count($this->object->groupby) > 0) {
+        if (count($groupby) > 0) {
             $isgrouped = 1;
             $items = [];
             $combo = [];
             foreach ($propids as $propid) {
-                if (in_array($propid, $this->object->groupby)) {
+                if (in_array($propid, $groupby)) {
                     // Note: we'll process the *TIME_BY_* operations for the groupid
                     continue;
                 } elseif (empty($properties[$propid]->operation)) {
@@ -733,7 +740,7 @@ class VariableTableDataStore extends SQLDataStore
                     $propval[$propid] = array_shift($values);
                 }
                 $groupid = '';
-                foreach ($this->object->groupby as $propid) {
+                foreach ($groupby as $propid) {
                     // handle *TIME_BY_* operations here
                     if (!empty($propval[$propid]) && !empty($properties[$propid]->operation)) {
                         switch ($properties[$propid]->operation) {
@@ -766,7 +773,7 @@ class VariableTableDataStore extends SQLDataStore
                     $combo[$groupid] = $id;
                     // add this "itemid" to the list
                     $this->_itemids[] = $id;
-                    foreach ($this->object->groupby as $propid) {
+                    foreach ($groupby as $propid) {
                         // add the item to the value list for this property
                         $properties[$propid]->setItemValue($id, $propval[$propid]);
                     }

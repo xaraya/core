@@ -87,11 +87,6 @@
                                 <td valign="top">
                                 <xar:foreach in="$proplist" value="$name">
                                     <xar:set name="property">#$object:properties.$name#</xar:set>
-                                    <xar:comment>CHECKME: could the dummy datastore actually do something here ?</xar:comment>
-                                    <xar:if condition="$property:datastore eq '_dummy_'">
-                                        N/A
-                                       <xar:continue/>
-                                    </xar:if>
                                     <select name="field[#$name#]" id="field_#$name#">
                                         <xar:foreach in="$stats.options" key="$value" value="$label">
                                             <xar:if condition="($value eq 'sum' or $value eq 'avg') and !is_a($property, 'NumberBoxProperty')">
@@ -127,11 +122,6 @@
                             <label class="xar-form-label" for="field_#$name#">#$property:label#</label>
                         </div>
                         <div class="xar-col">
-                            <xar:comment>CHECKME: could the dummy datastore actually do something here ?</xar:comment>
-                            <xar:if condition="$property:datastore eq '_dummy_'">
-                                N/A
-                                <xar:continue/>
-                            </xar:if>
                             <select name="field[#$name#]" id="field_#$name#">
                                 <xar:foreach in="$stats.options" key="$value" value="$label">
                                     <xar:if condition="($value eq 'sum' or $value eq 'avg') and !is_a($property, 'NumberBoxProperty')">

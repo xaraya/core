@@ -84,10 +84,7 @@
                                 <td valign="top">
                                 <xar:foreach in="$proplist" value="$name">
                                     <xar:set name="property">#$object:properties.$name#</xar:set>
-                                    <!-- CHECKME: could the dummy datastore actually do something here ? -->
-                                    <xar:if condition="$property:datastore eq '_dummy_'">
-                                        <input type="checkbox" name="field[#$name#]" id="field_#$name#" value="1" disabled="disabled"/>
-                                    <xar:elseif condition="empty($search['field']) or in_array($name, $search['field'])"/>
+                                    <xar:if condition="empty($search['field']) or in_array($name, $search['field'])">
                                         <input type="checkbox" name="field[#$name#]" id="field_#$name#" value="1" checked="checked"/>
                                     <xar:else/>
                                         <input type="checkbox" name="field[#$name#]" id="field_#$name#" value="1"/>

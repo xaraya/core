@@ -232,6 +232,8 @@ class StatsHandler extends DefaultHandler
             if (in_array($name, $groupby)) {
                 continue;
             }
+            // property operation is used for xar_dynamic_data
+            // @todo check what to do for relational tables
             switch ($operation) {
                 case 'hide':
                     break;
@@ -240,22 +242,28 @@ class StatsHandler extends DefaultHandler
                     break;
                 case 'count':
                     $fieldlist[] = "COUNT($name)";
+                    $this->object->properties[$name]->operation = 'COUNT';
                     break;
                 case 'min':
                     $fieldlist[] = "MIN($name)";
+                    $this->object->properties[$name]->operation = 'MIN';
                     break;
                 case 'max':
                     $fieldlist[] = "MAX($name)";
+                    $this->object->properties[$name]->operation = 'MAX';
                     break;
                 case 'avg':
                     $fieldlist[] = "AVG($name)";
+                    $this->object->properties[$name]->operation = 'AVG';
                     break;
                 case 'sum':
                     $fieldlist[] = "SUM($name)";
+                    $this->object->properties[$name]->operation = 'SUM';
                     break;
                     // We use a custom operation here that gets translated to a database-specific one by the datastore
                 case 'distinct':
                     $fieldlist[] = "COUNT_DISTINCT($name)"; // CHECKME in datastores
+                    $this->object->properties[$name]->operation = 'COUNT_DISTINCT';
                     break;
                 default:
                     break;

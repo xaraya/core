@@ -92,18 +92,6 @@ class ExportMethod extends MethodClass
                 $ext = '-def';
             }
 
-            /**
-            if (!empty($myobject->datastores) && count($myobject->datastores) == 1 && !empty($myobject->datastores['_dynamic_data_'])) {
-                $data['convertlink'] = $this->mod()->getURL('admin','export',
-                                                 array('objectid' => $myobject->objectid,
-                                                       'convert'  => 1));
-                if (!empty($convert)) {
-                    if (!$utilapi->maketable(array('objectref' => &$myobject))) return;
-
-                }
-            }
-             */
-
             // export specific item
         } elseif (is_numeric($itemid)) {
             $data['label'] = $this->ml('Export Data for #(1) # #(2)', $myobject->label, $itemid);

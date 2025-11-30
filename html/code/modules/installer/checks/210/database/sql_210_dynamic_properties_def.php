@@ -39,7 +39,6 @@ function sql_210_dynamic_properties_def()
         `class`,
         `configuration`,
         `source`,
-        `reqfiles`,
         `modid`,
         `args`,
         `aliases`,

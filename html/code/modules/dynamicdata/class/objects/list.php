@@ -740,6 +740,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         if (!empty($this->groupby)) {
+            // make sure properties with operations are shown here
+            foreach (array_keys($this->properties) as $name) {
+                if (!empty($this->properties[$name]->operation) && !in_array($name, $args['properties'])) {
+                    $args['properties'][$name] = & $this->properties[$name];
+                }
+            }
             foreach (array_keys($args['properties']) as $name) {
                 if (!empty($this->properties[$name]->operation)) {
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';

@@ -49,12 +49,6 @@
                             <label class="xar-form-label" for="field_#$name#">#$property:label#</label>
                         </div>
                         <div class="xar-col">
-                            <!-- CHECKME: could the dummy datastore actually do something here ? -->
-                            <xar:if condition="$property:datastore eq '_dummy_'">
-                                N/A
-                                <xar:continue/>
-                            </xar:if>
-    
                             <!-- initialize fieldname, fieldid and fieldvalue -->
                             <xar:set name="fieldname">'field[' . $name . ']'</xar:set>
                             <xar:set name="fieldid">'field_' . $name</xar:set>

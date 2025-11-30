@@ -35,8 +35,7 @@ class PropertyRegistration extends DataContainer
     public $class      = '';                     // what is the class?
     public $configuration = '';                  // what is its default configuration?
     public $source     = 'dynamic_data';         // what source is default for this type?
-    public $reqfiles   = [];                     // do we require some files to be present?
-    public $reqmodules = [];                     // do we require some modules to be present?
+    public $reqmodules = [];                     // do we require some module(s) to be present? @note only 1 module supported here
     public $args       = [];                     // special args needed?
     public $aliases    = [];                     // aliases for this property
     public $filepath   = '';                     // path to the directory where the property lives
@@ -75,12 +74,6 @@ class PropertyRegistration extends DataContainer
         static $stmt = null;
         static $types = [];
 
-        // Sanity checks (silent)
-        foreach ($this->reqfiles as $required) {
-            if (!file_exists($required)) {
-                return false;
-            }
-        }
         $xar = xar::getServicesClass();
 
         /*
@@ -115,8 +108,8 @@ class PropertyRegistration extends DataContainer
                     (id, name, label,
                      filepath, class,
                      format, configuration, source,
-                     reqfiles, modid, args, aliases)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                     modid, args, aliases)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             $this->stmt = $dbconn->prepareStatement($sql);
         }
 
@@ -124,7 +117,7 @@ class PropertyRegistration extends DataContainer
             (int) $this->id, $this->name, $this->desc,
             $this->filepath, $this->class,
             $this->format, $this->configuration, $this->source,
-            serialize($this->reqfiles), $module_id, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases),
+            $module_id, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases),
         ];
 
         // Ignore if we already have this dataproperty
@@ -173,7 +166,7 @@ class PropertyRegistration extends DataContainer
         $query = "SELECT  p.id, p.name, p.label,
                           p.filepath, p.class,
                           p.format, p.configuration, p.source,
-                          p.reqfiles, m.name as modname, p.args,
+                          m.name as modname, p.args,
                           p.aliases
                   FROM    $tables[dynamic_properties_def] p LEFT JOIN $tables[modules] m
                   ON      p.modid = m.id
@@ -187,7 +180,7 @@ class PropertyRegistration extends DataContainer
             while ($result->next()) {
                 [
                     $id, $name, $label, $filepath, $class, $format,
-                    $configuration, $source, $reqfiles, $modname, $args, $aliases
+                    $configuration, $source, $modname, $args, $aliases
                 ] = $result->fields;
 
                 $property['id']             = $id;
@@ -198,7 +191,6 @@ class PropertyRegistration extends DataContainer
                 $property['format']         = $format;
                 $property['configuration']  = $configuration;
                 $property['source']         = $source;
-                $property['dependancies']   = unserialize((string) $reqfiles);
                 $property['requiresmodule'] = $modname;
                 $property['args']           = $args;
                 // TODO: this returns a serialized array of objects, does that hurt?

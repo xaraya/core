@@ -138,9 +138,6 @@
     <column id="dynamic_properties_def.prop_source" name="prop_source">
       <text size="254"/>
     </column>
-    <column id="dynamic_properties_def.prop_reqfiles" name="prop_reqfiles">
-      <text size="254"/>
-    </column>
     <column id="dynamic_properties_def.prop_modid" name="prop_modid">
       <number size="10" default=""/>
     </column>
