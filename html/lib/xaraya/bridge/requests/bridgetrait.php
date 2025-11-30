@@ -48,7 +48,9 @@ trait BasicBridgeTrait
         $ctl->setEntryPoint($entryPoint);
         // @todo get $ctl->getBaseURL() working correctly for ReactPHP etc.
         //ModuleRouter::setBaseUri($baseUri);
-        $ctl->setCallback('buildUri', [$this, 'buildUri']);
+        if (is_callable([$this, 'buildUri'])) {
+            $ctl->setCallback('buildUri', [$this, 'buildUri']);
+        }
         //$ctl->setCallback('redirectTo', [$this, 'redirectTo']);
         // Note: do this after updating controller entryPoint, so that request entryPoint matches
         $request = $ctl->getRequest();

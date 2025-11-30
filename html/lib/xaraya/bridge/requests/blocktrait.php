@@ -71,7 +71,10 @@ trait BlockBridgeTrait
 
     public function block(): BlocksInterface
     {
-        $this->xarBlock ??= ServiceFactory::getBlocksService($this);
+        if (!isset($this->xarBlock)) {
+            $xar = $this->getServicesClass();
+            $this->xarBlock = $xar->block();
+        }
         return $this->xarBlock;
     }
 
