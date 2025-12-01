@@ -987,7 +987,7 @@ class CategoryNavigationProperty extends SelectProperty
                     // TODO: don't show icons when displaying items?
                     if (!empty($curcat['image'])) {
                         // find the image in categories (we need to specify the module here)
-                        $data['catimage'] = $this->tpl()->getImage($curcat['image'], 'categories');
+                        $data['catimage'] = $this->tpl()->getImage($curcat['image'], 'module', 'categories');
                         $data['catname'] = $this->prep()->text($curcat['name']);
                     }
                     if ($data['showchildren'] == 2) {
@@ -1077,7 +1077,7 @@ class CategoryNavigationProperty extends SelectProperty
                             }
                             if (!empty($cat['image'])) {
                                 // find the image in categories (we need to specify the module here)
-                                $image = $this->tpl()->getImage($cat['image'], 'categories');
+                                $image = $this->tpl()->getImage($cat['image'], 'module', 'categories');
                                 $numicons++;
                                 $data['caticons'][] = [
                                     'catlabel' => $label,

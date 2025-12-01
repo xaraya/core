@@ -17,7 +17,7 @@ use Xaraya\DataObject\Handlers\DefaultHandler;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 
 /**
  * Dynamic Object User Interface (work in progress)
@@ -63,6 +63,7 @@ use Xaraya\Services\xar;
 class DataObjectUserInterface extends xarObject implements ContextInterface
 {
     use ContextTrait;
+    use WithServicesClass;
 
     // application framework we're working with
     public string $framework = 'xaraya';
@@ -104,8 +105,9 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
      *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList() later on
      * @param mixed $context optional context for the DataObjectUserInterface (default = none)
      */
-    public function __construct(array $args = [], $context = null)
+    public function __construct(array $args = [], $context = null, $xar = null)
     {
+        $this->setServicesClass($xar);
         $this->setContext($context);
 
         // set a specific framework
@@ -202,7 +204,8 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
         // sanity check on method aliases during setup
         foreach ($this->alias as $alias => $realmethod) {
             if (empty($this->mapper[$realmethod])) {
-                throw new Exception(xar::ml('Unknown method #(1) for alias #(2)', $realmethod, $alias));
+                $xar = $this->getServicesClass();
+                throw new Exception($xar->ml('Unknown method #(1) for alias #(2)', $realmethod, $alias));
             }
         }
 
@@ -234,7 +237,7 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
         } else {
             $context = $this->getContext();
         }
-        $xar ??= xar::getServicesClass();
+        $xar = $this->getServicesClass($xar);
         // Set module name in Services Class for templates
         $xar->setModName('object');
         $xar->var()->check('method', $args['method']);
@@ -289,7 +292,7 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
             }
 
             // create the new handler with the initial arguments and context
-            $this->handler = new $handlerclazz($this->args, $context);
+            $this->handler = new $handlerclazz($this->args, $context, $xar);
         } else {
             // set the context for this handler call
             $this->handler->setContext($context);

@@ -20,9 +20,9 @@ class VirtualSample extends DataObject
      * @param array<string, mixed> $params
      * @param mixed $context optional context for the DataObject (default = none)
      */
-    public function __construct(array $params = [], $context = null)
+    public function __construct(array $params = [], $context = null, $xar = null)
     {
-        $descriptor = $this->getVirtualDescriptor($params, $context);
+        $descriptor = $this->getVirtualDescriptor($params, $context, $xar);
         parent::__construct($descriptor);
     }
 }
@@ -41,9 +41,9 @@ class VirtualSampleList extends DataObjectList
      * @param array<string, mixed> $params
      * @param mixed $context optional context for the DataObject (default = none)
      */
-    public function __construct(array $params = [], $context = null)
+    public function __construct(array $params = [], $context = null, $xar = null)
     {
-        $descriptor = $this->getVirtualDescriptor($params, $context);
+        $descriptor = $this->getVirtualDescriptor($params, $context, $xar);
         parent::__construct($descriptor);
     }
 }

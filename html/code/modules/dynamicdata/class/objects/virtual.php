@@ -498,9 +498,9 @@ class VirtualObjectFactory extends xarObject
  *     use VirtualDescriptorTrait;
  *     protected static string $configFile = 'sample-def.php';
  *
- *     public function __construct(array $params = [], $context = null)
+ *     public function __construct(array $params = [], $context = null, $xar = null)
  *     {
- *         $descriptor = $this->getVirtualDescriptor($params, $context);
+ *         $descriptor = $this->getVirtualDescriptor($params, $context, $xar);
  *         parent::__construct($descriptor);
  *     }
  * }
@@ -520,6 +520,7 @@ trait VirtualDescriptorTrait
             $args = array_replace($args, $params);
         }
         $descriptor = VirtualObjectFactory::getObjectDescriptor($args, true, $xar);
+        // pass context as argument to descriptor for use in DataObject
         if (!empty($context)) {
             $descriptor->setArgs(['context' => $context]);
         }

@@ -408,6 +408,7 @@ class DataObjectFactory extends xarObject
 
         // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
         $descriptor = new DataObjectDescriptor($data, $xar);
+        // pass context as argument to descriptor for use in DataObject
         if (!empty($context)) {
             $descriptor->setArgs(['context' => $context]);
         }
@@ -499,6 +500,7 @@ class DataObjectFactory extends xarObject
             }
         }
         $descriptor = new DataObjectDescriptor($data, $xar);
+        // pass context as argument to descriptor for use in DataObjectList
         if (!empty($context)) {
             $descriptor->setArgs(['context' => $context]);
         }
@@ -545,7 +547,7 @@ class DataObjectFactory extends xarObject
      * @return object the requested data object user interface instance
      * @todo  get rid of the classname munging
     **/
-    public static function &getObjectInterface(array $args = [], $context = null)
+    public static function &getObjectInterface(array $args = [], $context = null, $xar = null)
     {
 
         $class = 'DataObjectUserInterface';
@@ -563,7 +565,7 @@ class DataObjectFactory extends xarObject
             }
         }
         // here we can use our own classes to retrieve this
-        $object = new $class($args);
+        $object = new $class($args, $context, $xar);
         $object->setContext($context);
         return $object;
     }

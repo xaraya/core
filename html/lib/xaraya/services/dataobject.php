@@ -224,7 +224,7 @@ trait DataObjectTrait
      */
     public function getObjectInterface(array $args = [])
     {
-        return DataObjectFactory::getObjectInterface($args, $this->getContext());
+        return DataObjectFactory::getObjectInterface($args, $this->getContext(), $this->getParent());
     }
 
     /**

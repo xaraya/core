@@ -61,10 +61,11 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
      *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList() later on
      * @param ?Context<string, mixed> $context optional context for the handler call (default = none)
      */
-    public function __construct(array $args = [], ?Context $context = null)
+    public function __construct(array $args = [], ?Context $context = null, $xar = null)
     {
-        // set core services for access via methods - nothing to do here
-        //$this->setCoreServices();
+        if (isset($xar)) {
+            $this->setStaticServices($xar->getStaticServices());
+        }
         // set the context before checking any variables
         $this->setContext($context);
 

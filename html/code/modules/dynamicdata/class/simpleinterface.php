@@ -20,9 +20,9 @@ use Xaraya\Context\Context;
   */
 class SimpleObjectInterface extends DefaultHandler
 {
-    public function __construct(array $args = [], ?Context $context = null)
+    public function __construct(array $args = [], ?Context $context = null, $xar = null)
     {
-        parent::__construct($args, $context);
+        parent::__construct($args, $context, $xar);
         $this->var()->check('tplmodule', $args['tplmodule'], 'isset', 'dynamicdata');
 
         if (!empty($args) && is_array($args) && count($args) > 0) {

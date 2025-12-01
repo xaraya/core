@@ -80,8 +80,8 @@ class xarDDObject extends xarObject implements ixarDDObject
         }
 
 
-        $interface = new DataObjectUserInterface($args);
-        return $interface->handle($args, $context, $xar);
+        $interface = new DataObjectUserInterface($args, $context, $xar);
+        return $interface->handle($args);
     }
 
     /**

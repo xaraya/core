@@ -281,9 +281,9 @@ trait DataObjectBridgeTrait
         if (empty($params['object'])) {
             throw new Exception("Missing object parameter");
         }
-        $interface = new DataObjectUserInterface($params);
         // from BasicBridgeTrait -> WithServicesClass
-        return $interface->handle($params, $this->getContext(), $this->getServicesClass());
+        $interface = new DataObjectUserInterface($params, $this->getContext(), $this->getServicesClass());
+        return $interface->handle($params);
         // From DataObjectUserInterface:
         //...
     }
