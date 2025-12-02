@@ -133,8 +133,8 @@ class ExecHelper extends ServiceClass
         $info = $xar->mod()->getInfoHelper();
 
         // good thing this information is cached :)
-        $modBaseInfo = $info->getBaseInfo($modName);
-        if (empty($modBaseInfo)) {
+        $modFileInfo = $info->getFileInfo($modName);
+        if (empty($modFileInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
             if ($funcType == "api") {
                 throw new FunctionNotFoundException($modFunc);
@@ -164,8 +164,8 @@ class ExecHelper extends ServiceClass
 
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {
-                // Q: who are we kidding with this? osdirectory == modName always, no?
-                $funcFile = sys::code() . 'modules/' . $modBaseInfo['osdirectory'] . '/xar' . $modType . $funcType . '/' . strtolower($funcName) . '.php';
+                // Q: who are we kidding with this? directory == modName always, no?
+                $funcFile = sys::code() . 'modules/' . $modFileInfo['directory'] . '/xar' . $modType . $funcType . '/' . strtolower($funcName) . '.php';
                 if (!file_exists($funcFile)) {
                     // @todo cache this if we ever get here again? Already cached internally for module class methods
                     // Note: pass modType . funcType as modType here for module classes, and use funcType to identify the callType (api or not)

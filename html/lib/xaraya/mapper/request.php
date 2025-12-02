@@ -388,8 +388,12 @@ class xarRequest extends xarObject
     public function getModule()
     {
         if (!isset($this->module)) {
-            $xar = $this->getServicesClass();
-            $this->module = $xar->mod('modules')->getVar('defaultmodule');
+            try {
+                $xar = $this->getServicesClass();
+                $this->module = $xar->mod('modules')->getVar('defaultmodule');
+            } catch (VariableNotFoundException) {
+                $this->module = 'base';
+            }
         }
         return $this->module;
     }
@@ -402,8 +406,12 @@ class xarRequest extends xarObject
     public function getType()
     {
         if (!isset($this->type)) {
-            $xar = $this->getServicesClass();
-            $this->type = $xar->mod('modules')->getVar('defaultmoduletype');
+            try {
+                $xar = $this->getServicesClass();
+                $this->type = $xar->mod('modules')->getVar('defaultmoduletype');
+            } catch (VariableNotFoundException) {
+                $this->type = 'user';
+            }
         }
         return $this->type;
     }
@@ -411,8 +419,12 @@ class xarRequest extends xarObject
     public function getFunction()
     {
         if (!isset($this->func)) {
-            $xar = $this->getServicesClass();
-            $this->func = $xar->mod('modules')->getVar('defaultmodulefunction');
+            try {
+                $xar = $this->getServicesClass();
+                $this->func = $xar->mod('modules')->getVar('defaultmodulefunction');
+            } catch (VariableNotFoundException) {
+                $this->func = 'main';
+            }
         }
         return $this->func;
     }

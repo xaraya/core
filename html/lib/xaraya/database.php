@@ -17,6 +17,11 @@
 
 use Xaraya\Services\xar;
 
+class DatabaseException extends ConfigurationExceptions
+{
+    protected $message = 'No connection available';
+}
+
 /**
  * Summary of xarDB
  */
@@ -234,7 +239,7 @@ class xarDB
         }
 
         // No luck. This happens e.g. early in the installation before we have a database to connect to
-        throw new Exception(xar::mls()->translate('No connection available'));
+        throw new DatabaseException();
     }
 
     /**

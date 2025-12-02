@@ -18,7 +18,9 @@ namespace Xaraya\Services\Modules;
 
 use Xaraya\Services\ServiceClass;
 use EmptyParameterException;
+use DatabaseException;
 use SQLException;
+use VariableNotFoundException;
 
 /**
  * Modules Service Helper for Module Variables
@@ -251,10 +253,14 @@ class VarsHelper extends ServiceClass
             return true;
         }
 
-        $mod = $this->getParent()->mod();
-        $modBaseInfo = $mod->getBaseInfo($modName);
-        if (empty($modBaseInfo)) {
-            return false;
+        try {
+            $mod = $this->getParent()->mod();
+            $modBaseInfo = $mod->getBaseInfo($modName);
+            if (empty($modBaseInfo)) {
+                throw new VariableNotFoundException([$modName, 'Invalid module.'], "Module variables of module '#(1)' not found: #(2)");
+            }
+        } catch (DatabaseException) {
+            throw new VariableNotFoundException([$modName, 'No connection available.'], "Module variables of module '#(1)' not found: #(2)");
         }
 
         $db = $this->getParent()->db();

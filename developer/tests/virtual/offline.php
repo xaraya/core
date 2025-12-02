@@ -13,8 +13,10 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\DataStores\MongoDBDataStore;
 use Xaraya\Context\Context;
+use Xaraya\Context\ContextFactory;
 use Xaraya\DataObject\Generated\VirtualSample;
 use Xaraya\DataObject\Generated\VirtualSampleList;
+use Xaraya\Services\SecurityService;
 use Xaraya\Services\xar;
 use Brick\VarExporter\VarExporter;
 
@@ -260,4 +262,67 @@ test_get_items();
  */
 
 //test_virtual_sample();
-test_normal_sample();
+//test_normal_sample();
+
+// Experiment loading module component & calling module method offline
+// Note: this works (with preload) until we need templating...
+
+// preload Config.Variables here for xar::config()->getVar() in xar::req()->getConfig()
+xar::mem()->setPreload(xar::config()::SCOPE);
+
+$req = xar::req();
+$req->getInstance();
+// $xar->config()->getVar('Site.Core.EnableSecureServer')
+//$req->getRequest();
+//var_dump($req);
+$ctl = xar::ctl();
+// $xar->config()->getVar('Site.Core.EnableSecureServer')
+//$ctl->getBaseURL();
+//var_dump($ctl);
+$mod = xar::mod();
+$module = $mod->getModule('base');
+//var_dump($mod);
+//var_dump($module);
+$usergui = $module->usergui();
+//var_dump($usergui);
+
+/**
+ * Allow free access for all here
+ */
+class FreeAccess extends SecurityService
+{
+    public function checkAccess(string $mask, string|int $action = '', ?string $modName = null): bool
+    {
+        return true;
+    }
+}
+
+// Concatenate and parse string into $_GET: php offline.php class=handlers ...
+if (php_sapi_name() === 'cli') {
+    parse_str(implode('&', array_slice($argv, 1)), $_GET);
+}
+
+$context = ContextFactory::fromGlobals(__FILE__);
+$xar = xar::setServicesContext($context);
+$freeAccess = new FreeAccess($xar);
+$xar->setCoreServices(['sec' => $freeAccess]);
+
+// try using Twig templates
+$context['twig'] = true;
+//$context['module'] = 'base';
+//$context['modtype'] = 'user';
+$usergui->setContext($context);
+chdir(sys::web());
+
+// $this->sec()->checkAccess('ViewBase')
+// $this->mod()->getVar('AlternatePageTemplateName') if no $page param
+//$output = $usergui->main();
+// $xar->mod('themes')->getVar('default_theme')
+if (empty($context['twig'])) {
+    //xar::tpl()->init();
+    xarTemplateCache::init(sys::varpath() . xarConst::TPL_CACHEDIR, true);
+}
+// xarModVars::get('base','use_module_alias') in includes/user-mod-head.xt - removed in template
+//xar::db()->init();
+$output = $usergui->main(['page' => 'classmap']);
+echo $output;
