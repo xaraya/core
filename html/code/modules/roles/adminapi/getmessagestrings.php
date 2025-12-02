@@ -41,7 +41,7 @@ class GetmessagestringsMethod extends MethodClass
         }
 
         if (!isset($module)) {
-            $module = $this->ctl()->getRequest()->getModule();
+            $module = $this->req()->getModule();
         }
 
         if (!isset($tpl_path)) {

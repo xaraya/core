@@ -64,7 +64,7 @@ class PagerMethod extends MethodClass
 
         if (!isset($itemsperpage) || !is_numeric($itemsperpage)) {
             if (empty($module)) {
-                $module = $this->ctl()->getRequest()->getModule();
+                $module = $this->req()->getModule();
             }
             if (!empty($module)) {
                 // @TODO: setting per itemtype?

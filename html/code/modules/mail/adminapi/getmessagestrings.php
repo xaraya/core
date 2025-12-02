@@ -42,7 +42,7 @@ class GetmessagestringsMethod extends MethodClass
         }
 
         if (!isset($module)) {
-            $module = $this->ctl()->getRequest()->getModule();
+            $module = $this->req()->getModule();
         }
 
         $messaginghome = sys::varpath() . "/messaging/" . $module;

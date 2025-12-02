@@ -65,7 +65,7 @@ class Roles_LanguageBlock extends BasicBlock
         $data['form_picker_name'] = 'locale';
         $data['locales'] = $locales;
 
-        if ($this->ctl()->getRequestMethod() == 'GET') {
+        if ($this->req()->getMethod() == 'GET') {
             // URL of this page
             $data['return_url'] = $this->ctl()->getCurrentURL();
         } else {

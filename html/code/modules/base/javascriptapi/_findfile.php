@@ -54,7 +54,7 @@ class FindfileMethod extends MethodClass
 
         // Use the current module if none supplied.
         if (empty($module) && empty($modid)) {
-            $module = $this->ctl()->getRequest()->getModule();
+            $module = $this->req()->getModule();
         }
 
         // Get the module ID from the module name.

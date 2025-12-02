@@ -42,7 +42,7 @@ class GetmessageincludestringMethod extends MethodClass
         }
 
         if (!isset($module)) {
-            $module = $this->ctl()->getRequest()->getModule();
+            $module = $this->req()->getModule();
         }
 
         // Get the template that defines the substitution vars

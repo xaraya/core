@@ -45,7 +45,7 @@ class UpdatemessagestringsMethod extends MethodClass
         }
 
         if (empty($module)) {
-            $module = $this->ctl()->getRequest()->getModule();
+            $module = $this->req()->getModule();
         }
         if (empty($subject)) {
             $subject = '';

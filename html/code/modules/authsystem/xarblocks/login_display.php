@@ -42,7 +42,7 @@ class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlo
             } else {
                 return;
             }
-        } elseif ($this->ctl()->getRequestMethod() == 'GET') {
+        } elseif ($this->req()->getMethod() == 'GET') {
             $this->var()->find(
                 'redirecturl',
                 $data['return_url'],

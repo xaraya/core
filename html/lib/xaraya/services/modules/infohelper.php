@@ -46,7 +46,7 @@ class InfoHelper extends ServiceClass
     {
         if (!isset($regID)) {
             $xar = $this->getParent();
-            $modName = $xar->req()->getRequest()->getModule();
+            $modName = $xar->req()->getModule();
         } else {
             $modinfo = $this->getInfo($regID);
             $modName = $modinfo['name'];

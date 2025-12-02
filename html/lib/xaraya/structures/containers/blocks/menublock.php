@@ -91,7 +91,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
     {
         if (!isset($this->thismodname) || !isset($this->thismodtype) || !isset($this->thisfuncname)) {
             // set current request info properties
-            [$this->thismodname, $this->thismodtype, $this->thisfuncname] = $this->ctl()->getRequest()->getInfo();
+            [$this->thismodname, $this->thismodtype, $this->thisfuncname] = $this->req()->getRequest()->getInfo();
         }
         if (!isset($this->currenturl)) {
             $this->currenturl = $this->ctl()->getCurrentURL();

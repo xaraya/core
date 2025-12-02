@@ -165,7 +165,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_baseuri()
     {
         // avoid double-encoding URLs
-        return $this->ctl()->getBaseURI();
+        return $this->req()->getBaseURI();
     }
 
     public function xar_imageurl($fileName, $scope = null, $package = null)
@@ -259,7 +259,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
 
     public function xar_systemvar($name)
     {
-        return $this->ctl()->getSystemVar($name);
+        return $this->sysConfig()->getVar($name);
     }
 
     public function xar_varcache($scope, $name, $value = null)
@@ -341,7 +341,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
 
     public function xar_request()
     {
-        return $this->ctl()->getRequest();
+        return $this->req()->getRequest();
     }
 
     public function xar_translate($rawstring, ...$args)

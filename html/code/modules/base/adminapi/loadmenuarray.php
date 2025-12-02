@@ -55,7 +55,7 @@ class LoadmenuarrayMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         if (!isset($args['modname']) || !isset($args['modtype']) || !isset($args['funcname'])) {
-            $urlinfo = $this->ctl()->getRequest()->getInfo();
+            $urlinfo = $this->req()->getRequest()->getInfo();
             if (empty($args['modname'])) {
                 $args['modname'] = $urlinfo[0];
             }

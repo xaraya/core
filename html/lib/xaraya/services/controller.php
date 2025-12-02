@@ -524,6 +524,7 @@ trait ControllerTrait
     /**
      * Get a server variable
      * @return mixed
+     * @deprecated 2.8.6 use xar::req()->getServerVar() instead
      */
     public function getServerVar(string $varName): mixed
     {
@@ -533,6 +534,7 @@ trait ControllerTrait
     /**
      * Get a system config variable
      * @return mixed
+     * @deprecated 2.8.7 use xar::sysConfig() instead
      */
     public function getSystemVar(string $varName): mixed
     {
@@ -543,6 +545,7 @@ trait ControllerTrait
     /**
      * Get current request
      * @return xarRequest
+     * @deprecated 2.8.6 use xar::req()->getRequest() instead
      */
     public function getRequest(mixed $url = null): xarRequest
     {
@@ -552,12 +555,18 @@ trait ControllerTrait
     /**
      * Get a request variable
      * @return mixed
+     * @deprecated 2.8.6 use xar::req()->getVar() instead
      */
     public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed
     {
         return $this->getParent()->req()->getVar($varName, $allowOnlyMethod);
     }
 
+    /**
+     * Summary of getRequestMethod
+     * @return string
+     * @deprecated 2.8.6 use xar::req()->getMethod() instead
+     */
     public function getRequestMethod(): string
     {
         return $this->getParent()->req()->getMethod();
@@ -590,11 +599,21 @@ trait ControllerTrait
         return $params;
     }
 
+    /**
+     * Summary of isLocalReferer
+     * @return bool
+     * @deprecated 2.8.6 use xar::req()->isLocalReferer() instead
+     */
     public function isLocalReferer(): bool
     {
         return $this->getParent()->req()->isLocalReferer();
     }
 
+    /**
+     * Summary of isSameReferer
+     * @return bool
+     * @deprecated 2.8.6 use xar::req()->isSameReferer() instead
+     */
     public function isSameReferer(): bool
     {
         return $this->getParent()->req()->isSameReferer();

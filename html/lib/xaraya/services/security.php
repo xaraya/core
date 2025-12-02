@@ -100,7 +100,7 @@ trait SecurityTrait
         $modName ??= $this->getModName();
         $xar = $this->getParent();
         if (empty($modName)) {
-            $modName = $xar->req()->getRequest()->getModule();
+            $modName = $xar->req()->getModule();
         }
 
         // Date gives extra security but leave it out for now
@@ -131,7 +131,7 @@ trait SecurityTrait
         }
 
         if (empty($modName)) {
-            $modName = $xar->req()->getRequest()->getModule();
+            $modName = $xar->req()->getModule();
         }
         $authid = $xar->req()->getVar($varName);
 

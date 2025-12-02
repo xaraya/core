@@ -40,7 +40,7 @@ class Themes_SkinBlockDisplay extends Themes_SkinBlock implements iBlock
             return;
         }
         $data['default_theme'] = $this->mod('themes')->getUserVar('default_theme');
-        $data['return_url'] = ($this->ctl()->getRequestMethod() == 'GET')
+        $data['return_url'] = ($this->req()->getMethod() == 'GET')
             ? $this->ctl()->getCurrentURL() : $this->ctl()->getBaseURL();
 
         return $data;
