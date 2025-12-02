@@ -40,7 +40,7 @@ class AliasesMethod extends MethodClass
         if (!empty($removealias) && !empty($modname)) {
             $this->mod()->removeAlias($removealias, $modname);
         } elseif (!empty($addalias) && !empty($modname)) {
-            $this->mod()->setAlias($addalias, $modname);
+            $this->mod()->defineAlias($addalias, $modname);
         }
         $data['modname'] = $modname;
         $data['aliasesMap'] = $this->config()->getVar('System.ModuleAliases');

@@ -463,7 +463,7 @@ class xarModAlias extends xarObject implements IxarModAlias
     public static function set($alias, $modName)
     {
         // @todo move back to ModulesService for direct method calls
-        return self::modalias()->set($alias, $modName);
+        return self::modalias()->define($alias, $modName);
     }
 
     /**

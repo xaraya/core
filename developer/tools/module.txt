@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Skeleton;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get skeleton module classes via xarMod::getModule()
+ * Get skeleton module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

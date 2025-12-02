@@ -48,7 +48,7 @@ class AliasHelper extends ServiceClass
         return (!empty($aliasesMap[$alias])) ? $aliasesMap[$alias] : $alias;
     }
 
-    public function set($alias, $modName): mixed
+    public function define($alias, $modName): mixed
     {
         $mod = $this->getParent()->mod();
         if (!$mod->apiLoad('modules', 'admin')) {

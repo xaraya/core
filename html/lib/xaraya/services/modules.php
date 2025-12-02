@@ -91,7 +91,7 @@ interface ModulesInterface extends ServiceInterface
     /** @param array<string, mixed> $args */
     public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     public function resolveAlias(string $name): string;
-    public function setAlias(string $alias, string $modName): mixed;
+    public function defineAlias(string $alias, string $modName): mixed;
     public function removeAlias(string $alias, string $modName): mixed;
     public function isHooked(string $hookModName, ?string $callerModName = null, ?int $callerItemType = null): bool;
     public function callHooks(string $scope, string $action, mixed $itemid, mixed $extraInfo = null, ?string $callerModName = null, ?int $callerItemType = null): mixed;
@@ -662,9 +662,17 @@ trait ModulesTrait
         return $this->getAliasHelper()->resolve($name);
     }
 
+    public function defineAlias(string $alias, string $modName): mixed
+    {
+        return $this->getAliasHelper()->define($alias, $modName);
+    }
+
+    /**
+     * @deprecated 2.9.0 use xar::mod()->defineAlias() instead
+     */
     public function setAlias(string $alias, string $modName): mixed
     {
-        return $this->getAliasHelper()->set($alias, $modName);
+        return $this->defineAlias($alias, $modName);
     }
 
     public function removeAlias(string $alias, string $modName): mixed
