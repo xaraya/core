@@ -119,9 +119,9 @@ class ' . $classname . ' extends GeneratedClass
      * @param ?int $itemid (optional) itemid to retrieve ' . $objectclass . ' item from database
      * @param array<string, mixed> $values (optional) values to set for ' . $objectclass . ' properties
      */
-    public function __construct($itemid = null, $values = [])
+    public function __construct($itemid = null, $values = [], $xar = null)
     {
-        parent::__construct($itemid, $values);
+        parent::__construct($itemid, $values, $xar);
     }
 
     /**

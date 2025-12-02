@@ -54,7 +54,7 @@ use ixarMod;
 /**
  * Module class supports user gui methods - available via UserGuiTrait
  */
-interface UserGuiInterface extends GuiModuleServicesInterface
+interface UserGuiInterface extends GuiModuleClassInterface
 {
     /**
      * Summary of main
@@ -70,8 +70,8 @@ interface UserGuiInterface extends GuiModuleServicesInterface
  */
 trait UserGuiTrait
 {
-    /** @use ModuleServicesTrait<TModule> */
-    use ModuleServicesTrait;
+    /** @use ModuleClassTrait<TModule> */
+    use ModuleClassTrait;
 
     /**
      * Summary of configure

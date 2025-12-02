@@ -711,18 +711,23 @@ final class ClassMapTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        // we can't get an instance without database here - UserGui relies on xar::mod()->load() in configure()
-        $expected = 'No connection available';
-        $this->expectExceptionMessage($expected);
-
         $instance = new \Xaraya\Modules\DynamicData\UserGui('dynamicdata');
 
         $expected = $result['classname'];
         $moduleHandler = new $result['classname']($instance);
         $this->assertInstanceOf($expected, $moduleHandler);
 
+        // we can't handle a call without database here - xarRequest relies on xar::mod()->resolveAlias() in setURL() - fixed
+        //$expected = 'Variable System.ModuleAliases not found';
+        $expected = 'No connection available';
+        $this->expectExceptionMessage($expected);
+
+        // we can't handle a call without database here - UserGui->main() relies on $this->mod()->getVar()
         $handler = ['dummy', 'main'];
         $vars = [];
+        // we can't handle a call without database here - UserGui->view() relies on $this->data()->getObjectList()
+        //$handler = ['dummy', 'view'];
+        //$vars = ['name' => 'sample', 'numitems' => 10];
         [$result, $context] = $moduleHandler->callHandler($handler, $vars);
     }
 
@@ -787,6 +792,8 @@ final class ClassMapTest extends TestCase
         //$expected = 'No connection available';
         //$this->expectExceptionMessage($expected);
         xarDatabase::init();
+        // initialize wrapped class by default
+        //xarEvents::init();
 
         $route = 'dynamicdata-view-name';
         $context = new \Xaraya\Context\Context(['source' => __METHOD__]);
@@ -1048,7 +1055,7 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected, $result);
 
         // we can't instantiate module class method without parent here
-        $expected = 'Xaraya\Modules\MethodClass::setParent(): Argument #1 ($parent) must be of type Xaraya\Modules\ModuleServicesInterface, null given';
+        $expected = 'Xaraya\Modules\MethodClass::setParent(): Argument #1 ($parent) must be of type Xaraya\Modules\ModuleClassInterface, null given';
         $this->expectExceptionMessage($expected);
 
         $instance = new $result['classname']($modName);

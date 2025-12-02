@@ -395,6 +395,7 @@ class xarDB
 class xarDatabase extends xarObject
 {
     /**
+     * Note: for installer phase5 we set $args['doConnect'] = false
      * @see \Xaraya\Services\DatabaseService::init()
      */
     public static function init(array $args = [], $xar = null)

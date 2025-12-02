@@ -10,8 +10,8 @@ namespace Xaraya\Routing;
 
 use Xaraya\Context\Context;
 use Xaraya\Context\ContextTrait;
-use Xaraya\Modules\GuiModuleServicesInterface;
-use Xaraya\Modules\ModuleServicesInterface;
+use Xaraya\Modules\GuiModuleClassInterface;
+use Xaraya\Modules\ModuleClassInterface;
 use Xaraya\Services\WithServicesClass;
 use FunctionNotFoundException;
 
@@ -37,15 +37,15 @@ class ModuleHandler implements HandlerInterface
     use ContextTrait;
     use WithServicesClass;
 
-    protected ModuleServicesInterface $instance;
+    protected ModuleClassInterface $instance;
     protected string $funcName;
 
     /**
      * Summary of __construct
-     * @param ModuleServicesInterface $instance
+     * @param ModuleClassInterface $instance
      * @param ?Context<string, mixed> $context
      */
-    public function __construct(ModuleServicesInterface $instance, ?Context $context = null)
+    public function __construct(ModuleClassInterface $instance, ?Context $context = null)
     {
         $this->instance = $instance;
         $this->setContext($context);
@@ -76,7 +76,7 @@ class ModuleHandler implements HandlerInterface
         $this->context?->tracePath(__METHOD__ . ': resolve', [$handler[0]::class, $this->funcName, $vars]);
         $result = $handler($vars);
         // @todo do not apply template here (yet)?
-        if (is_array($result) && is_subclass_of($handler[0], GuiModuleServicesInterface::class)) {
+        if (is_array($result) && is_subclass_of($handler[0], GuiModuleClassInterface::class)) {
             $this->context?->tracePath(__METHOD__ . ': template', [$handler[0]::class, $this->funcName]);
             $result = $handler[0]->mod()->template($this->funcName, $result);
         }
@@ -87,7 +87,7 @@ class ModuleHandler implements HandlerInterface
      * Summary of resolveHandler
      * @param mixed $handler
      * @param array<string, mixed> $vars
-     * @return array{0: ModuleServicesInterface, 1: string}
+     * @return array{0: ModuleClassInterface, 1: string}
      * @see \Xaraya\Bridge\Routing\RoutingBridge::resolveHandler()
      */
     public function resolveHandler(mixed $handler, array $vars): mixed
@@ -126,7 +126,7 @@ class ModuleHandler implements HandlerInterface
     /**
      * Summary of getInstance
      */
-    public function getInstance(): ModuleServicesInterface
+    public function getInstance(): ModuleClassInterface
     {
         return $this->instance;
     }
@@ -138,7 +138,7 @@ class ModuleHandler implements HandlerInterface
     public function output(mixed $result, mixed $transform = null): string
     {
         // @todo apply template here?
-        //if (is_array($result) && is_subclass_of($this->instance, GuiModuleServicesInterface::class)) {
+        //if (is_array($result) && is_subclass_of($this->instance, GuiModuleClassInterface::class)) {
         //    $result = $this->instance->mod()->template($this->funcName, $result);
         //}
         if (is_string($result)) {

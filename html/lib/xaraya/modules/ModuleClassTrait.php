@@ -21,9 +21,9 @@ use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\CoreServicesTrait;
 
 /**
- * For documentation purposes only - available via ModuleServicesTrait
+ * For documentation purposes only - available via ModuleClassTrait
  */
-interface ModuleServicesInterface extends ServicesInterface
+interface ModuleClassInterface extends ServicesInterface
 {
     /** @param ?Context<string, mixed> $context */
     public function __construct(string $modName, ?ModuleInterface $parent = null, ?Context $context = null);
@@ -40,9 +40,17 @@ interface ModuleServicesInterface extends ServicesInterface
 }
 
 /**
+ * @deprecated 2.8.9 use ModuleClassInterface() instead
+ */
+interface ModuleServicesInterface extends ModuleClassInterface
+{
+    // ...
+}
+
+/**
  * Module class supports api methods
  */
-interface ApiModuleServicesInterface extends ModuleServicesInterface
+interface ApiModuleClassInterface extends ModuleClassInterface
 {
     // ...
 }
@@ -50,7 +58,7 @@ interface ApiModuleServicesInterface extends ModuleServicesInterface
 /**
  * Module class supports gui methods
  */
-interface GuiModuleServicesInterface extends ModuleServicesInterface
+interface GuiModuleClassInterface extends ModuleClassInterface
 {
     // ...
 }
@@ -60,7 +68,7 @@ interface GuiModuleServicesInterface extends ModuleServicesInterface
  * @see https://phpstan.org/blog/generics-in-php-using-phpdocs
  * @template TModule of ModuleInterface|null
  */
-trait ModuleServicesTrait
+trait ModuleClassTrait
 {
     use CoreServicesTrait;
 
@@ -91,7 +99,7 @@ trait ModuleServicesTrait
         'db',
         'ml',
         'exit',
-        // ModuleServicesTrait
+        // ModuleClassTrait
         'configure',
         'getmodtype',
         'setmodtype',
@@ -115,7 +123,7 @@ trait ModuleServicesTrait
         'getproperty',
         // @todo add new internal methods here + find a better way to do this
     ];
-    /** @var array<string, MethodServicesInterface<ModuleServicesInterface>|null> */
+    /** @var array<string, MethodClassInterface<ModuleClassInterface>|null> */
     private array $methods = [];
 
     /**
@@ -176,11 +184,11 @@ trait ModuleServicesTrait
         }
         // @todo should we check $callType on component level or method level - do we allow mix of both in class?
         // don't allow api methods to be called as gui functions
-        if ($callType != 'api' && $this instanceof ApiModuleServicesInterface) {
+        if ($callType != 'api' && $this instanceof ApiModuleClassInterface) {
             return false;
         }
         // Note: non-api methods can still be called as api functions here if needed
-        //if ($callType == 'api' && !($this instanceof ApiModuleServicesInterface)) {
+        //if ($callType == 'api' && !($this instanceof ApiModuleClassInterface)) {
         //    return false;
         //}
         // normalize for case-insensitive + conversion from snake_case to PascalCase
@@ -301,11 +309,11 @@ trait ModuleServicesTrait
     /**
      * Get single-method class for module function by class name
      * @see https://phpstan.org/blog/generics-by-examples
-     * @template TMethodClass of MethodServicesInterface<ModuleServicesInterface>
+     * @template TMethodClass of MethodClassInterface<ModuleClassInterface>
      * @param class-string<TMethodClass> $className
      * @return TMethodClass
      */
-    protected function getMethodClass(string $className): MethodServicesInterface
+    protected function getMethodClass(string $className): MethodClassInterface
     {
         return new $className($this->getModName(), $this->getItemType(), $this);
     }
@@ -318,7 +326,7 @@ trait ModuleServicesTrait
      * will become Xaraya\Modules\MyFancyModule\UserApi\TestCallMethod
      *
      * @param string $funcName
-     * @return class-string<MethodClass<ModuleServicesInterface>>
+     * @return class-string<MethodClass<ModuleClassInterface>>
      */
     protected function getClassName(string $funcName): string
     {
@@ -371,7 +379,7 @@ trait ModuleServicesTrait
     }
 
     /**
-     * Dummy method for ModuleServicesInterface extends ServicesInterface
+     * Dummy method for ModuleClassInterface extends ServicesInterface
      */
     public function getObject(): null
     {
@@ -379,7 +387,7 @@ trait ModuleServicesTrait
     }
 
     /**
-     * Dummy method for ModuleServicesInterface extends ServicesInterface
+     * Dummy method for ModuleClassInterface extends ServicesInterface
      */
     public function getProperty(): null
     {
@@ -388,7 +396,7 @@ trait ModuleServicesTrait
 
     public function __serialize()
     {
-        // reset methods for comparison - see SerializeServicesTest::testModuleServicesTrait()
+        // reset methods for comparison - see SerializeServicesTest::testModuleClassTrait()
         $this->methods = [];
         // add any protected/private properties that are relevent here
         return [

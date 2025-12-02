@@ -15,13 +15,13 @@
 namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Modules\MethodClass as CoreMethodClass;
-use Xaraya\Modules\ModuleServicesInterface;
+use Xaraya\Modules\ModuleClassInterface;
 use Xaraya\Modules\DynamicData\Traits\UserApiInterface;
 
 /**
  * Handle (traditional) DD api/gui functions via module class
  * Note: this does not replace the object-centric UI handlers or direct use of object methods
- * @template TComponent of ModuleServicesInterface
+ * @template TComponent of ModuleClassInterface
  * @extends CoreMethodClass<TComponent>
  */
 class MethodClass extends CoreMethodClass

@@ -7,11 +7,11 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\Generated\Sample;
 use Xaraya\DataObject\Generated\VirtualSample;
-use Brick\VarExporter\VarExporter;
+//use Brick\VarExporter\VarExporter;
 use Xaraya\Services\xar;
 
 if (!class_exists('\Brick\VarExporter\VarExporter')) {
-    return;
+    //return;
 }
 
 // initialize bootstrap
@@ -130,10 +130,11 @@ function mini_profile($profile, $callable, $itemid = null)
 function test_normal_baseline($itemid = null)
 {
     $coll = new ArrayObject();
+    $xar = xar::getServicesClass();
     XarayaProfiler::clear();
     for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
-        $sample = DataObjectFactory::getObject(['name' => 'sample']);
+        $sample = DataObjectFactory::getObject(['name' => 'sample'], null, $xar);
         if (!empty($itemid)) {
             $sample->getItem(['itemid' => $itemid]);
         }
@@ -148,7 +149,8 @@ function test_normal_baseline($itemid = null)
 
 function test_normal_unserialize($itemid = null)
 {
-    $sample = DataObjectFactory::getObject(['name' => 'sample']);
+    $xar = xar::getServicesClass();
+    $sample = DataObjectFactory::getObject(['name' => 'sample'], null, $xar);
     $serialized = serialize($sample);
     $coll = new ArrayObject();
     for ($i = 0; $i < TEST_COUNT; $i++) {
@@ -167,7 +169,8 @@ function test_normal_unserialize($itemid = null)
 
 function test_normal_clone($itemid = null)
 {
-    $base = DataObjectFactory::getObject(['name' => 'sample']);
+    $xar = xar::getServicesClass();
+    $base = DataObjectFactory::getObject(['name' => 'sample'], null, $xar);
     DataObjectFactory::unlinkObjectRef($base);
     $coll = new ArrayObject();
     for ($i = 0; $i < TEST_COUNT; $i++) {
@@ -214,13 +217,14 @@ function test_normal_export($itemid = null)
 
 function test_generated_baseline($itemid = null)
 {
+    $xar = xar::getServicesClass();
     $coll = new ArrayObject();
     XarayaProfiler::clear();
     for ($i = 0; $i < TEST_COUNT; $i++) {
         Sample::$_object = null;
         Sample::$_descriptor = null;
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
-        $sample = new Sample($itemid, $args);
+        $sample = new Sample($itemid, $args, $xar);
         $coll[] = $sample;
     }
     echo XarayaProfiler::result();
@@ -231,8 +235,9 @@ function test_generated_baseline($itemid = null)
 
 function test_generated_unserialize($itemid = null)
 {
+    $xar = xar::getServicesClass();
     $args = ['name' => "Mike", 'age' => 20];
-    $sample = new Sample($itemid, $args);
+    $sample = new Sample($itemid, $args, $xar);
     $serialized = serialize($sample);
     $coll = new ArrayObject();
     for ($i = 0; $i < TEST_COUNT; $i++) {
@@ -253,8 +258,9 @@ function test_generated_unserialize($itemid = null)
 
 function test_generated_clone($itemid = null)
 {
+    $xar = xar::getServicesClass();
     $args = ['name' => "Mike", 'age' => 20];
-    $base = new Sample($itemid, $args);
+    $base = new Sample($itemid, $args, $xar);
     $coll = new ArrayObject();
     for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
@@ -274,11 +280,12 @@ function test_generated_clone($itemid = null)
 
 function test_virtual_baseline($itemid = null)
 {
+    $xar = xar::getServicesClass();
     $coll = new ArrayObject();
     XarayaProfiler::clear();
     for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
-        $sample = new VirtualSample();
+        $sample = new VirtualSample([], null, $xar);
         if (!empty($itemid)) {
             $sample->getItem(['itemid' => $itemid]);
         }
@@ -293,7 +300,8 @@ function test_virtual_baseline($itemid = null)
 
 function test_virtual_unserialize($itemid = null)
 {
-    $sample = new VirtualSample();
+    $xar = xar::getServicesClass();
+    $sample = new VirtualSample([], null, $xar);
     $serialized = serialize($sample);
     $coll = new ArrayObject();
     for ($i = 0; $i < TEST_COUNT; $i++) {
@@ -312,7 +320,8 @@ function test_virtual_unserialize($itemid = null)
 
 function test_virtual_clone($itemid = null)
 {
-    $base = new VirtualSample();
+    $xar = xar::getServicesClass();
+    $base = new VirtualSample([], null, $xar);
     DataObjectFactory::unlinkObjectRef($base);
     $coll = new ArrayObject();
     for ($i = 0; $i < TEST_COUNT; $i++) {
@@ -335,7 +344,7 @@ function run_profile($itemid = null)
     mini_profile("Normal baseline", function ($itemid) { return test_normal_baseline($itemid); }, $itemid);
     mini_profile("Normal unserialize", function ($itemid) { return test_normal_unserialize($itemid); }, $itemid);
     mini_profile("Normal clone", function ($itemid) { return test_normal_clone($itemid); }, $itemid);
-    mini_profile("Normal export", function ($itemid) { return test_normal_export($itemid); }, $itemid);
+    //mini_profile("Normal export", function ($itemid) { return test_normal_export($itemid); }, $itemid);
     mini_profile("Generated baseline", function ($itemid) { return test_generated_baseline($itemid); }, $itemid);
     mini_profile("Generated unserialize", function ($itemid) { return test_generated_unserialize($itemid); }, $itemid);
     mini_profile("Generated clone", function ($itemid) { return test_generated_clone($itemid); }, $itemid);

@@ -95,7 +95,7 @@ class TestHelper extends TestCase
     /**
      * Create parent module for a module class
      * @param string $modName
-     * @param class-string<ModuleServicesInterface> $className
+     * @param class-string<ModuleClassInterface> $className
      * @return ModuleInterface
      */
     protected function createModule(string $modName, string $className)
@@ -114,8 +114,8 @@ class TestHelper extends TestCase
     /**
      * Create parent component for a method class
      * @param string $modName
-     * @param class-string<MethodServicesInterface<ModuleServicesInterface>> $className
-     * @return ModuleServicesInterface
+     * @param class-string<MethodClassInterface<ModuleClassInterface>> $className
+     * @return ModuleClassInterface
      */
     protected function createComponent(string $modName, string $className)
     {
@@ -125,7 +125,7 @@ class TestHelper extends TestCase
         array_pop($parts);
         // Xaraya\Modules\MyFancyModule\UserApi
         $parentName = implode('\\', $parts);
-        assert(is_subclass_of($parentName, ModuleServicesInterface::class));
+        assert(is_subclass_of($parentName, ModuleClassInterface::class));
         //return new $parentName($modName);
         $classType = array_pop($parts);
         return $xar->mod()->getModule($modName)->getComponent($classType);
@@ -134,17 +134,17 @@ class TestHelper extends TestCase
     /**
      * Get parent class or module class
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
+     * @param class-string<ModuleClassInterface|MethodClassInterface<ModuleClassInterface>> $className
      * @return array<mixed>
      */
     protected function getConstructorArgs(string $modName, string $className)
     {
-        if (is_subclass_of($className, MethodServicesInterface::class)) {
+        if (is_subclass_of($className, MethodClassInterface::class)) {
             $itemtype = 0;
             $parent = $this->createComponent($modName, $className);
             return [$modName, $itemtype, $parent];
         }
-        if (is_subclass_of($className, ModuleServicesInterface::class)) {
+        if (is_subclass_of($className, ModuleClassInterface::class)) {
             $parent = $this->createModule($modName, $className);
             return [$modName, $parent];
         }
@@ -154,9 +154,9 @@ class TestHelper extends TestCase
     /**
      * Override checkAccess() method to return true + check if called $count times
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
+     * @param class-string<ModuleClassInterface|MethodClassInterface<ModuleClassInterface>> $className
      * @param int $count
-     * @return ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>
+     * @return ModuleClassInterface|MethodClassInterface<ModuleClassInterface>
      */
     protected function createMockWithAccess(string $modName, string $className, int $count = 1): object
     {
@@ -171,9 +171,9 @@ class TestHelper extends TestCase
     /**
      * Override callSecurityCheck() method to intercept redirect + check if called $count times
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
+     * @param class-string<ModuleClassInterface|MethodClassInterface<ModuleClassInterface>> $className
      * @param int $count
-     * @return ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>
+     * @return ModuleClassInterface|MethodClassInterface<ModuleClassInterface>
      */
     protected function createMockWithoutAccess(string $modName, string $className, int $count = 1): object
     {
@@ -188,9 +188,9 @@ class TestHelper extends TestCase
     /**
      * Override redirect() method to throw exception + check if called $count times
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
+     * @param class-string<ModuleClassInterface|MethodClassInterface<ModuleClassInterface>> $className
      * @param int $count
-     * @return ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>
+     * @return ModuleClassInterface|MethodClassInterface<ModuleClassInterface>
      */
     protected function createMockWithoutRedirect(string $modName, string $className, int $count = 1): object
     {
@@ -205,9 +205,9 @@ class TestHelper extends TestCase
     /**
      * Override exit() method to throw exception + check if called $count times
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
+     * @param class-string<ModuleClassInterface|MethodClassInterface<ModuleClassInterface>> $className
      * @param int $count
-     * @return ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>
+     * @return ModuleClassInterface|MethodClassInterface<ModuleClassInterface>
      */
     protected function createMockWithoutExit(string $modName, string $className, int $count = 1): object
     {

@@ -566,7 +566,7 @@ class InfoHelper extends ServiceClass
         $fileInfo['dependencyinfo'] = $version['dependencyinfo'] ?? [];
         $fileInfo['propertyinfo']   = $version['propertyinfo'] ?? [];
         $fileInfo['extensions']     = $version['extensions'] ?? [];
-        $fileInfo['directory']      = $version['directory'] ?? false;
+        $fileInfo['directory']      = $version['directory'] ?? $version['name'];
         $fileInfo['homepage']       = $version['homepage'] ?? false;
         $fileInfo['email']          = $version['email'] ?? false;
         $fileInfo['contact_info']   = $version['contact_info'] ?? false;
@@ -594,8 +594,8 @@ class InfoHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        $modInfo = $this->getInfo($this->getRegID($modName));
-        if ((strpos($modInfo['class'], 'Core') !== false)) {
+        $modInfo = $this->getFileInfo($modName);
+        if (str_contains($modInfo['class'], 'Core')) {
             return $modInfo['version'] == \xarCore::VERSION_NUM;
         } else {
             // Add check for non core modules here

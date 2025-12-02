@@ -32,6 +32,7 @@ interface MemoryInterface extends ServiceInterface
     public function del(string $scope, string $name): void;
     public function flush(string $scope): void;
     public function hasPreload(string $scope, ?string $name = null): bool;
+    public function setPreload(string $scope, ?string $name = null): void;
     public function load(string $scope, ?string $name = null): bool;
     public function save(string $scope, ?string $name = null, ?string $source = null): bool;
 }
@@ -42,6 +43,7 @@ interface MemoryInterface extends ServiceInterface
 class MemoryService implements MemoryInterface
 {
     use ServiceTrait;
+    public const PRELOAD = 'CoreCache.Preload';
 
     /** @var array<string, array<string, mixed>> */
     private array $cacheCollection = [];
@@ -55,7 +57,7 @@ class MemoryService implements MemoryInterface
     **/
     public function init(array $config = []): bool
     {
-        $scopes = ['CoreCache.Preload'];
+        $scopes = [self::PRELOAD];
         $this->getContext()[static::SLICE] ??= [];
         // initialize core cache with some values from caching configuration
         foreach ($scopes as $scope) {
@@ -140,14 +142,27 @@ class MemoryService implements MemoryInterface
 
     public function hasPreload(string $scope, ?string $name = null): bool
     {
-        if ($scope === 'CoreCache.Preload') {
+        if ($scope === self::PRELOAD) {
             return false;
         }
         if (isset($name)) {
             // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
-            return $this->has('CoreCache.Preload', $scope . ':' . $name);
+            return $this->has(self::PRELOAD, $scope . ':' . $name);
         }
-        return $this->has('CoreCache.Preload', $scope);
+        return $this->has(self::PRELOAD, $scope);
+    }
+
+    public function setPreload(string $scope, ?string $name = null): void
+    {
+        if ($scope === self::PRELOAD) {
+            return;
+        }
+        if (isset($name)) {
+            // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
+            $this->set(self::PRELOAD, $scope . ':' . $name, 1);
+            return;
+        }
+        $this->set(self::PRELOAD, $scope, 1);
     }
 
     public function load(string $scope, ?string $name = null): bool
@@ -226,12 +241,14 @@ return $values;
             if (is_file($filepath)) {
                 unlink($filepath);
             }
+            $this->del(self::PRELOAD, $scope . ':' . $name);
             return;
         }
         $filepath = sys::varpath() . '/cache/core/' . $scope . '.php';
         if (is_file($filepath)) {
             unlink($filepath);
         }
+        $this->del(self::PRELOAD, $scope);
     }
 
     public function setCacheStorage(ixarCache_Storage $cacheStorage, int $cacheExpire = 0)

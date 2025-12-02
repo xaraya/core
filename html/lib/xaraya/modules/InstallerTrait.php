@@ -34,7 +34,7 @@ namespace Xaraya\Modules;
 /**
  * Module class supports installer (api) methods - available via InstallerTrait
  */
-interface InstallerInterface extends ApiModuleServicesInterface
+interface InstallerInterface extends ApiModuleClassInterface
 {
     /**
      * Configure this module - override this method
@@ -58,8 +58,8 @@ interface InstallerInterface extends ApiModuleServicesInterface
  */
 trait InstallerTrait
 {
-    /** @use ModuleServicesTrait<TModule> */
-    use ModuleServicesTrait;
+    /** @use ModuleClassTrait<TModule> */
+    use ModuleClassTrait;
 
     /** @var array<string> */
     protected $objects;                    // set in configure() - override this method

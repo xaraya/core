@@ -17,6 +17,7 @@
 namespace Xaraya\Services\Modules;
 
 use Xaraya\Services\ServiceClass;
+use VariableNotFoundException;
 
 /**
  * Modules Service Helper for Module Alias
@@ -38,7 +39,12 @@ class AliasHelper extends ServiceClass
             return $alias;
         }
         $xar = $this->getParent();
-        $aliasesMap = $xar->config()->getVar('System.ModuleAliases');
+        try {
+            $aliasesMap = $xar->config()->getVar('System.ModuleAliases');
+        } catch (VariableNotFoundException) {
+            // ignore resolve issues for xarRequest->setURL(['module' => '...']) in ModuleHandler->callHandler()
+            $aliasesMap = [];
+        }
         return (!empty($aliasesMap[$alias])) ? $aliasesMap[$alias] : $alias;
     }
 

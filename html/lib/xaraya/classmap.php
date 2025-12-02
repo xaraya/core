@@ -633,7 +633,7 @@ class xarClassMap extends xarObject
      * @param string $modType
      * @param string $funcName
      * @return array{classname: string, filepath: string, method: string}|null
-     * @see \Xaraya\Modules\ModuleServicesTrait::getClassName()
+     * @see \Xaraya\Modules\ModuleClassTrait::getClassName()
      */
     public static function findModuleClassMethod(string $modName, string $modType, string $funcName): ?array
     {

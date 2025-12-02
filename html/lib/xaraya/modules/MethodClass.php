@@ -39,9 +39,9 @@ use Xaraya\Services\ParentServicesTrait;
 
 /**
  * For documentation purposes only - available via MethodClass
- * @template TComponent of ModuleServicesInterface
+ * @template TComponent of ModuleClassInterface
  */
-interface MethodServicesInterface extends ParentServicesInterface
+interface MethodClassInterface extends ParentServicesInterface
 {
     /**
      * Summary of __invoke
@@ -50,12 +50,12 @@ interface MethodServicesInterface extends ParentServicesInterface
      */
     public function __invoke(array $args = []);
     /** @param TComponent|null $parent */
-    public function __construct(string $modName, int $itemtype = 0, ?ModuleServicesInterface $parent = null);
+    public function __construct(string $modName, int $itemtype = 0, ?ModuleClassInterface $parent = null);
     public function configure(): void;
     /** @return TComponent */
-    public function getParent(): ModuleServicesInterface;
+    public function getParent(): ModuleClassInterface;
     /** @param TComponent $parent */
-    public function setParent(ModuleServicesInterface $parent): void;
+    public function setParent(ModuleClassInterface $parent): void;
     public function getModule(?string $modName = null): ?ModuleInterface;
     public function userapi(): ?UserApiInterface;
     public function usergui(): ?UserGuiInterface;
@@ -73,9 +73,9 @@ interface MethodServicesInterface extends ParentServicesInterface
  * The instance will be created by the api/gui module class
  * and configured with the right module, itemtype and parent
  *
- * @template TComponent of ModuleServicesInterface
+ * @template TComponent of ModuleClassInterface
  */
-trait MethodServicesTrait
+trait MethodClassTrait
 {
     use ParentServicesTrait;
 
@@ -93,10 +93,10 @@ trait MethodServicesTrait
      * Create method class instance with modName, itemtype and parent
      * @param TComponent|null $parent
      */
-    public function __construct(string $modName, int $itemtype = 0, ?ModuleServicesInterface $parent = null)
+    public function __construct(string $modName, int $itemtype = 0, ?ModuleClassInterface $parent = null)
     {
         // make parent mandatory to comply with parent requirement of services
-        assert($parent instanceof ModuleServicesInterface);
+        assert($parent instanceof ModuleClassInterface);
         $this->setModName($modName);
         // pass along itemtype from module class - @todo is this useful/relevant?
         $this->setItemType($itemtype);
@@ -116,7 +116,7 @@ trait MethodServicesTrait
      * Get parent module class for core services
      * @return TComponent
      */
-    public function getParent(): ModuleServicesInterface
+    public function getParent(): ModuleClassInterface
     {
         return $this->parent;
     }
@@ -125,7 +125,7 @@ trait MethodServicesTrait
      * Set parent module class for core services
      * @param TComponent $parent
      */
-    public function setParent(ModuleServicesInterface $parent): void
+    public function setParent(ModuleClassInterface $parent): void
     {
         $this->parent = $parent;
     }
@@ -203,7 +203,7 @@ trait MethodServicesTrait
     }
 
     /**
-     * Dummy method for ModuleServicesInterface extends ServicesInterface
+     * Dummy method for ModuleClassInterface extends ServicesInterface
      */
     public function getObject(): null
     {
@@ -211,7 +211,7 @@ trait MethodServicesTrait
     }
 
     /**
-     * Dummy method for ModuleServicesInterface extends ServicesInterface
+     * Dummy method for ModuleClassInterface extends ServicesInterface
      */
     public function getProperty(): null
     {
@@ -258,18 +258,18 @@ trait MethodServicesTrait
  * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
  * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
  *
- * @template TComponent of ModuleServicesInterface
- * @implements MethodServicesInterface<TComponent>
+ * @template TComponent of ModuleClassInterface
+ * @implements MethodClassInterface<TComponent>
  */
-class MethodClass implements MethodServicesInterface
+class MethodClass implements MethodClassInterface
 {
-    /** @use MethodServicesTrait<TComponent> */
-    use MethodServicesTrait;
+    /** @use MethodClassTrait<TComponent> */
+    use MethodClassTrait;
 
     protected string $moduleName;          // set in constructor by MethodsTrait::__call()
     protected int $itemtype = 0;
     /** @var TComponent */
-    protected ModuleServicesInterface $parent;
+    protected ModuleClassInterface $parent;
 
     // ...
 }

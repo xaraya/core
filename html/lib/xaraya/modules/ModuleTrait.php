@@ -62,8 +62,8 @@ interface ModuleInterface extends ContextInterface
     public function getFileInfo(): array;
     /** @return array<string, mixed> */
     public function getTables(): array;
-    public function getComponent(string $type): ?ModuleServicesInterface;
-    public function hasComponent(string $type): bool;
+    public function getComponent(string $classType): ?ModuleClassInterface;
+    public function hasComponent(string $classType): bool;
     public function userapi(): ?UserApiInterface;
     public function usergui(): ?UserGuiInterface;
     public function adminapi(): ?AdminApiInterface;
@@ -89,7 +89,7 @@ trait ModuleTrait
 
     /** @var array<string, string> */
     protected array $classtypes = [];
-    /** @var array<string, ModuleServicesInterface|null> */
+    /** @var array<string, ModuleClassInterface|null> */
     private array $components = [];
 
     /**
@@ -126,25 +126,25 @@ trait ModuleTrait
     /**
      * Summary of createComponent
      * @see https://phpstan.org/blog/generics-by-examples
-     * @template TComponent of ModuleServicesInterface
+     * @template TComponent of ModuleClassInterface
      * @param class-string<TComponent> $className
      * @return TComponent
      */
-    protected function createComponent(string $className): ModuleServicesInterface
+    protected function createComponent(string $className): ModuleClassInterface
     {
         return new $className($this->getModName(), $this, $this->context, $this->getServicesClass());
     }
 
     /**
      * Summary of getClassName
-     * @param string $type
-     * @return class-string<ModuleServicesInterface>
+     * @param string $classType
+     * @return class-string<ModuleClassInterface>
      */
-    protected function getClassName(string $type): string
+    protected function getClassName(string $classType): string
     {
         // this assumes that the class is in the same namespace as the module
         // Xaraya\Modules\MyFancyModule\AdminGui
-        return $this->getNamespace() . '\\' . $type;
+        return $this->getNamespace() . '\\' . $classType;
     }
 
     protected function getNamespace(): string
@@ -153,28 +153,28 @@ trait ModuleTrait
         return substr($this::class, 0, strrpos($this::class, '\\'));
     }
 
-    public function getComponent(string $type): ?ModuleServicesInterface
+    public function getComponent(string $classType): ?ModuleClassInterface
     {
-        if (!array_key_exists($type, $this->components)) {
+        if (!array_key_exists($classType, $this->components)) {
             try {
                 // this assumes that the class is in the same namespace as the module
-                $className = $this->getClassName($type);
+                $className = $this->getClassName($classType);
                 if (class_exists($className)) {
-                    $this->components[$type] = $this->createComponent($className);
+                    $this->components[$classType] = $this->createComponent($className);
                 } else {
-                    $this->components[$type] = null;
+                    $this->components[$classType] = null;
                 }
             } catch (\Throwable $e) {
                 throw new Exception("Unable to create '$className': " . $e->getMessage(), 0, $e);
-                //$this->components[$type] = null;
+                //$this->components[$classType] = null;
             }
         }
-        return $this->components[$type];
+        return $this->components[$classType];
     }
 
-    public function hasComponent(string $type): bool
+    public function hasComponent(string $classType): bool
     {
-        $className = $this->getClassName($type);
+        $className = $this->getClassName($classType);
         return class_exists($className);
     }
 

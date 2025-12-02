@@ -52,7 +52,7 @@ namespace Xaraya\Modules;
 /**
  * Module class supports user api methods - available via UserApiTrait
  */
-interface UserApiInterface extends ApiModuleServicesInterface
+interface UserApiInterface extends ApiModuleClassInterface
 {
     // ...
 }
@@ -63,8 +63,8 @@ interface UserApiInterface extends ApiModuleServicesInterface
  */
 trait UserApiTrait
 {
-    /** @use ModuleServicesTrait<TModule> */
-    use ModuleServicesTrait;
+    /** @use ModuleClassTrait<TModule> */
+    use ModuleClassTrait;
 
     /**
      * Summary of configure

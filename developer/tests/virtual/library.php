@@ -1,5 +1,7 @@
 <?php
 
+use Xaraya\Context\ContextFactory;
+
 /**
  * Entrypoint for experimenting with library objects (without Xaraya DB)
  */
@@ -12,6 +14,7 @@ use Xaraya\Services\xar;
 
 // initialize bootstrap
 sys::init();
+chdir(sys::web());
 // initialize caching
 xar::cache()->init();
 
@@ -25,6 +28,8 @@ function get_descriptor($table, $offline)
     $descriptor = VirtualObjectFactory::getObjectDescriptor($args, $offline);
     return $descriptor;
 }
+$context = ContextFactory::fromGlobals(__FILE__);
+xar::setServicesContext($context);
 
 //$offline = true;
 $offline = false;
@@ -43,13 +48,14 @@ $table = 'books';
 
 // try out session context class
 $session = new \Xaraya\Context\SessionContext();
+$session->startSession($context, 'sessionId');
 // set instance in xarSession for setCurrentDatabase()
 xar::session()->setInstance($session);
 //xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
 //xar::session()->init();
 
 /** @var UserApi $userapi */
-$userapi = xarMod::userapi('library');
+$userapi = xar::mod()->userapi('library');
 // set current database before we get to dbConnArgs - this uses xarSession (not initialized) = $_SESSION
 $userapi->setCurrentDatabase('test');
 if ($offline or true) {

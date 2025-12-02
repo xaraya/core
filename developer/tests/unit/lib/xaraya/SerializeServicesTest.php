@@ -185,13 +185,13 @@ final class SerializeServicesTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testModuleServicesTrait(): void
+    public function testModuleClassTrait(): void
     {
         $xar = xar::getServicesClass();
         $restapi = $xar->mod()->getModule('dynamicdata')->restapi();
         $expected = $restapi;
 
-        // this creates an equivalent ModuleServicesTrait() = not same but equal
+        // this creates an equivalent ModuleClassTrait() = not same but equal
         $serialized = serialize($expected);
         $unserialized = unserialize($serialized);
         $this->assertNotSame($expected, $unserialized);

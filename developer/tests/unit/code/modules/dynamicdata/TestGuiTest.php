@@ -22,17 +22,24 @@ final class TestGuiTest extends TestHelper
         $services->setCoreServices($args);
     }
 
-    public function testTestGui(): void
+    public function testGetModuleClass(): void
     {
         $expected = TestGui::class;
-        $testgui = xarMod::getModule('dynamicdata')->getTestGUI();
+        $testgui = xar::mod()->getModuleClass('dynamicdata', 'testgui');
+        $this->assertEquals($expected, $testgui::class);
+    }
+
+    public function testGetTestGui(): void
+    {
+        $expected = TestGui::class;
+        $testgui = xar::mod()->getModule('dynamicdata')->getTestGUI();
         $this->assertEquals($expected, $testgui::class);
     }
 
     public function testMain(): void
     {
         $context = $this->createContext();
-        $testgui = xarMod::getModule('dynamicdata')->getTestGUI();
+        $testgui = xar::mod()->getModuleClass('dynamicdata', 'testgui');
         $testgui->setContext($context);
 
         $args = ['hello' => 'world'];
@@ -51,7 +58,7 @@ final class TestGuiTest extends TestHelper
     {
         $context = $this->createContext();
         /** @var TestGui $testgui */
-        $testgui = xarMod::getModule('dynamicdata')->getTestGUI();
+        $testgui = xar::mod()->getModuleClass('dynamicdata', 'testgui');
         $testgui->setContext($context);
 
         $args = ['hello' => 'world'];
@@ -71,7 +78,7 @@ final class TestGuiTest extends TestHelper
     {
         $context = $this->createContext();
         /** @var TestGui $testgui */
-        $testgui = xarMod::getModule('dynamicdata')->getTestGUI();
+        $testgui = xar::mod()->getModuleClass('dynamicdata', 'testgui');
         $testgui->setContext($context);
 
         $args = ['hello' => 'world'];

@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use Xaraya\Modules\ModuleInterface;
+use Xaraya\Modules\ModuleClassInterface;
 use Xaraya\Modules\UserApiInterface;
 use Xaraya\Modules\UserGuiInterface;
 use ixarMod;
@@ -83,6 +84,7 @@ interface ModulesInterface extends ServiceInterface
     public function usergui(?string $modName = null): ?UserGuiInterface;
     public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string;
     public function getModule(?string $modName = null): ModuleInterface;
+    public function getModuleClass(?string $modName = null, ?string $modType = null): ?ModuleClassInterface;
     public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): ?callable;
     /** @param array<string, mixed> $args */
     public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
@@ -579,6 +581,19 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         return $this->getExecHelper()->getModule($modName);
+    }
+
+    /**
+     * Get module class component for this module (if there is one)
+     * @param ?string $modName
+     * @param ?string $modType (incl. funcType) -> will be mapped to class type
+     * @return ModuleClassInterface|null
+     */
+    public function getModuleClass(?string $modName = null, ?string $modType = null): ?ModuleClassInterface
+    {
+        $modName ??= $this->getModName();
+        $modType ??= $this->getModType();
+        return $this->getExecHelper()->getModuleClass($modName, $modType);
     }
 
     /**

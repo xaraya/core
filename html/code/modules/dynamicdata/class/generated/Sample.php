@@ -39,9 +39,9 @@ class Sample extends GeneratedClass
      * @param ?int $itemid (optional) itemid to retrieve DataObject item from database
      * @param array<string, mixed> $values (optional) values to set for DataObject properties
      */
-    public function __construct($itemid = null, $values = [])
+    public function __construct($itemid = null, $values = [], $xar = null)
     {
-        parent::__construct($itemid, $values);
+        parent::__construct($itemid, $values, $xar);
     }
 
     /**

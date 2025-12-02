@@ -10,7 +10,7 @@ namespace Xaraya\Routing;
 
 use Xaraya\Context\Context;
 use Xaraya\Modules\ModuleInterface;
-use Xaraya\Modules\ModuleServicesInterface;
+use Xaraya\Modules\ModuleClassInterface;
 use xarClassMap;
 
 /**
@@ -34,7 +34,7 @@ class ModuleRoutes implements RoutesInterface
 {
     public static string $moduleName = '';
     public static string $objectName = '';
-    /** @var class-string<ModuleServicesInterface> */
+    /** @var class-string<ModuleClassInterface> */
     public static string $handlerClass = '';
 
     /**
@@ -276,7 +276,7 @@ class ModuleRoutes implements RoutesInterface
      * Get module UserGui class instance like \Xaraya\Modules\Base\UserGui()
      * @param ?Context<string, mixed> $context
      */
-    public static function getInstance(?Context $context, $xar = null): ModuleServicesInterface
+    public static function getInstance(?Context $context, $xar = null): ModuleClassInterface
     {
         $module = static::getModule($context, $xar);
         $instance = new (static::$handlerClass)(static::$moduleName, $module, $context);

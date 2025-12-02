@@ -272,7 +272,10 @@ class ServiceFactory
     public static function getWrapperService(object|string|null $parent = null, $className = null, $instance = null): ServiceInterface
     {
         self::log(__METHOD__ . "($className)", $parent);
-        return WrapperService::create($parent, $className, $instance);
+        $wrapper = WrapperService::create($parent, $className, $instance);
+        // initialize wrapped class by default here
+        $wrapper->init();
+        return $wrapper;
     }
 
     public static function getModuleVarsHelper(ServicesInterface $parent): ServiceInterface

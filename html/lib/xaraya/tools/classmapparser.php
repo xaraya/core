@@ -264,7 +264,7 @@ class ClassMapParser
             if ($fileType == 'module') {
                 $interface = \Xaraya\Modules\ModuleInterface::class;
             } else {
-                $interface = \Xaraya\Modules\ModuleServicesInterface::class;
+                $interface = \Xaraya\Modules\ModuleClassInterface::class;
             }
             if (!$this->checkInterface($className, $interface)) {
                 $classType = 'others';
@@ -297,7 +297,7 @@ class ClassMapParser
     protected function addMethod(string $className, string $filePath, string $modName, string $modType, string $fileType): void
     {
         if ($this->checkClass) {
-            $interface = \Xaraya\Modules\MethodServicesInterface::class;
+            $interface = \Xaraya\Modules\MethodClassInterface::class;
             if (!$this->checkInterface($className, $interface)) {
                 // @todo put in others here?
                 $classType = 'others/' . $modType;

@@ -91,6 +91,7 @@ trait DatabaseTrait
 
     /**
      * Initialize service class
+     * Note: for installer phase5 we set $args['doConnect'] = false
      * @param array<string, mixed> $config
      * @uses \xarDatabase::init()
      */

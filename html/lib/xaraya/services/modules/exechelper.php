@@ -18,6 +18,7 @@ namespace Xaraya\Services\Modules;
 
 use Xaraya\Context\ContextInterface;
 use Xaraya\Modules\ModuleInterface;
+use Xaraya\Modules\ModuleClassInterface;
 use Xaraya\Services\ServiceClass;
 use xarCore;
 use ixarMod;
@@ -230,14 +231,19 @@ class ExecHelper extends ServiceClass
 
         $info = $xar->mod()->getInfoHelper();
 
-        $modBaseInfo = $info->getBaseInfo($modName);
+        // allow inactive/non-upgraded modules in any state
+        if ($flags & ixarMod::LOAD_ANYSTATE) {
+            $modBaseInfo = $info->getFileInfo($modName);
+        } else {
+            $modBaseInfo = $info->getBaseInfo($modName);
+        }
         // Not a valid module - throw exception
         if (empty($modBaseInfo)) {
             throw new ModuleNotFoundException($modName);
         }
 
         // Not a valid module state - throw exception
-        if ($modBaseInfo['state'] != ixarMod::STATE_ACTIVE && !($flags & ixarMod::LOAD_ANYSTATE)) {
+        if (!($flags & ixarMod::LOAD_ANYSTATE) && $modBaseInfo['state'] != ixarMod::STATE_ACTIVE) {
             throw new ModuleNotActiveException($modName);
         }
 
@@ -350,6 +356,16 @@ class ExecHelper extends ServiceClass
             $this->moduleClasses[$modName]->setContext($this->getContext());
         }
         return $this->moduleClasses[$modName];
+    }
+
+    public function getModuleClass(string $modName, string $modType): ?ModuleClassInterface
+    {
+        $module = $this->getModule($modName);
+        $classType = $module->getClassType($modType);
+        if (empty($classType)) {
+            return null;
+        }
+        return $module->getComponent($classType);
     }
 
     public function getModuleClassMethod(string $modName, string $modType, string $funcName, string $callType): ?callable

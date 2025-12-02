@@ -4,6 +4,7 @@ namespace Xaraya\DataObject\Generated;
 
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
+use Xaraya\Services\WithServicesClass;
 use DataContainer;
 use DataObjectDescriptor;
 use DataObject;
@@ -72,6 +73,7 @@ interface iGeneratedClass
 class GeneratedClass extends DataContainer implements iGeneratedClass, ContextInterface
 {
     use ContextTrait;
+    use WithServicesClass;
 
     /** @var string */
     protected static $_objectName = 'OVERRIDE';
@@ -93,8 +95,9 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
      * @param ?int $itemid (optional) itemid to retrieve DataObject item from database
      * @param array<string, mixed> $values (optional) values to set for DataObject properties
      */
-    public function __construct($itemid = null, $values = [])
+    public function __construct($itemid = null, $values = [], $xar = null)
     {
+        $this->setServicesClass($xar);
         $this->load($itemid);
         if (!empty($values)) {
             $this->refresh($values);
@@ -164,9 +167,9 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
     public function refresh($values = null)
     {
         if (isset($values)) {
-            static::getObject()->setFieldValues($values);
+            $this->getObject()->setFieldValues($values);
         } else {
-            static::getObject()->setFieldValues($this->_values);
+            $this->getObject()->setFieldValues($this->_values);
         }
         $this->store();
     }
@@ -177,7 +180,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
      */
     public function store()
     {
-        $this->_values = static::getObject()->getFieldValues();
+        $this->_values = $this->getObject()->getFieldValues();
     }
 
     /**
@@ -190,7 +193,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
         if (empty($itemid) || $itemid == $this->_itemid) {
             return $itemid;
         }
-        $this->_itemid = static::getObject()->getItem(['itemid' => $itemid]);
+        $this->_itemid = $this->getObject()->getItem(['itemid' => $itemid]);
         $this->store();
         return $this->_itemid;
     }
@@ -201,7 +204,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
      */
     public function clear()
     {
-        static::getObject()->clearFieldValues();
+        $this->getObject()->clearFieldValues();
         $this->store();
     }
 
@@ -212,9 +215,9 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
     public function save()
     {
         if (empty($this->_itemid)) {
-            $this->_itemid = static::getObject()->createItem();
+            $this->_itemid = $this->getObject()->createItem();
         } else {
-            $this->_itemid = static::getObject()->updateItem();
+            $this->_itemid = $this->getObject()->updateItem();
         }
         $this->store();
         return $this->_itemid;
@@ -227,7 +230,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
     public function delete()
     {
         if (!empty($this->_itemid)) {
-            static::getObject()->deleteItem();
+            $this->getObject()->deleteItem();
         }
         $this->load();
     }
@@ -239,7 +242,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
     public function connect()
     {
         foreach (static::getPropertyNames() as $name) {
-            $this->$name = static::getObject()->properties[$name];
+            $this->$name = $this->getObject()->properties[$name];
         }
     }
 
@@ -272,7 +275,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
     {
         $this->context = $context;
         // @todo set context if available in generated class
-        static::getObject()->setContext($this->getContext());
+        $this->getObject()->setContext($this->getContext());
     }
 
     /**
@@ -308,10 +311,11 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
      * Get the data object
      * @return DataObject
      */
-    public static function getObject()
+    public function getObject()
     {
         if (!isset(static::$_object)) {
-            static::$_object = VirtualObjectFactory::makeObject(static::getDescriptor());
+            $xar = $this->getServicesClass();
+            static::$_object = VirtualObjectFactory::makeObject(static::getDescriptor($xar), $this->getContext(), $xar);
         }
         return static::$_object;
     }
@@ -320,12 +324,12 @@ class GeneratedClass extends DataContainer implements iGeneratedClass, ContextIn
      * Get the object descriptor
      * @return DataObjectDescriptor
      */
-    public static function getDescriptor()
+    public static function getDescriptor($xar = null)
     {
         if (!isset(static::$_descriptor)) {
             // support *virtual* DataObject classes (= not defined in database) too
             $offline = true;
-            static::$_descriptor = VirtualObjectFactory::getObjectDescriptor(static::getDescriptorArgs(), $offline);
+            static::$_descriptor = VirtualObjectFactory::getObjectDescriptor(static::getDescriptorArgs(), $offline, $xar);
         }
         return static::$_descriptor;
     }
