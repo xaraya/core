@@ -70,6 +70,7 @@ class CompiledTemplate extends xarObject
         if ($this->type == 'page') {
             xarDebug::setExceptionHandler(['ExceptionHandlers','bone']);
         }
+        // Use $xar in BL .xsl transform
         $xar = $this->getServicesClass();
 
         // Executing means generating output, start a buffer for it

@@ -23,7 +23,7 @@
               </xsl:when>
               <xsl:otherwise>
                 <!-- Ok, we have nothin, but a label -->
-                <xsl:text>echo xarTpl::property('dynamicdata','label','showoutput',array('label'=&gt;</xsl:text>
+                <xsl:text>echo $xar->tpl()->property('dynamicdata','label','showoutput',array('label'=&gt;</xsl:text>
                 <xsl:choose>
                   <xsl:when test="starts-with(@label,'$')">
                     <xsl:value-of select="@label"/>
@@ -74,7 +74,7 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- If we have an object, throw out its label -->
-        <xsl:text>echo xarVarPrep::text(</xsl:text>
+        <xsl:text>echo $xar->prep()->text(</xsl:text>
         <xsl:value-of select="@object"/><xsl:text>-&gt;label);</xsl:text>
       </xsl:otherwise>
     </xsl:choose>

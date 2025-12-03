@@ -40,7 +40,7 @@
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>);}catch(Exception $e){if(xarModVars::get('dynamicdata','debugmode')&amp;&amp;xarUser::isDebugAdmin())echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
+        <xsl:text>);}catch(Exception $e){if($xar->mod('dynamicdata')->getVar('debugmode')&amp;&amp;$xar->user()->isDebugAdmin())echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <!-- We do have a property in the attribute -->
@@ -69,7 +69,7 @@
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>);}}catch(Exception $e){if(xarModVars::get('dynamicdata','debugmode')&amp;&amp;xarUser::isDebugAdmin())echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
+        <xsl:text>);}}catch(Exception $e){if($xar->mod('dynamicdata')->getVar('debugmode')&amp;&amp;$xar->user()->isDebugAdmin())echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:processing-instruction>

@@ -200,7 +200,7 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:processing-instruction name="php">
-        <xsl:text>echo xarMLS::translate(</xsl:text>
+        <xsl:text>echo $xar->mls()->translate(</xsl:text>
         <xsl:call-template name="resolveText">
           <xsl:with-param name="expr" select="$expr"/>
         </xsl:call-template>

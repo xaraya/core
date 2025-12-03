@@ -12,9 +12,8 @@
   <xsl:processing-instruction name="php">
       <xsl:choose>
         <xsl:when test="not(@object)">
-          <xsl:text>$context ??= null;&nl;</xsl:text>
           <!-- No object passed in -->
-          <xsl:text>echo xarMod::apiFunc('dynamicdata','admin','showform',</xsl:text>
+          <xsl:text>echo $xar->mod()->apiFunc('dynamicdata','admin','showform',</xsl:text>
           <xsl:choose>
             <xsl:when test="not(@definition)">
               <!-- No direct definition, use the attributes -->
@@ -26,7 +25,7 @@
               <xsl:value-of select="@definition"/>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:text>, $context);</xsl:text>
+          <xsl:text>);</xsl:text>
         </xsl:when>
         <xsl:otherwise>
           <!-- Use the object attribute -->

@@ -10,7 +10,7 @@
 
 <xsl:template match="xar:event">
   <xsl:processing-instruction name="php">
-    <xsl:text>xarEvents::notify('</xsl:text>
+    <xsl:text>$xar->events()->notify('</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>');</xsl:text>
   </xsl:processing-instruction>

@@ -36,7 +36,7 @@
           <xsl:call-template name="xarvar_getcode"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:text>xarVarPrep::text(</xsl:text>
+          <xsl:text>$xar->prep()->text(</xsl:text>
             <xsl:call-template name="xarvar_getcode"/>
           <xsl:text>)</xsl:text>
         </xsl:otherwise>
@@ -56,7 +56,7 @@
                 <xsl:call-template name="xarvar_getcode"/>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:text>xarVarPrep::text(</xsl:text>
+                <xsl:text>$xar->prep()->text(</xsl:text>
                   <xsl:call-template name="xarvar_getcode"/>
                 <xsl:text>)</xsl:text>
               </xsl:otherwise>
@@ -107,7 +107,7 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- No start with #, just copy it -->
-        <xsl:text>xarMLS::translate('</xsl:text>
+        <xsl:text>$xar->mls()->translate('</xsl:text>
         <xsl:call-template name="replace">
           <xsl:with-param name="source" select="normalize-space(.)"/>
         </xsl:call-template>
@@ -128,11 +128,11 @@
     <xsl:choose>
       <!-- Modvars -->
       <xsl:when test="@scope = 'module'">
-        <xsl:text>xarModVars::get("</xsl:text>
+        <xsl:text>$xar->mod("</xsl:text>
           <xsl:call-template name="resolvePHP">
             <xsl:with-param name="expr" select="@module"/>
           </xsl:call-template>
-        <xsl:text>", '</xsl:text>
+        <xsl:text>")->getVar('</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>')</xsl:text>
       </xsl:when>
@@ -144,32 +144,33 @@
       </xsl:when>
       <!-- User vars -->
       <xsl:when test="@scope = 'user'">
-        <xsl:text>xarUser::getVar('</xsl:text>
-        <xsl:value-of select="@name"/>
-        <xsl:text>'</xsl:text>
+        <xsl:text>$xar->user(</xsl:text>
         <xsl:if test="@user">
-          <xsl:text>,</xsl:text>
+          <xsl:text>'</xsl:text>
           <xsl:call-template name="resolvePHP">
             <xsl:with-param name="expr" select="@user"/>
           </xsl:call-template>
+          <xsl:text>'</xsl:text>
         </xsl:if>
-        <xsl:text>)</xsl:text>
+        <xsl:text>)->getVar('</xsl:text>
+        <xsl:value-of select="@name"/>
+        <xsl:text>')</xsl:text>
       </xsl:when>
       <!-- Config vars -->
       <xsl:when test="@scope = 'config'">
-        <xsl:text>xarConfigVars::get(null,'</xsl:text>
+        <xsl:text>$xar->config()->getVar('</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>')</xsl:text>
       </xsl:when>
       <!-- Session vars -->
       <xsl:when test="@scope = 'session'">
-        <xsl:text>xarSession::getVar('</xsl:text>
+        <xsl:text>$xar->session()->getVar('</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>')</xsl:text>
       </xsl:when>
       <!-- Request vars -->
       <xsl:when test="@scope = 'request'">
-        <xsl:text>xarController::getVar('</xsl:text>
+        <xsl:text>$xar->req()->getVar('</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>')</xsl:text>
       </xsl:when>

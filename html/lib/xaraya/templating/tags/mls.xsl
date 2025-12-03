@@ -14,7 +14,7 @@
 -->
 <xsl:template match="xar:ml">
   <xsl:processing-instruction name="php">
-    <xsl:text>echo xarMLS::translate(</xsl:text>
+    <xsl:text>echo $xar->mls()->translate(</xsl:text>
     <xsl:apply-templates/>
     <xsl:for-each select=".//xar:var">
       <xsl:text>,</xsl:text>
@@ -35,7 +35,7 @@
   do it again (TEMP, ugly)
 -->
 <xsl:template match="xar:set/xar:ml">
-  <xsl:text>xarMLS::translate(</xsl:text>
+  <xsl:text>$xar->mls()->translate(</xsl:text>
   <xsl:apply-templates/>
   <xsl:for-each select=".//xar:var">
     <xsl:text>,</xsl:text>
@@ -70,7 +70,7 @@
 <xsl:template match="xar:mlvar"/>
 
 <!--
-  we pick up its value/expression to add to the PHP xarML function as a param by explicitly calling this template
+  we pick up its value/expression to add to the PHP xar::ml function as a param by explicitly calling this template
 -->
 <xsl:template name="mlvar">
   <xsl:call-template name="resolvePHP">
@@ -104,7 +104,7 @@
 
 <!-- mlstring inside set just needs to resolve the text node -->
 <xsl:template match="xar:set/xar:mlstring">
-  <xsl:text>xarMLS::translate(</xsl:text>
+  <xsl:text>$xar->mls()->translate(</xsl:text>
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>

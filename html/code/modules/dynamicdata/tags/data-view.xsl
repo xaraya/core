@@ -10,16 +10,15 @@
 
 <xsl:template match="xar:data-view">
   <xsl:processing-instruction name="php">
-    <xsl:text>$context ??= null;&nl;</xsl:text>
     <xsl:choose>
       <!-- No object or objectname? Generate ourselves then -->
       <xsl:when test="not(@object) and not(@objectname)">
-        <xsl:text>echo xarMod::apiFunc('dynamicdata','user','showview',</xsl:text>
+        <xsl:text>echo $xar->mod()->apiFunc('dynamicdata','user','showview',</xsl:text>
         <!-- Dump the attributes in an array for the function call -->
         <xsl:call-template name="atts2args">
           <xsl:with-param name="nodeset" select="@*"/>
         </xsl:call-template>
-        <xsl:text>, $context);</xsl:text>
+        <xsl:text>);</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
@@ -31,9 +30,9 @@
             <!-- This a string. we assume it's an object name -->
             <xsl:text>$__</xsl:text>
             <xsl:value-of select="@objectname"/>
-            <xsl:text>=DataObjectFactory::getObjectList(array('name'=>'</xsl:text>
+            <xsl:text>=$xar->data()->getObjectList(array('name'=>'</xsl:text>
             <xsl:value-of select="@objectname"/>
-            <xsl:text>'), $context);</xsl:text>
+            <xsl:text>'));</xsl:text>
             <xsl:text>$__</xsl:text>
             <xsl:value-of select="@objectname"/>
             <xsl:text>-&gt;getItems(</xsl:text>

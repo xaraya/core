@@ -17,7 +17,6 @@
 
 <xsl:template match="xar:block">
   <xsl:processing-instruction name="php">
-    <xsl:text>$_bl_context ??= null;&nl;</xsl:text>
     <xsl:text>echo </xsl:text>
     <xsl:call-template name="block_code"/>
     <xsl:text>;</xsl:text>
@@ -34,7 +33,7 @@
       <!-- fixme: this causes all parameters to be passed to the function,
           regardless of if they were passed to the tag, 
           thus negating the possibility to test isset() -->
-      <xsl:text> xarBlock::renderBlock(array(&nl;</xsl:text>
+      <xsl:text> $xar->block()->renderBlock(array(&nl;</xsl:text>
       <xsl:text>'instance' =&gt; "</xsl:text><xsl:value-of select="@instance"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'module'   =&gt; "</xsl:text><xsl:value-of select="@module"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'type'     =&gt; "</xsl:text><xsl:value-of select="@type"/><xsl:text>",&nl;</xsl:text>
@@ -54,7 +53,7 @@
           name="nodeset"
           select="@*[name() != 'instance' and name() != 'module' and name() != 'type' and name() != 'name' and  name() != 'title' and name() != 'template' and name() != 'state' and name() != 'tplmodule'] "/>
       </xsl:call-template>
-      <xsl:text>), $_bl_context)</xsl:text>
+      <xsl:text>))</xsl:text>
     </xsl:when>
     <xsl:otherwise>
         <!-- Error out? -->

@@ -29,7 +29,7 @@
             <xsl:when test="@type='system'">
               <!-- The name is to be interpreted relative to the file we're parsing now -->
               <xsl:processing-instruction name="php">
-                <xsl:text>echo xarTpl::file("</xsl:text>
+                <xsl:text>echo $xar->tpl()->file("</xsl:text>
                 <xsl:value-of select="$bl_dirname"/><xsl:text>/</xsl:text><xsl:value-of select="@file"/>
                 <xsl:text>",</xsl:text>
                 <xsl:call-template name="resolvePHP">
@@ -97,7 +97,7 @@
                           <xsl:value-of select="@theme"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:text>xarTpl::getThemeName()</xsl:text>
+                        <xsl:text>$xar->tpl()->getThemeName()</xsl:text>
                       </xsl:otherwise>
                     </xsl:choose>
                   </xsl:when>
@@ -132,7 +132,7 @@
                           <xsl:value-of select="substring-before(substring-after($bl_dirname,'modules/'),'/')"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:text>xarMod::getName()</xsl:text>
+                        <xsl:text>$xar->mod()->getName()</xsl:text>
                       </xsl:otherwise>
                     </xsl:choose>
                   </xsl:otherwise>                           
@@ -167,7 +167,7 @@
               </xsl:variable>
               
               <xsl:processing-instruction name="php">
-                <xsl:text>echo xarTpl::includeTemplate("</xsl:text>
+                <xsl:text>echo $xar->tpl()->includeTemplate("</xsl:text>
                 <xsl:call-template name="resolvePHP">
                    <xsl:with-param name="expr" select="$scope"/>
                 </xsl:call-template>

@@ -10,11 +10,10 @@
 
 <xsl:template match="xar:data-display">
   <xsl:processing-instruction name="php">
-      <xsl:text>$context ??= null;&nl;</xsl:text>
       <xsl:choose>
         <xsl:when test="not(@object)">
           <!-- No object passed in -->
-          <xsl:text>echo xarMod::apiFunc('dynamicdata','user','showdisplay',</xsl:text>
+          <xsl:text>echo $xar->mod()->apiFunc('dynamicdata','user','showdisplay',</xsl:text>
           <xsl:choose>
             <xsl:when test="not(@definition)">
               <!-- No direct definition, use the attributes -->
@@ -26,7 +25,7 @@
               <xsl:value-of select="@definition"/>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:text>, $context);</xsl:text>
+          <xsl:text>);</xsl:text>
         </xsl:when>
         <xsl:otherwise>
           <xsl:choose>
@@ -39,9 +38,9 @@
               <!-- This a string. we assume it's an object name -->
               <xsl:text>$__</xsl:text>
               <xsl:value-of select="@object"/>
-              <xsl:text>=DataObjectFactory::getObject(array('name'=>'</xsl:text>
+              <xsl:text>=$xar->data()->getObject(array('name'=>'</xsl:text>
               <xsl:value-of select="@object"/>
-              <xsl:text>'), $context);</xsl:text>
+              <xsl:text>'));</xsl:text>
               <xsl:text>echo </xsl:text>
               <xsl:text>$__</xsl:text>
               <xsl:value-of select="@object"/>

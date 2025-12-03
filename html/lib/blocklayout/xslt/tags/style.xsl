@@ -10,12 +10,11 @@
 
     <xsl:template match="xar:style">
       <xsl:processing-instruction name="php">
-        <xsl:text>$context ??= $_bl_context ?? null;&nl;</xsl:text>
-        <xsl:text>xarMod::apiFunc('themes','user','register',</xsl:text>
+        <xsl:text>$xar->mod()->apiFunc('themes','user','register',</xsl:text>
         <xsl:call-template name="atts2args">
           <xsl:with-param name="nodeset" select="@*"/>
         </xsl:call-template>
-        <xsl:text>, $context);</xsl:text>
+        <xsl:text>);</xsl:text>
       </xsl:processing-instruction>
     </xsl:template>
 </xsl:stylesheet>
