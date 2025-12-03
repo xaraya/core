@@ -43,6 +43,7 @@ final class DynamicDataRoutesTest extends TestHelper
     public function testRoutesMain(): void
     {
         xar::tpl()->init();
+        xar::block()->init();
 
         $router = new Routing(function () {
             return DynamicDataRoutes::getRoutes();
@@ -86,6 +87,7 @@ final class DynamicDataRoutesTest extends TestHelper
     public function testRoutesEntity(): void
     {
         xar::tpl()->init();
+        xar::block()->init();
 
         $router = new Routing(function () {
             return DynamicDataRoutes::getRoutes();

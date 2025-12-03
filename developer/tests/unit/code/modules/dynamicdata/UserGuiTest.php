@@ -48,6 +48,7 @@ final class UserGuiTest extends TestHelper
         //xar::mod()->init();
         // needed to initialize the template cache
         xar::tpl()->init();
+        xar::block()->init();
         $expected = 'View Dynamic Objects';
         $output = xar::mod()->guiFunc('dynamicdata');
         $this->assertStringContainsString($expected, $output);
@@ -59,6 +60,7 @@ final class UserGuiTest extends TestHelper
         //xar::mod()->init();
         // needed to initialize the template cache
         xar::tpl()->init();
+        xar::block()->init();
         $expected = 'Function not found';
         $output = xar::mod()->guiFunc('dynamicdata', 'user', 'invalid');
         $this->assertStringContainsString($expected, $output);
@@ -70,6 +72,7 @@ final class UserGuiTest extends TestHelper
         //xar::mod()->init();
         // needed to initialize the template cache
         xar::tpl()->init();
+        xar::block()->init();
         $expected = 'Function not found';
         $output = xar::mod()->guiFunc('dynamicdata', 'oops', 'main');
         $this->assertStringContainsString($expected, $output);
