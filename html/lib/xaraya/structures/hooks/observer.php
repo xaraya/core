@@ -35,6 +35,7 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
     public $module = "modules";
     /** @var string */
     public $type = "admin";
+    public $itemtype = 0;
 
     /**
      * Get name for this module in hook observer
