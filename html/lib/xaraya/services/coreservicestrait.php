@@ -18,6 +18,8 @@ namespace Xaraya\Services;
 
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
+use Xaraya\Modules\ModuleClassInterface;
+use Xaraya\Modules\ModuleInterface;
 use sys;
 use Exception;
 
@@ -57,6 +59,8 @@ interface CoreServicesInterface extends ContextInterface
     public function events(): WrapperInterface;
     public function hooked(): WrapperInterface;
     public function theme(): WrapperInterface;
+    public function module(string $modName): ModuleInterface;
+    public function modclass(string $modName, string $modType): ModuleClassInterface|null;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
      * @return void|never
@@ -613,6 +617,16 @@ trait CoreServicesTrait
     public function theme(): WrapperInterface
     {
         return $this->getStaticServices()->theme();
+    }
+
+    public function module(string $modName): ModuleInterface
+    {
+        return $this->getStaticServices()->module($modName);
+    }
+
+    public function modclass(string $modName, string $modType): ModuleClassInterface|null
+    {
+        return $this->getStaticServices()->modclass($modName, $modType);
     }
 
     /**

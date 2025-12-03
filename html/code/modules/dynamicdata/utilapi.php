@@ -60,7 +60,7 @@ class UtilApi extends UserApi implements DatabaseInterface
         $this->setDbModName($modName);
         // we extend from UserApi now
         // @todo verify if/when we can use $this->mod() here before/after parent constructor
-        $parent ??= xar::mod()->getModule($modName);
+        $parent ??= xar::module($modName);
         parent::__construct($modName, $parent, $context);
     }
 

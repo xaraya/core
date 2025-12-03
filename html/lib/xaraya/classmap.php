@@ -302,6 +302,17 @@ class xarClassMap extends xarObject
     }
 
     /**
+     * Summary of findEventObserver
+     * @param string $modName
+     * @param string $event
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
+     */
+    public static function findEventObserver(string $modName, string $event): ?array
+    {
+        return static::findClassFile('eventobservers', $modName, $event);
+    }
+
+    /**
      * Summary of getHookObservers
      * @param ?string $modName (optional)
      * @param ?string $event (optional)

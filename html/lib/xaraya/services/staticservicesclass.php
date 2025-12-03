@@ -17,6 +17,8 @@
 namespace Xaraya\Services;
 
 use Xaraya\Context\Context;
+use Xaraya\Modules\ModuleClassInterface;
+use Xaraya\Modules\ModuleInterface;
 use Xaraya\Requests\RequestInterface as RequestFacade;
 use Xaraya\Sessions\SessionInterface as SessionFacade;
 use xarConst;
@@ -494,6 +496,20 @@ class StaticServicesClass extends ServicesClass
     public function theme(): WrapperInterface
     {
         return $this->getServicePrototype('theme');
+    }
+
+    public function module(string $modName): ModuleInterface
+    {
+        /** @var Modules\ExecHelper $modulesExecHelper */
+        $modulesExecHelper = $this->getServicePrototype('modules.exec');
+        return $modulesExecHelper->getModule($modName);
+    }
+
+    public function modclass(string $modName, string $modType): ModuleClassInterface|null
+    {
+        /** @var Modules\ExecHelper $modulesExecHelper */
+        $modulesExecHelper = $this->getServicePrototype('modules.exec');
+        return $modulesExecHelper->getModuleClass($modName, $modType);
     }
 
     /**

@@ -159,7 +159,8 @@ class xarInstall extends xarObject
             throw new EmptyParameterException('modName');
         }
 
-        if (isset($loadedModuleCache[strtolower("$modName$modType")])) {
+        $cacheKey = strtolower($modName . ':' . $modType);
+        if (isset($loadedModuleCache[$cacheKey])) {
             // Already loaded from somewhere else
             return true;
         }
@@ -171,7 +172,7 @@ class xarInstall extends xarObject
 
         $osfile = sys::code() . "modules/$modOsDir/xar$modOsType/$func.php";
 
-        $loadedModuleCache[strtolower("$modName$modType")] = true;
+        $loadedModuleCache[$cacheKey] = true;
 
         // Get Xaraya Services Class
         $xar = xar::getServicesClass();

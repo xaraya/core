@@ -17,6 +17,8 @@
 namespace Xaraya\Services;
 
 use Xaraya\Context\Context;
+use Xaraya\Modules\ModuleClassInterface;
+use Xaraya\Modules\ModuleInterface;
 
 /**
  * Make Core Services available via self::service() etc. in trait (WIP)
@@ -538,6 +540,16 @@ trait WithStaticServices
     public static function theme(): WrapperInterface
     {
         return self::getServicesClass()->theme();
+    }
+
+    public static function module(string $modName): ModuleInterface
+    {
+        return self::getServicesClass()->module($modName);
+    }
+
+    public static function modclass(string $modName, string $modType): ModuleClassInterface|null
+    {
+        return self::getServicesClass()->modclass($modName, $modType);
     }
 
     /**

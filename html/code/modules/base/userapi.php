@@ -29,5 +29,13 @@ use Xaraya\Modules\UserApiClass;
  */
 class UserApi extends UserApiClass
 {
-    // ...
+    /**
+     * Summary of getmenulinks
+     * @param array<mixed> $args
+     * @return mixed
+     */
+    public function getmenulinks(array $args = [])
+    {
+        return [];
+    }
 }

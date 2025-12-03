@@ -394,7 +394,7 @@ class xarMod extends xarObject implements ixarMod
      * @param string $func link function (display, getitemtypes, ...)
      * @return string tplmodule or 'dynamicdata'
      */
-    public static function checkModuleFunction($tplmodule = 'dynamicdata', $type = 'user', $func = 'display', $defaultmodule = 'dynamicdata')
+    public static function checkModuleFunction($tplmodule = 'dynamicdata', $type = 'userapi', $func = 'getitemtypes', $defaultmodule = 'dynamicdata')
     {
         return self::mod()->checkModuleFunction($tplmodule, $type, $func, $defaultmodule);
     }

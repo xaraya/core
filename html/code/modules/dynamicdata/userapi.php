@@ -54,6 +54,16 @@ class UserApi implements UserApiInterface
     use UserApiTrait;
 
     /**
+     * Summary of getmenulinks
+     * @param array<mixed> $args
+     * @return mixed
+     */
+    public function getmenulinks(array $args = [])
+    {
+        return [];
+    }
+
+    /**
      * Summary of other
      * @param array<mixed> $args
      * @return mixed

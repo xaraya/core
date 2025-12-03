@@ -143,6 +143,12 @@ class ExecHelper extends ServiceClass
             }
         }
 
+        // Note: pass modType . funcType as modType here for module classes, and use funcType to identify the callType (api or not)
+        $callable = $this->getModuleClassMethod($modName, $modType . $funcType, $funcName, $funcType);
+        if (!empty($callable)) {
+            return $this->callMethod($callable, $args);
+        }
+
         // Call function
         $found = true;
         $isLoaded = true;
@@ -167,12 +173,6 @@ class ExecHelper extends ServiceClass
                 // Q: who are we kidding with this? directory == modName always, no?
                 $funcFile = sys::code() . 'modules/' . $modFileInfo['directory'] . '/xar' . $modType . $funcType . '/' . strtolower($funcName) . '.php';
                 if (!file_exists($funcFile)) {
-                    // @todo cache this if we ever get here again? Already cached internally for module class methods
-                    // Note: pass modType . funcType as modType here for module classes, and use funcType to identify the callType (api or not)
-                    $callable = $this->getModuleClassMethod($modName, $modType . $funcType, $funcName, $funcType);
-                    if (!empty($callable)) {
-                        return $this->callMethod($callable, $args);
-                    }
                     // Valid syntax, but the function doesn't exist
                     if ($funcType == "api") {
                         throw new FunctionNotFoundException($modFunc);
@@ -220,7 +220,7 @@ class ExecHelper extends ServiceClass
         }
 
         // Make sure we access the cache with lower case key, return true when we already loaded
-        $cacheKey = strtolower($modName . $modType);
+        $cacheKey = strtolower($modName . ':' . $modType);
         if (isset($this->loadedModuleCache[$cacheKey])) {
             return true;
         }
@@ -231,45 +231,49 @@ class ExecHelper extends ServiceClass
 
         $info = $xar->mod()->getInfoHelper();
 
-        // allow inactive/non-upgraded modules in any state
+        // Allow inactive/non-upgraded modules in any state
         if ($flags & ixarMod::LOAD_ANYSTATE) {
             $modBaseInfo = $info->getFileInfo($modName);
+            // Not a valid module - throw exception
+            if (empty($modBaseInfo)) {
+                throw new ModuleNotFoundException($modName);
+            }
         } else {
             $modBaseInfo = $info->getBaseInfo($modName);
-        }
-        // Not a valid module - throw exception
-        if (empty($modBaseInfo)) {
-            throw new ModuleNotFoundException($modName);
-        }
-
-        // Not a valid module state - throw exception
-        if (!($flags & ixarMod::LOAD_ANYSTATE) && $modBaseInfo['state'] != ixarMod::STATE_ACTIVE) {
-            throw new ModuleNotActiveException($modName);
-        }
-
-        // Not the correct version - throw exception unless we are upgrading
-        if (!$info->checkVersion($modName) && !$xar->mem()->get('Upgrade', 'upgrading') && $modName != 'modules') {
-            xarCore::exit('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
-            return false;
+            // Not a valid module - throw exception
+            if (empty($modBaseInfo)) {
+                throw new ModuleNotFoundException($modName);
+            }
+            // Not a valid module state - throw exception
+            if ($modBaseInfo['state'] != ixarMod::STATE_ACTIVE) {
+                throw new ModuleNotActiveException($modName);
+            }
+            // Not the correct version - throw exception unless we are upgrading
+            if (!$info->checkVersion($modName) && !$xar->mem()->get('Upgrade', 'upgrading') && $modName != 'modules') {
+                xarCore::exit('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
+                return false;
+            }
         }
 
-        // Load the module files
-        $modDir = $modBaseInfo['directory'];
-        $fileName = sys::code() . 'modules/' . $modDir . '/xar' . $modType . '.php';
-
-        // Assume failure
-        if (file_exists($fileName)) {
-            sys::import('modules.' . $modDir . '.xar' . $modType);
+        // Do we have a module class handling this modType
+        $module = $this->getModule($modName);
+        // returns null for DefaultModule() = no suitable class type
+        $classType = $module->getClassType($modType);
+        if (isset($classType)) {
+            // this is OK - do nothing
             $this->loadedModuleCache[$cacheKey] = true;
-        } elseif (is_dir(sys::code() . 'modules/' . $modDir . '/xar' . $modType)) {
-            // this is OK too - do nothing
-            $this->loadedModuleCache[$cacheKey] = true;
+            $modDir = $modBaseInfo['directory'] ?? $modName;
         } else {
-            // Do we have a module class handling this modType
-            $instance = $this->getModule($modName);
-            // returns null for DefaultModule() = no suitable class type
-            $classType = $instance->getClassType($modType);
-            if (isset($classType)) {
+            // Load the module files
+            $modDir = $modBaseInfo['directory'];
+            $fileName = sys::code() . 'modules/' . $modDir . '/xar' . $modType . '.php';
+
+            // Assume failure
+            if (file_exists($fileName)) {
+                // this is OK too - do nothing
+                sys::import('modules.' . $modDir . '.xar' . $modType);
+                $this->loadedModuleCache[$cacheKey] = true;
+            } elseif (is_dir(sys::code() . 'modules/' . $modDir . '/xar' . $modType)) {
                 // this is OK too - do nothing
                 $this->loadedModuleCache[$cacheKey] = true;
             } else {
@@ -308,15 +312,10 @@ class ExecHelper extends ServiceClass
         return $this->getModule($modName)->usergui();
     }
 
-    public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string
+    public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'userapi', string $func = 'getitemtypes', string $defaultmodule = 'dynamicdata'): string
     {
         $key = "$tplmodule:$type:$func";
         if (!isset($this->checkFunctionCache[$key])) {
-            $file = sys::code() . 'modules/' . $tplmodule . '/xar' . $type . '/' . $func . '.php';
-            if (file_exists($file)) {
-                $this->checkFunctionCache[$key] = $tplmodule;
-                return $this->checkFunctionCache[$key];
-            }
             // Note: pass modType . funcType as modType here for module classes, and use callType (api or not)
             if (str_ends_with($type, 'api')) {
                 $callType = 'api';
@@ -329,9 +328,14 @@ class ExecHelper extends ServiceClass
             $callable = $this->getModuleClassMethod($tplmodule, $type, $func, $callType);
             if (!empty($callable)) {
                 $this->checkFunctionCache[$key] = $tplmodule;
-            } else {
-                $this->checkFunctionCache[$key] = $defaultmodule;
+                return $this->checkFunctionCache[$key];
             }
+            $file = sys::code() . 'modules/' . $tplmodule . '/xar' . $type . '/' . $func . '.php';
+            if (file_exists($file)) {
+                $this->checkFunctionCache[$key] = $tplmodule;
+                return $this->checkFunctionCache[$key];
+            }
+            $this->checkFunctionCache[$key] = $defaultmodule;
         }
         return $this->checkFunctionCache[$key];
     }
@@ -373,9 +377,9 @@ class ExecHelper extends ServiceClass
         $key = "$modName:$modType:$funcName:$callType";
         if (!array_key_exists($key, $this->getMethodCache)) {
             $xar = $this->getParent();
-            $instance = $this->getModule($modName);
+            $module = $this->getModule($modName);
             // returns null for DefaultModule() = no suitable class method
-            $this->getMethodCache[$key] = $instance->getCallableMethod($modType, $funcName, $callType);
+            $this->getMethodCache[$key] = $module->getCallableMethod($modType, $funcName, $callType);
             if (!isset($this->getMethodCache[$key])) {
                 $xar->log()->info("xar::mod()->getModuleClassMethod: Missing method for $key");
             } else {

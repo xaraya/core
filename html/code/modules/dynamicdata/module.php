@@ -31,6 +31,7 @@ class Module extends ModuleClass
         $this->classtypes['utilapi'] = 'UtilApi';
         $this->classtypes['dataapi'] = 'DataApi';
         $this->classtypes['restapi'] = 'RestApi';
+        $this->classtypes['object'] = 'ObjectGui';
     }
 
     public function getTestGUI(): AdminGuiInterface

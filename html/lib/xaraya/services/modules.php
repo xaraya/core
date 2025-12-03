@@ -82,7 +82,7 @@ interface ModulesInterface extends ServiceInterface
     public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed;
     public function userapi(?string $modName = null): ?UserApiInterface;
     public function usergui(?string $modName = null): ?UserGuiInterface;
-    public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string;
+    public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'userapi', string $func = 'getitemtypes', string $defaultmodule = 'dynamicdata'): string;
     public function getModule(?string $modName = null): ModuleInterface;
     public function getModuleClass(?string $modName = null, ?string $modType = null): ?ModuleClassInterface;
     public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): ?callable;
@@ -566,8 +566,10 @@ trait ModulesTrait
      * @param string $type link type (user, userapi, admin, adminapi, ...)
      * @param string $func link function (display, getitemtypes, ...)
      * @return string tplmodule or 'dynamicdata'
+     * @see \Xaraya\Bridge\RestAPI\RestAPIBuilder::find_default_api_functions()
+     * @see \xarDDObject::getModuleURL()
      */
-    public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string
+    public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'userapi', string $func = 'getitemtypes', string $defaultmodule = 'dynamicdata'): string
     {
         return $this->getExecHelper()->checkModuleFunction($tplmodule, $type, $func, $defaultmodule);
     }

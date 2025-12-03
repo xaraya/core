@@ -17,6 +17,8 @@
 namespace Xaraya\Services;
 
 use Xaraya\Context\ContextTrait;
+use Xaraya\Modules\ModuleClassInterface;
+use Xaraya\Modules\ModuleInterface;
 use sys;
 
 /**
@@ -538,6 +540,16 @@ trait ParentServicesTrait
     public function theme(): WrapperInterface
     {
         return $this->getParent()->theme();
+    }
+
+    public function module(string $modName): ModuleInterface
+    {
+        return $this->getParent()->module($modName);
+    }
+
+    public function modclass(string $modName, string $modType): ModuleClassInterface|null
+    {
+        return $this->getParent()->modclass($modName, $modType);
     }
 
     /**

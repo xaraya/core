@@ -127,6 +127,8 @@ class InfoHelper extends ServiceClass
                 if (!empty($result) && class_exists($result['classname'])) {
                     $versionCall = new $result['classname']();
                     $modversion = $versionCall();
+                    // set directory here if needed
+                    $modversion['directory'] ??= $modOsDir;
                     // If the locale is already present, it means we can make the translations available
                     if (!empty($xar->mls()->getCurrentLocale())) {
                         $xar->mls()->loadModuleTranslations($modOsDir, '', 'version');
@@ -169,6 +171,8 @@ class InfoHelper extends ServiceClass
         }
 
         $version = array_merge($themeinfo, $modversion);
+        // set directory here if needed
+        $version['directory'] ??= $modOsDir;
 
         return $this->parseFileInfo($version, $modOsDir . " / " . $type);
     }
@@ -566,7 +570,7 @@ class InfoHelper extends ServiceClass
         $fileInfo['dependencyinfo'] = $version['dependencyinfo'] ?? [];
         $fileInfo['propertyinfo']   = $version['propertyinfo'] ?? [];
         $fileInfo['extensions']     = $version['extensions'] ?? [];
-        $fileInfo['directory']      = $version['directory'] ?? $version['name'];
+        $fileInfo['directory']      = $version['directory'] ?? false;
         $fileInfo['homepage']       = $version['homepage'] ?? false;
         $fileInfo['email']          = $version['email'] ?? false;
         $fileInfo['contact_info']   = $version['contact_info'] ?? false;
@@ -594,7 +598,7 @@ class InfoHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        $modInfo = $this->getFileInfo($modName);
+        $modInfo = $this->getInfo($this->getRegID($modName));
         if (str_contains($modInfo['class'], 'Core')) {
             return $modInfo['version'] == \xarCore::VERSION_NUM;
         } else {
