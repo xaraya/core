@@ -923,9 +923,9 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testGetModuleClasses(): void
+    public function testGetModules(): void
     {
-        $modules = xarClassMap::getModuleClasses();
+        $modules = xarClassMap::getModules();
 
         $expected = [
             'authsystem' => [
@@ -939,10 +939,10 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected[$modName], $modules[$modName]);
     }
 
-    public function testFindModuleClass(): void
+    public function testFindModule(): void
     {
         $modName = 'authsystem';
-        $result = xarClassMap::findModuleClass($modName);
+        $result = xarClassMap::findModule($modName);
 
         $expected = [
             'classname' => 'Xaraya\Modules\Authsystem\Module',
@@ -957,19 +957,19 @@ final class ClassMapTest extends TestCase
         $this->assertInstanceOf($expected, $instance);
     }
 
-    public function testFindModuleClassInvalid(): void
+    public function testFindModuleInvalid(): void
     {
         $modName = 'invalid';
-        $result = xarClassMap::findModuleClass($modName);
+        $result = xarClassMap::findModule($modName);
 
         $expected = null;
         $this->assertEquals($expected, $result);
     }
 
-    public function testGetModuleClassTypes(): void
+    public function testGetModuleClasses(): void
     {
         $modName = 'authsystem';
-        $classTypes = xarClassMap::getModuleClassTypes($modName);
+        $classTypes = xarClassMap::getModuleClasses($modName);
 
         $expected = [
             'restapi' => [
@@ -984,11 +984,11 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected[$modType], $classTypes[$modType]);
     }
 
-    public function testFindModuleClassType(): void
+    public function testFindModuleClass(): void
     {
         $modName = 'authsystem';
         $modType = 'restapi';
-        $result = xarClassMap::findModuleClassType($modName, $modType);
+        $result = xarClassMap::findModuleClass($modName, $modType);
 
         $expected = [
             'classname' => 'Xaraya\Modules\Authsystem\RestApi',
@@ -1062,12 +1062,12 @@ final class ClassMapTest extends TestCase
         $this->assertInstanceOf($expected, $instance);
     }
 
-    public function testWalkModuleMethods(): void
+    public function testWalkModuleClassMethods(): void
     {
-        $modules = xarClassMap::getModuleClasses();
+        $modules = xarClassMap::getModules();
         foreach ($modules as $modName => $modInfo) {
             //echo $modName . ': ' . json_encode($modInfo) . "\n";
-            $classTypes = xarClassMap::getModuleClassTypes($modName);
+            $classTypes = xarClassMap::getModuleClasses($modName);
             //foreach ($classTypes as $classType => $classInfo) {
             //    echo "\t" . $classType . ': ' . json_encode($classInfo) . "\n";
             //}

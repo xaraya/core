@@ -289,7 +289,7 @@ class ModuleRoutes implements RoutesInterface
      */
     public static function getModule(?Context $context, $xar = null): ModuleInterface
     {
-        $result = xarClassMap::findModuleClass(static::$moduleName);
+        $result = xarClassMap::findModule(static::$moduleName);
         /** @var ModuleInterface $module */
         $module = new $result['classname'](static::$moduleName, $context, $xar);
         return $module;

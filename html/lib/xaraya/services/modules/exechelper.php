@@ -343,7 +343,7 @@ class ExecHelper extends ServiceClass
     public function getModule(string $modName): ModuleInterface
     {
         if (!array_key_exists($modName, $this->moduleClasses)) {
-            $result = xarClassMap::findModuleClass($modName);
+            $result = xarClassMap::findModule($modName);
             if (!empty($result) && class_exists($result['classname'])) {
                 $class = $result['classname'];
                 try {

@@ -534,11 +534,11 @@ class xarClassMap extends xarObject
     }
 
     /**
-     * Summary of getModuleClasses
+     * Summary of getModules
      * @param ?string $modName (optional)
      * @return array<string, array{classname: string, filepath: string, module: string}>
      */
-    public static function getModuleClasses(?string $modName = null): array
+    public static function getModules(?string $modName = null): array
     {
         $classType = 'modules';
         $fileType = 'module';
@@ -552,24 +552,24 @@ class xarClassMap extends xarObject
     }
 
     /**
-     * Summary of findModuleClass
+     * Summary of findModule
      * @param string $modName
      * @return array{classname: string, filepath: string, module: string}|null
      * @see \xar::mod()->getModule()
      */
-    public static function findModuleClass(string $modName): ?array
+    public static function findModule(string $modName): ?array
     {
-        $modules = static::getModuleClasses($modName);
+        $modules = static::getModules($modName);
         return $modules[$modName] ?? null;
     }
 
     /**
-     * Summary of getModuleClassTypes
+     * Summary of getModuleClasses
      * @param string $modName
      * @param ?string $modType (optional)
      * @return array<string, array{classname: string, filepath: string, module: string, classtype: string}>
      */
-    public static function getModuleClassTypes(string $modName, ?string $modType = null): array
+    public static function getModuleClasses(string $modName, ?string $modType = null): array
     {
         $classType = 'modules';
         $found = static::getClassFiles($classType, $modName, $modType);
@@ -587,16 +587,16 @@ class xarClassMap extends xarObject
     }
 
     /**
-     * Summary of findModuleClassType
+     * Summary of findModuleClass
      * @param string $modName
      * @param string $modType
      * @return array{classname: string, filepath: string, module: string, classtype: string}|null
      * @see \Xaraya\Modules\ModuleTrait::getClassName()
      */
-    public static function findModuleClassType(string $modName, string $modType): ?array
+    public static function findModuleClass(string $modName, string $modType): ?array
     {
         $modType = strtolower($modType);
-        $classTypes = static::getModuleClassTypes($modName, $modType);
+        $classTypes = static::getModuleClasses($modName, $modType);
         return $classTypes[$modType] ?? null;
     }
 
