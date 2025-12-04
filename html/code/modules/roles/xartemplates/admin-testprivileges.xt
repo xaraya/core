@@ -9,7 +9,7 @@
             <xar:set name="pname">$object->properties['name']->getValue()</xar:set>
         </xar:if>
         <h2>Test Privileges of #$itemtypename# '#$pname#':</h2>
-        <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
+        <xar:set name="request">$xar->req()->getRequest()->getInfo()</xar:set>
         <xar:set name="activetab">#$request.2#</xar:set>
         <xar:set name="xmldata">'showusers'</xar:set>
         <xar:set name="urlargs">['id' => $id, 'reload' => 'reload']</xar:set>
@@ -25,7 +25,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#$xar->ctl()->URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
                                     #$parents[$i]['parentname']#
                                 </a>
                             </li>
@@ -35,7 +35,7 @@
                 </ul>
             </div>
         </xar:if>
-        <form action="#xarController::URL('roles','admin','testprivileges')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#$xar->ctl()->URL('roles','admin','testprivileges')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Scope</legend>
                 <div class="xar-row">
@@ -65,7 +65,7 @@
                 <table class="xar-table xar-fullwidth">
                     <tr>
                         <th>Mask</th>
-                        <xar:if condition="xarModVars::get('privileges','showrealms')">
+                        <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                             <th>Realm</th>
                         </xar:if>
                         <th>Module</th>
@@ -76,10 +76,10 @@
                     <xar:foreach in="$masks" value="$mask">
                         <tr>
                             <td>
-                                <a href="#xarController::URL('roles','admin','testprivileges',['id'=>xarVar('id'),'name'=>$mask->getName(),'test'=>true])#">
+                                <a href="#$xar->ctl()->URL('roles','admin','testprivileges',['id'=>xarVar('id'),'name'=>$mask->getName(),'test'=>true])#">
                                 #$mask:getName()#</a>
                             </td>
-                            <xar:if condition="xarModVars::get('privileges','showrealms')">
+                            <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                                 <td>#$mask:getRealm()#</td>
                             </xar:if>
                             <td>#$mask:getModule()#</td>
@@ -97,7 +97,7 @@
                 <table class="xar-table xar-fullwidth">
                     <tr>
                         <th>Mask</th>
-                        <xar:if condition="xarModVars::get('privileges','showrealms')">
+                        <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                             <th>Realm</th>
                         </xar:if>
                         <th>Module</th>
@@ -108,7 +108,7 @@
                     <xar:loop name="$testmasks">
                         <tr>
                             <td>#$loop:item['sname']#</td>
-                            <xar:if condition="xarModVars::get('privileges','showrealms')">
+                            <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                                 <td>#$loop:item['srealm']#</td>
                             </xar:if>
                             <td>#$loop:item['smodule']#</td>
@@ -125,7 +125,7 @@
                     <xar:if condition="$testresult ne false">
                         <tr>
                             <th>Privilege</th>
-                            <xar:if condition="xarModVars::get('privileges','showrealms')">
+                            <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                                 <th>Realm</th>
                             </xar:if>
                             <th>Module</th>
@@ -135,7 +135,7 @@
                         </tr>
                         <tr>
                             <td>#$rname#</td>
-                            <xar:if condition="xarModVars::get('privileges','showrealms')">
+                            <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                                 <td>#$rrealm#</td>
                             </xar:if>
                             <td>#$rmodule#</td>
@@ -150,7 +150,7 @@
             <fieldset>
                 <legend>Test Result</legend>
                 <h4>
-                    #$itemtypename# <a href="#xarController::URL('roles','admin','modify',['id'=>$id])#">'#$pname#'</a>
+                    #$itemtypename# <a href="#$xar->ctl()->URL('roles','admin','modify',['id'=>$id])#">'#$pname#'</a>
                     <xar:if condition="$testresult eq false">
                         Is Not Permitted 
                     <xar:else />

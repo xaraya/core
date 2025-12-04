@@ -9,7 +9,7 @@
            We want to show this option so people know it is available.
            We only show this if we can use it eg scheduler is installed and hooked to mail
        -->
-        <xar:if condition="xarMod::isAvailable('scheduler') and xarHooks::isAttached('mail','scheduler')">
+        <xar:if condition="$xar->mod()->isAvailable('scheduler') and $xar->mod()->isHooked('mail','scheduler')">
             <!-- We only show this if we can use it eg scheduler is installed and hooked to mail -->
             <xar:if condition="!empty($log)">
                 <pre>
@@ -19,12 +19,12 @@
                     <table class="xar-table">
                         <tr>
                             <td>Mail ID</td>
-                            <td>#xarVarPrep::text($id)#</td>
+                            <td>#$xar->prep()->text($id)#</td>
                         </tr>
                         <tr>
                             <td>From</td>
-                            <td>#xarVarPrep::text($mail['fromname'])#
-                            &lt;#xarVarPrep::text($mail['from'])#&gt;</td>
+                            <td>#$xar->prep()->text($mail['fromname'])#
+                            &lt;#$xar->prep()->text($mail['from'])#&gt;</td>
                         </tr>
                         <tr>
                             <td>To</td>
@@ -32,36 +32,36 @@
                                 <xar:if condition="!empty($mail['recipients'])">
                                     <xar:foreach in="$mail['recipients']" key="$k" value="$v">
                                         <xar:if condition="!is_numeric($k)">
-                                        #xarVarPrep::text($k)#</xar:if>
+                                        #$xar->prep()->text($k)#</xar:if>
                                         <xar:if condition="!is_numeric($v)">
-                                        #xarVarPrep::text($v)#</xar:if>
+                                        #$xar->prep()->text($v)#</xar:if>
                                         <br />
                                     </xar:foreach>
                                 <xar:elseif condition="!empty($mail['info'])"/>
                                     <xar:if condition="!empty($mail['name'])">
-                                        #xarVarPrep::text($mail['name'])#
+                                        #$xar->prep()->text($mail['name'])#
                                     </xar:if>
-                                    &lt;#xarVarPrep::text($mail['info'])#&gt;
+                                    &lt;#$xar->prep()->text($mail['info'])#&gt;
                                 </xar:if>
                             </td>
                         </tr>
                         <tr>
                             <td>Subject</td>
-                            <td>#xarVarPrep::text($mail['subject'])#</td>
+                            <td>#$xar->prep()->text($mail['subject'])#</td>
                         </tr>
                         <tr>
                             <td>Queued</td>
-                            <td>#xarLocale::getFormattedDate('medium',$mail['queued'])#
-                            #xarLocale::getFormattedTime('medium',$mail['queued'])#</td>
+                            <td>#$xar->mls()->getFormattedDate('medium',$mail['queued'])#
+                            #$xar->mls()->getFormattedTime('medium',$mail['queued'])#</td>
                         </tr>
                         <tr>
                             <td>Send After</td>
-                            <td>#xarLocale::getFormattedDate('medium',$mail['when'])#
-                            #xarLocale::getFormattedTime('medium',$mail['when'])#</td>
+                            <td>#$xar->mls()->getFormattedDate('medium',$mail['when'])#
+                            #$xar->mls()->getFormattedTime('medium',$mail['when'])#</td>
                         </tr>
                     </table>
                 </xar:if>
-                <form method="post" action="#xarController::URL('mail','admin','viewq')#">
+                <form method="post" action="#$xar->ctl()->URL('mail','admin','viewq')#">
                     <input type="hidden" name="authid" value="#$authid#"/>
                     <input type="hidden" name="action" value="process"/>
                     <xar:var name="label">Process Queue</xar:var>
@@ -78,13 +78,13 @@
                             <tr>
                                 <td>#$id#</td>
                                 <td>
-                                    #xarLocale::getFormattedDate('medium',$when)#
-                                    #xarLocale::getFormattedTime('medium',$when)#
+                                    #$xar->mls()->getFormattedDate('medium',$when)#
+                                    #$xar->mls()->getFormattedTime('medium',$when)#
                                 </td>
                                 <td>
-                                <a href="#xarController::URL('mail','admin','viewq',['id' => $id,'action' => 'view','authid' => $authid])#">
+                                <a href="#$xar->ctl()->URL('mail','admin','viewq',['id' => $id,'action' => 'view','authid' => $authid])#">
                                 View</a>| 
-                                <a href="#xarController::URL('mail','admin','viewq',['id' => $id,'action' => 'delete','authid' => $authid])#">
+                                <a href="#$xar->ctl()->URL('mail','admin','viewq',['id' => $id,'action' => 'delete','authid' => $authid])#">
                                 Delete</a></td>
                             </tr>
                         </xar:foreach>
@@ -99,7 +99,7 @@
                 </table>
             <xar:else />
                 <p>
-                    <xar:set name="hookmailurl">xarController::URL('modules','admin','hooks', ['hook' => 'mail'])</xar:set>
+                    <xar:set name="hookmailurl">$xar->ctl()->URL('modules','admin','hooks', ['hook' => 'mail'])</xar:set>
                     <xar:var name="hookmailtitle">Hook mail to scheduler to activate queue processing</xar:var>
                     <xar:var name="hookmaillinktext">hook mail to scheduler</xar:var>
                     You can schedule mail for sending later by installing and using the Scheduler module. Install Sche option.

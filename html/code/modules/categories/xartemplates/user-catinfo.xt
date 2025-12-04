@@ -7,7 +7,7 @@
         </xar:loop>
     <xar:else/>
         <xar:if condition ="!empty($ifempty)">
-            #xarML($ifempty)#
+            #$xar->ml($ifempty)#
         </xar:if>
     </xar:if>
 </xar:template>

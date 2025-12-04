@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="proptypes">DataPropertyMaster::getPropertyTypes()</xar:set>
-    <xar:set name="currenturl">xarServer::getCurrentURL()</xar:set>
+    <xar:set name="currenturl">$xar->ctl()->getCurrentURL()</xar:set>
     <xar:set name="itemcount">$object->itemcount ?: count($items)</xar:set>
     <xar:set name="where">$object->where ?: []</xar:set>
     <tr>
@@ -29,7 +29,7 @@
                         <xar:set name="dummy">$options[] = ['id' => '', 'name' => '']</xar:set>
                         <xar:foreach in="$values" key="$option" value="$dummy">
                             <xar:if condition="$proptype['name'] eq 'username'">
-                                <xar:set name="option">xarUser::getVar('uname', $option)</xar:set>
+                                <xar:set name="option">$xar->user($option)->getVar('uname')</xar:set>
                                 <xar:set name="dummy">$options[] = ['id' => $option, 'name' => $option]</xar:set>
                             <xar:else />
                                 <xar:set name="dummy">$options[] = ['id' => $option, 'name' => $option]</xar:set>

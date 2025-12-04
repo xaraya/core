@@ -4,8 +4,8 @@
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
     <xar:set name="userid">$object->itemid</xar:set>
-    <xar:set name="currentid">xarUser::getVar('id')</xar:set>
-    <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
+    <xar:set name="currentid">$xar->user()->getVar('id')</xar:set>
+    <xar:set name="settings">explode(',',$xar->mod('roles')->getVar('duvsettings'))</xar:set>
     <xar:if condition="$layout eq 'default'">
         <h2>Profile for <xar:data-output property="$properties['name']"/></h2>
         <fieldset>
@@ -32,11 +32,11 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    #xarLocale::getFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$userid))#  #xarLocale::getFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$userid))#
+                    #$xar->mls()->getFormattedDate('medium', $xar->mod('roles')->getUserVar('userlastlogin',$userid))#  #$xar->mls()->getFormattedTime('medium', $xar->mod('roles')->getUserVar('userlastlogin',$userid))#
                 </div>
             </div>
         </xar:if>
-        <xar:if condition="(bool)xarModVars::get('roles', 'allowemail') and (bool)xarModUserVars::get('roles', 'allowemail', $userid) and ($currentid ne $userid)">
+        <xar:if condition="(bool)$xar->mod('roles')->getVar('allowemail') and (bool)$xar->mod('roles')->getUserVar('allowemail', $userid) and ($currentid ne $userid)">
             <div class="xar-row">
                 <div class="xar-col">
                     <label class="xar-form-label">
@@ -44,14 +44,14 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <a href="#xarController::URL('roles','user','email',['id'=>$userid])#">
-                        Send an Email to #xarVarPrep::text(xarUser::getVar('name', $userid))#
+                    <a href="#$xar->ctl()->URL('roles','user','email',['id'=>$userid])#">
+                        Send an Email to #$xar->prep()->text($xar->user($userid)->getVar('name'))#
                     </a>
                 </div>
             </div>
         </xar:if>
-        <xar:if condition="xarModUserVars::get('roles', 'userhome', $userid) ne '' and in_array('userhome', $settings)">
-            <xar:set name="homelink">xarModUserVars::get('roles', 'userhome', $userid)</xar:set>
+        <xar:if condition="$xar->mod('roles')->getUserVar('userhome', $userid) ne '' and in_array('userhome', $settings)">
+            <xar:set name="homelink">$xar->mod('roles')->getUserVar('userhome', $userid)</xar:set>
             <div class="xar-row">
                 <div class="xar-col">
                     <label class="xar-form-label">
@@ -60,7 +60,7 @@
                 </div>
                 <div class="xar-col">
                     <xar:set name="url">
-                        xarMod::apiFunc('roles','user','parseuserhome',['url'=>$homelink, 'truecurrenturl' => xarServer::getCurrentURL([], false)]);
+                        $xar->mod()->apiFunc('roles','user','parseuserhome',['url'=>$homelink, 'truecurrenturl' => $xar->ctl()->getCurrentURL([], false)]);
                     </xar:set>
                     <xar:var name="label">My Home Page</xar:var>
                     <a href="#$url['redirecturl']#" title="#$label#" target="_blank">#$label#</a>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="xar-col">
                     <xar:set name="value">
-                        xarModUserVars::get('roles','usertimezone')
+                        $xar->mod('roles')->getUserVar('usertimezone')
                     </xar:set>
                     <xar:data-output type="timezone" value="$value"/>
                 </div>
@@ -91,7 +91,7 @@
                 </div>
                 <div class="xar-col">
                     <xar:set name="value">
-                        xarModUserVars::get('roles','useremailformat')
+                        $xar->mod('roles')->getUserVar('useremailformat')
                     </xar:set>
                     <xar:data-output type="textbox" value="$value"/>
                 </div>

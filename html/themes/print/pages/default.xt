@@ -7,7 +7,7 @@ dtd="xhtml1-strict">
     <html xml:lang="en" lang="en">
         <head>
             <title>#$tpl:pageTitle#</title>
-            <base href="#xarServer::getBaseURL()#"/>
+            <base href="#$xar->ctl()->getBaseURL()#"/>
             <xar:style scope="common"/>
             <xar:style scope="theme" method="import" file="style"/>
             <xar:place-css />

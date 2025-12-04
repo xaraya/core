@@ -10,11 +10,11 @@
             This is the layout used by the roles module itself when a user is editing their basic account info
             Any data not provided by the object is provided by the $formdata array
         -->
-        <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
+        <xar:set name="settings">explode(',',$xar->mod('roles')->getVar('duvsettings'))</xar:set>
         <h2>Edit #$object->properties['name']->getValue()#</h2>
         <fieldset>
             <legend>User Details</legend>
-            <xar:if condition="(bool)xarModVars::get('roles', 'requirevalidation')">
+            <xar:if condition="(bool)$xar->mod('roles')->getVar('requirevalidation')">
                 <div class="xar-row">
                         Changing your email address will require you to revalidate your account.
                 </div>
@@ -41,7 +41,7 @@
             <xar:data-input property="$object->properties['role_type']" hidden="hidden"/>
 
             <xar:if condition="in_array('passwordupdate', $settings)">
-                <xar:set name="passwordupdate">xarModUserVars::get('roles', 'passwordupdate')</xar:set>
+                <xar:set name="passwordupdate">$xar->mod('roles')->getUserVar('passwordupdate')</xar:set>
                     <div class="xar-row">
                         <div class="xar-col">
                             <label for="passwordupdate" class="xar-form-label">
@@ -50,8 +50,8 @@
                         </div>
                         <div class="xar-col">
                             <xar:if condition="!empty($passwordupdate)">
-                                #xarLocale::getFormattedDate('medium', $passwordupdate)#
-                                #xarLocale::getFormattedTime('medium', $passwordupdate)#
+                                #$xar->mls()->getFormattedDate('medium', $passwordupdate)#
+                                #$xar->mls()->getFormattedTime('medium', $passwordupdate)#
                             <xar:else/>
                                 Never
                             </xar:if>
@@ -60,7 +60,7 @@
             </xar:if>
 
             <xar:if condition="in_array('userlastlogin', $settings)">
-                <xar:set name="userlastlogin">xarModUserVars::get('roles', 'userlastlogin')</xar:set>
+                <xar:set name="userlastlogin">$xar->mod('roles')->getUserVar('userlastlogin')</xar:set>
                 <xar:if condition="!empty($userlastlogin)">
                     <div class="xar-row">
                         <div class="xar-col">
@@ -69,8 +69,8 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            #xarLocale::getFormattedDate('medium', $userlastlogin)#
-                            #xarLocale::getFormattedTime('medium', $userlastlogin)#
+                            #$xar->mls()->getFormattedDate('medium', $userlastlogin)#
+                            #$xar->mls()->getFormattedTime('medium', $userlastlogin)#
                         </div>
                     </div>
                 </xar:if>

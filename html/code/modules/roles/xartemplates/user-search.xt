@@ -7,15 +7,15 @@
         <ul>
             <xar:foreach in="$users" key="$id" value="$user">
                 <li>
-                    <a href="#xarController::URL('roles','user','display',['id'=>$user['id']])#">
-                        #xarVarPrep::text($user['name'])#
+                    <a href="#$xar->ctl()->URL('roles','user','display',['id'=>$user['id']])#">
+                        #$xar->prep()->text($user['name'])#
                     </a>
                 </li>
             </xar:foreach>
         </ul>
     </xar:if>
     <xar:if condition="!empty($status)">
-        <p>#xarVarPrep::text($status)#</p>
+        <p>#$xar->prep()->text($status)#</p>
     </xar:if>
     <p></p>
     <xar:if condition="!empty($properties) and count($properties) gt 0">

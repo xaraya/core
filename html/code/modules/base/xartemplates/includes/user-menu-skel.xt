@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- Common user menu -->
-    <xar:if condition="xarModVars::get('themes','userpagemenu')">
+    <xar:if condition="$xar->mod('themes')->getVar('userpagemenu')">
         <xar:if condition="!isset($xmldata)">
             <xar:set name="xmldata">''</xar:set>
         </xar:if>
@@ -13,7 +13,7 @@
             <xar:set name="urlargs">[]</xar:set>
         </xar:if>
         <!-- loadmenuarray function does all the hard work for us :) -->
-        <xar:set name="tabs">xarMod::apiFunc('base', 'admin', 'loadmenuarray', ['layout' => 'tabs', 'xmldata' => $xmldata, 'phpdata' => $phpdata, 'urlargs' => $urlargs])</xar:set>
+        <xar:set name="tabs">$xar->mod()->apiFunc('base', 'admin', 'loadmenuarray', ['layout' => 'tabs', 'xmldata' => $xmldata, 'phpdata' => $phpdata, 'urlargs' => $urlargs])</xar:set>
         <!-- only display if we found some links -->
         <xar:if condition="!empty($tabs['menulinks'])">
             <ul class="xar-tabs xar-alt xar-norm-outline">

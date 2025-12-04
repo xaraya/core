@@ -2,8 +2,8 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <script type="text/javascript">
-        var TCP_picker_page = "#xarTpl::getCodeUrl()#modules/base/xartemplates/scripts/tcolorpicker.html";
-        var TCP_picker_pixel = "#xarTpl::getCodeUrl()#modules/base/xartemplates/includes/img/tcolorpicker_pixel.gif";
+        var TCP_picker_page = "#$xar->tpl()->getCodeUrl()#modules/base/xartemplates/scripts/tcolorpicker.html";
+        var TCP_picker_pixel = "#$xar->tpl()->getCodeUrl()#modules/base/xartemplates/includes/img/tcolorpicker_pixel.gif";
     </script>
     <xar:javascript scope="module" module="base" filename="tcolorpicker.js"/>
     <xar:var name="alttext">Click to select a color</xar:var>

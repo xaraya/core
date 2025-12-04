@@ -17,7 +17,7 @@
             <tr>
                 <td>#$rolename#</td>
                 <xar:foreach in="$levels" key="$level" value="$info">
-                    <xar:set name="allow">xarSecurity::check($info['mask'],0,'Item',$instance,'',$rolename,0,0)</xar:set>
+                    <xar:set name="allow">$xar->sec()->check($info['mask'],0,'Item',$instance,'',$rolename,0,0)</xar:set>
                     <xar:if condition="!empty($allow)">
                         <td style="text-align: center"><xar:img scope="theme" file="icons/activate.png" class="xar-icon"/></td>
                     <xar:else/>

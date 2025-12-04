@@ -8,16 +8,16 @@
         the tplmodule="..." argument in the xar:data-view BL tag or showView() method call.
     -->
     <xar:style scope="module" module="dynamicdata" file="dd"/>
-    <xar:if condition="!empty($isprimary) and xarHooks::isAttached('categories',$modname,$itemtype)">
+    <xar:if condition="!empty($isprimary) and $xar->mod()->isHooked('categories',$modname,$itemtype)">
         <xar:template file="catnavigation"/>
     </xar:if>
     <!-- You can give a custom 'newlink' argument to showView() higher up -->
     <xar:if condition="!empty($isprimary) and !empty($newlink)">
         <xar:if condition="$object:checkAccess('create')">
             <div style="text-align: right;">
-                <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
+                <xar:if condition="$xar->mod('dynamicdata')->getVar('use_module_icons')">
                     <a href="#$newlink#" title="Create New #$object:label#">
-                        <xar:img scope="theme" file="icons/document-new.png" class="xar-icon" alt="#xarML('New')#"/>
+                        <xar:img scope="theme" file="icons/document-new.png" class="xar-icon" alt="#$xar->ml('New')#"/>
                     </a>
                 <xar:else />
                     <a href="#$newlink#" title="Create New #$object:label#">Create New #$object:label#</a>

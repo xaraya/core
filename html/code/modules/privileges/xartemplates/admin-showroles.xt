@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <script type="text/javascript" src="#xarTpl::getCodeUrl()#modules/privileges/xartemplates/xarTree.js"></script>
+    <script type="text/javascript" src="#$xar->tpl()->getCodeUrl()#modules/privileges/xartemplates/xarTree.js"></script>
     <script type="text/javascript">
         var oldOnLoadFunction = (window.onload) ? window.onload : new
         Function("","return true;"); function doOnLoad() { oldOnLoadFunction();
@@ -51,7 +51,7 @@
         <table class="xar-table" border="0" cellspacing="5" width="100%">
             <tr>
                 <td>
-                    <a href="#xarController::URL('privileges','admin','newprivilege')#">Add Privilege</a>
+                    <a href="#$xar->ctl()->URL('privileges','admin','newprivilege')#">Add Privilege</a>
                 </td>
             </tr>
             <tr>

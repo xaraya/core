@@ -24,9 +24,9 @@
 							<div id="header_tlcorner"><div id="header_trcorner">&#160;</div></div>
 
 							<div id="header_contentcore">
-								<xar:set name="script_path">xarServer::getVar('SCRIPT_NAME')</xar:set>
+								<xar:set name="script_path">$xar->req()->getServerVar('SCRIPT_NAME')</xar:set>
 								<xar:set name="script">basename($script_path)</xar:set>
-								<xar:set name="modulename">xarController::getVar('module')</xar:set>
+								<xar:set name="modulename">$xar->req()->getVar('module')</xar:set>
 								<xar:if condition="$script eq 'install.php' OR $modulename eq 'installer'">
 									<h1>Xaraya Installer</h1>
 									<p>

@@ -8,11 +8,11 @@
 	        <!-- Icon -->
 	                <h3>#$moddispname#</h3>
 	            <div style="display: none;">
-	                <xar:set name="modiconurl">xarTpl::getImage($modname . '.png', 'module', $modname)</xar:set>
+	                <xar:set name="modiconurl">$xar->tpl()->getImage($modname . '.png', 'module', $modname)</xar:set>
 	                <xar:if condition="empty($modiconurl)">
-	                    <xar:set name="modiconurl">xarTpl::getImage($modname . '.png', 'theme')</xar:set>
+	                    <xar:set name="modiconurl">$xar->tpl()->getImage($modname . '.png', 'theme')</xar:set>
 	                    <xar:if condition="empty($modiconurl)">
-	                        <xar:set name="modiconurl">xarTpl::getImage('module-generic.png', 'theme')</xar:set>
+	                        <xar:set name="modiconurl">$xar->tpl()->getImage('module-generic.png', 'theme')</xar:set>
 	                    </xar:if>
 	                </xar:if>
 	                <xar:var name="imagetext">#$moddispname#</xar:var>
@@ -69,9 +69,9 @@
 	                </label>
                 </div>
                 <div class="xar-col">
-	                <a href="#xarController::URL('modules','admin','aliases',['name' => $modname])#">
+	                <a href="#$xar->ctl()->URL('modules','admin','aliases',['name' => $modname])#">
 	                    <xar:var name="imagealt">[set aliases]</xar:var>
-	                    <xar:set name="iconurl">xarTpl::getImage('icons/modify.png', 'theme')</xar:set>
+	                    <xar:set name="iconurl">$xar->tpl()->getImage('icons/modify.png', 'theme')</xar:set>
 	                    <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>
 	                </a>
 	                #$aliases#
@@ -151,7 +151,7 @@
                 <div class="xar-col">
                     <label class="xar-form-label">
                         <xar:if condition="!empty($hookobservers)">
-                            <a href="#xarController::URL('modules','admin','hooks',['hook' => $modname])#">Hook Observers</a>
+                            <a href="#$xar->ctl()->URL('modules','admin','hooks',['hook' => $modname])#">Hook Observers</a>
                         <xar:else/>
                             Hook Observers
                         </xar:if>

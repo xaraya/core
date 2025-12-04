@@ -8,11 +8,11 @@
         <xar:if condition="count($dependencies['active']) ne 0">
             <ul>
                 <xar:foreach in="$dependencies['active']" value="$modInfo">
-                    <li>#xarML($modInfo['displayname'])#</li>
+                    <li>#$xar->ml($modInfo['displayname'])#</li>
                 </xar:foreach>
             </ul>
         </xar:if>
-        <form action="#xarController::URL('modules','admin','deactivate')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#$xar->ctl()->URL('modules','admin','deactivate')#" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-form-actions">
                 <input type="hidden" name="id" id="id" value="#$id#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>

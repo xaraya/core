@@ -14,12 +14,12 @@
                 <td class="xar-threequarterswidth">Users</td>
                 <td>&#160;</td>
                 <td colspan="2">
-                    <xar:if condition="xarMod::isAvailable('messages')">
+                    <xar:if condition="$xar->mod()->isAvailable('messages')">
                         Messages 
                     <xar:else />&#160;</xar:if>
                 </td>
             </tr>
-            <xar:if condition="xarMod::isAvailable('messages')">
+            <xar:if condition="$xar->mod()->isAvailable('messages')">
                 <tr>
                     <td>&#160;</td>
                     <td>&#160;</td>
@@ -41,7 +41,7 @@
                         <xar:else />
                             <xar:img scope="module" module="roles" file="ob_user_other.gif" class="xar-icon"/>
                         </xar:if>
-                        <a href="#$dd['userurl']#">#xarVarPrep::text($dd['name'])#</a>
+                        <a href="#$dd['userurl']#">#$xar->prep()->text($dd['name'])#</a>
                     </td>
                     <td>&#160;</td>
                     <td class="xar-align-center">
@@ -81,8 +81,8 @@
     <xar:if condition="isset($lastuser) AND $showlastuser">
          <p>
              Welcome to our latest member,
-             <a href="#xarController::URL('roles','user','display',['id'=>$lastuser['id']])#">
-                 #xarVarPrep::text($lastuser['name'])#
+             <a href="#$xar->ctl()->URL('roles','user','display',['id'=>$lastuser['id']])#">
+                 #$xar->prep()->text($lastuser['name'])#
              </a>
          </p>
     </xar:if>

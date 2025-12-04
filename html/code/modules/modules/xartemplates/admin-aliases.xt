@@ -4,7 +4,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Manage Module Aliases</h2>
-        <form method="post" action="#xarController::URL('modules','admin','aliases')#">
+        <form method="post" action="#$xar->ctl()->URL('modules','admin','aliases')#">
             <fieldset>
                 <legend>
                     Aliases of #$modname#
@@ -14,9 +14,9 @@
                         <xar:if condition="$value ne $modname">
                         <xar:else/>
                         <div class="xar-col dummy">
-                            <a href="#xarController::URL('modules','admin','aliases',['name' => $value, 'remove' => $key])#">
+                            <a href="#$xar->ctl()->URL('modules','admin','aliases',['name' => $value, 'remove' => $key])#">
                                 <xar:var name="imagealt">[remove]</xar:var>
-                                <xar:set name="iconurl">xarTpl::getImage('icons/delete.png', 'theme')</xar:set>
+                                <xar:set name="iconurl">$xar->tpl()->getImage('icons/delete.png', 'theme')</xar:set>
                                 <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>
                             </a>
                             &#160;#$key#
@@ -36,7 +36,7 @@
                         <input type="text" name="add"/>&#160;
                         <input type="hidden" name="name" value="#$modname#"/>
                         <xar:var name="label">Add Alias</xar:var>
-                        <xar:set name="iconurl">xarTpl::getImage('icons/add.png', 'theme')</xar:set>
+                        <xar:set name="iconurl">$xar->tpl()->getImage('icons/add.png', 'theme')</xar:set>
                         <xar:var name="imagealt">[add]</xar:var>
                         <xar:button type="submit" label="$label" src="$iconurl" title="$imagealt" style="width: 16px"/>
                     </div>

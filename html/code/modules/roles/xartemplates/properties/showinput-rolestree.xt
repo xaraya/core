@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:if condition="!empty($nodes)">
-        <xar:set name="deleteicon">xarTpl::getImage('icons/delete.png', 'theme')</xar:set>
-        <xar:set name="usersicon">xarTpl::getImage('icons/system-users.png','theme')</xar:set>
-        <xar:set name="mailicon">xarTpl::getImage('icons/mail-message-new.png','theme')</xar:set>
-        <xar:set name="privsicon">xarTpl::getImage('icons/privileges.png','theme')</xar:set>
-        <xar:set name="testicon">xarTpl::getImage('icons/test.png','theme')</xar:set>
-        <xar:set name="blankicon">xarTpl::getImage('icons/blank.png','theme')</xar:set>
+        <xar:set name="deleteicon">$xar->tpl()->getImage('icons/delete.png', 'theme')</xar:set>
+        <xar:set name="usersicon">$xar->tpl()->getImage('icons/system-users.png','theme')</xar:set>
+        <xar:set name="mailicon">$xar->tpl()->getImage('icons/mail-message-new.png','theme')</xar:set>
+        <xar:set name="privsicon">$xar->tpl()->getImage('icons/privileges.png','theme')</xar:set>
+        <xar:set name="testicon">$xar->tpl()->getImage('icons/test.png','theme')</xar:set>
+        <xar:set name="blankicon">$xar->tpl()->getImage('icons/blank.png','theme')</xar:set>
 
         <ul class="xar-tree">
             <xar:set name="nodecount">$nodes->size()</xar:set>
@@ -16,7 +16,7 @@
                 <xar:set name="users">$node-&gt;users</xar:set>
                 <xar:set name="id">$node-&gt;id</xar:set>
                 <xar:set name="drawchildren">true</xar:set>
-                <xar:set name="seccheck">xarSecurity::check('ManageRoles',0,'Roles',$node-&gt;name)</xar:set>
+                <xar:set name="seccheck">$xar->sec()->check('ManageRoles',0,'Roles',$node-&gt;name)</xar:set>
 
                 <li class="leaf">
                     <div class="leaf-actions">
@@ -25,14 +25,14 @@
                             <img src="#$blankicon#" alt="#$label#"/>
                         <xar:else />
                             <xar:var name="label1">Delete this Group</xar:var>
-                            <a href="#xarController::URL('roles', 'admin', 'delete', ['id' => $id])#" title="#$label1#">
+                            <a href="#$xar->ctl()->URL('roles', 'admin', 'delete', ['id' => $id])#" title="#$label1#">
                                 <img src="#$deleteicon#" alt="#$label#"/>
                             </a>
                         </xar:if>
                         <xar:var name="label">Users</xar:var>
                         <xar:if condition="($users gt 0) and ($drawchildren)">
                             <xar:var name="label1">Show the Users in this Group</xar:var>
-                            <a href="#xarController::URL('roles', 'admin', 'showusers', ['id' => $id, 'reload' => 1])#" title="#$label1#">
+                            <a href="#$xar->ctl()->URL('roles', 'admin', 'showusers', ['id' => $id, 'reload' => 1])#" title="#$label1#">
                                 <img src="#$usersicon#" alt="#$label#"/>
                             </a>
                         <xar:else />
@@ -43,14 +43,14 @@
                             <img src="#$blankicon#" alt="#$label#"/>
                         <xar:else />
                             <xar:var name="label1">Email the Users in this Group</xar:var>
-                            <a href="#xarController::URL('roles', 'admin', 'createmail', ['id' => $id])#" title="#$label1#">
+                            <a href="#$xar->ctl()->URL('roles', 'admin', 'createmail', ['id' => $id])#" title="#$label1#">
                                 <img src="#$mailicon#" alt="#$label#"/>
                             </a>
                         </xar:if>
                         <xar:var name="label">Privileges</xar:var>
                         <xar:if condition="$drawchildren">
                             <xar:var name="label1">Show the Privileges assigned to this Group</xar:var>
-                            <a href="#xarController::URL('roles', 'admin', 'showprivileges', ['id' => $id])#" title="#$label1#">
+                            <a href="#$xar->ctl()->URL('roles', 'admin', 'showprivileges', ['id' => $id])#" title="#$label1#">
                                 <img src="#$privsicon#" alt="#$label#"/>
                             </a>
                         <xar:else />
@@ -59,7 +59,7 @@
                         <xar:var name="label">Test</xar:var>
                         <xar:if condition="$drawchildren">
                             <xar:var name="label1">Test this Groups's Privileges</xar:var>
-                            <a href="#xarController::URL('roles', 'admin', 'testprivileges', ['id' => $id])#" title="#$label1#">
+                            <a href="#$xar->ctl()->URL('roles', 'admin', 'testprivileges', ['id' => $id])#" title="#$label1#">
                                 <img src="#$testicon#" alt="#$label#"/>
                             </a>
                         <xar:else />
@@ -72,11 +72,11 @@
                             #$node-&gt;name# <strong>see the entry above</strong>
                         <xar:else />
                             <xar:set name="numofsubgroups">count($children)</xar:set>
-                            <xar:set name="subgroups">$numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups')</xar:set>
-                            <xar:set name="numofusers">$users == 1 ? xarML('user') : xarML('users')</xar:set>
+                            <xar:set name="subgroups">$numofsubgroups == 1 ? $xar->ml('subgroup') : $xar->ml('subgroups')</xar:set>
+                            <xar:set name="numofusers">$users == 1 ? $xar->ml('user') : $xar->ml('users')</xar:set>
                             <xar:set name="description">$numofsubgroups . " " . $subgroups . ' | ' . $users . " " . $numofusers</xar:set>
                             <xar:var name="label">Modify this Group</xar:var>
-                            <a href="#xarController::URL('roles', 'admin', 'modify', ['id' => $id])#" title="#$label#">
+                            <a href="#$xar->ctl()->URL('roles', 'admin', 'modify', ['id' => $id])#" title="#$label#">
                                 #$node-&gt;name#
                             </a>
                             #$description#

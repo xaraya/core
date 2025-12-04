@@ -30,11 +30,11 @@
                 <xar:if condition="!empty($openapi)">
                     <a href="./var/cache/api/openapi.json">var/cache/api/openapi.json</a>
                     <xar:set name="mtime">filemtime($openapi)</xar:set>
-                    (#xarLocale::formatUTCDate("%Y-%m-%d", $mtime)#)
+                    (#$xar->mls()->formatUTCDate("%Y-%m-%d", $mtime)#)
                 <xar:else/>
                     var/cache/api/openapi.json
                 </xar:if>
-                    &#8635; <a href="#xarController::URL('dynamicdata','admin','test_apis',['create_rst'=>1])#">re-build</a>
+                    &#8635; <a href="#$xar->ctl()->URL('dynamicdata','admin','test_apis',['create_rst'=>1])#">re-build</a>
                 </div>
                 <div class="xar-col">
                     The current openapi.json document for this API
@@ -72,11 +72,11 @@
                 <xar:if condition="!empty($schema)">
                     <a href="./var/cache/api/schema.graphql">var/cache/api/schema.graphql</a>
                     <xar:set name="mtime">filemtime($schema)</xar:set>
-                    (#xarLocale::formatUTCDate("%Y-%m-%d", $mtime)#)
+                    (#$xar->mls()->formatUTCDate("%Y-%m-%d", $mtime)#)
                 <xar:else/>
                     var/cache/api/schema.graphql
                 </xar:if>
-                    &#8635; <a href="#xarController::URL('dynamicdata','admin','test_apis',['create_gql'=>1])#">re-build</a>
+                    &#8635; <a href="#$xar->ctl()->URL('dynamicdata','admin','test_apis',['create_gql'=>1])#">re-build</a>
                 </div>
                 <div class="xar-col">
                     The current schema.graphql document for this API
@@ -120,7 +120,7 @@
                     </tr>
                     <xar:foreach in="$objects" value="$item">
                         <tr>
-                            <td><a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></td>
+                            <td><a href="#$xar->ctl()->getObjectURL($item['name'])#">#$item['label']#</a></td>
                             <xar:if condition="empty($restapilist) or in_array($item['name'], $restapilist)">
                                 <td><input type="checkbox" name="restapi[#$item['name']#]" id="restapi_#$item['name']#" checked="checked"/></td>
                             <xar:else/>
@@ -156,7 +156,7 @@
                             <xar:if condition="empty($info['type'])">
                                 <xar:set name="dummy">$info['type'] = 'rest'</xar:set>
                             </xar:if>
-                            <td>Module <a href="#xarServer::getModuleURL($item['module'])#">#$item['module']#</a> #$api# with #$info['type']# api #$info['name']#() <xar:if condition="!empty($info['caching'])"><span>*</span></xar:if></td>
+                            <td>Module <a href="#$xar->ctl()->getModuleURL($item['module'])#">#$item['module']#</a> #$api# with #$info['type']# api #$info['name']#() <xar:if condition="!empty($info['caching'])"><span>*</span></xar:if></td>
                             <xar:set name="moduleapi">$item['module'] . '.' . $api</xar:set>
                             <xar:if condition="empty($restapilist) or in_array($moduleapi, $restapilist)">
                                 <td><input type="checkbox" name="restapi[#$moduleapi#]" id="restapi_#$moduleapi#" checked="checked"/></td>
@@ -309,7 +309,7 @@
             </fieldset>
             <fieldset class="xar-form-actions">
                 <legend>Save Configuration</legend>
-                <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
+                <input type="hidden" name="authid" value="#$xar->sec()->genAuthKey()#"/>
                 <xar:var name="label">Update List</xar:var>
                 <xar:button type="submit" label="$label"/>
                 <p><span style="color:red;">Note: don't forget to &#8635; re-build the API schema document(s) above after updating this object list</span></p>

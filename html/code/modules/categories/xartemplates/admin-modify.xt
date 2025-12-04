@@ -6,8 +6,8 @@
         <h2>
             Modify Category
         </h2>
-        <form action="#xarController::URL('categories','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
-            <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
+        <form action="#$xar->ctl()->URL('categories','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="authid" id="authid" value="#$xar->sec()->genAuthKey()#"/>
             <fieldset class="xar-norm">
                 <legend>
                     <strong>
@@ -27,7 +27,7 @@
                         <xar:button type="submit" label="$label"/>
                         <input type="hidden" name="creating" id="creating" value="false"/>
                         <xar:comment><!--
-                            <input type="reset" value="#xarML('Reset')#"/>
+                            <input type="reset" value="#$xar->ml('Reset')#"/>
                         --></xar:comment>
                     </div>
                 </div>

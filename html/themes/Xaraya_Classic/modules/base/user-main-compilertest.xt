@@ -124,7 +124,7 @@
         
 <![CDATA[
         <xar:set name="next">4</xar:set>
-        <xar:set name="link">'&lt;a href="blah"&gt;' . xarML('Test #(1) items',$next).'&lt;/a&gt;'</xar:set>
+        <xar:set name="link">'&lt;a href="blah"&gt;' . $xar->ml('Test #(1) items',$next).'&lt;/a&gt;'</xar:set>
         <xar:set name="nextpagelabel">
           <xar:ml>
             Next page; <xar:var name="next"/> items, yes really <xar:var name="next"/>.
@@ -140,7 +140,7 @@
 </pre>
             <h4>Results</h4>
             <xar:set name="next">4</xar:set>
-            <xar:set name="link">'&lt;a href="blah"&gt;' . xarML('Test #(1)
+            <xar:set name="link">'&lt;a href="blah"&gt;' . $xar->ml('Test #(1)
             items',$next).'&lt;/a&gt;'</xar:set>
             <pre>
 E: Next page; 4 items, yes really 4.
@@ -271,7 +271,7 @@ E: Next page;
             <xar:var>#$third#</xar:var>
             <!-- anon var gets value of variable $third -->
             <xar:mlvar>#$third#</xar:mlvar>
-            <xar:var>#xarServer::getVar('HTTP_HOST')#</xar:var>
+            <xar:var>#$xar->req()->getServerVar('HTTP_HOST')#</xar:var>
         </div>
         <xar:comment>End of the tests</xar:comment>
         <!-- Some tests which dont need to do anything, but also should not error out -->

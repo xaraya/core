@@ -24,7 +24,7 @@
         </xar:if>
         <xar:if condition="$object:visibility ne 'public'">
             <h3 class="xar-align-center">Warning! This is a <em>#$object:visibility#</em> object used
-            internally by the #xarMod::getName($object:moduleid)# module.<br/>
+            internally by the #$xar->mod()->getName($object:moduleid)# module.<br/>
             Trying to create this item here may break the module. Please proceed with caution.</h3>
         </xar:if>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->

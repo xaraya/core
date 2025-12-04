@@ -8,9 +8,9 @@
                 <xar:var name="label">DataObjects</xar:var>
             </xar:if>
             <xar:if condition="!empty($object) and !empty($object:objectid)">
-                <xar:set name="newlink">xarController::URL('dynamicdata','admin','new',['objectid' => $object->objectid])</xar:set>
+                <xar:set name="newlink">$xar->ctl()->URL('dynamicdata','admin','new',['objectid' => $object->objectid])</xar:set>
             <xar:else/>
-                <xar:set name="newlink">xarController::URL('dynamicdata','admin','new',['table' => $table])</xar:set>
+                <xar:set name="newlink">$xar->ctl()->URL('dynamicdata','admin','new',['table' => $table])</xar:set>
             </xar:if>
             <h2>View #$label#&#160;</h2>
 
@@ -18,8 +18,8 @@
                 <xar:if condition="$object:checkAccess('create')">
                     <dd>
                         <a class="xar-icon xar-icon-add" href="#$newlink#" title="Create New Item in #$label#">
-                            <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
-                                <img src="#xarTpl::getImage('icons/document-new.png','base')#" class="xar-icon" alt="Create New Item in #$label#"/>
+                            <xar:if condition="$xar->mod('dynamicdata')->getVar('use_module_icons')">
+                                <img src="#$xar->tpl()->getImage('icons/document-new.png','base')#" class="xar-icon" alt="Create New Item in #$label#"/>
                             <xar:else/>
                                 Create New Item in #$label#
                             </xar:if>
@@ -28,10 +28,10 @@
                 </xar:if>
                 <xar:if condition="$object:checkAccess('config')">
                     <dd>
-                        <xar:set name="proplink">xarController::URL('dynamicdata','admin','modifyprop',['itemid' => $object->objectid])</xar:set>
+                        <xar:set name="proplink">$xar->ctl()->URL('dynamicdata','admin','modifyprop',['itemid' => $object->objectid])</xar:set>
                         <a class="xar-icon xar-icon-modify-config" href="#$proplink#" title="Configure #$label#">
-                            <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
-                                <img src="#xarTpl::getImage('icons/modify-config.png','base')#" class="xar-icon" alt="Configure #$label#"/>
+                            <xar:if condition="$xar->mod('dynamicdata')->getVar('use_module_icons')">
+                                <img src="#$xar->tpl()->getImage('icons/modify-config.png','base')#" class="xar-icon" alt="Configure #$label#"/>
                             <xar:else/>
                                 Configure #$label#
                             </xar:if>
@@ -41,8 +41,8 @@
                 <xar:if condition="!empty($querylink)">
                     <dd>
                         <a href="#$querylink#">
-                            <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
-                                <img src="#xarTpl::getImage('icons/info.png','base')#" class="xar-icon" alt="Query #$label#"/>
+                            <xar:if condition="$xar->mod('dynamicdata')->getVar('use_module_icons')">
+                                <img src="#$xar->tpl()->getImage('icons/info.png','base')#" class="xar-icon" alt="Query #$label#"/>
                             <xar:else/>
                                 Query #$label#
                             </xar:if>
@@ -58,7 +58,7 @@
         <xar:if condition="isset($object)">
             <xar:if condition="$object:visibility ne 'public'">
                 <h3 class="xar-align-center">Warning! This is a <em>#$object:visibility#</em> object used
-                internally by the #xarMod::getName($object:moduleid)# module.<br/>
+                internally by the #$xar->mod()->getName($object:moduleid)# module.<br/>
                 Trying to modify items here may break the module. Please proceed with caution.</h3>
             </xar:if>
             <!-- TODO: distinguish between 'protected' and 'private' ? -->

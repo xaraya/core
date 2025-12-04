@@ -4,7 +4,7 @@
 
     <xar:javascript scope="theme" filename="orderitem.js" position="head"/>
     <script type="text/javascript">
-        xar_base_reorder_warn = '#xarML('You must select an option to move.')#';
+        xar_base_reorder_warn = '#$xar->ml('You must select an option to move.')#';
     </script>
 
     <xar:if condition="count($options) gt 10">

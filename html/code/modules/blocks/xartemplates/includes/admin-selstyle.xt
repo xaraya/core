@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <form method="post" action="#xarController::URL('blocks', 'admin', 'settings')#">
+    <form method="post" action="#$xar->ctl()->URL('blocks', 'admin', 'settings')#">
         <fieldset>
             <legend>View Options</legend>
             <div class="xar-row">
                 <div class="xar-col">
-                    <label for="selstyle" title="#xarML('Choose how Block instances are displayed.')#" class="xar-form-label">
+                    <label for="selstyle" title="#$xar->ml('Choose how Block instances are displayed.')#" class="xar-form-label">
                         Preferred Layout:
                     </label>
                     <!--
@@ -15,10 +15,10 @@
                 <div class="xar-col">
                     <xar:set name="options">
                         array(
-                            ['id' => 'plain',   'name' => xarML('Plain')],
-                            ['id' => 'compact', 'name' => xarML('Compact')],
-                            ['id' => 'bygroup', 'name' => xarML('By Group')],
-                            ['id' => 'bytype',  'name' => xarML('By Type')],
+                            ['id' => 'plain',   'name' => $xar->ml('Plain')],
+                            ['id' => 'compact', 'name' => $xar->ml('Compact')],
+                            ['id' => 'bygroup', 'name' => $xar->ml('By Group')],
+                            ['id' => 'bytype',  'name' => $xar->ml('By Type')],
                         )
                     </xar:set>
                     <xar:data-input type="dropdown" name="selstyle" options="$options" value="$selstyle"/>&#160;
@@ -28,7 +28,7 @@
             </div>
             <div class="xar-row">
                 <div class="xar-col">
-                    <label for="filter" title="#xarML('Filter the instances to be shown.')#" class="xar-form-label">
+                    <label for="filter" title="#$xar->ml('Filter the instances to be shown.')#" class="xar-form-label">
                         Filter:
                     </label>
                 </div>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="lang">substr(xarUser::getNavigationLocale(),0,2)</xar:set>
+    <xar:set name="lang">substr($xar->user()->getLocale(),0,2)</xar:set>
     <xar:if condition="!empty($meta) and is_array($meta)">
         <xar:foreach in="$meta" key="$type" value="$values">
             <xar:if condition="empty($values)">

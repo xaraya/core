@@ -11,7 +11,7 @@
         <div class="xar-mod-page-body">
             <!--  Begin General Options -->
             <xar:if condition="$tab eq 'general'">
-                <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+                <form method="post" action="#$xar->ctl()->getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                         <legend>General options</legend>
                         <xar:data-form object="$module_settings"/>
@@ -75,7 +75,7 @@
             </xar:if>
             <!-- Begin Realms Options -->
             <xar:if condition="$tab eq 'realms'">
-                <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+                <form method="post" action="#$xar->ctl()->getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                         <legend>Working With Realms</legend>
                         <div class="xar-row">
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    <xar:if condition="xarModVars::get('privileges', 'showrealms')">
+                    <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                         <fieldset>
                             <legend>Realm Privilege Options</legend>
                             <p class="xar-col dummy xar-padding-endsthick">
@@ -110,11 +110,11 @@
                                 <div class="xar-col">
                                     <xar:set name="realmoptions">
                                         array( 
-                                            ['id' => 'none', 'name' => xarML('No Value')], 
-                                            ['id' => 'domain', 'name' => xarML('Current Domain')], 
-                                            ['id' => 'theme', 'name' => xarML('Current Theme')], 
-                                            ['id' => 'group', 'name' => xarML('Primary Parent Group')], 
-                                            ['id' => 'string', 'name' => xarML('Text Value')] 
+                                            ['id' => 'none', 'name' => $xar->ml('No Value')], 
+                                            ['id' => 'domain', 'name' => $xar->ml('Current Domain')], 
+                                            ['id' => 'theme', 'name' => $xar->ml('Current Theme')], 
+                                            ['id' => 'group', 'name' => $xar->ml('Primary Parent Group')], 
+                                            ['id' => 'string', 'name' => $xar->ml('Text Value')] 
                                         )
                                     </xar:set>
                                     <xar:data-input type="radio" name="realmvalue" options="$realmoptions" value="$realmvalue" layout="vertical"/>
@@ -164,8 +164,8 @@
                 </form>
             </xar:if>
             <!-- Begin Last Resort -->
-            <xar:if condition="$tab eq 'lastresort' AND xarModVars::get('privileges','lastresort')">
-                <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+            <xar:if condition="$tab eq 'lastresort' AND $xar->mod('privileges')->getVar('lastresort')">
+                <form method="post" action="#$xar->ctl()->getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                         <legend>Manage Last Resort Admin</legend>
                         <div class="xar-row">
@@ -213,11 +213,11 @@
                                 <input type="password" name="password2" id="password2" value="" maxlength="40" class="xar-form-textmedium"/>
                             </div>
                         </div>
-                        <xar:set name="message">xarSession::getVar('statusmsg')</xar:set>
+                        <xar:set name="message">$xar->session()->getVar('statusmsg')</xar:set>
                         <xar:if condition="$message ne ''">
                             <p class="xar-col dummy xar-error">#$message#</p>
                         </xar:if>
-                        <xar:set name="dummy">xarSession::setVar('statusmsg','')</xar:set>
+                        <xar:set name="dummy">$xar->session()->setVar('statusmsg','')</xar:set>
                     </fieldset>
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <xar:template file="update-button" module="base" />
@@ -243,11 +243,11 @@
             </xar:if>
             <!-- Begin Testing -->
             <xar:if condition="$tab eq 'testing'">
-                <form method="post" id="testerform" name="testerform" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+                <form method="post" id="testerform" name="testerform" action="#$xar->ctl()->getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                         <legend>Testing Settings</legend>
                         <p class="xar-note">
-                            The options activated below display messages visible to the debug administrators, which are defined <a href="#xarController::URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">here</a>.
+                            The options activated below display messages visible to the debug administrators, which are defined <a href="#$xar->ctl()->URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">here</a>.
                         </p>
                         <div class="xar-row">
                             <div class="xar-col">
@@ -287,7 +287,7 @@
                                 </label>
                             </div>
                             <div class="xar-col">
-                                <xar:set name="value">trim(xarModVars::get('privileges', 'testmask'))</xar:set>
+                                <xar:set name="value">trim($xar->mod('privileges')->getVar('testmask'))</xar:set>
                                 <xar:if condition="empty($value)">
                                     <xar:set name="value">'All'</xar:set>
                                 </xar:if>

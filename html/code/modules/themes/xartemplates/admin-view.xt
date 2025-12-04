@@ -7,7 +7,7 @@
 	        <h2>View Themes</h2>
         </div>
         <div class="xar-mod-page-body">
-            <form method="get" action="#xarServer::getBaseURL()#index.php">
+            <form method="get" action="#$xar->ctl()->getBaseURL()#index.php">
                 <input type="hidden" name="module" id="module" value="themes"/>
                 <input type="hidden" name="type" id="type" value="admin"/>
                 <input type="hidden" name="func" id="func" value="view"/>
@@ -68,23 +68,23 @@
             <xar:var name="removelabel">Remove</xar:var>
 
             <xar:if condition="!empty($useicons)">
-                <xar:set name="infoicon">xarTpl::getImage('icons/info.png','theme')</xar:set>
-                <xar:set name="initicon">xarTpl::getImage('icons/initialize.png','theme')</xar:set>
-                <xar:set name="activateicon">xarTpl::getImage('icons/activate.png','theme')</xar:set>
-                <xar:set name="deactivateicon">xarTpl::getImage('icons/deactivate.png','theme')</xar:set>
-                <xar:set name="upgradeicon">xarTpl::getImage('icons/software-upgrade.png','theme')</xar:set>
-                <xar:set name="noneicon">xarTpl::getImage('icons/none.png','theme')</xar:set>
-                <xar:set name="erroricon">xarTpl::getImage('icons/dialog-error.png','theme')</xar:set>
-                <xar:set name="removeicon">xarTpl::getImage('icons/remove.png','theme')</xar:set>
+                <xar:set name="infoicon">$xar->tpl()->getImage('icons/info.png','theme')</xar:set>
+                <xar:set name="initicon">$xar->tpl()->getImage('icons/initialize.png','theme')</xar:set>
+                <xar:set name="activateicon">$xar->tpl()->getImage('icons/activate.png','theme')</xar:set>
+                <xar:set name="deactivateicon">$xar->tpl()->getImage('icons/deactivate.png','theme')</xar:set>
+                <xar:set name="upgradeicon">$xar->tpl()->getImage('icons/software-upgrade.png','theme')</xar:set>
+                <xar:set name="noneicon">$xar->tpl()->getImage('icons/none.png','theme')</xar:set>
+                <xar:set name="erroricon">$xar->tpl()->getImage('icons/dialog-error.png','theme')</xar:set>
+                <xar:set name="removeicon">$xar->tpl()->getImage('icons/remove.png','theme')</xar:set>
             </xar:if>
 
             <xar:if condition="$sort eq 'ASC'">
-                <xar:set name="sorturl">xarServer::getCurrentURL(['sort' => 'DESC'])</xar:set>
-                <xar:set name="sortimg">xarTpl::getImage('arrow_down.gif', 'module', 'base')</xar:set>
+                <xar:set name="sorturl">$xar->ctl()->getCurrentURL(['sort' => 'DESC'])</xar:set>
+                <xar:set name="sortimg">$xar->tpl()->getImage('arrow_down.gif', 'module', 'base')</xar:set>
                 <xar:var name="sortlbl">Sort by name descending</xar:var>
             <xar:else/>
-                <xar:set name="sorturl">xarServer::getCurrentURL(['sort' => 'ASC'])</xar:set>
-                <xar:set name="sortimg">xarTpl::getImage('arrow_up.gif', 'module', 'base')</xar:set>
+                <xar:set name="sorturl">$xar->ctl()->getCurrentURL(['sort' => 'ASC'])</xar:set>
+                <xar:set name="sortimg">$xar->tpl()->getImage('arrow_up.gif', 'module', 'base')</xar:set>
                 <xar:var name="sortlbl">Sort by name ascending</xar:var>
             </xar:if>                         
             

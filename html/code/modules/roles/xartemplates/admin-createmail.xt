@@ -3,15 +3,15 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="stateoptions">
         array(
-            ['id' => xarRoles::ROLES_STATE_ALL, 'name' => xarML('All')],
-            ['id' => xarRoles::ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')],
-            ['id' => xarRoles::ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')],
-            ['id' => xarRoles::ROLES_STATE_ACTIVE, 'name' => xarML('Active')],
-            ['id' => xarRoles::ROLES_STATE_PENDING, 'name' => xarML('Pending')],
+            ['id' => xarRoles::ROLES_STATE_ALL, 'name' => $xar->ml('All')],
+            ['id' => xarRoles::ROLES_STATE_INACTIVE, 'name' => $xar->ml('Inactive')],
+            ['id' => xarRoles::ROLES_STATE_NOTVALIDATED, 'name' => $xar->ml('Not Validated')],
+            ['id' => xarRoles::ROLES_STATE_ACTIVE, 'name' => $xar->ml('Active')],
+            ['id' => xarRoles::ROLES_STATE_PENDING, 'name' => $xar->ml('Pending')],
         )
     </xar:set>
     <xar:set name="modstatus">
-        xarSession::getVar('statusmsg')
+        $xar->session()->getVar('statusmsg')
     </xar:set>
     <xar:var name="messagetitle">
         Write this string in the message body or subject to display the corresponding information
@@ -19,14 +19,14 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>
-            <a href="#xarController::URL('roles','admin','createmail')#">Messaging System:</a> Send Mail To Users/Groups
+            <a href="#$xar->ctl()->URL('roles','admin','createmail')#">Messaging System:</a> Send Mail To Users/Groups
         </h2>
-        <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
+        <xar:set name="request">$xar->req()->getRequest()->getInfo()</xar:set>
         <xar:set name="tab">#$request.2#</xar:set>
         <xar:set name="xmldata">'mail'</xar:set>
         <xar:template type="module" module="base" file="admin-menu-skel"/>
 
-        <form method="post" action="#xarController::URL('roles','admin','createmail')#">
+        <form method="post" action="#$xar->ctl()->URL('roles','admin','createmail')#">
             <!--
                 Module List Sort and Filter Controls table
             -->
@@ -107,7 +107,7 @@
                         </select>
                     </td>
                     <td class="xar-align-center">
-                        <xar:set name="firstline">xarML('-- choose --')</xar:set>
+                        <xar:set name="firstline">$xar->ml('-- choose --')</xar:set>
                         <xar:data-input type="dropdown" name="state" tabindex="5" onchange="this.form.submit()" firstline="$firstline" options="$stateoptions" value="$state"/>
                     </td>
                     <xar:if condition="$id gt 0">
@@ -162,23 +162,23 @@
                         <table class="xar-table xar-fullwidth">
                             <tr>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'name'])#">
+                                    <a href="#$xar->ctl()->URL('roles','admin','createmail',['state'=>$state,'order'=>'name'])#">
                                     Real name</a>
                                 </th>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'uname'])#">
+                                    <a href="#$xar->ctl()->URL('roles','admin','createmail',['state'=>$state,'order'=>'uname'])#">
                                     Login</a>
                                 </th>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'email'])#">
+                                    <a href="#$xar->ctl()->URL('roles','admin','createmail',['state'=>$state,'order'=>'email'])#">
                                     Email</a>
                                 </th>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'date_reg'])#">
+                                    <a href="#$xar->ctl()->URL('roles','admin','createmail',['state'=>$state,'order'=>'date_reg'])#">
                                     Date Registered</a>
                                 </th>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'state'])#">
+                                    <a href="#$xar->ctl()->URL('roles','admin','createmail',['state'=>$state,'order'=>'state'])#">
                                     State</a>
                                 </th>
                             </tr>
@@ -191,11 +191,11 @@
                                     <td>#$loop:item['uname']#</td>
                                     <td>
                                         <xar:var name="label">Email this user</xar:var>
-                                        <a href="#xarController::URL('roles','admin','createmail',['id'=>$loop->item['id']])#" title="#$label#">
+                                        <a href="#$xar->ctl()->URL('roles','admin','createmail',['id'=>$loop->item['id']])#" title="#$label#">
                                         #$loop:item['email']#</a>
                                     </td>
                                     <td class="xar-align-center">
-                                    #xarLocale::formatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
+                                    #$xar->mls()->formatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
                                     <td>
                                         <xar:if condition="$loop:item['status'] eq 1">Inactive 
                                         <xar:elseif condition="$loop:item['status'] eq 2"/>Not Validated 
@@ -214,7 +214,7 @@
                 </xar:if>
             </xar:if>
         </fieldset>
-          <form action="#xarController::URL('roles','admin','sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
+          <form action="#$xar->ctl()->URL('roles','admin','sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Message</legend>
                 <p>Choose a message template from the Templates dropdown above, or type in your
@@ -227,7 +227,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <input type="text" name="subject" id="subject" value="#xarVarPrep::text($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                        <input type="text" name="subject" id="subject" value="#$xar->prep()->text($subject)#" maxlength="150" class="xar-form-textxlong"/>
                     </div>
                 </div>
                 <div class="xar-row">
@@ -238,7 +238,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrep::text($message)#</textarea>
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#$xar->prep()->text($message)#</textarea>
                     </div>
                 </div>
             </fieldset>

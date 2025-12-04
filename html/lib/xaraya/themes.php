@@ -126,4 +126,22 @@ class xarTheme extends xarObject implements ixarTheme
     {
         self::info()->noCacheTheme = (bool) $noCache;
     }
+
+    /**
+     * Get a theme variable
+     * @param  string $themeName The name of the theme
+     * @param  string $varName  The name of the variable
+     * @return mixed The value of the variable or void if variable doesn't exist
+     * @deprecated 2.4.1 not used except in kingston theme pages
+     */
+    public static function getVar($themeName, $varName)
+    {
+        try {
+            $themeBaseInfo = self::info()->getBaseInfo($themeName, 'theme');
+            $varvalue = $themeBaseInfo['configuration'][$varName];
+            return $varvalue;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
 }

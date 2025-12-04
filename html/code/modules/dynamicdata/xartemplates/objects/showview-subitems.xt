@@ -56,7 +56,7 @@
                                         <xar:if condition="!empty($option['olink'])">
                                             <xar:if condition="!empty($option['oicon'])">
                                                 <xar:set name="imgfile">'icons/' . $option['oicon']</xar:set>
-                                                <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTpl::getImage($imgfile, 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
+                                                <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#$xar->tpl()->getImage($imgfile, 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
                                             <xar:else/>
                                                 #$option['ojoin']# 
                                                 <a href="#$option['olink']#">#$option['otitle']#</a>

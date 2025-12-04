@@ -6,15 +6,15 @@
     </div>
     <div class="xar-mod-body">
         <h2>
-            <a href="#xarController::URL('roles','user','viewlist')#">Member List</a>&#160;&gt;&#160; 
-            <a href="#xarController::URL('roles','user','display',['id'=>$id])#">
-            #xarVarPrep::text($name)#</a>&#160;&gt;&#160; Send an Email to
-            &#160;#xarVarPrep::text($name)#
+            <a href="#$xar->ctl()->URL('roles','user','viewlist')#">Member List</a>&#160;&gt;&#160; 
+            <a href="#$xar->ctl()->URL('roles','user','display',['id'=>$id])#">
+            #$xar->prep()->text($name)#</a>&#160;&gt;&#160; Send an Email to
+            &#160;#$xar->prep()->text($name)#
         </h2>
-        <form method="post" action="#xarController::URL('roles','user','email',['phase'=>'confirm'])#" enctype="application/x-www-form-urlencoded">
+        <form method="post" action="#$xar->ctl()->URL('roles','user','email',['phase'=>'confirm'])#" enctype="application/x-www-form-urlencoded">
             <div>
                 <xar:if condition="!empty($error_message)">
-                    <div class="xar-error">#xarVarPrep::text($error_message)#</div>
+                    <div class="xar-error">#$xar->prep()->text($error_message)#</div>
                 </xar:if>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="id" id="id" value="#$id#"/>
@@ -22,13 +22,13 @@
                     <div>
                         <label for="subject">Subject:</label>
                     </div>
-                    <input type="text" name="subject" id="subject" size="40" maxlength="100" value="#xarVarPrep::text($subject)#"/>
+                    <input type="text" name="subject" id="subject" size="40" maxlength="100" value="#$xar->prep()->text($subject)#"/>
                 </div>
                 <div>
                     <div>
                         <label for="message">Message:</label>
                     </div>
-                    <textarea name="message" id="message" rows="20" cols="60">#xarVarPrep::text($message)#</textarea>
+                    <textarea name="message" id="message" rows="20" cols="60">#$xar->prep()->text($message)#</textarea>
                 </div>
                 <xar:var name="label">Send</xar:var>
                 <xar:button type="submit" label="$label" name="submit"/>

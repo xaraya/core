@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <ul>
-        <li>Xaraya: (0) <a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['db' => 'default'])#">default</a></li>
+        <li>Xaraya: (0) <a href="#$xar->ctl()->URL('dynamicdata', 'admin', 'dbconfig', ['db' => 'default'])#">default</a></li>
         <xar:foreach in="$dbconfigs" key="$module" value="$info">
             <li>
                 #$module#:
@@ -12,7 +12,7 @@
                             <xar:foreach in="$info['databases']" key="$name" value="$config">
                                 <li>
                                     <xar:set name="dbname">$module . '.' . $name</xar:set>
-                                    <a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['db' => $dbname])#">#$name#</a>:
+                                    <a href="#$xar->ctl()->URL('dynamicdata', 'admin', 'dbconfig', ['db' => $dbname])#">#$name#</a>:
                                     #$config['description']#
                                     <xar:if condition="!empty($config['external'])">
                                         (#strtoupper($config['external'])#)
@@ -20,7 +20,7 @@
                                 </li>
                             </xar:foreach>
                             <xar:set name="dbname">$module . '.*'</xar:set>
-                            <li><a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['db' => $dbname])#">Add new database</a></li>
+                            <li><a href="#$xar->ctl()->URL('dynamicdata', 'admin', 'dbconfig', ['db' => $dbname])#">Add new database</a></li>
                         </ul>
                     </li>
                     <li>
@@ -29,12 +29,12 @@
                             <xar:foreach in="$info['objects']" key="$name" value="$config">
                                 <li>
                                     <xar:set name="dbname">$module . '.' . $name</xar:set>
-                                    <a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['obj' => $dbname])#">#$name#</a>:
+                                    <a href="#$xar->ctl()->URL('dynamicdata', 'admin', 'dbconfig', ['obj' => $dbname])#">#$name#</a>:
                                     #$config['datastore']# (#$config['dbConnIndex']#) #$config['dbConnArgs']#
                                 </li>
                             </xar:foreach>
                             <xar:set name="dbname">$module . '.*'</xar:set>
-                            <li><a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['obj' => $dbname])#">Configure other objects</a></li>
+                            <li><a href="#$xar->ctl()->URL('dynamicdata', 'admin', 'dbconfig', ['obj' => $dbname])#">Configure other objects</a></li>
                         </ul>
                     </li>
                 </ol>

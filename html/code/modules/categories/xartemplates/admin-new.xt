@@ -6,7 +6,7 @@
         <h2>
             Create New Category
         </h2>
-        <form action="#xarController::URL('categories','admin','create')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#$xar->ctl()->URL('categories','admin','create')#" method="post" enctype="application/x-www-form-urlencoded">
             <input type="hidden" name="authid" id="authid" value="#$authid#"/>
             <xar:for iter="$i++" start="$i=1" test="$i le $repeat">
                 <fieldset class="xar-norm">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </fieldset>
-            <xar:if condition="xarModVars::get('categories','allowbatch')">
+            <xar:if condition="$xar->mod('categories')->getVar('allowbatch')">
                 <fieldset class="xar-norm">
                     <legend>
                         <strong>
@@ -42,7 +42,7 @@
                         </strong>
                     </legend>
                     <div class="xar-form-input-wrapper">
-                        <label for="repeat" class="xar-form-label help" title="#xarML('Input and save a set of categories at the same time.')#">
+                        <label for="repeat" class="xar-form-label help" title="#$xar->ml('Input and save a set of categories at the same time.')#">
                             Category forms to display
                         </label>
                         <input class="xar-form-textlong" type="text" name="repeat" id="repeat" value="#$repeat#"/>
@@ -54,7 +54,7 @@
                             <xar:var name="label">Submit</xar:var>
                             <xar:button type="submit" name="reassign" id="reassign" label="$label"/>
                             <xar:comment><!--
-                                <input type="reset" value="#xarML('Reset')#"/>
+                                <input type="reset" value="#$xar->ml('Reset')#"/>
                             --></xar:comment>
                         </div>
                     </div>

@@ -4,7 +4,7 @@
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <p>
-            This template <strong>modules/base/xartemplates/user-main<em>-test</em>.xt</strong> can be reached by adding <strong><a href="#xarServer::getModuleURL('base','user','main',['page' => 'test'])#">page=<em>test</em></a></strong> to the base module URL.
+            This template <strong>modules/base/xartemplates/user-main<em>-test</em>.xt</strong> can be reached by adding <strong><a href="#$xar->ctl()->getModuleURL('base','user','main',['page' => 'test'])#">page=<em>test</em></a></strong> to the base module URL.
             You can experiment with various blocklayout features and template tags here if you want...
         </p>
 

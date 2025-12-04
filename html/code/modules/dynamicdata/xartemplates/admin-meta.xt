@@ -9,14 +9,14 @@
         <xar:template type="module" file="utility-menu"/>
         <xar:if condition="!empty($table)">
             <xar:if condition="empty($dbtype)">
-                <xar:set name="tablelink">xarController::URL('dynamicdata','admin','meta',['table'=>$table])</xar:set>
+                <xar:set name="tablelink">$xar->ctl()->URL('dynamicdata','admin','meta',['table'=>$table])</xar:set>
             <xar:else />
-                <xar:set name="tablelink">xarController::URL('dynamicdata','admin','meta',['dbtype'=>$dbtype,'db'=>$db,'table'=>$table])</xar:set>
+                <xar:set name="tablelink">$xar->ctl()->URL('dynamicdata','admin','meta',['dbtype'=>$dbtype,'db'=>$db,'table'=>$table])</xar:set>
             </xar:if>
         </xar:if>
         <xar:if condition="empty($export)">
             <xar:if condition="!empty($databases)">
-                <form method="post" action="#xarController::URL('dynamicdata','admin','meta')#">
+                <form method="post" action="#$xar->ctl()->URL('dynamicdata','admin','meta')#">
                     <fieldset>
                         <legend>Select Database</legend>
                         <div class="xar-row">
@@ -40,7 +40,7 @@
                     <pre>#$result#</pre>
                 </fieldset>
             </xar:if>
-            <form method="post" id="import_tables" action="#xarController::URL('dynamicdata','admin','meta')#">
+            <form method="post" id="import_tables" action="#$xar->ctl()->URL('dynamicdata','admin','meta')#">
                 <table class="xar-table">
                     <tr>
                         <xar:if condition="!empty($dbtype)">
@@ -61,9 +61,9 @@
                             </xar:if>
                             <td>
                                 <xar:if condition="empty($dbtype)">
-                                    <xar:set name="curlink">xarController::URL('dynamicdata','admin','meta',['table'=>$curtable])</xar:set>
+                                    <xar:set name="curlink">$xar->ctl()->URL('dynamicdata','admin','meta',['table'=>$curtable])</xar:set>
                                 <xar:else />
-                                    <xar:set name="curlink">xarController::URL('dynamicdata','admin','meta',['dbtype'=>$dbtype,'db'=>$db,'table'=>$curtable])</xar:set>
+                                    <xar:set name="curlink">$xar->ctl()->URL('dynamicdata','admin','meta',['dbtype'=>$dbtype,'db'=>$db,'table'=>$curtable])</xar:set>
                                 </xar:if>
                                 <a href="#$curlink#">
                                 #$curtable#</a>
@@ -73,7 +73,7 @@
                             View</a>
                             </td>
                             <td class="xar-align-center">
-                                <a href="#xarController::URL('dynamicdata','admin','query',['table'=>$curtable])#">
+                                <a href="#$xar->ctl()->URL('dynamicdata','admin','query',['table'=>$curtable])#">
                             Query</a>
                             </td>
                             <td class="xar-align-center">
@@ -84,7 +84,7 @@
                                 <a href="#$curlink#&amp;export=ddl">
                             Export DDL</a>
                             <xar:comment><!--
-                                | <a href="#xarController::URL('dynamicdata','admin','relations',['table'=>$curtable])#">
+                                | <a href="#$xar->ctl()->URL('dynamicdata','admin','relations',['table'=>$curtable])#">
                             Add Relation</a>
                             --></xar:comment>
                            </td>
@@ -102,7 +102,7 @@
                             </td>
                             <td>
                                 <input type="hidden" name="db" value="#$db#"/>
-                                <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
+                                <input type="hidden" name="authid" value="#$xar->sec()->genAuthKey()#"/>
                                 <xar:var name="label">Create DD Objects</xar:var>
                                 <xar:button type="submit" label="$label"/>
                             </td>
@@ -126,13 +126,13 @@
                 </h3>
                 <p>
                 <a href="#$tablelink#&amp;export=view">View</a>| 
-                <a href="#xarController::URL('dynamicdata','admin','query',['table'=>$table])#">Query</a>|
+                <a href="#$xar->ctl()->URL('dynamicdata','admin','query',['table'=>$table])#">Query</a>|
                     <a href="#$tablelink#&amp;export=object">
                 Export Object</a>| 
                     <a href="#$tablelink#&amp;export=ddl">
                 Export DDL</a>
                 <xar:comment><!--
-                | <a href="#xarController::URL('dynamicdata','admin','relations',['table'=>$table])#">Add
+                | <a href="#$xar->ctl()->URL('dynamicdata','admin','relations',['table'=>$table])#">Add
                 Relation</a>
                 --></xar:comment>
                 </p>
@@ -164,11 +164,11 @@
                 </table>
             </xar:if>
             <p class="xar-align-center">
-            <a href="#xarController::URL('dynamicdata','admin','meta',['export'=>'object'])#">Export all tables to
+            <a href="#$xar->ctl()->URL('dynamicdata','admin','meta',['export'=>'object'])#">Export all tables to
             Objects</a>| 
-            <a href="#xarController::URL('dynamicdata','admin','meta',['export'=>'ddl'])#">Export all tables to
+            <a href="#$xar->ctl()->URL('dynamicdata','admin','meta',['export'=>'ddl'])#">Export all tables to
             DDL</a>| 
-            <a href="#xarController::URL('dynamicdata','admin','meta',['showdb'=>1])#">Show other databases</a></p>
+            <a href="#$xar->ctl()->URL('dynamicdata','admin','meta',['showdb'=>1])#">Show other databases</a></p>
         <xar:elseif condition="$export eq 'view'"/>
             <!-- example of using virtual object descriptor to show database table -->
             <xar:set name="descriptor">new TableObjectDescriptor(['table' => $table, 'fields' => $tables[$table], 'dbConnIndex' => $dbConnIndex])</xar:set>
@@ -188,7 +188,7 @@
             <!-- example of using virtual object descriptor to show database table -->
             <xar:set name="descriptor">new TableObjectDescriptor(['table' => $table, 'fields' => $tables[$table], 'dbConnIndex' => $dbConnIndex])</xar:set>
             <xar:set name="object">new DataObject($descriptor)</xar:set>
-            <xar:set name="dummy">xarVar::fetch('itemid', 'notempty', $itemid, 1, xarVar::NOT_REQUIRED)</xar:set>
+            <xar:set name="dummy">$xar->var()->find('itemid', $itemid, 'notempty', 1)</xar:set>
             <xar:set name="dummy">$object->getItem(['itemid' => $itemid])</xar:set>
             <h3>
                 Table: #$table#&#160;
@@ -213,7 +213,7 @@
                     <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
                 </a>
             </h3>
-            <form method="post" action="#xarController::URL('dynamicdata','admin','import')#">
+            <form method="post" action="#$xar->ctl()->URL('dynamicdata','admin','import')#">
                 <fieldset>
                     <xar:if condition="$export eq 'ddl'">
                         <legend>Data definition for #$table#</legend>
@@ -262,7 +262,7 @@
                 </fieldset>
                 <xar:if condition="$export ne 'ddl'">
                     <div class="xar-align-center">
-                        <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
+                        <input type="hidden" name="authid" value="#$xar->sec()->genAuthKey()#"/>
                         <xar:var name="label">Import Object Definition</xar:var>
                         <xar:button type="submit" label="$label"/>
                     </div>

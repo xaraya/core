@@ -77,7 +77,7 @@
             <dd>
 	            <select name="defaultlocale" id="defaultlocale">
 	                <xar:loop name="$locales">
-	                    <xar:if condition="xarMLS::getSiteLocale() eq $loop:item['name']">
+	                    <xar:if condition="$xar->mls()->getSiteLocale() eq $loop:item['name']">
 	                        <option value="#$loop:item['name']#" selected="selected">
 	                            #$loop:item['name']#
 	                        </option>
@@ -111,15 +111,15 @@
             </div>
             <div class="xar-col">
                 <select name="translationsbackend" id="translationsbackend" size="1">
-                    <xar:if condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'xml'">
+                    <xar:if condition="$xar->config()->getVar('Site.MLS.TranslationsBackend') eq 'xml'">
                     <option value="xml" selected="selected">XML (good for interoperability)</option>
                     <option value="php">PHP (good for programmed access)</option>
                     <option value="xml2php">XML with caching in PHP (new experimental)</option>
-                    <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'php'"/>
+                    <xar:elseif condition="$xar->config()->getVar('Site.MLS.TranslationsBackend') eq 'php'"/>
                     <option value="xml">XML (good for interoperability)</option>
                     <option value="php" selected="selected">PHP (good for programmed access)</option>
                     <option value="xml2php">XML with caching in PHP (new experimental)</option>
-                    <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'xml2php'"/>
+                    <xar:elseif condition="$xar->config()->getVar('Site.MLS.TranslationsBackend') eq 'xml2php'"/>
                     <option value="xml">XML (good for interoperability)</option>
                     <option value="php">PHP (good for programmed access)</option>
                     <option value="xml2php" selected="selected">XML with caching in PHP (new experimental)</option>

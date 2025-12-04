@@ -35,12 +35,12 @@
             This is the layout used to display the form that users see for the roles_user_settings object
         -->
         <h2>Edit Settings</h2>
-        <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
+        <xar:set name="settings">explode(',',$xar->mod('roles')->getVar('duvsettings'))</xar:set>
         <fieldset>
             <legend>#$object->label#</legend>
             <xar:set name="optionsactive">false</xar:set>
             
-            <xar:if condition="in_array('userhome',$settings) and (bool)xarModVars::get('roles','allowuserhomeedit') eq true">
+            <xar:if condition="in_array('userhome',$settings) and (bool)$xar->mod('roles')->getVar('allowuserhomeedit') eq true">
                 <xar:set name="optionsactive">true</xar:set>
                 <div class="xar-row">
                     <div class="xar-col">
@@ -48,7 +48,7 @@
                     </div>
                     <div class="xar-col">
                         <xar:data-input property="$properties['userhome']"/>
-                        <xar:if condition="(bool)xarModVars::get('roles', 'loginredirect')">&#160;
+                        <xar:if condition="(bool)$xar->mod('roles')->getVar('loginredirect')">&#160;
                             You will be redirected to your homepage whenever you log in
                         </xar:if>
                     </div>
@@ -67,7 +67,7 @@
                 </div>
             </xar:if>
             
-            <xar:if condition="(bool)xarModVars::get('roles', 'allowemail') == true">
+            <xar:if condition="(bool)$xar->mod('roles')->getVar('allowemail') == true">
                 <xar:set name="optionsactive">true</xar:set>
                 <div class="xar-row">
                     <div class="xar-col">
@@ -109,7 +109,7 @@
         <!--
             This is the layout used to display the form to admins for the roles_user_settings object
         -->
-        <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
+        <xar:set name="settings">explode(',',$xar->mod('roles')->getVar('duvsettings'))</xar:set>
         <fieldset>
             <legend>Member Options</legend>
             <div class="xar-row">
@@ -194,7 +194,7 @@
                     <div class="xar-col">
                         Allow users to set a home page in their user settings.
                         <br />
-                        To activate click on the User Home Page checkbox <a href="#xarController::URL('roles','admin','modifyconfig',['tab'=>'duvs'])#">here</a>
+                        To activate click on the User Home Page checkbox <a href="#$xar->ctl()->URL('roles','admin','modifyconfig',['tab'=>'duvs'])#">here</a>
                     </div>
                 </div>
             </xar:if>
@@ -216,7 +216,7 @@
                     <div class="xar-col">
                         Defines a parent group for the current uswer that takes precedence over other groups.
                         <br />
-                        To activate click on the Primary Parent checkbox <a href="#xarController::URL('roles','admin','modifyconfig',['tab'=>'duvs'])#">here</a>
+                        To activate click on the Primary Parent checkbox <a href="#$xar->ctl()->URL('roles','admin','modifyconfig',['tab'=>'duvs'])#">here</a>
                     </div>
                 </div>
             </xar:if>

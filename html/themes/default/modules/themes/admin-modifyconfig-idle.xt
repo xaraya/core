@@ -19,11 +19,11 @@
         <div class="xar-mod-body">
             <xar:template type="module" file="admin-menu"/>
             <h2>Modify Configuration</h2>
-            <form action="#xarController::URL('themes','admin','updateconfig')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#$xar->ctl()->URL('themes','admin','updateconfig')#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Configuration Options</legend>
                     <div class="textInputContainer">
-                        <xar:set name="valThemedir">xarModVars::get('themes', 'themesdirectory')</xar:set>
+                        <xar:set name="valThemedir">$xar->mod('themes')->getVar('themesdirectory')</xar:set>
                         <xar:data-label label="Default Theme Directory" for="themedir" title="The default directory for site themes - no trailing slash."/>
                         <xar:data-input id="themedir" name="themedir" type="textbox" size="15" maxlength="100" value="$valThemedir"/>
                     </div>
@@ -58,7 +58,7 @@
                         <xar:data-label label="Enable InPage Admin SubMenus" for="adminpagemenu" title="Use submenus in the page for admin functions."/>
                     </div>
                     <div class="checkInputContainer">
-                        <xar:set name="checkUsermenu">xarHooks::isAttached('themes', 'roles')</xar:set>
+                        <xar:set name="checkUsermenu">$xar->mod()->isHooked('themes', 'roles')</xar:set>
                         <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checkUsermenu"/>
                         <xar:data-label label="Allow users to set their theme in User Account page" for="usermenu" title="Allow users to select themes from their Account Details page."/>
                     </div>
@@ -70,45 +70,45 @@
                 </xar:set>
                 <xar:data-input id="authid" name="authid" type="hidden" value="$valAuthid"/>
                 <div class="textInputContainer">
-                    <xar:set name="valSitename">xarModVars::get('themes', 'SiteName', 1)</xar:set>
+                    <xar:set name="valSitename">$xar->mod('themes')->getVar('SiteName', 1)</xar:set>
                     <xar:data-label label="Site Name" for="sitename"/>
                     <xar:data-input type="textbox" name="sitename" id="sitename"
                     value="$valSitename"/>
                 </div>
                 <div class="textInputContainer">
-                    <xar:set name="valSiteslogan">xarModVars::get('themes', 'SiteSlogan',
+                    <xar:set name="valSiteslogan">$xar->mod('themes')->getVar('SiteSlogan',
                     1)</xar:set>
                     <xar:data-label label="Site Slogan" for="slogan"/>
                     <xar:data-input type="textbox" id="slogan" name="slogan"
                     value="$valSiteslogan"/>
                 </div>
                 <div class="textInputContainer">
-                    <xar:set name="valCopyright">xarModVars::get('themes', 'SiteCopyRight',
+                    <xar:set name="valCopyright">$xar->mod('themes')->getVar('SiteCopyRight',
                     1)</xar:set>
                     <xar:data-label label="Copyright" for="copyright"/>
                     <xar:data-input type="textbox" name="copyright" id="copyright" value="$valCopyright"/>
                 </div>#\Xaraya\Services\xar::mem()->del('Mod.Variables.themes','SiteCopyRight')# 
                 <div class="textareaContainer">
-                    <xar:set name="valFooternote">xarModVars::get('themes', 'SiteFooter',
+                    <xar:set name="valFooternote">$xar->mod('themes')->getVar('SiteFooter',
                     1)</xar:set>
                     <xar:data-label label="Footer Note" for="footer"/>
                     <xar:data-input type="textarea" id="footer" name="footer" cols="60" rows="5"
                     value="$valFooternote"/>
                 </div>#\Xaraya\Services\xar::mem()->del('Mod.Variables.themes','SiteFooter')# 
                 <div class="textInputContainer">
-                    <xar:set name="valSeperator">xarModVars::get('themes', 'SiteTitleSeparator', 1)</xar:set>
+                    <xar:set name="valSeperator">$xar->mod('themes')->getVar('SiteTitleSeparator', 1)</xar:set>
                     <xar:data-label label="Page Title Separator" for="separator"/>
                     <xar:data-input type="textbox" name="separator" id="separator"
                     value="$valSeperator"/>
                 </div>
                 <div class="selectContainer">
                     <xar:set name="options">array(
-                        ['id' => 'default', 'name' => xarML('Site Name - Module Name - Page Name')],
-                        ['id' => 'sp', 'name' => xarML('Site Name - Page Name')],
-                        ['id' => 'mps', 'name' => xarML('Module Name - Page Name - Site Name')],
-                        ['id' => 'pms', 'name' => xarML('Page Name - Module Name - Site Name')],
-                        ['id' => 'to', 'name' => xarML('Page Name')],
-                        ['id' => 'theme', 'name' => xarML('Theme Driven')],
+                        ['id' => 'default', 'name' => $xar->ml('Site Name - Module Name - Page Name')],
+                        ['id' => 'sp', 'name' => $xar->ml('Site Name - Page Name')],
+                        ['id' => 'mps', 'name' => $xar->ml('Module Name - Page Name - Site Name')],
+                        ['id' => 'pms', 'name' => $xar->ml('Page Name - Module Name - Site Name')],
+                        ['id' => 'to', 'name' => $xar->ml('Page Name')],
+                        ['id' => 'theme', 'name' => $xar->ml('Theme Driven')],
                     )</xar:set>
                     <xar:set name="valPagetitle">
                         <xar:var scope="module" module="themes" name="SiteTitleOrder"/>
@@ -119,7 +119,7 @@
                 </div></fieldset>
                 <fieldset>
                     <legend>Template Debugging options</legend>
-            <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
+            <xar:if condition="$xar->config()->getVar('Site.BL.CacheTemplates')">
                 <div class="checkInputContainer">
                     <xar:set name="checkShowphpcbit"><xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/></xar:set>
                     <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checkShowphpcbit"/>
@@ -153,10 +153,10 @@
                         <xar:data-label label="Debug Templates by Showing Variables Available"
                         for="var_dump"/>
                     </div>
-                    <xar:if condition="xarTheme::isAvailable('atom')">
+                    <xar:if condition="$xar->theme()->isAvailable('atom')">
                         <!-- This should be moved if we ever fully support the atom spec -->
                         <div class="textInputContainer">
-                            <xar:set name="valAtomtag">xarModVars::get('themes', 'AtomTag',
+                            <xar:set name="valAtomtag">$xar->mod('themes')->getVar('AtomTag',
                             1)</xar:set>
                             <xar:data-label label="Atom Tag" for="AtomTag"/>
                             <xar:data-input type="textbox" name="AtomTag" id="AtomTag"

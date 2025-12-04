@@ -37,7 +37,7 @@
                 <tr class="#$rowclass#">
                     <td style="text-align: left; margin-left: 5px">
                         <xar:for start="$i = 1" test="$i le $level" iter="$i++">
-                            <img src="#xarTpl::getImage('blank.png','categories')#"/>
+                            <img src="#$xar->tpl()->getImage('blank.png','categories')#"/>
                         </xar:for>
                        #$name#
                     </td>
@@ -47,35 +47,35 @@
                     <td style="text-align: left; margin-left: 5px;">#$template#</td>
                     <td style="text-align: center;">
                         <xar:if condition="!empty($cid)">
-                            <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
-                                <a href="#xarController::URL('categories', 'admin', 'clone', ['itemid' => $cid])#" title="#$clonetitle#" style="margin-right: 5px">
+                            <xar:if condition="$xar->mod('categories')->getVar('use_module_icons')">
+                                <a href="#$xar->ctl()->URL('categories', 'admin', 'clone', ['itemid' => $cid])#" title="#$clonetitle#" style="margin-right: 5px">
                                     <xar:set name="imgfile">'icons/'.'add.png'</xar:set>
                                     <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$clonetitle"/>
                                 </a>
                             <xar:else />
-                                <a href="#xarController::URL('categories', 'admin', 'clone', ['itemid' => $cid])#" title="#$modifytitle#">
+                                <a href="#$xar->ctl()->URL('categories', 'admin', 'clone', ['itemid' => $cid])#" title="#$modifytitle#">
                                     Clone
                                 </a>
                             </xar:if>
-                            <xar:if condition="($cid ne 1) OR (xarUser::isSiteAdmin())">
-                                <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
-                                    <a href="#xarController::URL('categories', 'admin', 'modify', ['itemid' => $cid])#" title="#$modifytitle#" style="margin-right: 5px">
+                            <xar:if condition="($cid ne 1) OR ($xar->user()->isSiteAdmin())">
+                                <xar:if condition="$xar->mod('categories')->getVar('use_module_icons')">
+                                    <a href="#$xar->ctl()->URL('categories', 'admin', 'modify', ['itemid' => $cid])#" title="#$modifytitle#" style="margin-right: 5px">
                                         <xar:set name="imgfile">'icons/'.'modify.png'</xar:set>
                                         <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$modifytitle"/>
                                     </a>
                                 <xar:else />
-                                    <a href="#xarController::URL('categories', 'admin', 'modify', ['itemid' => $cid])#" title="#$modifytitle#">
+                                    <a href="#$xar->ctl()->URL('categories', 'admin', 'modify', ['itemid' => $cid])#" title="#$modifytitle#">
                                         Modify
                                     </a>
                                 </xar:if>
-                                <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
-                                    <a href="#xarController::URL('categories', 'admin', 'delete', ['itemid' => $cid])#" title="#$deletetitle#">
+                                <xar:if condition="$xar->mod('categories')->getVar('use_module_icons')">
+                                    <a href="#$xar->ctl()->URL('categories', 'admin', 'delete', ['itemid' => $cid])#" title="#$deletetitle#">
                                         <xar:set name="imgfile">'icons/'.'delete.png'</xar:set>
                                         <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$deletetitle"/>
                                     </a>
                                 <xar:else />
                                     &#160;|&#160;
-                                    <a href="#xarController::URL('categories', 'admin', 'delete', ['itemid' => $cid])#" title="#$deletetitle#">
+                                    <a href="#$xar->ctl()->URL('categories', 'admin', 'delete', ['itemid' => $cid])#" title="#$deletetitle#">
                                         Delete
                                     </a>
                                 </xar:if>
@@ -99,7 +99,7 @@
                             <xar:if condition="$i le $startnum  AND ($i + $items_per_page) gt $startnum">
                                 #$i#-#$endrow#
                             <xar:else />
-                                <a href="#xarController::URL('categories', 'admin', 'view', ['activetab' => $activetab,'startnum' => $i, 'items_per_page' => $items_per_page])#">
+                                <a href="#$xar->ctl()->URL('categories', 'admin', 'view', ['activetab' => $activetab,'startnum' => $i, 'items_per_page' => $items_per_page])#">
                                     #$i#-#$endrow#
                                 </a>
                             </xar:if>
@@ -113,7 +113,7 @@
                             <xar:if condition="$i le $startnum  AND ($i + $items_per_page) gt $startnum">
                                 #$i#
                             <xar:else />
-                                <a href="#xarController::URL('categories', 'admin', 'view', ['activetab' => $activetab,'startnum' => $i, 'items_per_page' => $items_per_page])#">
+                                <a href="#$xar->ctl()->URL('categories', 'admin', 'view', ['activetab' => $activetab,'startnum' => $i, 'items_per_page' => $items_per_page])#">
                                     #$i#
                                 </a>
                             </xar:if>
@@ -122,7 +122,7 @@
                             <xar:if condition="$i le $startnum  AND ($i + $items_per_page) gt $startnum">
                                 #$i#-#$pagertotal#
                             <xar:else />
-                                <a href="#xarController::URL('categories', 'admin', 'view', ['activetab' => $activetab,'startnum' => $i, 'items_per_page' => $items_per_page])#">
+                                <a href="#$xar->ctl()->URL('categories', 'admin', 'view', ['activetab' => $activetab,'startnum' => $i, 'items_per_page' => $items_per_page])#">
                                     #$i#-#$pagertotal#
                                 </a>
                             </xar:if>
@@ -132,7 +132,7 @@
                 <div class="xar-row">
                     <div class="xar-col"></div>
                     <div class="xar-col">
-                        <form action="#xarController::URL('categories','admin','view')#" method="post">
+                        <form action="#$xar->ctl()->URL('categories','admin','view')#" method="post">
                             Categories per page:&#160;
                             <input type="hidden" name="startnum" id="startnum" value="#$startnum#"/>
                             <input type="text" name="items_per_page" id="items_per_page" value="#$items_per_page#" size="5"/>&#160;&#160;

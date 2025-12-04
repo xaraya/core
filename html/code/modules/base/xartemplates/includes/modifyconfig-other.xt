@@ -43,7 +43,7 @@
             </div>
             <div class="xar-col">
                 <xar:set name="hosttimezone">
-                    xarSystemVars::get(sys::CONFIG, 'SystemTimeZone')
+                    $xar->sysConfig()->getVar('SystemTimeZone')
                 </xar:set>
                 <xar:data-input type="timezone" name="hosttimezone" id="hosttimezone" value="$hosttimezone"/>
                 &#160;The time is #$hostdatetime->format(DATE_RSS)#

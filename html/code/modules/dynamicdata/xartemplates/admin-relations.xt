@@ -16,9 +16,9 @@
         <xar:template type="module" file="utility-menu"/>
        </div><!--/xar-mod-page-head-->
 		<div class="xar-mod-page-body">
-        <xar:set name="authid">#xarSec::genAuthKey()#</xar:set>
+        <xar:set name="authid">#$xar->sec()->genAuthKey()#</xar:set>
 
-        <form method="get" action="#xarServer::getBaseURL()#">
+        <form method="get" action="#$xar->ctl()->getBaseURL()#">
             <fieldset>
                 <input type="hidden" name="module" value="dynamicdata"/>
                 <input type="hidden" name="type" value="admin"/>
@@ -52,7 +52,7 @@
             <xar:template type="module" file="link-objects"/>
         </xar:if>
 
-        <form method="get" action="#xarServer::getBaseURL()#">
+        <form method="get" action="#$xar->ctl()->getBaseURL()#">
             <fieldset>
                 <input type="hidden" name="module" value="dynamicdata"/>
                 <input type="hidden" name="type" value="admin"/>
@@ -94,7 +94,7 @@
 
 <xar:comment><!-- TODO: re-examine module links
 
-        <form method="get" action="#xarServer::getBaseURL()#">
+        <form method="get" action="#$xar->ctl()->getBaseURL()#">
             <fieldset>
                 <input type="hidden" name="module" value="dynamicdata"/>
                 <input type="hidden" name="type" value="admin"/>

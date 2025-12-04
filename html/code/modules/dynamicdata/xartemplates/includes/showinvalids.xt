@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="debugadmins">xarConfigVars::get(null, 'Site.User.DebugAdmins')</xar:set>
-    <xar:set name="username">xarUser::getVar('uname')</xar:set>
-    <xar:if condition="xarModVars::get('dynamicdata','debugmode') AND in_array($username,$debugadmins)">
+    <xar:set name="debugadmins">$xar->config()->getVar('Site.User.DebugAdmins')</xar:set>
+    <xar:set name="username">$xar->user()->getVar('uname')</xar:set>
+    <xar:if condition="$xar->mod('dynamicdata')->getVar('debugmode') AND in_array($username,$debugadmins)">
         <xar:set name="invalids">$object->getInvalids()</xar:set>
         <xar:if condition="!empty($invalids)">
           <fieldset>

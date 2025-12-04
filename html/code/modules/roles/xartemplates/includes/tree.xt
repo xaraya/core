@@ -30,30 +30,30 @@
                                     <xar:else />
                                         <xar:set name="numofsubgroups">count(xarRoles::getsubgroups($node['id']))</xar:set>
                                         <xar:set name="numofsubgroups">1</xar:set>
-                                        <xar:set name="subgroups">$numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups')</xar:set>
-                                        <xar:set name="users">$node['users'] == 1 ? xarML('user') : xarML('users')</xar:set>
+                                        <xar:set name="subgroups">$numofsubgroups == 1 ? $xar->ml('subgroup') : $xar->ml('subgroups')</xar:set>
+                                        <xar:set name="users">$node['users'] == 1 ? $xar->ml('user') : $xar->ml('users')</xar:set>
                                         <xar:set name="description">
                                             $numofsubgroups . " " . $subgroups . ' | ' . $node['users'] . " " . $users
                                         </xar:set>
                                         <xar:var name="label">Modify this Group</xar:var>
-                                        <a href="#xarController::URL('roles', 'admin', 'modify', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
+                                        <a href="#$xar->ctl()->URL('roles', 'admin', 'modify', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
                                             #$node['name']#
                                         </a> 
                                         #$description#
                                     </xar:if>
                                     <!-- Delete item -->>
-                                    <xar:set name="seccheck"> xarSecurity::check('ManageRoles',0,'Roles',$node['name'])</xar:set>
+                                    <xar:set name="seccheck"> $xar->sec()->check('ManageRoles',0,'Roles',$node['name'])</xar:set>
                                     <xar:if condition="($seccheck eq false) or ($node['users'] gt 0) or ($drawchildren eq false)">
                                     <xar:else />
                                         <xar:var name="label">Delete this Group</xar:var>
-                                        <a href="#xarController::URL('roles', 'admin', 'delete', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
+                                        <a href="#$xar->ctl()->URL('roles', 'admin', 'delete', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
                                             <xar:img scope="theme" file="icons/delete.png" class="xar-icon" />
                                         </a>
                                     </xar:if>
                                     <!-- Users item -->
                                     <xar:if condition="($node['users'] gt 0) and ($drawchildren)">
                                         <xar:var name="label">Show the Users in this Group</xar:var>
-                                        <a href="#xarController::URL('roles', 'admin', 'showusers', ['id' => $node['id'], 'reload' => 1])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
+                                        <a href="#$xar->ctl()->URL('roles', 'admin', 'showusers', ['id' => $node['id'], 'reload' => 1])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
                                             <xar:img scope="theme" file="icons/system-users.png" class="xar-icon"/>
                                         </a>
                                     </xar:if>
@@ -61,21 +61,21 @@
                                     <xar:if condition="($node['users'] gt 0) and ($drawchildren)">
                                     <xar:else />
                                         <xar:var name="label">Email the Users in this Group</xar:var>
-                                        <a href="#xarController::URL('roles', 'admin', 'createmail', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
+                                        <a href="#$xar->ctl()->URL('roles', 'admin', 'createmail', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
                                             <xar:img scope="theme" file="icons/mail.png" class="xar-icon"/>
                                         </a>
                                     </xar:if>
                                     <!-- Show privileges item -->
                                     <xar:if condition="$drawchildren">
                                         <xar:var name="label">Show the Privileges assigned to this Group</xar:var>
-                                        <a href="#xarController::URL('roles', 'admin', 'showprivileges', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
+                                        <a href="#$xar->ctl()->URL('roles', 'admin', 'showprivileges', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
                                             <xar:img scope="theme" file="icons/privileges.png" class="xar-icon"/>
                                         </a>
                                     </xar:if>
                                     <!-- Test privileges item -->
                                     <xar:if condition="$drawchildren">
                                         <xar:var name="label">Test this Groups's Privileges</xar:var>
-                                        <a href="#xarController::URL('roles', 'admin', 'testprivileges', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
+                                        <a href="#$xar->ctl()->URL('roles', 'admin', 'testprivileges', ['id' => $node['id']])#" title="#$label#" style="margin: 0 0.25em 0 0.25em;">
                                             <xar:img scope="theme" file="icons/test.png" class="xar-icon"/>
                                         </a>
                                     </xar:if>

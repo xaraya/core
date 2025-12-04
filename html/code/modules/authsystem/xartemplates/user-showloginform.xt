@@ -5,7 +5,7 @@
         <span class="xar-mod-title">Login to an existing account</span>
     </div>
     <div class="xar-mod-body">
-        <xar:if condition="xarUser::isLoggedIn()">
+        <xar:if condition="$xar->user()->isLoggedIn()">
             <fieldset>
                 <legend>Logged In</legend>
                     <div class="xar-row">
@@ -13,14 +13,14 @@
                             You are already logged in. What do you want to do?
                         </div>
                         <div class="xar-col">
-                            <a href="#xarController::URL('authsystem','user','logout')#">Log out</a>
+                            <a href="#$xar->ctl()->URL('authsystem','user','logout')#">Log out</a>
                             &#160;&#160;
                             <a href="#$redirecturl#">Continue</a>
                         </div>
                     </div>
             </fieldset>
         <xar:else/>
-            <form action="#xarController::URL('authsystem','user','login')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#$xar->ctl()->URL('authsystem','user','login')#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Login</legend>
                     <xar:data-input type="hidden" name="redirecturl" id="returnurl" value="$redirecturl"/>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="xar-row">
                         <div class="xar-col">
-                            <a href="#xarController::URL('roles','user','lostpassword')#">Request a new password</a>
+                            <a href="#$xar->ctl()->URL('roles','user','lostpassword')#">Request a new password</a>
                         </div>
                         <div class="xar-col">
                             <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3"/>&#160;

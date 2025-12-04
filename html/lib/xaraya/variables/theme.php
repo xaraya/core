@@ -43,6 +43,7 @@ class xarThemeVars extends xarObject implements IxarThemeVars
      * @return mixed The value of the variable or void if variable doesn't exist
      * @throws EmptyParameterException
      * @todo the silent spec of itemid is a bit hacky
+     * @deprecated 2.9.1 use xar::theme()->getVar() instead
      */
     public static function get($scope, $name, $itemid = null)
     {

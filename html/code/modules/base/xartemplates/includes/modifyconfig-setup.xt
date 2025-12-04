@@ -37,7 +37,7 @@
                 </label>
             </div>
             <div class="xar-col">
-                #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
+                #$xar->sysConfig()->getVar('DB.Host')#
             </div>
         </div>
         <div class="xar-row">
@@ -48,7 +48,7 @@
                 </label>
             </div>
             <div class="xar-col">
-                #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
+                #$xar->sysConfig()->getVar('DB.Type')#
             </div>
         </div>
         <div class="xar-row">
@@ -59,11 +59,11 @@
                 </label>
             </div>
             <div class="xar-col">
-            	<xar:if condition="xarSystemVars::get(sys::CONFIG, 'DB.Switching')">
-                	<xar:set name="value">xarSystemVars::get(sys::CONFIG, 'DB.Name')</xar:set>
+            	<xar:if condition="$xar->sysConfig()->getVar('DB.Switching')">
+                	<xar:set name="value">$xar->sysConfig()->getVar('DB.Name')</xar:set>
 	                <xar:data-input type="dropdown" name="database" value="$value" options="$allowed_dbs"/>
             	<xar:else/>
-	                #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
+	                #$xar->sysConfig()->getVar('DB.Name')#
             	</xar:if>
             </div>
         </div>
@@ -81,7 +81,7 @@
                         ['id' => 'PDO', 'name' => 'PDO'], 
                     )
                 </xar:set>
-                <xar:set name="value">xarSystemVars::get(sys::CONFIG, 'DB.Middleware')</xar:set>
+                <xar:set name="value">$xar->sysConfig()->getVar('DB.Middleware')</xar:set>
                 <xar:data-input type="dropdown" name="middleware" id="middleware" options="$options" value="$value"/>
             </div>
         </div>

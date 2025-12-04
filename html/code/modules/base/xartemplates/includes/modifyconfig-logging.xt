@@ -10,46 +10,46 @@
     
 		<xar:set name="levels">
 				array(
-					['id' =>   1, 'name' => xarML('Emergency')],
-					['id' =>   2, 'name' => xarML('Alert')],
-					['id' =>   4, 'name' => xarML('Critical')],
-					['id' =>   8, 'name' => xarML('Error')],
-					['id' =>  16, 'name' => xarML('Warning')],
-					['id' =>  32, 'name' => xarML('Notice')],
-					['id' =>  64, 'name' => xarML('Info')],
-					['id' => 128, 'name' => xarML('Debug')],
+					['id' =>   1, 'name' => $xar->ml('Emergency')],
+					['id' =>   2, 'name' => $xar->ml('Alert')],
+					['id' =>   4, 'name' => $xar->ml('Critical')],
+					['id' =>   8, 'name' => $xar->ml('Error')],
+					['id' =>  16, 'name' => $xar->ml('Warning')],
+					['id' =>  32, 'name' => $xar->ml('Notice')],
+					['id' =>  64, 'name' => $xar->ml('Info')],
+					['id' => 128, 'name' => $xar->ml('Debug')],
 				)
 		</xar:set>
 
-        <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+        <form action="#$xar->ctl()->getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
            <!-- <xar:template file="modifyconfig-logging" module="base" type="module"/> -->
             <fieldset>
                 <legend>General</legend>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="logenabled" title="#xarML('General flag to enable logging')#" class="xar-form-label">                                
+                        <label for="logenabled" title="#$xar->ml('General flag to enable logging')#" class="xar-form-label">                                
                             Enable logging:                                
                         </label>
                     </div>
                     <div class="xar-col">
                         <xar:set name="options">
                             array(
-                                ['id' => 0, 'name' => xarML('No')],
-                                ['id' => 1, 'name' => xarML('Yes')],
+                                ['id' => 0, 'name' => $xar->ml('No')],
+                                ['id' => 1, 'name' => $xar->ml('Yes')],
                             )
                         </xar:set>
-                        <xar:set name="log_enabled">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
+                        <xar:set name="log_enabled">$xar->sysConfig()->getVar('Log.Enabled')</xar:set>
                         <xar:data-input type="radio" name="logenabled" value="$log_enabled" options="$options"/>
                     </div>
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="logenabled" title="#xarML('The loggers that are logging')#" class="xar-form-label">                                
+                        <label for="logenabled" title="#$xar->ml('The loggers that are logging')#" class="xar-form-label">                                
                             Active loggers:                                
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:set name="value">xarSystemVars::get(sys::CONFIG, 'Log.Available')</xar:set>
+                        <xar:set name="value">$xar->sysConfig()->getVar('Log.Available')</xar:set>
                         <xar:data-input property="$logavailable" name="available_loggers" value="$value" layout="horizontal"/>
                     </div>
                 </div>
@@ -70,12 +70,12 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="logfilename" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                        <label for="logfilename" title="#$xar->ml('The cipher we are using')#" class="xar-form-label">                                
                             Log file name:                                
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:set name="value">xarSystemVars::get(sys::CONFIG, 'Log.Filename')</xar:set>
+                        <xar:set name="value">$xar->sysConfig()->getVar('Log.Filename')</xar:set>
                         <xar:data-input type="textbox" name="logfilename" value="$value"/>
                         <br/>Allowed extensions are txt and html
                         <br/>If the file does not exist, Xaraya will try to create it
@@ -83,16 +83,16 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="loglevel" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                        <label for="loglevel" title="#$xar->ml('The cipher we are using')#" class="xar-form-label">                                
                             Log level:                                
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:set name="value">@unserialize((string) xarSystemVars::get(sys::CONFIG, 'Log.Level'))</xar:set>
+                        <xar:set name="value">@unserialize((string) $xar->sysConfig()->getVar('Log.Level'))</xar:set>
                         <xar:data-input type="checkboxlist" name="loglevel" value="$value" options="$levels"/>
                     </div>
                 </div>
-                <xar:if condition="xarSystemVars::get(sys::CONFIG, 'Log.Enabled') AND empty(xarLog::availables()) AND xarLog::fallbackPossible()">
+                <xar:if condition="$xar->sysConfig()->getVar('Log.Enabled') AND empty(xarLog::availables()) AND xarLog::fallbackPossible()">
 					<div style="color: green">
 						Fallback logging is currently active.
 					</div>
@@ -120,7 +120,7 @@
 						<div class="xar-col">
 						</div>
 						<div class="xar-col">
-							<form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+							<form action="#$xar->ctl()->getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
 								<xar:var name="label">Clear Log</xar:var>
 								<xar:button type="submit" name="clear" label="$label"/>
 								<input type="hidden" name="tab" id="tab" value="#$tab#"/>

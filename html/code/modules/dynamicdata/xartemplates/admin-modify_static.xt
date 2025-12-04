@@ -12,7 +12,7 @@
             </fieldset>
         </xar:if>
 
-        <form method="post" action="#xarServer::getCurrentURL()#">
+        <form method="post" action="#$xar->ctl()->getCurrentURL()#">
           <fieldset>
             <legend>Modify item details</legend>
             <xar:data-form object="$object"/>

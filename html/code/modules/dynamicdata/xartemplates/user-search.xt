@@ -5,7 +5,7 @@
         <xar:template file="user-mod-head"/>
         <div class="xar-mod-body">
             <xar:if condition="empty($gotobject)">
-                <xar:set name="label">xarML('Dynamic Data')</xar:set>
+                <xar:set name="label">$xar->ml('Dynamic Data')</xar:set>
                 <h2>Search #$label#</h2>
                 <ul>
                     <xar:foreach in="$items" value="$item">
@@ -17,7 +17,7 @@
             <xar:else />
                 <xar:foreach in="$items" value="$item">
                     <h2>Search #$item['label']#</h2>
-                    <form method="post" action="#xarServer::getCurrentURL()#">
+                    <form method="post" action="#$xar->ctl()->getCurrentURL()#">
                         <div>
                             <table class="xar-table" border="0" cellpadding="2" cellspacing="0">
                                 <tr>

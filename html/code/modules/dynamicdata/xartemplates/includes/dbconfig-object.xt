@@ -97,7 +97,7 @@
             </div>
         </fieldset>
         <div class="xar-align-center">
-            <input type="hidden" name="authid" value="#xarSec::genAuthKey('dynamicdata')#"/>
+            <input type="hidden" name="authid" value="#$xar->sec()->genAuthKey('dynamicdata')#"/>
             <input type="hidden" name="obj" value="#$obj#"/>
             <xar:var name="label">Cancel</xar:var>
             <xar:button type="cancel" label="$label"/>&#160;

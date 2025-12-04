@@ -10,7 +10,7 @@
             <h2 class="xar-mod-pagetitle">Overview</h2>
             <xar:style scope="theme" file="navtabs"/>
             <ul class="xar-tabs xar-alt xar-norm-outline">
-                <li class="xar-tabs-label help" title="#xarML('Choose an action to perform')#">Overview:</li>
+                <li class="xar-tabs-label help" title="#$xar->ml('Choose an action to perform')#">Overview:</li>
                 <xar:set name="activetab">'xar-tab-active'</xar:set>
                 <xar:set name="activelink">'xar-accent xar-accent-outline'</xar:set>
                 <xar:set name="inactivetab">'xar-tab'</xar:set>
@@ -19,37 +19,37 @@
                 <xar:set name="tabclass">empty($tab)?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">empty($tab)?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentURL(['tab' => null])#" title="#xarML('About')#" class="#$linkclass#">
+                    <a href="#$xar->ctl()->getCurrentURL(['tab' => null])#" title="#$xar->ml('About')#" class="#$linkclass#">
                     About</a>
                 </li>
                 <xar:set name="tabclass">$tab=='admin'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='admin'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentURL(['tab' => 'admin'])#" title="#xarML('Admin')#" class="#$linkclass#">
+                    <a href="#$xar->ctl()->getCurrentURL(['tab' => 'admin'])#" title="#$xar->ml('Admin')#" class="#$linkclass#">
                     Admin</a>
                 </li>
                 <xar:set name="tabclass">$tab=='config'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='config'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentURL(['tab' => 'config'])#" title="#xarML('Config')#" class="#$linkclass#">
+                    <a href="#$xar->ctl()->getCurrentURL(['tab' => 'config'])#" title="#$xar->ml('Config')#" class="#$linkclass#">
                     Config</a>
                 </li>
                 <xar:set name="tabclass">$tab=='caching'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='caching'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentURL(['tab' => 'caching'])#" title="#xarML('Caching')#" class="#$linkclass#">
+                    <a href="#$xar->ctl()->getCurrentURL(['tab' => 'caching'])#" title="#$xar->ml('Caching')#" class="#$linkclass#">
                     Caching</a>
                 </li>
                 <xar:set name="tabclass">$tab=='access'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='access'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentURL(['tab' => 'access'])#" title="#xarML('Access')#" class="#$linkclass#">
+                    <a href="#$xar->ctl()->getCurrentURL(['tab' => 'access'])#" title="#$xar->ml('Access')#" class="#$linkclass#">
                     Access</a>
                 </li>
                 <xar:set name="tabclass">$tab=='howto'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='howto'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentURL(['tab' => 'howto'])#" title="#xarML('How To')#" class="#$linkclass#">
+                    <a href="#$xar->ctl()->getCurrentURL(['tab' => 'howto'])#" title="#$xar->ml('How To')#" class="#$linkclass#">
                     How To</a>
                 </li>
                 <!-- add tabs as required here, then add a condition for them below -->
@@ -66,7 +66,7 @@
                     Xaraya and cannot be removed.
                 </p>
                 <p>
-                    Detail information on this module can be found <a href="#xarController::URL('modules','admin','modinfo',['id' => xarMod::getRegID('blocks')])#">here</a>.
+                    Detail information on this module can be found <a href="#$xar->ctl()->URL('modules','admin','modinfo',['id' => $xar->mod()->getRegID('blocks')])#">here</a>.
                 </p>
 
                 <h3>Concepts</h3>
@@ -125,12 +125,12 @@
 
                 <h4>View Blocks</h4>
                 <p>
-                    Clicking on the <strong>View Blocks</strong> link in the Admin menu displays all the current blocks that are available for use in your Xaraya site and lets you modify or delete them. The page also has a link to the <strong>New Block</strong>&#160;page. You can go to a block's configuration page by clicking on its Edit link in the list of blocks displayed. See <a href="#xarServer::getCurrentURL(['tab' => 'config'])#">Block Configuration</a> for details.
+                    Clicking on the <strong>View Blocks</strong> link in the Admin menu displays all the current blocks that are available for use in your Xaraya site and lets you modify or delete them. The page also has a link to the <strong>New Block</strong>&#160;page. You can go to a block's configuration page by clicking on its Edit link in the list of blocks displayed. See <a href="#$xar->ctl()->getCurrentURL(['tab' => 'config'])#">Block Configuration</a> for details.
                 </p>
 
                 <h4>New Block</h4>
                 <p>
-                    Clicking on the <strong>New Block</strong> link in the Admin menu lets you create and make available a new block of a given block type, and optionally assign it to a block group. See <a href="#xarServer::getCurrentURL(['tab' => 'howto'])#">How To</a> for details.
+                    Clicking on the <strong>New Block</strong> link in the Admin menu lets you create and make available a new block of a given block type, and optionally assign it to a block group. See <a href="#$xar->ctl()->getCurrentURL(['tab' => 'howto'])#">How To</a> for details.
                 </p>
 
                 <h4>Block Types</h4>
@@ -253,8 +253,8 @@
                 </ul>
                 <h4>See also...</h4>
                 <ul>
-                    <li><a href="#xarServer::getCurrentURL(['tab' => 'caching'])#">Block Caching Configuration</a></li>
-                    <li><a href="#xarServer::getCurrentURL(['tab' => 'access'])#">Block Access Configuration</a></li>
+                    <li><a href="#$xar->ctl()->getCurrentURL(['tab' => 'caching'])#">Block Caching Configuration</a></li>
+                    <li><a href="#$xar->ctl()->getCurrentURL(['tab' => 'access'])#">Block Access Configuration</a></li>
                 </ul>
             <!-- Caching configuration -->
             <xar:elseif condition="$tab eq 'caching'"/>
@@ -278,8 +278,8 @@
                 </ul>
                 <h4>See also...</h4>
                 <ul>
-                    <li><a href="#xarServer::getCurrentURL(['tab' => 'config'])#">Block Configuration</a></li>
-                    <li><a href="#xarServer::getCurrentURL(['tab' => 'access'])#">Block Access Configuration</a></li>
+                    <li><a href="#$xar->ctl()->getCurrentURL(['tab' => 'config'])#">Block Configuration</a></li>
+                    <li><a href="#$xar->ctl()->getCurrentURL(['tab' => 'access'])#">Block Access Configuration</a></li>
                 </ul>
             <!-- Access configuration -->
             <xar:elseif condition="$tab eq 'access'"/>
@@ -317,8 +317,8 @@
 
                 <h4>See also...</h4>
                 <ul>
-                    <li><a href="#xarServer::getCurrentURL(['tab' => 'config'])#">Block Configuration</a></li>
-                    <li><a href="#xarServer::getCurrentURL(['tab' => 'caching'])#">Block Caching Configuration</a></li>
+                    <li><a href="#$xar->ctl()->getCurrentURL(['tab' => 'config'])#">Block Configuration</a></li>
+                    <li><a href="#$xar->ctl()->getCurrentURL(['tab' => 'caching'])#">Block Caching Configuration</a></li>
                 </ul>
             <!-- Create more tabs as required here -->
             <xar:else/>

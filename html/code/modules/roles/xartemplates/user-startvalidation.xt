@@ -16,13 +16,13 @@
             </p>
         </xar:if>
         <xar:if condition="!empty($valcode)">
-            <xar:set name="validationlink">xarController::URL('roles','user','getvalidation',
-            ['phase' => 'getvalidate','uname' => xarVarPrep::text($uname),
+            <xar:set name="validationlink">$xar->ctl()->URL('roles','user','getvalidation',
+            ['phase' => 'getvalidate','uname' => $xar->prep()->text($uname),
             'valcode' => $valcode])</xar:set>
             <p>To continue, please follow 
             <a href="#$validationlink#">this link</a>.</p>
         <xar:else />
-            <form action="#xarController::URL('roles','user','getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#$xar->ctl()->URL('roles','user','getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Start Validation</legend>
                     <div class="xar-row">
@@ -38,7 +38,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <input type="text" name="uname" id="uname" value="#xarVarPrep::text($uname)#"/>
+                            <input type="text" name="uname" id="uname" value="#$xar->prep()->text($uname)#"/>
                         </div>
                     </div>
                     <div class="xar-row">
@@ -59,7 +59,7 @@
                 </fieldset>
             </form>
             <p>If you did not receive your validation code, we will try to resend it now.</p>
-            <form action="#xarController::URL('roles','user','getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#$xar->ctl()->URL('roles','user','getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Resend Validation</legend>
                     <div class="xar-row">

@@ -11,7 +11,7 @@
             <title>
                 <xar:var name="tpl:pageTitle"/>
             </title>
-            <base href="#xarServer::getBaseURL()#index.php"/>
+            <base href="#$xar->ctl()->getBaseURL()#index.php"/>
             <link rel='icon' href="favicon.ico"/>
             <xar:style scope="common"/>
             <xar:style scope="theme" file="style" title="Xaraya Default Stylesheet"/>
@@ -23,7 +23,7 @@
             <div id="admin-wrapper">
                 <div id="admin-main">
                     <div style="text-align: right">
-                        <a href="#xarServer::getBaseURL()#" style="text-decoration: none">
+                        <a href="#$xar->ctl()->getBaseURL()#" style="text-decoration: none">
                             <xar:var name="SiteName" scope="module" module="themes"/>
                         </a>
                     </div>

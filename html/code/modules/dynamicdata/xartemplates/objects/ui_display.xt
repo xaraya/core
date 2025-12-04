@@ -20,7 +20,7 @@
                 </xar:if>
             </h2>
 
-            <xar:set name="getlinked">xarModItemVars::get('dynamicdata','getlinkedobjects',$object->objectid)</xar:set>
+            <xar:set name="getlinked">$xar->mod('dynamicdata')->getItemVar('getlinkedobjects',$object->objectid)</xar:set>
             <xar:if condition="!empty($getlinked)">
 
                 <!-- Display object with linked objects -->

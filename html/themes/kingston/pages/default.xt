@@ -7,26 +7,26 @@
         
     <xar:blockgroup name="header" id="header"/>
     <title><xar:var name="tpl:pageTitle"/></title>
-    <base href="#xarServer::getBaseURL()#index.php"/>
+    <base href="#$xar->ctl()->getBaseURL()#index.php"/>
     <link rel='icon' href="favicon.ico"/>
         
     <!-- Theme Options -->
-    <xar:set name="xar_footer">xarThemeVars::get('Kingston','xar_footer')</xar:set> 
-    <xar:set name="color_scheme">xarThemeVars::get('Kingston','color_scheme')</xar:set> <!-- "algae" or "reggae" (pending) -->
-    <xar:set name="page_width">xarThemeVars::get('Kingston','page_width')</xar:set> <!-- "variable" or "fixed" (pending) -->
-    <xar:set name="nav_pos">xarThemeVars::get('Kingston','nav_pos')</xar:set> <!-- "left", "right" or "top" -->
-    <xar:set name="font_set">xarThemeVars::get('Kingston','font_set')</xar:set> <!-- "custom" or "standard" -->
-    <xar:set name="admin_bar">xarThemeVars::get('Kingston','admin_bar')</xar:set> <!-- Frontend Inline Admin Bar -->
+    <xar:set name="xar_footer">$xar->theme()->getVar('Kingston','xar_footer')</xar:set> 
+    <xar:set name="color_scheme">$xar->theme()->getVar('Kingston','color_scheme')</xar:set> <!-- "algae" or "reggae" (pending) -->
+    <xar:set name="page_width">$xar->theme()->getVar('Kingston','page_width')</xar:set> <!-- "variable" or "fixed" (pending) -->
+    <xar:set name="nav_pos">$xar->theme()->getVar('Kingston','nav_pos')</xar:set> <!-- "left", "right" or "top" -->
+    <xar:set name="font_set">$xar->theme()->getVar('Kingston','font_set')</xar:set> <!-- "custom" or "standard" -->
+    <xar:set name="admin_bar">$xar->theme()->getVar('Kingston','admin_bar')</xar:set> <!-- Frontend Inline Admin Bar -->
     <xar:set name="palette">' '.$color_scheme</xar:set>
     
     <!-- Modal Variables -->
-    <xar:set name="module_tag">' module-'.xarController::getVar('module')</xar:set>
-    <xar:set name="type_tag">' type-'.xarController::getVar('type')</xar:set>
-    <xar:set name="order_tag">' order-'.xarController::getVar('order')</xar:set>
-    <xar:if condition="xarController::getVar('func') eq '' OR xarController::getVar('func') eq 'main'">
+    <xar:set name="module_tag">' module-'.$xar->req()->getVar('module')</xar:set>
+    <xar:set name="type_tag">' type-'.$xar->req()->getVar('type')</xar:set>
+    <xar:set name="order_tag">' order-'.$xar->req()->getVar('order')</xar:set>
+    <xar:if condition="$xar->req()->getVar('func') eq '' OR $xar->req()->getVar('func') eq 'main'">
     	<xar:set name="function_tag">' function-overview'</xar:set>
     <xar:else/>
-    	<xar:set name="function_tag">' function-'.xarController::getVar('func').' '</xar:set>
+    	<xar:set name="function_tag">' function-'.$xar->req()->getVar('func').' '</xar:set>
     </xar:if>
     
     <link rel='icon' href="favicon.ico"/>

@@ -25,17 +25,17 @@
             </strong>
         </legend>
         <div class="xar-form-input-wrapper">
-            <label for="number_of_categories" class="xar-form-label help" title="#xarML('Enter the number of possible categories that this itemtype will use')#">
+            <label for="number_of_categories" class="xar-form-label help" title="#$xar->ml('Enter the number of possible categories that this itemtype will use')#">
                 
                     Number of possible categories
                 
             </label> <input type="text" name="number_of_categories" id="number_of_categories" size="3" maxlength="2" value="#$numcats#"/>
         </div>
-        <xar:set name="cidlist">explode(',',xarModVars::get($modname,'mastercids'.$itemtype))</xar:set>
+        <xar:set name="cidlist">explode(',',$xar->mod($modname)->getVar('mastercids'.$itemtype))</xar:set>
         <xar:if condition="isset($cidlist) AND !empty($cidlist)">
             <xar:foreach in="$cidlist" value="$cid">
                 <div class="xar-form-input-wrapper">
-                    <label for="number_of_categories" class="xar-form-label help" title="#xarML('Base category')#">
+                    <label for="number_of_categories" class="xar-form-label help" title="#$xar->ml('Base category')#">
                         
                             Base category for
                         

@@ -8,7 +8,7 @@
             </label>
         </div>
         <div class="xar-col">
-            <xar:set name="value">xarModVars::get('dynamicdata', 'caching')</xar:set>
+            <xar:set name="value">$xar->mod('dynamicdata')->getVar('caching')</xar:set>
             <xar:data-input type="checkbox" name="caching" value="$value"/>
         </div>
     </div>

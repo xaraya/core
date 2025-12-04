@@ -18,7 +18,7 @@
 			For general information on Celko (nested set) trees see <a href="https://en.wikipedia.org/wiki/Nested_set_model" target="_blank">this page</a>.
 		</div>
 
-        <form action="#xarController::URL('categories','admin','build_tree')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#$xar->ctl()->URL('categories','admin','build_tree')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset class="xar-norm">
                 <legend>
                     <strong>Tree Details</strong>

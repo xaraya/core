@@ -12,18 +12,18 @@
             <div class="xar-col">
                 <xar:set name="options">
                     array(
-                        ['id' => 'High', 'name' => xarML('High')],
-                        ['id' => 'Medium', 'name' => xarML('Medium')],
-                        ['id' => 'Low', 'name' => xarML('Low')],
+                        ['id' => 'High', 'name' => $xar->ml('High')],
+                        ['id' => 'Medium', 'name' => $xar->ml('Medium')],
+                        ['id' => 'Low', 'name' => $xar->ml('Low')],
                     )
                 </xar:set>
                 <xar:set name="value">
-                    xarConfigVars::get(null,'Site.Session.SecurityLevel')
+                    $xar->config()->getVar('Site.Session.SecurityLevel')
                 </xar:set>
                 <xar:data-input type="dropdown" name="securitylevel" options="$options" value="$value"/>
             </div>
         </div>
-        <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'">
+        <xar:if condition="$xar->config()->getVar('Site.Session.SecurityLevel') eq 'Medium'">
 
             <div class="xar-row">
                 <div class="xar-col">
@@ -95,7 +95,7 @@
                 </xar:set>
                 <input type="text" id="cookiepath" name="cookiepath" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
                 <span>
-                    &#160;Default: #xarServer::getBaseURI()# (limited to the Xaraya directory)
+                    &#160;Default: #$xar->ctl()->getBaseURI()# (limited to the Xaraya directory)
                 </span>
             </div>
         </div>
@@ -122,7 +122,7 @@
                 </label>
             </div>
             <div class="xar-col">
-            <xar:set name="value" catch="false">xarConfigVars::get(null,'Site.Session.CookieTimeout')</xar:set>
+            <xar:set name="value" catch="false">$xar->config()->getVar('Site.Session.CookieTimeout')</xar:set>
                 <input type="text" id="cookietimeout" name="cookietimeout" value="#$value#" maxlength="40" class="xar-form-textmedium"/>
                 <span>
                 </span>
@@ -141,7 +141,7 @@
                 </xar:set>
                 <input type="text" id="referercheck" name="referercheck" value="#$value#" maxlength="40" class="xar-form-textmedium"/>
                 <span>
-                    &#160;Default: #xarServer::getVar('HTTP_HOST')# for security level 'High'
+                    &#160;Default: #$xar->req()->getServerVar('HTTP_HOST')# for security level 'High'
                 </span>
             </div>
         </div>
@@ -181,7 +181,7 @@
         <xar:if condition="extension_loaded('mcrypt')">
             <div class="xar-row">
                 <div class="xar-col">
-                    <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                    <label for="bar" title="#$xar->ml('The cipher we are using')#" class="xar-form-label">                                
                         Cipher Employed:                                
                     </label>
                 </div>
@@ -191,7 +191,7 @@
             </div>
             <div class="xar-row">
                 <div class="xar-col">
-                    <label for="bar" title="#xarML('The cipher mode we are using')#" class="xar-form-label">                                
+                    <label for="bar" title="#$xar->ml('The cipher mode we are using')#" class="xar-form-label">                                
                         Cipher Mode:                                
                     </label>
                 </div>
@@ -201,7 +201,7 @@
             </div>
             <div class="xar-row">
                 <div class="xar-col">
-                    <label for="bar" title="#xarML('The key used in encryption and decryption')#" class="xar-form-label">                                
+                    <label for="bar" title="#$xar->ml('The key used in encryption and decryption')#" class="xar-form-label">                                
                         Key:                                
                     </label>
                 </div>
@@ -211,7 +211,7 @@
             </div>
             <div class="xar-row">
                 <div class="xar-col">
-                    <label for="bar" title="#xarML('A hint for remembering the key used in encryption and decryption')#" class="xar-form-label">                                
+                    <label for="bar" title="#$xar->ml('A hint for remembering the key used in encryption and decryption')#" class="xar-form-label">                                
                         Hint:                                
                     </label>
                 </div>
@@ -222,7 +222,7 @@
             
             <div class="xar-row">
                 <div class="xar-col">
-                    <label for="bar" title="#xarML('The initialization vector used in encryption and decryption')#" class="xar-form-label">
+                    <label for="bar" title="#$xar->ml('The initialization vector used in encryption and decryption')#" class="xar-form-label">
                         Initialization Vector:
                     </label>
                 </div>

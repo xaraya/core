@@ -173,7 +173,7 @@
                 <xar:set name="fromvalue">#$object:properties.$fromprop:value#</xar:set>
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:if condition="!empty($fromvalue) and is_numeric($fromvalue)">
-                    <xar:set name="newlink">xarServer::getObjectURL($link['list']->name, 'create', ['values['.$toprop.']' => $fromvalue])</xar:set>
+                    <xar:set name="newlink">$xar->ctl()->getObjectURL($link['list']->name, 'create', ['values['.$toprop.']' => $fromvalue])</xar:set>
                 </xar:if>
                 --></xar:comment>
                 <xar:if condition="!empty($link.list:itemids)">

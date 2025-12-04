@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="icon_info">xarTpl::getImage('icons/info.png','theme')</xar:set>
-    <xar:set name="icon_modify">xarTpl::getImage('icons/modify-config.png','theme')</xar:set>
-    <xar:set name="icon_help">xarTpl::getImage('icons/help-browser.png','theme')</xar:set>
-    <xar:set name="icon_preview">xarTpl::getImage('icons/display.png','theme')</xar:set>
-    <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
+    <xar:set name="icon_info">$xar->tpl()->getImage('icons/info.png','theme')</xar:set>
+    <xar:set name="icon_modify">$xar->tpl()->getImage('icons/modify-config.png','theme')</xar:set>
+    <xar:set name="icon_help">$xar->tpl()->getImage('icons/help-browser.png','theme')</xar:set>
+    <xar:set name="icon_preview">$xar->tpl()->getImage('icons/display.png','theme')</xar:set>
+    <xar:set name="icon_delete">$xar->tpl()->getImage('icons/delete.png','theme')</xar:set>
                 
     <xar:foreach in="$list" key="$group_id" value="$group">
         <table class="xar-table xar-fullwidth xar-items xar-margin-nonetop">
@@ -82,7 +82,7 @@
                             </td>
                             <td>
                                 <xar:if condition="$item['type_state'] ne ixarBlock::TYPE_STATE_ACTIVE">
-                                    <a href="xarController::URL('blocks', 'admin', 'modify_instance', ['interface' => 'display', 'block_method' => 'state', 'block_id' => $block_id])#">Type #$type_states[$item['type_state']]['name']#</a>
+                                    <a href="$xar->ctl()->URL('blocks', 'admin', 'modify_instance', ['interface' => 'display', 'block_method' => 'state', 'block_id' => $block_id])#">Type #$type_states[$item['type_state']]['name']#</a>
                                 <xar:else/>
                                     #$instance_states[$item['state']]['name']#
                                 </xar:if>

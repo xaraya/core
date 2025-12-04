@@ -156,7 +156,7 @@
         </xar:if>
         <fieldset>
             <div class="xar-align-center">
-                <form method="get" action="#xarServer::getCurrentURL()#">
+                <form method="get" action="#$xar->ctl()->getCurrentURL()#">
                     <input type="hidden" name="module" id="module" value="blocks"/>
                     <input type="hidden" name="type" id="type" value="admin"/>
                     <input type="hidden" name="func" id="func" value="refresh_types"/>

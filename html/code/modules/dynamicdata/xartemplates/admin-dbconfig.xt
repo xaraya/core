@@ -11,7 +11,7 @@
             <xar:template type="module" file="dbconfig-dblist"/>
         <xar:elseif condition="!empty($db)"/>
             <xar:if condition="$db eq 'default'">
-                <xar:set name="link">xarController::URL('dynamicdata', 'admin', 'meta')</xar:set>
+                <xar:set name="link">$xar->ctl()->URL('dynamicdata', 'admin', 'meta')</xar:set>
                 <h3>Database Configuration <a href="#$link#" title="Table Browser"><xar:img scope="theme" file="icons/system-search.png" class="xar-icon" alt="meta"/></a></h3>
                 <div class="xar-row">
                     <div class="xar-col">
@@ -19,7 +19,7 @@
                     </div>
                 </div>
             <xar:else/>
-                <xar:set name="link">xarController::URL('dynamicdata', 'admin', 'meta', ['db' => $db])</xar:set>
+                <xar:set name="link">$xar->ctl()->URL('dynamicdata', 'admin', 'meta', ['db' => $db])</xar:set>
                 <h3>
                     Database Configuration
                     <a href="#$link#" title="Table Browser"><xar:img scope="theme" file="icons/system-search.png" class="xar-icon" alt="meta"/></a>
@@ -31,7 +31,7 @@
             <xar:if condition="empty($config['objectid'])">
                 <h3>Object Configuration</h3>
             <xar:else/>
-                <xar:set name="link">xarController::URL('dynamicdata', 'admin', 'modify', ['itemid' => $config['objectid']])</xar:set>
+                <xar:set name="link">$xar->ctl()->URL('dynamicdata', 'admin', 'modify', ['itemid' => $config['objectid']])</xar:set>
                 <h3>Object Configuration <a href="#$link#" title="Modify DataObject"><xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="modify"/></a></h3>
             </xar:if>
             <xar:template type="module" file="dbconfig-object"/>

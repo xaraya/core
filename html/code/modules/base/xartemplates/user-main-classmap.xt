@@ -7,8 +7,8 @@
         <h2>Class Map</h2>
         <p>This page allows you to explore the autoload class map for Xaraya modules</p>
         <xar:set name="classmap">xarClassMap::getClassMap()</xar:set>
-        <xar:set name="dummy">xarVar::fetch('class', 'isset', $class, null, xarVar::NOT_REQUIRED)</xar:set>
-        <xar:set name="dummy">xarVar::fetch('mod', 'isset', $mod, null, xarVar::NOT_REQUIRED)</xar:set>
+        <xar:set name="dummy">$xar->var()->find('class', $class)</xar:set>
+        <xar:set name="dummy">$xar->var()->find('mod', $mod)</xar:set>
 
         <xar:if condition="empty($class) and !empty($mod)">
             <strong>#$mod#:</strong>
@@ -16,12 +16,12 @@
         <ul>
         <xar:foreach in="$classmap" key="$classtype" value="$values">
             <li>
-                <xar:set name="url">xarServer::getCurrentURL(['class' => $classtype, 'mod' => null])</xar:set>
+                <xar:set name="url">$xar->ctl()->getCurrentURL(['class' => $classtype, 'mod' => null])</xar:set>
                 <xar:if condition="!empty($class) and $class eq $classtype">
                     <a href="#$url#">#$classtype#</a>:
                     <ul>
                     <xar:foreach in="$values" key="$module" value="$types">
-                        <xar:set name="url">xarServer::getCurrentURL(['class' => $classtype, 'mod' => $module])</xar:set>
+                        <xar:set name="url">$xar->ctl()->getCurrentURL(['class' => $classtype, 'mod' => $module])</xar:set>
                         <xar:if condition="is_array($types)">
                             <li>
                                 <xar:if condition="isset($mod) and $mod eq $module">

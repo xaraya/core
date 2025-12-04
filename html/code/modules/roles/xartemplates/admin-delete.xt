@@ -9,7 +9,7 @@
             <xar:set name="thisname">$object->properties['name']->getValue()</xar:set>
         </xar:if>
         <h2>Manage #$itemtypename# '#$thisname#':</h2>
-        <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
+        <xar:set name="request">$xar->req()->getRequest()->getInfo()</xar:set>
         <xar:set name="activetab">#$request.2#</xar:set>
         <xar:set name="xmldata">'showusers'</xar:set>
         <xar:set name="urlargs">['id' => $id, 'reload' => 'reload']</xar:set>
@@ -25,12 +25,12 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
-                                #xarVarPrep::text($parents[$i]['parentname'])#</a>
+                                <a href="#$xar->ctl()->URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
+                                #$xar->prep()->text($parents[$i]['parentname'])#</a>
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">
-                        #xarVarPrep::text($parents[$i]['parentname'])#</xar:set>
+                        #$xar->prep()->text($parents[$i]['parentname'])#</xar:set>
                     </xar:for>
                 </ul>
             </div>
@@ -38,7 +38,7 @@
         <xar:if condition="$frozen">
             <p>You do not have the privileges to delete #$itemtypename# #$name#</p>
         <xar:else />
-            <form method="post" action="#xarController::URL('roles','admin','delete')#" enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#$xar->ctl()->URL('roles','admin','delete')#" enctype="application/x-www-form-urlencoded">
                 <div class="xar-row">
                     <div class="xar-col">
                     </div>

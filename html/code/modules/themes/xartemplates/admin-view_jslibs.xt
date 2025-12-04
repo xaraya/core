@@ -12,7 +12,7 @@
                 <h2>
                     Loaded Javascript Libraries
                 </h2>
-                <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
+                <form method="post" action="#$xar->ctl()->getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
                     <table class="table xar-table">
                         <tr>
                             <th>Sequence</th>
@@ -115,12 +115,12 @@
                     Local Javascript Libraries
                 </h2>
 	        <xar:comment><!--
-            <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
+            <form method="post" action="#$xar->ctl()->getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
 	            <xar:var name="label">Refresh</xar:var>
                 <xar:button type="submit" name="refresh" label="$label"/>
             </form>
             --></xar:comment>
-                <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
+                <form method="post" action="#$xar->ctl()->getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
                     <table class="table xar-table">
                         <tr>
                             <th>Sequence</th>
@@ -215,7 +215,7 @@
                 <h2>
                     Remote Javascript Libraries and Plugins
                 </h2>
-                <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
+                <form method="post" action="#$xar->ctl()->getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
                     <table class="table xar-table">
                         <thead>
                             <tr>

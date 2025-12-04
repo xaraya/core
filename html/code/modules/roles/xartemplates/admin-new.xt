@@ -14,7 +14,7 @@
         <xar:else />
             <xar:set name="enctype">'application/x-www-form-urlencoded'</xar:set>
         </xar:if>
-        <form id="newrole" action="#xarServer::getCurrentURL()#" method="post" enctype="#$enctype#">
+        <form id="newrole" action="#$xar->ctl()->getCurrentURL()#" method="post" enctype="#$enctype#">
             <fieldset>
                 <legend>
                   #$object:label# Details
@@ -27,7 +27,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
+                        <xar:set name="onchange">"this.form.action='" . $xar->ctl()->getCurrentURL() . "';this.form.submit();"</xar:set>
                         <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1"/>
                     </div>
                 </div>
@@ -40,14 +40,14 @@
                     <div class="xar-col">
                         <xar:if condition="empty($parentid)">
                             <xar:set name="parentid">
-                                xarModVars::get('roles','defaultgroup')
+                                $xar->mod('roles')->getVar('defaultgroup')
                             </xar:set>
                         </xar:if>
                         <xar:data-input type="grouplist" name="parentid" value="$parentid"/>
                     </div>
                 </div>
                 <xar:set name="settings">
-                    explode(',',xarModVars::get('roles','duvsettings'))
+                    explode(',',$xar->mod('roles')->getVar('duvsettings'))
                 </xar:set>
                 <xar:if condition="xarRoles::ROLES_USERTYPE eq $itemtype">
                     <xar:if condition="in_array('useremailformat',$settings)">
@@ -58,7 +58,7 @@
                             </div>
                             <div class="xar-col">
                                 <xar:set name="value">
-                                    xarModUserVars::get('roles','useremailformat',$id)
+                                    $xar->mod('roles')->getUserVar('useremailformat',$id)
                                 </xar:set>
                                 <xar:set name="options">
                                     array( 
@@ -79,7 +79,7 @@
                             </div>
                             <div class="xar-col">
                                 <xar:set name="value">
-                                    xarModUserVars::get('roles','usertimezone',$id)
+                                    $xar->mod('roles')->getUserVar('usertimezone',$id)
                                 </xar:set>
                                 <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value"/>
                             </div>
@@ -95,7 +95,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7"/>
+                            <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#$xar->mod('roles')->getUserVar('userhome',$id)#" size="40" maxlength="100" tabindex="7"/>
                         </div>
                     </div>
                 </xar:if>
@@ -107,7 +107,7 @@
                     <div class="xar-col">
                         <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                         <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
-                        <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
+                        <input type="hidden" name="authid" id="authid" value="#$xar->sec()->genAuthKey()#"/>
                         <xar:var name="label">Add</xar:var>
                         <xar:button type="submit" label="$label" name="confirm"/>
                     </div>

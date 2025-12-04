@@ -5,12 +5,12 @@
     <div class="xar-mod-body">
         <h2>View Block Types</h2>
         <xar:if condition="!empty($types)">
-                <xar:set name="icon_info">xarTpl::getImage('icons/info.png','theme')</xar:set>
-                <xar:set name="icon_modify">xarTpl::getImage('icons/modify-config.png','theme')</xar:set>
-                <xar:set name="icon_help">xarTpl::getImage('icons/help-browser.png','theme')</xar:set>
-                <xar:set name="icon_preview">xarTpl::getImage('icons/display.png','theme')</xar:set>
-                <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
-                <xar:set name="icon_add">xarTpl::getImage('icons/add.png','theme')</xar:set>
+                <xar:set name="icon_info">$xar->tpl()->getImage('icons/info.png','theme')</xar:set>
+                <xar:set name="icon_modify">$xar->tpl()->getImage('icons/modify-config.png','theme')</xar:set>
+                <xar:set name="icon_help">$xar->tpl()->getImage('icons/help-browser.png','theme')</xar:set>
+                <xar:set name="icon_preview">$xar->tpl()->getImage('icons/display.png','theme')</xar:set>
+                <xar:set name="icon_delete">$xar->tpl()->getImage('icons/delete.png','theme')</xar:set>
+                <xar:set name="icon_add">$xar->tpl()->getImage('icons/add.png','theme')</xar:set>
             <table class="xar-table xar-fullwidth">
                 <caption class="xar-align-left xar-margin-nonebottom">
                     Block Types
@@ -54,7 +54,7 @@
                         </td>
                         <td>
                             <xar:if condition="$item['type_state'] ne ixarBlock::TYPE_STATE_ACTIVE">
-                                <a href="#xarController::URL('blocks', 'admin', 'modify_type',['type_id' => $item['type_id'], 'tab' => 'status'])#">#$type_states[$item['type_state']]['name']#</a>
+                                <a href="#$xar->ctl()->URL('blocks', 'admin', 'modify_type',['type_id' => $item['type_id'], 'tab' => 'status'])#">#$type_states[$item['type_state']]['name']#</a>
                             <xar:else/>
                                 #$type_states[$item['type_state']]['name']#
                             </xar:if>

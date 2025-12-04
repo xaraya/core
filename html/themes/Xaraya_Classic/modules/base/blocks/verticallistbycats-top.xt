@@ -5,7 +5,7 @@
             <li id="hmenulabel">Administration</li>
             <li class="cat">
                 <a href="#" onclick="return false;"
-                title="#xarML('This menu contains links to modules')#" class="empty">Support</a>
+                title="#$xar->ml('This menu contains links to modules')#" class="empty">Support</a>
                 <ul>
                     <li>
                         <a href="http://www.xaraya.com/index.php/xarbb">Support Forums</a>
@@ -26,7 +26,7 @@
                 <xar:if condition="count($cats) ne 0">
                     <li class="cat">
                         <a href="#" onclick="return false;"
-                        title="#xarML('This menu contains links to modules')#" class="empty">
+                        title="#$xar->ml('This menu contains links to modules')#" class="empty">
                         #$catname#</a>
                         <ul>
                             <xar:foreach in="$cats" value="$mod" key="$modname">
@@ -131,7 +131,7 @@
             </xar:foreach>
             <xar:if condition="$showhelp eq '1'">
                 <li class="cat">
-                    <a href="#$overviewlink#" title="#xarML('System help')#" class="empty">Help</a>
+                    <a href="#$overviewlink#" title="#$xar->ml('System help')#" class="empty">Help</a>
                 </li>
             </xar:if>
         </ul>

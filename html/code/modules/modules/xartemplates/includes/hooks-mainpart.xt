@@ -6,7 +6,7 @@
         <ul>
             <xar:foreach in="$observers" key="$module" value="$modinfo">             
                 <li>
-                    <a href="#xarServer::getCurrentURL(['hook' => $module])#">
+                    <a href="#$xar->ctl()->getCurrentURL(['hook' => $module])#">
                         #$modinfo['displayname']#
                     </a>
                      : #$modinfo['displaydescription']# 
@@ -59,7 +59,7 @@
     </xar:if>
 
     <xar:if condition="!empty($cats)">
-        <form action="#xarController::URL('modules','admin','updatehooks')#" method="post">
+        <form action="#$xar->ctl()->URL('modules','admin','updatehooks')#" method="post">
             <div>
                 <xar:foreach in="$cats" key="$cat" value="$subjects">
 

@@ -10,7 +10,7 @@
             <xar:ajax-form form="modifyconfig-form"/>
         </div>
         <div class="xar-mod-page-body">
-            <form id="modifyconfig-form" method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+            <form id="modifyconfig-form" method="post" action="#$xar->ctl()->getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>General options</legend>
                     <xar:data-form object="$module_settings"/>
@@ -24,7 +24,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:set name="value">xarModVars::get('authsystem', 'forwarding_page')</xar:set>
+                            <xar:set name="value">$xar->mod('authsystem')->getVar('forwarding_page')</xar:set>
                             <xar:data-input type="textbox" name="forwarding_page" value="$value"/>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:set name="checked">xarModVars::get('authsystem', 'ask_forward')</xar:set>
+                            <xar:set name="checked">$xar->mod('authsystem')->getVar('ask_forward')</xar:set>
                             <xar:data-input type="checkbox" name="ask_forward" checked="$checked"/>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:set name="checked">xarModVars::get('authsystem', 'uselockout')</xar:set>
+                            <xar:set name="checked">$xar->mod('authsystem')->getVar('uselockout')</xar:set>
                             <xar:data-input type="checkbox" name="uselockout" id="uselockout" checked="$checked"/>
                         </div>
                     </div>

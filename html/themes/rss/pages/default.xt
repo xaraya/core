@@ -9,7 +9,7 @@ dtd="rss">
     xmlns:content="http://purl.org/rss/1.0/modules/content/">
         <channel>
             <title>#$tpl:pageTitle#</title>
-            <link>#xarVarPrep::text(xarServer::getBaseURL())#</link>
+            <link>#$xar->prep()->text($xar->ctl()->getBaseURL())#</link>
             <description>
                 <xar:var scope="module" module="themes" name="SiteSlogan"/>
             </description>
@@ -18,7 +18,7 @@ dtd="rss">
                 <xar:var scope="module" module="mail" name="adminname"/>
             </dc:creator>
             <generator>http://www.xaraya.org</generator>
-            <webMaster>#xarModVars::get('mail', 'adminmail')# (website admin)</webMaster>
+            <webMaster>#$xar->mod('mail')->getVar('adminmail')# (website admin)</webMaster>
             <sy:updatePeriod>hourly</sy:updatePeriod>
             <sy:updateFrequency>1</sy:updateFrequency>
             <docs>http://backend.userland.com/rss</docs>

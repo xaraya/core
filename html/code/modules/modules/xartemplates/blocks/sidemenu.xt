@@ -47,5 +47,5 @@
         </xar:foreach>
     </xar:if>
     <!-- Logout -->
-    [<a href="#xarController::URL('modules','admin','confirmlogout')#">Admin logout</a>]
+    [<a href="#$xar->ctl()->URL('modules','admin','confirmlogout')#">Admin logout</a>]
 </xar:template>

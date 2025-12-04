@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
-        <form action="#xarController::URL('themes', 'user', 'switch_theme')#" method="post">
+        <form action="#$xar->ctl()->URL('themes', 'user', 'switch_theme')#" method="post">
             <fieldset>
                 <legend>Themes</legend>
                 <div class="xar-row">
@@ -12,7 +12,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:set name="value">xarModUserVars::get('themes', 'default_theme')</xar:set>#$value#
+                        <xar:set name="value">$xar->mod('themes')->getUserVar('default_theme')</xar:set>#$value#
                         <xar:data-input property="$user_themes" name="default_theme" id="default_theme" value="$value"/>
                     </div>
                 </div>

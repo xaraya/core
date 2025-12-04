@@ -2,13 +2,13 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: multi-column output -->
-    <xar:set name="dummy">xarVar::fetch('table', 'notempty', $table, '', xarVar::NOT_REQUIRED)</xar:set>
-    <xar:set name="dummy">xarVar::fetch('dbtype', 'notempty', $dbtype, '', xarVar::NOT_REQUIRED)</xar:set>
-    <xar:set name="dummy">xarVar::fetch('db', 'notempty', $db, '', xarVar::NOT_REQUIRED)</xar:set>
+    <xar:set name="dummy">$xar->var()->find('table', $table, 'notempty', '')</xar:set>
+    <xar:set name="dummy">$xar->var()->find('dbtype', $dbtype, 'notempty', '')</xar:set>
+    <xar:set name="dummy">$xar->var()->find('db', $db, 'notempty', '')</xar:set>
     <xar:if condition="empty($dbtype)">
-        <xar:set name="itemlink">xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'display'])</xar:set>
+        <xar:set name="itemlink">$xar->ctl()->URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'display'])</xar:set>
     <xar:else />
-        <xar:set name="itemlink">xarController::URL('dynamicdata','admin','meta', ['dbtype' => $dbtype, 'db' => $db, 'table' => $table, 'export' => 'display'])</xar:set>
+        <xar:set name="itemlink">$xar->ctl()->URL('dynamicdata','admin','meta', ['dbtype' => $dbtype, 'db' => $db, 'table' => $table, 'export' => 'display'])</xar:set>
     </xar:if>
     <table class="xar-table">
         <tr>

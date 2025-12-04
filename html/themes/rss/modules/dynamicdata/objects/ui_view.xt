@@ -19,6 +19,6 @@
         </xar:if>
     <xar:else />
         <error>Please select one of the available objects</error>
-        <configure>#xarController::URL('dynamicdata','object','main')#</configure>
+        <configure>#$xar->ctl()->URL('dynamicdata','object','main')#</configure>
     </xar:if>
 </xar:template>

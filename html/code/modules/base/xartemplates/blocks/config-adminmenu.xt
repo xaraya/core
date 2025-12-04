@@ -22,7 +22,7 @@
             </label>
         </div>
         <div class="xar-col">
-            <input type="text" name="marker" id="marker" value="#xarVarPrep::text($marker)#" maxlength="255" class="xar-form-textshort"/>
+            <input type="text" name="marker" id="marker" value="#$xar->prep()->text($marker)#" maxlength="255" class="xar-form-textshort"/>
         </div>
     </div>
     <div class="xar-row">
@@ -38,7 +38,7 @@
     </div>
     <div class="xar-row">
         <div class="xar-col">
-            <label class="xar-form-label" for="showfront#$bid#" title="#xarML('By checking this box a link to the front end will be shown in the panel instance.')#">
+            <label class="xar-form-label" for="showfront#$bid#" title="#$xar->ml('By checking this box a link to the front end will be shown in the panel instance.')#">
                 Show Link to Front End
             </label>
         </div>
@@ -63,7 +63,7 @@
                 <th class="xar-align-left">
                     Module
                 </th>
-                <th title="#xarML('Use current module name or alias in menus')#">
+                <th title="#$xar->ml('Use current module name or alias in menus')#">
                     Alias
                 </th>
                 <!--
@@ -71,7 +71,7 @@
                     Required Access Group or Level
                 </th>
                 -->
-                <th class="xar-align-center" title="#xarML('Display link to this module in the menu')#">
+                <th class="xar-align-center" title="#$xar->ml('Display link to this module in the menu')#">
                     Visible
                 </th>
             </tr>

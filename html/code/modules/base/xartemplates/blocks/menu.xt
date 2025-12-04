@@ -56,7 +56,7 @@
                     <xar:sec mask="ManageBase" catch="false">
                         <li class="xar-menu-item">
                             <xar:var name="label">View the site back end interface</xar:var>
-                            <a title="#$label#" href="#xarController::URL($thismodname,'admin','main')#">
+                            <a title="#$label#" href="#$xar->ctl()->URL($thismodname,'admin','main')#">
                                 #$backlabel#
                             </a>
                         </li>
@@ -73,7 +73,7 @@
                 <xar:if condition="!empty($displayprint)">
                    <!-- pointless having the block get the url, just get it here if needed -->
                    <li class="xar-menu-item">
-                        <a title="#$printtitle#" href="#xarServer::getCurrentURL(['theme' => 'print'])#">
+                        <a title="#$printtitle#" href="#$xar->ctl()->getCurrentURL(['theme' => 'print'])#">
                             #$printlabel#
                         </a>
                     </li>

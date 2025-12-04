@@ -16,7 +16,7 @@
         <xar:set name="xmldata">'modifyconfig'</xar:set>
         <xar:template type="module" module="base" file="admin-menu-skel"/>
         
-        <form method="post" action="#xarServer::getCurrentURL()#" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
+        <form method="post" action="#$xar->ctl()->getCurrentURL()#" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
 
             <!-- General tab -->
             <xar:if condition="$tab eq 'general'">
@@ -100,7 +100,7 @@
                     </xar:if>
                     <div class="xar-row">
                         <div class="xar-col">
-                            <label for="showtemplates" title="#xarML('If you would like the names of the templates used displayed in the emails, check this box.')#" class="xar-form-label">
+                            <label for="showtemplates" title="#$xar->ml('If you would like the names of the templates used displayed in the emails, check this box.')#" class="xar-form-label">
                                 Show templates used in emails
                             </label>
                         </div>
@@ -114,7 +114,7 @@
                 </fieldset>
                 <fieldset>
                     <legend>Debugging</legend>
-                    If debug mode is active, exception messages are visible to the debug administrators, which are defined <a href="#xarController::URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">here</a>.
+                    If debug mode is active, exception messages are visible to the debug administrators, which are defined <a href="#$xar->ctl()->URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">here</a>.
                     <div class="xar-row">
                         <div class="xar-col">
                             <xar:var name="label">Debug mode</xar:var>
@@ -123,7 +123,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:set name="checked">xarModVars::get('mail', 'debugmode')</xar:set>
+                            <xar:set name="checked">$xar->mod('mail')->getVar('debugmode')</xar:set>
                             <xar:data-input type="checkbox" name="debugmode"  checked="$checked"/>
                         </div>
                     </div>
@@ -241,9 +241,9 @@
                             </xar:set>
                             <xar:set name="options">
                                 array(
-                                    ['id' => 1, 'name' => xarML('High')],
-                                    ['id' => 3, 'name' => xarML('Normal')],
-                                    ['id' => 5, 'name' => xarML('Low')]
+                                    ['id' => 1, 'name' => $xar->ml('High')],
+                                    ['id' => 3, 'name' => $xar->ml('Normal')],
+                                    ['id' => 5, 'name' => $xar->ml('Low')]
                                 )
                             </xar:set>
                             <xar:data-input type="dropdown" name="priority" value="$priority" options="$options"/>
@@ -257,11 +257,11 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    ['id' => '7bit', 'name' => xarML('7-bit')],
-                                    ['id' => '8bit', 'name' => xarML('8-bit')],
-                                    ['id' => 'binary', 'name' => xarML('binary')],
-                                    ['id' => 'quoted-printable', 'name' => xarML('quoted-printable')],
-                                    ['id' => 'base64', 'name' => xarML('base64')],
+                                    ['id' => '7bit', 'name' => $xar->ml('7-bit')],
+                                    ['id' => '8bit', 'name' => $xar->ml('8-bit')],
+                                    ['id' => 'binary', 'name' => $xar->ml('binary')],
+                                    ['id' => 'quoted-printable', 'name' => $xar->ml('quoted-printable')],
+                                    ['id' => 'base64', 'name' => $xar->ml('base64')],
                                 )
                             </xar:set>
                             <xar:data-input type="dropdown" value="$encoding" name="encoding" options="$options"/>
@@ -281,7 +281,7 @@
                             <xar:data-input type="checkbox" name="textuseheadfoot" onchange="this.form.submit()" checked="$textuseheadfoot"/>
                         </div>
                     </div>
-                    <xar:if condition="xarModVars::get('mail', 'textuseheadfoot')">
+                    <xar:if condition="$xar->mod('mail')->getVar('textuseheadfoot')">
                         <div class="xar-row">
                             <div class="xar-col">
                                 <xar:var name="label">Enter the header that you wish displayed in your HTML emails.</xar:var>
@@ -344,10 +344,10 @@
                             </xar:set>
                             <xar:set name="options">
                                 array(
-                                    ['id' => 'smtp', 'name' => xarML('SMTP-server')],
-                                    ['id' => 'qmail', 'name' => xarML('QMail')],
-                                    ['id' => 'mail', 'name' => xarML('Mail')],
-                                    ['id' => 'sendmail', 'name' => xarML('SendMail')],
+                                    ['id' => 'smtp', 'name' => $xar->ml('SMTP-server')],
+                                    ['id' => 'qmail', 'name' => $xar->ml('QMail')],
+                                    ['id' => 'mail', 'name' => $xar->ml('Mail')],
+                                    ['id' => 'sendmail', 'name' => $xar->ml('SendMail')],
                                 )
                             </xar:set>
                             <xar:data-input type="dropdown" name="server" value="$server" onchange="this.form.submit()" options="$options"/>
@@ -413,7 +413,7 @@
                                 <xar:data-input type="checkbox" name="smtpAuth" checked="$smtpAuth" onchange="this.form.submit();"/>
                             </div>
                         </div>
-                        <xar:if condition="xarModVars::get('mail', 'smtpAuth')">
+                        <xar:if condition="$xar->mod('mail')->getVar('smtpAuth')">
                             <div class="xar-row">
                                 <div class="xar-col">
                                     <xar:var name="label">Enter your SMTP username.</xar:var>
@@ -455,9 +455,9 @@
                                     </xar:set>
                                     <xar:set name="options">
                                         array(
-                                            ['id' => '',    'name' => xarML('None')],
-                                            ['id' => 'ssl', 'name' => xarML('ssl')],
-                                            ['id' => 'tls', 'name' => xarML('tls')]
+                                            ['id' => '',    'name' => $xar->ml('None')],
+                                            ['id' => 'ssl', 'name' => $xar->ml('ssl')],
+                                            ['id' => 'tls', 'name' => $xar->ml('tls')]
                                         )
                                     </xar:set>
                                     <xar:data-input type="dropdown" name="smtpSecure" value="$smtpSecure" options="$options"/>
@@ -473,7 +473,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:if condition="xarMod::isAvailable('scheduler')">
+                            <xar:if condition="$xar->mod()->isAvailable('scheduler')">
                                 <xar:data-input type="dropdown" name="interval" options="$intervals" value="$interval"/>
                             <xar:else />
                                 <xar:data-input type="hidden" name="interval" value=""/>
@@ -500,7 +500,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:set name="searchstrings">unserialize(xarModVars::get('mail', 'searchstrings'))</xar:set>
+                            <xar:set name="searchstrings">unserialize($xar->mod('mail')->getVar('searchstrings'))</xar:set>
                             <xar:data-input type="textarea_medium" name="searchstrings" value="$searchstrings"/>
                         </div>
                     </div>
@@ -512,7 +512,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:set name="replacestrings">unserialize(xarModVars::get('mail', 'replacestrings'))</xar:set>
+                            <xar:set name="replacestrings">unserialize($xar->mod('mail')->getVar('replacestrings'))</xar:set>
                             <xar:data-input type="textarea_medium" name="replacestrings" value="$replacestrings"/>
                         </div>
                     </div>
@@ -573,7 +573,7 @@
                     <legend>
                         Configure Mail Hooks
                     </legend>
-                    <xar:set name="url">#xarController::URL('mail','admin','modifyconfig',['tab' => 'managehooks'])#</xar:set>
+                    <xar:set name="url">#$xar->ctl()->URL('mail','admin','modifyconfig',['tab' => 'managehooks'])#</xar:set>
                     <xar:module main="false" module="modules" type="admin" func="hooks" curhook="mail" return_url="$url"/>
                 </fieldset>
             </xar:if>

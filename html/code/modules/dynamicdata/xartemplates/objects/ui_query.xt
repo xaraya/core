@@ -65,7 +65,7 @@
                                     <option value="">Undefined</option>
                                     <!-- get the options for this select property -->
                                     <xar:if condition="is_a($property, 'UsernameProperty')">
-                                        <xar:set name="options">xarMod::apiFunc('roles', 'user', 'getall')</xar:set>
+                                        <xar:set name="options">$xar->mod()->apiFunc('roles', 'user', 'getall')</xar:set>
                                     <xar:else/>
                                         <xar:set name="options">$property->getOptions()</xar:set>
                                     </xar:if>

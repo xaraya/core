@@ -13,7 +13,7 @@
             <p>
                 The CSS subsystem can function in one of two modes: configurable (managed) or non-configurable (unmanaged - default). While default mode is extremely fast and fool-proof, the configurable option gives much more flexibility and control over the way css is treated by Xaraya.
             </p>
-            <form class="xar-blocks-admin" action="#xarController::URL('themes', 'admin', 'cssconfig')#" method="post">
+            <form class="xar-blocks-admin" action="#$xar->ctl()->URL('themes', 'admin', 'cssconfig')#" method="post">
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:var name="label">Enable manual stylesheet configuration</xar:var>
@@ -68,7 +68,7 @@
             </form>
             <h4>Note: About stylesheet tags</h4>
             <p>
-                With the manager come the custom template tags. These should be used in modules and theme templates instead of (old) xarTplAddStyleLink and $tpl:additionalStyles. See examples in the Default theme and in this module templates. The complete list of the tags is also available in "Template Tags" panel, although modifying the tags from that interface would probably not be advisable.
+                With the manager come the custom template tags. These should be used in modules and theme templates instead of (old) xar::tpl()->addStyleLink and $tpl:additionalStyles. See examples in the Default theme and in this module templates. The complete list of the tags is also available in "Template Tags" panel, although modifying the tags from that interface would probably not be advisable.
             </p>
             <xar:elseif condition="$component eq 'core'"/>
             <xar:template file="corecss" type="module"/>

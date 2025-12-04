@@ -7,7 +7,7 @@
     </div>
     --></xar:comment>
     <div class="xar-mod-body">
-        <form action="#xarController::URL('modules', 'admin', 'updateinstalloptions', ['regid' => $regid])#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#$xar->ctl()->URL('modules', 'admin', 'updateinstalloptions', ['regid' => $regid])#" method="post" enctype="application/x-www-form-urlencoded">
             <xar:template module="$modname" file="installoptions"/>
             <xar:comment><!--        <xar:module main="false" module="#$modname#" type="admin" func="installoptions"/> --></xar:comment>
             <fieldset class="xar-form-actions">

@@ -16,7 +16,7 @@
             <h3>
                 Privilege Assignments for #$tabmodule#
             </h3>
-            <form id="groupassignments" method="post" action="#xarController::URL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
+            <form id="groupassignments" method="post" action="#$xar->ctl()->URL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>
                         Privileges on groups
@@ -88,7 +88,7 @@
                     <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
                 </fieldset>
             </form>
-            <form id="anonassignments" method="post" action="#xarController::URL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
+            <form id="anonassignments" method="post" action="#$xar->ctl()->URL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>
                         Privileges on the anonymous user
@@ -143,7 +143,7 @@
                         <div class="xar-col">
                             <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" /> &#160;
                             to the Anonymous (unregistered) user
-                            <xar:set name="anon">xarConfigVars::get(null,'Site.User.AnonymousUID')</xar:set>
+                            <xar:set name="anon">$xar->config()->getVar('Site.User.AnonymousUID')</xar:set>
                         </div>
                     </div>
                     <div class="xar-row">
@@ -161,7 +161,7 @@
                     <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
                 </fieldset>
             </form>
-            <form id="userassignments" method="post" action="#xarController::URL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
+            <form id="userassignments" method="post" action="#$xar->ctl()->URL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>
                         Privileges on other users

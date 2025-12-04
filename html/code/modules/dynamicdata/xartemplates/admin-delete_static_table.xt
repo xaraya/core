@@ -14,7 +14,7 @@
             Any data the table contains will be deleted.
         </fieldset>
 
-        <form method="post" action="#xarServer::getCurrentURL()#">
+        <form method="post" action="#$xar->ctl()->getCurrentURL()#">
             <div class="xar-form-actions">
                 <div class="xar-row">
                     <div class="xar-col"></div>

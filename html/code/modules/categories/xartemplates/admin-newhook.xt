@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="firstline">xarML('Select Category')</xar:set>
+    <xar:set name="firstline">$xar->ml('Select Category')</xar:set>
     <xar:if condition="!empty($preview)">
         <!-- Note: we might get a single value here instead of an array, if there is only one tree -->
-        <xar:set name="dummy">xarVar::fetch('hookedcategories_categories', 'isset', $categories, [], xarVar::NOT_REQUIRED)</xar:set>
+        <xar:set name="dummy">$xar->var()->find('hookedcategories_categories', $categories, 'isset', [])</xar:set>
         <xar:if condition="!is_array($categories)">
             <xar:set name="categories">[$categories]</xar:set>
         </xar:if>

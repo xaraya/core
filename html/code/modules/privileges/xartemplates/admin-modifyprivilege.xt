@@ -36,7 +36,7 @@
 	                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
 	                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
 	                            <li class="xar-tab">
-	                                <a href="#xarController::URL('privileges','admin','modifyprivilege',['id'=>$parents[$i]['parentid']])#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
+	                                <a href="#$xar->ctl()->URL('privileges','admin','modifyprivilege',['id'=>$parents[$i]['parentid']])#" title="#$xar->ml('Show this privilege')#" class="xar-norm xar-norm-outline">
 	                                    #$parents[$i]['parentname']#
 	                                </a>
 	                            </li>
@@ -50,29 +50,29 @@
 	                <xar:var name="label">Manage privilege</xar:var>
 	                <li class="xar-tabs-label" title="#$title#">#$label#</li>
 	                <li class="xar-tab">
-	                    <a href="#xarController::URL('privileges','admin','displayprivilege',['id'=>$ppid])#">
+	                    <a href="#$xar->ctl()->URL('privileges','admin','displayprivilege',['id'=>$ppid])#">
 	                        Display
 	                    </a>
 	                </li>
 	                <li class="xar-tab-active">
-	                    <a href="#xarController::URL('privileges','admin','modifyprivilege',['id'=>$ppid])#">
+	                    <a href="#$xar->ctl()->URL('privileges','admin','modifyprivilege',['id'=>$ppid])#">
 	                        Modify
 	                     </a>
 	                </li>
 	                <li class="xar-tab">
-	                    <a href="#xarController::URL('privileges','admin','deleteprivilege',['id'=>$ppid])#">
+	                    <a href="#$xar->ctl()->URL('privileges','admin','deleteprivilege',['id'=>$ppid])#">
 	                        Delete
 	                    </a>
 	                </li>
 	                <li class="xar-tab">
-	                    <a href="#xarController::URL('privileges','admin','viewroles',['id'=>$ppid])#">
+	                    <a href="#$xar->ctl()->URL('privileges','admin','viewroles',['id'=>$ppid])#">
 	                        Groups/Users
 	                    </a>
 	                </li>
 	            </ul>
 	      </div>
 	      <div class="xar-mod-page-body">
-	      <form name="privilegeform" id="privilegeform" action="#xarController::URL('privileges','admin','updateprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
+	      <form name="privilegeform" id="privilegeform" action="#$xar->ctl()->URL('privileges','admin','updateprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
 	            <fieldset>
 	                <legend>Privilege properties</legend>
 	                <xar:if condition="$frozen">
@@ -88,7 +88,7 @@
 	                <xar:else />
                         <div class="xar-row">
                             <div class="xar-col">
-                                <label for="pname" title="#xarML('TITLE')#" class="xar-form-label">
+                                <label for="pname" title="#$xar->ml('TITLE')#" class="xar-form-label">
                                     Name:
                                 </label>
                             </div>
@@ -96,7 +96,7 @@
                                 <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong"/>
                             </div>
                         </div>
-	                    <xar:set name="onclick">"this.form.action='" . xarController::URL('privileges','admin','modifyprivilege') ."';this.form.submit()";</xar:set>
+	                    <xar:set name="onclick">"this.form.action='" . $xar->ctl()->URL('privileges','admin','modifyprivilege') ."';this.form.submit()";</xar:set>
 	                    <xar:comment><!-- FIXME: make this dprop support onclick, cause IE6 doesn't do onchange
 	                    <div class="xar-col dummy">
 	                        <xar:set name="options">
@@ -111,7 +111,7 @@
 	                    <xar:if condition="$ptype eq 'empty'">
                             <div class="xar-row">
                                 <div class="xar-col">
-                                    <label for="ptype1_empty" title="#xarML('This privilege has no children')#">
+                                    <label for="ptype1_empty" title="#$xar->ml('This privilege has no children')#">
                                         empty
                                     </label>
                                 </div>
@@ -121,7 +121,7 @@
                             </div>
                             <div class="xar-row">
                                 <div class="xar-col">
-                                    <label for="ptype1_full" title="#xarML('This privilege has children')#">
+                                    <label for="ptype1_full" title="#$xar->ml('This privilege has children')#">
                                         with rights
                                     </label>
                                 </div>
@@ -132,7 +132,7 @@
 	                    <xar:else />
                             <div class="xar-row">
                                 <div class="xar-col">
-                                    <label for="ptype_empty" title="#xarML('This privilege has no children')#">
+                                    <label for="ptype_empty" title="#$xar->ml('This privilege has no children')#">
                                         empty
                                     </label>
                                 </div>
@@ -142,7 +142,7 @@
                            </div>
                             <div class="xar-row">
                                 <div class="xar-col">
-                                    <label for="ptype_full" title="#xarML('This privilege has children')#">
+                                    <label for="ptype_full" title="#$xar->ml('This privilege has children')#">
                                         with rights
                                     </label>
                                 </div>
@@ -150,10 +150,10 @@
                                     <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
                                 </div>
                             </div>
-	                        <xar:if condition="xarModVars::get('privileges','showrealms')">
+	                        <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                                 <div class="xar-row">
                                     <div class="xar-col">
-                                        <label for="prealm" title="#xarML('Realm to which this privilege applies')#" class="xar-form-label">Realm:</label>
+                                        <label for="prealm" title="#$xar->ml('Realm to which this privilege applies')#" class="xar-form-label">Realm:</label>
                                     </div>
                                     <div class="xar-col">
                                         <xar:data-input type="dropdown" name="prealm" options="$realms" value="$prealm"/>
@@ -164,7 +164,7 @@
 	                    <xar:if condition="$ptype ne null">
                             <div class="xar-row">
                                 <div class="xar-col">
-                                    <label for="pmodule" title="#xarML('Module which holds the target component')#" class="xar-form-label">
+                                    <label for="pmodule" title="#$xar->ml('Module which holds the target component')#" class="xar-form-label">
                                         Module:
                                     </label>
                                 </div>
@@ -174,7 +174,7 @@
                             </div>
                             <div class="xar-row">
                                 <div class="xar-col">
-                                    <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">
+                                    <label for="pcomponent" title="#$xar->ml('Component to which this privilege applies')#" class="xar-form-label">
                                         Component:
                                     </label>
                                 </div>
@@ -195,7 +195,7 @@
                             </div>
                             <div class="xar-row">
                                 <div class="xar-col">
-                                    <label for="plevel" title="#xarML('Level of access')#" class="xar-form-label">
+                                    <label for="plevel" title="#$xar->ml('Level of access')#" class="xar-form-label">
                                         Level:
                                     </label>
                                 </div>
@@ -250,7 +250,7 @@
                                 </div>
                             </div>
 	                        <p>
-	                            <a href="#$target#" title="#xarML('Use Wizard')#">
+	                            <a href="#$target#" title="#$xar->ml('Use Wizard')#">
 	                                Modify the instances that apply for this privilege
 	                            </a>
 	                        </p>
@@ -275,7 +275,7 @@
 	                </div>
                     <div class="xar-row">
                         <div class="xar-col">
-                            <label for="privid" title="#xarML('Privilege to add')#" class="xar-form-label">
+                            <label for="privid" title="#$xar->ml('Privilege to add')#" class="xar-form-label">
                                 Add new component
                             </label>
                         </div>
@@ -311,12 +311,12 @@
                         <div class="xar-row">
                             <div class="xar-col">
                                 <span class="xar-form-label">
-                                    <a href="#xarController::URL('privileges','admin','modifyprivilege',['id'=>$loop->item['parentid']])#">
+                                    <a href="#$xar->ctl()->URL('privileges','admin','modifyprivilege',['id'=>$loop->item['parentid']])#">
                                         #$loop:item['parentname']#
                                     </a>
                                 </span>
-                                <a href="#xarController::URL('privileges','admin','removemember',['childid'=>$ppid,'parentid'=>$loop->item['parentid'],'authid'=>$authid])#">
-                                    <img src="#xarTpl::getCodeUrl()#modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
+                                <a href="#$xar->ctl()->URL('privileges','admin','removemember',['childid'=>$ppid,'parentid'=>$loop->item['parentid'],'authid'=>$authid])#">
+                                    <img src="#$xar->tpl()->getCodeUrl()#modules/privileges/xarimages/remove.gif" alt="#$xar->ml('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
                                 </a>
                             </div>
                         </div>

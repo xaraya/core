@@ -23,7 +23,7 @@
                 To install and use the composer functionality please first install the cURL PHP extension.
             </div>
         <xar:else/>
-            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#$xar->ctl()->getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>
                         Composer Installer
@@ -38,10 +38,10 @@
                 </fieldset>
             </form>
             <xar:if condition="$installed">
-                <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+                <form action="#$xar->ctl()->getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                     <xar:template file="composer-file" module="base" type="module"/>
                 </form>
-                <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+                <form action="#$xar->ctl()->getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                         <legend>
                             Install a package
@@ -49,7 +49,7 @@
                         <xar:comment><!--
                         <div class="xar-row">
                             <div class="xar-col">
-                                <label for="install_dir" title="#xarML('The directory where the package will be installed')#" class="xar-form-label">                                
+                                <label for="install_dir" title="#$xar->ml('The directory where the package will be installed')#" class="xar-form-label">                                
                                     Install directory                                
                                 </label>
                             </div>
@@ -59,7 +59,7 @@
                         </div>
                         <div class="xar-row">
                             <div class="xar-col">
-                                <label for="package_dir" title="#xarML('The package directory name')#" class="xar-form-label">                                
+                                <label for="package_dir" title="#$xar->ml('The package directory name')#" class="xar-form-label">                                
                                     Package directory                  
                                 </label>
                             </div>
@@ -70,7 +70,7 @@
                         --></xar:comment>
                         <div class="xar-row">
                             <div class="xar-col">
-                                <label for="install_com" title="#xarML('The command to install the package')#" class="xar-form-label">                                
+                                <label for="install_com" title="#$xar->ml('The command to install the package')#" class="xar-form-label">                                
                                     Command                                
                                 </label>
                             </div>

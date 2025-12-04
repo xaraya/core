@@ -46,7 +46,7 @@
         </fieldset>
         <fieldset>
             Status:
-            <xar:set name="idsequal">xarCore::VERSION_ID == xarConfigVars::get(null, 'System.Core.VersionId')</xar:set>
+            <xar:set name="idsequal">xarCore::VERSION_ID == $xar->config()->getVar('System.Core.VersionId')</xar:set>
             <xar:if condition="$idsequal">
                 <xar:if condition="$versioncompare eq 0">
                     Your installation is current.

@@ -7,7 +7,7 @@
 	<xar:else /> 
 		<div class="xar-row">
 			<div class="xar-col-condensed">
-				<label for="reference_id" class="help" title="#xarML('Item relationship hiearchy.')#">
+				<label for="reference_id" class="help" title="#$xar->ml('Item relationship hiearchy.')#">
 					In relation to
 				</label>
 			</div>
@@ -68,7 +68,7 @@
 		<!-- The position needs to be set after items select because There is no position which we can have a selected item that will work in all cases-->
 		<div class="xar-row">
 			<div class="xar-col-condensed">
-				<label for="#$name#_position" class="help" title="#xarML('Position of this item.')#">
+				<label for="#$name#_position" class="help" title="#$xar->ml('Position of this item.')#">
 					Position
 				</label>
 			</div>

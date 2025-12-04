@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="commonDir">xarTpl::getThemeUrl('common')</xar:set>
+    <xar:set name="commonDir">$xar->tpl()->getThemeUrl('common')</xar:set>
     <style>
         .complete {
             background-image: url(#$commonDir#/images/icons/activate.png);
@@ -25,7 +25,7 @@
         <div id="status_body">
             <div class="xar-align-center">
                 <xar:var name="label">Upgrade icon</xar:var>
-                <img src="#xarTpl::getCodeUrl()#modules/installer/xarimages/installer.png" alt="#$label#"/>
+                <img src="#$xar->tpl()->getCodeUrl()#modules/installer/xarimages/installer.png" alt="#$label#"/>
             </div>
             <ul>
                 <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">

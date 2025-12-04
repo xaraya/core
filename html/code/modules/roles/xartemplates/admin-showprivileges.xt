@@ -13,7 +13,7 @@
           Show privileges of #$itemtypename# '#$pname#':
         </h2>
         <xar:set name="id">$roleid</xar:set>
-        <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
+        <xar:set name="request">$xar->req()->getRequest()->getInfo()</xar:set>
         <xar:set name="activetab">#$request.2#</xar:set>
         <xar:set name="xmldata">'showusers'</xar:set>
         <xar:set name="urlargs">['id' => $id, 'reload' => 'reload']</xar:set>
@@ -28,7 +28,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#$xar->ctl()->URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
                                     <xar:var name="parents[$i].parentname"/>
                                 </a>
                             </li>
@@ -43,7 +43,7 @@
         <!-- Show the general tab list for roles -->
         <fieldset>
           <legend>
-                Privileges inherited by #xarVarPrep::text($pname)#:
+                Privileges inherited by #$xar->prep()->text($pname)#:
           </legend>
             <xar:if condition="count($inherited) eq 0">
                 <p>No privileges inherited.</p>
@@ -52,7 +52,7 @@
                     <table class="xar-table xar-fullwidth">
                         <tr>
                             <th>Name</th>
-                            <xar:if condition="xarModVars::get('privileges','showrealms')">
+                            <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                                 <th>Realm</th>
                             </xar:if>
                             <th>Module</th>
@@ -65,11 +65,11 @@
                         <xar:loop name="$inherited">
                             <tr>
                                 <td>
-                                    <a href="#xarController::URL('privileges','admin','modifyprivilege',['id'=>$loop->item['privid']])#">
+                                    <a href="#$xar->ctl()->URL('privileges','admin','modifyprivilege',['id'=>$loop->item['privid']])#">
                                         <xar:var name="loop:item.name"/>
                                     </a>
                                 </td>
-                                <xar:if condition="xarModVars::get('privileges','showrealms')">
+                                <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                                     <td>
                                         <xar:var name="loop:item.realm"/>
                                     </td>
@@ -95,7 +95,7 @@
             </xar:if>
         </fieldset>
         <fieldset>
-            <legend>Privileges assigned to #xarVarPrep::text($pname)#:</legend>
+            <legend>Privileges assigned to #$xar->prep()->text($pname)#:</legend>
             <xar:if condition="count($privileges) eq 0">
                 <p>No privileges assigned.</p>
             <xar:else />
@@ -103,7 +103,7 @@
                 <table class="xar-table xar-fullwidth">
                     <tr>
                         <th>Name</th>
-                        <xar:if condition="xarModVars::get('privileges','showrealms')">
+                        <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                             <th>Realm</th>
                         </xar:if>
                         <th>Module</th>
@@ -116,11 +116,11 @@
                     <xar:loop name="$privileges">
                         <tr>
                             <td>
-                                <a href="#xarController::URL('privileges','admin','modifyprivilege',['id'=>$loop->item['privid']])#">
+                                <a href="#$xar->ctl()->URL('privileges','admin','modifyprivilege',['id'=>$loop->item['privid']])#">
                                     <xar:var name="loop:item.name"/>
                                 </a>
                             </td>
-                            <xar:if condition="xarModVars::get('privileges','showrealms')">
+                            <xar:if condition="$xar->mod('privileges')->getVar('showrealms')">
                                 <td class="xar-align-center">
                                     <xar:var name="loop:item.realm"/>
                                 </td>
@@ -146,12 +146,12 @@
                     </xar:loop>
                 </table>
             </xar:if>
-          <form action="#xarController::URL('roles','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
+          <form action="#$xar->ctl()->URL('roles','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:var name="label">Select the Privilege to add</xar:var>
                         <label for="privid" title="#$label#" class="xar-form-label">
-                            Assign a Privilege to #$itemtypename# '#xarVarPrep::text($pname)#'
+                            Assign a Privilege to #$itemtypename# '#$xar->prep()->text($pname)#'
                         </label>
                     </div>
                     <div class="xar-col">

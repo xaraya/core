@@ -18,7 +18,7 @@
 </pre>
             </div>
         </xar:if>
-        <form method="post" action="#xarController::URL('dynamicdata','admin','migrate')#">
+        <form method="post" action="#$xar->ctl()->URL('dynamicdata','admin','migrate')#">
             <fieldset>
                 <legend>Mapping</legend>
                     <div class="xar-row">
@@ -165,7 +165,7 @@
                             <xar:data-input type="checkbox" name="to[itemid]" id="to_itemid"
                             checked="$checked"/>
                             <label for="to_itemid"
-                            title="xarML('Attempt to preserve item id during this migration')#">
+                            title="$xar->ml('Attempt to preserve item id during this migration')#">
                             Preserve id</label>
                         </div>
                     </xar:if>
@@ -173,7 +173,7 @@
             </fieldset>
             <fieldset class="xar-form-actions">
                 <input type="hidden" name="step" value="#$step#"/>
-                <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
+                <input type="hidden" name="authid" value="#$xar->sec()->genAuthKey()#"/>
                 <xar:var name="label">Back</xar:var>
                 <xar:if condition="$step gt 1">
                     <xar:button type="submit" label="$label" name="back"/>

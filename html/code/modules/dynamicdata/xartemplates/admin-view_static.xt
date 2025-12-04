@@ -7,7 +7,7 @@
         <xar:template type="module" file="utility-menu"/>
         <xar:var name="firstline">Choose a table</xar:var>
         <xar:set name="firstline">"0,$firstline"</xar:set>
-        <form action="#xarServer::getCurrentURL()#" method="post">
+        <form action="#$xar->ctl()->getCurrentURL()#" method="post">
             <div class="xar-form-actions">
                 New Table:
                 &#160;
@@ -27,16 +27,16 @@
                 <h3>#$table#</h3>
                 <p>
                 <xar:comment><!--
-                    <a href="#xarController::URL('dynamicdata','admin','relations',['module_id'=>$fmodule_id])#">Add
+                    <a href="#$xar->ctl()->URL('dynamicdata','admin','relations',['module_id'=>$fmodule_id])#">Add
                     Relation</a>
                 --></xar:comment>
-                    <a href="#xarController::URL('dynamicdata','admin','new_static',['table'=>$table])#" style="float:left">
+                    <a href="#$xar->ctl()->URL('dynamicdata','admin','new_static',['table'=>$table])#" style="float:left">
                         Add a field to this table
                     </a>
-                    <a href="#xarController::URL('dynamicdata','admin','delete_static_table',['table'=>$table])#" style="float:right">
+                    <a href="#$xar->ctl()->URL('dynamicdata','admin','delete_static_table',['table'=>$table])#" style="float:right">
                         Delete this table:
                     </a>
-                    <a href="#xarController::URL('dynamicdata','admin','rename_static_table',['table'=>$table])#" style="float:right">
+                    <a href="#$xar->ctl()->URL('dynamicdata','admin','rename_static_table',['table'=>$table])#" style="float:right">
                         Rename this table:&#160;|&#160;
                     </a>
                 </p>
@@ -53,7 +53,7 @@
                     <xar:foreach in="$fields" value="$field">
                         <tr>
                             <td>
-                                <a href="#xarController::URL('dynamicdata','admin','modify_static')#&amp;table=#$table#&amp;field=#$field['name']#">
+                                <a href="#$xar->ctl()->URL('dynamicdata','admin','modify_static')#&amp;table=#$table#&amp;field=#$field['name']#">
                                     #$field['name']# 
                                 </a>
                             </td>
@@ -73,7 +73,7 @@
                                 #$field['configuration']# 
                             </td>
                             <td>
-                                <a href="#xarController::URL('dynamicdata','admin','delete_static')#&amp;table=#$table#&amp;field=#$field['name']#">
+                                <a href="#$xar->ctl()->URL('dynamicdata','admin','delete_static')#&amp;table=#$table#&amp;field=#$field['name']#">
                                     Delete 
                                 </a>
                             </td>
@@ -81,7 +81,7 @@
                     </xar:foreach>
                 </table>
                             <xar:comment><!--
-                <form method="post" action="#xarController::URL('dynamicdata','util','importprops')#">
+                <form method="post" action="#$xar->ctl()->URL('dynamicdata','util','importprops')#">
                     <fieldset class="xar-form-actions">
                         <input type="hidden" name="authid" value="#$authid#"/>
                         <input type="hidden" name="module_id" value="#$module_id#"/>
@@ -95,7 +95,7 @@
             </xar:foreach>
             <xar:comment><!--
             <div class="xar-align-center">
-                <a href="#xarController::URL('dynamicdata','admin','static',['export'=>1,'module_id'=>$module_id])#">
+                <a href="#$xar->ctl()->URL('dynamicdata','admin','static',['export'=>1,'module_id'=>$module_id])#">
                 Export to XML</a>
             </div>
             --></xar:comment>
@@ -130,7 +130,7 @@
                 </fieldset>
             </form>
             <div class="xar-align-center">
-                <a href="#xarController::URL('dynamicdata','admin','static',['module_id'=>$module_id])#">Show Table
+                <a href="#$xar->ctl()->URL('dynamicdata','admin','static',['module_id'=>$module_id])#">Show Table
                 Definitions</a>
             </div>
         </xar:if>

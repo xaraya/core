@@ -15,7 +15,7 @@
                 representations of the site's registered users and the different groups they can belong to. The Roles module is a core module within Xaraya and cannot be removed. 
             </p>
             <p>
-                Detail information on this module can be found <a href="#xarController::URL('modules','admin','modinfo',['id' => xarMod::getRegID('roles')])#">here</a>.
+                Detail information on this module can be found <a href="#$xar->ctl()->URL('modules','admin','modinfo',['id' => $xar->mod()->getRegID('roles')])#">here</a>.
             </p>
             
             <h3>Concepts</h3>
@@ -80,7 +80,7 @@
             <p>
                 The designated site admin is a role that is distinguished among others. Xaraya keepts track fo this role's ID, and its value can be retrieved at any time through a special module variable:
                 <pre>
-                    xarModVars::get('roles', 'admin')
+                    $xar->mod('roles')->getVar('admin')
                 </pre>
                 The designated site admin is used in several places in Xaraya for privileged access. It can be thought of as the "root" user of a Xaraya site and is by convention a member of the Administrator's group (although Xaraya places no restriction on which user can be the designated site admin.
             </p>

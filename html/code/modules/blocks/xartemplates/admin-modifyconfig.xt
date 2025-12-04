@@ -14,7 +14,7 @@
                 - - - - - - - - - - - Begin General Options - - - - - - - - - - -
             -->
             <xar:if condition="$tab eq 'general'">
-                <form id="modifyconfig-form" action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+                <form id="modifyconfig-form" action="#$xar->ctl()->getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                         <legend>General options</legend>
                         <xar:data-form object="$module_settings"/>
@@ -35,7 +35,7 @@
                             <div class="xar-col">
     By default the blocks module suppresses exceptions it encounters when displaying blocks. <br/>
     When developing blocks or block template over-rides for your site it may be useful to see those exceptions.<br/> 
-    Exception messages are only visible to the debug administrators, which are defined <a href="#xarController::URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">here</a>.
+    Exception messages are only visible to the debug administrators, which are defined <a href="#$xar->ctl()->URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">here</a>.
                             </div>
                         </div>
                     </fieldset>

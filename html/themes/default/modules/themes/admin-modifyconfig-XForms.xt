@@ -65,7 +65,7 @@ xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
                         title="Use submenus in the page for admin functions."/>
                     </div>
                     <div class="checkInputContainer">
-                        <xar:set name="checked">xarHooks::isAttached('themes', 'roles')</xar:set>
+                        <xar:set name="checked">$xar->mod()->isHooked('themes', 'roles')</xar:set>
                         <xar:data-input type="checkbox" name="usermenu" id="usermenu"
                         checked="$checked"/>
                         <xar:data-label label="Allow users to set their theme in User Account page"
@@ -80,7 +80,7 @@ xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
                     </xar:set>
                     <xar:data-input id="authid" name="authid" type="hidden" value="$valAuthid"/>
                     <div class="textInputContainer">
-                        <xar:set name="valSitename">xarModVars::get('themes', 'SiteName',
+                        <xar:set name="valSitename">$xar->mod('themes')->getVar('SiteName',
                         1)</xar:set>
                         <xar:data-label label="Site Name" for="sitename"/>
                         <xar:data-input type="textbox" name="sitename" id="sitename"
@@ -89,34 +89,34 @@ xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
                     <div class="textInputContainer">
                         <label for="slogan">Site Slogan</label>
                         <input type="text" name="slogan" id="slogan"
-                        value="#xarModVars::get('themes', 'SiteSlogan', 1)#" size="30"
+                        value="#$xar->mod('themes')->getVar('SiteSlogan', 1)#" size="30"
                         maxlength="100"/>
                     </div>
                     <div class="textInputContainer">
                         <label for="copyright">Copyright</label>
                         <input type="text" name="copyright" id="copyright"
-                        value="#xarModVars::get('themes', 'SiteCopyRight', 1)#" size="30"
+                        value="#$xar->mod('themes')->getVar('SiteCopyRight', 1)#" size="30"
                         maxlength="100"/>
                     </div>
                     <div class="textareaContainer">
                         <label for="footer">Footer Note</label>
                         <textarea name="footer" id="footer" cols="60" rows="5">
-                        #xarModVars::get('themes', 'SiteFooter', 1)#</textarea>
+                        #$xar->mod('themes')->getVar('SiteFooter', 1)#</textarea>
                     </div>
                     <div class="textInputContainer">
                         <label for="separator">Page Title Separator</label>
                         <input type="text" name="separator" id="separator"
-                        value="#xarModVars::get('themes', 'SiteTitleSeparator', 1)#" size="10"
+                        value="#$xar->mod('themes')->getVar('SiteTitleSeparator', 1)#" size="10"
                         maxlength="15"/>
                     </div>
                     <div class="selectContainer">
                         <xar:set name="options">array(
-                            ['id' => 'default', 'name' => xarML('Site Name - Module Name - Page Name')],
-                            ['id' => 'sp', 'name' => xarML('Site Name - Page Name')],
-                            ['id' => 'mps', 'name' => xarML('Module Name - Page Name - Site Name')],
-                            ['id' => 'pms', 'name' => xarML('Page Name - Module Name - Site Name')],
-                            ['id' => 'to', 'name' => xarML('Page Name')],
-                            ['id' => 'theme', 'name' => xarML('Theme Driven')],
+                            ['id' => 'default', 'name' => $xar->ml('Site Name - Module Name - Page Name')],
+                            ['id' => 'sp', 'name' => $xar->ml('Site Name - Page Name')],
+                            ['id' => 'mps', 'name' => $xar->ml('Module Name - Page Name - Site Name')],
+                            ['id' => 'pms', 'name' => $xar->ml('Page Name - Module Name - Site Name')],
+                            ['id' => 'to', 'name' => $xar->ml('Page Name')],
+                            ['id' => 'theme', 'name' => $xar->ml('Theme Driven')],
                         )</xar:set>
                         <xar:set name="value">
                             <xar:var scope="module" module="themes" name="SiteTitleOrder"/>
@@ -128,7 +128,7 @@ xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
                 </xf:group>
                 <xf:group>
                     <xf:label>Template Debugging options</xf:label>
-          <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
+          <xar:if condition="$xar->config()->getVar('Site.BL.CacheTemplates')">
             <div class="checkInputContainer">
               <xar:set name="checked">
                 <xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/>
@@ -157,7 +157,7 @@ xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
                     </div>
                     <div class="checkInputContainer">
                         <xar:comment>
-                            <xar:set name="checked">xarModVars::get('themes', 'var_dump')</xar:set>
+                            <xar:set name="checked">$xar->mod('themes')->getVar('var_dump')</xar:set>
                         </xar:comment>
                         <xar:set name="checked">
                             <xar:var scope="module" module="themes" name="var_dump"/>
@@ -167,12 +167,12 @@ xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
                         <label for="var_dump">Debug Templates by Showing Variables
                         Available</label>
                     </div>
-                    <xar:if condition="xarTheme::isAvailable('atom')">
+                    <xar:if condition="$xar->theme()->isAvailable('atom')">
                         <!-- This should be moved if we ever fully support the atom spec -->
                         <div class="textInputContainer">
                             <label for="AtomTag">Atom Tag</label>
                             <input type="text" name="AtomTag" id="AtomTag"
-                            value="#xarModVars::get('themes', 'AtomTag', 1)#" size="30"
+                            value="#$xar->mod('themes')->getVar('AtomTag', 1)#" size="30"
                             maxlength="100"/>
                         </div>
                     </xar:if>

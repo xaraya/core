@@ -7,7 +7,7 @@
             <h2>Modify Themes Configuration</h2>
         </div>
         <div class="xar-mod-page-body">
-            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#$xar->ctl()->getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>General options</legend>
                     <xar:data-form object="$module_settings"/>
@@ -245,12 +245,12 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    ['id' => 'default', 'name' => xarML('Site Name - Module Name - Page Name')],
-                                    ['id' => 'sp', 'name' => xarML('Site Name - Page Name')],
-                                    ['id' => 'mps', 'name' => xarML('Module Name - Page Name - Site Name')],
-                                    ['id' => 'pms', 'name' => xarML('Page Name - Module Name - Site Name')],
-                                    ['id' => 'to', 'name' => xarML('Page Name')],
-                                    ['id' => 'theme', 'name' => xarML('Theme Driven')],
+                                    ['id' => 'default', 'name' => $xar->ml('Site Name - Module Name - Page Name')],
+                                    ['id' => 'sp', 'name' => $xar->ml('Site Name - Page Name')],
+                                    ['id' => 'mps', 'name' => $xar->ml('Module Name - Page Name - Site Name')],
+                                    ['id' => 'pms', 'name' => $xar->ml('Page Name - Module Name - Site Name')],
+                                    ['id' => 'to', 'name' => $xar->ml('Page Name')],
+                                    ['id' => 'theme', 'name' => $xar->ml('Theme Driven')],
                                 )
                             </xar:set>
                             <xar:set name="value">
@@ -334,7 +334,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:set name="allowajax">xarConfigVars::get(null, 'Site.Core.AllowAJAX')</xar:set>
+                            <xar:set name="allowajax">$xar->config()->getVar('Site.Core.AllowAJAX')</xar:set>
                             <xar:data-input type="checkbox" name="allowajax" id="allowajax" checked="$allowajax"/>
                         </div>
                     </div>
@@ -354,8 +354,8 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    ['id' => 0, 'name' => xarML('No')],
-                                    ['id' => 1, 'name' => xarML('Yes')],
+                                    ['id' => 0, 'name' => $xar->ml('No')],
+                                    ['id' => 1, 'name' => $xar->ml('Yes')],
                                 )
                             </xar:set>
                             <xar:set name="checked"><xar:var scope="config" name="Site.BL.CompressWhitespace"/></xar:set>
@@ -365,8 +365,8 @@
                 </fieldset>
                 <fieldset>
                     <legend>Template Debugging options</legend>
-                    <p class="xar-note">The options activated below are visible to the debug administrators, <a href="#xarController::URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">which are defined here</a>.</p>
-                    <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
+                    <p class="xar-note">The options activated below are visible to the debug administrators, <a href="#$xar->ctl()->URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">which are defined here</a>.</p>
+                    <xar:if condition="$xar->config()->getVar('Site.BL.CacheTemplates')">
                         <div class="xar-row">
                             <div class="xar-col">
                                 <label for="showphpcbit" class="xar-form-label">                            
@@ -401,7 +401,7 @@
                             <xar:data-input type="checkbox" name="variable_dump" checked="$checked"/> Debug Templates by Showing Available Variables
                         </div>
                     </div>
-                    <xar:if condition="xarMod::isAvailable('atom')">
+                    <xar:if condition="$xar->mod()->isAvailable('atom')">
                         <!-- This should be moved if we ever fully support the atom spec -->
                         <div class="xar-row">
                             <div class="xar-col">
@@ -418,7 +418,7 @@
                 </fieldset>
                 <xar:template file="update-button" module="base" />
             </form>
-            <form action="#xarServer::getCurrentURL()#" method="post">
+            <form action="#$xar->ctl()->getCurrentURL()#" method="post">
                 <fieldset>
                     <legend>Flush Caches</legend>
                     <p class="xar-alert">Removes all cached files, forcing their recompilation</p>
@@ -432,14 +432,14 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    ['id' => 'templates', 'name' => xarML('Templates')],
-                                    ['id' => 'rss',       'name' => xarML('RSS')],
-                                    ['id' => 'database',  'name' => xarML('Database')],
-                                    ['id' => 'css',       'name' => xarML('CSS')],
-                                    // ['id' => 'output', 'name' => xarML('Output')],
+                                    ['id' => 'templates', 'name' => $xar->ml('Templates')],
+                                    ['id' => 'rss',       'name' => $xar->ml('RSS')],
+                                    ['id' => 'database',  'name' => $xar->ml('Database')],
+                                    ['id' => 'css',       'name' => $xar->ml('CSS')],
+                                    // ['id' => 'output', 'name' => $xar->ml('Output')],
                                 )
                             </xar:set>
-                            <xar:set name="value">xarModVars::get('themes','flushcaches')</xar:set>
+                            <xar:set name="value">$xar->mod('themes')->getVar('flushcaches')</xar:set>
                             <xar:data-input type="checkboxlist" name="flushcaches" value="$value" options="$options"/>
                         </div>
                     </div>
@@ -454,10 +454,10 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    ['id' => 'dynamicdata',  'name' => xarML('Dynamicdata')],
+                                    ['id' => 'dynamicdata',  'name' => $xar->ml('Dynamicdata')],
                                 )
                             </xar:set>
-                            <xar:set name="value">xarModVars::get('themes','flushdbcaches')</xar:set>
+                            <xar:set name="value">$xar->mod('themes')->getVar('flushdbcaches')</xar:set>
                             <xar:data-input type="checkboxlist" name="flushdbcaches" value="$value" options="$options"/>
                         </div>
                     </div>
@@ -467,7 +467,7 @@
                         <div class="xar-col"></div>
                         <div class="xar-col">
                             <xar:data-input type="hidden" name="phase" id="phase" value="flush"/>
-                            <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
+                            <input type="hidden" name="authid" id="authid" value="#$xar->sec()->genAuthKey()#"/>
                             <xar:var name="label">Flush</xar:var>
                             <xar:button type="submit" label="$label"/>
                         </div>

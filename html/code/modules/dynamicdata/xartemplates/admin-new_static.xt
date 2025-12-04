@@ -5,7 +5,7 @@
     <div class="xar-mod-body">
         <h2>Create new field in table #$table#</h2>
 
-        <form method="post" action="#xarServer::getCurrentURL()#">
+        <form method="post" action="#$xar->ctl()->getCurrentURL()#">
           <fieldset>
             <legend>Item details</legend>
             <xar:data-form object="$object"/>

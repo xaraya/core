@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:style scope="module" module="base" file="navtabs"/>
 
-    <xar:set name="urlinfo">xarController::getRequest()->getInfo()</xar:set>
+    <xar:set name="urlinfo">$xar->req()->getRequest()->getInfo()</xar:set>
     <div>
         <ul class="xar-tabs xar-alt xar-norm-outline">
             <xar:if condition="$layout eq 'toplevel'">
@@ -17,7 +17,7 @@
                         <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                     </xar:if>
                     <li class="#$tabclass#">
-                        <a href="#xarServer::getCurrentURL(['activetab' => $tab['id']])#" class="#$linkclass#">
+                        <a href="#$xar->ctl()->getCurrentURL(['activetab' => $tab['id']])#" class="#$linkclass#">
                             #$tab['name']#
                         </a>
                     </li>
@@ -41,7 +41,7 @@
                                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                             </xar:if>
                             <li class="#$tabclass#">
-                                <a href="#xarController::URL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
+                                <a href="#$xar->ctl()->URL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
                                     #$tab['label']#
                                 </a>
                             </li>
@@ -56,7 +56,7 @@
                         </xar:if>
                         <dd class="#$tabclass#">
                             <xar:set name="name">$currentcategory->name</xar:set>
-                            <xar:set name="url">isset($currentcategory->url) ? $currentcategory->url : xarServer::getCurrentURL(['activetab' => $id])</xar:set>
+                            <xar:set name="url">isset($currentcategory->url) ? $currentcategory->url : $xar->ctl()->getCurrentURL(['activetab' => $id])</xar:set>
                             <a href="#$url#" class="#$linkclass#">
                                 #$name#
                             </a>
