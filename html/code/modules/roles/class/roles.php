@@ -315,6 +315,9 @@ class xarRoles extends xarObject
         return $parent->removeMember($child);
     }
 
+    /**
+     * @deprecated 2.9.0 use xarRoles::getRole($userId) with $userId = $this->session()->getUserId() instead
+     */
     public static function current()
     {
         return self::getRole(xar::session()->getUserId());

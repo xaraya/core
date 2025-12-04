@@ -497,6 +497,7 @@ class AccessProperty extends DataProperty
     private function checkGroupArray(array $groups = [])
     {
         $anonID = $this->config()->getVar('Site.User.AnonymousUID');
+        $userID = $this->session()->getUserId();
         $access = false;
         foreach ($groups as $group) {
             $group = (int) $group;
@@ -512,7 +513,7 @@ class AccessProperty extends DataProperty
                 }
             } elseif ($group) {
                 $rolesgroup = xarRoles::getRole($group);
-                $thisuser = xarRoles::current();
+                $thisuser = xarRoles::getRole($userID);
                 if (is_object($rolesgroup)) {
                     if ($thisuser->isAncestor($rolesgroup)) {
                         $access = true;
