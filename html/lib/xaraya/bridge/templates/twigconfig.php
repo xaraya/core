@@ -232,7 +232,6 @@ class TwigConfig
     public static function addThemeTemplates($xar = null)
     {
         $xar ??= xar::getServicesClass();
-        // @todo this assumes we're running in sys::web() because it looks for 'themes'
         // make other themes configurable based on fileinfo from xartheme.php
         $fileThemes = $xar->mod()->apiFunc('themes', 'admin', 'getfilethemes');
         foreach ($fileThemes as $name => $fileInfo) {

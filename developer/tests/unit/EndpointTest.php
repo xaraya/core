@@ -73,10 +73,6 @@ final class EndpointTest extends TestCase
 
     public function testIndex(): void
     {
-        $olddir = getcwd();
-        // twig fails to load namespaces otherwise because themes getfilethemes checks for 'themes'
-        chdir(sys::web());
-
         xar::req()->setServerVar('REQUEST_URI', '/xaraya/index.php');
         ob_start();
         include sys::web() . 'index.php';
@@ -84,8 +80,6 @@ final class EndpointTest extends TestCase
 
         $expected = 'Congratulations';
         $this->assertStringContainsString($expected, $output);
-
-        chdir($olddir);
     }
 
     public function testInstall(): void

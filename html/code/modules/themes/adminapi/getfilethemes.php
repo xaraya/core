@@ -13,6 +13,7 @@ namespace Xaraya\Modules\Themes\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
+use sys;
 
 /**
  * themes adminapi getfilethemes function
@@ -31,7 +32,7 @@ class GetfilethemesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $fileThemes = [];
-        $basedir = $this->config()->getVar('Site.BL.ThemesDirectory');
+        $basedir = sys::web() . $this->config()->getVar('Site.BL.ThemesDirectory');
 
         $dh = opendir($basedir);
         while ($themeOsDir = readdir($dh)) {
