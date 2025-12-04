@@ -66,6 +66,14 @@ interface RequestInterface
     public function getQueryVar($name);
 
     /**
+     * Allow setting query variable if needed
+     * @param string $name the name of the variable
+     * @param mixed $value value of the variable
+     * @return void
+     */
+    public function setQueryVar($name, $value);
+
+    /**
      * Gets a body variable
      * @param string $name the name of the variable
      * @return mixed value of the variable

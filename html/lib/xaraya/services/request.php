@@ -47,6 +47,7 @@ interface RequestInterface extends ServiceInterface
     public function getServerVar(string $varName): mixed;
     public function setServerVar(string $varName, mixed $value): void;
     public function getVar(string $varName, ?string $allowOnlyMethod = null): mixed;
+    public function setVar(string $varName, mixed $value): void;
     public function getHost(): string;
     public function getProtocol(): string;
     public function getMethod(): string;
@@ -414,6 +415,11 @@ trait RequestTrait
         //    $value = $this->stripVarSlashes($value);
         //}
         return $value;
+    }
+
+    public function setVar(string $varName, mixed $value): void
+    {
+        $this->getInstance()->setQueryVar($varName, $value);
     }
 
     /**

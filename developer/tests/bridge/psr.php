@@ -38,13 +38,18 @@ $timer->setTimer('sys');
 xar::req()->setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class
 xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
-$xar = xar::load(xarCore::SYSTEM_USER);
+$xar = xar::load(xarCore::SYSTEM_BLOCKS);
 $timer->setTimer('core');
 
 // Concatenate and parse string into $_GET: php psr.php object=sample ...
 if (php_sapi_name() === 'cli') {
-    parse_str(implode('&', array_slice($argv, 1)), $_GET);
+    $params = [];
+    parse_str(implode('&', array_slice($argv, 1)), $params);
+    foreach ($params as $name => $value) {
+        $xar->req()->setVar($name, $value);
+    }
     $xar->req()->setServerVar('REQUEST_URI', $argv[0]);
+    $_GET = $params;
 }
 
 function getRequest($psr17Factory)
