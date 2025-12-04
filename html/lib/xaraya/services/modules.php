@@ -89,7 +89,7 @@ interface ModulesInterface extends ServiceInterface
     /** @param array<string, mixed> $args */
     public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     /** @param array<string, mixed> $args */
-    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
+    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): string;
     public function resolveAlias(string $name): string;
     public function defineAlias(string $alias, string $modName): mixed;
     public function removeAlias(string $alias, string $modName): mixed;
@@ -640,9 +640,9 @@ trait ModulesTrait
      * @param string $funcName
      * @param array<string, mixed> $args
      * @throws \FunctionNotFoundException
-     * @return mixed
+     * @return string
      */
-    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed
+    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): string
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
@@ -650,7 +650,15 @@ trait ModulesTrait
         //if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
         //    $modType .= 'gui';
         //}
-        return $this->getExecHelper()->guiMethod($modName, $modType, $funcName, $args);
+        $result = $this->getExecHelper()->guiMethod($modName, $modType, $funcName, $args);
+        if (!isset($result)) {
+            return '';
+        }
+        // always apply template here
+        if (is_array($result)) {
+            return $this->template($funcName, $result);
+        }
+        return $result;
     }
 
     /**
