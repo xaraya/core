@@ -104,7 +104,7 @@ trait SessionTrait
         //self::$sessionClass = $config['sessionClass'] ?? SessionHandler::class;
         $this->args = $config;
 
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $this->anonId = (int) $xar->config()->getVar('Site.User.AnonymousUID', 5);
 
         // Set up the session instance with current context
@@ -123,7 +123,7 @@ trait SessionTrait
      */
     public function getConfig(): array
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $systemArgs = [
             'securityLevel'     => $xar->config()->getVar('Site.Session.SecurityLevel'),
             'duration'          => $xar->config()->getVar('Site.Session.Duration'),
@@ -182,7 +182,7 @@ trait SessionTrait
         }
         // ignore templates and security try to get stuff in session
         if ($varName == 'navigationLocale') {
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
             return $xar->config()->getVar('Site.MLS.DefaultLocale');
         } elseif ($varName == 'privilegeset') {
             return null;

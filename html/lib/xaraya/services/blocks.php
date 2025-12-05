@@ -71,7 +71,7 @@ trait BlocksTrait
         if (empty($config) && $this->initialized) {
             return true;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // Blocks Support Tables
         $xar->mod()->loadDbInfo('blocks');
         $this->initialized = true;
@@ -89,7 +89,7 @@ trait BlocksTrait
      */
     public function render(array $blockinfo = []): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // Get a cache key for this block if it's suitable for block caching
         $cacheKey = $xar->cache()->getBlockKey($blockinfo);
 
@@ -191,7 +191,7 @@ trait BlocksTrait
      */
     public function renderBlock(array $args): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // All the hard work is done in this function.
         // It keeps the core code lighter when standalone blocks are not used.
         if (isset($args['instance'])) {  // valid block instance states
@@ -225,7 +225,7 @@ trait BlocksTrait
      */
     public function getObject(array $blockinfo = [], ?string $interface = null, ?string $method = null): iBlock
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $invalid = [];
         if (empty($blockinfo['type']) || !is_string($blockinfo['type'])) {
             $invalid[] = 'type';
@@ -281,7 +281,7 @@ trait BlocksTrait
 
     public function guiMethod(iBlock $block, string $method, ?string $block_tpl = null): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         if (!method_exists($block, $method)) {
             throw new FunctionNotFoundException($method);
         }
@@ -385,7 +385,7 @@ trait BlocksTrait
         if (empty($args['instance'])) {
             throw new Exception("Missing object parameter");
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         return $xar->mod()->apiFunc('blocks', 'blocks', 'getinfo', $args);
     }
 

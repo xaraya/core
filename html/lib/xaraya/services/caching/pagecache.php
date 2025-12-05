@@ -114,7 +114,7 @@ class PageCache extends ServiceClass
         }
 
         // we should be safe for caching now
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // set the current cacheKey - already done in checkCachingRules() here
         //$this->cacheKey = $cacheKey;
@@ -154,7 +154,7 @@ class PageCache extends ServiceClass
 
     public function checkCachingRules($url = null)
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         if (empty($url)) {
             // get module parameters
             [$modName, $modType, $funcName] = $xar->req()->getRequest()->getInfo();

@@ -38,7 +38,7 @@ class AliasHelper extends ServiceClass
         if ($alias == 'object') {
             return $alias;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         try {
             $aliasesMap = $xar->config()->getVar('System.ModuleAliases');
         } catch (VariableNotFoundException) {

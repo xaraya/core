@@ -33,12 +33,14 @@ interface DataObjectInterface extends ServiceInterface
     /**
      * Get url for this object method
      * @param array<string, mixed> $args
+     * @deprecated 2.9.0 use xar::ctl()->getObjectURL() instead
      */
     public function getURL(string $methodName = 'view', array $args = [], ?string $objectName = null): string;
 
     /**
      * Render output with object template
      * @param array<mixed> $tplData
+     * @deprecated 2.9.2 use xar::tpl()->object() instead
      */
     public function template(string $tplType, array $tplData = []): string;
 
@@ -46,7 +48,7 @@ interface DataObjectInterface extends ServiceInterface
      * Call a dataobject user interface method (maybe from index.php someday)
      * @param array<string, mixed> $args arguments to pass to the method
      */
-    public function guiMethod(?string $objectName = null, string $methodName = 'view', array $args = []): string;
+    public function guiMethod(string $objectName, string $methodName = 'view', array $args = []): string;
 
     /**
      * Get data object
@@ -64,7 +66,7 @@ interface DataObjectInterface extends ServiceInterface
      * Get data object loader
      * @param array<string> $fieldlist
      */
-    public function getObjectLoader(?string $objectName = null, array $fieldlist = ['id', 'name']): ?DataObjectLoader;
+    public function getObjectLoader(string $objectName, array $fieldlist = ['id', 'name']): ?DataObjectLoader;
 
     /**
      * Get info about a data object by name or objectid
@@ -132,6 +134,7 @@ trait DataObjectTrait
     /**
      * Get url for this object method
      * @param array<string, mixed> $args
+     * @deprecated 2.9.0 use xar::ctl()->getObjectURL() instead
      */
     public function getURL(string $methodName = 'view', array $args = [], ?string $objectName = null): string
     {
@@ -147,11 +150,11 @@ trait DataObjectTrait
      * @param string $tplType
      * @param array<mixed> $tplData
      * @return string
+     * @deprecated 2.9.2 use xar::tpl()->object() instead
      */
     public function template(string $tplType, array $tplData = []): string
     {
-        // Add standard template variables (module, itemtype and context)
-        // @todo $tplData = $this->prepare($tplData);
+        // Add standard template variables (context)
         $tplData['context'] ??= $this->getContext();
 
         $modName = $this->getModName();
@@ -173,9 +176,8 @@ trait DataObjectTrait
      * Call a dataobject user interface method (maybe from index.php someday)
      * @param array<string, mixed> $args arguments to pass to the method
      */
-    public function guiMethod(?string $objectName = null, string $methodName = 'view', array $args = []): string
+    public function guiMethod(string $objectName, string $methodName = 'view', array $args = []): string
     {
-        $objectName ??= $this->getObjectName();
         return xarDDObject::guiMethod($objectName, $methodName, $args, $this->getContext(), $this->getParent());
     }
 
@@ -201,9 +203,8 @@ trait DataObjectTrait
      * Get data object loader
      * @param array<string> $fieldlist
      */
-    public function getObjectLoader(?string $objectName = null, array $fieldlist = ['id', 'name']): ?DataObjectLoader
+    public function getObjectLoader(string $objectName, array $fieldlist = ['id', 'name']): ?DataObjectLoader
     {
-        $objectName ??= $this->getObjectName();
         return DataObjectFactory::getObjectLoader($objectName, $fieldlist, $this->getContext());
     }
 
@@ -291,8 +292,8 @@ trait DataObjectTrait
  * Access DataObject*::* methods with context (getObject, getObjectList, ...)
  *
  * Available methods:
- * - getURL() for current object - or use ctl()->getObjectURL() in general with objectName
- * - template() for current object - or use tpl()->object() in general with modName objectTemplate
+ * - getURL() for current object - @deprecated 2.9.0 use xar::ctl()->getObjectURL() instead
+ * - template() for current object - @deprecated 2.9.2 use xar::tpl()->object() instead
  * - getObject()
  * - getObjectList()
  * - getObjectLoader()
@@ -303,9 +304,9 @@ trait DataObjectTrait
  * - ...
  *
  * Required methods in parent:
- * - getObjectName() for data()->getURL()
- * - getModName() for data()->template()
- * - getObjectTemplate() for data()->template()
+ * - getObjectName() for data()->getURL() - @deprecated 2.9.0 use xar::ctl()->getObjectURL() instead
+ * - getModName() for data()->template() - @deprecated 2.9.2 use xar::tpl()->object() instead
+ * - getObjectTemplate() for data()->template() - @deprecated 2.9.2 use xar::tpl()->object() instead
  *
  * @todo do something with getParent()->getObject() + simplify methods by name or objectid?
  *
@@ -316,6 +317,7 @@ class DataObjectService implements DataObjectInterface
 
     /**
      * Get name of the object from parent getObject()
+     * @deprecated 2.9.0 use xar::ctl()->getObjectURL() instead
      */
     public function getObjectName(): string
     {
@@ -324,6 +326,7 @@ class DataObjectService implements DataObjectInterface
 
     /**
      * Get name of the module from parent getObject()
+     * @deprecated 2.9.2 use xar::tpl()->object() instead
      */
     public function getModName(): string
     {
@@ -332,6 +335,7 @@ class DataObjectService implements DataObjectInterface
 
     /**
      * Get template of the object from parent getObject()
+     * @deprecated 2.9.2 use xar::tpl()->object() instead
      */
     public function getObjectTemplate(): string
     {

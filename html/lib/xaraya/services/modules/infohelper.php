@@ -45,7 +45,7 @@ class InfoHelper extends ServiceClass
     public function getName(?int $regID = null): string
     {
         if (!isset($regID)) {
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
             $modName = $xar->req()->getModule();
         } else {
             $modinfo = $this->getInfo($regID);
@@ -88,7 +88,7 @@ class InfoHelper extends ServiceClass
         if (empty($modInfo['displayname'])) {
             $modInfo['displayname'] = $modName;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         return $xar->mls()->translate($modInfo['displayname']);
     }
 
@@ -101,7 +101,7 @@ class InfoHelper extends ServiceClass
         if (empty($modInfo['displaydescription'])) {
             $modInfo['displaydescription'] = $modName;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         return $xar->mls()->translate($modInfo['displaydescription']);
     }
 
@@ -112,7 +112,7 @@ class InfoHelper extends ServiceClass
             throw new EmptyParameterException('modOsDir');
         }
 
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         if (empty($this->noCacheMod) && $xar->mem()->has('Mod.getFileInfos', $modOsDir . " / " . $type)) {
             return $xar->mem()->get('Mod.getFileInfos', $modOsDir . " / " . $type);
         }
@@ -199,7 +199,7 @@ class InfoHelper extends ServiceClass
             $checkNoState = $this->noCacheTheme;
         }
 
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         if (empty($checkNoState) && $xar->mem()->has($cacheCollection, $modName)) {
             return $xar->mem()->get($cacheCollection, $modName);
         }
@@ -279,7 +279,7 @@ class InfoHelper extends ServiceClass
             throw new EmptyParameterException('modRegid');
         }
 
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         switch ($type) {
             case 'module':
                 if ($xar->mem()->has('Mod.Infos', $modRegId)) {
@@ -465,7 +465,7 @@ class InfoHelper extends ServiceClass
         if (isset($this->loadedDbInfoCache[$modName])) {
             return true;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $result = xarClassMap::findTables($modName);
         if (!empty($result) && class_exists($result['classname'])) {
@@ -587,7 +587,7 @@ class InfoHelper extends ServiceClass
         $fileInfo['twigextension']  = $version['twigextension'] ?? '.html.twig';
 
         if (!empty($name)) {
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
             $xar->mem()->set('Mod.getFileInfos', $name, $fileInfo);
         }
         return $fileInfo;

@@ -145,7 +145,7 @@ class ModuleCache extends ServiceClass
         }
 
         // set the cacheCode for the current cacheKey
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // the output depends on the current host, theme and locale
         $factors = $xar->req()->getHost() . $xar->tpl()->getThemeDir()
@@ -174,7 +174,7 @@ class ModuleCache extends ServiceClass
     public function getCacheSettings()
     {
         if (!isset($this->cacheSettings)) {
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
             $settings = [];
             $serialsettings = $xar->mod('modules')->getVar('modulecache_settings');
             if (!empty($serialsettings)) {
@@ -273,7 +273,7 @@ class ModuleCache extends ServiceClass
         // we're done with this cacheKey
         $this->cacheKey = null;
 
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $content = unserialize((string) $value);
         if (!empty($content['title']) && is_array($content['title'])) {
             $xar->tpl()->setPageTitle($content['title'][0], $content['title'][1]);

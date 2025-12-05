@@ -111,7 +111,7 @@ trait RequestTrait
      */
     public function getConfig(): array
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $systemArgs = [
             'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
             //'generateXMLURLs'        => true,
@@ -295,7 +295,7 @@ trait RequestTrait
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseURI = '' in config.php
         try {
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
             $BaseURI =  $xar->sysConfig(sys::LAYOUT)->getVar('BaseURI');
             return $BaseURI;
         } catch (Exception $e) {
@@ -449,7 +449,7 @@ trait RequestTrait
 
     public function getProtocol(): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         try {
             if ($xar->config()->getVar('Site.Core.EnableSecureServer')) {
                 if (preg_match('/^http:/', $this->getServerVar('REQUEST_URI') ?? '')) {

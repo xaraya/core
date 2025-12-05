@@ -35,7 +35,7 @@ class ViewHandler extends DefaultHandler
      *     $args['sort'] optional sort for the view
      *     $args['where'] optional where clause(s) for the view
      *     $args['startnum'] optional start number for the view
-     * @return string|void output of data()->template() using 'ui_view'
+     * @return string|void output of $this->template() using 'ui_view'
      */
     public function run(array $args = [])
     {
@@ -143,7 +143,7 @@ class ViewHandler extends DefaultHandler
             'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
-        $output = $this->data()->template(
+        $output = $this->template(
             'ui_view',
             $data
         );

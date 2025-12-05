@@ -81,7 +81,7 @@ trait UserTrait
             }
             $config = $this->getConfig();
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // User System and Security Service Tables
         $prefix = $xar->db()->getPrefix();
 
@@ -110,7 +110,7 @@ trait UserTrait
      */
     public function getConfig(): array
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $systemArgs = ['authenticationModules' => $xar->config()->getVar('Site.User.AuthenticationModules')];
         return $systemArgs;
     }
@@ -129,7 +129,7 @@ trait UserTrait
         if (empty($varName)) {
             throw new EmptyParameterException('name');
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // @todo see UserContext::getUserId() for userId without session
         if (empty($userId)) {
@@ -276,7 +276,7 @@ trait UserTrait
         if ($varName == 'id' || $varName == 'authenticationModule' || $varName == 'pass') {
             throw new BadParameterException('name');
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         if (empty($userId)) {
             $userId = $xar->session()->getUserId();
@@ -332,7 +332,7 @@ trait UserTrait
      */
     public function getId(): ?int
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // @todo see UserContext::getUserId() for userId without session
         return $xar->session()->getUserId();
     }
@@ -356,27 +356,27 @@ trait UserTrait
     {
         // @todo see UserContext::getUserId() for userId without session
         $userId = $this->getCurrentId();
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         return !empty($userId) && ($userId != $xar->session()->getAnonId());
     }
 
     public function isDebugAdmin(): bool
     {
         $userId = $this->getCurrentId();
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         return in_array($userId, $xar->config()->getVar('Site.User.DebugAdmins'));
     }
 
     public function isSiteAdmin(): bool
     {
         $userId = $this->getCurrentId();
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         return $userId == $xar->mod('roles')->getVar('admin');
     }
 
     public function getLocale(): mixed
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         if ($this->isLoggedIn()) {
             $id = $this->getVar('id');
             //last resort user is falling over on this uservar by setting multiple times
@@ -401,7 +401,7 @@ trait UserTrait
 
     public function setLocale(string $locale): bool
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $xar->log()->info("Changing the navigation locale from " . $this->getLocale() . " to " . $locale);
         if ($xar->mls()->getMode() != $xar->mls()::SINGLE_LANGUAGE_MODE) {
             $xar->session()->setVar('navigationLocale', $locale);
@@ -415,7 +415,7 @@ trait UserTrait
 
     public function getThemeName(): mixed
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $themeName = $xar->tpl()->getThemeName();
 
         if ($this->isLoggedIn() && (bool) $xar->mod('themes')->getVar('enable_user_menu')) {
@@ -430,7 +430,7 @@ trait UserTrait
 
     public function setThemeName(string $themeName): void
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         assert($themeName != "");
         // uservar system takes care of dealing with anynomous
         $xar->mod('themes')->setUserVar('default_theme', $themeName);
@@ -448,7 +448,7 @@ trait UserTrait
         if (empty($password)) {
             throw new EmptyParameterException('password');
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $userId = self::AUTH_FAILED;
         $args = ['uname' => $userName, 'pass' => $password];
@@ -547,7 +547,7 @@ trait UserTrait
         if (!$this->isLoggedIn()) {
             return true;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // get the current userid before logging out
         $userId = $xar->session()->getUserId();
 
@@ -594,7 +594,7 @@ trait UserTrait
 
     protected function getAuthModule(int $userId): mixed
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         if ($userId == $xar->session()->getUserId()) {
             $authModName = $xar->session()->getVar('authenticationModule');
             if (isset($authModName)) {
@@ -639,7 +639,7 @@ trait UserTrait
 
     protected function isVarDefined(string $varName): bool
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // Retrieve the dynamic user object if necessary
         if (!isset($this->objectRef) && $xar->mod()->isHooked('dynamicdata', 'roles')) {
             $this->objectRef = $xar->data()->getObject(['module' => 'roles']);

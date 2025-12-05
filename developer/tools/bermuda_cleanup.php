@@ -1767,7 +1767,6 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/,\s*null,\s*\$this->getContext\(\)\s*\)/s' => ')',
             '/xarServer::getModuleURL\(/' => '\$this->ctl()->getModuleURL(',
             '/xarServer::getCurrentURL\(/' => '\$this->ctl()->getCurrentURL(',
-            // @todo or use $this->data()->getURL()
             '/xarServer::getObjectURL\(/' => '\$this->ctl()->getObjectURL(',
             '/xarServer::getBaseURL\(/' => '\$this->ctl()->getBaseURL(',
             '/xarServer::getBaseURI\(/' => '\$this->ctl()->getBaseURI(',
@@ -1776,11 +1775,8 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarController::getVar\(/' => '\$this->req()->getVar(',
             // @todo check xarTpl::module() against current modName modType for mod()->template()
             '/xarTpl::module\(/' => '\$this->tpl()->module(',
-            // @todo check xarTpl::block() against current modName blockType for block()->template()
             '/xarTpl::block\(/' => '\$this->tpl()->block(',
-            // @todo check xarTpl::object() against current objectName for data()->template()
             '/xarTpl::object\(/' => '\$this->tpl()->object(',
-            // @todo check xarTpl::property() against current propertyName for prop()->template()
             '/xarTpl::property\(/' => '\$this->tpl()->property(',
             '/xarTpl::setPageTitle\(/' => '\$this->tpl()->setPageTitle(',
             '/xarTpl::setPageTemplateName\(/' => '\$this->tpl()->setPageTemplateName(',

@@ -99,6 +99,7 @@ interface ModulesInterface extends ServiceInterface
     public function notifyHooks(string $event, array $info = []): mixed;
     public function checkAccess(?string $modName = null, string $action = '', ?int $roleid = null): bool;
     public function setCurrentModName(string $modName): void;
+    public function getInfoHelper(): Modules\InfoHelper;
 }
 
 /**
@@ -121,43 +122,43 @@ trait ModulesTrait
 
     private function getVarsHelper(): Modules\VarsHelper
     {
-        $this->varsHelper ??= $this->getParent()->service('modules.vars');
+        $this->varsHelper ??= $this->getServicesClass()->service('modules.vars');
         return $this->varsHelper;
     }
 
     private function getUserVarsHelper(): Modules\UserVarsHelper
     {
-        $this->userVarsHelper ??= $this->getParent()->service('modules.user');
+        $this->userVarsHelper ??= $this->getServicesClass()->service('modules.user');
         return $this->userVarsHelper;
     }
 
     private function getItemVarsHelper(): Modules\ItemVarsHelper
     {
-        $this->itemVarsHelper ??= $this->getParent()->service('modules.item');
+        $this->itemVarsHelper ??= $this->getServicesClass()->service('modules.item');
         return $this->itemVarsHelper;
     }
 
     public function getInfoHelper(): Modules\InfoHelper
     {
-        $this->infoHelper ??= $this->getParent()->service('modules.info');
+        $this->infoHelper ??= $this->getServicesClass()->service('modules.info');
         return $this->infoHelper;
     }
 
     public function getExecHelper(): Modules\ExecHelper
     {
-        $this->execHelper ??= $this->getParent()->service('modules.exec');
+        $this->execHelper ??= $this->getServicesClass()->service('modules.exec');
         return $this->execHelper;
     }
 
     private function getHooksHelper(): Modules\HooksHelper
     {
-        $this->hooksHelper ??= $this->getParent()->service('modules.hooks');
+        $this->hooksHelper ??= $this->getServicesClass()->service('modules.hooks');
         return $this->hooksHelper;
     }
 
     private function getAliasHelper(): Modules\AliasHelper
     {
-        $this->aliasHelper ??= $this->getParent()->service('modules.alias');
+        $this->aliasHelper ??= $this->getServicesClass()->service('modules.alias');
         return $this->aliasHelper;
     }
 
@@ -187,7 +188,7 @@ trait ModulesTrait
         $this->genShortUrls = $config['enableShortURLsSupport'];
         $this->genXmlUrls   = $config['generateXMLURLs'];
 
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // Modules Support Tables
         $prefix = $xar->db()->getPrefix();
 
@@ -209,7 +210,7 @@ trait ModulesTrait
      */
     public function getConfig(): array
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $systemArgs = [
             'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
             'generateXMLURLs'        => true,
@@ -327,7 +328,7 @@ trait ModulesTrait
     public function getURL(string $modType = 'user', string $funcName = 'main', array $args = [], ?string $modName = null): string
     {
         $modName ??= $this->getModName();
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         return $xar->ctl()->getModuleURL($modName, $modType, $funcName, $args);
     }
 
@@ -357,7 +358,7 @@ trait ModulesTrait
         }
 
         /** @var ServicesInterface $xar */
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // Create the output.
         return $xar->tpl()->module(

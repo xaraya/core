@@ -323,7 +323,7 @@ trait ControllerTrait
     /** @return array<string, mixed> */
     public function getConfig(): array
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $systemArgs = [
             'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
             // @todo re-evaluate this default
@@ -830,7 +830,7 @@ trait ControllerTrait
  *
  * Available methods:
  * - getModuleURL() - or use mod()->getURL() for current module
- * - getObjectURL() - or use data()->getURL() for current object
+ * - getObjectURL()
  * - getActionURL() - or use $object->getActionURL() with actual object
  * - getRouteURL() - @todo
  * - getCurrentURL()

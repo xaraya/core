@@ -105,7 +105,7 @@ class BlockCache extends ServiceClass
         $this->cacheKey = $blockInfo['module'] . '-' . $blockInfo['type'] . '-' . $blockInfo['name'];
 
         // set the cacheCode for the current cacheKey
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // the output depends on the current host, theme and locale
         $factors = $xar->req()->getHost() . $xar->tpl()->getThemeDir()

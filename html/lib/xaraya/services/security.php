@@ -62,7 +62,7 @@ trait SecurityTrait
         // if the mask is empty, use xar::mod()->checkAccess() - currently not used
         if (empty($mask) && !empty($action) && is_string($action)) {
             $modName ??= $this->getModName();
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
             return $xar->mod()->checkAccess($modName, $action) ? true : false;
         }
         // @todo mainly legacy hook module - remove 2nd argument in call later?
@@ -98,7 +98,7 @@ trait SecurityTrait
     {
         // Note: this should be restricted to gui methods
         $modName ??= $this->getModName();
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         if (empty($modName)) {
             $modName = $xar->req()->getModule();
         }
@@ -124,7 +124,7 @@ trait SecurityTrait
     {
         // Note: this should be restricted to gui methods
         $modName ??= $this->getModName();
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // We don't need this check for AJAX calls
         if ($xar->req()->getRequest()->isAjax()) {
             return true;

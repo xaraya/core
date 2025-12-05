@@ -161,7 +161,7 @@ class StaticServicesClass extends ServicesClass
      *
      * Available methods:
      * - getModuleURL() - or use mod()->getURL() for current module
-     * - getObjectURL() - or use data()->getURL() for current object
+     * - getObjectURL()
      * - getActionURL() - or use $object->getActionURL() with actual object
      * - getRouteURL() - @todo
      * - getCurrentURL()
@@ -229,6 +229,26 @@ class StaticServicesClass extends ServicesClass
     }
 
     /**
+     * Access xarTpl::* Templating methods (module, setPageTitle, ...)
+     *
+     * Available methods:
+     * - module()
+     * - block()
+     * - object()
+     * - property()
+     * - setPageTitle()
+     * - setPageTemplateName()
+     * - getImage()
+     * - getPager()
+     * - ...
+     *
+     */
+    public function tpl(): TemplatingInterface
+    {
+        return $this->getServicePrototype('tpl');
+    }
+
+    /**
      * Access xarVar::* Variables methods (fetch, get, prep, ...)
      *
      * Available methods:
@@ -261,6 +281,25 @@ class StaticServicesClass extends ServicesClass
     public function block(): BlocksInterface
     {
         return $this->getServicePrototype('block');
+    }
+
+    /**
+     * Access DataObjectFactory::* methods with context (getObject, getObjectList, ...)
+     *
+     * Available methods:
+     * - getObject()
+     * - getObjectList()
+     * - getObjectLoader()
+     * - getObjectInfo()
+     * - getObjects()
+     * - getObjectID()
+     * - getObjectDescriptor()
+     * - ...
+     *
+     */
+    public function data(): DataObjectInterface
+    {
+        return $this->getServicePrototype('data');
     }
 
     /**
@@ -305,9 +344,6 @@ class StaticServicesClass extends ServicesClass
      * - setVariable()
      * - delVariable()
      * - ...
-     *
-     * Required methods in parent:
-     * - getObject() for cache()->getObjectKey(null, '...')
      *
      */
     public function cache(): CachingInterface

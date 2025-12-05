@@ -65,7 +65,7 @@ class ExecHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // Get a cache key for this module function if it's suitable for module caching
         $cacheKey = $xar->cache()->getModuleKey($modName, $modType, $funcName, $args);
@@ -117,7 +117,7 @@ class ExecHelper extends ServiceClass
     protected function callFunc($modName, $modType, $funcName, $args, $funcType = '')
     {
         assert(($funcType == "api" || $funcType == ""));
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // Build function name
         $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
@@ -164,7 +164,7 @@ class ExecHelper extends ServiceClass
                     return $xar->ctl()->notFound('Function not found');
                 }
             }
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
 
             $xar->log()->info("xar::mod()->callFunc: Calling $modFunc");
 
@@ -224,7 +224,7 @@ class ExecHelper extends ServiceClass
         if (isset($this->loadedModuleCache[$cacheKey])) {
             return true;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // Log it when it doesn't come from the cache
         $xar->log()->debug("xar::mod()->load: Loading $modName:$modType");
@@ -350,7 +350,7 @@ class ExecHelper extends ServiceClass
                     $this->moduleClasses[$modName] = new $class($modName, $this->getContext(), $this->getParent());
                 } catch (Throwable $e) {
                     $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext());
-                    $xar = $this->getParent();
+                    $xar = $this->getServicesClass();
                     $xar->log()->warning("xar::mod()->getModule: Error loading $class for module $modName");
                 }
             } else {
@@ -376,7 +376,7 @@ class ExecHelper extends ServiceClass
     {
         $key = "$modName:$modType:$funcName:$callType";
         if (!array_key_exists($key, $this->getMethodCache)) {
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
             $module = $this->getModule($modName);
             // returns null for DefaultModule() = no suitable class method
             $this->getMethodCache[$key] = $module->getCallableMethod($modType, $funcName, $callType);

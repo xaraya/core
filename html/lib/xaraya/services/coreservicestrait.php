@@ -172,7 +172,7 @@ trait CoreServicesTrait
      *
      * Available methods:
      * - getModuleURL() - or use mod()->getURL() for current module
-     * - getObjectURL() - or use data()->getURL() for current object
+     * - getObjectURL()
      * - getActionURL() - or use $object->getActionURL() with actual object
      * - getRouteURL() - @todo
      * - getCurrentURL()
@@ -323,12 +323,12 @@ trait CoreServicesTrait
      * - ...
      *
      * Optional methods in parent:
-     * - getModName() for tpl()->setPageTitle()
+     * - getModName() for tpl()->setPageTitle() - @deprecated 2.9.2 use xar::mod()->getName() instead
      *
      */
     public function tpl(): TemplatingInterface
     {
-        return $this->service('tpl');
+        return $this->getStaticServices()->tpl();
     }
 
     /**
@@ -370,8 +370,8 @@ trait CoreServicesTrait
      * Access DataObjectFactory::* methods with context (getObject, getObjectList, ...)
      *
      * Available methods:
-     * - getURL() for current object - or use ctl()->getObjectURL() in general with objectName
-     * - template() for current object - or use tpl()->object() in general with modName objectTemplate
+     * - getURL() for current object - @deprecated 2.9.0 use xar::ctl()->getObjectURL() instead
+     * - template() for current object - @deprecated 2.9.2 use xar::tpl()->object() instead
      * - getObject()
      * - getObjectList()
      * - getObjectLoader()
@@ -382,12 +382,14 @@ trait CoreServicesTrait
      * - ...
      *
      * Required methods in parent:
-     * - getObjectName() for data()->getURL()
+     * - getObjectName() for data()->getURL() - @deprecated 2.9.0 use xar::ctl()->getObjectURL() instead
+     * - getModName() for data()->template() - @deprecated 2.9.2 use xar::tpl()->object() instead
+     * - getObjectTemplate() for data()->template() - @deprecated 2.9.2 use xar::tpl()->object() instead
      *
      */
     public function data(): DataObjectInterface
     {
-        return $this->service('data');
+        return $this->getStaticServices()->data();
     }
 
     /**
@@ -432,9 +434,6 @@ trait CoreServicesTrait
      * - setVariable()
      * - delVariable()
      * - ...
-     *
-     * Required methods in parent:
-     * - getObject() for cache()->getObjectKey(null, '...')
      *
      */
     public function cache(): CachingInterface

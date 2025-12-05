@@ -242,7 +242,7 @@ trait MultiLanguageTrait
      */
     public function getConfig(): array
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // FIXME: Site.MLS.MLSMode is null during install
         try {
             $systemArgs = [
@@ -312,7 +312,7 @@ trait MultiLanguageTrait
         if ($this->getCurrentLocale() == $locale) {
             return true;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $xar->log()->info("Changing the default locale from " . $this->getCurrentLocale() . " to " . $locale);
 
@@ -442,7 +442,7 @@ trait MultiLanguageTrait
             $locale = $this->defaultLocale;
         }
         if (!isset($timezone)) {
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
             if ($xar->user()->isLoggedIn()) {
                 $timezone = $xar->mod('roles')->getUserVar('usertimezone');
             } else {
@@ -631,7 +631,7 @@ trait MultiLanguageTrait
      */
     public function loadTranslations(string $path): bool
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $xar->log()->debug("MLS: Loading translations for the path: $path");
         // @todo with migration to module class methods, it doesn't matter if the old path still exists
         //if(!file_exists($path)) {
@@ -705,7 +705,7 @@ trait MultiLanguageTrait
      */
     protected function _loadTranslations($domainType, $domainName, $contextType, $contextName)
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $xar->log()->debug("MLS: Loading translations for the context " . "$domainType,$domainName,$contextType,$contextName");
 

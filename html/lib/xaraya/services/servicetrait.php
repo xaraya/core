@@ -107,6 +107,11 @@ trait ServiceTrait
         $this->parent = $parent;
     }
 
+    public function getServicesClass(): StaticServicesClass
+    {
+        return $this->getParent()->getStaticServices();
+    }
+
     /**
      * Create a specialized version of this service instance.
      * By default, it just returns a clone of itself.

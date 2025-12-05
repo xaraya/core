@@ -191,7 +191,7 @@ trait TemplatingTrait
      */
     public function getConfig(): array
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $systemArgs = [
             'enableTemplatesCaching' => $xar->config()->getVar('Site.BL.CacheTemplates'),
             'defaultThemeDir'        => $xar->mod('themes')->getVar('default_theme') ?? 'default',
@@ -241,8 +241,7 @@ trait TemplatingTrait
      */
     public function module(string $modName, string $modType, string $funcName, array $tplData = [], ?string $templateName = null): string
     {
-        // Add standard template variables (module, itemtype and context)
-        // @todo $tplData = $this->prepare($tplData);
+        // Add standard template variables (context)
         $tplData['context'] ??= $this->getContext();
 
         // See if we have a special template to apply
@@ -270,7 +269,7 @@ trait TemplatingTrait
         $tpl->pageTitle = $this->getPageTitle();
         $tplData['tpl'] = $tpl;
 
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // TODO: make this work different, for example:
         // 1. Only create a link somewhere on the page,
         //    when clicked opens a page with the variables on that page
@@ -301,8 +300,7 @@ trait TemplatingTrait
      */
     public function block(string $modName, string $blockType, array $tplData = [], ?string $tplName = null, ?string $tplBase = null, ?string $tplModule = null): string
     {
-        // Add standard template variables (module, itemtype and context)
-        // @todo $tplData = $this->prepare($tplData);
+        // Add standard template variables (context)
         $tplData['context'] ??= $this->getContext();
 
         // use name of blocktype as base unless over-ridden
@@ -337,8 +335,7 @@ trait TemplatingTrait
      */
     public function object(string $modName, string $objectName, string $tplType, array $tplData = []): string
     {
-        // Add standard template variables (module, itemtype and context)
-        // @todo $tplData = $this->prepare($tplData);
+        // Add standard template variables (context)
         $tplData['context'] ??= $this->getContext();
 
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
@@ -346,7 +343,7 @@ trait TemplatingTrait
                 return $this->getTwigTpl()->object($modName, $objectName, $tplType, $tplData);
             }
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $modName = xarVarPrep::path($modName);
         $objectName = xarVarPrep::path($objectName);
         $tplType = xarVarPrep::path($tplType);
@@ -384,8 +381,7 @@ trait TemplatingTrait
      */
     public function property(string $modName, string $propertyName, string $tplType = 'showoutput', array $tplData = [], ?string $tplBase = null): string
     {
-        // Add standard template variables (module, itemtype and context)
-        // @todo $tplData = $this->prepare($tplData);
+        // Add standard template variables (context)
         $tplData['context'] ??= $this->getContext();
 
         // @todo check and handle stand-alone properties with module 'auto' + adapt includes path
@@ -394,7 +390,7 @@ trait TemplatingTrait
                 return $this->getTwigTpl()->property($modName, $propertyName, $tplType, $tplData, $tplBase);
             }
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $modName = xarVarPrep::path($modName);
         $propertyName = xarVarPrep::path($propertyName);
         $tplType = xarVarPrep::path($tplType);
@@ -466,11 +462,7 @@ trait TemplatingTrait
      */
     public function setPageTitle(string $title, ?string $modName = null): bool
     {
-        // getModName() might not be available on all parents, so check first
-        if (empty($modName) && method_exists($this->getParent(), 'getModName')) {
-            $modName = $this->getParent()->getModName();
-        }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // keep track of page title when we're caching
         $xar->cache()->setPageTitle($title, $modName);
@@ -530,7 +522,7 @@ trait TemplatingTrait
     public function setPageTemplateName(string $templateName): bool
     {
         assert($templateName != "");
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $xar->log()->info("xar::tpl()->setPageTemplateName: Setting the template name to $templateName");
 
@@ -550,7 +542,7 @@ trait TemplatingTrait
     public function setDoctype(string $doctypeName): bool
     {
         assert(is_string($doctypeName));
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $xar->log()->info("xar::tpl()->setDoctype: Setting the doc type to $doctypeName");
 
@@ -581,7 +573,7 @@ trait TemplatingTrait
     public function setBaseDir(string $themesDir): bool
     {
         assert($themesDir != "" && $themesDir[0] != "/");
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $xar->log()->info("xar::tpl()->setBaseDir: Setting the theme base dir to $themesDir");
 
@@ -603,7 +595,7 @@ trait TemplatingTrait
      */
     public function getBaseDir(): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         try {
             $themesdir = sys::web() . $xar->config()->getVar('Site.BL.ThemesDirectory', 'themes');
         } catch (Exception $e) {
@@ -632,7 +624,7 @@ trait TemplatingTrait
     public function setThemeDir(string $themeDir): bool
     {
         assert($themeDir != "" && $themeDir[0] != "/");
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $xar->log()->info("xar::tpl()->setThemeDir: Setting the theme dir to $themeDir");
 
@@ -660,7 +652,7 @@ trait TemplatingTrait
         if (isset($this->themeName)) {
             return $this->themeName;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // If it is not set, set it return the default theme.
         // @checkme: modules is a depency of templates, redundant check?
         if ($xar->mod()->isLoaded()) {
@@ -681,7 +673,7 @@ trait TemplatingTrait
     public function setThemeName(string $themeName): bool
     {
         assert($themeName != "" && $themeName[0] != "/");
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $xar->log()->info("xar::tpl()->setThemeName: Setting the theme name to $themeName");
 
@@ -715,7 +707,7 @@ trait TemplatingTrait
      */
     public function getThemeUrl(?string $theme = null): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $themeDir = $this->getThemeDir($theme);
 
         // Turn relative path into an absolute URL
@@ -733,7 +725,7 @@ trait TemplatingTrait
      */
     public function getCodeUrl(): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         $codeDir = sys::code();
 
         // Turn relative path into an absolute URL
@@ -767,7 +759,7 @@ trait TemplatingTrait
             $package = $scope;
             $scope = 'module';
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $paths = [];
         switch ($scope) {
@@ -889,7 +881,7 @@ trait TemplatingTrait
         if ($scope != 'theme' && $scope != 'module' && $scope != 'property' && $scope != 'block') {
             return null;
         }
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         $paths = [];
         switch ($scope) {
@@ -980,7 +972,7 @@ trait TemplatingTrait
      */
     public function string(string $templateCode, array $tplData): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // Pretend as if the cache is fully operational and we'll be fine
         xarTemplateCache::saveEntry('memory', $templateCode);
 
@@ -1156,7 +1148,7 @@ trait TemplatingTrait
     {
         assert(!empty($sourceFileName));
         assert(is_array($tplData));
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
 
         // cache frequently-used cachedfilenames
         if ($xar->mem()->has('Templates.ExecuteFromFile', $sourceFileName)) {
@@ -1210,7 +1202,7 @@ trait TemplatingTrait
      */
     public function outputTemplate(string $sourceFileName, string $tplOutput): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // flag used to determine if the header content has been found.
         if (!isset($this->isHeaderContent)) {
             $this->isHeaderContent = false;
@@ -1247,7 +1239,7 @@ trait TemplatingTrait
      */
     public function outputPHPCommentBlockInTemplates(): int
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         try {
             // We need to make sure enough of the core is loaded to run this
             $allowed = $xar->user()->isLoaded();
@@ -1283,7 +1275,7 @@ trait TemplatingTrait
     public function outputTemplateFilenames(): int
     {
         if (!isset($this->showTemplateFilenames)) {
-            $xar = $this->getParent();
+            $xar = $this->getServicesClass();
             // Default to not showing it
             $this->showTemplateFilenames = 0;
             // @checkme: modules is a depency of templates, redundant check?
@@ -1374,7 +1366,7 @@ trait TemplatingTrait
      */
     protected function getScopeFileName(string $scope, string $package, string $tplBase, ?string $tplName = null, string $tplPart = '', ?string $callerMod = null): string
     {
-        $xar = $this->getParent();
+        $xar = $this->getServicesClass();
         // prep input
         $package = xarVarPrep::path($package);
         $tplBase = xarVarPrep::path($tplBase);
@@ -1516,7 +1508,7 @@ trait TemplatingTrait
  * Available methods:
  * - module() - or use mod()->template() for current module
  * - block()
- * - object() - or use data()->template() for current object
+ * - object()
  * - property()
  * - setPageTitle()
  * - setPageTemplateName()
@@ -1525,7 +1517,7 @@ trait TemplatingTrait
  * - ...
  *
  * Optional methods in parent:
- * - getModName() for tpl()->setPageTitle()
+ * - getModName() for tpl()->setPageTitle() - @deprecated 2.9.2 use xar::mod()->getName() instead
  *
  */
 class TemplatingService implements TemplatingInterface
@@ -1534,6 +1526,7 @@ class TemplatingService implements TemplatingInterface
 
     /**
      * Get name of the module from parent
+     * @deprecated 2.9.2 use xar::mod()->getName() instead
      */
     public function getModName(): string
     {

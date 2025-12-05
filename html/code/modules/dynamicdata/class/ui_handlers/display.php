@@ -34,7 +34,7 @@ class DisplayHandler extends DefaultHandler
      *     $args['itemid'] item id of the object to display, and/or
      *     $args['preview'] true if you want dd to call checkInput() = standard dd preview using GET/POST params, or
      *     $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
-     * @return string|void output of data()->template() using 'ui_display'
+     * @return string|void output of $this->template() using 'ui_display'
      */
     public function run(array $args = [])
     {
@@ -119,7 +119,7 @@ class DisplayHandler extends DefaultHandler
             'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
-        $output = $this->data()->template(
+        $output = $this->template(
             'ui_display',
             $data
         );
