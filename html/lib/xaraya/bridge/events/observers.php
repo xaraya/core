@@ -50,7 +50,7 @@ namespace Xaraya\Bridge\Events;
 
 //use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 interface ObserverBridgeInterface
 {
@@ -66,7 +66,7 @@ interface ObserverBridgeInterface
 
 class EventObserverBridge implements ObserverBridgeInterface
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     protected static $eventNamePrefix = 'xarEvents';
     protected static $observedEvents = [];

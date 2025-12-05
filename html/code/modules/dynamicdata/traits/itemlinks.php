@@ -14,15 +14,15 @@
 
 namespace Xaraya\Modules\DynamicData\Traits;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 use DataObjectFactory;
 use DataPropertyMaster;
 
 /**
  * For documentation purposes only - available via ItemLinksTrait
  */
-interface ItemLinksInterface extends ContextInterface
+interface ItemLinksInterface extends WithContextInterface
 {
     /**
      * Utility function to retrieve the DD objects of this module (if any).
@@ -53,7 +53,7 @@ interface ItemLinksInterface extends ContextInterface
  */
 trait ItemLinksTrait
 {
-    use ContextTrait;
+    use WithContextTrait;
 
     /** @var array<string, mixed> */
     protected static array $_itemlinkObjects = [];

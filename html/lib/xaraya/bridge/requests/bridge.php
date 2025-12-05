@@ -12,20 +12,20 @@
 
 namespace Xaraya\Bridge\Requests;
 
-use Xaraya\Caching\CacheInterface;
-use Xaraya\Caching\CacheTrait;
-use Xaraya\Tools\TimerInterface;
-use Xaraya\Tools\TimerTrait;
+use Xaraya\Caching\WithCacheInterface;
+use Xaraya\Caching\WithCacheTrait;
+use Xaraya\Tools\WithTimerInterface;
+use Xaraya\Tools\WithTimerTrait;
 
 /**
  * Bridge for generic requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  * @phpstan-type RouteDef array{0: string|array<string>, 1: string, 2: mixed, 3: array<string, mixed>}
  */
-class BridgeRequest extends BasicRequest implements BasicBridgeInterface, CacheInterface, TimerInterface
+class BridgeRequest extends BasicRequest implements BasicBridgeInterface, WithCacheInterface, WithTimerInterface
 {
     use BasicBridgeTrait;
-    use TimerTrait;  // activate with $this->enableTimer(true)
-    use CacheTrait;  // activate with $this->enableCache(true)
+    use WithTimerTrait;  // activate with $this->enableTimer(true)
+    use WithCacheTrait;  // activate with $this->enableCache(true)
 
     public function __construct($xar = null)
     {

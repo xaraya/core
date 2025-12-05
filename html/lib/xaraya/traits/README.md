@@ -14,12 +14,12 @@ Trait to cache variables in other classes
 
 Usage:
 ```
-use Xaraya\Caching\CacheInterface;
-use Xaraya\Caching\CacheTrait;
+use Xaraya\Caching\WithCacheInterface;
+use Xaraya\Caching\WithCacheTrait;
 
-class myFancyClass implements CacheInterface
+class myFancyClass implements WithCacheInterface
 {
-    use CacheTrait;  // activate with $this->$enableCache(true)
+    use WithCacheTrait;  // activate with $this->$enableCache(true)
 
     public function __construct()
     {
@@ -56,12 +56,12 @@ Trait to trace time and record steps taken
 
 Usage:
 ```
-use Xaraya\Tools\TimerInterface;
-use Xaraya\Tools\TimerTrait;
+use Xaraya\Tools\WithTimerInterface;
+use Xaraya\Tools\WithTimerTrait;
 
-class myFancyClass implements TimerInterface
+class myFancyClass implements WithTimerInterface
 {
-    use TimerTrait;  // activate with $this->enableTimer(true)
+    use WithTimerTrait;  // activate with $this->enableTimer(true)
 
     public function __construct()
     {
@@ -129,14 +129,14 @@ Usage:
 ```
 namespace Xaraya\Modules\Library;
 
-use Xaraya\Database\DatabaseInterface;
-use Xaraya\Database\DatabaseTrait;
+use Xaraya\Database\WithDatabaseInterface;
+use Xaraya\Database\WithDatabaseTrait;
 use sys;
 
 
-class UserApi implements DatabaseInterface
+class UserApi implements WithDatabaseInterface
 {
-    use DatabaseTrait;
+    use WithDatabaseTrait;
 }
 ```
 
@@ -146,12 +146,12 @@ Trait to add context in other classes
 
 Usage:
 ```
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 
-class myFancyClass implements ContextInterface
+class myFancyClass implements WithContextInterface
 {
-    use ContextTrait;
+    use WithContextTrait;
 
     public function doSomething()
     {
@@ -166,7 +166,7 @@ class myFancyClass implements ContextInterface
 
 ## Module Traits
 
-Trait to get module classes via xar::mod()->getModule(), and associated traits for user/admin api/gui classes.
+Trait to get module classes via xar::module(), and associated traits for user/admin api/gui classes.
 
 Usage:
 ```
@@ -216,7 +216,7 @@ class UserGui implements UserGuiInterface
 # xaruser/main.php or xaruser.php (migration)
 function myfancymodule_user_main($args = [], $context = null) {
     // get module class instance first
-    //$module = xar::mod()->getModule('myfancymodule');
+    //$module = xar::module('myfancymodule');
     //$module->setContext($context);
     //return $module->usergui()->main($args);
     // or get module gui directly
@@ -228,7 +228,7 @@ function myfancymodule_user_main($args = [], $context = null) {
 # xaruserapi/get.php or xaruserapi.php (migration)
 function myfancymodule_userapi_get($args = [], $context = null) {
     // get module class instance first
-    //$module = xar::mod()->getModule('myfancymodule');
+    //$module = xar::module('myfancymodule');
     //$module->setContext($context);
     //return $module->userapi()->get($args);
     // or get module api directly

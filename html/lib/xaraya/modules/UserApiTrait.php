@@ -26,7 +26,7 @@
  * # xaruserapi/get.php or xaruserapi.php (migration)
  * function myfancymodule_userapi_get($args = [], $context = null) {
  *     // get module class instance first
- *     //$module = xar::mod()->getModule('myfancymodule');
+ *     //$module = xar::module('myfancymodule');
  *     //$module->setContext($context);
  *     //return $module->userapi()->get($args);
  *     // or get module api directly

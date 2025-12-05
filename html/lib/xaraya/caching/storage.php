@@ -13,11 +13,11 @@
  * @todo get the var directory from the configured sys:varpath(), dont hardcode
 **/
 
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 class xarCache_Storage extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public string $storage    = '';        // filesystem, database, apcu or doctrine cache
     public string $cachedir   = 'var/cache/output';

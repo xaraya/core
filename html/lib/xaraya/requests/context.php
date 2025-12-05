@@ -19,9 +19,9 @@ use RuntimeException;
 /**
  * Request instance with context for use with xar::req()->setInstance() etc.
  */
-class RequestContext implements ContextInterface, RequestInterface
+class RequestContext implements WithContextInterface, RequestInterface
 {
-    use ContextTrait;
+    use WithContextTrait;
 
     public static string $cookieName = 'XARAYASID';
     public static string $remoteUser = 'REMOTE_USER';

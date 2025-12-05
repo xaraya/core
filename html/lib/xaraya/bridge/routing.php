@@ -265,7 +265,7 @@ class RoutingBridge extends BridgeRequest
                 echo $result;
             }
         } else {
-            // from BasicBridgeTrait - WithServicesClass
+            // from BasicBridgeTrait - WithServicesTrait
             $xar = $this->getServicesClass();
             if (!empty($xar->req()->getServerVar('HTTP_ORIGIN'))) {
                 header('Access-Control-Allow-Origin: *');

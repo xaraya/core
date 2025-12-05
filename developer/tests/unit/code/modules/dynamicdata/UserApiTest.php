@@ -55,7 +55,7 @@ final class UserApiTest extends TestHelper
     public function testUserApiContext(): void
     {
         // reset context of dd module class first
-        $module = xar::mod()->getModule('dynamicdata');
+        $module = xar::module('dynamicdata');
         $module->setContext(null);
 
         $context = $this->createContext(['source' => __METHOD__]);

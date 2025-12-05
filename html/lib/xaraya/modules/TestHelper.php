@@ -108,7 +108,7 @@ class TestHelper extends TestCase
         $moduleName = implode('\\', $parts) . '\Module';
         assert(is_subclass_of($moduleName, ModuleInterface::class));
         //return new $moduleName($modName);
-        return $xar->mod()->getModule($modName);
+        return $xar->module($modName);
     }
 
     /**
@@ -128,7 +128,7 @@ class TestHelper extends TestCase
         assert(is_subclass_of($parentName, ModuleClassInterface::class));
         //return new $parentName($modName);
         $classType = array_pop($parts);
-        return $xar->mod()->getModule($modName)->getComponent($classType);
+        return $xar->module($modName)->getComponent($classType);
     }
 
     /**

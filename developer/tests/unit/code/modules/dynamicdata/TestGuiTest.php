@@ -30,6 +30,14 @@ final class TestGuiTest extends TestHelper
         $this->assertEquals($expected, $testgui::class);
     }
 
+    public function testGetModule(): void
+    {
+        $expected = TestGui::class;
+        $module = xar::mod()->getModule('dynamicdata');
+        $testgui = $module->getComponent('TestGui');
+        $this->assertEquals($expected, $testgui::class);
+    }
+
     public function testModClass(): void
     {
         $expected = TestGui::class;
@@ -47,7 +55,7 @@ final class TestGuiTest extends TestHelper
     public function testGetTestGui(): void
     {
         $expected = TestGui::class;
-        $testgui = xar::mod()->getModule('dynamicdata')->getTestGUI();
+        $testgui = xar::module('dynamicdata')->getTestGUI();
         $this->assertEquals($expected, $testgui::class);
     }
 

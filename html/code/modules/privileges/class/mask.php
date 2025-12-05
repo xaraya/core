@@ -17,11 +17,11 @@
  * @access  public
 */
 
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 class xarMask extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public const PRIVILEGES_PRIVILEGETYPE = 2;
     public const PRIVILEGES_MASKTYPE = 3;

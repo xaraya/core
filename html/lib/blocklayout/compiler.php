@@ -20,7 +20,7 @@
  * @author Garrett Hunter <garrett@blacktower.com>
  * @todo  This is still the architecture of BL1, just stripped. We can do a lot better.
  */
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
 
 /**
@@ -56,7 +56,7 @@ interface IxarBLCompiler
  */
 class xarBLCompiler extends xarObject implements IxarBLCompiler
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     /** @var ?xarBLCompiler */
     public static $instance  = null;

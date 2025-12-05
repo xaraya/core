@@ -16,8 +16,8 @@
 
 namespace Xaraya\Services;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 use Xaraya\Modules\ModuleClassInterface;
 use Xaraya\Modules\ModuleInterface;
 use sys;
@@ -26,7 +26,7 @@ use Exception;
 /**
  * For documentation purposes only - available via CoreServicesTrait
  */
-interface CoreServicesInterface extends ContextInterface
+interface CoreServicesInterface extends WithContextInterface
 {
     /** @param array<string, mixed> $args */
     public function setCoreServices(array $args = []): void;
@@ -83,7 +83,7 @@ interface CoreServicesInterface extends ContextInterface
  */
 trait CoreServicesTrait
 {
-    use ContextTrait;
+    use WithContextTrait;
 
     /**
      * Instance-level cache for parent-specific or mocked services.

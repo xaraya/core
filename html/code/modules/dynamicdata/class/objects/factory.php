@@ -742,7 +742,7 @@ class DataObjectFactory extends xarObject
         if ($objectref instanceof DataObjectList) {
             $objectref->datastore->_itemids = [];
         }
-        // @see Xaraya\Context\ContextTrait::__clone()
+        // @see Xaraya\Context\WithContextTrait::__clone()
         $objectref->setContext(null);
     }
 

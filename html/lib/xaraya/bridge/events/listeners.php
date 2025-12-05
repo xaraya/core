@@ -46,7 +46,7 @@
 namespace Xaraya\Bridge\Events;
 
 use Psr\EventDispatcher\ListenerProviderInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use ixarEventSubject;
 use ixarHookSubject;
 use Exception;
@@ -56,7 +56,7 @@ use Exception;
  */
 class EventListenerProvider implements ListenerProviderInterface
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public $type = 'xarEvents';
     public $attached = [];

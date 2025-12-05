@@ -16,15 +16,21 @@
 
 namespace Xaraya\Services;
 
+interface WithServicesInterface
+{
+    public function getServicesClass(?ServicesInterface $xar = null): StaticServicesClass;
+    public function setServicesClass(?ServicesInterface $xar): void;
+}
+
 /**
  * Make Core Services available via $this->getServicesClass() in trait (instance method)
  *
  * ```
- * use Xaraya\Services\WithServicesClass;
+ * use Xaraya\Services\WithServicesTrait;
  *
  * class MyFancyClass
  * {
- *     use WithServicesClass;
+ *     use WithServicesTrait;
  *
  *     public function helloWorld():
  *     {
@@ -35,7 +41,7 @@ namespace Xaraya\Services;
  * }
  * ```
  */
-trait WithServicesClass
+trait WithServicesTrait
 {
     // aligned with CoreServicesTrait if both are used, e.g. DD UtilApi or Library = UserApiTrait + DatabaseTrait
     protected ?StaticServicesClass $xarServices = null;
@@ -60,4 +66,12 @@ trait WithServicesClass
         // set static services from the parent, e.g. UserGui()
         $this->xarServices = $xar->getStaticServices();
     }
+}
+
+/**
+ * @deprecated 2.9.3 use WithServicesTrait() instead
+ */
+trait WithServicesClass
+{
+    use WithServicesTrait;
 }

@@ -9,10 +9,10 @@
 namespace Xaraya\Routing;
 
 use Xaraya\Context\Context;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextTrait;
 use Xaraya\Modules\GuiModuleClassInterface;
 use Xaraya\Modules\ModuleClassInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use FunctionNotFoundException;
 
 /**
@@ -34,8 +34,8 @@ use FunctionNotFoundException;
  */
 class ModuleHandler implements HandlerInterface
 {
-    use ContextTrait;
-    use WithServicesClass;
+    use WithContextTrait;
+    use WithServicesTrait;
 
     protected ModuleClassInterface $instance;
     protected string $funcName;

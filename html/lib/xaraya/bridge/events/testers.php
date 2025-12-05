@@ -37,14 +37,14 @@ namespace Xaraya\Bridge\Events;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Exception;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 /**
  * Test the event observer bridges in observers.php by subscribing to a few events and/or hooks here
  */
 class TestObserverBridgeSubscriber implements EventSubscriberInterface
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public static $subscribedEvents = [];
 

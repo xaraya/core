@@ -164,7 +164,7 @@ final class SerializeServicesTest extends TestCase
     public function testModuleClass(): void
     {
         $xar = xar::getServicesClass();
-        $module = $xar->mod()->getModule('dynamicdata');
+        $module = $xar->module('dynamicdata');
         $expected = $module;
 
         // this creates an equivalent ModuleClass() = not same but equal
@@ -188,7 +188,7 @@ final class SerializeServicesTest extends TestCase
     public function testModuleClassTrait(): void
     {
         $xar = xar::getServicesClass();
-        $restapi = $xar->mod()->getModule('dynamicdata')->restapi();
+        $restapi = $xar->module('dynamicdata')->restapi();
         $expected = $restapi;
 
         // this creates an equivalent ModuleClassTrait() = not same but equal

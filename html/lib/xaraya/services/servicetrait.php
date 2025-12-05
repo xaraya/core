@@ -16,8 +16,8 @@
 
 namespace Xaraya\Services;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 use Xaraya\Context\Context;
 
 if (interface_exists('Xaraya\Services\ServiceInterface', false)) {
@@ -27,7 +27,7 @@ if (interface_exists('Xaraya\Services\ServiceInterface', false)) {
 /**
  * For documentation purposes only - available via ServiceTrait
  */
-interface ServiceInterface extends ContextInterface
+interface ServiceInterface extends WithContextInterface
 {
     public function __construct(mixed $parent);
     /** @param array<string, mixed> $config */
@@ -50,7 +50,7 @@ interface ServiceInterface extends ContextInterface
  */
 trait ServiceTrait
 {
-    use ContextTrait;
+    use WithContextTrait;
 
     public mixed $parent;
 
@@ -190,9 +190,9 @@ class ServiceClass implements ServiceInterface
  * Dummy parent with context for facades
  * @todo handle context for facades
  */
-class DummyParent implements ContextInterface
+class DummyParent implements WithContextInterface
 {
-    use ContextTrait;
+    use WithContextTrait;
 
     protected mixed $parent = null;
 

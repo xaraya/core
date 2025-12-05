@@ -2,9 +2,9 @@
 
 namespace Xaraya\DataObject\Generated;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
+use Xaraya\Services\WithServicesTrait;
 use DataContainer;
 use DataObjectDescriptor;
 use DataObject;
@@ -70,10 +70,10 @@ interface iGeneratedClass
  *     $coll[] = new Sample(null, ['name' => "Item $i", 'age' => $i]);
  * }
  */
-class GeneratedClass extends DataContainer implements iGeneratedClass, ContextInterface
+class GeneratedClass extends DataContainer implements iGeneratedClass, WithContextInterface
 {
-    use ContextTrait;
-    use WithServicesClass;
+    use WithContextTrait;
+    use WithServicesTrait;
 
     /** @var string */
     protected static $_objectName = 'OVERRIDE';

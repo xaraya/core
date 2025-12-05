@@ -5,12 +5,12 @@
  *
  * Usage:
  * ```
- * use Xaraya\Context\ContextInterface;
- * use Xaraya\Context\ContextTrait;
+ * use Xaraya\Context\WithContextInterface;
+ * use Xaraya\Context\WithContextTrait;
  *
- * class myFancyClass implements ContextInterface
+ * class myFancyClass implements WithContextInterface
  * {
- *     use ContextTrait;
+ *     use WithContextTrait;
  *
  *     public function doSomething()
  *     {
@@ -37,9 +37,9 @@
 namespace Xaraya\Context;
 
 /**
- * For documentation purposes only - available via ContextTrait
+ * For documentation purposes only - available via WithContextTrait
  */
-interface ContextInterface
+interface WithContextInterface
 {
     /**
      * @return ?Context<string, mixed>
@@ -65,9 +65,17 @@ interface ContextInterface
 }
 
 /**
- * Summary of ContextTrait
+ * @deprecated 2.9.3 use WithContextInterface() instead
  */
-trait ContextTrait
+interface ContextInterface extends WithContextInterface
+{
+    // ...
+}
+
+/**
+ * Summary of WithContextTrait
+ */
+trait WithContextTrait
 {
     /** @var ?Context<string, mixed> */
     protected $context = null;
@@ -106,4 +114,12 @@ trait ContextTrait
         // @todo check context in concurrent environment
         // $this->context = null;
     }
+}
+
+/**
+ * @deprecated 2.9.3 use WithContextTrait() instead
+ */
+trait ContextTrait
+{
+    use WithContextTrait;
 }

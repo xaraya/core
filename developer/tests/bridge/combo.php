@@ -13,15 +13,15 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
 use Xaraya\Bridge\Middleware\RoutingHandler;
-use Xaraya\Tools\TimerInterface;
-use Xaraya\Tools\TimerTrait;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Tools\WithTimerInterface;
+use Xaraya\Tools\WithTimerTrait;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
 
-class LocalTimer implements TimerInterface
+class LocalTimer implements WithTimerInterface
 {
-    use TimerTrait;  // activate with $this->enableTimer(true)
-    use WithServicesClass;
+    use WithTimerTrait;  // activate with $this->enableTimer(true)
+    use WithServicesTrait;
 }
 $timer = new LocalTimer();
 

@@ -13,7 +13,7 @@
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
 
 /**
@@ -25,7 +25,7 @@ use Xaraya\Services\xar;
 **/
 class CompiledTemplate extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     /** @var ?string */
     protected $fileName = null;   // where is it stored?

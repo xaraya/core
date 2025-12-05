@@ -13,7 +13,7 @@
 namespace Xaraya\DataObject\DataStores;
 
 use Xaraya\Database\ExternalDatabase;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
 use xarObject;
 use DataObject;
@@ -28,7 +28,7 @@ use sys;
  */
 class DDObject extends xarObject implements IDDObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     /** @var string */
     public $name;

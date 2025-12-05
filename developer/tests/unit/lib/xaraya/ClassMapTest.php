@@ -431,8 +431,9 @@ final class ClassMapTest extends TestCase
             'module' => 'roles',
             'itemtype' => 1,
         ];
+        $xar = \Xaraya\Services\xar::getServicesClass();
         $descriptor = new VirtualObjectDescriptor($defaults);
-        $instance = new $result['classname']($descriptor);
+        $instance = new $result['classname']($descriptor, $xar);
         $this->assertInstanceOf($expected['classname'], $instance);
 
         // we have 2 classes here: Role and RoleList - try without suffix to get duplicate exception
@@ -711,7 +712,8 @@ final class ClassMapTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        $instance = new \Xaraya\Modules\DynamicData\UserGui('dynamicdata');
+        $module = new \Xaraya\Modules\DynamicData\Module('dynamicdata');
+        $instance = new \Xaraya\Modules\DynamicData\UserGui('dynamicdata', $module);
 
         $expected = $result['classname'];
         $moduleHandler = new $result['classname']($instance);

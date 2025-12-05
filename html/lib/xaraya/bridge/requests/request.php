@@ -12,15 +12,15 @@
 
 namespace Xaraya\Bridge\Requests;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 
 /**
  * Handle generic requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  * Accepts PSR-7 compatible server requests, xarRequest (partial use), context or nothing (using $_SERVER)
  */
-class BasicRequest implements CommonRequestInterface, ContextInterface
+class BasicRequest implements CommonRequestInterface, WithContextInterface
 {
     use CommonRequestTrait;
-    use ContextTrait;
+    use WithContextTrait;
 }

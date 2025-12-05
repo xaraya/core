@@ -42,11 +42,11 @@ namespace Xaraya\Bridge\TemplateEngine;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 use Xaraya\Context\Context;
 use Xaraya\Services\ServicesInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use xarConst;
 use sys;
 
@@ -61,10 +61,10 @@ use sys;
  * 5. PHPOtherExtension - see phpothers.php
  *
  */
-class TwigBridge implements ContextInterface
+class TwigBridge implements WithContextInterface
 {
-    use ContextTrait;
-    use WithServicesClass;
+    use WithContextTrait;
+    use WithServicesTrait;
 
     /** @var array<string, string> */
     private array $paths = [];

@@ -12,9 +12,9 @@ use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use Xaraya\Bridge\RestAPI\RestAPIRoutes;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use Xaraya\Context\Context;
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
+use Xaraya\Services\WithServicesTrait;
 use xarClassMap;
 use sys;
 use Exception;
@@ -23,10 +23,10 @@ use FunctionNotFoundException;
 /**
  * Module dispatcher for routing & dispatching outside Xaraya
  */
-class Dispatcher implements ContextInterface
+class Dispatcher implements WithContextInterface
 {
-    use ContextTrait;
-    use WithServicesClass;
+    use WithContextTrait;
+    use WithServicesTrait;
 
     public string $baseUri = '';
     public string $basePath = '';

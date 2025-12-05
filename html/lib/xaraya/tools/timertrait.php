@@ -5,12 +5,12 @@
  *
  * Usage:
  * ```
- * use Xaraya\Tools\TimerInterface;
- * use Xaraya\Tools\TimerTrait;
+ * use Xaraya\Tools\WithTimerInterface;
+ * use Xaraya\Tools\WithTimerTrait;
  *
- * class myFancyClass implements TimerInterface
+ * class myFancyClass implements WithTimerInterface
  * {
- *     use TimerTrait;  // activate with $this->enableTimer(true)
+ *     use WithTimerTrait;  // activate with $this->enableTimer(true)
  *
  *     public function __construct()
  *     {
@@ -51,9 +51,9 @@ namespace Xaraya\Tools;
 use Xaraya\Services\RequestService;
 
 /**
- * For documentation purposes only - available via TimerTrait
+ * For documentation purposes only - available via WithTimerTrait
  */
-interface TimerInterface
+interface WithTimerInterface
 {
     public function enableTimer(?bool $enable = null): bool;
     public function setTimer(string $label): void;
@@ -64,9 +64,17 @@ interface TimerInterface
 }
 
 /**
+ * @deprecated 2.9.3 use WithTimerInterface() instead
+ */
+interface TimerInterface extends WithTimerInterface
+{
+    // ...
+}
+
+/**
  * Trait to trace time and record steps taken
  */
-trait TimerTrait
+trait WithTimerTrait
 {
     public bool $enableTimer = false;  // activate with $this->enableTimer(true)
     /** @var list<array<string, float>> */
@@ -79,7 +87,7 @@ trait TimerTrait
     protected function _req(): RequestService
     {
         if (!isset($this->_reqService)) {
-            // @checkme assume WithServicesClass here
+            // @checkme assume WithServicesTrait here
             $xar = $this->getServicesClass();
             $this->_reqService = $xar->req();
         }
@@ -141,4 +149,12 @@ trait TimerTrait
         $this->setTimer("stop $label");
         return $result;
     }
+}
+
+/**
+ * @deprecated 2.9.3 use WithTimerTrait() instead
+ */
+trait TimerTrait
+{
+    use WithTimerTrait;
 }

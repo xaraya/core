@@ -26,7 +26,7 @@
  * # xaruser/main.php or xaruser.php (migration)
  * function myfancymodule_user_main($args = [], $context = null) {
  *     // get module class instance first
- *     //$module = xar::mod()->getModule('myfancymodule');
+ *     //$module = xar::module('myfancymodule');
  *     //$module->setContext($context);
  *     //return $module->usergui()->main($args);
  *     // or get module gui directly

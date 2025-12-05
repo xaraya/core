@@ -14,12 +14,12 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
 **/
 
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
 
 class BlockLayoutXSLTProcessor extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     /** @var ?XSLTProcessor */
     protected $xslProc = null;    // Object representing the processor.

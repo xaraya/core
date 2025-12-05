@@ -9,10 +9,10 @@
 namespace Xaraya\Bridge\Events;
 
 use Symfony\Component\EventDispatcher\GenericEvent;
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 
-class DefaultEvent extends GenericEvent implements ContextInterface
+class DefaultEvent extends GenericEvent implements WithContextInterface
 {
-    use ContextTrait;
+    use WithContextTrait;
 }

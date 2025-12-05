@@ -9,7 +9,7 @@ use Twig\TemplateWrapper;
 use Xaraya\Bridge\TemplateEngine\TwigConfig;
 use Xaraya\Context\Context;
 use Xaraya\Services\TemplatingService;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 /**
  * Use Twig template engine to generate output in Xaraya
@@ -18,7 +18,7 @@ use Xaraya\Services\WithServicesClass;
  */
 class xarTwigTpl
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     protected ?TemplatingService $tplService = null;
 

@@ -12,11 +12,11 @@
  **/
 
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
+use Xaraya\Services\WithServicesTrait;
 
-interface ixarEventSubject extends ContextInterface
+interface ixarEventSubject extends WithContextInterface
 {
     /**
      * @return void
@@ -57,8 +57,8 @@ interface ixarEventSubject extends ContextInterface
 **/
 abstract class EventSubject extends xarObject implements ixarEventSubject
 {
-    use ContextTrait;
-    use WithServicesClass;
+    use WithContextTrait;
+    use WithServicesTrait;
 
     /** @var mixed */
     protected $args;                // args passed from caller when event is raised

@@ -23,7 +23,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
@@ -38,7 +38,7 @@ use xarEvents;
  */
 class SessionMiddleware implements MiddlewareInterface
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     private readonly string $cookieName;
     private readonly string $prefix;

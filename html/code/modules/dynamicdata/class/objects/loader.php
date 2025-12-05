@@ -30,13 +30,13 @@
  *
  **/
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 use Xaraya\Services\xar;
 
-class DataObjectLoader implements ContextInterface
+class DataObjectLoader implements WithContextInterface
 {
-    use ContextTrait;
+    use WithContextTrait;
 
     /** @var string */
     public $objectname = '';

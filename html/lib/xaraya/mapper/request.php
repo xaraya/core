@@ -15,11 +15,11 @@
 **/
 
 use Xaraya\Requests\RequestInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 class xarRequest extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public static string $delimiter = '?';    // This character divides the URL into action part and parameters
     public static string $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route

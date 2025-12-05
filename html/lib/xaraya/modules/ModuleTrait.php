@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Handle module classes via xar::mod()->getModule()
+ * Handle module classes via xar::module()
  *
  * Usage:
  * ```
@@ -19,7 +19,7 @@
  * # xaruser/main.php or xaruser.php (migration)
  * function myfancymodule_user_main($args = [], $context = null) {
  *     // get module class instance first
- *     $module = xar::mod()->getModule('myfancymodule');
+ *     $module = xar::module('myfancymodule');
  *     $module->setContext($context);
  *     return $module->usergui()->main($args);
  *     // or get module gui directly
@@ -41,20 +41,20 @@
 namespace Xaraya\Modules;
 
 use Xaraya\Context\Context;
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 use Xaraya\Services\ServicesInterface;
-use Xaraya\Services\WithServicesClass;
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesTrait;
+use Xaraya\Services\WithServicesInterface;
 use sys;
 use Exception;
 
 /**
  * For documentation purposes only - available via ModuleTrait
  */
-interface ModuleInterface extends ContextInterface
+interface ModuleInterface extends WithContextInterface, WithServicesInterface
 {
-    public function __construct(string $modName);
+    public function __construct(string $modName, ?Context $context = null, $xar = null);
     /** @return void */
     public function configure();
     public function getName(): string;
@@ -77,15 +77,15 @@ interface ModuleInterface extends ContextInterface
 }
 
 /**
- * Trait to get module classes via xar::mod()->getModule()
- * @see \xar::mod()->getModule()
+ * Trait to get module classes via xar::module()
+ * @see \xar::module()
  */
 trait ModuleTrait
 {
-    use ContextTrait;
-    use WithServicesClass;
+    use WithContextTrait;
+    use WithServicesTrait;
 
-    protected string $moduleName;          // set in constructor by xar::mod()->getModule()
+    protected string $moduleName;          // set in constructor by xar::module()
 
     /** @var array<string, string> */
     protected array $classtypes = [];
@@ -132,7 +132,7 @@ trait ModuleTrait
      */
     protected function createComponent(string $className): ModuleClassInterface
     {
-        return new $className($this->getModName(), $this, $this->context, $this->getServicesClass());
+        return new $className($this->getModName(), $this);
     }
 
     /**

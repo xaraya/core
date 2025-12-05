@@ -14,10 +14,10 @@
  */
 
 use Xaraya\DataObject\Handlers\DefaultHandler;
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 use Xaraya\Context\Context;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 /**
  * Dynamic Object User Interface (work in progress)
@@ -60,10 +60,10 @@ use Xaraya\Services\WithServicesClass;
  * }
  *
  */
-class DataObjectUserInterface extends xarObject implements ContextInterface
+class DataObjectUserInterface extends xarObject implements WithContextInterface
 {
-    use ContextTrait;
-    use WithServicesClass;
+    use WithContextTrait;
+    use WithServicesTrait;
 
     // application framework we're working with
     public string $framework = 'xaraya';

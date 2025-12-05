@@ -15,14 +15,14 @@
 
 use Xaraya\Services\xar;
 use Xaraya\Services\ServicesInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 /**
  * Base Meta class
 **/
 class xarMeta extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public const CACHE_SCOPE = 'Themes.Meta';
     // this singleton instance belongs with static services class (or service in it)

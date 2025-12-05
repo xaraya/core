@@ -40,7 +40,7 @@ Module functions use a naming convention for the function type: '' for gui funct
 
 ## Module Methods (object-oriented)
 
-Newer modules can use class methods instead of procedural functions. They can be invoked via the traditional `xar::mod()->guiFunc()` or `xar::mod()->apiFunc()`, or by getting a *module class* via `xar::mod()->getModule()` and then using method calls to get the right component and method(s).
+Newer modules can use class methods instead of procedural functions. They can be invoked via the traditional `xar::mod()->guiFunc()` or `xar::mod()->apiFunc()`, or by getting a *module class* via `xar::module()` and then using method calls to get the right component and method(s).
 
 Each module has a central module handler class, and *component classes* per type with their own methods. 
 Short-hand methods like `xar::mod()->userapi()` and `xar::mod()->usergui()` are available to get common components by module.
@@ -120,7 +120,7 @@ use sys;
 
 
 /**
- * Get myfancymodule module classes via xar::mod()->getModule()
+ * Get myfancymodule module classes via xar::module()
  */
 class Module extends ModuleClass
 {

@@ -10,7 +10,7 @@
  * @link http://www.xaraya.info
  */
 
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
 
 /**
@@ -19,7 +19,7 @@ use Xaraya\Services\xar;
  */
 class Query
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public $version             = "3.6";
     public $id;                                 // A unique identifier for this query

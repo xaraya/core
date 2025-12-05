@@ -16,7 +16,7 @@ use Xaraya\Sessions\SessionInterface;
 use Xaraya\Sessions\VirtualSession;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use RuntimeException;
 
 /**
@@ -29,10 +29,10 @@ use RuntimeException;
  * $storageClass with SessionDatabaseStorage instead of SessionCacheStorage
  * @todo decide when to save the session in the request/response cycle
  */
-class SessionContext implements ContextInterface, SessionInterface
+class SessionContext implements WithContextInterface, SessionInterface
 {
-    use ContextTrait;
-    use WithServicesClass;
+    use WithContextTrait;
+    use WithServicesTrait;
 
     /** @var class-string<SessionStorageInterface> */
     private static $storageClass = SessionCacheStorage::class;

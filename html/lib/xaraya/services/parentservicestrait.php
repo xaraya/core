@@ -16,7 +16,7 @@
 
 namespace Xaraya\Services;
 
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextTrait;
 use Xaraya\Modules\ModuleClassInterface;
 use Xaraya\Modules\ModuleInterface;
 use sys;
@@ -58,7 +58,7 @@ interface ParentServicesInterface extends CoreServicesInterface
  */
 trait ParentServicesTrait
 {
-    use ContextTrait;
+    use WithContextTrait;
 
     /**
      * Get static services class for shared service instances

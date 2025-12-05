@@ -15,7 +15,7 @@ namespace Xaraya\Bridge\Middleware;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Throwable;
 use JsonException;
 
@@ -47,7 +47,7 @@ interface DefaultResponseInterface
  */
 trait DefaultResponseTrait
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     protected ResponseFactoryInterface $responseFactory;
     protected StreamFactoryInterface $streamFactory;

@@ -15,7 +15,7 @@
 
 use Xaraya\Services\xar;
 use Xaraya\Services\ServicesInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 // use ixarMod;
 // use ixarTheme;
@@ -25,7 +25,7 @@ use Xaraya\Services\WithServicesClass;
 **/
 class xarCSS extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public const CACHE_SCOPE = 'Themes.CSS';
     /**
@@ -943,7 +943,7 @@ class xarCSS extends xarObject
 **/
 class xarCSSLib extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     // required meta data, filled in when the object is created
     public $name;

@@ -128,12 +128,12 @@ Example:
 ```
 namespace Xaraya\Modules\Library;
 
-use Xaraya\Database\DatabaseInterface;
-use Xaraya\Database\DatabaseTrait;
+use Xaraya\Database\WithDatabaseInterface;
+use Xaraya\Database\WithDatabaseTrait;
 
-class UserApi implements DatabaseInterface
+class UserApi implements WithDatabaseInterface
 {
-    use DatabaseTrait;
+    use WithDatabaseTrait;
 }
 ```
 

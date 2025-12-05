@@ -15,7 +15,7 @@
 
 use Xaraya\Services\xar;
 use Xaraya\Services\ServicesInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 
 // use ixarMod;
 // use ixarTheme;
@@ -31,7 +31,7 @@ use Xaraya\Services\WithServicesClass;
 **/
 class xarJS extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public const CACHE_SCOPE = 'Themes.JS';
     // the name of the module and the modvar to use for storing this object
@@ -1184,7 +1184,7 @@ class xarJS extends xarObject
 **/
 class xarJSLib extends xarObject
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     // required meta data, filled in when the object is created
     public $name;

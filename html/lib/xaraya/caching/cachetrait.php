@@ -5,12 +5,12 @@
  *
  * Usage:
  * ```
- * use Xaraya\Caching\CacheInterface;
- * use Xaraya\Caching\CacheTrait;
+ * use Xaraya\Caching\WithCacheInterface;
+ * use Xaraya\Caching\WithCacheTrait;
  *
- * class myFancyClass implements CacheInterface
+ * class myFancyClass implements WithCacheInterface
  * {
- *     use CacheTrait;  // activate with $this->enableCache(true)
+ *     use WithCacheTrait;  // activate with $this->enableCache(true)
  *
  *     public function __construct()
  *     {
@@ -57,9 +57,9 @@ namespace Xaraya\Caching;
 use Xaraya\Services\CachingService;
 
 /**
- * For documentation purposes only - available via CacheTrait
+ * For documentation purposes only - available via WithCacheTrait
  */
-interface CacheInterface
+interface WithCacheInterface
 {
     /**
      * Get or set enableCache
@@ -142,9 +142,17 @@ interface CacheInterface
 }
 
 /**
+ * @deprecated 2.9.3 use WithCacheInterface() instead
+ */
+interface CacheInterface extends WithCacheInterface
+{
+    // ...
+}
+
+/**
  * Summary of xarCacheTrait
  */
-trait CacheTrait
+trait WithCacheTrait
 {
     public bool $enableCache = false;  // activate with $this->enableCache(true)
     public string $_cacheScope = 'CacheTrait';
@@ -154,7 +162,7 @@ trait CacheTrait
     protected function _cache(): CachingService
     {
         if (!isset($this->_cacheService)) {
-            // @checkme assume WithServicesClass here
+            // @checkme assume WithServicesTrait here
             $xar = $this->getServicesClass();
             $this->_cacheService = $xar->cache();
         }
@@ -327,4 +335,12 @@ trait CacheTrait
         }
         return $item;
     }
+}
+
+/**
+ * @deprecated 2.9.3 use WithCacheTrait() instead
+ */
+trait CacheTrait
+{
+    use WithCacheTrait;
 }

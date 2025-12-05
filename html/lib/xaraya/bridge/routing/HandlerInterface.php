@@ -8,12 +8,12 @@
 
 namespace Xaraya\Routing;
 
-use Xaraya\Context\ContextInterface;
+use Xaraya\Context\WithContextInterface;
 
 /**
  * Generic handler interface for routing & dispatching outside Xaraya
  */
-interface HandlerInterface extends ContextInterface
+interface HandlerInterface extends WithContextInterface
 {
     /**
      * Call the right handler after matching the route

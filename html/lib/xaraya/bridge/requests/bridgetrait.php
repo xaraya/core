@@ -13,7 +13,7 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use sys;
 
 /**
@@ -30,7 +30,7 @@ interface BasicBridgeInterface
  */
 trait BasicBridgeTrait
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     /**
      * Summary of prepareController

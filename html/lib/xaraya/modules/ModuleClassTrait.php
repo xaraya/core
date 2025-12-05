@@ -26,7 +26,7 @@ use Xaraya\Services\CoreServicesTrait;
 interface ModuleClassInterface extends ServicesInterface
 {
     /** @param ?Context<string, mixed> $context */
-    public function __construct(string $modName, ?ModuleInterface $parent = null, ?Context $context = null);
+    public function __construct(string $modName, ?ModuleInterface $parent = null);
     /** @return void */
     public function configure();
     public function getModType(): string;
@@ -81,7 +81,7 @@ trait ModuleClassTrait
     protected array $allowed = [];
     /** @var array<string> */
     protected array $internal = [
-        // ContextTrait
+        // WithContextTrait
         'getcontext',
         'setcontext',
         // CoreServicesTrait
@@ -132,13 +132,13 @@ trait ModuleClassTrait
      * @param ?Context<string, mixed> $context
      * @param ?ServicesInterface $xar
      */
-    public function __construct(string $modName, ?ModuleInterface $parent = null, ?Context $context = null, $xar = null)
+    public function __construct(string $modName, ?ModuleInterface $parent = null)
     {
         $this->setModName($modName);
         $this->setModule($parent);
-        $this->setContext($context);
-        if (isset($xar)) {
-            $this->setStaticServices($xar->getStaticServices());
+        if (isset($parent)) {
+            $this->setContext($parent->getContext());
+            $this->setStaticServices($parent->getServicesClass());
         }
         // call configure() after setting the context
         $this->configure();
@@ -213,10 +213,10 @@ trait ModuleClassTrait
     public function getModule(?string $modName = null): ?ModuleInterface
     {
         if (!empty($modName)) {
-            $module = $this->mod()->getModule($modName);
+            $module = $this->module($modName);
             return $module;
         }
-        $this->parent ??= $this->mod()->getModule($this->getModName());
+        $this->parent ??= $this->module($this->getModName());
         if (!$this->parent->hasContext()) {
             $this->parent->setContext($this->context);
         }

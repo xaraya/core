@@ -16,7 +16,7 @@
 
 namespace Xaraya\Services\Modules;
 
-use Xaraya\Context\ContextInterface;
+use Xaraya\Context\WithContextInterface;
 use Xaraya\Modules\ModuleInterface;
 use Xaraya\Modules\ModuleClassInterface;
 use Xaraya\Services\ServiceClass;
@@ -420,7 +420,7 @@ class ExecHelper extends ServiceClass
     public function callMethod(callable $callable, array $args): mixed
     {
         // this expects an instance in $callable[0]
-        if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
+        if (is_array($callable) && is_a($callable[0] ?? '', WithContextInterface::class)) {
             $this->getContext()?->tracePath($callable[0]::class . '::' . $callable[1], $args);
             $callable[0]->setContext($this->getContext());
         }

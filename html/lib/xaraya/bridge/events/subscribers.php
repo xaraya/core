@@ -48,12 +48,12 @@
 namespace Xaraya\Bridge\Events;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Exception;
 
 class EventSubscriber implements EventSubscriberInterface
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     protected static $eventNamePrefix = 'xarEvents';
     protected static $subscribedEvents = [];

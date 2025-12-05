@@ -14,17 +14,17 @@
 
 namespace Xaraya\Bridge\RestAPI;
 
-use Xaraya\Caching\CacheInterface;
-use Xaraya\Caching\CacheTrait;
+use Xaraya\Caching\WithCacheInterface;
+use Xaraya\Caching\WithCacheTrait;
 use Xaraya\Context\RequestContext;
-use Xaraya\Services\WithServicesClass;
-use Xaraya\Tools\TimerInterface;
-use Xaraya\Tools\TimerTrait;
+use Xaraya\Services\WithServicesTrait;
+use Xaraya\Tools\WithTimerInterface;
+use Xaraya\Tools\WithTimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
 use Xaraya\Context\ContextFactory;
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Context\WithContextInterface;
+use Xaraya\Context\WithContextTrait;
 use Xaraya\Context\Context;
 use Xaraya\Authentication\AuthToken;
 // use the nikic FastRoute library here
@@ -42,13 +42,13 @@ use Throwable;
 /**
  * Class to handle REST API calls
  */
-class RestAPIHandler extends xarObject implements CommonRequestInterface, ContextInterface, CacheInterface, TimerInterface
+class RestAPIHandler extends xarObject implements CommonRequestInterface, WithContextInterface, WithCacheInterface, WithTimerInterface
 {
     use CommonRequestTrait;
-    use ContextTrait;
-    use TimerTrait;  // activate with $this->enableTimer(true)
-    use CacheTrait;  // activate with $this->enableCache(true)
-    use WithServicesClass;
+    use WithContextTrait;
+    use WithTimerTrait;  // activate with $this->enableTimer(true)
+    use WithCacheTrait;  // activate with $this->enableCache(true)
+    use WithServicesTrait;
 
     public static string $endpoint = 'rst.php/v1';
     /** @var array<string, mixed> */

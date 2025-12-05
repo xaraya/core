@@ -47,17 +47,14 @@
 
 namespace Xaraya\Database;
 
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Connection;
-use xarCore;
 use BadParameterException;
 
 /**
- * For documentation purposes only - available via DatabaseTrait
- *
- * @todo rename to avoid confusion with Database Service? (different namespace)
+ * For documentation purposes only - available via WithDatabaseTrait
  */
-interface DatabaseInterface
+interface WithDatabaseInterface
 {
     /**
      * Summary of getDbModName
@@ -144,26 +141,33 @@ interface DatabaseInterface
 }
 
 /**
+ * @deprecated 2.9.3 use WithDatabaseInterface() instead
+ */
+interface DatabaseInterface extends WithDatabaseInterface
+{
+    // ...
+}
+
+/**
  * Trait to handle module- or object-specific database connections
  *
  * Usage:
  * ```
  * namespace Xaraya\Modules\Library;
  *
- * use Xaraya\Database\DatabaseInterface;
- * use Xaraya\Database\DatabaseTrait;
+ * use Xaraya\Database\WithDatabaseInterface;
+ * use Xaraya\Database\WithDatabaseTrait;
  *
- * class UserApi implements DatabaseInterface
+ * class UserApi implements WithDatabaseInterface
  * {
- *     use DatabaseTrait;
+ *     use WithDatabaseTrait;
  * }
  * ```
  *
- * @todo rename to avoid confusion with Database Service? (different namespace)
  */
-trait DatabaseTrait
+trait WithDatabaseTrait
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     /** @var array<string, mixed> */
     protected array $_databases = [];
@@ -426,4 +430,12 @@ trait DatabaseTrait
         }
         return $result;
     }
+}
+
+/**
+ * @deprecated 2.9.3 use WithDatabaseTrait() instead
+ */
+trait DatabaseTrait
+{
+    use WithDatabaseTrait;
 }

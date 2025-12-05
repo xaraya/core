@@ -18,15 +18,15 @@ use Xaraya\Bridge\Middleware\DataObjectApiMiddleware;
 use Xaraya\Bridge\Middleware\ModuleMiddleware;
 use Xaraya\Bridge\Middleware\ModuleApiMiddleware;
 use Xaraya\Bridge\Middleware\ResponseUtil;
-use Xaraya\Tools\TimerInterface;
-use Xaraya\Tools\TimerTrait;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Tools\WithTimerInterface;
+use Xaraya\Tools\WithTimerTrait;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
 
-class LocalTimer implements TimerInterface
+class LocalTimer implements WithTimerInterface
 {
-    use TimerTrait;  // activate with $this->enableTimer(true)
-    use WithServicesClass;
+    use WithTimerTrait;  // activate with $this->enableTimer(true)
+    use WithServicesTrait;
 }
 $timer = new LocalTimer();
 

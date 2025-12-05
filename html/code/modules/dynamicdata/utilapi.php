@@ -14,8 +14,8 @@
 
 namespace Xaraya\Modules\DynamicData;
 
-use Xaraya\Database\DatabaseInterface;
-use Xaraya\Database\DatabaseTrait;
+use Xaraya\Database\WithDatabaseInterface;
+use Xaraya\Database\WithDatabaseTrait;
 use Xaraya\Database\ExternalDatabase;
 use Xaraya\DataObject\Import\PhpImporter;
 use Xaraya\Services\xar;
@@ -43,9 +43,9 @@ use Exception;
  * @method mixed updatehooks(array $args = []) Update hooks when migrating module items
  * @extends
  */
-class UtilApi extends UserApi implements DatabaseInterface
+class UtilApi extends UserApi implements WithDatabaseInterface
 {
-    use DatabaseTrait;
+    use WithDatabaseTrait;
 
     protected string $moduleName;          // set in constructor by default
     /** @var array<string, int> */

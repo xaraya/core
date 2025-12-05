@@ -12,7 +12,7 @@
 namespace Xaraya\Sessions;
 
 use Xaraya\Database\ConnectionInterface;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use xarCore;
 use xarObject;
 use SessionHandlerInterface;
@@ -50,7 +50,7 @@ interface iSessionHandler extends SessionHandlerInterface
  */
 class SessionHandler extends xarObject implements iSessionHandler, SessionInterface
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     public const PREFIX = 'XARSV';     // Reserved by us for our session vars
     public const COOKIE = 'XARAYASID'; // Our cookiename

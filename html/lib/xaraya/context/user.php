@@ -14,7 +14,7 @@ namespace Xaraya\Context;
 
 use Xaraya\Authentication\AuthToken;
 use Xaraya\Authentication\RemoteUser;
-use Xaraya\Services\WithServicesClass;
+use Xaraya\Services\WithServicesTrait;
 use Exception;
 
 /**
@@ -22,7 +22,7 @@ use Exception;
  */
 class UserContext
 {
-    use WithServicesClass;
+    use WithServicesTrait;
 
     /** @var Context<string, mixed> */
     protected Context $context;
