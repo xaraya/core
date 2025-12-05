@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use ixarUser;
+use xarRoles;
 use BadParameterException;
 use EmptyParameterException;
 use IDNotFoundException;
@@ -44,6 +45,8 @@ interface UserInterface extends ServiceInterface
     public function isLoggedIn(): bool;
     public function isDebugAdmin(): bool;
     public function isSiteAdmin(): bool;
+    public function hasParent(string $parentName): bool;
+    public function getRole(string $field, mixed $value, int $state = xarRoles::ROLES_STATE_ALL);
     public function getLocale(): mixed;
     public function setLocale(string $locale): bool;
     public function getThemeName(): mixed;
@@ -66,6 +69,8 @@ trait UserTrait
 
     protected ?int $currentId = null;
     private $objectRef;
+    /** @var array<string, bool> */
+    private $parents = [];
     public $authenticationModules;
     protected bool $initialized = false;
 
@@ -372,6 +377,27 @@ trait UserTrait
         $userId = $this->getCurrentId();
         $xar = $this->getServicesClass();
         return $userId == $xar->mod('roles')->getVar('admin');
+    }
+
+    public function hasParent(string $parentName): bool
+    {
+        if (!isset($this->parents[$parentName])) {
+            $parent = $this->getRole('name', $parentName);
+            $user = $this->getRole('id', $this->getCurrentId());
+            if (is_object($user) && is_object($parent)) {
+                $result = $user->isParent($parent);
+                $this->parents[$parentName] = $result;
+            } else {
+                $this->parents[$parentName] = false;
+            }
+        }
+        return $this->parents[$parentName];
+    }
+
+    public function getRole(string $field, mixed $value, int $state = xarRoles::ROLES_STATE_ALL)
+    {
+        // we don't actually use $itemtype there except to cache results
+        return xarRoles::_lookuprole($field, $value, xarRoles::ROLES_USERTYPE, $state, $this->getServicesClass());
     }
 
     public function getLocale(): mixed

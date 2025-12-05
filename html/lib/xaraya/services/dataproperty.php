@@ -61,6 +61,9 @@ trait DataPropertyTrait
 {
     use ServiceTrait;
 
+    /** @var ?\DataObject */
+    protected $dummyObject = null;
+
     /**
      * List all defined property types
      * @return array<int, mixed>
@@ -86,6 +89,12 @@ trait DataPropertyTrait
      */
     public function getProperty(array $args = []): DataProperty
     {
+        if (!isset($this->dummyObject)) {
+            $property = DataPropertyMaster::getProperty($args, $this->getParent());
+            // initialize dummy object with static services class for stand-alone properties
+            $this->dummyObject = $property->getDummyObject($this->getServicesClass());
+            return $property;
+        }
         return DataPropertyMaster::getProperty($args, $this->getParent());
     }
 

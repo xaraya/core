@@ -41,7 +41,7 @@ class GetnextitemtypeMethod extends MethodClass
         }
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        $types = $userapi::findModuleItemTypes($module_id);
+        $types = $userapi::findModuleItemTypes($module_id, false, true, $this->getStaticServices());
         $ids = array_keys($types);
         sort($ids);
         $lastid = array_pop($ids);

@@ -69,7 +69,7 @@ trait ItemLinksTrait
             return static::$_itemlinkObjects[$this->getModName()];
         }
         $moduleId = $this->mod()->getRegID();
-        $objects = DataObjectFactory::getObjects();
+        $objects = $this->data()->getObjects();
         static::$_itemlinkObjects[$this->getModName()] = [];
         foreach ($objects as $objectid => $objectinfo) {
             /** @var array<string, mixed> $objectinfo */

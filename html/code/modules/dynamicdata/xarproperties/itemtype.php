@@ -137,12 +137,7 @@ class ItemTypeProperty extends ComboProperty
             // we have some specific function to retrieve the items here
             try {
                 /** @var array<mixed>|null $items */
-                $items = null;
-                $namespace = '';
-                if (str_starts_with($this->func, 'xar::')) {
-                    $namespace = '\\Xaraya\\Services\\';
-                }
-                eval('$items = ' . $namespace . $this->func . ';');
+                $items = $this->funcEval($this->func);
                 if (isset($items) && count($items) > 0) {
                     foreach ($items as $id => $name) {
                         // skip empty items from e.g. dropdownlist() API

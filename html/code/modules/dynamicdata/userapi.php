@@ -82,13 +82,13 @@ class UserApi implements UserApiInterface
      * @todo move this elsewhere?
      *
      * @param int $moduleId
-     * @param bool $native
-     * @param bool $extensions
+     * @param bool $native use native module user getitemtypes function (default false)
+     * @param bool $extensions include DD extensions (default true)
      * @return array<mixed>
      */
-    public static function findModuleItemTypes($moduleId, $native = false, $extensions = true): array
+    public static function findModuleItemTypes($moduleId, $native = false, $extensions = true, $xar = null): array
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $module = $xar->mod()->getName($moduleId);
 
         $types = [];

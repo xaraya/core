@@ -55,10 +55,10 @@ interface CoreServicesInterface extends WithContextInterface
     public function session(): SessionInterface;
     public function user(?int $userId = null): UserInterface;
     public function db(): DatabaseInterface;
-    public function prep(): WrapperInterface;
-    public function events(): WrapperInterface;
-    public function hooked(): WrapperInterface;
-    public function theme(): WrapperInterface;
+    public function prep(): VarPrepInterface;
+    public function events(): EventsInterface;
+    public function hooked(): HookedInterface;
+    public function theme(): ThemesInterface;
     public function module(string $modName): ModuleInterface;
     public function modclass(string $modName, string $modType): ModuleClassInterface|null;
     /**
@@ -576,7 +576,7 @@ trait CoreServicesTrait
      * - path()
      * - validate()
      */
-    public function prep(): WrapperInterface
+    public function prep(): VarPrepInterface
     {
         return $this->getStaticServices()->prep();
     }
@@ -588,7 +588,7 @@ trait CoreServicesTrait
      * - notify()
      * - ...
      */
-    public function events(): WrapperInterface
+    public function events(): EventsInterface
     {
         return $this->getStaticServices()->events();
     }
@@ -600,7 +600,7 @@ trait CoreServicesTrait
      * - notify()
      * - ...
      */
-    public function hooked(): WrapperInterface
+    public function hooked(): HookedInterface
     {
         return $this->getStaticServices()->hooked();
     }
@@ -613,7 +613,7 @@ trait CoreServicesTrait
      * - getInfo()
      * - ...
      */
-    public function theme(): WrapperInterface
+    public function theme(): ThemesInterface
     {
         return $this->getStaticServices()->theme();
     }

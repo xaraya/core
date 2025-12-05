@@ -303,7 +303,7 @@ class AccessProperty extends DataProperty
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if (xarRoles::isParent($allowed, $this->user()->getUser())) {
+            if ($this->user()->hasParent($allowed)) {
                 return true;
             }
         }
@@ -369,7 +369,7 @@ class AccessProperty extends DataProperty
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if (xarRoles::isParent($allowed, $this->user()->getUser())) {
+            if ($this->user()->hasParent($allowed)) {
                 return true;
             }
         }

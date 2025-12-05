@@ -32,7 +32,8 @@ class HooksHelper extends ServiceClass
      */
     public function isHooked(string $hookModName, string $callerModName, ?int $callerItemType = null): bool
     {
-        return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
+        $xar = $this->getServicesClass();
+        return $xar->hooked()->isAttached($hookModName, $callerModName, $callerItemType);
     }
 
     /**

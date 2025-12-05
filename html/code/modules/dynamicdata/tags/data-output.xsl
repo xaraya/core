@@ -14,7 +14,7 @@
         <xsl:when test="not(@property)">
           <!-- No prop, get one (the right one, preferably) -->
           <xsl:text>try{</xsl:text>
-          <xsl:text>$property =&amp; DataPropertyMaster::getProperty(</xsl:text>
+          <xsl:text>$property = $xar->prop()->getProperty(</xsl:text>
           <xsl:call-template name="atts2args">
             <xsl:with-param name="nodeset" select="@*"/>
           </xsl:call-template>

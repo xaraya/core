@@ -407,7 +407,7 @@ trait TemplatingTrait
 
         // Property fall-back to default template in the module the property belongs to
         if (empty($sourceFileName)) {
-            $tplModule = DataPropertyMaster::getProperty(['type' => $propertyName])->tplmodule;
+            $tplModule = $xar->prop()->getProperty(['type' => $propertyName])->tplmodule;
 
             if ($modName == 'auto') {
                 // standalone property called in standalone context

@@ -521,22 +521,22 @@ trait ParentServicesTrait
      * - path()
      * - validate()
      */
-    public function prep(): WrapperInterface
+    public function prep(): VarPrepInterface
     {
         return $this->getParent()->prep();
     }
 
-    public function events(): WrapperInterface
+    public function events(): EventsInterface
     {
         return $this->getParent()->events();
     }
 
-    public function hooked(): WrapperInterface
+    public function hooked(): HookedInterface
     {
         return $this->getParent()->hooked();
     }
 
-    public function theme(): WrapperInterface
+    public function theme(): ThemesInterface
     {
         return $this->getParent()->theme();
     }

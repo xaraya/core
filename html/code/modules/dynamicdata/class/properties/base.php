@@ -140,13 +140,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             // Expression stolen from http://php.net/functions
             if (!empty($this->defaultvalue) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/', $this->defaultvalue)) {
                 try {
-                    /** @var mixed|null $value */
-                    $value = null;
-                    $namespace = '';
-                    if (str_starts_with($this->defaultvalue, 'xar::')) {
-                        $namespace = '\\Xaraya\\Services\\';
-                    }
-                    eval('$value = ' . $namespace . $this->defaultvalue . ';');
+                    $value = $this->funcEval($this->defaultvalue);
                     if (isset($value)) {
                         $this->defaultvalue = $value;
                     } else {
@@ -174,6 +168,31 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             } catch (Exception) {
             }
         }
+    }
+
+    public function funcEval($string)
+    {
+        /** @var mixed|null $value */
+        $value = null;
+        if (str_starts_with($string, 'xar::')) {
+            // replace static xar::*() method calls with instance $xar->*() calls in current scope
+            $xar = $this->getStaticServices();
+            $newval = str_replace('xar::', '$xar->', $string);
+            eval('$value = ' . $newval . ';');
+        } elseif (str_starts_with($string, 'xar')) {
+            // replace static xarMod::*() method calls with instance $xar->mod() calls etc. in current scope
+            $xar = $this->getStaticServices();
+            $replace = [
+                '/xarMod::/' => '$xar->mod()->',
+                '/xarModVars::get\(([^,]+),\s*/' => '$xar->mod($1)->getVar(',
+                '/xarMLS::/' => '$xar->mls()->',
+            ];
+            $newval = preg_replace(array_keys($replace), array_values($replace), $string);
+            eval('$value = ' . $newval . ';');
+        } else {
+            eval('$value = ' . $string . ';');
+        }
+        return $value;
     }
 
     /**

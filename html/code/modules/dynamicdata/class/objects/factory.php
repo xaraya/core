@@ -523,10 +523,10 @@ class DataObjectFactory extends xarObject
      * @param mixed $context
      * @return DataObjectLoader
      */
-    public static function getObjectLoader(string $objectName, array $fieldlist = ['id', 'name'], mixed $context = null)
+    public static function getObjectLoader(string $objectName, array $fieldlist = ['id', 'name'], mixed $context = null, $xar = null)
     {
         $context?->tracePath(__METHOD__, ['objectName' => $objectName, 'fieldlist' => $fieldlist]);
-        $loader = new DataObjectLoader($objectName, $fieldlist);
+        $loader = new DataObjectLoader($objectName, $fieldlist, null, $xar);
         $loader->setContext($context);
         return $loader;
     }

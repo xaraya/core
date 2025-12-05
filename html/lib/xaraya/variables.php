@@ -206,7 +206,7 @@ class xarVar extends xarObject implements ixarVar
      * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
      * @todo  re-evaluate the prepping, prepforstore is deprecated for example, prep for display and prep for html are partially exclusive
     **/
-    public static function fetch($name, $validation, &$value, $defaultValue = null, $flags = self::GET_OR_POST, $prep = xarVarPrep::NOTHING)
+    public static function fetch($name, $validation, &$value, $defaultValue = null, $flags = self::GET_OR_POST, $prep = ixarVarPrep::NOTHING)
     {
         return self::var()->fetch($name, $validation, $value, $defaultValue, $flags, $prep);
     }
@@ -297,7 +297,8 @@ class xarVar extends xarObject implements ixarVar
     ----------------------------------------------------------------------
 */
 
-class xarVarPrep
+
+interface ixarVarPrep
 {
     public const NOTHING = 0;
     public const TEXT    = 1;
@@ -305,7 +306,10 @@ class xarVarPrep
     public const PATH    = 4;
     public const TRIM    = 8;
     public const STORE   = 16;
+}
 
+class xarVarPrep implements ixarVarPrep
+{
     public static $dbCharSet = 'utf8';
     public static $allowableHTML = [];
     public static $fixHTMLEntities = true;

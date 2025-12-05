@@ -57,6 +57,7 @@ class xarRouter extends xarObject
      */
     public function route(xarRequest $request)
     {
+        $xar = $request->getServicesClass();
         // handled in ControllerService::getRouter()
         // $this->addDefaultRoutes();
         foreach (array_reverse($this->routes) as $name => $route) {
@@ -69,7 +70,7 @@ class xarRouter extends xarObject
                 }
                 $request->setRoute($name);
                 $this->currentRoute = $name;
-                xar::log()->notice('The route is set: ' . $name);
+                $xar->log()->notice('The route is set: ' . $name);
                 return true;
             }
         }

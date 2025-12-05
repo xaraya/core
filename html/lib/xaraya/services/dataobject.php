@@ -205,7 +205,7 @@ trait DataObjectTrait
      */
     public function getObjectLoader(string $objectName, array $fieldlist = ['id', 'name']): ?DataObjectLoader
     {
-        return DataObjectFactory::getObjectLoader($objectName, $fieldlist, $this->getContext());
+        return DataObjectFactory::getObjectLoader($objectName, $fieldlist, $this->getContext(), $this->getParent());
     }
 
     /**

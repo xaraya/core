@@ -254,7 +254,8 @@ trait ControllerTrait
      */
     public function getActionURL(object $object, string $action = '', mixed $itemid = null, array $extra = []): string
     {
-        return xarDDObject::getActionURL($object, $action, $itemid, $extra);
+        $xar = $this->getServicesClass();
+        return xarDDObject::getActionURL($object, $action, $itemid, $extra, $xar);
     }
 
     /**

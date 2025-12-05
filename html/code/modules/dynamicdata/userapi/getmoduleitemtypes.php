@@ -45,6 +45,6 @@ class GetmoduleitemtypesMethod extends MethodClass
 
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        return $userapi::findModuleItemTypes($moduleid, $native, $extensions);
+        return $userapi::findModuleItemTypes($moduleid, $native, $extensions, $this->getStaticServices());
     }
 }

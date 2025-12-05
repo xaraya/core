@@ -187,9 +187,9 @@ class DeferredItemProperty extends DataProperty
         //static::init_deferred($this->defername);
         if (empty(static::$deferred[$this->defername])) {
             if (!empty($this->fieldlist)) {
-                static::$deferred[$this->defername] = new DataObjectItemLoader($this->objectname, $this->fieldlist);
+                static::$deferred[$this->defername] = new DataObjectItemLoader($this->objectname, $this->fieldlist, null, $this->getStaticServices());
             } else {
-                static::$deferred[$this->defername] = new DataObjectDummyLoader($this->objectname, $this->fieldlist);
+                static::$deferred[$this->defername] = new DataObjectDummyLoader($this->objectname, $this->fieldlist, null, $this->getStaticServices());
             }
         }
         return static::$deferred[$this->defername];

@@ -492,7 +492,7 @@ class StaticServicesClass extends ServicesClass
      * - path()
      * - validate()
      */
-    public function prep(): WrapperInterface
+    public function prep(): VarPrepInterface
     {
         return $this->getServicePrototype('prep');
     }
@@ -504,7 +504,7 @@ class StaticServicesClass extends ServicesClass
      * - notify()
      * - ...
      */
-    public function events(): WrapperInterface
+    public function events(): EventsInterface
     {
         return $this->getServicePrototype('events');
     }
@@ -516,7 +516,7 @@ class StaticServicesClass extends ServicesClass
      * - notify()
      * - ...
      */
-    public function hooked(): WrapperInterface
+    public function hooked(): HookedInterface
     {
         return $this->getServicePrototype('hooked');
     }
@@ -529,7 +529,7 @@ class StaticServicesClass extends ServicesClass
      * - getInfo()
      * - ...
      */
-    public function theme(): WrapperInterface
+    public function theme(): ThemesInterface
     {
         return $this->getServicePrototype('theme');
     }

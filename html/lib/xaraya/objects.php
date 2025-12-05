@@ -94,21 +94,21 @@ class xarDDObject extends xarObject implements ixarDDObject
      * @return string the generated URL
      * @see \Xaraya\Bridge\Requests\DataObjectRequestHandler::handleObjectRequest()
      */
-    public static function getActionURL($object, $action = '', $itemid = null, $extra = [])
+    public static function getActionURL($object, $action = '', $itemid = null, $extra = [], $xar = null)
     {
         // special case when dealing with objectid 1 = objects
         if ($action == 'modifyprop' || $action == 'viewitems') {
-            return self::getModuleURL($object, $action, $itemid);
+            return self::getModuleURL($object, $action, $itemid, [], $xar);
         }
 
         // CHECKME: the linktype is set by the object user interface when we work with object URLs - make this depend on current request, config, ... ?
         switch ($object->linktype) {
             case 'object':
-                $link = self::getObjectURL($object, $action, $itemid, $extra);
+                $link = self::getObjectURL($object, $action, $itemid, $extra, $xar);
                 break;
 
             case 'current':
-                $link = self::getCurrentURL($object, $action, $itemid);
+                $link = self::getCurrentURL($object, $action, $itemid, $xar);
                 break;
 
             case 'other':
@@ -116,14 +116,14 @@ class xarDDObject extends xarObject implements ixarDDObject
                 if (!empty($object->linkfunc) && is_callable($object->linkfunc)) {
                     $link = call_user_func($object->linkfunc, $object->name, $action, $itemid, $extra);
                 } else {
-                    $link = self::getObjectURL($object, $action, $itemid, $extra);
+                    $link = self::getObjectURL($object, $action, $itemid, $extra, $xar);
                 }
                 break;
 
             case 'user':
             case 'admin':
             default:
-                $link = self::getModuleURL($object, $action, $itemid, $extra);
+                $link = self::getModuleURL($object, $action, $itemid, $extra, $xar);
                 break;
         }
 
@@ -140,7 +140,7 @@ class xarDDObject extends xarObject implements ixarDDObject
      * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
-    public static function getModuleURL($object, $action = '', $itemid = null, $extra = [])
+    public static function getModuleURL($object, $action = '', $itemid = null, $extra = [], $xar = null)
     {
         $urlargs = $extra;
         if (!empty($object->table)) {
@@ -153,7 +153,7 @@ class xarDDObject extends xarObject implements ixarDDObject
         // TODO: do we need the concept of tplmodule at all? Good question :-)
         $urlargs['tplmodule'] = $object->tplmodule;
 
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         switch ($action) {
             case 'display':
                 $tplmodule = $xar->mod()->checkModuleFunction($object->tplmodule, $object->linktype, $object->linkfunc);
@@ -207,7 +207,7 @@ class xarDDObject extends xarObject implements ixarDDObject
      * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
-    public static function getObjectURL($object, $action = '', $itemid = null, $extra = [])
+    public static function getObjectURL($object, $action = '', $itemid = null, $extra = [], $xar = null)
     {
         $urlargs = $extra;
         if (!empty($object->table)) {
@@ -217,7 +217,7 @@ class xarDDObject extends xarObject implements ixarDDObject
             $urlargs[$object->urlparam] = $itemid;
         }
 
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         switch ($action) {
             case 'new':
                 unset($urlargs['itemid']);
@@ -251,9 +251,9 @@ class xarDDObject extends xarObject implements ixarDDObject
      * @param mixed $itemid the specific item id or null
      * @return string the generated URL
      */
-    public static function getCurrentURL($object, $action = '', $itemid = null)
+    public static function getCurrentURL($object, $action = '', $itemid = null, $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         switch ($action) {
             case 'display':
                 // CHECKME: reset method in the current URL ?
@@ -297,7 +297,7 @@ class xarDDObject extends xarObject implements ixarDDObject
      * @param mixed $itemid the specific item id or null
      * @return string the generated URL
      */
-    public static function getOtherURL($object, $action = '', $itemid = null)
+    public static function getOtherURL($object, $action = '', $itemid = null, $xar = null)
     {
         return 'http://www.xaraya.com/to_be_defined';
     }

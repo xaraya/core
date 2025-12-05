@@ -50,14 +50,9 @@ class FilePickerProperty extends SelectProperty
         } else {
             // Cater to common Xaraya calls
             if ((strpos($this->initialization_basedirectory, 'sys') === 0) || (strpos($this->initialization_basedirectory, 'xar') === 0)) {
-                /** @var string $temp */
-                $temp = '';
-                $namespace = '';
-                if (str_starts_with($this->initialization_basedirectory, 'xar::')) {
-                    $namespace = '\\Xaraya\\Services\\';
-                }
-                eval('$temp=' . $namespace . $this->initialization_basedirectory . ";");
-                $this->initialization_basedirectory = $temp;
+                /** @var string|null $temp */
+                $temp = $this->funcEval($this->initialization_basedirectory);
+                $this->initialization_basedirectory = $temp ?? '';
             }
         }
         // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory

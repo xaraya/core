@@ -87,10 +87,10 @@ class ServiceFactory
             'user' => self::getUserService($parent),
             'db' => self::getDatabaseService($parent),
             // wrappers for static core classes
-            'prep' => self::getWrapperService($parent, \xarVarPrep::class),
-            'events' => self::getWrapperService($parent, \xarEvents::class),
-            'hooked' => self::getWrapperService($parent, \xarHooks::class),
-            'theme' => self::getWrapperService($parent, \xarTheme::class),
+            'prep' => self::getVarPrepService($parent),
+            'events' => self::getEventsService($parent),
+            'hooked' => self::getHookedService($parent),
+            'theme' => self::getThemesService($parent),
             // internal modules helpers
             'modules.vars' => self::getModuleVarsHelper($parent),
             'modules.user' => self::getModuleUserVarsHelper($parent),
@@ -267,6 +267,45 @@ class ServiceFactory
     {
         self::log(__METHOD__, $parent);
         return DatabaseService::create($parent);
+    }
+
+    public static function getVarPrepService(object|string|null $parent = null): VarPrepInterface
+    {
+        $className = \xarVarPrep::class;
+        $instance = null;
+        self::log(__METHOD__ . "($className)", $parent);
+        $varprep = VarPrepService::create($parent, $className, $instance);
+        // initialize wrapped class by default here
+        $varprep->init();
+        return $varprep;
+    }
+
+    public static function getEventsService(object|string|null $parent = null): EventsInterface
+    {
+        $className = \xarEvents::class;
+        $instance = null;
+        self::log(__METHOD__ . "($className)", $parent);
+        $events = EventsService::create($parent, $className, $instance);
+        // initialize wrapped class by default here
+        $events->init();
+        return $events;
+    }
+
+    public static function getHookedService(object|string|null $parent = null): HookedInterface
+    {
+        $className = \xarHooks::class;
+        $instance = null;
+        self::log(__METHOD__ . "($className)", $parent);
+        $hooked = HookedService::create($parent, $className, $instance);
+        // initialize wrapped class by default here
+        $hooked->init();
+        return $hooked;
+    }
+
+    public static function getThemesService(object|string|null $parent = null): ThemesInterface
+    {
+        self::log(__METHOD__, $parent);
+        return ThemesService::create($parent);
     }
 
     public static function getWrapperService(object|string|null $parent = null, $className = null, $instance = null): ServiceInterface

@@ -360,9 +360,9 @@ class xarRoles extends xarObject
      * @param int    $state
      * @return object|void a role
      */
-    private static function _lookuprole($field, $value, $itemtype = self::ROLES_USERTYPE, $state = self::ROLES_STATE_ALL)
+    public static function _lookuprole($field, $value, $itemtype = self::ROLES_USERTYPE, $state = self::ROLES_STATE_ALL, $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         // get rid of 30 repeating queries for base homepage due to security checks
         $cacheScope = 'Roles.ByLookup';
         $cacheName = "$field:$value:$itemtype:$state";

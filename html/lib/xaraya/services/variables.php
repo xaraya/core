@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use ixarVar;
+use ixarVarPrep;
 use xarVarPrep;
 use EmptyParameterException;
 use ValidationExceptions;
@@ -40,7 +41,7 @@ interface VariablesInterface extends ServiceInterface
      * @param int $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
      * @return true
      */
-    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = ixarVar::GET_OR_POST, $prep = xarVarPrep::NOTHING): true;
+    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = ixarVar::GET_OR_POST, $prep = ixarVarPrep::NOTHING): true;
 
     /**
      * Get required variable by name: set the value if there is one, and validate the variable or throw excception
@@ -182,11 +183,11 @@ trait VariablesTrait
      * that if the variable is not present or doesn't validate correctly an exception will be raised.
      *
      * The $prep flag will prepare $value by passing it to one of the following:
-     *   xarVarPrep::NOTHING:    no prep (default)
-     *   xarVarPrep::TEXT:       xarVarPrep::text($value)
-     *   xarVarPrep::HTML:       xarVarPrep::html($value)
-     *   xarVarPrep::STORE:      dbconn->qstr($value)
-     *   xarVarPrep::TRIM:       trim($value)
+     *   ixarVarPrep::NOTHING:    no prep (default)
+     *   ixarVarPrep::TEXT:       xarVarPrep::text($value)
+     *   ixarVarPrep::HTML:       xarVarPrep::html($value)
+     *   ixarVarPrep::STORE:      dbconn->qstr($value)
+     *   ixarVarPrep::TRIM:       trim($value)
      *
      * @param string $name the variable name
      * @param string $validation the validation to be performed
@@ -196,7 +197,7 @@ trait VariablesTrait
      * @param int $prep will prep the value with xarVarPrep::text, xarVarPrep::html, or dbconn->qstr()
      * @return true
      */
-    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = ixarVar::GET_OR_POST, $prep = xarVarPrep::NOTHING): true
+    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = ixarVar::GET_OR_POST, $prep = ixarVarPrep::NOTHING): true
     {
         // Note: this should be restricted to gui methods
         assert(is_int($flags));
@@ -246,20 +247,20 @@ trait VariablesTrait
             }
         } else {
             // Value is ok, handle preparation of that value
-            if ($prep & xarVarPrep::TEXT) {
+            if ($prep & ixarVarPrep::TEXT) {
                 $variable = xarVarPrep::text($variable);
             }
-            if ($prep & xarVarPrep::HTML) {
+            if ($prep & ixarVarPrep::HTML) {
                 $variable = xarVarPrep::html($variable);
             }
 
             // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
-            if ($prep & xarVarPrep::STORE) {
+            if ($prep & ixarVarPrep::STORE) {
                 $dbconn = $this->getParent()->db()->getConn();
                 $variable = $dbconn->qstr($variable);
             }
 
-            if ($prep & xarVarPrep::TRIM) {
+            if ($prep & ixarVarPrep::TRIM) {
                 $variable = trim($variable);
             }
         }
@@ -273,7 +274,7 @@ trait VariablesTrait
      * $this->var()->get($name, $variable, $validation, $defaultValue=null)
      * ```
      * with flags = ixarVar::GET_OR_POST - the variable must be in GET or POST
-     * and prep = xarVarPrep::NOTHING
+     * and prep = ixarVarPrep::NOTHING
      *
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
@@ -294,7 +295,7 @@ trait VariablesTrait
      * $this->var()->check($name, $variable, $validation='isset', $defaultValue=null)
      * ```
      * with flags = ixarVar::DONT_SET     - if there is an existing value, use it
-     * and prep = xarVarPrep::NOTHING
+     * and prep = ixarVarPrep::NOTHING
      *
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
@@ -328,7 +329,7 @@ trait VariablesTrait
      * $this->var()->find($name, $variable, $validation='isset', $defaultValue=null)
      * ```
      * with flags = ixarVar::NOT_REQUIRED - allow the variable to be empty/not set, dont raise exception if it is
-     * and prep = xarVarPrep::NOTHING
+     * and prep = ixarVarPrep::NOTHING
      *
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
@@ -349,7 +350,7 @@ trait VariablesTrait
      * $this->var()->update($name, $variable, $validation='isset', $defaultValue=null)
      * ```
      * with flags = ixarVar::DONT_REUSE   - if there is an existing value, do not reuse it
-     * and prep = xarVarPrep::NOTHING
+     * and prep = ixarVarPrep::NOTHING
      *
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference

@@ -97,8 +97,9 @@ class DataObjectAPIHandler extends RestAPIHandler
             $args['limit'] = 100;
         }
         $fieldlist = $this->getViewProperties($object, $args);
+        $xar = $this->getServicesClass();
         // set context if available in handler
-        $loader = DataObjectFactory::getObjectLoader($object, $fieldlist, $context);
+        $loader = DataObjectFactory::getObjectLoader($object, $fieldlist, $context, $xar);
         $loader->parseQueryArgs($args);
         $objectlist = $loader->getObjectList();
         if ($this->hasSecurity($object, $method) && !$objectlist->checkAccess('view', 0, $userId)) {

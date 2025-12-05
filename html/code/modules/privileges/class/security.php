@@ -314,10 +314,10 @@ class xarSecurity extends xarObject
             if ($xar->mem()->has('Roles.ById', $userID)) {
                 $role = $xar->mem()->get('Roles.ById', $userID);
             } else {
-                $role = xarRoles::get($userID);
+                $role = $xar->user()->getRole('id', (int) $userID);
             }
         } else {
-            $role = xarRoles::findRole($rolename);
+            $role = $xar->user()->getRole('name', $rolename);
         }
 
         // check if we already have the irreducible set of privileges for the current user

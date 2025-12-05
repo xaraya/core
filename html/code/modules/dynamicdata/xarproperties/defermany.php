@@ -235,9 +235,9 @@ class DeferredManyProperty extends DeferredItemProperty
         //static::init_deferred($this->defername);
         if (empty(static::$deferred[$this->defername])) {
             if (!empty($this->linkname)) {
-                static::$deferred[$this->defername] = new LinkObjectItemLoader($this->linkname, $this->caller_id, $this->called_id);
+                static::$deferred[$this->defername] = new LinkObjectItemLoader($this->linkname, $this->caller_id, $this->called_id, null, $this->getStaticServices());
             } else {
-                static::$deferred[$this->defername] = new DataObjectDummyLoader($this->linkname, [$this->caller_id, $this->called_id]);
+                static::$deferred[$this->defername] = new DataObjectDummyLoader($this->linkname, [$this->caller_id, $this->called_id], null, $this->getStaticServices());
             }
         }
         return static::$deferred[$this->defername];

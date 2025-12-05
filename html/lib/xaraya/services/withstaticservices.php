@@ -521,22 +521,44 @@ trait WithStaticServices
      * - path()
      * - validate()
      */
-    public static function prep(): WrapperInterface
+    public static function prep(): VarPrepInterface
     {
         return self::getServicesClass()->prep();
     }
 
-    public static function events(): WrapperInterface
+    /**
+     * Access xarEvents::* methods (notify, ...)
+     *
+     * Available methods:
+     * - notify()
+     * - ...
+     */
+    public static function events(): EventsInterface
     {
         return self::getServicesClass()->events();
     }
 
-    public static function hooked(): WrapperInterface
+    /**
+     * Access xarHooks::* methods (notify, ...)
+     *
+     * Available methods:
+     * - notify()
+     * - ...
+     */
+    public static function hooked(): HookedInterface
     {
         return self::getServicesClass()->hooked();
     }
 
-    public static function theme(): WrapperInterface
+    /**
+     * Access xarTheme::* methods (isAvailable, getInfo, ...)
+     *
+     * Available methods:
+     * - isAvailable()
+     * - getInfo()
+     * - ...
+     */
+    public static function theme(): ThemesInterface
     {
         return self::getServicesClass()->theme();
     }

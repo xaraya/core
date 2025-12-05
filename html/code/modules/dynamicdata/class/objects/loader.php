@@ -32,11 +32,14 @@
 
 use Xaraya\Context\WithContextInterface;
 use Xaraya\Context\WithContextTrait;
+use Xaraya\Services\WithServicesInterface;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
 
-class DataObjectLoader implements WithContextInterface
+class DataObjectLoader implements WithContextInterface, WithServicesInterface
 {
     use WithContextTrait;
+    use WithServicesTrait;
 
     /** @var string */
     public $objectname = '';
@@ -76,7 +79,7 @@ class DataObjectLoader implements WithContextInterface
     protected function log()
     {
         if (!isset($this->xarLog)) {
-            $this->xarLog = xar::log();
+            $this->xarLog = $this->getServicesClass()->log();
         }
         return $this->xarLog;
     }
@@ -86,11 +89,11 @@ class DataObjectLoader implements WithContextInterface
      * @param list<string> $fieldlist
      * @return DataObjectLoader
      */
-    public static function getItemLoader(string $objectname = 'sample', array $fieldlist = ['id', 'name'])
+    public static function getItemLoader(string $objectname = 'sample', array $fieldlist = ['id', 'name'], $xar = null)
     {
         // we don't have an itemloader for this object yet, so we make a new one and keep it
         if (empty(self::$loaders[$objectname])) {
-            self::$loaders[$objectname] = new DataObjectItemLoader($objectname, $fieldlist);
+            self::$loaders[$objectname] = new DataObjectItemLoader($objectname, $fieldlist, null, $xar);
             return self::$loaders[$objectname];
         }
         // we already have all the fields we need in the current itemloader, so we use it
@@ -99,20 +102,21 @@ class DataObjectLoader implements WithContextInterface
             return self::$loaders[$objectname];
         }
         // we are missing some fields in the current itemloader, so we make a new one
-        return new DataObjectItemLoader($objectname, $fieldlist);
+        return new DataObjectItemLoader($objectname, $fieldlist, null, $xar);
     }
 
     /**
      * Summary of __construct
      * @param list<string> $fieldlist
      */
-    public function __construct(string $objectname = 'sample', array $fieldlist = ['id', 'name'], ?callable $resolver = null)
+    public function __construct(string $objectname = 'sample', array $fieldlist = ['id', 'name'], ?callable $resolver = null, $xar = null)
     {
         $this->objectname = $objectname;
         $this->fieldlist = $fieldlist;
         $this->todo = [];
         $this->cache = [];
         $this->resolver = $resolver;
+        $this->setServicesClass($xar);
         $this->preLoader = null;
         $this->postLoader = null;
         $this->checkFieldlist = true;
@@ -307,7 +311,7 @@ class DataObjectLoader implements WithContextInterface
         $this->log()->info("DataObjectLoader::getValues: get " . count($itemids) . " items from " . $this->objectname);
         $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
         //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
-        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
+        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext(), $this->getServicesClass());
         //echo "Datastore: " . get_class($this->objectlist->datastore) . "\n";
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         $this->objectlist->setFieldList($this->fieldlist);
@@ -354,7 +358,7 @@ class DataObjectLoader implements WithContextInterface
             $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
             //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         }
-        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
+        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext(), $this->getServicesClass());
         if (!empty($this->access) && !$this->objectlist->checkAccess($this->access)) {
             //http_response_code(403);
             throw new Exception('No access to object ' . $this->objectname);
@@ -737,13 +741,13 @@ class LinkObjectItemLoader extends DataObjectItemLoader
     /** @var DataObjectLoader|null */
     public $targetLoader = null;
 
-    public function __construct(string $linkname = 'sample', string $caller_id = '', string $called_id = '', ?callable $resolver = null)
+    public function __construct(string $linkname = 'sample', string $caller_id = '', string $called_id = '', ?callable $resolver = null, $xar = null)
     {
         $this->linkname = $linkname;
         $this->caller_id = $caller_id;
         $this->called_id = $called_id;
         $this->targetLoader = null;
-        parent::__construct($linkname, [$caller_id, $called_id], $resolver);
+        parent::__construct($linkname, [$caller_id, $called_id], $resolver, $xar);
     }
 
     /**
@@ -757,7 +761,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         // @checkme we could use a DataObjectListLoader and pass all the values to it, but that's less efficient
         //$this->targetLoader = new DataObjectListLoader($objectname, $fieldlist, $resolver);
         //$this->targetLoader = new DataObjectItemLoader($objectname, $fieldlist);
-        $this->targetLoader = DataObjectLoader::getItemLoader($objectname, $fieldlist);
+        $this->targetLoader = DataObjectLoader::getItemLoader($objectname, $fieldlist, $this->getServicesClass());
         $this->targetLoader->setContext($this->getContext());
     }
 
@@ -784,7 +788,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         $fieldlist = [$this->caller_id, $this->called_id];
         $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
-        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
+        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext(), $this->getServicesClass());
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         // @todo make this query work for relational datastores: select where caller_id in $values
         //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
@@ -817,7 +821,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
             //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         }
-        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
+        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext(), $this->getServicesClass());
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         return $this->objectlist;
     }
@@ -919,7 +923,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             throw new Exception('No saving links to complete child object ' . $this->linkname);
         }
         $params = ['name' => $this->linkname];
-        $objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
+        $objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext(), $this->getServicesClass());
         // @todo add quotes if itemid is string
         $objectlist->addWhere($this->caller_id, '= ' . $itemid);
         if (is_object($objectlist->datastore) && $objectlist->datastore->getClassName() === 'RelationalDataStore') {
@@ -943,7 +947,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         // $this->log()->info("LinkObjectItemLoader::save: old links " . implode(', ', $oldlinks));
         // $this->log()->info("LinkObjectItemLoader::save: new values " . implode(', ', $newvalues));
         // $this->log()->info("LinkObjectItemLoader::save: del values " . implode(', ', $delvalues));
-        $objectref = VirtualObjectFactory::getObject($params, $this->getContext());
+        $objectref = VirtualObjectFactory::getObject($params, $this->getContext(), $this->getServicesClass());
         foreach ($delvalues as $called_id) {
             $objectref->deleteItem(['itemid' => $oldlinks[$called_id]]);
         }
