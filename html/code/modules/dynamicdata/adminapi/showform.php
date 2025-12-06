@@ -39,7 +39,7 @@ class ShowformMethod extends MethodClass
         }
 
         $args['fallbackmodule'] = 'current';
-        $descriptor = new DataObjectDescriptor($args, $this->getParent());
+        $descriptor = $this->data()->getObjectDescriptor($args);
         $args = $descriptor->getArgs();
 
         // optional layout for the template

@@ -14,7 +14,7 @@ namespace Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\AdminApi;
-use DataObjectDescriptor;
+use ObjectDescriptor;
 use FieldTypeProperty;
 
 /**
@@ -55,7 +55,7 @@ class ViewPropertydefsMethod extends MethodClass
         // FIXME: This may not work when moving property classes around manually !
         //$data['fieldtypeprop'] =& $this->prop()->getProperty(array('type' => 'fieldtype'));
 
-        $descriptor = new DataObjectDescriptor(['type' => 'fieldtype'], $this->getParent());
+        $descriptor = new ObjectDescriptor(['type' => 'fieldtype']);
         $data['fieldtypeprop'] = new FieldTypeProperty($descriptor);
 
         $data['labels'] = [

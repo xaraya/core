@@ -18,8 +18,6 @@ use Xaraya\Database\WithDatabaseInterface;
 use Xaraya\Database\WithDatabaseTrait;
 use Xaraya\Database\ExternalDatabase;
 use Xaraya\DataObject\Import\PhpImporter;
-use Xaraya\Services\xar;
-use DataObjectFactory;
 use DataPropertyMaster;
 use TableObjectDescriptor;
 use BadParameterException;
@@ -55,13 +53,19 @@ class UtilApi extends UserApi implements WithDatabaseInterface
      * Summary of __construct
      * @param string $modName
      */
-    public function __construct(string $modName = 'dynamicdata', mixed $parent = null, mixed $context = null, $xar = null)
+    public function __construct(string $modName = 'dynamicdata', mixed $parent = null, $xar = null)
     {
+        if (isset($xar)) {
+            $this->setStaticServices($xar->getStaticServices());
+        }
         $this->setDbModName($modName);
         // we extend from UserApi now
-        // @todo verify if/when we can use $this->mod() here before/after parent constructor
-        $parent ??= xar::module($modName);
-        parent::__construct($modName, $parent, $context);
+        if (!isset($parent)) {
+            // @todo verify if/when we can use $this->mod() here before/after parent constructor
+            $xar = $this->getStaticServices();
+            $parent = $xar->module($modName);
+        }
+        parent::__construct($modName, $parent);
     }
 
     public function configure()
@@ -78,7 +82,7 @@ class UtilApi extends UserApi implements WithDatabaseInterface
      */
     public function getObjectConfig($objectname, $item = null)
     {
-        $item ??= DataObjectFactory::getObjectInfo(['name' => $objectname]);
+        $item ??= $this->data()->getObjectInfo(['name' => $objectname]);
         if (empty($item) || $item['name'] !== $objectname) {
             throw new BadParameterException($objectname, 'Invalid object name #(1)');
         }
@@ -473,7 +477,7 @@ class UtilApi extends UserApi implements WithDatabaseInterface
             return static::$propTypeIds;
         }
         // Get the default property types
-        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $proptypes = $this->prop()->getPropertyTypes();
         static::$propTypeIds = [];
         foreach ($proptypes as $proptype) {
             static::$propTypeIds[(string) $proptype['name']] = (int) $proptype['id'];
@@ -511,11 +515,12 @@ class UtilApi extends UserApi implements WithDatabaseInterface
         }
         // check existing tables and objects
         $tables = $this->getMetaInfo('', null, $dbConnIndex);
-        $objects = DataObjectFactory::getObjects();
+        $objects = $this->data()->getObjects();
         $objectnames = [];
         foreach ($objects as $objectinfo) {
             $objectnames[] = $objectinfo['name'];
         }
+        $xar = $this->getStaticServices();
         foreach ($checklist as $table => $check) {
             if (empty($check)) {
                 $result .= "Skipping table $table\n";
@@ -543,7 +548,7 @@ class UtilApi extends UserApi implements WithDatabaseInterface
             ]);
             //var_dump($descriptor);
             try {
-                $objectid = PhpImporter::createObject($descriptor);
+                $objectid = PhpImporter::createObject($descriptor, $xar);
                 $result .= "Created DD object ($objectid) '$name' for table $table\n";
             } catch (Exception $e) {
                 $result .= "Error creating DD object '$name' for table $table:\n";

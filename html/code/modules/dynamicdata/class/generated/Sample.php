@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * See Xaraya\DataObject\Export\PhpExporter (experimental)
+ */
+
 namespace Xaraya\DataObject\Generated;
 
 use ItemIDProperty;

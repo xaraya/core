@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="proptypes">DataPropertyMaster::getPropertyTypes()</xar:set>
+    <xar:set name="proptypes">$xar->prop()->getPropertyTypes()</xar:set>
     <xar:set name="currenturl">$xar->ctl()->getCurrentURL()</xar:set>
     <xar:set name="itemcount">$object->itemcount ?: count($items)</xar:set>
     <xar:set name="where">$object->where ?: []</xar:set>

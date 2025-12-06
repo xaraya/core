@@ -248,6 +248,15 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         return true;
     }
 
+    /**
+     * Relink objectref when cloning
+     * @return void
+     */
+    public function __clone()
+    {
+        DataObjectFactory::relinkObjectRef($this);
+    }
+
     private function propertysource($sourcestring, $object, $prefix = false)
     {
         $parts = explode('.', $sourcestring);
@@ -262,8 +271,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
                 return $object->properties[$parts[1]]->source;
             }
         } else {
-            // @todo do we need to pass along $this->getContext() here?
-            $foreignobject = DataObjectFactory::getObject(['name' => $parts[0]]);
+            $foreignobject = $this->data()->getObject(['name' => $parts[0]]);
             $foreignstore = $foreignobject->properties[$parts[1]]->source;
             $foreignparts = explode('.', $foreignstore);
             $foreignconfiguration = $foreignobject->datasources;
@@ -928,8 +936,9 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
      */
     public function getLinkedObjects($linktype = '', $itemid = null)
     {
+        $objectLinks = new DataObjectLinks($this->getStaticServices());
         // we'll skip the 'info' here, unless explicitly asked for 'all'
-        return DataObjectLinks::getLinkedObjects($this, $linktype, $itemid);
+        return $objectLinks->getLinkedObjects($this, $linktype, $itemid);
     }
 
     private function assembleQuery($object, $prefix = false, $type = "SELECT")

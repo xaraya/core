@@ -13,13 +13,13 @@
         <h4>First create the roles object</h4>
 <pre>
 &lt;xar:set name="dummy">1;
-    $roles = DataObjectFactory::getObjectList(['name'=>'roles_users']);
+    $roles = $xar->data()->getObjectList(['name'=>'roles_users']);
 &lt;/xar:set>
 </pre>
 
         <!-- Here we create the object -->
         <xar:set name="dummy">1;
-            $roles = DataObjectFactory::getObjectList(['name'=>'roles_users']);
+            $roles = $xar->data()->getObjectList(['name'=>'roles_users']);
             $roles->dataquery->eq('uname','admin');
         </xar:set>
 
@@ -52,7 +52,7 @@
 </pre>
         <!-- Here we create the object -->
         <xar:set name="dummy">1;
-            $roles = DataObjectFactory::getObjectList(['name'=>'roles_users']);
+            $roles = $xar->data()->getObjectList(['name'=>'roles_users']);
         </xar:set>
         
         <!-- Here we create the object -->

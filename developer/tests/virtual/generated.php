@@ -176,7 +176,6 @@ function test_normal_clone($itemid = null)
     for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = clone $base;
-        DataObjectFactory::relinkObjectRef($sample);
         if (!empty($itemid)) {
             $sample->getItem(['itemid' => $itemid]);
         }
@@ -327,7 +326,6 @@ function test_virtual_clone($itemid = null)
     for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = clone $base;
-        DataObjectFactory::relinkObjectRef($sample);
         if (!empty($itemid)) {
             $sample->getItem(['itemid' => $itemid]);
         }

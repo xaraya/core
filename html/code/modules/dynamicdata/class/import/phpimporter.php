@@ -61,8 +61,9 @@ class PhpImporter extends JsonImporter
      */
     public function importObjectDef($filepath)
     {
-        $descriptor = static::importDefinition($filepath);
-        $objectid = static::createObject($descriptor);
+        $xar = $this->getServicesClass();
+        $descriptor = $this->importDefinition($filepath);
+        $objectid = static::createObject($descriptor, $xar);
         return $objectid;
     }
 
@@ -84,9 +85,10 @@ class PhpImporter extends JsonImporter
      * @param bool $offline
      * @return VirtualObjectDescriptor
      */
-    public static function importDefinition($filepath, $offline = false)
+    public function importDefinition($filepath, $offline = false)
     {
+        $xar = $this->getServicesClass();
         $args = include $filepath;
-        return VirtualObjectFactory::getObjectDescriptor($args, $offline);
+        return VirtualObjectFactory::getObjectDescriptor($args, $offline, $xar);
     }
 }

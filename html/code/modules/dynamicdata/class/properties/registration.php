@@ -518,7 +518,7 @@ class PropertyRegistration extends DataContainer
         if ($frommodule) {
             // Assume this is a property in a module
             if (class_exists($class)) {
-                $descriptor = new DataObjectDescriptor();
+                $descriptor = new ObjectDescriptor();
                 $installer = new $class($descriptor);
                 $installer->install();
             }
@@ -526,10 +526,10 @@ class PropertyRegistration extends DataContainer
             // Assume this is a standalone property in the properties directory
             if (!class_exists($class)) {
                 sys::import('properties.' . $propertyname . '.install');
-                $descriptor = new DataObjectDescriptor();
+                $descriptor = new ObjectDescriptor();
                 $installer = new $class($descriptor);
             } else {
-                $descriptor = new DataObjectDescriptor();
+                $descriptor = new ObjectDescriptor();
                 $installer = new $class($descriptor);
             }
             $installer->install();

@@ -14,11 +14,9 @@
 
 namespace Xaraya\DataObject\Export;
 
-use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
 use Exception;
-use Xaraya\Services\xar;
 
 /**
  * DataObject JSON Exporter
@@ -45,10 +43,11 @@ class JsonExporter extends DataObjectExporter
 
     public function addObjectDef($info, $objectdef)
     {
+        $xar = $this->getServicesClass();
         // get the list of properties for a Dynamic Object
-        $object_properties = DataPropertyMaster::getProperties(['objectid' => 1]);
+        $object_properties = $xar->prop()->getProperties(['objectid' => 1]);
 
-        $prep = xar::prep();
+        $prep = $xar->prep();
         $info['@name'] = $objectdef->properties['name']->value;
         foreach (array_keys($object_properties) as $name) {
             if ($name == 'name' || !isset($objectdef->properties[$name]->value)) {
@@ -83,12 +82,13 @@ class JsonExporter extends DataObjectExporter
 
     public function addProperties($info)
     {
+        $xar = $this->getServicesClass();
         // get the list of properties for a Dynamic Property
-        $property_properties = DataPropertyMaster::getProperties(['objectid' => 2]);
+        $property_properties = $xar->prop()->getProperties(['objectid' => 2]);
 
-        $properties = DataPropertyMaster::getProperties(['objectid' => $this->objectid]);
+        $properties = $xar->prop()->getProperties(['objectid' => $this->objectid]);
 
-        $prep = xar::prep();
+        $prep = $xar->prep();
         $info['properties'] = [];
         foreach (array_keys($properties) as $name) {
             $propinfo = ['@name' => $name];

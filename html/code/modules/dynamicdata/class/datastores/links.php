@@ -10,13 +10,15 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesTrait;
 
 /**
  * DataStoreLinks class
  */
 class DataStoreLinks extends xarObject
 {
+    use WithServicesTrait;
+
     public static $linktypes = [
         'children'   => 'is parent of (one-to-many)',
         'parents'    => 'is child of (many-to-one)',
@@ -36,18 +38,34 @@ class DataStoreLinks extends xarObject
         'fk'   => 'foreign key',
     ];
 
+    public static function getLinkTypes()
+    {
+        return self::$linktypes;
+    }
+
+    public static function getDirections()
+    {
+        return self::$directions;
+    }
+
+    public function __construct($xar = null)
+    {
+        $this->setServicesClass($xar);
+    }
+
     /**
      * Initialize DataStoreLinks by importing the necessary xml files if necessary
      * @return DataObjectList|void
      */
-    public static function initLinks()
+    public function initLinks()
     {
-        $linklist = DataObjectFactory::getObjectList(['name' => 'dynamic_table_links']);
+        $xar = $this->getServicesClass();
+        $linklist = $xar->data()->getObjectList(['name' => 'dynamic_table_links']);
         if (empty($linklist) || empty($linklist->objectid)) {
             $def_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_table_links-def.xml';
             $dat_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_table_links-dat.xml';
             if (file_exists($def_file)) {
-                $objectid = xar::mod()->apiMethod(
+                $objectid = $xar->mod()->apiMethod(
                     'dynamicdata',
                     'utilapi',
                     'import',
@@ -58,7 +76,7 @@ class DataStoreLinks extends xarObject
                 }
             }
             if (file_exists($dat_file)) {
-                $objectid = xar::mod()->apiMethod(
+                $objectid = $xar->mod()->apiMethod(
                     'dynamicdata',
                     'utilapi',
                     'import',
@@ -69,12 +87,12 @@ class DataStoreLinks extends xarObject
                 }
             } else {
                 // add foreign keys to table links
-                $foreignkeys = self::getForeignKeys();
+                $foreignkeys = $this->getForeignKeys();
                 foreach ($foreignkeys as $info) {
-                    DataStoreLinks::addLink($info['source'], $info['from'], $info['target'], $info['to'], 'parents', 'fk');
+                    $this->addLink($info['source'], $info['from'], $info['target'], $info['to'], 'parents', 'fk');
                 }
             }
-            $linklist = DataObjectFactory::getObjectList(['name' => 'dynamic_table_links']);
+            $linklist = $xar->data()->getObjectList(['name' => 'dynamic_table_links']);
         }
         return $linklist;
     }
@@ -85,14 +103,14 @@ class DataStoreLinks extends xarObject
      * @param $source the table we want to get the links for (tablename)
      * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
      */
-    public static function getLinks($source = '', $linktype = '')
+    public function getLinks($source = '', $linktype = '')
     {
-        $linklist = self::initLinks();
+        $linklist = $this->initLinks();
         if (empty($linklist) || empty($linklist->objectid)) {
             return [];
         }
 
-        $source = self::getName($source);
+        $source = $this->getName($source);
 
         $where = [];
 
@@ -143,15 +161,16 @@ class DataStoreLinks extends xarObject
      * @param $extra additional constraints for this link
      * @param $add_reverse if we want to add a reverse link from target to source too (default is always true)
      */
-    public static function addLink($from_table, $from_field, $to_table, $to_field, $link_type, $direction, $extra = '', $add_reverse = true)
+    public function addLink($from_table, $from_field, $to_table, $to_field, $link_type, $direction, $extra = '', $add_reverse = true)
     {
-        $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_table_links']);
+        $xar = $this->getServicesClass();
+        $linkobject = $xar->data()->getObject(['name' => 'dynamic_table_links']);
         if (empty($linkobject) || empty($linkobject->objectid)) {
             return;
         }
 
-        $from_table = self::getName($from_table);
-        $to_table = self::getName($to_table);
+        $from_table = $this->getName($from_table);
+        $to_table = $this->getName($to_table);
         if (empty($from_table) || empty($to_table)) {
             return;
         }
@@ -204,9 +223,10 @@ class DataStoreLinks extends xarObject
     /**
      * Remove a link between a source table and a target table
      */
-    public static function removeLink($link_id, $remove_reverse = true)
+    public function removeLink($link_id, $remove_reverse = true)
     {
-        $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_table_links']);
+        $xar = $this->getServicesClass();
+        $linkobject = $xar->data()->getObject(['name' => 'dynamic_table_links']);
         if (empty($linkobject) || empty($linkobject->objectid)) {
             return;
         }
@@ -225,7 +245,7 @@ class DataStoreLinks extends xarObject
         }
 
         // get all links from the target (= including 'info')
-        $links = self::getLinks($linkfields['target'], 'all');
+        $links = $this->getLinks($linkfields['target'], 'all');
         if (empty($links[$linkfields['target']])) {
             return $link_id;
         }
@@ -253,7 +273,7 @@ class DataStoreLinks extends xarObject
     /**
      * Get the name of table arguments (tablename)
      */
-    public static function getName($object)
+    public function getName($object)
     {
         return $object;
     }
@@ -263,14 +283,15 @@ class DataStoreLinks extends xarObject
      *
      * @return array<mixed> of [datastore][objectid] = number of properties
      */
-    public static function getMapping()
+    public function getMapping()
     {
+        $xar = $this->getServicesClass();
         // load tables for 'dynamic_data'
-        xar::mod()->loadDbInfo('dynamicdata');
-        $xartables =  xar::db()->getTables();
+        $xar->mod()->loadDbInfo('dynamicdata');
+        $xartables =  $xar->db()->getTables();
 
         $mapping = [];
-        $properties = xar::mod()->apiMethod(
+        $properties = $xar->mod()->apiMethod(
             'dynamicdata',
             'userapi',
             'getobjectlist',
@@ -303,14 +324,15 @@ class DataStoreLinks extends xarObject
      *
      * @return array<mixed> of [datasource] = property info
      */
-    public static function getSourceFieldMapping()
+    public function getSourceFieldMapping()
     {
+        $xar = $this->getServicesClass();
         // load tables for 'dynamic_data'
-        xar::mod()->loadDbInfo('dynamicdata');
-        $xartables =  xar::db()->getTables();
+        $xar->mod()->loadDbInfo('dynamicdata');
+        $xartables =  $xar->db()->getTables();
 
         $sourcemapping = [];
-        $properties = xar::mod()->apiMethod(
+        $properties = $xar->mod()->apiMethod(
             'dynamicdata',
             'userapi',
             'getobjectlist',
@@ -337,10 +359,11 @@ class DataStoreLinks extends xarObject
      *
      * @return array<mixed> of foreign keys
      */
-    public static function getForeignKeys()
+    public function getForeignKeys()
     {
+        $xar = $this->getServicesClass();
         // get tables
-        $dbconn = xar::db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $dbInfo = $dbconn->getDatabaseInfo();
         $tables = $dbInfo->getTables();
 

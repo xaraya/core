@@ -52,25 +52,25 @@ class GetinfoMethod extends MethodClass
                 break;
 
             case 'objectlinktypes':
-                foreach (DataObjectLinks::$linktypes as $linktype => $descr) {
+                foreach (DataObjectLinks::getLinkTypes() as $linktype => $descr) {
                     $options[] = ['id' => $linktype, 'name' => $descr];
                 }
                 break;
 
             case 'objectdirections':
-                foreach (DataObjectLinks::$directions as $direction => $descr) {
+                foreach (DataObjectLinks::getDirections() as $direction => $descr) {
                     $options[] = ['id' => $direction, 'name' => $descr];
                 }
                 break;
 
             case 'tablelinktypes':
-                foreach (DataStoreLinks::$linktypes as $linktype => $descr) {
+                foreach (DataStoreLinks::getLinkTypes() as $linktype => $descr) {
                     $options[] = ['id' => $linktype, 'name' => $descr];
                 }
                 break;
 
             case 'tabledirections':
-                foreach (DataStoreLinks::$directions as $direction => $descr) {
+                foreach (DataStoreLinks::getDirections() as $direction => $descr) {
                     $options[] = ['id' => $direction, 'name' => $descr];
                 }
                 break;

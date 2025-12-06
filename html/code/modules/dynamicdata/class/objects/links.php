@@ -10,13 +10,15 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesTrait;
 
 /**
  * DataObjectLinks class
  */
 class DataObjectLinks extends xarObject
 {
+    use WithServicesTrait;
+
     public static $linktypes = [
         'children'   => 'is parent of (one-to-many)',
         'parents'    => 'is child of (many-to-one)',
@@ -39,21 +41,37 @@ class DataObjectLinks extends xarObject
         'info' => 'info',
     ];
 
+    public static function getLinkTypes()
+    {
+        return self::$linktypes;
+    }
+
+    public static function getDirections()
+    {
+        return self::$directions;
+    }
+
+    public function __construct($xar = null)
+    {
+        $this->setServicesClass($xar);
+    }
+
     /**
      * Initialize DataObjectLinks by importing the necessary xml files if necessary
      * @return DataObjectList|void
      */
-    public static function initLinks()
+    public function initLinks()
     {
+        $xar = $this->getServicesClass();
         $linklist = null;
         try {
-            $linklist = DataObjectFactory::getObjectList(['name' => 'dynamic_object_links']);
+            $linklist = $xar->data()->getObjectList(['name' => 'dynamic_object_links']);
         } catch (Exception) {
             if (empty($linklist) || empty($linklist->objectid)) {
                 $def_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-def.xml';
                 $dat_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-dat.xml';
                 if (file_exists($def_file)) {
-                    $objectid = xar::mod()->apiMethod(
+                    $objectid = $xar->mod()->apiMethod(
                         'dynamicdata',
                         'utilapi',
                         'import',
@@ -64,7 +82,7 @@ class DataObjectLinks extends xarObject
                     }
                 }
                 if (file_exists($dat_file)) {
-                    $objectid = xar::mod()->apiMethod(
+                    $objectid = $xar->mod()->apiMethod(
                         'dynamicdata',
                         'utilapi',
                         'import',
@@ -74,7 +92,7 @@ class DataObjectLinks extends xarObject
                         return;
                     }
                 }
-                $linklist = DataObjectFactory::getObjectList(['name' => 'dynamic_object_links']);
+                $linklist = $xar->data()->getObjectList(['name' => 'dynamic_object_links']);
             }
         }
         return $linklist;
@@ -86,14 +104,14 @@ class DataObjectLinks extends xarObject
      * @param $source the object we want to get the links for (object, objectlist, objectname or objectid)
      * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
      */
-    public static function getLinks($source = '', $linktype = '', $itemid = null)
+    public function getLinks($source = '', $linktype = '', $itemid = null)
     {
-        $linklist = self::initLinks();
+        $linklist = $this->initLinks();
         if (empty($linklist) || empty($linklist->objectid)) {
             return [];
         }
 
-        $source = self::getName($source);
+        $source = $this->getName($source);
 
         $where = [];
 
@@ -144,10 +162,10 @@ class DataObjectLinks extends xarObject
      * @param $extra additional constraints for this link
      * @param $add_reverse if we want to add a reverse link from target to source too (default is always true)
      */
-    public static function addLink($from_object, $from_propname, $to_object, $to_propname, $link_type, $direction, $extra = '', $add_reverse = true)
+    public function addLink($from_object, $from_propname, $to_object, $to_propname, $link_type, $direction, $extra = '', $add_reverse = true)
     {
-        $from_object = self::getName($from_object);
-        $to_object = self::getName($to_object);
+        $from_object = $this->getName($from_object);
+        $to_object = $this->getName($to_object);
         if (empty($from_object) || empty($to_object)) {
             return;
         }
@@ -161,7 +179,7 @@ class DataObjectLinks extends xarObject
             'extra'     => $extra];
 
         // get the list of all existing links
-        $linklist = self::initLinks();
+        $linklist = $this->initLinks();
         if (empty($linklist) || empty($linklist->objectid)) {
             return;
         }
@@ -169,6 +187,7 @@ class DataObjectLinks extends xarObject
         if (empty($checklinks)) {
             $checklinks = [];
         }
+        $xar = $this->getServicesClass();
 
         // make sure the link doesn't exist yet
         $link_id = 0;
@@ -185,7 +204,7 @@ class DataObjectLinks extends xarObject
 
         // create the link
         if (empty($link_id)) {
-            $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_object_links']);
+            $linkobject = $xar->data()->getObject(['name' => 'dynamic_object_links']);
             if (empty($linkobject) || empty($linkobject->objectid)) {
                 return;
             }
@@ -243,7 +262,7 @@ class DataObjectLinks extends xarObject
 
         // create the reverse link
         if (empty($linkobject)) {
-            $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_object_links']);
+            $linkobject = $xar->data()->getObject(['name' => 'dynamic_object_links']);
             if (empty($linkobject) || empty($linkobject->objectid)) {
                 return;
             }
@@ -256,9 +275,10 @@ class DataObjectLinks extends xarObject
     /**
      * Remove a link between a source object and a target object
      */
-    public static function removeLink($link_id, $remove_reverse = true)
+    public function removeLink($link_id, $remove_reverse = true)
     {
-        $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_object_links']);
+        $xar = $this->getServicesClass();
+        $linkobject = $xar->data()->getObject(['name' => 'dynamic_object_links']);
         if (empty($linkobject) || empty($linkobject->objectid)) {
             return;
         }
@@ -277,7 +297,7 @@ class DataObjectLinks extends xarObject
         }
 
         // get all links from the target (= including 'info')
-        $links = self::getLinks($linkfields['target'], 'all');
+        $links = $this->getLinks($linkfields['target'], 'all');
         if (empty($links[$linkfields['target']])) {
             return $link_id;
         }
@@ -305,12 +325,13 @@ class DataObjectLinks extends xarObject
     /**
      * Get the name of object arguments (object, objectlist, objectid or objectname)
      */
-    public static function getName($object)
+    public function getName($object)
     {
         if (empty($object)) {
-            return;
+            return null;
         } elseif (is_numeric($object)) {
-            $info = DataObjectFactory::getObjectInfo(['objectid' => $object]);
+            $xar = $this->getServicesClass();
+            $info = $xar->data()->getObjectInfo(['objectid' => $object]);
             return $info['name'];
         } elseif (is_string($object)) {
             return $object;
@@ -326,13 +347,14 @@ class DataObjectLinks extends xarObject
      * @param string $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
      * @param ?int $itemid (optional) for a particular itemid in ObjectList ?
      */
-    public static function getLinkedObjects($object, $linktype = '', $itemid = null)
+    public function getLinkedObjects($object, $linktype = '', $itemid = null)
     {
         // we'll skip the 'info' here, unless explicitly asked for 'all'
-        $links = self::getLinks($object, $linktype, $itemid);
+        $links = $this->getLinks($object, $linktype, $itemid);
         if (empty($links[$object->name])) {
             return [];
         }
+        $xar = $this->getServicesClass();
 
         // CHECKME: review where we place the linked objects
         $object->links = [
@@ -351,7 +373,7 @@ class DataObjectLinks extends xarObject
             }
 
             // get an objectlist for the target
-            $linkedlist = DataObjectFactory::getObjectList(['name' => $link['target']]);
+            $linkedlist = $xar->data()->getObjectList(['name' => $link['target']]);
 
             // skip links to unknown objects or properties
             if (empty($linkedlist->objectid) || empty($linkedlist->properties[$link['to_prop']])) {
@@ -394,7 +416,7 @@ class DataObjectLinks extends xarObject
                                             $itemid = $linkedlist->itemids[0];
                                             $item = $linkedlist->items[$itemid];
                                             // get a single object for the target
-                                            $linkedlist = DataObjectFactory::getObject(array('name' => $link['target']));
+                                            $linkedlist = $xar->data()->getObject(array('name' => $link['target']));
                                             $linkedlist->itemid = $itemid;
                                             $linkedlist->setFieldValues($item);
                                         }
@@ -424,13 +446,14 @@ class DataObjectLinks extends xarObject
      * @param string $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
      * @param ?int $itemid (optional) for a particular itemid in ObjectList ?
      */
-    public static function countLinkedItems($object, $linktype = '', $itemid = null)
+    public function countLinkedItems($object, $linktype = '', $itemid = null)
     {
         // we'll skip the 'info' here, unless explicitly asked for 'all'
-        $links = self::getLinks($object, $linktype, $itemid);
+        $links = $this->getLinks($object, $linktype, $itemid);
         if (empty($links[$object->name])) {
             return [];
         }
+        $xar = $this->getServicesClass();
 
         // CHECKME: use this only to count children here, or also for the others (= 0 or 1) ?
 
@@ -451,7 +474,7 @@ class DataObjectLinks extends xarObject
             }
 
             // get an objectlist for the target
-            $linkedlist = DataObjectFactory::getObjectList(['name' => $link['target']]);
+            $linkedlist = $xar->data()->getObjectList(['name' => $link['target']]);
             // skip links to unknown objects or properties
             if (empty($linkedlist->objectid) || empty($linkedlist->properties[$link['to_prop']])) {
                 continue;
@@ -562,14 +585,15 @@ class DataObjectLinks extends xarObject
      *
      * @return array<mixed> of [objectid][datastore] = number of properties
      */
-    public static function getMapping()
+    public function getMapping()
     {
+        $xar = $this->getServicesClass();
         // load tables for 'dynamic_data'
-        xar::mod()->loadDbInfo('dynamicdata');
-        $xartables = xar::db()->getTables();
+        $xar->mod()->loadDbInfo('dynamicdata');
+        $xartables = $xar->db()->getTables();
 
         $mapping = [];
-        $properties = xar::mod()->apiMethod(
+        $properties = $xar->mod()->apiMethod(
             'dynamicdata',
             'userapi',
             'getobjectlist',

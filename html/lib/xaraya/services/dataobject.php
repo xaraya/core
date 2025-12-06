@@ -16,6 +16,8 @@
 
 namespace Xaraya\Services;
 
+use Xaraya\DataObject\Export\DataObjectExporter;
+use Xaraya\DataObject\Import\DataObjectImporter;
 use DataObjectDescriptor;
 use DataObjectFactory;
 use DataObject;
@@ -285,6 +287,16 @@ trait DataObjectTrait
     public function getObjectDescriptor(array $args = []): DataObjectDescriptor
     {
         return new DataObjectDescriptor($args, $this->getParent());
+    }
+
+    public function export($objectid, $itemid = null, $format = 'xml', $tofile = false)
+    {
+        return DataObjectExporter::export($objectid, $itemid, $format, $tofile, $this->getParent());
+    }
+
+    public function import($file = null, $content = null, $format = 'xml', $prefix = null, $overwrite = false, $keepitemid = false)
+    {
+        return DataObjectImporter::import($file, $content, $format, $prefix, $overwrite, $keepitemid, $this->getParent());
     }
 }
 

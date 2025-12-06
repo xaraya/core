@@ -14,17 +14,18 @@
 
 namespace Xaraya\DataObject\Import;
 
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
 use DataObject;
 use DataObjectDescriptor;
-use DataObjectFactory;
-use DataPropertyMaster;
 
 /**
  * DataObject Importer
  */
 class DataObjectImporter
 {
+    use WithServicesTrait;
+
     protected static ?DataObject $dataobject = null;
     protected static ?DataObject $dataproperty = null;
     /** @var array<int, mixed> */
@@ -43,11 +44,12 @@ class DataObjectImporter
      * @param bool $overwrite
      * @param bool $keepitemid
      */
-    public function __construct($prefix = null, $overwrite = false, $keepitemid = false)
+    public function __construct($prefix = null, $overwrite = false, $keepitemid = false, $xar = null)
     {
-        $this->proptypes = DataPropertyMaster::getPropertyTypes();
+        $xar = $this->getServicesClass($xar);
+        $this->proptypes = $xar->prop()->getPropertyTypes();
 
-        $this->prefix = $prefix ?? (xar::db()->getPrefix() . '_');
+        $this->prefix = $prefix ?? ($xar->db()->getPrefix() . '_');
         $this->overwrite = $overwrite;
         $this->keepitemid = $keepitemid;
     }
@@ -61,24 +63,24 @@ class DataObjectImporter
      * @param ?string $prefix table prefix for local database installation (default xarDB prefix)
      * @param bool $overwrite overwrite existing object definition (default false)
      * @param bool $keepitemid (try to) keep the item id of the different items (default false)
-     * //$args['entry'] optional array of external references. (deprecated)
      * @return mixed|null object id on success, null on failure
      */
-    public static function import($file = null, $content = null, $format = 'xml', $prefix = null, $overwrite = false, $keepitemid = false)
+    public static function import($file = null, $content = null, $format = 'xml', $prefix = null, $overwrite = false, $keepitemid = false, $xar = null)
     {
         if (empty($format)) {
             $format = 'xml';
         }
+        $xar ??= xar::getServicesClass();
         if (!isset($prefix)) {
-            $prefix = xar::db()->getPrefix();
+            $prefix = $xar->db()->getPrefix();
         }
         // @todo allow non-prefixed table names someday
         $prefix .= '_';
 
         $importer = match ($format) {
-            'php'   => new PhpImporter($prefix, $overwrite, $keepitemid),
-            'json'  => new JsonImporter($prefix, $overwrite, $keepitemid),
-            default => new XmlImporter($prefix, $overwrite, $keepitemid),
+            'php'   => new PhpImporter($prefix, $overwrite, $keepitemid, $xar),
+            'json'  => new JsonImporter($prefix, $overwrite, $keepitemid, $xar),
+            default => new XmlImporter($prefix, $overwrite, $keepitemid, $xar),
         };
 
         return $importer->importContent($file, $content);
@@ -123,11 +125,12 @@ class DataObjectImporter
      * @param DataObjectDescriptor $descriptor
      * @return int|mixed
      */
-    public static function createObject($descriptor)
+    public static function createObject($descriptor, $xar = null)
     {
-        static::$dataobject ??= DataObjectFactory::getObject(['name' => 'objects']);
-        static::$dataproperty ??= DataObjectFactory::getObject(['name' => 'properties']);
-        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $xar ??= xar::getServicesClass();
+        static::$dataobject ??= $xar->data()->getObject(['name' => 'objects']);
+        static::$dataproperty ??= $xar->data()->getObject(['name' => 'properties']);
+        $proptypes = $xar->prop()->getPropertyTypes();
         $name2id = [];
         foreach ($proptypes as $propid => $proptype) {
             $name2id[$proptype['name']] = $propid;

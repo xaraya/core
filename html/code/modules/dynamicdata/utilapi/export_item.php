@@ -11,6 +11,7 @@
 
 namespace Xaraya\Modules\DynamicData\UtilApi;
 
+use Xaraya\DataObject\Export\DataObjectExporter;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UtilApi;
 
@@ -50,6 +51,7 @@ class ExportItemMethod extends MethodClass
             $tofile = false;
         }
 
-        return \Xaraya\DataObject\Export\DataObjectExporter::export($objectid, $itemid, $format, $tofile);
+        $xar = $this->getStaticServices();
+        return DataObjectExporter::export($objectid, $itemid, $format, $tofile, $xar);
     }
 }

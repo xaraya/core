@@ -18,11 +18,9 @@ namespace Xaraya\Services;
 
 use Xaraya\Bridge\TemplateEngine\TwigConfig;
 use CompiledTemplate;
-use DataPropertyMaster;
 use XarayaCompiler;
 use XarayaSourceTemplate;
 use xarConst;
-use xarCore;
 use xarTemplateCache;
 use xarTplPager;
 use xarTwigTpl;

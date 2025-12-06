@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Mail\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminApi;
 use Xaraya\Modules\Mail\UserApi;
-use DataObjectFactory;
 use sys;
 
 /**

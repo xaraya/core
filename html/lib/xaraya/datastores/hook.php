@@ -15,7 +15,6 @@
 namespace Xaraya\DataObject\DataStores;
 
 use DataProperty;
-use DataPropertyMaster;
 
 /**
  * Class to handle hook datastore
@@ -28,8 +27,9 @@ class HookDataStore extends BasicDataStore
      */
     public function getFieldName(DataProperty &$property)
     {
+        $xar = $this->getServicesClass();
         // check if this is a known module, based on the name of the property type
-        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $proptypes = $xar->prop()->getPropertyTypes();
         $curtype = $property->type;
         if (!empty($proptypes[$curtype]['name'])) {
             return $proptypes[$curtype]['name'];

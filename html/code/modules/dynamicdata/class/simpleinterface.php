@@ -53,11 +53,11 @@ class SimpleObjectInterface extends DefaultHandler
             $this->args = array_merge($this->args, $args);
         }
         // set context if available in handler
-        $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
+        $this->object = $this->data()->getObjectList($this->args);
         if (method_exists($this->object, $this->args['method'])) {
             $this->object->getItems();
         } else {
-            $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
+            $this->object = $this->data()->getObject($this->args);
         }
         $this->context?->tracePath(__METHOD__ . ': ' . $this->object->name, $this->args);
 

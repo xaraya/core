@@ -16,7 +16,6 @@ namespace Xaraya\DataObject\Export;
 
 use DataObject;
 use DataObjectDescriptor;
-use DataObjectFactory;
 use VirtualObjectFactory;
 use BadParameterException;
 use Throwable;
@@ -57,8 +56,9 @@ class PhpExporter extends JsonExporter
      */
     public function getObjectDef()
     {
+        $xar = $this->getServicesClass();
         // we grab the actual object here
-        $myobject = DataObjectFactory::getObject([
+        $myobject = $xar->data()->getObject([
             'objectid' => $this->objectid,
             'allprops' => true,
         ]);
@@ -77,9 +77,11 @@ class PhpExporter extends JsonExporter
         static::exportDefinition($objectdef->descriptor, $filepath);
 
         $info .= '<?php
+
 /**
  * See ' . $source . ' (experimental)
  */
+
 namespace Xaraya\DataObject\Generated;
 
 ';
@@ -171,6 +173,7 @@ class ' . $classname . ' extends GeneratedClass
         $info = $descriptor->getArgs();
         $propertyargs = $info['propertyargs'];
         unset($info['propertyargs']);
+        unset($info['context']);
         $arrayargs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
         foreach ($arrayargs as $name) {
             if (!empty($info[$name]) && is_string($info[$name])) {
@@ -178,9 +181,11 @@ class ' . $classname . ' extends GeneratedClass
             }
         }
         $output = '<?php
+
 /**
  * Exported by ' . $source . '
  */
+
 $object = ' . var_export($info, true) . ";\n";
         $output .= "\$properties = array();\n";
         foreach ($propertyargs as $propertyarg) {

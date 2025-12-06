@@ -97,9 +97,10 @@ class RelationsMethod extends MethodClass
         $data['objects'] = $userapi->getobjects();
 
         // import the DataObjectLinks class
+        $objectLinks = new DataObjectLinks($this->getStaticServices());
 
         // get linktypes
-        $data['linktypes'] = DataObjectLinks::$linktypes;
+        $data['linktypes'] = $objectLinks->getLinkTypes();
 
         // get tables
         $dbconn = $this->db()->getConn();
@@ -109,7 +110,7 @@ class RelationsMethod extends MethodClass
 
         // get mapping of objects to datasources by looking at property sources
         if (empty($objectid) && empty($table)) {
-            $data['mapping'] = DataObjectLinks::getMapping();
+            $data['mapping'] = $objectLinks->getMapping();
         }
 
         //dynamicdata_sync_relations();
@@ -126,7 +127,7 @@ class RelationsMethod extends MethodClass
             $this->tpl()->setPageTitle($this->ml('Links for #(1)', $object->label));
 
             // get all links, including 'info' for reverse one-way information
-            $links = DataObjectLinks::getLinks($object, 'all');
+            $links = $objectLinks->getLinks($object, 'all');
             if (!empty($links[$object->name])) {
                 $data['relations'] = $links[$object->name];
             } else {
@@ -285,7 +286,7 @@ class RelationsMethod extends MethodClass
                 }
 
                 // add link
-                DataObjectLinks::addLink($objectid, $field, $withobjectid, $withfield, $relation, $direction, $extra);
+                $objectLinks->addLink($objectid, $field, $withobjectid, $withfield, $relation, $direction, $extra);
                 $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'relations',
@@ -302,7 +303,7 @@ class RelationsMethod extends MethodClass
                     if (empty($link_id) || empty($val)) {
                         continue;
                     }
-                    DataObjectLinks::removeLink($link_id);
+                    $objectLinks->removeLink($link_id);
                 }
                 $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
@@ -337,8 +338,10 @@ class RelationsMethod extends MethodClass
 
             $this->tpl()->setPageTitle($this->ml('Links for #(1)', $object->label));
 
+            $storeLinks = new DataStoreLinks($this->getStaticServices());
+
             // get all links, including 'info' for reverse one-way information
-            $links = DataStoreLinks::getLinks($table, 'all');
+            $links = $storeLinks->getLinks($table, 'all');
             if (!empty($links[$table])) {
                 $data['relations'] = $links[$table];
             } else {
@@ -346,7 +349,7 @@ class RelationsMethod extends MethodClass
             }
 
             // get foreign keys for tables
-            $data['foreignkeys'] = DataStoreLinks::getForeignKeys();
+            $data['foreignkeys'] = $storeLinks->getForeignKeys();
 
             if (!empty($withtable)) {
                 $withobject = $this->data()->getObject(['table' => $withtable]);
@@ -372,7 +375,7 @@ class RelationsMethod extends MethodClass
                 }
                 // CHECKME: always bi-directional for tables ?
                 $direction = 'bi';
-                DataStoreLinks::addLink($table, $field, $withtable, $withfield, $relation, $direction, $extra);
+                $storeLinks->addLink($table, $field, $withtable, $withfield, $relation, $direction, $extra);
                 $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'relations',
@@ -389,7 +392,7 @@ class RelationsMethod extends MethodClass
                     if (empty($link_id) || empty($val)) {
                         continue;
                     }
-                    DataStoreLinks::removeLink($link_id);
+                    $storeLinks->removeLink($link_id);
                 }
                 $this->ctl()->redirect($this->mod()->getURL(
                     'admin',

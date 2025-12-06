@@ -198,7 +198,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Replace the DB data with the data to be updated
         // @todo do we need to pass along $this->getContext() here?
-        $single_object = DataObjectFactory::getObject(['name' => $this->name]);
+        $single_object = $this->data()->getObject(['name' => $this->name]);
         foreach ($db_items as $key => $db_item) {
             // Check if the data changed
             $unchanged = true;

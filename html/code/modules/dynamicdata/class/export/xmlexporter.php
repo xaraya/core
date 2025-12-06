@@ -14,10 +14,8 @@
 
 namespace Xaraya\DataObject\Export;
 
-use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
-use Xaraya\Services\xar;
 
 /**
  * DataObject XML Exporter
@@ -38,10 +36,11 @@ class XmlExporter extends DataObjectExporter
 
     public function addObjectDef($xml, $objectdef)
     {
+        $xar = $this->getServicesClass();
         // get the list of properties for a Dynamic Object
-        $object_properties = DataPropertyMaster::getProperties(['objectid' => 1]);
+        $object_properties = $xar->prop()->getProperties(['objectid' => 1]);
 
-        $prep = xar::prep();
+        $prep = $xar->prep();
         $xml .= '<object name="' . $objectdef->properties['name']->value . '">' . "\n";
         foreach (array_keys($object_properties) as $name) {
             if ($name == 'name' || !isset($objectdef->properties[$name]->value)) {
@@ -71,12 +70,13 @@ class XmlExporter extends DataObjectExporter
 
     public function addProperties($xml)
     {
+        $xar = $this->getServicesClass();
         // get the list of properties for a Dynamic Property
-        $property_properties = DataPropertyMaster::getProperties(['objectid' => 2]);
+        $property_properties = $xar->prop()->getProperties(['objectid' => 2]);
 
-        $properties = DataPropertyMaster::getProperties(['objectid' => $this->objectid]);
+        $properties = $xar->prop()->getProperties(['objectid' => $this->objectid]);
 
-        $prep = xar::prep();
+        $prep = $xar->prep();
         $xml .= "  <properties>\n";
         foreach (array_keys($properties) as $name) {
             $xml .= '    <property name="' . $name . '">' . "\n";

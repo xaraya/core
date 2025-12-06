@@ -14,32 +14,34 @@
 
 namespace Xaraya\DataObject\Export;
 
+use Xaraya\Services\WithServicesTrait;
 use DataObject;
 use DataObjectList;
-use DataObjectFactory;
 use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
 use BadParameterException;
 use sys;
-use Xaraya\Services\xar;
 
 /**
  * DataObject Exporter
  */
 class DataObjectExporter
 {
+    use WithServicesTrait;
+
     /** @var array<string> */
     public array $deferred = [];
     /** @var array<int, mixed> */
     public array $proptypes = [];
     public string $prefix = 'xar_';
 
-    public function __construct(public int $objectid, public bool $tofile = false)
+    public function __construct(public int $objectid, public bool $tofile = false, $xar = null)
     {
-        $this->proptypes = DataPropertyMaster::getPropertyTypes();
+        $xar = $this->getServicesClass($xar);
+        $this->proptypes = $xar->prop()->getPropertyTypes();
 
-        $this->prefix = xar::db()->getPrefix();
+        $this->prefix = $xar->db()->getPrefix();
         $this->prefix .= '_';
     }
 
@@ -136,7 +138,8 @@ class DataObjectExporter
      */
     public function getObjectDef()
     {
-        $myobject = DataObjectFactory::getObject(['name' => 'objects']);
+        $xar = $this->getServicesClass();
+        $myobject = $xar->data()->getObject(['name' => 'objects']);
 
         $myobject->getItem(['itemid' => $this->objectid]);
 
@@ -154,7 +157,8 @@ class DataObjectExporter
      */
     public function getObjectList()
     {
-        $mylist = DataObjectFactory::getObjectList([
+        $xar = $this->getServicesClass();
+        $mylist = $xar->data()->getObjectList([
             'objectid' => $this->objectid,
             'prelist'  => false,
         ]);     // don't run preList method
@@ -203,7 +207,8 @@ class DataObjectExporter
      */
     public function getObjectItem(int $itemid)
     {
-        $myobject = DataObjectFactory::getObject([
+        $xar = $this->getServicesClass();
+        $myobject = $xar->data()->getObject([
             'objectid' => $this->objectid,
             'itemid'   => $itemid,
             'allprops' => true,
@@ -226,12 +231,12 @@ class DataObjectExporter
      * @param bool $tofile
      * @return bool|string
      */
-    public static function export($objectid, $itemid = null, $format = 'xml', $tofile = false)
+    public static function export($objectid, $itemid = null, $format = 'xml', $tofile = false, $xar = null)
     {
         $exporter = match ($format) {
-            'php' => new PhpExporter($objectid, $tofile),
-            'json' => new JsonExporter($objectid, $tofile),
-            default => new XmlExporter($objectid, $tofile),
+            'php' => new PhpExporter($objectid, $tofile, $xar),
+            'json' => new JsonExporter($objectid, $tofile, $xar),
+            default => new XmlExporter($objectid, $tofile, $xar),
         };
         if (!isset($itemid)) {
             $type = 'objectdef';

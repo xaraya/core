@@ -62,8 +62,9 @@ class JsonImporter extends DataObjectImporter
      */
     public function importObjectDef($content)
     {
-        $descriptor = static::importDefinition($content);
-        $objectid = static::createObject($descriptor);
+        $xar = $this->getServicesClass();
+        $descriptor = $this->importDefinition($content);
+        $objectid = static::createObject($descriptor, $xar);
         return $objectid;
     }
 
@@ -85,9 +86,10 @@ class JsonImporter extends DataObjectImporter
      * @param bool $offline
      * @return VirtualObjectDescriptor
      */
-    public static function importDefinition($content, $offline = false)
+    public function importDefinition($content, $offline = false)
     {
+        $xar = $this->getServicesClass();
         $args = json_decode($content, true);
-        return VirtualObjectFactory::getObjectDescriptor($args, $offline);
+        return VirtualObjectFactory::getObjectDescriptor($args, $offline, $xar);
     }
 }

@@ -13,7 +13,6 @@ namespace Xaraya\Modules\DynamicData\AdminApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminApi;
-use DataObjectFactory;
 
 /**
  * dynamicdata adminapi deleteobject function

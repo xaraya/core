@@ -36,7 +36,7 @@ class ShowviewMethod extends MethodClass
         extract($args);
 
         $args['fallbackmodule'] = 'current';
-        $descriptor = new DataObjectDescriptor($args, $this->getParent());
+        $descriptor = $this->data()->getObjectDescriptor($args);
         $args = $descriptor->getArgs();
 
         // do we want to count?

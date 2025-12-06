@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Exported by Xaraya\DataObject\Export\PhpExporter::exportDefinition
+ */
+
 $object = [
     'objectid' => 4,
     'allprops' => true,

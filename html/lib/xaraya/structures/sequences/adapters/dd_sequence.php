@@ -9,6 +9,9 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+
+use Xaraya\Services\WithServicesTrait;
+
 /**
  * Sequence implemented as a dd object, very inefficient implementation for now.
  *
@@ -17,10 +20,10 @@
  * @todo we have to clarify the interaction between these datastructures and
  *       datastores.
  */
-use Xaraya\Services\xar;
-
 class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceAdapter
 {
+    use WithServicesTrait;
+
     private $seqInfo   = null; /* This stays the same more or less */
     private $seqObject = null; /* The object definition */
 
@@ -29,10 +32,11 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
      * @param $args['name'] string name of the object containing the sequence
      *
      */
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $xar = null)
     {
         // TODO: check the object definition, it needs id, data and nextid
         assert(isset($args["name"]));
+        $this->setServicesClass($xar);
         $this->seqInfo = $args;
         // This fills $seqObject and $seq with most current data.
         $this->getSequence();
@@ -56,7 +60,8 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
             'where'    => 'id = ' . $this->items[$position]['id']];
         // And get the data, we do this explicitly because the 'data' field might be very big
         // so it is not included in the items property for this object by default.
-        $item = xar::mod()->apiFunc('dynamicdata', 'user', 'getitems', $params);
+        $xar = $this->getServicesClass();
+        $item = $xar->mod()->apiFunc('dynamicdata', 'user', 'getitems', $params);
         $item = $item[$this->items[$position]['id']]['data'] ?? '';
         $item = unserialize(base64_decode($item));
         return $item;
@@ -144,14 +149,15 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     /* Refresh the sequence data */
     private function getSequence()
     {
-        $this->seqObject = DataObjectFactory::getObjectList($this->seqInfo);
+        $xar = $this->getServicesClass();
+        $this->seqObject = $xar->data()->getObjectList($this->seqInfo);
         $objectData = $this->seqObject->getItems([
             'sort'      => 'nextid',
             'fieldlist' => ['id','nextid'],
         ]);
         // Make sure we have them in the right order (logically), i.e. sort on nextid
         $this->items = array_reverse($objectData);
-        $this->seqObject = DataObjectFactory::getObject($this->seqInfo);
+        $this->seqObject = $xar->data()->getObject($this->seqInfo);
     }
 
     /* Update an item to have a new successor in the sequence */
@@ -162,7 +168,8 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
             'itemid'    => $itemid,
             'fields'    => [['name' => 'nextid','value' => $nextid]]];
 
-        $res = xar::mod()->apiFunc('dynamicdata', 'admin', 'update', $params);
+        $xar = $this->getServicesClass();
+        $res = $xar->mod()->apiFunc('dynamicdata', 'admin', 'update', $params);
         return $res;
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Xaraya\Modules\DynamicData\UtilApi;
 
+use Xaraya\DataObject\Import\DataObjectImporter;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UtilApi;
 
@@ -44,6 +45,8 @@ class ImportMethod extends MethodClass
         $args['prefix'] ??= $this->db()->getPrefix();
         $args['overwrite'] ??= false;
         $args['keepitemid'] ??= false;
-        return \Xaraya\DataObject\Import\DataObjectImporter::import($args['file'], $args['xml'], $args['format'], $args['prefix'], $args['overwrite'], $args['keepitemid']);
+
+        $xar = $this->getStaticServices();
+        return DataObjectImporter::import($args['file'], $args['xml'], $args['format'], $args['prefix'], $args['overwrite'], $args['keepitemid'], $xar);
     }
 }

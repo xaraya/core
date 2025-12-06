@@ -16,7 +16,6 @@ namespace Xaraya\DataObject\Import;
 
 use DataObject;
 use DataObjectLinks;
-use DataObjectFactory;
 use SimpleXMLElement;
 use ValueValidations;
 use BadParameterException;
@@ -24,7 +23,6 @@ use DuplicateException;
 use EmptyParameterException;
 use Exception;
 use IValidation;
-use Xaraya\Services\xar;
 
 /**
  * DataObject XML Importer
@@ -40,9 +38,9 @@ class XmlImporter extends DataObjectImporter
      * @param bool $overwrite
      * @param bool $keepitemid
      */
-    public function __construct($prefix = null, $overwrite = false, $keepitemid = false)
+    public function __construct($prefix = null, $overwrite = false, $keepitemid = false, $xar = null)
     {
-        parent::__construct($prefix, $overwrite, $keepitemid);
+        parent::__construct($prefix, $overwrite, $keepitemid, $xar);
 
         $this->boolean = ValueValidations::get('bool');
         $this->integer = ValueValidations::get('int');
@@ -65,8 +63,9 @@ class XmlImporter extends DataObjectImporter
         }
 
         if (!empty($file)) {
+            $xar = $this->getServicesClass();
             $xml = file_get_contents($file);
-            xar::log()->info('DD: Importing file ' . $file);
+            $xar->log()->info('DD: Importing file ' . $file);
             if (empty($xml)) {
                 return null;
             }
@@ -106,6 +105,7 @@ class XmlImporter extends DataObjectImporter
     {
         $xmlobject = new SimpleXMLElement($xml);
         $objectid = 0;
+        $xar = $this->getServicesClass();
 
         # --------------------------------------------------------
         #
@@ -115,18 +115,18 @@ class XmlImporter extends DataObjectImporter
         $args = [];
         // Get the object's name
         $args['name'] = (string) ($xmlobject->attributes()->name);
-        xar::log()->info('DD: importing ' . $args['name']);
+        $xar->log()->info('DD: importing ' . $args['name']);
 
         // check if the object exists
-        $info = DataObjectFactory::getObjectInfo(['name' => $args['name']]);
+        $info = $xar->data()->getObjectInfo(['name' => $args['name']]);
         $dupexists = !empty($info);
         if ($dupexists && !$this->overwrite) {
             //$msg = 'Duplicate definition for #(1) #(2)';
-            //$vars = ['object', xar::prep()->text($args['name'])];
+            //$vars = ['object', $xar->prep()->text($args['name'])];
             throw new DuplicateException(null, $args['name']);
         }
 
-        $object = DataObjectFactory::getObject(['name' => 'objects']);
+        $object = $xar->data()->getObject(['name' => 'objects']);
         $objectproperties = array_keys($object->properties);
         foreach ($objectproperties as $property) {
             if (isset($xmlobject->{$property}[0])) {
@@ -155,7 +155,7 @@ class XmlImporter extends DataObjectImporter
         unset($args['objectid']);
 
         // Add an item to the object
-        $args['itemtype'] = xar::mod()->apiMethod(
+        $args['itemtype'] = $xar->mod()->apiMethod(
             'dynamicdata',
             'adminapi',
             'getnextitemtype',
@@ -163,7 +163,7 @@ class XmlImporter extends DataObjectImporter
         );
 
         // Create the DataProperty object we will use to create items of
-        $dataproperty = DataObjectFactory::getObject(['name' => 'properties']);
+        $dataproperty = $xar->data()->getObject(['name' => 'properties']);
         if (empty($dataproperty)) {
             return null;
         }
@@ -176,7 +176,7 @@ class XmlImporter extends DataObjectImporter
             $objectid = $object->updateItem(['itemid' => $args['itemid']]);
             $objectid = $object->updateItem();
             // remove the properties, as they will be replaced
-            $duplicateobject = DataObjectFactory::getObject(['name' => $info['name']]);
+            $duplicateobject = $xar->data()->getObject(['name' => $info['name']]);
             $oldproperties = $duplicateobject->properties;
             foreach ($oldproperties as $propertyitem) {
                 $dataproperty->deleteItem(['itemid' => $propertyitem->id]);
@@ -265,8 +265,10 @@ class XmlImporter extends DataObjectImporter
         }
 
         if (!empty($xmlobject->links)) {
+            $objectLinks = new DataObjectLinks($this->getServicesClass());
+
             // make sure that object links are initialized
-            $linklist = DataObjectLinks::initLinks();
+            $linklist = $objectLinks->initLinks();
             if (empty($linklist)) {
                 // no object links initialized, bail out
                 return $objectid;
@@ -284,7 +286,7 @@ class XmlImporter extends DataObjectImporter
                 }
                 if (!empty($info)) {
                     // add this link and its reverse if it doesn't exist yet
-                    DataObjectLinks::addLink($info['source'], $info['from_prop'], $info['target'], $info['to_prop'], $info['link_type'], $info['direction']);
+                    $objectLinks->addLink($info['source'], $info['from_prop'], $info['target'], $info['to_prop'], $info['link_type'], $info['direction']);
                 }
             }
         }
@@ -302,6 +304,8 @@ class XmlImporter extends DataObjectImporter
     {
         $xmlobject = new SimpleXMLElement($xml);
         $objectid = 0;
+        $xar = $this->getServicesClass();
+
         # --------------------------------------------------------
         #
         # Process an object's items (-dat.xml file)
@@ -340,19 +344,19 @@ class XmlImporter extends DataObjectImporter
                 /*
                 // Check that this is a real object
                 if (empty($objectnamelist[$currentobject])) {
-                    $objectinfo = DataObjectFactory::getObjectInfo(array('name' => $currentobject));
+                    $objectinfo = $xar->data()->getObjectInfo(array('name' => $currentobject));
                     if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
                         $objectname2objectid[$currentobject] = $$currentobject;
                     } else {
                         $msg = 'Unknown #(1) "#(2)"';
-                        $vars = array('object', xar::prep()->text($thisname));
+                        $vars = array('object', $xar->prep()->text($thisname));
                         throw new BadParameterException($vars,$msg);
                     }
                 }
                 */
                 // Create the item
                 if (!isset($this->objectcache[$currentobject])) {
-                    $this->objectcache[$currentobject] = DataObjectFactory::getObject(['name' => $currentobject]);
+                    $this->objectcache[$currentobject] = $xar->data()->getObject(['name' => $currentobject]);
                 }
                 /** @var DataObject $object */
                 $object = $this->objectcache[$currentobject];
@@ -407,7 +411,7 @@ class XmlImporter extends DataObjectImporter
         if (count($this->objectcache) > 0 && count($this->objectmaxid) > 0) {
             foreach (array_keys($this->objectcache) as $objectname) {
                 if (!empty($this->objectmaxid[$objectname]) && $object->maxid < $this->objectmaxid[$objectname]) {
-                    $itemid = DataObjectFactory::updateObject(array('name' => $objectname,
+                    $itemid = $xar->data()->updateObject(array('name' => $objectname,
                                                                     'maxid'    => $this->objectmaxid[$objectname]));
                     if (empty($itemid)) return;
                 }

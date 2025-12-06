@@ -16,7 +16,6 @@ namespace Xaraya\Modules\DynamicData\Traits;
 
 use Xaraya\Context\WithContextInterface;
 use Xaraya\Context\WithContextTrait;
-use DataObjectFactory;
 use DataPropertyMaster;
 
 /**

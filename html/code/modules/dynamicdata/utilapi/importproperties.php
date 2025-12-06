@@ -15,7 +15,6 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UtilApi;
 use Xaraya\Modules\DynamicData\AdminApi;
 use BadParameterException;
-use DataObjectFactory;
 
 /**
  * dynamicdata utilapi importproperties function
