@@ -86,8 +86,7 @@ class SearchMethod extends MethodClass
 
             // @todo load the right object for roles here
             // get a new object list for roles
-            $descriptor = new DataObjectDescriptor(['moduleid'  => $this->mod()->getRegID('roles')], $this->getParent());
-            $object = new DataObjectList($descriptor, $this->getParent());
+            $object = $this->data()->getObject(['moduleid'  => $this->mod()->getRegID('roles')]);
 
             if (isset($object) && !empty($object->objectid)) {
                 // save the properties for the search form

@@ -24,6 +24,7 @@ use Xaraya\Services\xar;
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @todo    evaluate scoping
+ * @phpstan-import-type NormalFormMask from MaskInterface
 */
 class xarSecurity extends xarObject
 {
@@ -166,7 +167,7 @@ class xarSecurity extends xarObject
         if (self::$maskbasedsecurity && !empty($mask) && empty($rolename)) { // $rolename must be empty
             $savedmask = $mask;
             if (empty(self::$maskbasedgrouplist)) {
-                $role = xarRoles::get($userID);
+                $role = $xar->user()->getRole('id', (int) $userID);
                 $grouplist = [];
                 foreach ($role->getParents() as $parent) {
                     $grouplist[$parent->getID()] = 1;
@@ -196,7 +197,7 @@ class xarSecurity extends xarObject
         } else {
             $mask =  self::getMask($mask, 0, "All", false, $xar);
         }
-        if (!$mask) {
+        if (empty($mask)) {
             // <mikespub> moved this whole $module thing where it's actually used, i.e. for
             // error reporting only. If you want to override masks with this someday, move
             // it back before the self::getMask($mask) or wherever :-)
@@ -275,13 +276,14 @@ class xarSecurity extends xarObject
             case "group":
                 //get some info on the user
                 $thisname = $xar->user()->getVar('uname');
-                $role = xarRoles::ufindRole($thisname);
+                $role = $xar->user()->getRole('uname', (string) $thisname);
                 $parent = 'Everybody'; //set a default
                 //We now have primary parent implemented
                 //Use primary parent if implemented else get first parent??
                 //TODO: this needs to be reviewed
                 $useprimary = $xar->mod('roles')->getVar('setprimaryparent');
                 if ($useprimary) { //grab the primary parent
+                    // @todo where is this defined?
                     $parent = $role->getPrimaryParent(); //string value
                 } else { //we don't have a primary parent so use the first parent?? ... hmm review
                     foreach ($role->getParents() as $parent) {
@@ -399,7 +401,7 @@ class xarSecurity extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string
-     * @return  xarMask|void object
+     * @return  xarMask|null object
     */
     public static function getMask($name, $modid = 0, $component = "All", $suppresscache = false, $xar = null)
     {
@@ -426,7 +428,7 @@ class xarSecurity extends xarObject
             $stmt = self::$dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
             if (!$result->next()) {
-                return;
+                return null;
             } // Mask isn't there.
             $pargs = $result->getRow();
             if (is_null($pargs['realm'])) {
@@ -444,8 +446,8 @@ class xarSecurity extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   array representing the initial node to start from
-     * @return array<mixed> nested array containing the role's ancestors and privileges
+     * @param   array{'roles': RoleInterface[]} representing the initial node to start from
+     * @return array{'privileges': NormalFormMask[], 'children': array<mixed>} nested array containing the role's ancestors and privileges
     */
     public static function irreducibleset($coreset, $module_id = null)
     {
@@ -477,10 +479,10 @@ class xarSecurity extends xarObject
                 foreach ($descendants as $descendant) {
                     $descendant->normalize();
                     unset($descendant->dbconn);
-                    $privs[] = $descendant->normalform;
+                    $privs[] = $descendant->getNormalForm();
                 }
                 unset($priv->dbconn);
-                $privileges = array_merge([$priv->normalform], $privileges);
+                $privileges = array_merge([$priv->getNormalForm()], $privileges);
                 $privileges = array_merge($privs, $privileges);
             }
             $privs = [];
@@ -501,13 +503,13 @@ class xarSecurity extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param array<mixed> $mask normalform
-     * @param array<mixed> $privilegeset representing the irreducibles set of privileges
+     * @param NormalFormMask $mask normalform
+     * @param array{'privileges': NormalFormMask[], 'children': array<mixed>} $privilegeset representing the irreducibles set of privileges
      * @param   bool $pass false (initial test value)
-     * @param   mixed $role
+     * @param   ?RoleInterface $role
      * @return  bool false if check fails, privilege object if check succeeds
     */
-    public static function testprivileges($mask, $privilegeset, $pass, $role = '', $xar = null)
+    public static function testprivileges($mask, $privilegeset, $pass, $role = null, $xar = null)
     {
         $xar ??= xar::getServicesClass();
         $candebug = $xar->user()->isDebugAdmin();
@@ -736,12 +738,7 @@ class xarSecurity extends xarObject
         if ($module == "All") {
             $module = 0;
         }
-        $mask = self::getMask($name, $module, $component, true);
-        if ($mask) {
-            return true;
-        } else {
-            return false;
-        }
+        return self::getMask($name, $module, $component, true) ? true : false;
     }
 
 }

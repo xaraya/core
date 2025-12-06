@@ -209,8 +209,8 @@ class AccessProperty extends DataProperty
      */
     public function getgroupoptions()
     {
-        $anonID = $this->config()->getVar('Site.User.AnonymousUID');
-        $options = xarRoles::getgroups();
+        $anonID = $this->session()->getAnonId();
+        $options = $this->user()->getGroups();
         $firstlines = [
             ['id' => 0, 'name' => $this->ml('No requirement')],
             ['id' => $this->myself, 'name' => $this->ml('Current User')],
@@ -384,7 +384,7 @@ class AccessProperty extends DataProperty
             if (isset($data['group'])) {
                 if (!is_array($data['group'])) {
                     $groupsarray = explode(',', $data['group']);
-                    $groupsdata = xarRoles::getgroups();
+                    $groupsdata = $this->user()->getGroups();
                     foreach ($groupsarray as $group) {
                         $group = trim($group);
                         foreach ($groupsdata as $groupdata) {
@@ -496,8 +496,7 @@ class AccessProperty extends DataProperty
      */
     private function checkGroupArray(array $groups = [])
     {
-        $anonID = $this->config()->getVar('Site.User.AnonymousUID');
-        $userID = $this->session()->getUserId();
+        $anonID = $this->session()->getAnonId();
         $access = false;
         foreach ($groups as $group) {
             $group = (int) $group;
@@ -512,12 +511,8 @@ class AccessProperty extends DataProperty
                     $access = true;
                 }
             } elseif ($group) {
-                $rolesgroup = xarRoles::getRole($group);
-                $thisuser = xarRoles::getRole($userID);
-                if (is_object($rolesgroup)) {
-                    if ($thisuser->isAncestor($rolesgroup)) {
-                        $access = true;
-                    }
+                if ($this->user()->hasAncestor($group)) {
+                    $access = true;
                 }
             }
             if ($access) {

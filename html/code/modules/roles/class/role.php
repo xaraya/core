@@ -10,6 +10,49 @@
  * @link http://xaraya.info/index.php/release/27.html
  */
 
+/**
+ * Minimal role interface used for security checks etc.
+ */
+interface RoleInterface
+{
+    public function getID(): int;
+
+    /**
+     * Get value of 'name' property
+     * @return string
+     */
+    public function getName();
+
+    // @todo where is this defined?
+    //public function getPrimaryParent();
+
+    /**
+     * isParent: checks whether a role is a parent of this one
+     * @param RoleInterface $role
+     * @return bool
+     */
+    public function isParent($role);
+
+    /**
+     * getParents: returns the parent objects of a role
+     * @return RoleInterface[] of role objects
+     */
+    public function getParents();
+
+    /**
+     * isAncestor: checks whether a role is an ancestor of this one
+     * @param RoleInterface $role
+     * @return bool
+     */
+    public function isAncestor($role);
+
+    /**
+     * Gets all the privileges assigned directly to this role.
+     * @return PrivilegeInterface[] of privilege objects
+     * @todo seems to me this belongs in privileges.
+     */
+    public function getAssignedPrivileges();
+}
 
 /**
  * Role: class for the role object
@@ -602,7 +645,7 @@ class Role extends DataObject
         while ($result->next()) {
             [$id] = $result->fields;
 
-            $role = DataObjectFactory::getObject(['name' => 'roles_users'], $this->getContext(), $this->getStaticServices());
+            $role = $this->data()->getObject(['name' => 'roles_users']);
             $role->getItem(['itemid' => $id]);
             $users[] = $role;
         }
@@ -712,7 +755,7 @@ class Role extends DataObject
         while ($result->next()) {
             [$id] = $result->fields;
 
-            $role = DataObjectFactory::getObject(['name' => 'roles_groups'], $this->getContext(), $this->getStaticServices());
+            $role = $this->data()->getObject(['name' => 'roles_groups']);
             $role->getItem(['itemid' => $id]);
             $parents[] = $role;
         }

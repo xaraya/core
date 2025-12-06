@@ -18,6 +18,7 @@ namespace Xaraya\Services;
 
 use ixarUser;
 use xarRoles;
+use RoleInterface;
 use BadParameterException;
 use EmptyParameterException;
 use IDNotFoundException;
@@ -46,7 +47,10 @@ interface UserInterface extends ServiceInterface
     public function isDebugAdmin(): bool;
     public function isSiteAdmin(): bool;
     public function hasParent(string $parentName): bool;
+    public function hasAncestor(int $ancestorId): bool;
+    /** @return RoleInterface|null */
     public function getRole(string $field, mixed $value, int $state = xarRoles::ROLES_STATE_ALL);
+    public function getGroups();
     public function getLocale(): mixed;
     public function setLocale(string $locale): bool;
     public function getThemeName(): mixed;
@@ -71,6 +75,8 @@ trait UserTrait
     private $objectRef;
     /** @var array<string, bool> */
     private $parents = [];
+    /** @var array<int, bool> */
+    private $ancestors = [];
     public $authenticationModules;
     protected bool $initialized = false;
 
@@ -379,6 +385,9 @@ trait UserTrait
         return $userId == $xar->mod('roles')->getVar('admin');
     }
 
+    /**
+     * @see \xarRoles::isParent()
+     */
     public function hasParent(string $parentName): bool
     {
         if (!isset($this->parents[$parentName])) {
@@ -394,10 +403,40 @@ trait UserTrait
         return $this->parents[$parentName];
     }
 
-    public function getRole(string $field, mixed $value, int $state = xarRoles::ROLES_STATE_ALL)
+    public function hasAncestor(int $ancestorId): bool
     {
+        if (!isset($this->ancestors[$ancestorId])) {
+            $ancestor = $this->getRole('id', $ancestorId);
+            $user = $this->getRole('id', $this->getCurrentId());
+            if (is_object($user) && is_object($ancestor)) {
+                $result = $user->isAncestor($ancestor);
+                $this->ancestors[$ancestorId] = $result;
+            } else {
+                $this->ancestors[$ancestorId] = false;
+            }
+        }
+        return $this->ancestors[$ancestorId];
+    }
+
+    /**
+     * @return RoleInterface|null
+     */
+    public function getRole(string $field = 'id', mixed $value = null, int $state = xarRoles::ROLES_STATE_ALL)
+    {
+        if (!isset($value) && $field == 'id') {
+            $value = (int) $this->getCurrentId();
+        }
         // we don't actually use $itemtype there except to cache results
         return xarRoles::_lookuprole($field, $value, xarRoles::ROLES_USERTYPE, $state, $this->getServicesClass());
+    }
+
+    /**
+     * Summary of getGroups
+     * @return list<array<string, mixed>>
+     */
+    public function getGroups()
+    {
+        return xarRoles::getgroups($this->getServicesClass());
     }
 
     public function getLocale(): mixed

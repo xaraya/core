@@ -16,8 +16,22 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
 */
-use Xaraya\Services\xar;
 
+/**
+ * Minimal privilege interface used for security checks etc.
+ */
+interface PrivilegeInterface extends MaskInterface
+{
+    /**
+     * getDescendants: returns all objects in the privileges hierarchy below a privilege
+     * @return PrivilegeInterface[] of privilege objects
+    */
+    public function getDescendants();
+}
+
+/**
+ * Summary of xarPrivilege
+ */
 class xarPrivilege extends xarMask
 {
     public $parentid = 0;      //the id of the parent of this privilege
@@ -295,10 +309,10 @@ class xarPrivilege extends xarMask
             [$id, $name, $itemtype, $uname, $email, $pass, $auth_modid] = $result->fields;
             switch ($itemtype) {
                 case 1:
-                    $role = DataObjectFactory::getObject(['name' => 'roles_users'], null, $xar);
+                    $role = $xar->data()->getObject(['name' => 'roles_users']);
                     break;
                 case 2:
-                    $role = DataObjectFactory::getObject(['name' => 'roles_groups'], null, $xar);
+                    $role = $xar->data()->getObject(['name' => 'roles_groups']);
                     break;
             }
             $role->getItem(['itemid' => $id]);
@@ -407,7 +421,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return array<mixed> of privilege objects
+     * @return array<xarPrivilege> of privilege objects
     */
     public function getChildren()
     {
@@ -472,7 +486,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return array<mixed> of privilege objects
+     * @return PrivilegeInterface[] of privilege objects
     */
     public function getDescendants()
     {

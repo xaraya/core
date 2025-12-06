@@ -19,6 +19,32 @@
 
 use Xaraya\Services\WithServicesTrait;
 
+/**
+ * Minimal mask interface used for security checks etc.
+ * @phpstan-type NormalFormMask array{'id': int, 'name': string, 'level': string, 'realm': string, 'module': mixed, 'component': string, 'instance': array<string, mixed>}
+ */
+interface MaskInterface
+{
+    /**
+     * normalize: creates a "normalized" array representing a mask
+     * Returns an array of strings representing a mask
+     * The array can be used for comparisons with other masks
+     * The function optionally adds "all"'s to the end of a normalized mask representation
+     * @param   int   adds  Number of additional instance parts to add to the array
+     * @return array<mixed> of strings
+    */
+    public function normalize($adds = 0);
+
+    /**
+     * @return NormalFormMask
+     */
+    public function getNormalForm();
+}
+
+/**
+ * Summary of xarMask
+ * @phpstan-import-type NormalFormMask from MaskInterface
+ */
 class xarMask extends xarObject
 {
     use WithServicesTrait;
@@ -35,6 +61,7 @@ class xarMask extends xarObject
     public $instance;              //the instance of this privilege/mask
     public $level;                 //the access level of this privilege/mask
     public $description = '';      //the long description of this privilege/mask
+    /** @var NormalFormMask */
     public $normalform;            //the normalized form of this privilege/mask
 
     public $privilegestable;
@@ -148,6 +175,11 @@ class xarMask extends xarObject
                 }
         */
         return $normalform;
+    }
+
+    public function getNormalForm()
+    {
+        return $this->normalform;
     }
 
     /**

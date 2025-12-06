@@ -96,8 +96,9 @@ class Installer extends InstallerClass
             'valcode' => 'createdbysystem',
             'authmodule' => (int) $this->mod()->getID('roles'),
         ];
+        $xar = $this->getStaticServices();
         // @todo check why $this->data() fails here
-        $group = DataObjectFactory::getObject(['name' => 'roles_groups']);
+        $group = DataObjectFactory::getObject(['name' => 'roles_groups'], null, $xar);
         $rolefields['role_type'] = xarRoles::ROLES_GROUPTYPE;
         $this->mod()->setVar('defaultgroup', 0);
         // The top level group Everybody
@@ -132,7 +133,7 @@ class Installer extends InstallerClass
         $usergroup = $group->createItem($rolefields);
         $this->mod()->setVar('defaultgroup', $usergroup);
         // @todo check why $this->data() fails here
-        $user = DataObjectFactory::getObject(['name' => 'roles_users']);
+        $user = DataObjectFactory::getObject(['name' => 'roles_users'], null, $xar);
         $rolefields['role_type'] = xarRoles::ROLES_USERTYPE;
         // The Anonymous user
         $rolefields['name'] = 'Anonymous';

@@ -44,6 +44,9 @@ class xarRoles extends xarObject
 
     public static function initialize($xar = null)
     {
+        if (!empty(self::$dbconn) && !empty(self::$rolestable)) {
+            return;
+        }
         $xar ??= xar::getServicesClass();
         self::$dbconn = $xar->db()->getConn();
         $xar->mod()->loadDbInfo('roles');
@@ -63,12 +66,12 @@ class xarRoles extends xarObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return array<mixed>|void of arrays representing all the groups
      */
-    public static function getgroups()
+    public static function getgroups($xar = null)
     {
-        self::initialize();
+        self::initialize($xar);
         static $allgroups = [];
         if (empty($allgroups)) {
-            $xar = xar::getServicesClass();
+            $xar ??= xar::getServicesClass();
             $query = "SELECT r.id AS id, r.name AS name, r.users AS users, rm.parent_id AS parentid 
                       FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
                       WHERE r.itemtype = ? AND r.state = ? ORDER BY r.name";
@@ -358,7 +361,7 @@ class xarRoles extends xarObject
      * @param string $field
      * @param mixed  $value
      * @param int    $state
-     * @return object|void a role
+     * @return object|null a role
      */
     public static function _lookuprole($field, $value, $itemtype = self::ROLES_USERTYPE, $state = self::ROLES_STATE_ALL, $xar = null)
     {
@@ -385,14 +388,14 @@ class xarRoles extends xarObject
             $stmt = self::$dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($params, $xar->db()->getFetchAssoc());
             if (!$result) {
-                return;
+                return null;
             }
             if ($result->next()) {
                 $row = $result->fields;
             }
             $result->close();
             if (empty($row)) {
-                return;
+                return null;
             }
             $xar->mem()->set($cacheScope, $cacheName, $row);
         }
@@ -409,7 +412,7 @@ class xarRoles extends xarObject
         if ($xar->mem()->has($cacheKey, $row['id'])) {
             return $xar->mem()->get($cacheKey, $row['id']);
         }
-        $role = DataObjectFactory::getObject(['name' => $name], null, $xar);
+        $role = $xar->data()->getObject(['name' => $name]);
         $role->getItem(['itemid' => $row['id']]);
         $xar->mem()->set($cacheKey, $row['id'], $role);
         return $role;
