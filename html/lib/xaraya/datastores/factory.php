@@ -229,6 +229,7 @@ class DataStoreFactory extends xarObject
             return $sources;
         }
 
+        $object->dbConnArgs ??= [];
         $object->dbConnIndex = $xar->db()->checkDbConnection($object->dbConnIndex, $object->dbConnArgs);
         // use external database connection
         if ($xar->db()->isIndexExternal($object->dbConnIndex)) {
