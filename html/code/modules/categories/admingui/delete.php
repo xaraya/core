@@ -80,7 +80,7 @@ class DeleteMethod extends MethodClass
             return $this->ctl()->badRequest('bad_author');
         }
 
-        $worker = new CategoryWorker();
+        $worker = new CategoryWorker($this->getStaticServices());
         $result = $worker->delete($data['itemid']);
 
         $this->ctl()->redirect($this->ctl()->getModuleURL('categories', 'admin', 'view', []));

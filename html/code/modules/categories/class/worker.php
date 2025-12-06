@@ -14,10 +14,12 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesTrait;
 
 class CategoryWorker extends xarObject
 {
+    use WithServicesTrait;
+
     protected $cattable;
     protected $basetable;
     protected $linktable;
@@ -32,7 +34,7 @@ class CategoryWorker extends xarObject
     protected function db()
     {
         if (!isset($this->xarDB)) {
-            $xar = xar::getServicesClass();
+            $xar = $this->getServicesClass();
             $this->xarDB = $xar->db();
             $this->xarMod = $xar->mod();
         }
@@ -42,7 +44,7 @@ class CategoryWorker extends xarObject
     protected function mod()
     {
         if (!isset($this->xarMod)) {
-            $xar = xar::getServicesClass();
+            $xar = $this->getServicesClass();
             $this->xarDB = $xar->db();
             $this->xarMod = $xar->mod();
         }
@@ -53,8 +55,9 @@ class CategoryWorker extends xarObject
      * Constructor for CategoryWorker
      *
      */
-    public function __construct()
+    public function __construct($xar = null)
     {
+        $this->setServicesClass($xar);
         $this->mod()->loadDbInfo('categories');
         $tables = $this->db()->getTables();
         $this->table     = $tables['categories'];
@@ -381,8 +384,9 @@ class CategoryWorker extends xarObject
 
         extract($args);
         if (isset($object)) {
+            $xar = $this->getServicesClass();
             // We are getting the base categories of an object
-            $object = DataObjectFactory::getObject(['name' => $object]);
+            $object = $xar->data()->getObject(['name' => $object]);
 
             if (!isset($property) && isset($object->properties['categories'])) {
                 $property = $object->properties['categories'];

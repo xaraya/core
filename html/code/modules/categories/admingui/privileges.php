@@ -304,7 +304,7 @@ class PrivilegesMethod extends MethodClass
         if (!empty($moduleid)) {
             $modinfo = $this->mod()->getInfo($moduleid);
             $modname = $modinfo['name'];
-            $worker = new CategoryWorker();
+            $worker = new CategoryWorker($this->getStaticServices());
             if (!empty($itemtype)) {
                 $basecats = $worker->getcatbases(
                     ['module'    => 'articles',

@@ -664,7 +664,7 @@ class CelkoPositionProperty extends DataProperty
         $right_id = $left_id + 1;
 
         // Get all children of this node
-        $worker = new CategoryWorker();
+        $worker = new CategoryWorker($this->getStaticServices());
         $worker->setTable($this->initialization_celkotable);
         $result = $worker->getchildren($parent_id);
 

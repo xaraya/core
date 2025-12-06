@@ -45,7 +45,7 @@ class GetcatinfoMethod extends MethodClass
             return [];
         }
 
-        $worker = new CategoryWorker();
+        $worker = new CategoryWorker($this->getStaticServices());
         if (isset($cid)) {
             $info = $worker->getInfo($cid);
         } else {

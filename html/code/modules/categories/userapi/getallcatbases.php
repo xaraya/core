@@ -32,7 +32,7 @@ class GetallcatbasesMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $worker = new CategoryWorker();
+        $worker = new CategoryWorker($this->getStaticServices());
         $bases = $worker->getcatbases($args);
         return $bases;
     }

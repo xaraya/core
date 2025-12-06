@@ -41,7 +41,7 @@ class GetchildrenMethod extends MethodClass
             return false;
         }
         $myself = $args['return_itself'] ?? 0;
-        $worker = new CategoryWorker();
+        $worker = new CategoryWorker($this->getStaticServices());
         if (isset($cid)) {
             $children = $worker->getchildren($cid, $myself);
         } else {

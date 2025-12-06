@@ -138,7 +138,7 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get base cids for this module + item type
         // CHECKME: getcatbases has changed result format !
-        $worker = new CategoryWorker();
+        $worker = new CategoryWorker($this->getStaticServices());
         $basecats = $worker->getcatbases(
             ['module'    => $modname,
                 'itemtype' => $data['itemtype']]

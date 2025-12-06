@@ -115,7 +115,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
             $mastercids = $rootcids;
         } else {
             // Get number of categories for this module + item type
-            $worker = new CategoryWorker();
+            $worker = new CategoryWorker($this->getStaticServices());
             $numcats = $worker->gettoplevelcount();
 
             if (empty($numcats)) {

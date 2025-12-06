@@ -66,7 +66,7 @@ class CloneMethod extends MethodClass
             }
             $newname = str_ireplace(" ", "_", $newname);
 
-            $worker = new CategoryWorker();
+            $worker = new CategoryWorker($this->getStaticServices());
             $toplevel = $worker->appendTree($data['itemid']);
 
             // Change the name of the top level category we added

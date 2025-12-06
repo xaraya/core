@@ -38,7 +38,7 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
         // 4.       itemtype [base3]
         //          itemtype [base4]
 
-        $worker = new CategoryWorker();
+        $worker = new CategoryWorker($this->getStaticServices());
         $allcatbases = $worker->getcatbases(['order' => 'module', 'format' => 'tree']);
 
         foreach ($allcatbases as $modulecatbases) {

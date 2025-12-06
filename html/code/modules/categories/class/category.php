@@ -108,7 +108,7 @@ class Category extends DataObject
                 $celkoposition->inorout = 'in';
 
                 // Get top level nodes (there should only be one)
-                $worker = new CategoryWorker();
+                $worker = new CategoryWorker($this->getStaticServices());
                 $worker->setTable($celkoposition->initialization_celkotable);
                 $toplevels = $worker->gettoplevel();
                 // Take the first one

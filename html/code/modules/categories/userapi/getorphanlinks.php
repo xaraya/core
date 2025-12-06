@@ -58,7 +58,7 @@ class GetorphanlinksMethod extends MethodClass
         $q->addgroup('cl.category_id');
         $q->run();
         $q->qecho();
-        $worker = new CategoryWorker();
+        $worker = new CategoryWorker($this->getStaticServices());
         $catbases = $worker->getcatbases(
             ['module_id'    => $modid,
                 'itemtype' => $itemtype]

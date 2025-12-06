@@ -42,7 +42,7 @@ class UpdatecelkolinksMethod extends MethodClass
         }
 
         //Get the information on the category and its parent
-        $worker = new CategoryWorker();
+        $worker = new CategoryWorker($this->getStaticServices());
         $cat = $worker->getInfo($cid);
         $catparent = $worker->getInfo($cat['parent_id']);
 
