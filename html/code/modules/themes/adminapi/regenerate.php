@@ -42,7 +42,7 @@ class RegenerateMethod extends MethodClass
         }
 
         //Finds and updates missing themes
-        $installer = InstallerTool::getInstance('themes');
+        $installer = InstallerTool::getInstance('themes', $this->getStaticServices());
         if (!$installer->checkformissing()) {
             return;
         }
@@ -131,8 +131,9 @@ class RegenerateMethod extends MethodClass
                 }
             }
         }
+        $xar = $this->getStaticServices();
         // Reinit the theme configurations
-        ThemeInitialization::importConfigurations();
+        ThemeInitialization::importConfigurations(true, [], $xar);
 
         return true;
     }

@@ -25,9 +25,9 @@ use Xaraya\Services\xar;
  */
 class ThemeInitialization extends xarObject
 {
-    public static function clearCache()
+    public static function clearCache($xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
         $dbconn = $xar->db()->getConn();
         $xar->mod()->loadDbInfo('themes');
         $tables = $xar->db()->getTables();
@@ -43,9 +43,9 @@ class ThemeInitialization extends xarObject
      * @param array dirs
      * @return bool true if the table is loaded, else false
      */
-    public static function importConfigurations($flush = true, $dirs = [])
+    public static function importConfigurations($flush = true, $dirs = [], $xar = null)
     {
-        $xar = xar::getServicesClass();
+        $xar ??= xar::getServicesClass();
 
         $dbconn = $xar->db()->getConn(); // Need this for the transaction
         $themeDirs = [];
@@ -61,7 +61,7 @@ class ThemeInitialization extends xarObject
                 $themeDirs = $dirs;
             } else {
                 // Clear the cache
-                self::ClearCache();
+                self::clearCache($xar);
 
                 $activeThemes = $xar->mod()->apiFunc('themes', 'admin', 'getlist', ['filter' => ['State' => ixarTheme::STATE_ACTIVE]]);
                 assert(!empty($activeThemes)); // this should never happen
@@ -102,7 +102,7 @@ class ThemeInitialization extends xarObject
             $class = 'ThemeInit';
             sys::import('modules.themes.class.init');
         }
-        $descriptor = new DataObjectDescriptor();
+        $descriptor = new ObjectDescriptor();
         $installer = new $class($descriptor);
         $installer->init(['name' => $dir]);
     }

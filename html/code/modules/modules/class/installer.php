@@ -49,8 +49,11 @@ class InstallerTool extends ServicesClass
     public $fileExtensions            = [];
     public $databaseExtensions        = [];
 
-    protected function __construct($type = 'modules')
+    protected function __construct($type = 'modules', $xar = null)
     {
+        if (isset($xar)) {
+            $this->setStaticServices($xar->getStaticServices());
+        }
         $this->setModName($type);
         $this->extType = $type;
         if ($this->extType == 'themes') {
@@ -71,10 +74,10 @@ class InstallerTool extends ServicesClass
         $this->modulestack = new Stack();
     }
 
-    public static function getInstance($type = 'modules')
+    public static function getInstance($type = 'modules', $xar = null)
     {
         if (null === self::$instance) {
-            self::$instance = new self($type);
+            self::$instance = new self($type, $xar);
         }
         return self::$instance;
     }
@@ -593,7 +596,7 @@ class InstallerTool extends ServicesClass
         if ($this->extType == 'themes') {
             // Reinit the theme configurations
             // @todo: this belongs in the ThemeActivate observer
-            ThemeInitialization::importConfigurations();
+            ThemeInitialization::importConfigurations(true, [], $this->getStaticServices());
             // Show the theme list
             $this->ctl()->redirect($return_url);
             return true;

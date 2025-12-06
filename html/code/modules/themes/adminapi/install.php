@@ -48,7 +48,7 @@ class InstallMethod extends MethodClass
             throw new EmptyParameterException('regid');
         }
         // See if we have lost any modules since last generation
-        $installer = InstallerTool::getInstance('themes');
+        $installer = InstallerTool::getInstance('themes', $this->getStaticServices());
         if (!$installer->checkformissing()) {
             return;
         }

@@ -73,7 +73,7 @@ class DeactivateMethod extends MethodClass
         }
 
         // See if we have lost any modules since last generation
-        $installer = InstallerTool::getInstance('themes');
+        $installer = InstallerTool::getInstance('themes', $this->getStaticServices());
         if (!$installer->checkformissing()) {
             return;
         }
