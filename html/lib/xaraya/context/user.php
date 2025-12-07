@@ -113,7 +113,7 @@ class UserContext
 
     /**
      * Summary of checkCookie
-     * @uses xar::session()->init()
+     * @uses xar::session()->start()
      * @uses xar::session()->getUserId()
      * @return int|null
      */
@@ -125,7 +125,7 @@ class UserContext
         }
         $xar = $this->getServicesClass();
         // @todo replace with something that doesn't depend on PHP sessions
-        $xar->session()->init([]);
+        $xar->session()->start();
         // @todo create virtual session for anonymous user here too?
         $xar->session()->getInstance()->setContext($this->context);
         if (!$xar->user()->isLoggedIn()) {
@@ -148,7 +148,7 @@ class UserContext
             throw new Exception('Session was already initialized');
         }
         $xar->session()->setSessionClass(SessionContext::class);
-        $xar->session()->init([]);
+        $xar->session()->start();
         $serverVars = $this->context['server'] ?? [];
         $ipAddress = $serverVars['REMOTE_ADDR'] ?? '-';
         $xar->session()->getInstance()?->startSession($this->context, $sessionId, $userId, $ipAddress);

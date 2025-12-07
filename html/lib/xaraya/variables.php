@@ -332,8 +332,13 @@ class xarVarPrep implements ixarVarPrep
         $xar ??= xar::getServicesClass();
 
         self::$dbCharSet = $xar->sysConfig()->getVar('DB.Charset');
-        self::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);
-        self::$fixHTMLEntities = $xar->config()->getVar('Site.Core.FixHTMLEntities', true);
+        try {
+            self::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);
+            self::$fixHTMLEntities = $xar->config()->getVar('Site.Core.FixHTMLEntities', true);
+        } catch (Exception) {
+            self::$allowableHTML = [];
+            self::$fixHTMLEntities = true;
+        }
 
         self::$initialized = true;
         return true;

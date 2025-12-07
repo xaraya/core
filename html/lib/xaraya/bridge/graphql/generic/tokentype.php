@@ -121,7 +121,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
             }
             $xar = $context->handler->getServicesClass();
             // @todo use $context
-            //$xar->session()->init();
+            //$xar->session()->start();
             $xar->mod()->init();
             $xar->user()->init();
             // @checkme unset $xar->session() role_id if needed, otherwise $xar->user()->logIn will hit $xar->user()->isLoggedIn first!?

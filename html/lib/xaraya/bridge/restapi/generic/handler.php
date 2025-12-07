@@ -98,7 +98,7 @@ class GenericAPIHandler extends RestAPIHandler
         }
         $context = $this->getContext();
         $xar = $this->getServicesClass();
-        //$xar->session()->init();
+        //$xar->session()->start();
         $xar->mod()->init();
         $xar->user()->init();
         // @checkme unset xarSession role_id if needed, otherwise $xar->user()->logIn will hit $xar->user()->isLoggedIn first!?

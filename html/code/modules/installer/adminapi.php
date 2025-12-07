@@ -17,6 +17,7 @@ use EmptyParameterException;
 use Exception;
 use FileNotFoundException;
 use FunctionNotFoundException;
+use xarVarPrep;
 use sys;
 
 /**
@@ -98,7 +99,8 @@ class AdminApi extends AdminApiClass
             throw new EmptyParameterException('directory or initfunc');
         }
 
-        $osDirectory = $this->prep()->path($directory);
+        // do not use $this->prep()->path() here - Variable Site.Core.AllowableHTML not found
+        $osDirectory = xarVarPrep::path($directory);
         $modInitFile = sys::code() . 'modules/' . $osDirectory . '/xarinit.php';
 
 

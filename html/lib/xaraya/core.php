@@ -403,7 +403,7 @@ class xarCore extends xarObject
          */
 
         if ($whatToLoad & self::SYSTEM_SESSION) {
-            $xar->session()->init([]);
+            $xar->session()->start();
             $whatToLoad ^= self::BIT_SESSION;
             // We're about done here - everything else requires sessions !?
         } else {

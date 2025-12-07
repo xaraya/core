@@ -174,7 +174,7 @@ trait ModulesTrait
     }
 
     /**
-     * Initialize service class
+     * Initialize service class - checked with xar::mod()->isLoaded()
      * @param array<string, mixed> $config
      */
     public function init(array $config = []): bool

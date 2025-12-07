@@ -83,7 +83,7 @@ class SessionContext implements WithContextInterface, SessionInterface
      */
     public function initialize()
     {
-        // always get storage here when xar::session()->init() is called
+        // always get storage here when xar::session()->start() is called
         $this->getStorage();
         // start session based on cookie here
         return $this->start();

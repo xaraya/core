@@ -32,8 +32,6 @@ class RenderMethod extends MethodClass
     {
         // needed to initialize the template cache
         $this->tpl()->init();
-        // not really needed here but why not?
-        $this->block()->init();
         try {
             $result = $this->block()->renderBlock($args);
         } catch (Exception $e) {

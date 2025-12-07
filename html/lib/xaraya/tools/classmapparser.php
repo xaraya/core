@@ -319,7 +319,7 @@ class ClassMapParser
         if ($this->checkClass) {
             // @todo memory issue when trying to check all dataobject classes!? - not reliable here
             $contents = file_get_contents($filePath);
-            if (str_contains($contents, ' extends DataObject')) {
+            if (str_contains($contents, ' extends DataObject') && !str_ends_with($className, 'Interface')) {
                 unset($contents);
                 $classType = 'dataobjects';
                 $this->addClassType($classType, $className, $filePath, $modName, $fileType);

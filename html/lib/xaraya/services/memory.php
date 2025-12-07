@@ -50,7 +50,7 @@ class MemoryService implements MemoryInterface
     private ?ixarCache_Storage $cacheStorage = null;
 
     /**
-     * Initialise the caching options
+     * Initialise the caching options - xar::cache()->init() will pass along $config
      *
      * @param array<string, mixed> $config caching configuration from config.caching.php
      * @todo configure optional second-level cache here ?

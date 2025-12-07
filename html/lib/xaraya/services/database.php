@@ -90,15 +90,21 @@ trait DatabaseTrait
     use ServiceTrait;
 
     /**
-     * Initialize service class
+     * Initialize service class - this can be called several times
      * Note: for installer phase5 we set $args['doConnect'] = false
      * @param array<string, mixed> $config
      * @uses \xarDatabase::init()
+     * @see \Xaraya\Modules\Installer\AdminGui\Phase5Method::__invoke()
      */
     public function init(array $config = []): bool
     {
         // @todo set sysConfig() defines here instead of auto-loaded file?
         return xarDatabase::init($config, $this->getParent());
+    }
+
+    protected function connect(array $config = [])
+    {
+        // ...
     }
 
     /**

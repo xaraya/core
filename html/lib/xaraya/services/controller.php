@@ -300,7 +300,10 @@ trait ControllerTrait
         return $this->dispatcher;
     }
 
-    /** @param array<string, mixed> $config */
+    /**
+     * Initialize service class - install.php will pass along $config
+     * @param array<string, mixed> $config
+     */
     public function init(array $config = []): bool
     {
         if (empty($config)) {
@@ -325,11 +328,18 @@ trait ControllerTrait
     public function getConfig(): array
     {
         $xar = $this->getServicesClass();
-        $systemArgs = [
-            'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
-            // @todo re-evaluate this default
-            'generateXMLURLs'        => true,
-        ];
+        try {
+            $systemArgs = [
+                'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
+                // @todo re-evaluate this default
+                'generateXMLURLs'        => true,
+            ];
+        } catch (Exception) {
+            $systemArgs = [
+                'enableShortURLsSupport' => false,
+                'generateXMLURLs'        => false,
+            ];
+        }
         return $systemArgs;
     }
 

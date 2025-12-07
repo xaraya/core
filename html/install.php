@@ -146,9 +146,6 @@ function xarInstallLoader()
     // Start HTTP Protocol Server/Request/Response utilities
     $systemArgs = [
         'enableShortURLsSupport' => false,
-        'defaultModuleName'      => 'installer',
-        'defaultModuleType'      => 'admin',
-        'defaultModuleFunction'  => 'main',
         'generateXMLURLs'        => false,
     ];
     $xar->req()->init($systemArgs);

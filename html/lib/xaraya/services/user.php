@@ -81,7 +81,7 @@ trait UserTrait
     protected bool $initialized = false;
 
     /**
-     * Initialize service class
+     * Initialize service class - checked with xar::user()->isLoaded()
      * @param array<string, mixed> $config
      */
     public function init(array $config = []): bool
@@ -178,6 +178,9 @@ trait UserTrait
                 // FIXME: Look at this again when we move to PDO
                 $dbconn = $xar->db()->getConn();
                 $tables = $xar->db()->getTables();
+                if (empty($tables['roles'])) {
+                    return $xar->mls()->translate('No Information'); // better return null here
+                }
                 $rolestable = $tables['roles'];
                 $query = "SELECT * FROM " . $rolestable . " WHERE id = " . $userId;
                 $result = $dbconn->Execute($query);

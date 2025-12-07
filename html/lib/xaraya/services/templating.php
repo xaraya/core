@@ -134,7 +134,7 @@ trait TemplatingTrait
     protected bool $initialized = false;
 
     /**
-     * Initialize service class
+     * Initialize service class - install.php will pass along $config + needed to initialize the template cache
      * @param array<string, mixed> $config
      */
     public function init(array $config = []): bool
@@ -190,12 +190,23 @@ trait TemplatingTrait
     public function getConfig(): array
     {
         $xar = $this->getServicesClass();
-        $systemArgs = [
-            'enableTemplatesCaching' => $xar->config()->getVar('Site.BL.CacheTemplates'),
-            'defaultThemeDir'        => $xar->mod('themes')->getVar('default_theme') ?? 'default',
-            'generateXMLURLs'        => true,
-            'defaultDocType'         => $xar->config()->getVar('Site.BL.DocType'),
-        ];
+        try {
+            $systemArgs = [
+                'enableTemplatesCaching' => $xar->config()->getVar('Site.BL.CacheTemplates'),
+                'defaultThemeDir'        => $xar->mod('themes')->getVar('default_theme') ?? 'default',
+                'pageTemplateName'       => 'default',
+                'defaultDocType'         => $xar->config()->getVar('Site.BL.DocType'),
+                'generateXMLURLs'        => true,
+            ];
+        } catch (Exception) {
+            $systemArgs = [
+                'enableTemplatesCaching' => false,
+                'defaultThemeDir'        => 'installer',
+                'pageTemplateName'       => 'admin',
+                'defaultDocType'         => 'xhtml1-strict',
+                'generateXMLURLs'        => false,
+            ];
+        }
         return $systemArgs;
     }
 

@@ -88,7 +88,6 @@ final class DataObjectTest extends TestCase
 
         // needed to initialize the template cache
         xar::tpl()->init();
-        xar::block()->init();
         // needed for security checks later...
         xar::session()->setAnonId(xarConfigVars::get(null, 'Site.User.AnonymousUID', 5));
         // needed to check security for the view options

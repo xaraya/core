@@ -18,7 +18,6 @@ final class AdminGuiTest extends TestHelper
     {
         // we need to load templates to get some output
         xar::tpl()->init();
-        xar::block()->init();
         // this is required because DD overview calls <xar:data-input type="grouplist"/> which does
         // security check in roles when getting the group list, and it redirects & exits
         xar::ctl()->setCallback('redirectTo', [$this, 'hello']);

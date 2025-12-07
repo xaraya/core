@@ -84,7 +84,10 @@ trait RequestTrait
         self::$requestClass = $className;
     }
 
-    /** @param array<string, mixed> $config */
+    /**
+     * Initialize service class - install.php will pass along $config
+     * @param array<string, mixed> $config
+     */
     public function init(array $config = []): bool
     {
         if (empty($config)) {
@@ -112,10 +115,15 @@ trait RequestTrait
     public function getConfig(): array
     {
         $xar = $this->getServicesClass();
-        $systemArgs = [
-            'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
-            //'generateXMLURLs'        => true,
-        ];
+        try {
+            $systemArgs = [
+                'enableShortURLsSupport' => $xar->config()->getVar('Site.Core.EnableShortURLsSupport'),
+            ];
+        } catch (Exception) {
+            $systemArgs = [
+                'enableShortURLsSupport' => false,
+            ];
+        }
         return $systemArgs;
     }
 

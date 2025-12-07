@@ -33,7 +33,7 @@ class TestHelper extends TestCase
         // initialize caching - delay until we need results
         $xar->cache()->init();
         // initialize loggers
-        $xar->log()->init();
+        //$xar->log()->init();
 
         // use RequestContext as request handler
         $xar->req()->setRequestClass(RequestContext::class);
@@ -49,7 +49,7 @@ class TestHelper extends TestCase
         // initialize server
         $xar->req()->init([]);
         // initialize session
-        $xar->session()->init([]);
+        $xar->session()->start();
         // initialize users
         $xar->user()->init();
 

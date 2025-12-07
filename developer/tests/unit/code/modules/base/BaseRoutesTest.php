@@ -67,7 +67,6 @@ final class BaseRoutesTest extends TestHelper
     public function testBasePage(): void
     {
         xar::tpl()->init();
-        xar::block()->init();
 
         $router = new Routing(function () {
             return BaseRoutes::getRoutes();

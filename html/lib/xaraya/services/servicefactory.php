@@ -109,6 +109,7 @@ class ServiceFactory
     public static function getControllerService(ServicesInterface $parent): ControllerInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - install.php will pass along $config
         return ControllerService::create($parent);
     }
 
@@ -118,7 +119,10 @@ class ServiceFactory
     public static function getLoggerService(object|string|null $parent = null): LoggerInterface
     {
         self::log(__METHOD__, $parent);
-        return LoggerService::create($parent);
+        $logger = LoggerService::create($parent);
+        // initialize service
+        $logger->init();
+        return $logger;
     }
 
     /**
@@ -127,6 +131,7 @@ class ServiceFactory
     public static function getMultiLanguageService(object|string|null $parent): MultiLanguageInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - install.php will pass along $config
         return MultiLanguageService::create($parent);
     }
 
@@ -136,6 +141,7 @@ class ServiceFactory
     public static function getModulesService(object|string|null $parent): ModulesInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - checked with xar::mod()->isLoaded()
         return ModulesService::create($parent);
     }
 
@@ -145,6 +151,7 @@ class ServiceFactory
     public static function getSecurityService(ServicesInterface $parent): SecurityInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return SecurityService::create($parent);
     }
 
@@ -154,6 +161,7 @@ class ServiceFactory
     public static function getTemplatingService(ServicesInterface $parent): TemplatingInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - install.php will pass along $config + needed to initialize the template cache
         return TemplatingService::create($parent);
     }
 
@@ -163,6 +171,7 @@ class ServiceFactory
     public static function getVariablesService(object|string|null $parent): VariablesInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - @todo clean up config_vars db table and xarVarPrep::init()
         return VariablesService::create($parent);
     }
 
@@ -172,7 +181,10 @@ class ServiceFactory
     public static function getBlocksService(object|string|null $parent): BlocksInterface
     {
         self::log(__METHOD__, $parent);
-        return BlocksService::create($parent);
+        $blocks = BlocksService::create($parent);
+        // initialize service
+        $blocks->init();
+        return $blocks;
     }
 
     /**
@@ -181,6 +193,7 @@ class ServiceFactory
     public static function getDataObjectService(object|string|null $parent): DataObjectInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return DataObjectService::create($parent);
     }
 
@@ -190,6 +203,7 @@ class ServiceFactory
     public static function getDataPropertyService(ServicesInterface $parent): DataPropertyInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return DataPropertyService::create($parent);
     }
 
@@ -199,6 +213,7 @@ class ServiceFactory
     public static function getCachingService(object|string|null $parent = null): CachingInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - delay until we need results
         return CachingService::create($parent);
     }
 
@@ -208,6 +223,7 @@ class ServiceFactory
     public static function getConfigService(object|string|null $parent = null): ConfigInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here - @todo clean up config_vars db table with VariablesService
         return ConfigService::create($parent);
     }
 
@@ -217,18 +233,21 @@ class ServiceFactory
     public static function getSystemService(object|string|null $parent = null): SystemInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return SystemService::create($parent);
     }
 
     public static function getMemoryService(object|string|null $parent = null): MemoryInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - xar::cache()->init() will pass along $config
         return MemoryService::create($parent);
     }
 
     public static function getRequestService(object|string|null $parent = null): RequestInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - install.php will pass along $config
         return RequestService::create($parent);
     }
 
@@ -239,6 +258,7 @@ class ServiceFactory
     public static function getSessionService(object|string|null $parent = null): SessionInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - depends on the caller using xar::session()->start() or not
         return SessionService::create($parent);
     }
 
@@ -248,6 +268,7 @@ class ServiceFactory
     public static function getUserService(object|string|null $parent = null): UserInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - checked with xar::user()->isLoaded()
         return UserService::create($parent);
     }
 
@@ -266,6 +287,7 @@ class ServiceFactory
     public static function getDatabaseService(object|string|null $parent = null): DatabaseInterface
     {
         self::log(__METHOD__, $parent);
+        // do *not* initialize service here - this can be called several times (see installer phase5)
         return DatabaseService::create($parent);
     }
 
@@ -305,6 +327,7 @@ class ServiceFactory
     public static function getThemesService(object|string|null $parent = null): ThemesInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return ThemesService::create($parent);
     }
 
@@ -320,42 +343,49 @@ class ServiceFactory
     public static function getModuleVarsHelper(ServicesInterface $parent): ServiceInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return new Modules\VarsHelper($parent);
     }
 
     public static function getModuleUserVarsHelper(ServicesInterface $parent): ServiceInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return new Modules\UserVarsHelper($parent);
     }
 
     public static function getModuleItemVarsHelper(ServicesInterface $parent): ServiceInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return new Modules\ItemVarsHelper($parent);
     }
 
     public static function getModuleInfoHelper(ServicesInterface $parent): ServiceInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return new Modules\InfoHelper($parent);
     }
 
     public static function getModuleExecHelper(ServicesInterface $parent): ServiceInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return new Modules\ExecHelper($parent);
     }
 
     public static function getModuleHooksHelper(ServicesInterface $parent): ServiceInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return new Modules\HooksHelper($parent);
     }
 
     public static function getModuleAliasHelper(ServicesInterface $parent): ServiceInterface
     {
         self::log(__METHOD__, $parent);
+        // no init() here
         return new Modules\AliasHelper($parent);
     }
 

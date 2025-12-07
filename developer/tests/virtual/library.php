@@ -52,7 +52,7 @@ $session->startSession($context, 'sessionId');
 // set instance in xarSession for setCurrentDatabase()
 xar::session()->setInstance($session);
 //xar::session()->setSessionClass(\Xaraya\Context\SessionContext::class);
-//xar::session()->init();
+//xar::session()->start();
 
 /** @var UserApi $userapi */
 $userapi = xar::mod()->userapi('library');

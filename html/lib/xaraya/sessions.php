@@ -48,7 +48,9 @@ class xarSession
     {
         // static cache for migration
         self::$sessionService = null;
-        return self::session()->init($args);
+        self::session()->init($args);
+        // always start session here when called via legacy xarSession::init()
+        return self::session()->start();
     }
 
     /**

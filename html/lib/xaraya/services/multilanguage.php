@@ -21,6 +21,7 @@ use xarCore;
 use XarDateTime;
 use xarLocale;
 use xarMLSContext;
+use sys;
 use BadParameterException;
 use Exception;
 
@@ -182,7 +183,7 @@ trait MultiLanguageTrait
     protected bool $initialized = false;
 
     /**
-     * Initialize service class
+     * Initialize service class - install.php will pass along $config
      * @param array<string, mixed> $config
      */
     public function init(array $config = []): bool
@@ -639,7 +640,11 @@ trait MultiLanguageTrait
         //    return true;
         //}
 
-        $themeBaseDir = $xar->tpl()->getBaseDir();
+        if ($xar->tpl()->isLoaded()) {
+            $themeBaseDir = $xar->tpl()->getBaseDir();
+        } else {
+            $themeBaseDir = sys::web() . 'themes';
+        }
         $domainArray = xarMLSContext::getContextFromPath($path, $themeBaseDir);
         if (empty($domainArray)) {
             // some non-standard file from another location, e.g. from var/processes for workflows

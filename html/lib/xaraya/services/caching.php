@@ -258,7 +258,7 @@ trait CachingTrait
     protected bool $initialized = false;
 
     /**
-     * Initialize service class
+     * Initialize service class - delay until we need results
      * @param array<string, mixed> $config
      */
     public function init(array $config = []): bool

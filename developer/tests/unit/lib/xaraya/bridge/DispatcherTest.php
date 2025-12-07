@@ -10,7 +10,6 @@ final class DispatcherTest extends TestHelper
     {
         parent::setUpBeforeClass();
         xar::tpl()->init();
-        xar::block()->init();
     }
 
     public function testInRoot(): void

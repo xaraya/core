@@ -118,7 +118,7 @@ trait VariablesTrait
     protected bool $initialized = false;
 
     /**
-     * Initialise the variable handling options
+     * Initialise the variable handling options - @todo clean up config_vars db table and xarVarPrep::init()
      *
      * Sets up allowable html and htmlentities options
      *

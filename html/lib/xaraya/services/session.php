@@ -32,6 +32,7 @@ interface SessionInterface extends ServiceInterface
 
     public static function setSessionClass($className): void;
     public function init(array $config = []): bool;
+    public function start(): bool;
     public function getConfig(): array;
     public function getInstance(): ?SessionFacade;
     public function setInstance(SessionFacade $instance): void;
@@ -76,6 +77,7 @@ trait SessionTrait
     /** @var array<string, mixed> */
     private array $args = [];
     protected bool $initialized = false;
+    protected bool $started = false;
 
     public static function setSessionClass($className): void
     {
@@ -104,6 +106,22 @@ trait SessionTrait
         //self::$sessionClass = $config['sessionClass'] ?? SessionHandler::class;
         $this->args = $config;
 
+        // Split off session start
+        $this->initialized = true;
+        return true;
+    }
+
+    /**
+     * Start session (split from init)
+     */
+    public function start(): bool
+    {
+        if (!empty($this->started)) {
+            return true;
+        }
+        // Initialize the service
+        $this->init();
+
         $xar = $this->getServicesClass();
         $this->anonId = (int) $xar->config()->getVar('Site.User.AnonymousUID', 5);
 
@@ -113,7 +131,7 @@ trait SessionTrait
 
         // Initialize the session
         $session->initialize();
-        $this->initialized = true;
+        $this->started = true;
         return true;
     }
 
