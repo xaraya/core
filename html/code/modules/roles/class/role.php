@@ -23,6 +23,12 @@ interface RoleInterface
      */
     public function getName();
 
+    /**
+     * Get field values
+     * @return array<string, mixed>
+     */
+    public function getFieldValues();
+
     // @todo where is this defined?
     //public function getPrimaryParent();
 

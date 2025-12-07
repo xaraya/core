@@ -13,8 +13,10 @@
 namespace Xaraya\Sessions\Storage;
 
 use Xaraya\Sessions\VirtualSession;
-use Exception;
+use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\xar;
+use ixarCache_Storage;
+use Exception;
 
 /**
  * Session storage interface for virtual sessions
@@ -24,7 +26,7 @@ interface SessionStorageInterface
     /**
      * @param array<string, mixed> $config
      */
-    public function __construct(array $config);
+    public function __construct(array $config = [], $xar = null);
     public function lookup(string $sessionId, string $ipAddress = ''): ?VirtualSession;
     public function register(VirtualSession $session): void;
     public function update(VirtualSession $session): void;
@@ -36,6 +38,14 @@ interface SessionStorageInterface
  */
 class SessionCacheStorage implements SessionStorageInterface
 {
+    use WithServicesTrait;
+
+    public static string $storageType = 'apcu';  // database or apcu or dummy
+    public static string $cacheType = 'session';
+    public static int $cacheExpire = 12 * 60 * 60;  // 12 hours
+    public static int $cacheSize = 10000000;  // 10 MB
+    public static ?ixarCache_Storage $cacheStorage = null;
+
     /** @var array<string, VirtualSession> */
     private $sessions = [];
     private int $limit = 10000;
@@ -43,14 +53,32 @@ class SessionCacheStorage implements SessionStorageInterface
     /**
      * @param array<string, mixed> $config
      */
-    public function __construct(private array $config) {}
+    public function __construct(private array $config = [], $xar = null)
+    {
+        $this->setServicesClass($xar);
+        if (!empty($config['storage'])) {
+            self::$storageType = $config['storage'];
+        }
+        if (!empty($config['expire'])) {
+            self::$cacheExpire = $config['expire'];
+        }
+    }
 
     public function lookup(string $sessionId, string $ipAddress = ''): ?VirtualSession
     {
-        if (!array_key_exists($sessionId, $this->sessions)) {
-            return null;
+        if (!empty(self::$cacheStorage)) {
+            $sessionInfo = $this->getCacheStorage()->getCached($sessionId);
+            try {
+                $session = unserialize($sessionInfo);
+            } catch (\Throwable) {
+                return null;
+            }
+        } else {
+            if (!array_key_exists($sessionId, $this->sessions)) {
+                return null;
+            }
+            $session = $this->sessions[$sessionId];
         }
-        $session = $this->sessions[$sessionId];
         // Already have this session
         if ($session->lastUsed < time() - intval($this->config['inactivityTimeout']) * 60) {
             // @todo
@@ -64,23 +92,58 @@ class SessionCacheStorage implements SessionStorageInterface
 
     public function register(VirtualSession $session): void
     {
-        if (count($this->sessions) > $this->limit * 0.95) {
-            // @todo garbage collection
-        }
         $session->firstUsed = time();
         $session->lastUsed = time();
-        $this->sessions[$session->sessionId] = $session;
+        if (!empty(self::$cacheStorage)) {
+            // @checkme clean up cachestorage occasionally based on size
+            $this->getCacheStorage()->sizeLimitReached();
+            $this->getCacheStorage()->setCached($session->sessionId, serialize($session));
+        } else {
+            if (count($this->sessions) > $this->limit * 0.95) {
+                // @todo garbage collection
+            }
+            $this->sessions[$session->sessionId] = $session;
+        }
     }
 
     public function update(VirtualSession $session): void
     {
         $session->lastUsed = time();
-        $this->sessions[$session->sessionId] = $session;
+        if (!empty(self::$cacheStorage)) {
+            $this->getCacheStorage()->setCached($session->sessionId, serialize($session));
+        } else {
+            $this->sessions[$session->sessionId] = $session;
+        }
     }
 
     public function delete(VirtualSession $session): void
     {
-        unset($this->sessions[$session->sessionId]);
+        if (!empty(self::$cacheStorage)) {
+            $this->getCacheStorage()->delCached($session->sessionId);
+        } else {
+            unset($this->sessions[$session->sessionId]);
+        }
+    }
+
+    /**
+     * Summary of getCacheStorage
+     * @uses xar::cache()->getStorage()
+     * @return ixarCache_Storage
+     */
+    public function getCacheStorage()
+    {
+        if (!isset(self::$cacheStorage)) {
+            $xar = $this->getServicesClass();
+            //self::loadConfig();
+            // @checkme access cachestorage directly here
+            self::$cacheStorage = $xar->cache()->getStorage([
+                'storage' => self::$storageType,
+                'type' => self::$cacheType,
+                'expire' => self::$cacheExpire,
+                'sizelimit' => self::$cacheSize,
+            ]);
+        }
+        return self::$cacheStorage;
     }
 }
 
@@ -89,6 +152,8 @@ class SessionCacheStorage implements SessionStorageInterface
  */
 class SessionDatabaseStorage implements SessionStorageInterface
 {
+    use WithServicesTrait;
+
     /** @var \Connection|\PDOConnection */
     private $db;
     private string $table;
@@ -99,15 +164,19 @@ class SessionDatabaseStorage implements SessionStorageInterface
      */
     protected function db()
     {
-        $this->xarDb ??= xar::db();
+        if (!isset($this->xarDb)) {
+            $xar = $this->getServicesClass();
+            $this->xarDb = $xar->db();
+        }
         return $this->xarDb;
     }
 
     /**
      * @param array<string, mixed> $config
      */
-    public function __construct(private array $config)
+    public function __construct(private array $config = [], $xar = null)
     {
+        $this->setServicesClass($xar);
         $this->db = $this->db()->getConn();
         $this->table = $this->getTable();
     }

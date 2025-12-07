@@ -131,8 +131,9 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
                 throw new Exception('Invalid username or password');
             }
             $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];
-            $token = AuthToken::createToken($userInfo);
-            $expiration = date('c', time() + AuthToken::$tokenExpires);
+            $authToken = new AuthToken($xar);
+            $token = $authToken->createItem($userInfo);
+            $expiration = date('c', time() + AuthToken::$cacheExpire);
             return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
         };
         return $resolver;
@@ -175,7 +176,9 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
             if (empty($token)) {
                 return true;
             }
-            AuthToken::deleteToken($token);
+            $xar = $context->handler->getServicesClass();
+            $authToken = new AuthToken($xar);
+            $authToken->deleteItem($token);
             return true;
         };
         return $resolver;

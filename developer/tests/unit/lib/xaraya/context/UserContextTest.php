@@ -84,11 +84,12 @@ final class UserContextTest extends TestCase
 
         $expected = 123;
         $userInfo = ['userId' => $expected, 'access' => 'ignored'];
-        $token = AuthToken::createToken($userInfo);
+        $xar = $this->getServicesClass();
+        $authToken = new AuthToken($xar);
+        $token = $authToken->createItem($userInfo);
         $context = new Context([
             'server' => ['HTTP_X_AUTH_TOKEN' => $token],
         ]);
-        $xar = $this->getServicesClass();
         $userId = $context->getUserId($xar);
         $this->assertEquals($expected, $userId);
         $expected = VirtualSession::class;

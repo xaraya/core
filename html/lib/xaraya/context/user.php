@@ -14,6 +14,7 @@ namespace Xaraya\Context;
 
 use Xaraya\Authentication\AuthToken;
 use Xaraya\Authentication\RemoteUser;
+use Xaraya\Authentication\SessionCookie;
 use Xaraya\Services\WithServicesTrait;
 use Exception;
 
@@ -75,14 +76,14 @@ class UserContext
         if (empty($uname)) {
             return null;
         }
-        $userInfo = RemoteUser::getUserInfo($uname);
-        if (empty($userInfo) || empty($userInfo['id'])) {
+        $remoteUser = new RemoteUser($xar);
+        $userId = $remoteUser->getUserId($uname);
+        if (empty($userId)) {
             return null;
         }
         $sessionId = 'RemoteUser:' . $uname;
-        $this->initSession($sessionId, $userInfo['id']);
-        //$this->context['userInfo'] = $userInfo;
-        return intval($userInfo['id']);
+        $this->initSession($sessionId, $userId);
+        return $userId;
     }
 
     /**
@@ -101,18 +102,18 @@ class UserContext
         if (empty($token)) {
             return null;
         }
-        $userInfo = AuthToken::getUserInfo($token);
-        if (empty($userInfo) || empty($userInfo['userId'])) {
+        $authToken = new AuthToken($xar);
+        $userId = $authToken->getUserId($token);
+        if (empty($userId)) {
             return null;
         }
         $sessionId = 'AuthToken:' . $token;
-        $this->initSession($sessionId, $userInfo['userId']);
-        //$this->context['userInfo'] = $userInfo;
-        return intval($userInfo['userId']);
+        $this->initSession($sessionId, $userId);
+        return $userId;
     }
 
     /**
-     * Summary of checkCookie
+     * Summary of checkCookie - using xar::session()
      * @uses xar::session()->start()
      * @uses xar::session()->getUserId()
      * @return int|null
@@ -132,6 +133,32 @@ class UserContext
             return null;
         }
         return $xar->session()->getUserId();
+    }
+
+    /**
+     * Summary of checkCookie2 (not used)
+     * @return int|null
+     */
+    protected function checkCookie2()
+    {
+        try {
+            $xar = $this->getServicesClass();
+            RequestContext::$cookieName = $xar->sysConfig()->getVar('Auth.SessionCookie');
+        } catch (Exception) {
+            return null;
+        }
+        $sessionId = RequestContext::getSessionCookie($this->context);
+        if (empty($sessionId)) {
+            return null;
+        }
+        $sessionCookie = new SessionCookie($xar);
+        $userId = $sessionCookie->getUserId($token);
+        if (empty($userId)) {
+            return null;
+        }
+        // @todo don't start session here if handled in SessionCookie()
+        // $this->initSession($sessionId, $userId);
+        return $userId;
     }
 
     /**

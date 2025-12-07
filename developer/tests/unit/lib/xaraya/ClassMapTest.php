@@ -11,8 +11,8 @@ final class ClassMapTest extends TestCase
 
         $expected = [
             'authsystem' => [
-                'authtoken' => [
-                    'Xaraya\Authentication\AuthToken' => sys::code() . 'modules/authsystem/class/authtoken.php',
+                'AuthToken' => [
+                    'Xaraya\Authentication\AuthToken' => sys::code() . 'modules/authsystem/class/AuthToken.php',
                 ],
             ],
         ];

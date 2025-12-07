@@ -112,8 +112,9 @@ class GenericAPIHandler extends RestAPIHandler
             throw new UnauthorizedOperationException();
         }
         $userInfo = ['userId' => $userId, 'access' => $access, 'created' => time()];
-        $token = AuthToken::createToken($userInfo);
-        $expiration = date('c', time() + AuthToken::$tokenExpires);
+        $authToken = new AuthToken($xar);
+        $token = $authToken->createItem($userInfo);
+        $expiration = date('c', time() + AuthToken::$cacheExpire);
         return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
     }
 
@@ -132,7 +133,9 @@ class GenericAPIHandler extends RestAPIHandler
         if (empty($token)) {
             return false;
         }
-        AuthToken::deleteToken($token);
+        $xar = $this->getServicesClass();
+        $authToken = new AuthToken($xar);
+        $authToken->deleteItem($token);
         return true;
     }
 }

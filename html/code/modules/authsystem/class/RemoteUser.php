@@ -5,7 +5,7 @@
  *
  * @package modules\authsystem
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.9.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/42.html
@@ -17,7 +17,7 @@ namespace Xaraya\Authentication;
 
 use Xaraya\Context\Context;
 use Xaraya\Context\RequestContext;
-use xarRoles;
+use Xaraya\Services\WithServicesTrait;
 
 /**
  * Remote User Authentication
@@ -26,8 +26,11 @@ use xarRoles;
  */
 class RemoteUser
 {
+    use WithServicesTrait;
+
     public static string $headerName = 'REMOTE_USER';
     public static string $lookupField = 'uname';
+    public static string $fieldName = 'id';
 
     /**
      * Summary of init
@@ -52,18 +55,38 @@ class RemoteUser
         return RequestContext::getRemoteUser($context);
     }
 
+    public function __construct($xar = null)
+    {
+        $this->setServicesClass($xar);
+    }
+
+    /**
+     * Summary of getUserId
+     * @param string $uname
+     * @return int|null
+     */
+    public function getUserId($uname)
+    {
+        $userInfo = $this->getUserInfo($uname);
+        if (empty($userInfo) || empty($userInfo[static::$fieldName])) {
+            return null;
+        }
+        return intval($userInfo[static::$fieldName]);
+    }
+
     /**
      * Summary of getUserInfo
      * @param string $uname
      * @return array<string, mixed>|null
      */
-    public static function getUserInfo($uname)
+    public function getUserInfo($uname)
     {
         if (empty($uname)) {
             return null;
         }
+        $xar = $this->getServicesClass();
         // Change the role lookup field if needed
-        $role = xarRoles::ufindRole($uname);
+        $role = $xar->user()->getRole(static::$lookupField, $uname);
         if (empty($role)) {
             return null;
         }

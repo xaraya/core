@@ -134,7 +134,7 @@ class SessionContext implements WithContextInterface, SessionInterface
      */
     public function getStorage()
     {
-        $this->storage ??= new self::$storageClass($this->args);
+        $this->storage ??= new self::$storageClass($this->args, $this->getServicesClass());
         return $this->storage;
     }
 

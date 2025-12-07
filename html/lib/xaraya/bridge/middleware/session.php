@@ -61,8 +61,8 @@ class SessionMiddleware implements MiddlewareInterface
         $this->cookieName = $this->config['cookieName'] ?? SessionHandler::COOKIE;
         $this->prefix = SessionHandler::PREFIX;
         $this->anonId = intval($xar->config()->getVar('Site.User.AnonymousUID', 5));
-        //$this->storage = new SessionDatabaseStorage($this->config);
-        $this->storage = new SessionCacheStorage($this->config);
+        //$this->storage = new SessionDatabaseStorage($this->config, $xar);
+        $this->storage = new SessionCacheStorage($this->config, $xar);
         // register callback functions for UserLogin and UserLogout events - to update userId in request
         $this->registerCallbackEvents();
     }
