@@ -139,11 +139,12 @@ class UserContext
      * Summary of checkCookie2 (not used)
      * @return int|null
      */
-    protected function checkCookie2()
+    public function checkCookie2()
     {
         try {
             $xar = $this->getServicesClass();
-            RequestContext::$cookieName = $xar->sysConfig()->getVar('Auth.SessionCookie');
+            // xarSystemVars: Unknown system variable: 'Auth.SessionCookie'.
+            // RequestContext::$cookieName = $xar->sysConfig()->getVar('Auth.SessionCookie');
         } catch (Exception) {
             return null;
         }
@@ -152,7 +153,7 @@ class UserContext
             return null;
         }
         $sessionCookie = new SessionCookie($xar);
-        $userId = $sessionCookie->getUserId($token);
+        $userId = $sessionCookie->getUserId($sessionId);
         if (empty($userId)) {
             return null;
         }

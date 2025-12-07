@@ -28,7 +28,7 @@ class SessionCookie extends CacheStorage
 {
     public static string $cookieName = 'XARAYASID';
     public static string $cacheType = 'session';
-    public static string $fieldName = 'id';
+    public static string $fieldName = 'userId';  // with VirtualSession()
     ///** @var class-string<SessionStorageInterface> */
     //public static $storageClass = SessionCacheStorage::class;
 

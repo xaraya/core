@@ -2,8 +2,10 @@
 
 use PHPUnit\Framework\TestCase;
 use Xaraya\Authentication\AuthToken;
+use Xaraya\Authentication\SessionCookie;
 use Xaraya\Context\Context;
 use Xaraya\Context\RequestContext;
+use Xaraya\Context\UserContext;
 use Xaraya\Sessions\VirtualSession;
 use Xaraya\Services\xar;
 
@@ -178,5 +180,50 @@ final class UserContextTest extends TestCase
         $this->assertEquals($expected, $sessionVars);
 
         unset($_COOKIE[RequestContext::$cookieName]);
+    }
+
+    public function testSessionCookieContext_User_Cached(): void
+    {
+        // get last session for admin user
+        $expected = 6;
+        $sessionInfo = $this->getLastSessionInfo($expected);
+        $this->assertNotEmpty($sessionInfo);
+
+        // we need to set $_COOKIE here to use the default PHP session handling
+        $_COOKIE[RequestContext::$cookieName] = $sessionInfo['id'];
+        $context = new Context([
+            'cookie' => $_COOKIE,
+        ]);
+        $xar = $this->getServicesClass();
+
+        // verify that checkCookie2 returns the same result as above
+        $userContext = new UserContext($context, $xar);
+        $userId = $userContext->checkCookie2();
+
+        unset($_COOKIE[RequestContext::$cookieName]);
+        $this->assertEquals($expected, $userId);
+
+        // save VirtualSession() as array in cache storage
+        $session = $xar->getContext()->getSession();
+        //var_dump(serialize($session));
+        $data = xar::getPublicProperties($session);
+
+        $sessionCookie = new SessionCookie($xar);
+        $expected = $sessionInfo['id'];
+        $sessionId = $sessionCookie->createItem($data, $expected);
+        $this->assertEquals($expected, $sessionId);
+
+        // get session data back from cache storage
+        $result = $sessionCookie->getUserInfo($sessionId);
+        // compare values for all expected keys
+        $expected = array_flip(array_keys($data));
+        $this->assertEquals($data, array_intersect_key($result, $expected));
+
+        // re-create equivalent VirtualSession() based on data - not same but equal
+        //$newSession = VirtualSession::__set_state($result);
+        $newSession = new VirtualSession($result['sessionId'], $result['userId'], $result['ipAddress'], $result['lastUsed'], $result['vars']);
+        $newSession->isNew = $result['isNew'];
+        $this->assertNotSame($session, $newSession);
+        $this->assertEquals($session, $newSession);
     }
 }
