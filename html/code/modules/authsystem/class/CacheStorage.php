@@ -33,11 +33,17 @@ class CacheStorage
     public static int $cacheExpire = 12 * 60 * 60;  // 12 hours
     public static int $cacheSize = 10000000;  // 10 MB
     public static ?ixarCache_Storage $cacheStorage = null;
-    public static string $fieldName = 'userId';
+    public static string $itemField = '';
+    public static string $userField = 'userId';
+    public static string $timeField = 'created';
+    public static string $saveField = 'updated';
+    /** @var array<string, mixed> */
+    protected array $item = [];
 
     public function __construct($xar = null)
     {
         $this->setServicesClass($xar);
+        $this->item = [];
     }
 
     /**
@@ -48,14 +54,14 @@ class CacheStorage
     public function getUserId($id)
     {
         $userInfo = $this->getUserInfo($id);
-        if (empty($userInfo) || empty($userInfo[static::$fieldName])) {
+        if (empty($userInfo) || empty($userInfo[static::$userField])) {
             return null;
         }
-        return intval($userInfo[static::$fieldName]);
+        return intval($userInfo[static::$userField]);
     }
 
     /**
-     * Summary of getItem
+     * Summary of getUserInfo
      * @param string $id
      * @return array<string, mixed>|null
      */
@@ -69,10 +75,23 @@ class CacheStorage
             return null;
         }
         $item = json_decode($item, true, 512, JSON_THROW_ON_ERROR);
-        if (!empty($item[static::$fieldName]) && ($item['created'] > (time() - static::$cacheExpire))) {
+        if (!empty($item[static::$userField]) && $this->expires($item) > time()) {
             return $item;
         }
         return null;
+    }
+
+    /**
+     * Summary of expires
+     * @param ?array<string, mixed> $item
+     * @return int
+     */
+    public function expires($item = null)
+    {
+        if (empty($item)) {
+            return time() + static::$cacheExpire;
+        }
+        return $item[static::$timeField] + static::$cacheExpire;
     }
 
     /**
@@ -83,8 +102,8 @@ class CacheStorage
     public function createItem($item, $id = null)
     {
         $id ??= bin2hex(random_bytes(16));
-        $item['created'] = time();
-        $item['updated'] = $item['created'];
+        $item[static::$saveField] = time();
+        $item[static::$timeField] ??= $item[static::$saveField];
         // @checkme clean up cachestorage occasionally based on size
         $this->getCacheStorage()->sizeLimitReached();
         $this->getCacheStorage()->setCached($id, json_encode($item));
@@ -99,7 +118,7 @@ class CacheStorage
      */
     public function updateItem($id, $item)
     {
-        $item['updated'] = time();
+        $item[static::$saveField] = time();
         $this->getCacheStorage()->setCached($id, json_encode($item));
     }
 

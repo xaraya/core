@@ -26,7 +26,7 @@ class AuthToken extends CacheStorage
     public const ACCESS_LEVELS = ['display', 'update', 'create', 'delete', 'config', 'admin'];
     public static string $headerName = 'HTTP_X_AUTH_TOKEN';
     public static string $cacheType = 'token';
-    public static string $fieldName = 'userId';
+    public static string $userField = 'userId';
 
     /**
      * Summary of init
@@ -57,9 +57,9 @@ class AuthToken extends CacheStorage
     public function getUserId($token)
     {
         $userInfo = $this->getUserInfo($token);
-        if (empty($userInfo) || empty($userInfo[static::$fieldName])) {
+        if (empty($userInfo) || empty($userInfo[static::$userField])) {
             return null;
         }
-        return intval($userInfo[static::$fieldName]);
+        return intval($userInfo[static::$userField]);
     }
 }

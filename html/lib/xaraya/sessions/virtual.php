@@ -90,9 +90,26 @@ class VirtualSession
      */
     public static function __set_state($args)
     {
-        // not using new static() here - see https://phpstan.org/blog/solving-phpstan-error-unsafe-usage-of-new-static
-        $c = new self($args['sessionId'], $args['userId'], $args['ipAddress'], $args['lastUsed'], $args['vars']);
-        $c->isNew = $args['isNew'];
-        return $c;
+        return self::create($args);
+    }
+
+    /**
+     * Summary of create
+     * @param array<string, mixed> $data
+     * @param ?string $sessionId
+     * @return VirtualSession
+     */
+    public static function create($data, $sessionId = null)
+    {
+        $data['sessionId'] ??= $sessionId ?? bin2hex(random_bytes(16));
+        $data['userId'] ??= 0;
+        $data['ipAddress'] ??= '';
+        $data['lastUsed'] ??= 0;
+        $data['vars'] ??= [];
+        //$session = self::__set_state($data);
+        $session = new self($data['sessionId'], $data['userId'], $data['ipAddress'], $data['lastUsed'], $data['vars']);
+        $session->firstUsed = $data['firstUsed'] ?? 0;
+        $session->isNew = $data['isNew'] ?? ($data['lastUsed'] == $data['firstUsed'] ? true : false);
+        return $session;
     }
 }

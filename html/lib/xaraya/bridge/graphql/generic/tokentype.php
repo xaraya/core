@@ -133,7 +133,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
             $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];
             $authToken = new AuthToken($xar);
             $token = $authToken->createItem($userInfo);
-            $expiration = date('c', time() + AuthToken::$cacheExpire);
+            $expiration = date('c', $authToken->expires());
             return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
         };
         return $resolver;

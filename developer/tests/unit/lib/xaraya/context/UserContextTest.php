@@ -206,23 +206,24 @@ final class UserContextTest extends TestCase
         // save VirtualSession() as array in cache storage
         $session = $xar->getContext()->getSession();
         //var_dump(serialize($session));
-        $data = xar::getPublicProperties($session);
-
         $sessionCookie = new SessionCookie($xar);
+        $data = $sessionCookie->fromSession($session);
+
         $expected = $sessionInfo['id'];
         $sessionId = $sessionCookie->createItem($data, $expected);
         $this->assertEquals($expected, $sessionId);
 
         // get session data back from cache storage
         $result = $sessionCookie->getUserInfo($sessionId);
+        // check that lastUsed was updated when saved
+        $this->assertGreaterThan($data['lastUsed'], $result['lastUsed']);
+        $result['lastUsed'] = $data['lastUsed'];
         // compare values for all expected keys
         $expected = array_flip(array_keys($data));
         $this->assertEquals($data, array_intersect_key($result, $expected));
 
         // re-create equivalent VirtualSession() based on data - not same but equal
-        //$newSession = VirtualSession::__set_state($result);
-        $newSession = new VirtualSession($result['sessionId'], $result['userId'], $result['ipAddress'], $result['lastUsed'], $result['vars']);
-        $newSession->isNew = $result['isNew'];
+        $newSession = $sessionCookie->makeSession($result);
         $this->assertNotSame($session, $newSession);
         $this->assertEquals($session, $newSession);
     }

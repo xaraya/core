@@ -62,6 +62,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
 
     private ?string $sessionId = null;  // The id assigned to us.
     private string $ipAddress = '';     // IP-address belonging to this session.
+    private ?int $firstUsed = null;     // When was this session first used ?
     private ?int $lastSaved = null;     // When was this session last saved ?
     protected $xarDb = null;         // Access database service with instance methods
 
@@ -325,11 +326,12 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     public function register(string $ipAddress): bool
     {
         $xar = $this->getServicesClass();
+        $now = time();
         try {
             $this->db->begin();
             $query = "INSERT INTO $this->tbl (id, ip_addr, role_id, first_use, last_use)
                       VALUES (?,?,?,?,?)";
-            $bindvars = [$this->sessionId, $ipAddress, $xar->session()->getAnonId(), time(), time()];
+            $bindvars = [$this->sessionId, $ipAddress, $xar->session()->getAnonId(), $now, $now];
             $stmt = $this->db->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
             $this->db->commit();
@@ -345,6 +347,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         srand((int) (microtime(true) * 1000000.0));
         $this->setVar('rand', rand());
 
+        $this->firstUsed = $now;
         $this->ipAddress = $ipAddress;
         return true;
     }
@@ -383,7 +386,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      */
     public function read($sessionId): string|false
     {
-        $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->tbl WHERE id = ?";
+        $query = "SELECT role_id, ip_addr, first_use, last_use, vars FROM $this->tbl WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
         $result = $stmt->executeQuery([$sessionId], $this->db()->getFetchNum());
 
@@ -391,7 +394,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         if ($result->first()) {
             // Already have this session
             $this->isNew = false;
-            [$XARSVid, $this->ipAddress, $lastused, $vars] = $result->getRow();
+            [$XARSVid, $this->ipAddress, $this->firstUsed, $lastused, $vars] = $result->getRow();
             // in case garbage collection didn't have the opportunity to do its job
             if (!empty($xar->session()->getSecurityLevel())
                 && $xar->session()->getSecurityLevel() == 'High') {
@@ -700,6 +703,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     {
         // not used in default session handler
         $context['session'] = new VirtualSession($this->getId(), $this->getUserId(), $this->ipAddress, $this->saveTime(), $this->getVars());
+        $context['session']->firstUsed = $this->firstUsed;
         $context['session']->isNew = $this->isNew();
     }
 }

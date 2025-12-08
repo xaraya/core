@@ -18,6 +18,7 @@ namespace Xaraya\Authentication;
 use Xaraya\Context\Context;
 use Xaraya\Context\RequestContext;
 use Xaraya\Context\UserContext;
+use Xaraya\Sessions\VirtualSession;
 //use Xaraya\Sessions\Storage\SessionCacheStorage;
 //use Xaraya\Sessions\Storage\SessionStorageInterface;
 
@@ -28,7 +29,10 @@ class SessionCookie extends CacheStorage
 {
     public static string $cookieName = 'XARAYASID';
     public static string $cacheType = 'session';
-    public static string $fieldName = 'userId';  // with VirtualSession()
+    public static string $itemField = 'sessionId';  // with VirtualSession()
+    public static string $userField = 'userId';
+    public static string $timeField = 'firstUsed';
+    public static string $saveField = 'lastUsed';
     ///** @var class-string<SessionStorageInterface> */
     //public static $storageClass = SessionCacheStorage::class;
 
@@ -70,5 +74,57 @@ class SessionCookie extends CacheStorage
             return null;
         }
         return $xar->session()->getUserId();
+    }
+
+    /**
+     * Summary of fromSession
+     * @param VirtualSession $session
+     * @return array<string, mixed>
+     */
+    public function fromSession($session)
+    {
+        $item = get_object_vars($session);
+        if (static::$itemField !== 'sessionId') {
+            $item[static::$itemField] = $item['sessionId'];
+            unset($item['sessionId']);
+        }
+        if (static::$userField !== 'userId') {
+            $item[static::$userField] = $item['userId'];
+            unset($item['userId']);
+        }
+        if (static::$timeField !== 'firstUsed') {
+            $item[static::$timeField] = $item['firstUsed'];
+            unset($item['firstUsed']);
+        }
+        if (static::$saveField !== 'lastUsed') {
+            $item[static::$saveField] = $item['lastUsed'];
+            unset($item['lastUsed']);
+        }
+        return $item;
+    }
+
+    /**
+     * Summary of makeSession
+     * @param array<string, mixed> $item
+     * @param ?string $sessionId
+     * @return VirtualSession
+     */
+    public function makeSession($item, $sessionId = null)
+    {
+        if (static::$itemField !== 'sessionId') {
+            $item['sessionId'] = $item[static::$itemField] ?? $sessionId;
+        } elseif (!empty($sessionId)) {
+            $item['sessionId'] = $sessionId;
+        }
+        if (static::$userField !== 'userId') {
+            $item['userId'] = $item[static::$userField] ?? 0;
+        }
+        if (static::$timeField !== 'firstUsed') {
+            $item['firstUsed'] = $item[static::$timeField] ?? 0;
+        }
+        if (static::$saveField !== 'lastUsed') {
+            $item['lastUsed'] = $item[static::$saveField] ?? 0;
+        }
+        return VirtualSession::create($item, $sessionId);
     }
 }

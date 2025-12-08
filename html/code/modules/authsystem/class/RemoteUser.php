@@ -29,8 +29,8 @@ class RemoteUser
     use WithServicesTrait;
 
     public static string $headerName = 'REMOTE_USER';
-    public static string $lookupField = 'uname';
-    public static string $fieldName = 'id';
+    public static string $userField = 'id';  // with Role() field values
+    public static string $roleField = 'uname';
 
     /**
      * Summary of init
@@ -42,7 +42,7 @@ class RemoteUser
         // @todo Change the header name for the remote user if needed
         // RequestContext::$remoteUser = 'HTTP_X_WEBAUTH_USER';
         // Change the role lookup field if needed
-        // static::$lookupField = 'email';
+        // static::$roleField = 'email';
     }
 
     /**
@@ -68,10 +68,10 @@ class RemoteUser
     public function getUserId($uname)
     {
         $userInfo = $this->getUserInfo($uname);
-        if (empty($userInfo) || empty($userInfo[static::$fieldName])) {
+        if (empty($userInfo) || empty($userInfo[static::$userField])) {
             return null;
         }
-        return intval($userInfo[static::$fieldName]);
+        return intval($userInfo[static::$userField]);
     }
 
     /**
@@ -86,7 +86,7 @@ class RemoteUser
         }
         $xar = $this->getServicesClass();
         // Change the role lookup field if needed
-        $role = $xar->user()->getRole(static::$lookupField, $uname);
+        $role = $xar->user()->getRole(static::$roleField, $uname);
         if (empty($role)) {
             return null;
         }
