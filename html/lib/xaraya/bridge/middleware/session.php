@@ -73,8 +73,9 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function registerCallbackEvents(): void
     {
-        xarEvents::registerCallback('UserLogin', $this->callbackUserLogin(...));
-        xarEvents::registerCallback('UserLogout', $this->callbackUserLogout(...));
+        $xar = $this->getServicesClass();
+        $xar->events()->registerCallback('UserLogin', $this->callbackUserLogin(...));
+        $xar->events()->registerCallback('UserLogout', $this->callbackUserLogout(...));
     }
 
     /**

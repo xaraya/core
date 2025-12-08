@@ -62,27 +62,31 @@ class HooksHelper extends ServiceClass
      */
     public function notifyHooks(string $event, array $info = [], ?Context $context = null): mixed
     {
+        $xar = $this->getServicesClass();
         $info['itemid'] ??= null;
         // @todo check if we'll have context here
         $context ??= $this->getContext();
-        return xarHooks::notify($event, $info, $context, $this->getParent());
+        return $xar->hooked()->notify($event, $info, $context, $this->getParent());
     }
 
     public function getList($callerModName, $hookScope, $hookAction, $callerItemType = '')
     {
+        $xar = $this->getServicesClass();
         $event = ucfirst($hookScope) . ucfirst($hookAction);
-        return xarHooks::getSubjectObservers($callerModName, $event, $callerItemType);
+        return $xar->hooked()->getSubjectObservers($callerModName, $event, $callerItemType);
     }
 
     public function register($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
     {
+        $xar = $this->getServicesClass();
         $event = ucfirst($hookScope) . ucfirst($hookAction);
-        return xarHooks::registerObserver($event, $hookModName, $hookArea, $hookModType, $hookModFunc);
+        return $xar->hooked()->registerObserver($event, $hookModName, $hookArea, $hookModType, $hookModFunc);
     }
 
     public function unregister($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
     {
+        $xar = $this->getServicesClass();
         $event = ucfirst($hookScope) . ucfirst($hookAction);
-        return xarHooks::unregisterObserver($event, $hookModName);
+        return $xar->hooked()->unregisterObserver($event, $hookModName);
     }
 }

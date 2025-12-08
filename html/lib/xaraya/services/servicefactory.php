@@ -304,22 +304,18 @@ class ServiceFactory
 
     public static function getEventsService(object|string|null $parent = null): EventsInterface
     {
-        $className = \xarEvents::class;
-        $instance = null;
-        self::log(__METHOD__ . "($className)", $parent);
-        $events = EventsService::create($parent, $className, $instance);
-        // initialize wrapped class by default here
+        self::log(__METHOD__, $parent);
+        $events = EventsService::create($parent);
+        // initialize service
         $events->init();
         return $events;
     }
 
     public static function getHookedService(object|string|null $parent = null): HookedInterface
     {
-        $className = \xarHooks::class;
-        $instance = null;
-        self::log(__METHOD__ . "($className)", $parent);
-        $hooked = HookedService::create($parent, $className, $instance);
-        // initialize wrapped class by default here
+        self::log(__METHOD__, $parent);
+        $hooked = HookedService::create($parent);
+        // initialize service
         $hooked->init();
         return $hooked;
     }
