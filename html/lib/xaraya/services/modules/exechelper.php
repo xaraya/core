@@ -343,18 +343,19 @@ class ExecHelper extends ServiceClass
     public function getModule(string $modName): ModuleInterface
     {
         if (!array_key_exists($modName, $this->moduleClasses)) {
+            $xar = $this->getServicesClass();
             $result = xarClassMap::findModule($modName);
             if (!empty($result) && class_exists($result['classname'])) {
                 $class = $result['classname'];
                 try {
-                    $this->moduleClasses[$modName] = new $class($modName, $this->getContext(), $this->getParent());
+                    $this->moduleClasses[$modName] = new $class($modName, $this->getContext(), $xar);
                 } catch (Throwable $e) {
-                    $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext());
-                    $xar = $this->getServicesClass();
+                    $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext(), $xar);
                     $xar->log()->warning("xar::mod()->getModule: Error loading $class for module $modName");
                 }
             } else {
-                $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext());
+                $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext(), $xar);
+                //$this->moduleClasses[$modName] = new \Xaraya\Modules\LegacyModule($modName, $this->getContext(), $xar);
             }
         } else {
             $this->moduleClasses[$modName]->setContext($this->getContext());

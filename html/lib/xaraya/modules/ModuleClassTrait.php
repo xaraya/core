@@ -212,7 +212,7 @@ trait ModuleClassTrait
      */
     public function getModule(?string $modName = null): ?ModuleInterface
     {
-        if (!empty($modName)) {
+        if (!empty($modName) && $modName !== $this->getModName()) {
             $module = $this->module($modName);
             return $module;
         }

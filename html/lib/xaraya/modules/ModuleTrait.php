@@ -46,6 +46,7 @@ use Xaraya\Context\WithContextTrait;
 use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\WithServicesInterface;
+use Xaraya\Services\Modules\InfoHelper;
 use sys;
 use Exception;
 
@@ -62,6 +63,7 @@ interface ModuleInterface extends WithContextInterface, WithServicesInterface
     public function getFileInfo(): array;
     /** @return array<string, mixed> */
     public function getTables(): array;
+    public function loadDbInfo(): void;
     public function getComponent(string $classType): ?ModuleClassInterface;
     public function hasComponent(string $classType): bool;
     public function userapi(): ?UserApiInterface;
@@ -91,6 +93,7 @@ trait ModuleTrait
     protected array $classtypes = [];
     /** @var array<string, ModuleClassInterface|null> */
     private array $components = [];
+    private $loadedDbInfo = false;
 
     /**
      * @param ?Context<string, mixed> $context
@@ -197,24 +200,35 @@ trait ModuleTrait
     }
 
     /**
-     * Get file info from version.php
+     * Get file info from version.php (2.8.*) or xarversion.php (2.4.*)
      * @return array<string, mixed>
      */
     public function getFileInfo(): array
     {
         $xar = $this->getServicesClass();
-        // Xaraya\Modules\MyFancyModule\Version
-        $className = $this->getNamespace() . '\\Version';
-        if (class_exists($className)) {
-            $versionCall = new $className();
-            $modversion = $versionCall();
-            return $xar->mod()->parseFileInfo($modversion);
+        $modOsDir = $this->getModName();
+        $type = 'module';
+        if ($xar->mem()->has('Mod.getFileInfos', $modOsDir . " / " . $type)) {
+            return $xar->mem()->get('Mod.getFileInfos', $modOsDir . " / " . $type);
         }
-        return $xar->mod()->getFileInfo($this->getModName());
+        // Log it when it didnt came from cache
+        $xar->log()->debug("xar::module()->getFileInfo: Getting file info of '" . $modOsDir . "' (a " . $type . ")");
+        $fileInfo = VersionClass::getFileInfo($modOsDir);
+        $xar->mem()->set('Mod.getFileInfos', $modOsDir . " / " . $type, $fileInfo);
+        if (empty($fileInfo)) {
+            // Don't raise an exception, it is too harsh, but log it tho (bug 295)
+            $xar->log()->warning("xar::module()->getFileInfo: Could not find xarversion.php, skipping $modOsDir");
+            return $fileInfo;
+        }
+        // If the locale is already present, it means we can make the translations available
+        if (!empty($xar->mls()->getCurrentLocale())) {
+            $xar->mls()->loadModuleTranslations($modOsDir, '', 'version');
+        }
+        return $fileInfo;
     }
 
     /**
-     * Get tables from tables.php
+     * Get tables from tables.php (2.8.*) or xartables.php (2.4.*)
      * @return array<string, mixed>
      */
     public function getTables(): array
@@ -241,6 +255,22 @@ trait ModuleTrait
             return $tablefunc($prefix);
         }
         return [];
+    }
+
+    public function loadDbInfo(): void
+    {
+        // Check to ensure we aren't doing this twice
+        if ($this->loadedDbInfo) {
+            return;
+        }
+        $tables = $this->getTables();
+        if (empty($tables)) {
+            $this->loadedDbInfo = true;
+            return;
+        }
+        $xar = $this->getServicesClass();
+        $xar->db()->importTables($tables);
+        $this->loadedDbInfo = true;
     }
 
     public function userapi(): ?UserApiInterface

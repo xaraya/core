@@ -568,7 +568,7 @@ trait WithStaticServices
         return self::getServicesClass()->module($modName);
     }
 
-    public static function modclass(string $modName, string $modType): ModuleClassInterface|null
+    public static function modclass(string $modName, string $modType): ?ModuleClassInterface
     {
         return self::getServicesClass()->modclass($modName, $modType);
     }

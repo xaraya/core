@@ -489,16 +489,19 @@ class Role extends DataObject
         while ($result->next()) {
             [$id, $name, $realm, $module_id, $module, $component, $instance, $level,
                 $description] = $result->fields;
-            $perm = new xarPrivilege(['id' => $id,
-                'name' => $name,
-                'realm' => is_null($realm) ? 'All' : $realm,
-                'module' => $module,
-                'module_id' => $module_id,
-                'component' => $component,
-                'instance' => $instance,
-                'level' => $level,
-                'description' => $description,
-                'parentid' => 0],
+            $perm = new xarPrivilege(
+                [
+                    'id' => $id,
+                    'name' => $name,
+                    'realm' => is_null($realm) ? 'All' : $realm,
+                    'module' => $module,
+                    'module_id' => $module_id,
+                    'component' => $component,
+                    'instance' => $instance,
+                    'level' => $level,
+                    'description' => $description,
+                    'parentid' => 0,
+                ],
                 $this->getStaticServices()
             );
             array_push($privileges, $perm);

@@ -546,7 +546,7 @@ trait ParentServicesTrait
         return $this->getParent()->module($modName);
     }
 
-    public function modclass(string $modName, string $modType): ModuleClassInterface|null
+    public function modclass(string $modName, string $modType): ?ModuleClassInterface
     {
         return $this->getParent()->modclass($modName, $modType);
     }

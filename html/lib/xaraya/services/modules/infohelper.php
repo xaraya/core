@@ -18,6 +18,7 @@
 namespace Xaraya\Services\Modules;
 
 use Xaraya\Services\ServiceClass;
+use Xaraya\Modules\VersionClass;
 use xarClassMap;
 use ixarMod;
 use sys;
@@ -123,26 +124,18 @@ class InfoHelper extends ServiceClass
         // TODO redo legacy support via type.
         switch ($type) {
             case 'module':
-                $result = xarClassMap::findVersion($modOsDir);
-                if (!empty($result) && class_exists($result['classname'])) {
-                    $versionCall = new $result['classname']();
-                    $modversion = $versionCall();
-                    // set directory here if needed
-                    $modversion['directory'] ??= $modOsDir;
-                    // If the locale is already present, it means we can make the translations available
-                    if (!empty($xar->mls()->getCurrentLocale())) {
-                        $xar->mls()->loadModuleTranslations($modOsDir, '', 'version');
-                    }
-                    return $this->parseFileInfo($modversion, $modOsDir . " / " . $type);
+                $fileInfo = VersionClass::getFileInfo($modOsDir);
+                $xar->mem()->set('Mod.getFileInfos', $modOsDir . " / " . $type, $fileInfo);
+                if (empty($fileInfo)) {
+                    // Don't raise an exception, it is too harsh, but log it tho (bug 295)
+                    $xar->log()->warning("xar::mod()->getFileInfo: Could not find xarversion.php, skipping $modOsDir");
+                    return $fileInfo;
                 }
-                // Spliffster, additional mod info from modules/$modOsDir/xarversion.php
-                $fileName = sys::code() . 'modules/' . $modOsDir . '/xarversion.php';
-                $part = 'xarversion';
                 // If the locale is already present, it means we can make the translations available
                 if (!empty($xar->mls()->getCurrentLocale())) {
                     $xar->mls()->loadModuleTranslations($modOsDir, '', 'version');
                 }
-                break;
+                return $fileInfo;
             case 'theme':
                 $fileName = $xar->config()->getVar('Site.BL.ThemesDirectory') . '/' . $modOsDir . '/xartheme.php';
                 $part = 'xartheme';
@@ -548,48 +541,12 @@ class InfoHelper extends ServiceClass
 
     public function parseFileInfo($version, $name = '')
     {
-        // name and id are required, assert them, otherwise the module is invalid
-        assert(isset($version["name"]) && isset($version["id"]));
-        $fileInfo = [];
-        $fileInfo['name']           = $version['name'];
-        $fileInfo['regid']          = (int) $version['id'];
-        $fileInfo['displayname']    = $version['displayname'] ?? $version['name'];
-        $fileInfo['description']    = $version['description'] ?? false;
-        $fileInfo['displaydescription'] = $version['displaydescription'] ?? $fileInfo['description'];
-        $fileInfo['admin']          = isset($version['admin']) ? (bool) $version['admin'] : false;
-        $fileInfo['admin_capable']  = isset($version['admin']) ? (bool) $version['admin'] : false;
-        $fileInfo['user']           = isset($version['user']) ? (bool) $version['user'] : false;
-        $fileInfo['user_capable']   = isset($version['user']) ? (bool) $version['user'] : false;
-        $fileInfo['securityschema'] = $version['securityschema'] ?? false;
-        $fileInfo['class']          = $version['class'] ?? false;
-        $fileInfo['category']       = $version['category'] ?? false;
-        $fileInfo['locale']         = $version['locale'] ?? 'en_US.iso-8859-1';
-        $fileInfo['author']         = $version['author'] ?? false;
-        $fileInfo['contact']        = $version['contact'] ?? false;
-        $fileInfo['dependency']     = $version['dependency'] ?? [];
-        $fileInfo['dependencyinfo'] = $version['dependencyinfo'] ?? [];
-        $fileInfo['propertyinfo']   = $version['propertyinfo'] ?? [];
-        $fileInfo['extensions']     = $version['extensions'] ?? [];
-        $fileInfo['directory']      = $version['directory'] ?? false;
-        $fileInfo['homepage']       = $version['homepage'] ?? false;
-        $fileInfo['email']          = $version['email'] ?? false;
-        $fileInfo['contact_info']   = $version['contact_info'] ?? false;
-        $fileInfo['publish_date']   = $version['publish_date'] ?? false;
-        $fileInfo['license']        = $version['license'] ?? false;
-        $fileInfo['version']        = $version['version'] ?? false;
-        // Check that 'xar_version' key exists before assigning
-        if (!$fileInfo['version'] && isset($version['xar_version'])) {
-            $fileInfo['version'] = $version['xar_version'];
+        if (empty($name)) {
+            return VersionClass::parseFileInfo($version);
         }
-        $fileInfo['bl_version']     = $version['bl_version'] ?? false;
-        $fileInfo['namespace']      = $version['namespace'] ?? '';
-        $fileInfo['twigtemplates']  = $version['twigtemplates'] ?? false;
-        $fileInfo['twigextension']  = $version['twigextension'] ?? '.html.twig';
-
-        if (!empty($name)) {
-            $xar = $this->getServicesClass();
-            $xar->mem()->set('Mod.getFileInfos', $name, $fileInfo);
-        }
+        $xar = $this->getServicesClass();
+        $fileInfo = VersionClass::parseFileInfo($version);
+        $xar->mem()->set('Mod.getFileInfos', $name, $fileInfo);
         return $fileInfo;
     }
 

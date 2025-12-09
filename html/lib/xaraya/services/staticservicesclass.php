@@ -541,7 +541,7 @@ class StaticServicesClass extends ServicesClass
         return $modulesExecHelper->getModule($modName);
     }
 
-    public function modclass(string $modName, string $modType): ModuleClassInterface|null
+    public function modclass(string $modName, string $modType): ?ModuleClassInterface
     {
         /** @var Modules\ExecHelper $modulesExecHelper */
         $modulesExecHelper = $this->getServicePrototype('modules.exec');

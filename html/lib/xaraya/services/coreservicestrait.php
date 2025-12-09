@@ -60,7 +60,7 @@ interface CoreServicesInterface extends WithContextInterface
     public function hooked(): HookedInterface;
     public function theme(): ThemesInterface;
     public function module(string $modName): ModuleInterface;
-    public function modclass(string $modName, string $modType): ModuleClassInterface|null;
+    public function modclass(string $modName, string $modType): ?ModuleClassInterface;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
      * @return void|never
@@ -623,7 +623,7 @@ trait CoreServicesTrait
         return $this->getStaticServices()->module($modName);
     }
 
-    public function modclass(string $modName, string $modType): ModuleClassInterface|null
+    public function modclass(string $modName, string $modType): ?ModuleClassInterface
     {
         return $this->getStaticServices()->modclass($modName, $modType);
     }
