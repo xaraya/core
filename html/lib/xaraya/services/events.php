@@ -20,7 +20,6 @@ use Xaraya\Context\Context;
 use ixarEventSubject;
 use ixarMod;
 use xarClassMap;
-use xarEvents;
 use sys;
 use Exception;
 use BadParameterException;
@@ -34,17 +33,18 @@ interface EventsInterface extends ServiceInterface
 {
     public function getSubjectType(): int;
     public function getObserverType(): int;
-    public function notify($event, $args = [], $context = null);
-    public function getSubject($event);
-    public function getSubjects();
-    public function getObservers(ixarEventSubject $subject);
-    public function fileLoad($info);
-    public function registerCallback($event, $callback);
-    public function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'eventsubjects', $func = 'notify');
-    public function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'eventobservers', $func = 'notify');
-    public function unregisterSubject($event, $module);
-    public function unregisterObserver($event, $module);
-    public function getObserverModules();
+    public function notify($event, $args = [], $context = null): mixed;
+    public function getSubject($event): array;
+    public function getSubjects(): array;
+    public function getObservers(ixarEventSubject $subject): array;
+    public function fileLoad($info): bool;
+    public function registerCallback($event, $callback): mixed;
+    // EventsConfig methods
+    public function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'eventsubjects', $func = 'notify'): mixed;
+    public function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'eventobservers', $func = 'notify'): mixed;
+    public function unregisterSubject($event, $module): bool;
+    public function unregisterObserver($event, $module): bool;
+    public function getObserverModules(): array;
 }
 
 /**
@@ -72,13 +72,20 @@ class EventsService implements EventsInterface
     public const OBSERVER_TYPE      = 2;   // System event observers
     public const SUPPORTED_AREAS    = ['class', 'api', 'gui'];
 
-    // keep track of classname as detected in fileLoad() for register()
+    // keep track of classname as detected in fileLoad() for register() - @todo handle service fileLoad() + static register()
     protected static $classnames = [];
     // for non-core modules we're only interested in hookobservers for now - this may extend to eventobservers later...
     protected static $classtypes = ['hookobservers'];
     // allow others to define callback functions without registering observers e.g. for event bridge
     protected $callbackFunctions = [];
     protected bool $initialized = false;
+    private ?Config\EventsConfig $configService = null;
+
+    private function getConfigService(): Config\EventsConfig
+    {
+        $this->configService ??= new Config\EventsConfig($this->getServicesClass());
+        return $this->configService;
+    }
 
     public function getSubjectType(): int
     {
@@ -111,7 +118,7 @@ class EventsService implements EventsInterface
      * @param ?Context<string, mixed> $context
      * @return mixed response from subject notify method
     **/
-    public function notify($event, $args = [], $context = null)
+    public function notify($event, $args = [], $context = null): mixed
     {
         $xar = $this->getServicesClass();
         $info = [];
@@ -120,7 +127,7 @@ class EventsService implements EventsInterface
             // get info for specified event
             $info = $this->getSubject($event);
             if (empty($info)) {
-                return;
+                return null;
             }
             // context for core services is set in handler
             if (!isset($context)) {
@@ -130,7 +137,7 @@ class EventsService implements EventsInterface
             }
             // file load takes care of validation for us
             if (!$this->fileLoad($info)) {
-                return;
+                return null;
             }
             $module = $info['module'];
             switch (strtolower($info['area'])) {
@@ -244,10 +251,10 @@ class EventsService implements EventsInterface
      * Get db info for an event subject
      *
      * @param string $event name of event subject, required
-     * @return mixed array of subject info or bool false
+     * @return array<string, mixed> array of subject info or empty array
      * used internally by the event system, must not be overloaded
     **/
-    final public function getSubject($event)
+    final public function getSubject($event): array
     {
         // init the cache, if it isn't already init'ed
         $subjects = $this->getSubjects();
@@ -260,10 +267,10 @@ class EventsService implements EventsInterface
     /**
      * Load all subjects from db for current subject type
      * We only ever do this once per page request, results are cached
-     * @return array<mixed>|void containing subjects, indexed by event name
+     * @return array<string, mixed> containing subjects, indexed by event name
      * used internally by the event system, must not be overloaded
     **/
-    final public function getSubjects()
+    final public function getSubjects(): array
     {
         // Note: this is overridden in HookedService()
         $subjecttype = $this->getSubjectType();
@@ -273,6 +280,7 @@ class EventsService implements EventsInterface
         $cacheName = $subjecttype;
         if ($xar->mem()->has($cacheScope, $cacheName)) {
             $subjects = $xar->mem()->get($cacheScope, $cacheName);
+            assert(is_array($subjects));
             return $subjects;
         }
 
@@ -307,7 +315,7 @@ class EventsService implements EventsInterface
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if (!$result) {
-            return;
+            return [];
         }
         while ($result->next()) {
             [$id, $event, $module_id, $area, $type, $func, $itemtype, $classname, $scope, $module] = $result->fields;
@@ -336,9 +344,9 @@ class EventsService implements EventsInterface
      * Note: this is overridden in HookedService()
      *
      * @param ixarEventSubject $subject ixarEventSubject
-     * @return array<mixed>|void containing subject observers
+     * @return array<string, mixed> containing subject observers
     **/
-    public function getObservers(ixarEventSubject $subject)
+    public function getObservers(ixarEventSubject $subject): array
     {
         $xar = $this->getServicesClass();
         $event = $subject->getSubject();
@@ -407,7 +415,7 @@ class EventsService implements EventsInterface
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if (!$result) {
-            return;
+            return [];
         }
         while ($result->next()) {
             [$id, $evt, $module_id, $module, $area, $type, $func, $itemtype, $classname] = $result->fields;
@@ -432,7 +440,7 @@ class EventsService implements EventsInterface
         return $observers[$event];
     }
 
-    public function fileLoad($info)
+    public function fileLoad($info): bool
     {
         extract($info);
 
@@ -624,35 +632,35 @@ class EventsService implements EventsInterface
     /**
      * allow others to define callback functions without registering observers e.g. for event bridge (= not saved in database)
      */
-    public function registerCallback($event, $callback)
+    public function registerCallback($event, $callback): mixed
     {
         $this->callbackFunctions[$event] ??= [];
         $this->callbackFunctions[$event][] = $callback;
+        return true;
     }
 
-    public function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'eventsubjects', $func = 'notify')
+    public function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'eventsubjects', $func = 'notify'): mixed
     {
-        return xarEvents::registerSubject($event, $scope, $module, $classnameOrArea, $type, $func);
+        return $this->getConfigService()->registerSubject($event, $scope, $module, $classnameOrArea, $type, $func);
     }
 
-    public function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'eventobservers', $func = 'notify')
+    public function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'eventobservers', $func = 'notify'): mixed
     {
-        return xarEvents::registerObserver($event, $module, $classnameOrArea, $type, $func);
+        return $this->getConfigService()->registerObserver($event, $module, $classnameOrArea, $type, $func);
     }
 
-    public function unregisterSubject($event, $module)
+    public function unregisterSubject($event, $module): bool
     {
-        return xarEvents::unregisterSubject($event, $module);
+        return $this->getConfigService()->unregisterSubject($event, $module);
     }
 
-    public function unregisterObserver($event, $module)
+    public function unregisterObserver($event, $module): bool
     {
-        return xarEvents::unregisterObserver($event, $module);
+        return $this->getConfigService()->unregisterObserver($event, $module);
     }
 
-    public function getObserverModules()
+    public function getObserverModules(): array
     {
-        $xar = $this->getServicesClass();
-        return xarEvents::getObserverModules($xar);
+        return $this->getConfigService()->getObserverModules();
     }
 }

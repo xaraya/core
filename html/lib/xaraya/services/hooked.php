@@ -16,31 +16,30 @@
 
 namespace Xaraya\Services;
 
-use xarHooks;
 use ixarEventSubject;
 use ixarHookSubject;
 use ixarMod;
-use BadParameterException;
-use EmptyParameterException;
 
 /**
  * For documentation purposes only - available via HookedTrait
  */
 interface HookedInterface extends EventsInterface
 {
+    public function getConfigService(): Config\HookedConfig;
     public function getSubjectType(): int;
     public function getObserverType(): int;
-    public function getObservers(ixarEventSubject $subject);
-    public function isAttached($observer, $subject, $itemtype = null, $scope = "0");
-    public function attach($observer, $subject, $itemtype = null, $scope = "0");
-    public function detach($observer, $subject, $itemtype = null, $scope = null);
-    public function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'hooksubjects', $func = 'notify');
-    public function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'hookobservers', $func = 'notify');
-    public function unregisterSubject($event, $module);
-    public function unregisterObserver($event, $module);
-    public function getObserverModules($observer = null);
-    public function getObserverSubjects($observer, $subject = null, $scope = null);
-    public function getSubjectObservers($subject, $event, $itemtype = null);
+    public function getObservers(ixarEventSubject $subject): array;
+    // HookedConfig methods
+    public function isAttached($observer, $subject, $itemtype = null, $scope = "0"): bool;
+    public function attach($observer, $subject, $itemtype = null, $scope = "0"): bool;
+    public function detach($observer, $subject, $itemtype = null, $scope = null): bool;
+    public function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'hooksubjects', $func = 'notify'): mixed;
+    public function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'hookobservers', $func = 'notify'): mixed;
+    public function unregisterSubject($event, $module): bool;
+    public function unregisterObserver($event, $module): bool;
+    public function getObserverModules($observer = null): array;
+    public function getObserverSubjects($observer, $subject = null, $scope = null): array;
+    public function getSubjectObservers($subject, $event, $itemtype = null): array;
 }
 
 /**
@@ -71,6 +70,13 @@ class HookedService extends EventsService implements HookedInterface
     protected static $hookobservers = [];
     // allow others to define callback functions without registering observers e.g. for event bridge
     protected $callbackFunctions = [];
+    private ?Config\HookedConfig $configService = null;
+
+    public function getConfigService(): Config\HookedConfig
+    {
+        $this->configService ??= new Config\HookedConfig($this->getServicesClass());
+        return $this->configService;
+    }
 
     /**
      * required functions, provide event system with late static bindings for these values
@@ -91,16 +97,16 @@ class HookedService extends EventsService implements HookedInterface
     /**
      * Summary of getObservers
      * @param ixarHookSubject $subject
-     * @return array<mixed>|void
+     * @return array<string, mixed>
      */
-    public function getObservers(ixarEventSubject $subject)
+    public function getObservers(ixarEventSubject $subject): array
     {
         $xar = $this->getServicesClass();
         $event = $subject->getSubject();
         $args = $subject->getExtrainfo();
         $info = $this->getSubject($event);
         if (empty($info)) {
-            return;
+            return [];
         }
         $subject_id = $args['module_id'];
         $subject_module = $args['module'];
@@ -136,7 +142,7 @@ class HookedService extends EventsService implements HookedInterface
                   FROM $htable h, $etable eo, $mtable mo, $etable es";
         // only get observers for the hooks observer itemtype
         $where[] =  "eo.itemtype = ?";
-        $bindvars[] = xarHooks::HOOK_OBSERVER_TYPE;
+        $bindvars[] = self::HOOK_OBSERVER_TYPE;
         // only get observers of this event - we take all events at once now
         //$where[] = "eo.event = ?";
         //$bindvars[] = $event;
@@ -179,7 +185,7 @@ class HookedService extends EventsService implements HookedInterface
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if (!$result) {
-            return;
+            return [];
         }
         while ($result->next()) {
             [$id, $evt, $module_id, $area, $type, $func, $itemtype, $classname, $module] = $result->fields;
@@ -205,120 +211,53 @@ class HookedService extends EventsService implements HookedInterface
      * See if a hook module (observer) is attached (hooked) to specific module (subject) (+ itemtype)
      * @return bool true if the observer is attached, false otherwise (for any reason)
     **/
-    public function isAttached($observer, $subject, $itemtype = null, $scope = "0")
+    public function isAttached($observer, $subject, $itemtype = null, $scope = "0"): bool
     {
-        // Argument check
-        if (empty($observer)) {
-            throw new EmptyParameterException('observer');
-        }
-        if (empty($subject)) {
-            throw new EmptyParameterException('subject');
-        }
-        if (!empty($itemtype) && !is_numeric($itemtype)) {
-            throw new BadParameterException('itemtype');
-        }
-        if (!empty($scope) && !is_numeric($scope) && !is_string($scope)) {
-            throw new EmptyParameterException('scope');
-        }
-        $xar = $this->getServicesClass();
-
-        $observer_id = $xar->mod()->getRegID($observer);
-        if (empty($observer_id)) {
-            return false;
-        }
-        $subject_id = $xar->mod()->getRegID($subject);
-        if (empty($subject_id)) {
-            return false;
-        }
-
-        if (empty($itemtype)) {
-            $itemtype = 0;
-        }
-        if (empty($scope)) {
-            $scope = 0;
-        }
-
-        // Get database info
-        $dbconn   = $xar->db()->getConn();
-        $xartable = $xar->db()->getTables();
-        if (empty($xartable['hooks'])) {
-            $xar->mod()->init();
-            $xartable = $xar->db()->getTables();
-        }
-        $htable = $xartable['hooks'];
-        $query = "SELECT observer, subject, itemtype, scope
-                  FROM $htable
-                  WHERE observer = ? AND subject = ?";
-        $bindvars = [$observer_id, $subject_id, $itemtype, $scope];
-        // check if a module is hooked to all (itemtype 0) when an itemtype is specified
-        if (!empty($itemtype)) {
-            $query .= " AND ( itemtype = ? OR itemtype = ? )";
-            $bindvars[] = 0;
-        } else {
-            $query .= " AND itemtype = ?";
-        }
-        if (!empty($scope)) {
-            $query .= " AND ( scope = ? OR scope = ? )";
-            $bindvars[] = '0';
-        } else {
-            $query .= " AND scope = ?";
-        }
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars);
-        if (!$result) {
-            return false;
-        }
-        if (!$result->next()) {
-            return false;
-        }
-        return true;
+        return $this->getConfigService()->isAttached($observer, $subject, $itemtype, $scope);
     }
 
-    public function attach($observer, $subject, $itemtype = null, $scope = "0")
+    public function attach($observer, $subject, $itemtype = null, $scope = "0"): bool
     {
-        return xarHooks::attach($observer, $subject, $itemtype, $scope);
+        return $this->getConfigService()->attach($observer, $subject, $itemtype, $scope);
     }
 
-    public function detach($observer, $subject, $itemtype = null, $scope = null)
+    public function detach($observer, $subject, $itemtype = null, $scope = null): bool
     {
-        return xarHooks::detach($observer, $subject, $itemtype, $scope);
+        return $this->getConfigService()->detach($observer, $subject, $itemtype, $scope);
     }
 
-    public function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'hooksubjects', $func = 'notify')
+    public function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'hooksubjects', $func = 'notify'): mixed
     {
-        return xarHooks::registerSubject($event, $scope, $module, $classnameOrArea, $type, $func);
+        return $this->getConfigService()->registerSubject($event, $scope, $module, $classnameOrArea, $type, $func);
     }
 
-    public function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'hookobservers', $func = 'notify')
+    public function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'hookobservers', $func = 'notify'): mixed
     {
-        return xarHooks::registerObserver($event, $module, $classnameOrArea, $type, $func);
+        return $this->getConfigService()->registerObserver($event, $module, $classnameOrArea, $type, $func);
     }
 
-    public function unregisterSubject($event, $module)
+    public function unregisterSubject($event, $module): bool
     {
-        return xarHooks::unregisterSubject($event, $module);
+        return $this->getConfigService()->unregisterSubject($event, $module);
     }
 
-    public function unregisterObserver($event, $module)
+    public function unregisterObserver($event, $module): bool
     {
-        return xarHooks::unregisterObserver($event, $module);
+        return $this->getConfigService()->unregisterObserver($event, $module);
     }
 
-    public function getObserverModules($observer = null)
+    public function getObserverModules($observer = null): array
     {
-        $xar = $this->getServicesClass();
-        return xarHooks::getObserverModules($observer, $xar);
+        return $this->getConfigService()->getObserverModules($observer);
     }
 
-    public function getObserverSubjects($observer, $subject = null, $scope = null)
+    public function getObserverSubjects($observer, $subject = null, $scope = null): array
     {
-        $xar = $this->getServicesClass();
-        return xarHooks::getObserverSubjects($observer, $subject, $scope, $xar);
+        return $this->getConfigService()->getObserverSubjects($observer, $subject, $scope);
     }
 
-    public function getSubjectObservers($subject, $event, $itemtype = null)
+    public function getSubjectObservers($subject, $event, $itemtype = null): array
     {
-        $xar = $this->getServicesClass();
-        return xarHooks::getSubjectObservers($subject, $event, $itemtype, $xar);
+        return $this->getConfigService()->getSubjectObservers($subject, $event, $itemtype);
     }
 }

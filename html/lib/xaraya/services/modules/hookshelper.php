@@ -18,10 +18,10 @@ namespace Xaraya\Services\Modules;
 
 use Xaraya\Context\Context;
 use Xaraya\Services\ServiceClass;
-use xarHooks;
 
 /**
  * Modules Service Helper for Module Hooks
+ * @deprecated 2.9.3 use xar::hooked() instead
  */
 class HooksHelper extends ServiceClass
 {
@@ -33,12 +33,12 @@ class HooksHelper extends ServiceClass
     public function isHooked(string $hookModName, string $callerModName, ?int $callerItemType = null): bool
     {
         $xar = $this->getServicesClass();
-        return $xar->hooked()->isAttached($hookModName, $callerModName, $callerItemType);
+        $hookedConfig = $xar->hooked()->getConfigService();
+        return $hookedConfig->isAttached($hookModName, $callerModName, $callerItemType);
     }
 
     /**
      * Wrapper for xarModHooks::call() - only for migration
-     * @see \xarModHooks::call()
      * @return mixed output from hooks, or null if there are no hooks
      */
     public function callHooks(string $scope, string $action, mixed $itemid, mixed $extraInfo = null, string $callerModName = '', ?int $callerItemType = null): mixed
@@ -49,13 +49,13 @@ class HooksHelper extends ServiceClass
         $extraInfo['itemid'] ??= $itemid;
         $extraInfo['module'] ??= $callerModName;
         $extraInfo['itemtype'] ??= $callerItemType;
+        $xar = $this->getServicesClass();
         // skip legacy format here - handled by HookSubject if needed
-        return $this->notifyHooks($event, $extraInfo);
+        return $xar->hooked()->notify($event, $extraInfo, $this->getContext());
     }
 
     /**
      * Wrapper for xarHooks::notify() - only for migration
-     * @see \xarHooks::notify()
      * @param array<string, mixed> $info
      * @param ?Context<string, mixed> $context
      * @return mixed output from hooks, or null if there are no hooks
@@ -66,7 +66,7 @@ class HooksHelper extends ServiceClass
         $info['itemid'] ??= null;
         // @todo check if we'll have context here
         $context ??= $this->getContext();
-        return $xar->hooked()->notify($event, $info, $context, $this->getParent());
+        return $xar->hooked()->notify($event, $info, $context);
     }
 
     public function getList($callerModName, $hookScope, $hookAction, $callerItemType = '')

@@ -45,7 +45,7 @@ class ServiceFactory
         // internal helpers
         'modules.vars', 'modules.user', 'modules.item', 'modules.info', 'modules.exec', 'modules.hooks', 'modules.alias',
         // created directly = not via ServiceFactory
-        // 'caching.output', ...
+        // 'caching.output', 'events.config', ...
     ];
     /** @var list<string> */
     public static array $argumentServices = [

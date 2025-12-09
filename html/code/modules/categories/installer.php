@@ -15,7 +15,6 @@ namespace Xaraya\Modules\Categories;
 
 use Xaraya\Modules\InstallerClass;
 use xarMasks;
-use xarModHooks;
 use xarPrivileges;
 use xarXMLInstaller;
 use Exception;
@@ -58,43 +57,43 @@ class Installer extends InstallerClass
         # Set up hooks
         #
         // when a new module item is being specified
-        if (!xarModHooks::register('item', 'new', 'GUI', 'categories', 'admin', 'newhook')) {
+        if (!$this->hooked()->registerObserver('ItemNew', 'categories', 'GUI', 'admin', 'newhook')) {
             return false;
         }
 
         // when a module item is created (uses 'cids')
-        if (!xarModHooks::register('item', 'create', 'API', 'categories', 'admin', 'createhook')) {
+        if (!$this->hooked()->registerObserver('ItemCreate', 'categories', 'API', 'admin', 'createhook')) {
             return false;
         }
 
         // when a module item is being modified (uses 'cids')
-        if (!xarModHooks::register('item', 'modify', 'GUI', 'categories', 'admin', 'modifyhook')) {
+        if (!$this->hooked()->registerObserver('ItemModify', 'categories', 'GUI', 'admin', 'modifyhook')) {
             return false;
         }
 
         // when a module item is updated (uses 'cids')
-        if (!xarModHooks::register('item', 'update', 'API', 'categories', 'admin', 'updatehook')) {
+        if (!$this->hooked()->registerObserver('ItemUpdate', 'categories', 'API', 'admin', 'updatehook')) {
             return false;
         }
 
         // when a module item is deleted
-        if (!xarModHooks::register('item', 'delete', 'API', 'categories', 'admin', 'deletehook')) {
+        if (!$this->hooked()->registerObserver('ItemDelete', 'categories', 'API', 'admin', 'deletehook')) {
             return false;
         }
 
         // when a module configuration is being modified (uses 'cids')
-        if (!xarModHooks::register('module', 'modifyconfig', 'GUI', 'categories', 'admin', 'modifyconfighook')) {
+        if (!$this->hooked()->registerObserver('ModuleModifyconfig', 'categories', 'GUI', 'admin', 'modifyconfighook')) {
             return false;
         }
 
         // when a module configuration is updated (uses 'cids')
-        if (!xarModHooks::register('module', 'updateconfig', 'API', 'categories', 'admin', 'updateconfighook')) {
+        if (!$this->hooked()->registerObserver('ModuleUpdateconfig', 'categories', 'API', 'admin', 'updateconfighook')) {
             return false;
         }
 
         // when a whole module is removed, e.g. via the modules admin screen
         // (set object ID to the module name !)
-        if (!xarModHooks::register('module', 'remove', 'API', 'categories', 'admin', 'removehook')) {
+        if (!$this->hooked()->registerObserver('ModuleRemove', 'categories', 'API', 'admin', 'removehook')) {
             return false;
         }
 

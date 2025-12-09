@@ -150,6 +150,9 @@ trait ModulesTrait
         return $this->execHelper;
     }
 
+    /**
+     * @deprecated 2.9.3 use xar::hooked() instead
+     */
     private function getHooksHelper(): Modules\HooksHelper
     {
         $this->hooksHelper ??= $this->getServicesClass()->service('modules.hooks');
@@ -698,12 +701,13 @@ trait ModulesTrait
     {
         $callerModName ??= $this->getModName();
         $callerItemType ??= $this->getItemType();
-        return $this->getHooksHelper()->isHooked($hookModName, $callerModName, $callerItemType);
+        $xar = $this->getServicesClass();
+        $hookedConfig = $xar->hooked()->getConfigService();
+        return $hookedConfig->isAttached($hookModName, $callerModName, $callerItemType);
     }
 
     /**
      * Wrapper for xarModHooks::call() - only for migration
-     * @see \xarModHooks::call()
      * @return mixed output from hooks, or null if there are no hooks
      */
     public function callHooks(string $scope, string $action, mixed $itemid, mixed $extraInfo = null, ?string $callerModName = null, ?int $callerItemType = null): mixed
@@ -717,8 +721,9 @@ trait ModulesTrait
         $extraInfo['itemid'] ??= $itemid;
         $extraInfo['module'] ??= $callerModName;
         $extraInfo['itemtype'] ??= $callerItemType;
+        $xar = $this->getServicesClass();
         // skip legacy format here - handled by HookSubject if needed
-        return $this->notifyHooks($event, $extraInfo);
+        return $xar->hooked()->notify($event, $extraInfo, $this->getContext());
     }
 
     /**
@@ -732,7 +737,9 @@ trait ModulesTrait
         $info['itemid'] ??= null;
         $info['module'] ??= $this->getModName();
         $info['itemtype'] ??= $this->getItemType();
-        return $this->getHooksHelper()->notifyHooks($event, $info, $this->getContext());
+        $info['itemid'] ??= null;
+        $xar = $this->getServicesClass();
+        return $xar->hooked()->notify($event, $info, $this->getContext());
     }
 
     public function checkAccess(?string $modName = null, string $action = '', ?int $roleid = null): bool
