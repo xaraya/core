@@ -28,6 +28,36 @@ final class LegacyModuleTest extends TestHelper
         $this->assertContains($expected, $module->getTables());
     }
 
+    public function testInvalidModule(): void
+    {
+        $xar = xar::getServicesClass();
+        $module = new LegacyModule('invalid', $xar->getContext(), $xar);
+
+        $expected = LegacyModule::class;
+        $this->assertEquals($expected, $module::class);
+        $expected = 'invalid';
+        $this->assertEquals($expected, $module->getModName());
+
+        // all is fine until we actually want to use it - no component
+        $userapi = $module->userapi();
+        $expected = null;
+        $this->assertEquals($expected, $userapi);
+        // $found = $userapi->hasMethod('getitemtypes');
+
+        // all is fine until we actually want to use it - no callable method
+        $callable = $module->getCallableMethod('userapi', 'getitemtypes');
+        $this->assertEmpty($callable);
+
+        // all is fine until we actually want to use it - no state
+        $this->expectException(ModuleNotFoundException::class);
+        $expected = 'The module "invalid" cannot be found.';
+        $this->expectExceptionMessage($expected);
+
+        $state = $module->checkState();
+        $expected = [];
+        $this->assertEquals($expected, $state);
+    }
+
     protected function getTestModule()
     {
         $xar = xar::getServicesClass();
@@ -139,7 +169,8 @@ final class LegacyModuleTest extends TestHelper
 
         $expected = true;
         $this->assertEquals($expected, $userapi->hasMethod('get_recognized_events', 'api'));
-        $data = $userapi->get_recognized_events();
+        $args = ['hello' => 'world'];
+        $data = $userapi->get_recognized_events($args);
 
         $expected = [
             'all' => 'All',
@@ -148,5 +179,42 @@ final class LegacyModuleTest extends TestHelper
             'itemdelete' => 'itemdelete',
         ];
         $this->assertEquals($expected, $data);
+    }
+
+    public function testFunctionWithCamelCase(): void
+    {
+        $context = $this->createContext();
+        $userapi = $this->getTestModule()->userapi();
+        $userapi->setContext($context);
+
+        $expected = true;
+        $this->assertEquals($expected, $userapi->hasMethod('getRecognizedEvents', 'api'));
+        $args = ['hello' => 'world'];
+        $data = $userapi->getRecognizedEvents($args);
+
+        $expected = [
+            'all' => 'All',
+            'itemcreate' => 'itemcreate',
+            'itemupdate' => 'itemupdate',
+            'itemdelete' => 'itemdelete',
+        ];
+        $this->assertEquals($expected, $data);
+    }
+
+    public function testFunctionInvalid(): void
+    {
+        $context = $this->createContext();
+        $userapi = $this->getTestModule()->userapi();
+        $userapi->setContext($context);
+
+        $expected = false;
+        $this->assertEquals($expected, $userapi->hasMethod('invalid', 'api'));
+
+        $this->expectException(FunctionNotFoundException::class);
+        $expected = 'The function "pubsub_userapi_invalid" could not be found or not be loaded.';
+        $this->expectExceptionMessage($expected);
+
+        $args = ['hello' => 'world'];
+        $data = $userapi->invalid($args);
     }
 }
