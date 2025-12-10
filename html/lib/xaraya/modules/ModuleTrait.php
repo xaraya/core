@@ -200,7 +200,7 @@ trait ModuleTrait
     }
 
     /**
-     * Get file info from version.php (2.8.*) or xarversion.php (2.4.*)
+     * Get file info from version.php (2.8.x) or xarversion.php (2.4.x)
      * @return array<string, mixed>
      */
     public function getFileInfo(): array
@@ -213,6 +213,7 @@ trait ModuleTrait
         }
         // Log it when it didnt came from cache
         $xar->log()->debug("xar::module()->getFileInfo: Getting file info of '" . $modOsDir . "' (a " . $type . ")");
+
         $fileInfo = VersionClass::getFileInfo($modOsDir);
         $xar->mem()->set('Mod.getFileInfos', $modOsDir . " / " . $type, $fileInfo);
         if (empty($fileInfo)) {
@@ -228,7 +229,7 @@ trait ModuleTrait
     }
 
     /**
-     * Get tables from tables.php (2.8.*) or xartables.php (2.4.*)
+     * Get tables from tables.php (2.8.x) or xartables.php (2.4.x)
      * @return array<string, mixed>
      */
     public function getTables(): array
@@ -360,6 +361,7 @@ trait ModuleTrait
             $this->classtypes[$modType] = $classType;
             return $this->classtypes[$modType];
         }
+        $this->classtypes[$modType] = '';
         return null;
     }
 

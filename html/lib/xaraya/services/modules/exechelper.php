@@ -236,13 +236,13 @@ class ExecHelper extends ServiceClass
             $modBaseInfo = $info->getFileInfo($modName);
             // Not a valid module - throw exception
             if (empty($modBaseInfo)) {
-                throw new ModuleNotFoundException($modName);
+                throw new ModuleNotFoundException($modName, 'The module "#(1)" cannot be found.');
             }
         } else {
             $modBaseInfo = $info->getBaseInfo($modName);
             // Not a valid module - throw exception
             if (empty($modBaseInfo)) {
-                throw new ModuleNotFoundException($modName);
+                throw new ModuleNotFoundException($modName, 'The module "#(1)" cannot be found.');
             }
             // Not a valid module state - throw exception
             if ($modBaseInfo['state'] != ixarMod::STATE_ACTIVE) {
@@ -259,7 +259,7 @@ class ExecHelper extends ServiceClass
         $module = $this->getModule($modName);
         // returns null for DefaultModule() = no suitable class type
         $classType = $module->getClassType($modType);
-        if (isset($classType)) {
+        if (!empty($classType)) {
             // this is OK - do nothing
             $this->loadedModuleCache[$cacheKey] = true;
             $modDir = $modBaseInfo['directory'] ?? $modName;
@@ -354,6 +354,7 @@ class ExecHelper extends ServiceClass
                     $xar->log()->warning("xar::mod()->getModule: Error loading $class for module $modName");
                 }
             } else {
+                // @todo test LegacyModule() to replace ExecHelper() methods
                 $this->moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $this->getContext(), $xar);
                 //$this->moduleClasses[$modName] = new \Xaraya\Modules\LegacyModule($modName, $this->getContext(), $xar);
             }

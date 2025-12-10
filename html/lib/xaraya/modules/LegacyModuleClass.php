@@ -16,9 +16,11 @@
 
 namespace Xaraya\Modules;
 
-use Xaraya\Services\Modules\ExecHelper;
+use Xaraya\Services\Modules\InfoHelper;
+use ixarMod;
 use sys;
 use Exception;
+use FunctionNotFoundException;
 
 /**
  * Class to handle legacy module functions as methods
@@ -30,7 +32,7 @@ class LegacyModuleClass implements ModuleClassInterface, UserApiInterface, UserG
     /** @use ModuleClassTrait<LegacyModule> */
     use ModuleClassTrait;
 
-    protected $loadedModuleCache = [];
+    protected $loadedModTypes = [];
     protected $hasMethodCache = [];
 
     public function configure()
@@ -39,24 +41,27 @@ class LegacyModuleClass implements ModuleClassInterface, UserApiInterface, UserG
     }
 
     /**
-     * Summary of main
+     * Summary of main - not called if $this->getModFunc() returns existing function
      * @param array<string, mixed> $args
      * @return array<mixed>|string|void
      */
     public function main(array $args = [])
     {
         if ($this->hasMethod('main', 'gui')) {
-            // @todo call module main function
-            $callable = $this->getModule()->getCallableMethod($this->getModType(), 'main');
+            // call module main function
+            $callable = $this->getModFunc('main');
             if (!empty($callable)) {
                 return $callable($args);
             }
         }
-        $output = [
+        return [
             'method' => __METHOD__,
+            'module' => $this->getModName(),
+            'type' => $this->getModType(),
+            'func' => 'main',
             'args' => $args,
+            //'context' => $this->getContext(),
         ];
-        return $this->mod()->prepare($output);
     }
 
     /**
@@ -66,7 +71,11 @@ class LegacyModuleClass implements ModuleClassInterface, UserApiInterface, UserG
     {
         $modName = $this->getModName();
         $modType = $this->getModType();
-        $modFunc = "{$modName}_{$modType}_{$funcName}";
+        // convert camelCase to snake_case for legacy module functions
+        if (preg_match('/[A-Z]/', $funcName) && !str_contains($funcName, '_')) {
+            $funcName = preg_replace('/([A-Z]+)/', '_$1', $funcName);
+        }
+        $modFunc = strtolower("{$modName}_{$modType}_{$funcName}");
         return $modFunc;
     }
 
@@ -85,7 +94,7 @@ class LegacyModuleClass implements ModuleClassInterface, UserApiInterface, UserG
         }
         if (!function_exists($modFunc)) {
             // attempt to load the module's api - this will load xaruserapi.php or xaruser.php etc. if they exist
-            if (!$this->privateLoad($modName, $modType, $callType)) {
+            if (!$this->loadModType($callType)) {
                 $this->hasMethodCache[$modFunc] = false;
                 return false;
             }
@@ -114,48 +123,34 @@ class LegacyModuleClass implements ModuleClassInterface, UserApiInterface, UserG
     }
 
     /**
-     * Summary of privateLoad
+     * Load the modtype only once we want to call a function = hasMethod()
+     * Note: file check and sys::import are already done in LegacyModule::getClassType()
      * @todo replace with ModuleClassTrait method
-     * @param mixed $modName
-     * @param mixed $modType
      * @param mixed $callType
      * @return bool
      */
-    protected function privateLoad($modName, $modType, $callType)
+    protected function loadModType($callType, $flags = ixarMod::LOAD_ANYSTATE)
     {
+        $modName = $this->getModName();
+        $modType = $this->getModType();
         // Make sure we access the cache with lower case key, return true when we already loaded
         $cacheKey = strtolower($modName . ':' . $modType . $callType);
-        if (isset($this->loadedModuleCache[$cacheKey])) {
-            return $this->loadedModuleCache[$cacheKey];
-        }
-        /** @var ExecHelper $exec */
-        $exec = $this->getStaticServices()->service('modules.exec');
-
-        $loaded = false;
-        if ($callType == 'api') {
-            if (str_ends_with($modType, $callType)) {
-                $exec->apiLoad($modName, substr($modType, 0, -3));
-            } else {
-                $exec->apiLoad($modName, $modType);
-            }
-            $loaded = true;
-        } else {
-            try {
-                $exec->load($modName, $modType);
-                $loaded = true;
-            } catch (Exception $e) {
-                $loaded = false;
-            }
+        if (isset($this->loadedModTypes[$cacheKey])) {
+            return $this->loadedModTypes[$cacheKey];
         }
 
-        $this->loadedModuleCache[$cacheKey] = $loaded;
+        // Check module state and version on demand
+        // Note: file check and sys::import are already done in LegacyModule::getClassType()
+        $loaded = $this->getModule()->checkState($flags);
+
+        $this->loadedModTypes[$cacheKey] = $loaded;
         if (!$loaded) {
-            return $this->loadedModuleCache[$cacheKey];
+            return $this->loadedModTypes[$cacheKey];
         }
 
         // Load the module translations files (common functions, uncut functions etc.)
         if ($this->mls()->loadModuleTranslations($modName, '', $modType) === null) {
-            return;
+            return false;
         }
 
         // Load database info
@@ -167,7 +162,7 @@ class LegacyModuleClass implements ModuleClassInterface, UserApiInterface, UserG
         } else {
             $this->events()->notify('ModLoad', $modName);
         }
-        return $this->loadedModuleCache[$cacheKey];
+        return $this->loadedModTypes[$cacheKey];
     }
 
     /**
@@ -192,14 +187,17 @@ class LegacyModuleClass implements ModuleClassInterface, UserApiInterface, UserG
                     $this->methods[$modFunc] = $modFunc;
                 } else {
                     $this->methods[$modFunc] = null;
+                    throw new FunctionNotFoundException($modFunc);
                 }
             } else {
                 $this->methods[$modFunc] = null;
+                throw new FunctionNotFoundException($modFunc);
             }
         }
         if (!isset($this->methods[$modFunc])) {
             return;
         }
+        // @todo pass along $this->getContext() as second argument here too?
         if (!empty($arguments)) {
             try {
                 return $this->methods[$modFunc](...$arguments);
