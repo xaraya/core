@@ -43,6 +43,12 @@ interface RouterInterface
     public function makeUri(?string $route, array $params = []): ?string;
 
     /**
+     * Find route uri based on params in optional module
+     * @param array<string, mixed> $params
+     */
+    public function findRoute(?string $modName = null, array $params = []): string;
+
+    /**
      * Check last modified cache file against reference file
      * @param string $filePath
      * @return void

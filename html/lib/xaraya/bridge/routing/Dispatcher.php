@@ -282,10 +282,10 @@ class Dispatcher implements WithContextInterface
                 // ...
             }
         }
-        $handlers = [];
+        $modName = null;
         if (!empty($arg1)) {
             if ($arg1 == 'object') {
-                $arg1 = 'dynamicdata';
+                $modName = 'dynamicdata';
                 $extra['entity'] ??= $arg2;
                 $extra['action'] ??= $arg3;
                 // @todo replace [itemid] with 1234567890 for defer* properties
@@ -294,31 +294,14 @@ class Dispatcher implements WithContextInterface
                     unset($extra['itemid']);
                 }
             } else {
+                $modName = $arg1;
                 $extra['module'] ??= $arg1;
                 $extra['type'] ??= $arg2;
                 $extra['func'] ??= $arg3;
             }
-            $handlers = xarClassMap::getRoutes($arg1);
         }
-        if (empty($handlers)) {
-            $handlers = xarClassMap::getRoutes();
-        }
-        $uri = null;
-        /** @var class-string<RoutesInterface> $className */
-        foreach ($handlers as $className => $filePath) {
-            $uri = $className::findRoute($router, $extra);
-            if (isset($uri)) {
-                break;
-            }
-        }
-        if (is_null($uri)) {
-            $uri = DefaultRoutes::findRoute($router, $extra);
-            if (is_null($uri)) {
-                // @todo find route based on args
-                return $this->basePath . "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));
-            }
-        }
-        return $this->basePath . $uri;
+        // find route uri based on params
+        return $this->basePath . $router->findRoute($modName, $extra);
     }
 
     /**

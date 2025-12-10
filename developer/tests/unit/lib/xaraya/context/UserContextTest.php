@@ -213,7 +213,7 @@ final class UserContextTest extends TestCase
         $sessionId = $sessionCookie->createItem($data, $expected);
         $this->assertEquals($expected, $sessionId);
 
-        // get session data back from cache storage
+        // get session data back from cache storage - @fixme this expires after 12 hours
         $result = $sessionCookie->getUserInfo($sessionId);
         // check that lastUsed was updated when saved
         $this->assertGreaterThan($data['lastUsed'], $result['lastUsed']);

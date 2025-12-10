@@ -33,5 +33,7 @@ class InstancesApi extends UserApiClass
     {
         $this->setModType('instances');
         // don't call xar::mod()->apiLoad() for blocks instances API
+        // make sure block service is initialized with loadDbInfo() for XarayaCompiler
+        $this->block()->init();
     }
 }

@@ -51,11 +51,12 @@ interface ControllerInterface extends ServiceInterface
     public function getActionURL(object $object, string $action = '', mixed $itemid = null, array $extra = []): string;
 
     /**
-     * Get URL for a specific route by name - @todo
+     * Get URL for a specific route by name and/or params
      * @param array<string, mixed> $params
      * @see \Xaraya\Routing\Dispatcher::buildUri()
      */
     public function getRouteURL(string $route, array $params = []): ?string;
+    public function getPathURL(string $path = ''): string;
 
     /** @param array<string, mixed> $config */
     public function init(array $config = []): bool;
@@ -259,7 +260,7 @@ trait ControllerTrait
     }
 
     /**
-     * Get URL for a specific route by name - @todo
+     * Get URL for a specific route by name and/or params
      * @param array<string, mixed> $params
      */
     public function getRouteURL(string $route, array $params = []): ?string
@@ -268,13 +269,33 @@ trait ControllerTrait
             $cacheFile = sys::varpath() . '/cache/core/' . \Xaraya\Routing\Routing::MATCHER_CACHE_FILE;
             $this->routing = new \Xaraya\Routing\Routing(\Xaraya\Routing\Dispatcher::getRoutes(...), $cacheFile);
         }
-        // @todo handle $baseURL + $entryPoint somehow!?
-        // ...
+        if (empty($route)) {
+            if (!empty($params['object'])) {
+                // @todo set entity & action - see Dispatcher::buildUri()
+                $modName = 'dynamicdata';
+            } elseif (!empty($params['module'])) {
+                $modName = $params['module'];
+            } else {
+                $modName = null;
+            }
+            $path = $this->routing->findRoute($modName, $params);
+            return $this->getPathURL($path);
+        }
         try {
             $path = $this->routing->generate($route, $params);
         } catch (Exception $e) {
             return null;
         }
+        return $this->getBaseURL() . ltrim($this->getEntryPoint() . $path, '/');
+    }
+
+    /**
+     * Get URL for a specific path info (via entrypoint)
+     * @param string $path
+     * @return string
+     */
+    public function getPathURL(string $path = ''): string
+    {
         return $this->getBaseURL() . ltrim($this->getEntryPoint() . $path, '/');
     }
 

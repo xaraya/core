@@ -65,6 +65,9 @@ final class ServerTest extends TestCase
         $this->assertEquals('http://test:123/xaraya/index.php', xar::ctl()->getModuleURL());
         $this->assertEquals('http://test:123/xaraya/index.php?module=base&amp;type=user&amp;func=main', xar::ctl()->getModuleURL('base'));
         $this->assertEquals('http://test:123/xaraya/index.php?object=sample&amp;method=view', xar::ctl()->getObjectURL('sample'));
+        $this->assertEquals('http://test:123/xaraya/index.php/base/test', xar::ctl()->getRouteURL('', ['module' => 'base', 'page' => 'test']));
+        $this->assertEquals('http://test:123/xaraya/index.php/object/sample/1/Johnny', xar::ctl()->getRouteURL('object-entity-itemid-title', ['entity' => 'sample', 'itemid' => 1, 'title' => 'Johnny']));
+        $this->assertEquals('http://test:123/xaraya/index.php/sample/1/Johnny', xar::ctl()->getPathURL('/sample/1/Johnny'));
     }
 
     public function testContextGetVar(): void
@@ -96,5 +99,8 @@ final class ServerTest extends TestCase
         $this->assertEquals('http://test:123/home/index.php', xar::ctl()->getModuleURL());
         $this->assertEquals('http://test:123/home/index.php?module=base&amp;type=user&amp;func=main', xar::ctl()->getModuleURL('base'));
         $this->assertEquals('http://test:123/home/index.php?object=sample&amp;method=view', xar::ctl()->getObjectURL('sample'));
+        $this->assertEquals('http://test:123/home/index.php/base/test', xar::ctl()->getRouteURL('', ['module' => 'base', 'page' => 'test']));
+        $this->assertEquals('http://test:123/home/index.php/object/sample/1/Johnny', xar::ctl()->getRouteURL('object-entity-itemid-title', ['entity' => 'sample', 'itemid' => 1, 'title' => 'Johnny']));
+        $this->assertEquals('http://test:123/home/index.php/sample/1/Johnny', xar::ctl()->getPathURL('/sample/1/Johnny'));
     }
 }

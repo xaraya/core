@@ -12,6 +12,7 @@ use FastRoute\Dispatcher;
 use FastRoute\FastRoute;
 use FastRoute\GenerateUri;
 use FastRoute\GenerateUri\UriCouldNotBeGenerated;
+use xarClassMap;
 use Exception;
 use Throwable;
 
@@ -199,6 +200,37 @@ class FastRouter implements RouterInterface
             return null;
         }
         return $this->generate($route, $params);
+    }
+
+    /**
+     * Find route uri based on params in optional module
+     * @param array<string, mixed> $params
+     */
+    public function findRoute(?string $modName = null, array $params = []): string
+    {
+        if (!empty($params[self::ROUTE_PARAM])) {
+            $uri = $this->makeUri(null, $params);
+            if (isset($uri)) {
+                // @todo replace 1234567890 with [itemid] for defer* properties
+                return $uri;
+            }
+        }
+        $handlers = xarClassMap::getRoutes($modName);
+        $uri = null;
+        /** @var class-string<RoutesInterface> $className */
+        foreach ($handlers as $className => $filePath) {
+            $uri = $className::findRoute($this, $params);
+            if (isset($uri)) {
+                return $uri;
+            }
+        }
+        $uri = DefaultRoutes::findRoute($this, $params);
+        if (isset($uri)) {
+            return $uri;
+        }
+        $modName ??= '';
+        // @todo find route based on args
+        return "/$modName?" . rawurldecode(json_encode($params));
     }
 
     /**
