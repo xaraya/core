@@ -16,8 +16,6 @@
 
 namespace Xaraya\Modules;
 
-use Xaraya\Services\Modules\InfoHelper;
-use ixarMod;
 use sys;
 use Exception;
 use FunctionNotFoundException;
@@ -32,7 +30,6 @@ class LegacyModuleClass implements ModuleClassInterface, UserApiInterface, UserG
     /** @use ModuleClassTrait<LegacyModule> */
     use ModuleClassTrait;
 
-    protected $loadedModTypes = [];
     protected $hasMethodCache = [];
 
     public function configure()
@@ -92,77 +89,56 @@ class LegacyModuleClass implements ModuleClassInterface, UserApiInterface, UserG
         if (isset($this->hasMethodCache[$modFunc])) {
             return $this->hasMethodCache[$modFunc];
         }
-        if (!function_exists($modFunc)) {
-            // attempt to load the module's api - this will load xaruserapi.php or xaruser.php etc. if they exist
-            if (!$this->loadModType($callType)) {
-                $this->hasMethodCache[$modFunc] = false;
-                return false;
-            }
-            // let's check for that function again to be sure
-            if (!function_exists($modFunc)) {
-                // don't include $callType after $modType here
-                $funcFile = sys::code() . 'modules/' . $modName . '/xar' . $modType . '/' . strtolower($funcName) . '.php';
-                if (!file_exists($funcFile)) {
-                    $this->hasMethodCache[$modFunc] = false;
-                    return false;
-                }
-                // don't include $callType after $modType here
-                ob_start();
-                $r = sys::import('modules.' . $modName . '.xar' . $modType . '.' . strtolower($funcName));
-                $error_msg = strip_tags(ob_get_contents());
-                ob_end_clean();
+        if (function_exists($modFunc)) {
+            $this->hasMethodCache[$modFunc] = true;
+            return true;
+        }
+        // attempt to load the module's api - this will load xaruserapi.php or xaruser.php etc. if they exist
+        if (!$this->loadModType($callType)) {
+            $this->hasMethodCache[$modFunc] = false;
+            return false;
+        }
+        // let's check for that function again to be sure
+        if (function_exists($modFunc)) {
+            $this->hasMethodCache[$modFunc] = true;
+            return true;
+        }
+        // don't include $callType after $modType here
+        $funcFile = sys::code() . 'modules/' . $modName . '/xar' . $modType . '/' . strtolower($funcName) . '.php';
+        if (!file_exists($funcFile)) {
+            $this->hasMethodCache[$modFunc] = false;
+            return false;
+        }
+        // don't include $callType after $modType here
+        ob_start();
+        $r = sys::import('modules.' . $modName . '.xar' . $modType . '.' . strtolower($funcName));
+        $error_msg = strip_tags(ob_get_contents());
+        ob_end_clean();
 
-                if (!function_exists($modFunc)) {
-                    $this->hasMethodCache[$modFunc] = false;
-                    return false;
-                }
-            }
+        if (empty($r)) {
+            // $msg = "Could not load function file: [#(1)].\n\n Error Caught:\n #(2)";
+        }
+        if (!function_exists($modFunc)) {
+            $this->hasMethodCache[$modFunc] = false;
+            return false;
         }
         $this->hasMethodCache[$modFunc] = true;
         return true;
     }
 
-    /**
-     * Load the modtype only once we want to call a function = hasMethod()
-     * Note: file check and sys::import are already done in LegacyModule::getClassType()
-     * @todo replace with ModuleClassTrait method
-     * @param mixed $callType
-     * @return bool
-     */
-    protected function loadModType($callType, $flags = ixarMod::LOAD_ANYSTATE)
+    public function getMethod(string $funcName, string $callType = 'api'): ?callable
     {
-        $modName = $this->getModName();
-        $modType = $this->getModType();
-        // Make sure we access the cache with lower case key, return true when we already loaded
-        $cacheKey = strtolower($modName . ':' . $modType . $callType);
-        if (isset($this->loadedModTypes[$cacheKey])) {
-            return $this->loadedModTypes[$cacheKey];
+        // @todo should we check $callType on component level or method level - do we allow mix of both in class?
+        if ($this->hasMethod($funcName, $callType)) {
+            // Build function name
+            $modFunc = $this->getModFunc($funcName);
+            // use function name as callable here
+            if (is_callable($modFunc)) {
+                //return [$component, $funcName];
+                return $modFunc;
+            }
         }
-
-        // Check module state and version on demand
-        // Note: file check and sys::import are already done in LegacyModule::getClassType()
-        $loaded = $this->getModule()->checkState($flags);
-
-        $this->loadedModTypes[$cacheKey] = $loaded;
-        if (!$loaded) {
-            return $this->loadedModTypes[$cacheKey];
-        }
-
-        // Load the module translations files (common functions, uncut functions etc.)
-        if ($this->mls()->loadModuleTranslations($modName, '', $modType) === null) {
-            return false;
-        }
-
-        // Load database info
-        $this->getModule()->loadDbInfo();
-
-        // Module loaded successfully, trigger the proper event
-        if (preg_match('/(.*)?api$/', $modType)) {
-            $this->events()->notify('ModApiLoad', $modName);
-        } else {
-            $this->events()->notify('ModLoad', $modName);
-        }
-        return $this->loadedModTypes[$cacheKey];
+        return null;
     }
 
     /**

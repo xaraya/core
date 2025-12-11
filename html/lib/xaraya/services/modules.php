@@ -609,12 +609,13 @@ trait ModulesTrait
      * @param string $funcName specific function to run -> find corresponding method
      * @param string $callType is this called as an api function or not -> check against module class
      * @return callable|null
+     * @deprecated 2.9.3 use xar::module($modName)->getCallableMethod() instead
      */
     public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): ?callable
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, $callType);
+        return $this->getExecHelper()->getModule($modName)->getCallableMethod($modType, $funcName, $callType);
     }
 
     /**

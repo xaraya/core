@@ -370,10 +370,11 @@ class xarMod extends xarObject implements ixarMod
      * @param string $funcName specific function to run -> find corresponding method
      * @param string $callType is this called as an api function or not -> check against module class
      * @return callable|null
+     * @deprecated 2.9.3 use xar::module($modName)->getCallableMethod() instead
      */
     public static function getModuleClassMethod($modName, $modType, $funcName, $callType = 'api', $context = null)
     {
-        return self::mod()->getModuleClassMethod($modName, $modType, $funcName, $callType);
+        return self::mod()->getModule($modName)->getCallableMethod($modType, $funcName, $callType);
     }
 
     /**

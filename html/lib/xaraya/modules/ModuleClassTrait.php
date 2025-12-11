@@ -19,6 +19,8 @@ namespace Xaraya\Modules;
 use Xaraya\Context\Context;
 use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\CoreServicesTrait;
+use ixarMod;
+use FunctionNotFoundException;
 
 /**
  * For documentation purposes only - available via ModuleClassTrait
@@ -31,7 +33,9 @@ interface ModuleClassInterface extends ServicesInterface
     public function configure();
     public function getModType(): string;
     public function setModType(string $modType): void;
+    public function loadModType(string $callType, int $flags = ixarMod::LOAD_ANYSTATE): bool;
     public function hasMethod(string $funcName, string $callType = 'api'): bool;
+    public function getMethod(string $funcName, string $callType = 'api'): ?callable;
     public function getModule(?string $modName = null): ?ModuleInterface;
     public function userapi(): ?UserApiInterface;
     public function usergui(): ?UserGuiInterface;
@@ -104,6 +108,7 @@ trait ModuleClassTrait
         'getmodtype',
         'setmodtype',
         'hasmethod',
+        'getmethod',
         'getmodule',
         'setmodule',
         'getmethodclass',
@@ -123,6 +128,8 @@ trait ModuleClassTrait
         'getproperty',
         // @todo add new internal methods here + find a better way to do this
     ];
+    /** @var array<string, bool> */
+    private array $loadedModTypes = [];
     /** @var array<string, MethodClassInterface<ModuleClassInterface>|null> */
     private array $methods = [];
 
@@ -171,9 +178,52 @@ trait ModuleClassTrait
     }
 
     /**
+     * Load the modtype only once we want to call a function = hasMethod()
+     * @param string $callType is this for an 'api' call or not?
+     */
+    public function loadModType(string $callType = 'api', int $flags = ixarMod::LOAD_ANYSTATE): bool
+    {
+        $modName = $this->getModName();
+        $modType = $this->getModType();
+        // Make sure we access the cache with lower case key, return true when we already loaded
+        $cacheKey = strtolower($modName . ':' . $modType . $callType);
+        if (isset($this->loadedModTypes[$cacheKey])) {
+            return $this->loadedModTypes[$cacheKey];
+        }
+
+        // Log it when it doesn't come from the cache
+        $this->log()->debug("ModuleClass::loadModType: Loading $modName:$modType");
+
+        // Check module state and version on demand - @todo do we want to do this for real module classes?
+        $loaded = $this->getModule()->checkState($flags);
+        //$loaded = true;
+
+        $this->loadedModTypes[$cacheKey] = $loaded;
+        if (!$loaded) {
+            return $this->loadedModTypes[$cacheKey];
+        }
+
+        // Load the module translations files (common functions, uncut functions etc.)
+        if ($this->mls()->loadModuleTranslations($modName, '', $modType) === null) {
+            return false;
+        }
+
+        // Load database info
+        $this->getModule()->loadDbInfo();
+
+        // Module loaded successfully, trigger the proper event
+        if (str_ends_with($modType, 'api')) {
+            $this->events()->notify('ModApiLoad', $modName);
+        } else {
+            $this->events()->notify('ModLoad', $modName);
+        }
+        return $this->loadedModTypes[$cacheKey];
+    }
+
+    /**
      * Summary of hasMethod
      * @param string $funcName
-     * @param string $callType is this for an api call or not?
+     * @param string $callType is this for an 'api' call or not?
      * @return bool
      */
     public function hasMethod(string $funcName, string $callType = 'api'): bool
@@ -204,6 +254,16 @@ trait ModuleClassTrait
         // Note: we cannot use is_callable() here, because due to the presence of __call it will accept anything
         // support regular class method (case-insensitive) or single-method class in namespace (converted to PascalCase)
         return method_exists($this, $funcName) || class_exists($this->getClassName($funcName));
+    }
+
+    public function getMethod(string $funcName, string $callType = 'api'): ?callable
+    {
+        // @todo should we check $callType on component level or method level - do we allow mix of both in class?
+        if ($this->hasMethod($funcName, $callType)) {
+            // use array format instead of first-class callable syntax to allow setting the context
+            return [$this, $funcName];
+        }
+        return null;
     }
 
     /**
@@ -293,6 +353,8 @@ trait ModuleClassTrait
                     $this->methods[$funcName] = $this->getModule()->getComponent($classType);
                 } else {
                     $this->methods[$funcName] = null;
+                    $modFunc = $this->getModName() . ':' . $this->getModType() . ':' . $funcName;
+                    throw new FunctionNotFoundException($modFunc);
                 }
             }
         }

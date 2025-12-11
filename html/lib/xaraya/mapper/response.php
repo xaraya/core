@@ -95,7 +95,7 @@ class xarResponse extends xarObject
         $xar->tpl()->setPageTitle('404 Not Found');
 
         $tplData = [
-            'msg' => $msg,
+            'msg' => htmlspecialchars($msg),
             'context' => $context,
         ];
         return $xar->tpl()->module($modName, $modType, $funcName, $tplData, $templateName);
@@ -132,7 +132,7 @@ class xarResponse extends xarObject
         $xar->tpl()->setPageTitle('403 Forbidden');
 
         $tplData = [
-            'msg' => $msg,
+            'msg' => htmlspecialchars($msg),
             'context' => $context,
         ];
         return $xar->tpl()->module($modName, $modType, $funcName, $tplData, $templateName);

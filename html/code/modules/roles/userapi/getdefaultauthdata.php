@@ -47,7 +47,7 @@ class GetdefaultauthdataMethod extends MethodClass
             //check for default logout function provided
             if (file_exists(sys::code() . 'modules/' . $defaultauthmodulename . '/xaruser/logout.php')) {
                 $defaultauthmodlogout = $defaultauthmodulename;
-            } elseif ($this->mod()->getModuleClassMethod($defaultauthmodulename, 'usergui', 'logout')) {
+            } elseif ($this->module($defaultauthmodulename)->getCallableMethod('usergui', 'logout')) {
                 $defaultauthmodlogout = $defaultauthmodulename;
             } else {
                 $defaultauthmodlogout = 'authsystem';
@@ -55,7 +55,7 @@ class GetdefaultauthdataMethod extends MethodClass
             //check for default login function provided
             if (file_exists(sys::code() . 'modules/' . $defaultauthmodulename . '/xaruser/login.php')) {
                 $defaultauthmodlogin = $defaultauthmodulename;
-            } elseif ($this->mod()->getModuleClassMethod($defaultauthmodulename, 'usergui', 'login')) {
+            } elseif ($this->module($defaultauthmodulename)->getCallableMethod('usergui', 'login')) {
                 $defaultauthmodlogin = $defaultauthmodulename;
             } else {
                 $defaultauthmodlogin = 'authsystem';

@@ -16,6 +16,7 @@
 
 namespace Xaraya\Services;
 
+use FunctionNotFoundException;
 use Xaraya\Routing\RouterInterface;
 use xarDispatcher;
 use xarRequest;
@@ -394,6 +395,8 @@ trait ControllerTrait
                 $request->setDispatched(true);
                 $this->getDispatcher()->dispatch($request, $response);
             } while (!$request->isDispatched());
+        } catch (FunctionNotFoundException $e) {
+            $this->notFound($e->getMessage());
         } catch (Exception $e) {
             throw $e;
         }

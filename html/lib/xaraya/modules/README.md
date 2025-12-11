@@ -44,7 +44,7 @@ Newer modules can use class methods instead of procedural functions. They can be
 
 Each module has a central module handler class, and *component classes* per type with their own methods. 
 Short-hand methods like `xar::mod()->userapi()` and `xar::mod()->usergui()` are available to get common components by module.
-You can also get a callable to a module method directly via `xar::mod()->getModuleClassMethod()`.
+You can also get a callable to a module method directly via `xar::module()->getCallableMethod()`.
 
 For smaller modules, methods can be combined in a single component class file by type:
 

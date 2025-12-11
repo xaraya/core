@@ -80,7 +80,11 @@ class ExecHelper extends ServiceClass
         $context['module'] ??= $modName;
         $context['modtype'] ??= $modType;
         // @todo call module gui class method directly if available
-        $tplData = $this->callFunc($modName, $modType, $funcName, $args, '');
+        try {
+            $tplData = $this->callFunc($modName, $modType, $funcName, $args, '');
+        } catch (FunctionNotFoundException $e) {
+            return $xar->ctl()->notFound('Function not found: ' . $e->getMessage());
+        }
         // If we have a string of data, we assume someone else did xarTpl* for us
         if (!is_array($tplData)) {
             if (!isset($tplData)) {
@@ -123,11 +127,7 @@ class ExecHelper extends ServiceClass
         $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
         if (empty($modName) || empty($funcName)) {
             // This is not a valid function syntax - CHECKME: also for api functions ?
-            if ($funcType == "api") {
-                throw new FunctionNotFoundException($modFunc);
-            } else {
-                return $xar->ctl()->notFound('Function not found');
-            }
+            throw new FunctionNotFoundException($modFunc);
         }
 
         $info = $xar->mod()->getInfoHelper();
@@ -136,15 +136,11 @@ class ExecHelper extends ServiceClass
         $modFileInfo = $info->getFileInfo($modName);
         if (empty($modFileInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
-            if ($funcType == "api") {
-                throw new FunctionNotFoundException($modFunc);
-            } else {
-                return $xar->ctl()->notFound('Function not found');
-            }
+            throw new FunctionNotFoundException($modFunc);
         }
 
         // Note: pass modType . funcType as modType here for module classes, and use funcType to identify the callType (api or not)
-        $callable = $this->getModuleClassMethod($modName, $modType . $funcType, $funcName, $funcType);
+        $callable = $this->getModule($modName)->getCallableMethod($modType . $funcType, $funcName, $funcType);
         if (!empty($callable)) {
             return $this->callMethod($callable, $args);
         }
@@ -161,7 +157,7 @@ class ExecHelper extends ServiceClass
                 try {
                     $this->load($modName, $modType);
                 } catch (Exception $e) {
-                    return $xar->ctl()->notFound('Function not found');
+                    throw new FunctionNotFoundException($modFunc);
                 }
             }
             $xar = $this->getServicesClass();
@@ -174,11 +170,7 @@ class ExecHelper extends ServiceClass
                 $funcFile = sys::code() . 'modules/' . $modFileInfo['directory'] . '/xar' . $modType . $funcType . '/' . strtolower($funcName) . '.php';
                 if (!file_exists($funcFile)) {
                     // Valid syntax, but the function doesn't exist
-                    if ($funcType == "api") {
-                        throw new FunctionNotFoundException($modFunc);
-                    } else {
-                        return $xar->ctl()->notFound('Function not found');
-                    }
+                    throw new FunctionNotFoundException($modFunc);
                 } else {
                     ob_start();
                     $r = sys::import('modules.' . $modName . '.xar' . $modType . $funcType . '.' . strtolower($funcName));
@@ -205,7 +197,7 @@ class ExecHelper extends ServiceClass
         }
 
         if (!$found) {
-            return $xar->ctl()->notFound('Function not found');
+            throw new FunctionNotFoundException($modFunc);
         }
         $this->getContext()?->tracePath(__METHOD__ . ': ' . $modFunc, $args);
 
@@ -294,10 +286,10 @@ class ExecHelper extends ServiceClass
         $info->loadDbInfo($modName, $modDir);
 
         // Module loaded successfully, trigger the proper event
-        if (preg_match('/(.*)?api$/', $modType)) {
-            $xar->events()->notify('ModApiLoad', $modName, $this->getContext(), $xar);
+        if (str_ends_with($modType, 'api')) {
+            $xar->events()->notify('ModApiLoad', $modName, $this->getContext());
         } else {
-            $xar->events()->notify('ModLoad', $modName, $this->getContext(), $xar);
+            $xar->events()->notify('ModLoad', $modName, $this->getContext());
         }
         return true;
     }
@@ -325,7 +317,7 @@ class ExecHelper extends ServiceClass
                 //$type .= 'gui';
             }
             // Note: component would use configure() with no context here
-            $callable = $this->getModuleClassMethod($tplmodule, $type, $func, $callType);
+            $callable = $this->getModule($tplmodule)->getCallableMethod($type, $func, $callType);
             if (!empty($callable)) {
                 $this->checkFunctionCache[$key] = $tplmodule;
                 return $this->checkFunctionCache[$key];
@@ -374,6 +366,9 @@ class ExecHelper extends ServiceClass
         return $module->getComponent($classType);
     }
 
+    /**
+     * @deprecated 2.9.3 use xar::module($modName)->getCallableMethod() instead
+     */
     public function getModuleClassMethod(string $modName, string $modType, string $funcName, string $callType): ?callable
     {
         $key = "$modName:$modType:$funcName:$callType";
@@ -398,9 +393,10 @@ class ExecHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        $callable = $this->getModuleClassMethod($modName, $modType, $funcName, 'api');
+        $callable = $this->getModule($modName)->getCallableMethod($modType, $funcName, 'api');
         if (empty($callable)) {
-            throw new FunctionNotFoundException($funcName);
+            $modFunc = "{$modName}:{$modType}:{$funcName}";
+            throw new FunctionNotFoundException($modFunc);
         }
         return $this->callMethod($callable, $args);
     }
@@ -411,11 +407,19 @@ class ExecHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
-        $callable = $this->getModuleClassMethod($modName, $modType, $funcName, 'gui');
+        $callable = $this->getModule($modName)->getCallableMethod($modType, $funcName, 'gui');
         if (empty($callable)) {
-            throw new FunctionNotFoundException($funcName);
+            $modFunc = "{$modName}:{$modType}:{$funcName}";
+            $e = new FunctionNotFoundException($modFunc);
+            $xar = $this->getServicesClass();
+            return $xar->ctl()->notFound('Function not found: ' . $e->getMessage());
         }
-        return $this->callMethod($callable, $args);
+        try {
+            return $this->callMethod($callable, $args);
+        } catch (FunctionNotFoundException $e) {
+            $xar = $this->getServicesClass();
+            return $xar->ctl()->notFound('Function not found: ' . $e->getMessage());
+        }
     }
 
     /** @param array<string, mixed> $args */

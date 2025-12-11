@@ -62,6 +62,6 @@ trait AdminApiTrait
     {
         $this->setModType('admin');
         // any state here = default for api load
-        $this->mod()->apiLoad($this->getModName(), $this->getModType());
+        $this->loadModType('api');
     }
 }

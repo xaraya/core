@@ -590,7 +590,7 @@ class EventsService implements EventsInterface
                 // see xar::mod()->callFunc() - pass modType . funcType as modType here for module classes
                 $modType = $type . $area;
                 // old-style module_type_func() hook function called via module class
-                $callable = $xar->mod()->getModuleClassMethod($module, $modType, $filename, 'api');
+                $callable = $xar->module($module)->getCallableMethod($modType, $filename, 'api');
                 if (!empty($callable)) {
                     // one function file loaded :)
                     $loaded = true;

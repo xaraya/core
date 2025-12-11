@@ -47,8 +47,11 @@ use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\WithServicesTrait;
 use Xaraya\Services\WithServicesInterface;
 use Xaraya\Services\Modules\InfoHelper;
+use ixarMod;
 use sys;
 use Exception;
+use ModuleNotActiveException;
+use ModuleNotFoundException;
 
 /**
  * For documentation purposes only - available via ModuleTrait
@@ -64,6 +67,7 @@ interface ModuleInterface extends WithContextInterface, WithServicesInterface
     /** @return array<string, mixed> */
     public function getTables(): array;
     public function loadDbInfo(): void;
+    public function checkState(int $flags = ixarMod::LOAD_ANYSTATE): bool;
     public function getComponent(string $classType): ?ModuleClassInterface;
     public function hasComponent(string $classType): bool;
     public function userapi(): ?UserApiInterface;
@@ -93,7 +97,11 @@ trait ModuleTrait
     protected array $classtypes = [];
     /** @var array<string, ModuleClassInterface|null> */
     private array $components = [];
-    private $loadedDbInfo = false;
+    private bool $loadedDbInfo = false;
+    /** @var array<int, bool> */
+    private array $checkedState = [];
+    /** @var array<string, callable|null> */
+    private array $getMethodCache = [];
 
     /**
      * @param ?Context<string, mixed> $context
@@ -244,8 +252,12 @@ trait ModuleTrait
         }
 
         // Load the database definition if required
+        $fileName = sys::code() . 'modules/' . $this->getModName() . '/xartables.php';
+        if (!file_exists($fileName)) {
+            return [];
+        }
         try {
-            include_once sys::code() . 'modules/' . $this->getModName() . '/xartables.php';
+            include_once $fileName;
         } catch (Exception $e) {
             return [];
         }
@@ -272,6 +284,57 @@ trait ModuleTrait
         $xar = $this->getServicesClass();
         $xar->db()->importTables($tables);
         $this->loadedDbInfo = true;
+    }
+
+    /**
+     * Check module state and version on demand - @todo do we want to do this for real module classes?
+     * Note: file check and sys::import are already done in LegacyModule::getClassType()
+     * @throws ModuleNotFoundException
+     * @throws ModuleNotActiveException
+     * @return bool
+     */
+    public function checkState(int $flags = ixarMod::LOAD_ANYSTATE): bool
+    {
+        if (isset($this->checkedState[$flags])) {
+            return $this->checkedState[$flags];
+        }
+        $modName = $this->getModName();
+
+        // Allow inactive/non-upgraded modules in any state
+        if ($flags & ixarMod::LOAD_ANYSTATE) {
+            $modBaseInfo = $this->getFileInfo();
+            // Not a valid module - throw exception
+            if (empty($modBaseInfo)) {
+                $this->checkedState[$flags] = false;
+                throw new ModuleNotFoundException($modName, 'The module "#(1)" cannot be found.');
+            }
+            $this->checkedState[$flags] = true;
+            return true;
+        }
+
+        $xar = $this->getServicesClass();
+        /** @var InfoHelper $info */
+        $info = $xar->service('modules.info');
+
+        $modBaseInfo = $info->getBaseInfo($modName);
+        // Not a valid module - throw exception
+        if (empty($modBaseInfo)) {
+            $this->checkedState[$flags] = false;
+            throw new ModuleNotFoundException($modName, 'The module "#(1)" cannot be found.');
+        }
+        // Not a valid module state - throw exception
+        if ($modBaseInfo['state'] != ixarMod::STATE_ACTIVE) {
+            $this->checkedState[$flags] = false;
+            throw new ModuleNotActiveException($modName);
+        }
+        // Not the correct version - throw exception unless we are upgrading
+        if (!$info->checkVersion($modName) && !$xar->mem()->get('Upgrade', 'upgrading') && $modName != 'modules') {
+            $this->checkedState[$flags] = false;
+            $xar->exit('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
+            return false;
+        }
+        $this->checkedState[$flags] = true;
+        return true;
     }
 
     public function userapi(): ?UserApiInterface
@@ -347,7 +410,7 @@ trait ModuleTrait
     }
 
     /**
-     * @see \xar::mod()->privateLoad()
+     * Get module class type for $modType or return null
      */
     public function getClassType(string $modType): ?string
     {
@@ -366,31 +429,47 @@ trait ModuleTrait
     }
 
     /**
-     * @see \xar::mod()->getModuleClassMethod()
+     * Get module class method if it exists or return null
      */
     public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): ?callable
     {
+        $modName = $this->getModName();
+        $cacheKey = "$modName:$modType:$funcName:$callType";
+        if (array_key_exists($cacheKey, $this->getMethodCache)) {
+            return $this->getMethodCache[$cacheKey];
+        }
         // $modType already includes $funcType here, e.g. userapi or installer
         $classType = $this->getClassType($modType);
+        // returns null for DefaultModule() = no suitable class method
         if (!isset($classType)) {
+            $this->getMethodCache[$cacheKey] = null;
             return null;
         }
         $component = $this->getComponent($classType);
         if (!isset($component)) {
+            $this->getMethodCache[$cacheKey] = null;
             return null;
         }
         // @todo should we check $callType on component level or method level - do we allow mix of both in class?
-        if ($component->hasMethod($funcName, $callType)) {
-            // use array format instead of first-class callable syntax to allow setting the context
-            return [$component, $funcName];
+        $method = $component->getMethod($funcName, $callType);
+        $this->getMethodCache[$cacheKey] = $method;
+        $xar = $this->getServicesClass();
+        if (!isset($method)) {
+            $xar->log()->info("xar::module()->getCallableMethod: Missing method for $cacheKey");
+        } else {
+            // Load the translations file, only if we have loaded the function for the first time here.
+            $xar->mls()->loadModuleTranslations($modName, $modType, $funcName);
         }
-        return null;
+        return $method;
     }
 
-    public function __serialize()
+    public function __serialize(): array
     {
-        // reset components for comparison - see SerializeServicesTest::testModuleClass()
+        // reset properties for comparison - see SerializeServicesTest::testModuleClass()
         $this->components = [];
+        $this->loadedDbInfo = false;
+        $this->checkedState = [];
+        $this->getMethodCache = [];
         // add any protected/private properties that are relevent here
         return [
             'moduleName' => $this->moduleName ?? null,

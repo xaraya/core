@@ -125,7 +125,7 @@ final class UserApiTest extends TestHelper
         //xar::mod()->init();
 
         // the method "exists" as inherited class method (case-insensitive)
-        $callable = xar::mod()->getModuleClassMethod('dynamicdata', 'userapi', 'getitemtypes');
+        $callable = xar::module('dynamicdata')->getCallableMethod('userapi', 'getitemtypes');
         $this->assertTrue(is_callable($callable));
 
         $expected = [
@@ -159,7 +159,7 @@ final class UserApiTest extends TestHelper
         //xar::mod()->init();
 
         // the method "exists" even as single-method class file (converted to PascalCase)
-        $callable = xar::mod()->getModuleClassMethod('dynamicdata', 'userapi', 'test_call');
+        $callable = xar::module('dynamicdata')->getCallableMethod('userapi', 'test_call');
         $this->assertTrue(is_callable($callable));
 
         $context = $this->createContext(['source' => __METHOD__]);

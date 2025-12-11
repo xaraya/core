@@ -107,7 +107,7 @@ class AdminApi extends AdminApiClass
         // support module Installer classes - see modules_adminapi_executeinitfunction()
         if (!file_exists($modInitFile)) {
             // use modType = 'installer' here to get the module Installer class (if available)
-            $modInitFunc = $this->mod()->getModuleClassMethod($directory, 'installer', $initfunc, 'api');
+            $modInitFunc = $this->module($directory)->getCallableMethod('installer', $initfunc, 'api');
             if (!empty($modInitFunc)) {
                 // Note: we don't support upgrade($oldversion) here
                 $res = $modInitFunc();

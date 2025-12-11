@@ -23,18 +23,12 @@ class DefaultModule implements ModuleInterface
 {
     use ModuleTrait;
 
-    /**
-     * @see \xar::mod()->privateLoad()
-     */
     public function getClassType(string $modType): ?string
     {
         // no class types available here
         return null;
     }
 
-    /**
-     * @see \xar::mod()->getModuleClassMethod()
-     */
     public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): ?callable
     {
         // no callable methods available here
