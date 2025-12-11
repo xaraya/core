@@ -215,7 +215,7 @@ class Routing implements RouterInterface
         }
         $modName ??= '';
         // @todo find route based on args
-        return "/$modName?" . rawurldecode(json_encode($params));
+        return "/$modName?" . rawurlencode(json_encode($params));
     }
 
     /**

@@ -29,6 +29,9 @@ class ShortActionController extends BaseActionController implements iController
     {
         $request = $this->getRequest();
         $token = $this->firstToken();
+        if (!$request->isValidType($token)) {
+            return $data;
+        }
         if ($request->getModule() == 'object') {
             $data['type'] = $token;
             if ($token == 'admin') {
@@ -37,13 +40,20 @@ class ShortActionController extends BaseActionController implements iController
                 $token = false;
             }
             $token = $this->nextToken();
+            if (!$request->isValidFunc($token)) {
+                $token = false;
+            }
+            // If no function was passed we get the default method (view)
             $data['func'] = empty($token) ? $request->getMethod() : $token;
         } else {
             if ($token == 'admin') {
                 $data['type'] = $token;
                 $token = $this->nextToken();
             }
-            // If no function was passed we get the default
+            if (!$request->isValidFunc($token)) {
+                $token = false;
+            }
+            // If no function was passed we get the default function (main)
             $data['func'] = empty($token) ? $request->getFunction() : $token;
         }
         return $data;

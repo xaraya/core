@@ -73,22 +73,26 @@ class DefaultRoute extends xarRoute
             return false;
         }
 
-        // Get the module
-        $this->parts[$this->moduleKey] = $params[$this->moduleKey];
+        // Get the module - see DefaultActionController::decode()
+        if (preg_match('/^[a-z][a-z_0-9]*$/', $params[$this->moduleKey])) {
+            $this->parts[$this->moduleKey] = $params[$this->moduleKey];
+        }
         unset($params[$this->moduleKey]);
 
-        // Get the type; assign the default if not given
-        if (empty($params[$this->typeKey])) {
-            $params[$this->typeKey] = $this->defaults[$this->typeKey];
+        // Get the type; assign the default if not given or invalid
+        if (!empty($params[$this->typeKey]) && $request->isValidType($params[$this->typeKey])) {
+            $this->parts[$this->typeKey] = $params[$this->typeKey];
+        } else {
+            $this->parts[$this->typeKey] = $this->defaults[$this->typeKey];
         }
-        $this->parts[$this->typeKey] = $params[$this->typeKey];
         unset($params[$this->typeKey]);
 
-        // Get the func; assign the default if not given
-        if (empty($params[$this->funcKey])) {
-            $params[$this->funcKey] = $this->defaults[$this->funcKey];
+        // Get the func; assign the default if not given or invalid
+        if (!empty($params[$this->funcKey]) && $request->isValidFunc($params[$this->funcKey])) {
+            $this->parts[$this->funcKey] = $params[$this->funcKey];
+        } else {
+            $this->parts[$this->funcKey] = $this->defaults[$this->funcKey];
         }
-        $this->parts[$this->funcKey] = $params[$this->funcKey];
         unset($params[$this->funcKey]);
 
         $this->parts['funcargs'] = $params;

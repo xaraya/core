@@ -121,22 +121,22 @@ class xarRequest extends xarObject
             // A URL was passed
             if (is_array($url)) {
                 // This is an array representing a traditional Xaraya URL array
-                if (!empty($url['module'])) {
+                if (!empty($url['module']) && preg_match('/^[a-z][a-z_0-9]*$/', $url['module'])) {
                     // Resolve if this is an alias for some other module
                     $this->setModule($xar->mod()->resolveAlias($url['module']));
                     if ($this->getModule() != $url['module']) {
                         $this->setModuleAlias($url['module']);
                     }
-                    unset($url['module']);
                 }
-                if (!empty($url['type'])) {
+                unset($url['module']);
+                if (!empty($url['type']) && $this->isValidType($url['type'])) {
                     $this->setType($url['type']);
-                    unset($url['type']);
                 }
-                if (!empty($url['func'])) {
+                unset($url['type']);
+                if (!empty($url['func']) && $this->isValidType($url['func'])) {
                     $this->setFunction($url['func']);
-                    unset($url['func']);
                 }
+                unset($url['func']);
 
                 // Rename the array so we can use the code at the end
                 $params = $url;
@@ -148,13 +148,13 @@ class xarRequest extends xarObject
                 $url = str_replace('&amp;', '&', $url);
                 // @todo take into account routing
                 $params = $xar->ctl()->parseQuery($url);
-                if (!empty($params['module'])) {
+                if (!empty($params['module']) && preg_match('/^[a-z][a-z_0-9]*$/', $params['module'])) {
                     $this->setModule($params['module']);
                 }
-                if (!empty($params['type'])) {
+                if (!empty($params['type']) && $this->isValidType($params['type'])) {
                     $this->setType($params['type']);
                 }
-                if (!empty($params['func'])) {
+                if (!empty($params['func']) && $this->isValidFunc($params['func'])) {
                     $this->setFunction($params['func']);
                 }
 
@@ -290,24 +290,20 @@ class xarRequest extends xarObject
         $xar = $this->getServicesClass();
         // @todo take into account routing
         $params = $xar->ctl()->parseQuery($url);
-        $regex = null;
-        if (!empty($params)) {
-            $regex = ValueValidations::get('regexp');
-        }
         if (isset($params['module'])) {
-            $isvalid =  $regex->validate($params['module'], ['/^[a-z][a-z_0-9]*$/']);
+            $isvalid =  (bool) preg_match('/^[a-z][a-z_0-9]*$/', $params['module']);
             $modName = $isvalid ? $params['module'] : null;
         } else {
             $modName = null;
         }
         if (isset($params['type'])) {
-            $isvalid =  $regex->validate($params['type'], ['/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/']);
+            $isvalid = $this->isValidType($params['type']);
             $modType = $isvalid ? $params['type'] : 'user';
         } else {
             $modType = 'user';
         }
         if (isset($params['func'])) {
-            $isvalid =  $regex->validate($params['func'], ['/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/']);
+            $isvalid = $this->isValidFunc($params['func']);
             $funcName = $isvalid ? $params['func'] : 'main';
         } else {
             $funcName = 'main';
@@ -549,6 +545,16 @@ class xarRequest extends xarObject
         $xar = $this->getServicesClass();
         $available = $xar->mod()->isAvailable($module);
         return $available;
+    }
+
+    public function isValidType(string $type)
+    {
+        return (bool) preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $type);
+    }
+
+    public function isValidFunc(string $func)
+    {
+        return (bool) preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $func);
     }
 
     /**

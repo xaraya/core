@@ -88,8 +88,8 @@ class ShortRoute extends xarRoute
             $parts[$this->typeKey] = $request->getType();
         }
 
-        // Get the function part
-        if (count($path) && !empty($path[0])) {
+        // Get the function part if not invalid - see ShortActionController::decode()
+        if (count($path) && !empty($path[0]) && $request->isValidFunc($path[0])) {
             $request->setFunction(array_shift($path));
             $parts[$this->funcKey] = $request->getFunction();
         }

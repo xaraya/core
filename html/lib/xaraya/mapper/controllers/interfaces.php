@@ -32,4 +32,6 @@ interface iController
     public function getActionString(xarRequest $request): string;
 
     public function getInitialPath(xarRequest $request): string;
+
+    public function chargeRequest(xarRequest $request, array $params = []): void;
 }
