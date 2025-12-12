@@ -19,7 +19,7 @@ class DataObjectURL
      * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
      * @param string $action the action we want to take on this object (= method or func)
      * @param mixed $itemid the specific item id or null
-     * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @param array<string, mixed> $extra extra arguments to pass to the URL - e.g. title slug
      * @return string the generated URL
      * @see \Xaraya\Bridge\Requests\DataObjectRequestHandler::handleObjectRequest()
      */
@@ -36,12 +36,16 @@ class DataObjectURL
                 $link = self::getObjectURL($object, $action, $itemid, $extra, $xar);
                 break;
 
+            case 'route':
+                $link = self::getRouteURL($object, $action, $itemid, $extra, $xar);
+                break;
+
             case 'current':
                 $link = self::getCurrentURL($object, $action, $itemid, $xar);
                 break;
 
             case 'other':
-                //$link = self::getOtherURL($object, $action, $itemid, $extra);
+                //$link = self::getOtherURL($object, $action, $itemid, $extra, $xar);
                 if (!empty($object->linkfunc) && is_callable($object->linkfunc)) {
                     $link = call_user_func($object->linkfunc, $object->name, $action, $itemid, $extra);
                 } else {
@@ -172,6 +176,42 @@ class DataObjectURL
     }
 
     /**
+     * Generate Route URL for a specific action on an object
+     * e.g. use route URLs via index.php/object/sample
+     *
+     * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @param array<string, mixed> $extra extra arguments to pass to the URL - e.g. title slug
+     * @return string the generated URL
+     */
+    public static function getRouteURL($object, $action = '', $itemid = null, $extra = [], $xar = null)
+    {
+        // set entity to get an object route with findRoute(), not a module route
+        $extra['entity'] ??= $object->name;
+        if (!empty($action)) {
+            $extra['action'] ??= $action;
+        }
+        if (isset($itemid)) {
+            $extra['itemid'] ??= $itemid;
+        }
+        // use tplmodule or dynamicdata as module for findRoute()
+        $extra['module'] ??= $object->getModName();
+
+        $xar ??= xar::getServicesClass();
+        if (!empty($extra[RouterInterface::ROUTE_PARAM])) {
+            $route = $extra[RouterInterface::ROUTE_PARAM];
+            unset($extra[RouterInterface::ROUTE_PARAM]);
+        } else {
+            // @todo build route based on object, action, itemid and extra here?
+            $route = '';
+        }
+        $link = $xar->ctl()->getRouteURL($route, $extra);
+
+        return $link;
+    }
+
+    /**
      * Generate Current URL for a specific action on an object
      *
      * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
@@ -218,15 +258,21 @@ class DataObjectURL
     }
 
     /**
-     * Generate Other URL for a specific action on an object (TBD)
+     * Generate Other URL for a specific action on an object (using linkfunc)
      *
      * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
      * @param string $action the action we want to take on this object (= method or func)
      * @param mixed $itemid the specific item id or null
+     * @param array<string, mixed> $extra extra arguments to pass to the URL - e.g. title slug
      * @return string the generated URL
+     * @see \Xaraya\Bridge\Middleware\DataObjectMiddleware::process()
+     * @see \Xaraya\Bridge\Requests\DataObjectBridgeTrait::handleObjectRequest()
      */
-    public static function getOtherURL($object, $action = '', $itemid = null, $xar = null)
+    public static function getOtherURL($object, $action = '', $itemid = null, $extra = [], $xar = null)
     {
-        return 'http://www.xaraya.com/to_be_defined';
+        if (!empty($object->linkfunc) && is_callable($object->linkfunc)) {
+            return call_user_func($object->linkfunc, $object->name, $action, $itemid, $extra);
+        }
+        return self::getObjectURL($object, $action, $itemid, $extra, $xar);
     }
 }
