@@ -23,7 +23,8 @@ use DataObjectFactory;
 use DataObject;
 use DataObjectList;
 use DataObjectLoader;
-use xarDDObject;
+use DataObjectUserInterface;
+use EmptyParameterException;
 
 /**
  * For documentation purposes only - available via DataObjectTrait
@@ -180,7 +181,29 @@ trait DataObjectTrait
      */
     public function guiMethod(string $objectName, string $methodName = 'view', array $args = []): string
     {
-        return xarDDObject::guiMethod($objectName, $methodName, $args, $this->getContext(), $this->getParent());
+        if (empty($objectName)) {
+            throw new EmptyParameterException('objectName');
+        }
+        $xar = $this->getServicesClass();
+
+        // Pass the object name and method to the userinterface class
+        $args['object'] = $objectName;
+        $args['method'] = $methodName;
+        $context = $this->getContext();
+        // Set module name and type in context if needed (dummy)
+        $context['module'] ??= 'object';
+        $context['modtype'] ??= $objectName;
+
+        // @todo refine configuration elsewhere later
+        $twig_support = $xar->mod('dynamicdata')->getVar('twig_support');
+        if (!empty($twig_support)) {
+            if (empty($context['twig'])) {
+                $context['twig'] = true;
+            }
+        }
+
+        $interface = new DataObjectUserInterface($args, $context, $xar);
+        return $interface->handle($args);
     }
 
     /**

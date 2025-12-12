@@ -571,7 +571,7 @@ trait ModulesTrait
      * @param string $func link function (display, getitemtypes, ...)
      * @return string tplmodule or 'dynamicdata'
      * @see \Xaraya\Bridge\RestAPI\RestAPIBuilder::find_default_api_functions()
-     * @see \xarDDObject::getModuleURL()
+     * @see \Xaraya\Routing\DataObjectURL::getModuleURL()
      */
     public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'userapi', string $func = 'getitemtypes', string $defaultmodule = 'dynamicdata'): string
     {

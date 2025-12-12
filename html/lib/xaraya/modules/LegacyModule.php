@@ -16,8 +16,6 @@
 
 namespace Xaraya\Modules;
 
-use Xaraya\Services\Modules\InfoHelper;
-use ixarMod;
 use sys;
 use Exception;
 
@@ -36,8 +34,12 @@ class LegacyModule implements ModuleInterface
     public function getTables(): array
     {
         // Load the database definition if required
+        $fileName = sys::code() . 'modules/' . $this->getModName() . '/xartables.php';
+        if (!file_exists($fileName)) {
+            return [];
+        }
         try {
-            include_once sys::code() . 'modules/' . $this->getModName() . '/xartables.php';
+            include_once $fileName;
         } catch (Exception $e) {
             return [];
         }

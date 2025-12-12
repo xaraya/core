@@ -18,11 +18,11 @@ namespace Xaraya\Services;
 
 use FunctionNotFoundException;
 use Xaraya\Routing\RouterInterface;
+use Xaraya\Routing\DataObjectURL;
 use xarDispatcher;
 use xarRequest;
 use xarResponse;
 use xarRouter;
-use xarDDObject;
 use sys;
 use Exception;
 
@@ -257,7 +257,7 @@ trait ControllerTrait
     public function getActionURL(object $object, string $action = '', mixed $itemid = null, array $extra = []): string
     {
         $xar = $this->getServicesClass();
-        return xarDDObject::getActionURL($object, $action, $itemid, $extra, $xar);
+        return DataObjectURL::getActionURL($object, $action, $itemid, $extra, $xar);
     }
 
     /**

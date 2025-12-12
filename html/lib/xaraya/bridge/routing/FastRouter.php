@@ -215,6 +215,11 @@ class FastRouter implements RouterInterface
                 return $uri;
             }
         }
+        // Clean up params by removing false values (= empty, false, null, 0)
+        //$params = array_filter($params);
+        if (empty($modName) && empty($params)) {
+            return '';
+        }
         $handlers = xarClassMap::getRoutes($modName);
         $uri = null;
         /** @var class-string<RoutesInterface> $className */

@@ -170,7 +170,7 @@ trait DataObjectBridgeTrait
      */
     public function buildDataObjectPath(string $object = 'sample', ?string $method = null, string|int|null $itemid = null, array $extra = [], string $prefix = '/object'): string
     {
-        // see xar::ctl()->getObjectURL() and xarDDObject::getObjectURL()
+        // see xar::ctl()->getObjectURL() and DataObjectURL::getObjectURL()
         $uri = $prefix;
         // {prefix}/{object} = view
         $uri .= '/' . $object;
@@ -213,7 +213,7 @@ trait DataObjectBridgeTrait
      * @param array<string, mixed> $vars
      * @param mixed $request
      * @return array<mixed>
-     * @see \xarDDObject::getActionURL()
+     * @see \Xaraya\Routing\DataObjectURL::getActionURL()
      */
     public function handleObjectRequest($vars, &$request = null)
     {
