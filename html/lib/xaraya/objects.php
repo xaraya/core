@@ -114,7 +114,7 @@ class xarDDObject extends xarObject implements ixarDDObject
      */
     public static function getModuleURL($object, $action = '', $itemid = null, $extra = [], $xar = null)
     {
-        return DataObjectURL::getModuleURL($object, $object: action, $itemid, $extra, $xar);
+        return DataObjectURL::getModuleURL($object, $action, $itemid, $extra, $xar);
     }
 
     /**
@@ -129,7 +129,7 @@ class xarDDObject extends xarObject implements ixarDDObject
      */
     public static function getObjectURL($object, $action = '', $itemid = null, $extra = [], $xar = null)
     {
-        return DataObjectURL::getObjectURL($object, $object: action, $itemid, $extra, $xar);
+        return DataObjectURL::getObjectURL($object, $action, $itemid, $extra, $xar);
     }
 
     /**
@@ -142,7 +142,7 @@ class xarDDObject extends xarObject implements ixarDDObject
      */
     public static function getCurrentURL($object, $action = '', $itemid = null, $xar = null)
     {
-        return DataObjectURL::getCurrentURL($object, $object: action, $itemid, $extra, $xar);
+        return DataObjectURL::getCurrentURL($object, $action, $itemid, $xar);
     }
 
     /**
@@ -155,7 +155,7 @@ class xarDDObject extends xarObject implements ixarDDObject
      */
     public static function getOtherURL($object, $action = '', $itemid = null, $xar = null)
     {
-        return DataObjectURL::getOtherURL($object, $object: action, $itemid, $extra, $xar);
+        return DataObjectURL::getOtherURL($object, $action, $itemid, $xar);
     }
 
     /**

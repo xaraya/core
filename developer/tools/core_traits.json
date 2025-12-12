@@ -1487,24 +1487,32 @@
                     "string $modName",
                     "?\\Xaraya\\Modules\\ModuleInterface $parent = null"
                 ],
-                "lines": "135-145"
+                "lines": "142-152"
             },
             "configure": {
                 "name": "configure",
                 "args": [],
-                "lines": "152-155"
+                "lines": "159-162"
             },
             "getmodtype": {
                 "name": "getModType",
                 "args": [],
-                "lines": "160-163"
+                "lines": "167-170"
             },
             "setmodtype": {
                 "name": "setModType",
                 "args": [
                     "string $modType"
                 ],
-                "lines": "168-171"
+                "lines": "175-178"
+            },
+            "loadmodtype": {
+                "name": "loadModType",
+                "args": [
+                    "string $callType = 'api'",
+                    "int $flags = \\ixarMod::LOAD_ANYSTATE"
+                ],
+                "lines": "184-221"
             },
             "hasmethod": {
                 "name": "hasMethod",
@@ -1512,41 +1520,49 @@
                     "string $funcName",
                     "string $callType = 'api'"
                 ],
-                "lines": "179-207"
+                "lines": "229-257"
+            },
+            "getmethod": {
+                "name": "getMethod",
+                "args": [
+                    "string $funcName",
+                    "string $callType = 'api'"
+                ],
+                "lines": "259-267"
             },
             "getmodule": {
                 "name": "getModule",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "213-224"
+                "lines": "273-284"
             },
             "setmodule": {
                 "name": "setModule",
                 "args": [
                     "?\\Xaraya\\Modules\\ModuleInterface $parent"
                 ],
-                "lines": "230-233"
+                "lines": "290-293"
             },
             "userapi": {
                 "name": "userapi",
                 "args": [],
-                "lines": "238-243"
+                "lines": "298-303"
             },
             "usergui": {
                 "name": "usergui",
                 "args": [],
-                "lines": "248-253"
+                "lines": "308-313"
             },
             "adminapi": {
                 "name": "adminapi",
                 "args": [],
-                "lines": "258-263"
+                "lines": "318-323"
             },
             "admingui": {
                 "name": "admingui",
                 "args": [],
-                "lines": "268-273"
+                "lines": "328-333"
             },
             "__call": {
                 "name": "__call",
@@ -1554,77 +1570,77 @@
                     "string $funcName",
                     "array $arguments = []"
                 ],
-                "lines": "281-307"
+                "lines": "341-369"
             },
             "getmethodclass": {
                 "name": "getMethodClass",
                 "args": [
                     "string $className"
                 ],
-                "lines": "316-319"
+                "lines": "378-381"
             },
             "getclassname": {
                 "name": "getClassName",
                 "args": [
                     "string $funcName"
                 ],
-                "lines": "331-337"
+                "lines": "393-399"
             },
             "getnamespace": {
                 "name": "getNamespace",
                 "args": [],
-                "lines": "343-347"
+                "lines": "405-409"
             },
             "getmodname": {
                 "name": "getModName",
                 "args": [],
-                "lines": "352-355"
+                "lines": "414-417"
             },
             "setmodname": {
                 "name": "setModName",
                 "args": [
                     "string $modName"
                 ],
-                "lines": "360-363"
+                "lines": "422-425"
             },
             "getitemtype": {
                 "name": "getItemType",
                 "args": [],
-                "lines": "368-371"
+                "lines": "430-433"
             },
             "setitemtype": {
                 "name": "setItemType",
                 "args": [
                     "int $itemtype = 0"
                 ],
-                "lines": "376-379"
+                "lines": "438-441"
             },
             "getobject": {
                 "name": "getObject",
                 "args": [],
-                "lines": "384-387"
+                "lines": "446-449"
             },
             "getproperty": {
                 "name": "getProperty",
                 "args": [],
-                "lines": "392-395"
+                "lines": "454-457"
             },
             "__serialize": {
                 "name": "__serialize",
                 "args": [],
-                "lines": "397-409"
+                "lines": "459-471"
             },
             "__unserialize": {
                 "name": "__unserialize",
                 "args": [
                     "$data"
                 ],
-                "lines": "411-418"
+                "lines": "473-480"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Modules\\",
-        "lines": "71-419",
+        "lines": "75-481",
         "traits": [
             "Xaraya\\Services\\CoreServicesTrait"
         ]
@@ -1640,126 +1656,138 @@
                     "?\\Xaraya\\Context\\Context $context = null",
                     "$xar = null"
                 ],
-                "lines": "99-105"
+                "lines": "110-116"
             },
             "configure": {
                 "name": "configure",
                 "args": [],
-                "lines": "111-114"
+                "lines": "122-125"
             },
             "getmodname": {
                 "name": "getModName",
                 "args": [],
-                "lines": "116-119"
+                "lines": "127-130"
             },
             "setmodname": {
                 "name": "setModName",
                 "args": [
                     "string $modName"
                 ],
-                "lines": "121-124"
+                "lines": "132-135"
             },
             "createcomponent": {
                 "name": "createComponent",
                 "args": [
                     "string $className"
                 ],
-                "lines": "133-136"
+                "lines": "144-147"
             },
             "getclassname": {
                 "name": "getClassName",
                 "args": [
                     "string $classType"
                 ],
-                "lines": "143-148"
+                "lines": "154-159"
             },
             "getnamespace": {
                 "name": "getNamespace",
                 "args": [],
-                "lines": "150-154"
+                "lines": "161-165"
             },
             "getcomponent": {
                 "name": "getComponent",
                 "args": [
                     "string $classType"
                 ],
-                "lines": "156-173"
+                "lines": "167-184"
             },
             "hascomponent": {
                 "name": "hasComponent",
                 "args": [
                     "string $classType"
                 ],
-                "lines": "175-179"
+                "lines": "186-190"
             },
             "setcontext": {
                 "name": "setContext",
                 "args": [
                     "$context"
                 ],
-                "lines": "181-192"
+                "lines": "192-203"
             },
             "getname": {
                 "name": "getName",
                 "args": [],
-                "lines": "194-197"
+                "lines": "205-208"
             },
             "getfileinfo": {
                 "name": "getFileInfo",
                 "args": [],
-                "lines": "203-214"
+                "lines": "214-237"
             },
             "gettables": {
                 "name": "getTables",
                 "args": [],
-                "lines": "220-244"
+                "lines": "243-271"
+            },
+            "loaddbinfo": {
+                "name": "loadDbInfo",
+                "args": [],
+                "lines": "273-287"
+            },
+            "checkstate": {
+                "name": "checkState",
+                "args": [
+                    "int $flags = \\ixarMod::LOAD_ANYSTATE"
+                ],
+                "lines": "296-338"
             },
             "userapi": {
                 "name": "userapi",
                 "args": [],
-                "lines": "246-251"
+                "lines": "340-345"
             },
             "usergui": {
                 "name": "usergui",
                 "args": [],
-                "lines": "253-258"
+                "lines": "347-352"
             },
             "adminapi": {
                 "name": "adminapi",
                 "args": [],
-                "lines": "260-265"
+                "lines": "354-359"
             },
             "admingui": {
                 "name": "admingui",
                 "args": [],
-                "lines": "267-272"
+                "lines": "361-366"
             },
             "installer": {
                 "name": "installer",
                 "args": [],
-                "lines": "274-279"
+                "lines": "368-373"
             },
             "restapi": {
                 "name": "restapi",
                 "args": [],
-                "lines": "281-286"
+                "lines": "375-380"
             },
             "schedulerapi": {
                 "name": "schedulerapi",
                 "args": [],
-                "lines": "288-293"
+                "lines": "382-387"
             },
             "setclasstypes": {
                 "name": "setClassTypes",
                 "args": [],
-                "lines": "298-316"
+                "lines": "392-410"
             },
             "getclasstype": {
                 "name": "getClassType",
                 "args": [
                     "string $modType"
                 ],
-                "lines": "321-334"
+                "lines": "415-429"
             },
             "getcallablemethod": {
                 "name": "getCallableMethod",
@@ -1768,24 +1796,24 @@
                     "string $funcName",
                     "string $callType = 'api'"
                 ],
-                "lines": "339-356"
+                "lines": "434-464"
             },
             "__serialize": {
                 "name": "__serialize",
                 "args": [],
-                "lines": "358-368"
+                "lines": "466-479"
             },
             "__unserialize": {
                 "name": "__unserialize",
                 "args": [
                     "$data"
                 ],
-                "lines": "370-377"
+                "lines": "481-488"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Modules\\",
-        "lines": "83-378",
+        "lines": "89-489",
         "traits": [
             "Xaraya\\Context\\WithContextTrait",
             "Xaraya\\Services\\WithServicesTrait"
@@ -2333,7 +2361,7 @@
                     "array $params = []",
                     "?bool $generateXMLURL = null"
                 ],
-                "lines": "174-177"
+                "lines": "176-179"
             },
             "getobjecturl": {
                 "name": "getObjectURL",
@@ -2343,7 +2371,7 @@
                     "array $params = []",
                     "?bool $generateXMLURL = null"
                 ],
-                "lines": "183-244"
+                "lines": "185-246"
             },
             "getactionurl": {
                 "name": "getActionURL",
@@ -2353,7 +2381,7 @@
                     "$itemid = null",
                     "array $extra = []"
                 ],
-                "lines": "255-258"
+                "lines": "257-261"
             },
             "getrouteurl": {
                 "name": "getRouteURL",
@@ -2361,50 +2389,57 @@
                     "string $route",
                     "array $params = []"
                 ],
-                "lines": "264-278"
+                "lines": "267-291"
+            },
+            "getpathurl": {
+                "name": "getPathURL",
+                "args": [
+                    "string $path = ''"
+                ],
+                "lines": "298-301"
             },
             "getrouter": {
                 "name": "getRouter",
                 "args": [],
-                "lines": "280-287"
+                "lines": "303-310"
             },
             "setrouter": {
                 "name": "setRouter",
                 "args": [
                     "?\\xarRouter $router"
                 ],
-                "lines": "289-292"
+                "lines": "312-315"
             },
             "getdispatcher": {
                 "name": "getDispatcher",
                 "args": [],
-                "lines": "294-300"
+                "lines": "317-323"
             },
             "init": {
                 "name": "init",
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "303-321"
+                "lines": "329-347"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "324-333"
+                "lines": "350-366"
             },
             "setconfig": {
                 "name": "setConfig",
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "336-344"
+                "lines": "369-377"
             },
             "withxmlurls": {
                 "name": "withXMLURLs",
                 "args": [
                     "?bool $setXMLURLs = null"
                 ],
-                "lines": "346-352"
+                "lines": "379-385"
             },
             "dispatch": {
                 "name": "dispatch",
@@ -2412,14 +2447,14 @@
                     "\\xarRequest $request",
                     "$context = null"
                 ],
-                "lines": "354-370"
+                "lines": "387-405"
             },
             "normalizerequest": {
                 "name": "normalizeRequest",
                 "args": [
                     "?\\xarRequest $request = null"
                 ],
-                "lines": "372-383"
+                "lines": "407-418"
             },
             "setcallback": {
                 "name": "setCallback",
@@ -2427,45 +2462,45 @@
                     "string $name",
                     "?callable $callback"
                 ],
-                "lines": "385-391"
+                "lines": "420-426"
             },
             "getcallback": {
                 "name": "getCallback",
                 "args": [
                     "string $name"
                 ],
-                "lines": "393-399"
+                "lines": "428-434"
             },
             "setrequest": {
                 "name": "setRequest",
                 "args": [
                     "$url = null"
                 ],
-                "lines": "401-404"
+                "lines": "436-439"
             },
             "setresponse": {
                 "name": "setResponse",
                 "args": [
                     "?\\xarResponse $response = null"
                 ],
-                "lines": "406-409"
+                "lines": "441-444"
             },
             "getresponse": {
                 "name": "getResponse",
                 "args": [],
-                "lines": "411-417"
+                "lines": "446-452"
             },
             "setbaseurl": {
                 "name": "setBaseURL",
                 "args": [
                     "?string $baseurl"
                 ],
-                "lines": "419-451"
+                "lines": "454-486"
             },
             "getpagetime": {
                 "name": "getPageTime",
                 "args": [],
-                "lines": "453-456"
+                "lines": "488-491"
             },
             "getcurrenturl": {
                 "name": "getCurrentURL",
@@ -2474,50 +2509,50 @@
                     "?bool $generateXMLURL = null",
                     "?string $target = null"
                 ],
-                "lines": "466-483"
+                "lines": "501-518"
             },
             "getbaseurl": {
                 "name": "getBaseURL",
                 "args": [],
-                "lines": "488-501"
+                "lines": "523-536"
             },
             "getbaseuri": {
                 "name": "getBaseURI",
                 "args": [],
-                "lines": "506-509"
+                "lines": "541-544"
             },
             "getentrypoint": {
                 "name": "getEntryPoint",
                 "args": [],
-                "lines": "514-517"
+                "lines": "549-552"
             },
             "setentrypoint": {
                 "name": "setEntryPoint",
                 "args": [
                     "string $entryPoint"
                 ],
-                "lines": "519-522"
+                "lines": "554-557"
             },
             "getservervar": {
                 "name": "getServerVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "529-532"
+                "lines": "564-567"
             },
             "getsystemvar": {
                 "name": "getSystemVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "539-543"
+                "lines": "574-578"
             },
             "getrequest": {
                 "name": "getRequest",
                 "args": [
                     "$url = null"
                 ],
-                "lines": "550-553"
+                "lines": "585-588"
             },
             "getrequestvar": {
                 "name": "getRequestVar",
@@ -2525,29 +2560,29 @@
                     "string $varName",
                     "?string $allowOnlyMethod = null"
                 ],
-                "lines": "560-563"
+                "lines": "595-598"
             },
             "getrequestmethod": {
                 "name": "getRequestMethod",
                 "args": [],
-                "lines": "570-573"
+                "lines": "605-608"
             },
             "parsequery": {
                 "name": "parseQuery",
                 "args": [
                     "?string $url = null"
                 ],
-                "lines": "578-600"
+                "lines": "613-635"
             },
             "islocalreferer": {
                 "name": "isLocalReferer",
                 "args": [],
-                "lines": "607-610"
+                "lines": "642-645"
             },
             "issamereferer": {
                 "name": "isSameReferer",
                 "args": [],
-                "lines": "617-620"
+                "lines": "652-655"
             },
             "redirect": {
                 "name": "redirect",
@@ -2555,7 +2590,7 @@
                     "string $url",
                     "?int $httpResponse = null"
                 ],
-                "lines": "626-682"
+                "lines": "661-717"
             },
             "forbidden": {
                 "name": "forbidden",
@@ -2563,7 +2598,7 @@
                     "string $msg = ''",
                     "?string $template = null"
                 ],
-                "lines": "688-696"
+                "lines": "723-731"
             },
             "notfound": {
                 "name": "notFound",
@@ -2571,14 +2606,14 @@
                     "string $msg = ''",
                     "?string $template = null"
                 ],
-                "lines": "702-710"
+                "lines": "737-745"
             },
             "badrequest": {
                 "name": "badRequest",
                 "args": [
                     "?string $layout = null"
                 ],
-                "lines": "716-733"
+                "lines": "751-768"
             },
             "url": {
                 "name": "URL",
@@ -2592,12 +2627,12 @@
                     "$entrypoint = []",
                     "?string $route = null"
                 ],
-                "lines": "739-825"
+                "lines": "774-860"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "140-826",
+        "lines": "142-861",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -2835,13 +2870,20 @@
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "98-102",
+                "lines": "99-103",
                 "uses": "xarDatabase::init()"
+            },
+            "connect": {
+                "name": "connect",
+                "args": [
+                    "array $config = []"
+                ],
+                "lines": "105-108"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "109-112",
+                "lines": "115-118",
                 "uses": "xarDatabase::getConfig()"
             },
             "checkdbconnection": {
@@ -2850,96 +2892,96 @@
                     "$dbConnIndex = 0",
                     "array $dbConnArgs = []"
                 ],
-                "lines": "117-120"
+                "lines": "123-126"
             },
             "isindexexternal": {
                 "name": "isIndexExternal",
                 "args": [
                     "$index"
                 ],
-                "lines": "122-125"
+                "lines": "128-131"
             },
             "setmiddleware": {
                 "name": "setMiddleware",
                 "args": [
                     "string $middlewareName"
                 ],
-                "lines": "127-130"
+                "lines": "133-136"
             },
             "getconn": {
                 "name": "getConn",
                 "args": [
                     "int|string $index = 0"
                 ],
-                "lines": "135-139"
+                "lines": "141-145"
             },
             "getfetchassoc": {
                 "name": "getFetchAssoc",
                 "args": [],
-                "lines": "144-147"
+                "lines": "150-153"
             },
             "getfetchnum": {
                 "name": "getFetchNum",
                 "args": [],
-                "lines": "152-155"
+                "lines": "158-161"
             },
             "getname": {
                 "name": "getName",
                 "args": [],
-                "lines": "160-163"
+                "lines": "166-169"
             },
             "getprefix": {
                 "name": "getPrefix",
                 "args": [],
-                "lines": "168-171"
+                "lines": "174-177"
             },
             "setprefix": {
                 "name": "setPrefix",
                 "args": [
                     "string $prefix"
                 ],
-                "lines": "173-176"
+                "lines": "179-182"
             },
             "gethost": {
                 "name": "getHost",
                 "args": [],
-                "lines": "178-181"
+                "lines": "184-187"
             },
             "gettype": {
                 "name": "getType",
                 "args": [],
-                "lines": "186-189"
+                "lines": "192-195"
             },
             "gettables": {
                 "name": "getTables",
                 "args": [],
-                "lines": "195-198"
+                "lines": "201-204"
             },
             "importtables": {
                 "name": "importTables",
                 "args": [
                     "array $tables = []"
                 ],
-                "lines": "204-207"
+                "lines": "210-213"
             },
             "hasconn": {
                 "name": "hasConn",
                 "args": [
                     "int|string $index = 0"
                 ],
-                "lines": "212-216"
+                "lines": "218-222"
             },
             "newconn": {
                 "name": "newConn",
                 "args": [
                     "?array $args = null"
                 ],
-                "lines": "222-226"
+                "lines": "228-232"
             },
             "getconnindex": {
                 "name": "getConnIndex",
                 "args": [],
-                "lines": "231-235"
+                "lines": "237-241"
             },
             "getconnection": {
                 "name": "getConnection",
@@ -2947,34 +2989,34 @@
                     "array $dsn",
                     "$flags"
                 ],
-                "lines": "241-244"
+                "lines": "247-250"
             },
             "removeconn": {
                 "name": "removeConn",
                 "args": [
                     "$index = null"
                 ],
-                "lines": "246-249"
+                "lines": "252-255"
             },
             "gettypemap": {
                 "name": "getTypeMap",
                 "args": [],
-                "lines": "255-258"
+                "lines": "261-264"
             },
             "getdrivers": {
                 "name": "getDrivers",
                 "args": [],
-                "lines": "263-266"
+                "lines": "269-272"
             },
             "withpdo": {
                 "name": "withPDO",
                 "args": [],
-                "lines": "268-271"
+                "lines": "274-277"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "88-272",
+        "lines": "88-278",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -2990,7 +3032,7 @@
                     "array $args = []",
                     "?string $objectName = null"
                 ],
-                "lines": "139-145"
+                "lines": "142-148"
             },
             "template": {
                 "name": "template",
@@ -2998,7 +3040,7 @@
                     "string $tplType",
                     "array $tplData = []"
                 ],
-                "lines": "155-173",
+                "lines": "158-176",
                 "uses": "ar::tpl()->object()"
             },
             "guimethod": {
@@ -3008,21 +3050,21 @@
                     "string $methodName = 'view'",
                     "array $args = []"
                 ],
-                "lines": "179-182"
+                "lines": "182-207"
             },
             "getobject": {
                 "name": "getObject",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "188-191"
+                "lines": "213-216"
             },
             "getobjectlist": {
                 "name": "getObjectList",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "197-200"
+                "lines": "222-225"
             },
             "getobjectloader": {
                 "name": "getObjectLoader",
@@ -3030,68 +3072,90 @@
                     "string $objectName",
                     "array $fieldlist = ['id', 'name']"
                 ],
-                "lines": "206-209"
+                "lines": "231-234"
             },
             "getobjectinfo": {
                 "name": "getObjectInfo",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "216-219"
+                "lines": "241-244"
             },
             "getobjectinterface": {
                 "name": "getObjectInterface",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "226-229"
+                "lines": "251-254"
             },
             "getobjects": {
                 "name": "getObjects",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "236-239"
+                "lines": "261-264"
             },
             "createobject": {
                 "name": "createObject",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "246-249"
+                "lines": "271-274"
             },
             "updateobject": {
                 "name": "updateObject",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "256-259"
+                "lines": "281-284"
             },
             "deleteobject": {
                 "name": "deleteObject",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "266-269"
+                "lines": "291-294"
             },
             "getobjectid": {
                 "name": "getObjectID",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "276-279"
+                "lines": "301-304"
             },
             "getobjectdescriptor": {
                 "name": "getObjectDescriptor",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "285-288"
+                "lines": "310-313"
+            },
+            "export": {
+                "name": "export",
+                "args": [
+                    "$objectid",
+                    "$itemid = null",
+                    "$format = 'xml'",
+                    "$tofile = false"
+                ],
+                "lines": "315-318"
+            },
+            "import": {
+                "name": "import",
+                "args": [
+                    "$file = null",
+                    "$content = null",
+                    "$format = 'xml'",
+                    "$prefix = null",
+                    "$overwrite = false",
+                    "$keepitemid = false"
+                ],
+                "lines": "320-323"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "130-289",
+        "lines": "133-324",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -3103,21 +3167,21 @@
             "getpropertytypes": {
                 "name": "getPropertyTypes",
                 "args": [],
-                "lines": "68-71"
+                "lines": "71-74"
             },
             "getproperties": {
                 "name": "getProperties",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "78-81"
+                "lines": "81-84"
             },
             "getproperty": {
                 "name": "getProperty",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "87-90"
+                "lines": "90-99"
             },
             "importpropertytypes": {
                 "name": "importPropertyTypes",
@@ -3125,14 +3189,36 @@
                     "bool $flush = true",
                     "array $dirs = []"
                 ],
-                "lines": "98-101"
+                "lines": "107-110"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "60-102",
+        "lines": "60-111",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\eventstrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/events.php",
+        "name": "Xaraya\\Services\\EventsTrait",
+        "methods": [],
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "53-56",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\hookedtrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/hooked.php",
+        "name": "Xaraya\\Services\\HookedTrait",
+        "methods": [],
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "48-51",
+        "traits": [
+            "Xaraya\\Services\\EventsTrait"
         ]
     },
     "xaraya\\services\\loggertrait": {
@@ -3282,34 +3368,34 @@
             "gethookshelper": {
                 "name": "getHooksHelper",
                 "args": [],
-                "lines": "153-157"
+                "lines": "156-160"
             },
             "getaliashelper": {
                 "name": "getAliasHelper",
                 "args": [],
-                "lines": "159-163"
+                "lines": "162-166"
             },
             "resethelpers": {
                 "name": "resetHelpers",
                 "args": [],
-                "lines": "165-174"
+                "lines": "168-177"
             },
             "init": {
                 "name": "init",
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "180-205"
+                "lines": "183-208"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "211-219"
+                "lines": "214-222"
             },
             "isloaded": {
                 "name": "isLoaded",
                 "args": [],
-                "lines": "221-224"
+                "lines": "224-227"
             },
             "getvar": {
                 "name": "getVar",
@@ -3317,7 +3403,7 @@
                     "string $varName",
                     "$default = null"
                 ],
-                "lines": "229-233"
+                "lines": "232-236"
             },
             "setvar": {
                 "name": "setVar",
@@ -3325,33 +3411,33 @@
                     "string $varName",
                     "$value"
                 ],
-                "lines": "238-242"
+                "lines": "241-245"
             },
             "delvar": {
                 "name": "delVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "247-251"
+                "lines": "250-254"
             },
             "flushvars": {
                 "name": "flushVars",
                 "args": [],
-                "lines": "256-260"
+                "lines": "259-263"
             },
             "cachevars": {
                 "name": "cacheVars",
                 "args": [
                     "?string $source = null"
                 ],
-                "lines": "265-269"
+                "lines": "268-272"
             },
             "getvarid": {
                 "name": "getVarID",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "274-278"
+                "lines": "277-281"
             },
             "getuservar": {
                 "name": "getUserVar",
@@ -3359,7 +3445,7 @@
                     "string $varName",
                     "?int $userId = null"
                 ],
-                "lines": "280-284"
+                "lines": "283-287"
             },
             "setuservar": {
                 "name": "setUserVar",
@@ -3368,7 +3454,7 @@
                     "$value",
                     "?int $userId = null"
                 ],
-                "lines": "286-290"
+                "lines": "289-293"
             },
             "deluservar": {
                 "name": "delUserVar",
@@ -3376,7 +3462,7 @@
                     "string $varName",
                     "?int $userId = null"
                 ],
-                "lines": "292-296"
+                "lines": "295-299"
             },
             "getitemvar": {
                 "name": "getItemVar",
@@ -3384,7 +3470,7 @@
                     "string $varName",
                     "$itemid = null"
                 ],
-                "lines": "298-302"
+                "lines": "301-305"
             },
             "setitemvar": {
                 "name": "setItemVar",
@@ -3393,7 +3479,7 @@
                     "$value",
                     "$itemid = null"
                 ],
-                "lines": "304-308"
+                "lines": "307-311"
             },
             "delitemvar": {
                 "name": "delItemVar",
@@ -3401,12 +3487,12 @@
                     "string $varName",
                     "$itemid = null"
                 ],
-                "lines": "310-314"
+                "lines": "313-317"
             },
             "disableoverview": {
                 "name": "disableOverview",
                 "args": [],
-                "lines": "319-322"
+                "lines": "322-325"
             },
             "geturl": {
                 "name": "getURL",
@@ -3416,7 +3502,7 @@
                     "array $args = []",
                     "?string $modName = null"
                 ],
-                "lines": "328-333"
+                "lines": "331-336"
             },
             "template": {
                 "name": "template",
@@ -3425,7 +3511,7 @@
                     "array $tplData = []",
                     "?string $templateName = null"
                 ],
-                "lines": "343-371",
+                "lines": "346-374",
                 "uses": "ar::tpl()->module()"
             },
             "prepare": {
@@ -3433,49 +3519,49 @@
                 "args": [
                     "array $tplData = []"
                 ],
-                "lines": "378-386"
+                "lines": "381-389"
             },
             "getname": {
                 "name": "getName",
                 "args": [
                     "?int $regID = null"
                 ],
-                "lines": "392-395"
+                "lines": "395-398"
             },
             "getid": {
                 "name": "getID",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "400-404"
+                "lines": "403-407"
             },
             "getregid": {
                 "name": "getRegID",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "409-413"
+                "lines": "412-416"
             },
             "getdisplayname": {
                 "name": "getDisplayName",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "418-422"
+                "lines": "421-425"
             },
             "getdisplaydescription": {
                 "name": "getDisplayDescription",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "427-431"
+                "lines": "430-434"
             },
             "getfileinfo": {
                 "name": "getFileInfo",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "437-441"
+                "lines": "440-444"
             },
             "parsefileinfo": {
                 "name": "parseFileInfo",
@@ -3483,47 +3569,47 @@
                     "$version",
                     "$name = ''"
                 ],
-                "lines": "446-449"
+                "lines": "449-452"
             },
             "getbaseinfo": {
                 "name": "getBaseInfo",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "455-459"
+                "lines": "458-462"
             },
             "getinfo": {
                 "name": "getInfo",
                 "args": [
                     "int $modRegId"
                 ],
-                "lines": "465-468"
+                "lines": "468-471"
             },
             "getnocache": {
                 "name": "getNoCache",
                 "args": [],
-                "lines": "473-476"
+                "lines": "476-479"
             },
             "setnocache": {
                 "name": "setNoCache",
                 "args": [
                     "bool $noCache"
                 ],
-                "lines": "481-484"
+                "lines": "484-487"
             },
             "gettables": {
                 "name": "getTables",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "491-495"
+                "lines": "494-498"
             },
             "isavailable": {
                 "name": "isAvailable",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "500-504"
+                "lines": "503-507"
             },
             "apifunc": {
                 "name": "apiFunc",
@@ -3533,7 +3619,7 @@
                     "string $funcName = 'main'",
                     "array $args = []"
                 ],
-                "lines": "509-514"
+                "lines": "512-517"
             },
             "apiload": {
                 "name": "apiLoad",
@@ -3542,7 +3628,7 @@
                     "?string $modType = null",
                     "int $flags = \\ixarMod::LOAD_ANYSTATE"
                 ],
-                "lines": "516-521"
+                "lines": "519-524"
             },
             "guifunc": {
                 "name": "guiFunc",
@@ -3552,7 +3638,7 @@
                     "string $funcName = 'main'",
                     "array $args = []"
                 ],
-                "lines": "526-531"
+                "lines": "529-534"
             },
             "load": {
                 "name": "load",
@@ -3561,7 +3647,7 @@
                     "?string $modType = null",
                     "int $flags = \\ixarMod::LOAD_ONLYACTIVE"
                 ],
-                "lines": "533-538"
+                "lines": "536-541"
             },
             "loaddbinfo": {
                 "name": "loadDbInfo",
@@ -3569,21 +3655,21 @@
                     "?string $modName = null",
                     "?string $modDir = null"
                 ],
-                "lines": "546-550"
+                "lines": "549-553"
             },
             "userapi": {
                 "name": "userapi",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "552-556"
+                "lines": "555-559"
             },
             "usergui": {
                 "name": "usergui",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "558-562"
+                "lines": "561-565"
             },
             "checkmodulefunction": {
                 "name": "checkModuleFunction",
@@ -3593,14 +3679,14 @@
                     "string $func = 'getitemtypes'",
                     "string $defaultmodule = 'dynamicdata'"
                 ],
-                "lines": "573-576"
+                "lines": "576-579"
             },
             "getmodule": {
                 "name": "getModule",
                 "args": [
                     "?string $modName = null"
                 ],
-                "lines": "583-587"
+                "lines": "586-590"
             },
             "getmoduleclass": {
                 "name": "getModuleClass",
@@ -3608,7 +3694,7 @@
                     "?string $modName = null",
                     "?string $modType = null"
                 ],
-                "lines": "595-600"
+                "lines": "598-603"
             },
             "getmoduleclassmethod": {
                 "name": "getModuleClassMethod",
@@ -3618,7 +3704,7 @@
                     "string $funcName = 'main'",
                     "string $callType = 'api'"
                 ],
-                "lines": "610-615"
+                "lines": "614-619"
             },
             "apimethod": {
                 "name": "apiMethod",
@@ -3628,7 +3714,7 @@
                     "string $funcName = 'main'",
                     "array $args = []"
                 ],
-                "lines": "626-635"
+                "lines": "630-639"
             },
             "guimethod": {
                 "name": "guiMethod",
@@ -3638,14 +3724,14 @@
                     "string $funcName = 'main'",
                     "array $args = []"
                 ],
-                "lines": "646-663"
+                "lines": "650-667"
             },
             "resolvealias": {
                 "name": "resolveAlias",
                 "args": [
                     "string $name"
                 ],
-                "lines": "670-674"
+                "lines": "674-678"
             },
             "definealias": {
                 "name": "defineAlias",
@@ -3653,7 +3739,7 @@
                     "string $alias",
                     "string $modName"
                 ],
-                "lines": "676-679"
+                "lines": "680-683"
             },
             "setalias": {
                 "name": "setAlias",
@@ -3661,7 +3747,7 @@
                     "string $alias",
                     "string $modName"
                 ],
-                "lines": "684-687"
+                "lines": "688-691"
             },
             "removealias": {
                 "name": "removeAlias",
@@ -3669,7 +3755,7 @@
                     "string $alias",
                     "string $modName"
                 ],
-                "lines": "689-692"
+                "lines": "693-696"
             },
             "ishooked": {
                 "name": "isHooked",
@@ -3678,7 +3764,7 @@
                     "?string $callerModName = null",
                     "?int $callerItemType = null"
                 ],
-                "lines": "697-702"
+                "lines": "701-708"
             },
             "callhooks": {
                 "name": "callHooks",
@@ -3690,7 +3776,7 @@
                     "?string $callerModName = null",
                     "?int $callerItemType = null"
                 ],
-                "lines": "709-722"
+                "lines": "714-728"
             },
             "notifyhooks": {
                 "name": "notifyHooks",
@@ -3698,7 +3784,7 @@
                     "string $event",
                     "array $info = []"
                 ],
-                "lines": "730-736"
+                "lines": "736-744"
             },
             "checkaccess": {
                 "name": "checkAccess",
@@ -3707,12 +3793,12 @@
                     "string $action = ''",
                     "?int $roleid = null"
                 ],
-                "lines": "738-770"
+                "lines": "746-778"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "108-771",
+        "lines": "108-779",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -3726,75 +3812,75 @@
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "188-237"
+                "lines": "189-238"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "243-268"
+                "lines": "244-269"
             },
             "isloaded": {
                 "name": "isLoaded",
                 "args": [],
-                "lines": "270-273"
+                "lines": "271-274"
             },
             "getsitelocale": {
                 "name": "getSiteLocale",
                 "args": [],
-                "lines": "279-282"
+                "lines": "280-283"
             },
             "listsitelocales": {
                 "name": "listSiteLocales",
                 "args": [],
-                "lines": "288-296"
+                "lines": "289-297"
             },
             "getcurrentlocale": {
                 "name": "getCurrentLocale",
                 "args": [],
-                "lines": "301-304"
+                "lines": "302-305"
             },
             "setcurrentlocale": {
                 "name": "setCurrentLocale",
                 "args": [
                     "string $locale"
                 ],
-                "lines": "309-391"
+                "lines": "310-392"
             },
             "getmode": {
                 "name": "getMode",
                 "args": [],
-                "lines": "396-399"
+                "lines": "397-400"
             },
             "setmode": {
                 "name": "setMode",
                 "args": [
                     "$mode"
                 ],
-                "lines": "401-404"
+                "lines": "402-405"
             },
             "getbackendname": {
                 "name": "getBackendName",
                 "args": [],
-                "lines": "406-409"
+                "lines": "407-410"
             },
             "getcharsetfromlocale": {
                 "name": "getCharsetFromLocale",
                 "args": [
                     "string $locale"
                 ],
-                "lines": "414-417"
+                "lines": "415-418"
             },
             "loadlocale": {
                 "name": "loadLocale",
                 "args": [
                     "?string $locale = null"
                 ],
-                "lines": "424-428"
+                "lines": "425-429"
             },
             "getformatter": {
                 "name": "getFormatter",
                 "args": [],
-                "lines": "430-436"
+                "lines": "431-437"
             },
             "setformatter": {
                 "name": "setFormatter",
@@ -3802,7 +3888,7 @@
                     "?string $locale = null",
                     "?string $timezone = null"
                 ],
-                "lines": "438-454"
+                "lines": "439-455"
             },
             "formatdate": {
                 "name": "formatDate",
@@ -3811,7 +3897,7 @@
                     "$timestamp = null",
                     "bool $addoffset = true"
                 ],
-                "lines": "463-466"
+                "lines": "464-467"
             },
             "getformatteddate": {
                 "name": "getFormattedDate",
@@ -3820,7 +3906,7 @@
                     "$timestamp = null",
                     "bool $addoffset = true"
                 ],
-                "lines": "475-478"
+                "lines": "476-479"
             },
             "getformattedtime": {
                 "name": "getFormattedTime",
@@ -3829,28 +3915,28 @@
                     "$timestamp = null",
                     "bool $addoffset = true"
                 ],
-                "lines": "487-490"
+                "lines": "488-491"
             },
             "localegetinfo": {
                 "name": "localeGetInfo",
                 "args": [
                     "$locale"
                 ],
-                "lines": "499-502"
+                "lines": "500-503"
             },
             "localegetstring": {
                 "name": "localeGetString",
                 "args": [
                     "$localeInfo"
                 ],
-                "lines": "512-515"
+                "lines": "513-516"
             },
             "localegetlist": {
                 "name": "localeGetList",
                 "args": [
                     "$filter = []"
                 ],
-                "lines": "525-529"
+                "lines": "526-530"
             },
             "usertime": {
                 "name": "userTime",
@@ -3858,14 +3944,14 @@
                     "$time = null",
                     "$flag = 1"
                 ],
-                "lines": "535-538"
+                "lines": "536-539"
             },
             "useroffset": {
                 "name": "userOffset",
                 "args": [
                     "$timestamp = null"
                 ],
-                "lines": "540-543"
+                "lines": "541-544"
             },
             "translate": {
                 "name": "translate",
@@ -3873,7 +3959,7 @@
                     "$rawstring",
                     "...$args"
                 ],
-                "lines": "550-588"
+                "lines": "551-589"
             },
             "translatebykey": {
                 "name": "translateByKey",
@@ -3881,7 +3967,7 @@
                     "$key",
                     "...$args"
                 ],
-                "lines": "590-615"
+                "lines": "591-616"
             },
             "getslug": {
                 "name": "getSlug",
@@ -3890,14 +3976,14 @@
                     "string $separator = '_'",
                     "?string $locale = null"
                 ],
-                "lines": "621-625"
+                "lines": "622-626"
             },
             "loadtranslations": {
                 "name": "loadTranslations",
                 "args": [
                     "string $path"
                 ],
-                "lines": "632-672"
+                "lines": "633-677"
             },
             "loadmoduletranslations": {
                 "name": "loadModuleTranslations",
@@ -3906,7 +3992,7 @@
                     "string $modType",
                     "string $funcName"
                 ],
-                "lines": "681-687"
+                "lines": "686-692"
             },
             "loadobjecttranslations": {
                 "name": "loadObjectTranslations",
@@ -3914,7 +4000,7 @@
                     "string $objectName",
                     "string $propertyName"
                 ],
-                "lines": "695-698"
+                "lines": "700-703"
             },
             "_loadtranslations": {
                 "name": "_loadTranslations",
@@ -3924,7 +4010,7 @@
                     "$contextType",
                     "$contextName"
                 ],
-                "lines": "706-790"
+                "lines": "711-795"
             },
             "convertfrominput": {
                 "name": "convertFromInput",
@@ -3932,7 +4018,7 @@
                     "$var",
                     "$method"
                 ],
-                "lines": "795-813"
+                "lines": "800-818"
             },
             "convertfromcharset": {
                 "name": "convertFromCharset",
@@ -3940,7 +4026,7 @@
                     "$var",
                     "$charset"
                 ],
-                "lines": "818-828"
+                "lines": "823-833"
             },
             "bindvariables": {
                 "name": "bindVariables",
@@ -3948,47 +4034,47 @@
                     "$string",
                     "$args"
                 ],
-                "lines": "830-840"
+                "lines": "835-845"
             },
             "getlocalealternatives": {
                 "name": "getLocaleAlternatives",
                 "args": [
                     "$locale"
                 ],
-                "lines": "845-848"
+                "lines": "850-853"
             },
             "parselocalestring": {
                 "name": "parseLocaleString",
                 "args": [
                     "$locale"
                 ],
-                "lines": "853-856"
+                "lines": "858-861"
             },
             "getsinglebytecharset": {
                 "name": "getSingleByteCharset",
                 "args": [
                     "$langISO2Code"
                 ],
-                "lines": "861-864"
+                "lines": "866-869"
             },
             "mkdirr": {
                 "name": "mkdirr",
                 "args": [
                     "$path"
                 ],
-                "lines": "869-872"
+                "lines": "874-877"
             },
             "iswritable": {
                 "name": "iswritable",
                 "args": [
                     "$directory = null"
                 ],
-                "lines": "877-880"
+                "lines": "882-885"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "165-881",
+        "lines": "166-886",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -4238,82 +4324,82 @@
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "88-106"
+                "lines": "91-109"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "112-120"
+                "lines": "115-128"
             },
             "setconfig": {
                 "name": "setConfig",
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "123-129"
+                "lines": "131-137"
             },
             "isloaded": {
                 "name": "isLoaded",
                 "args": [],
-                "lines": "131-134"
+                "lines": "139-142"
             },
             "getinstance": {
                 "name": "getInstance",
                 "args": [],
-                "lines": "139-151"
+                "lines": "147-159"
             },
             "setinstance": {
                 "name": "setInstance",
                 "args": [
                     "\\Xaraya\\Requests\\RequestInterface $instance"
                 ],
-                "lines": "156-160"
+                "lines": "164-168"
             },
             "newinstance": {
                 "name": "newInstance",
                 "args": [],
-                "lines": "165-169"
+                "lines": "173-177"
             },
             "getmodule": {
                 "name": "getModule",
                 "args": [],
-                "lines": "174-177"
+                "lines": "182-185"
             },
             "gettype": {
                 "name": "getType",
                 "args": [],
-                "lines": "182-185"
+                "lines": "190-193"
             },
             "getfunction": {
                 "name": "getFunction",
                 "args": [],
-                "lines": "190-193"
+                "lines": "198-201"
             },
             "geturl": {
                 "name": "getURL",
                 "args": [
                     "array $params = []"
                 ],
-                "lines": "199-212"
+                "lines": "207-220"
             },
             "getrequeststring": {
                 "name": "getRequestString",
                 "args": [
                     "array $params = []"
                 ],
-                "lines": "214-287"
+                "lines": "222-295"
             },
             "getbaseuri": {
                 "name": "getBaseURI",
                 "args": [],
-                "lines": "292-337"
+                "lines": "300-345"
             },
             "getservervar": {
                 "name": "getServerVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "343-346"
+                "lines": "351-354"
             },
             "setservervar": {
                 "name": "setServerVar",
@@ -4321,7 +4407,7 @@
                     "string $varName",
                     "$value"
                 ],
-                "lines": "348-351"
+                "lines": "356-359"
             },
             "getvar": {
                 "name": "getVar",
@@ -4329,7 +4415,7 @@
                     "string $varName",
                     "?string $allowOnlyMethod = null"
                 ],
-                "lines": "357-418"
+                "lines": "365-426"
             },
             "setvar": {
                 "name": "setVar",
@@ -4337,53 +4423,53 @@
                     "string $varName",
                     "$value"
                 ],
-                "lines": "420-423"
+                "lines": "428-431"
             },
             "stripvarslashes": {
                 "name": "stripVarSlashes",
                 "args": [
                     "$value"
                 ],
-                "lines": "428-432"
+                "lines": "436-440"
             },
             "gethost": {
                 "name": "getHost",
                 "args": [],
-                "lines": "434-448"
+                "lines": "442-456"
             },
             "getprotocol": {
                 "name": "getProtocol",
                 "args": [],
-                "lines": "450-466"
+                "lines": "458-474"
             },
             "getmethod": {
                 "name": "getMethod",
                 "args": [],
-                "lines": "471-474"
+                "lines": "479-482"
             },
             "islocalreferer": {
                 "name": "isLocalReferer",
                 "args": [],
-                "lines": "479-489"
+                "lines": "487-497"
             },
             "issamereferer": {
                 "name": "isSameReferer",
                 "args": [],
-                "lines": "494-502"
+                "lines": "502-510"
             },
             "getrequest": {
                 "name": "getRequest",
                 "args": [
                     "$url = null"
                 ],
-                "lines": "508-514"
+                "lines": "516-522"
             },
             "setrequest": {
                 "name": "setRequest",
                 "args": [
                     "$url = null"
                 ],
-                "lines": "516-519"
+                "lines": "524-527"
             },
             "getarrayvar": {
                 "name": "getArrayVar",
@@ -4391,7 +4477,7 @@
                     "$var",
                     "string $varName"
                 ],
-                "lines": "526-551"
+                "lines": "534-559"
             }
         },
         "const": {
@@ -4405,7 +4491,7 @@
             }
         },
         "namespace": "Xaraya\\Services\\",
-        "lines": "63-552",
+        "lines": "63-560",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -4611,62 +4697,67 @@
                 "args": [
                     "$className"
                 ],
-                "lines": "80-83"
+                "lines": "82-85"
             },
             "init": {
                 "name": "init",
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "89-118"
+                "lines": "91-112"
+            },
+            "start": {
+                "name": "start",
+                "args": [],
+                "lines": "117-136"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "124-138"
+                "lines": "142-156"
             },
             "isloaded": {
                 "name": "isLoaded",
                 "args": [],
-                "lines": "140-143"
+                "lines": "158-161"
             },
             "getinstance": {
                 "name": "getInstance",
                 "args": [],
-                "lines": "145-154"
+                "lines": "163-172"
             },
             "setinstance": {
                 "name": "setInstance",
                 "args": [
                     "\\Xaraya\\Sessions\\SessionInterface $instance"
                 ],
-                "lines": "156-160"
+                "lines": "174-178"
             },
             "newinstance": {
                 "name": "newInstance",
                 "args": [],
-                "lines": "162-166"
+                "lines": "180-184"
             },
             "getid": {
                 "name": "getId",
                 "args": [
                     "?string $id = null"
                 ],
-                "lines": "168-175"
+                "lines": "186-193"
             },
             "getdefaultvar": {
                 "name": "getDefaultVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "177-191"
+                "lines": "195-209"
             },
             "getvar": {
                 "name": "getVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "196-203"
+                "lines": "214-221"
             },
             "setvar": {
                 "name": "setVar",
@@ -4674,31 +4765,31 @@
                     "string $varName",
                     "$value"
                 ],
-                "lines": "208-225"
+                "lines": "226-243"
             },
             "delvar": {
                 "name": "delVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "230-237"
+                "lines": "248-255"
             },
             "getuserid": {
                 "name": "getUserId",
                 "args": [],
-                "lines": "242-246"
+                "lines": "260-264"
             },
             "getanonid": {
                 "name": "getAnonId",
                 "args": [],
-                "lines": "251-254"
+                "lines": "269-272"
             },
             "setanonid": {
                 "name": "setAnonId",
                 "args": [
                     "?int $anonId"
                 ],
-                "lines": "256-259"
+                "lines": "274-277"
             },
             "setuserinfo": {
                 "name": "setUserInfo",
@@ -4706,41 +4797,41 @@
                     "int $userId",
                     "int $rememberSession"
                 ],
-                "lines": "264-267"
+                "lines": "282-285"
             },
             "savetime": {
                 "name": "saveTime",
                 "args": [
                     "int $lastused = 0"
                 ],
-                "lines": "269-272"
+                "lines": "287-290"
             },
             "getsecuritylevel": {
                 "name": "getSecurityLevel",
                 "args": [],
-                "lines": "274-277"
+                "lines": "292-295"
             },
             "gettimeoutsetting": {
                 "name": "getTimeoutSetting",
                 "args": [],
-                "lines": "279-283"
+                "lines": "297-301"
             },
             "getduration": {
                 "name": "getDuration",
                 "args": [],
-                "lines": "285-288"
+                "lines": "303-306"
             },
             "clear": {
                 "name": "clear",
                 "args": [
                     "$spared = []"
                 ],
-                "lines": "290-293"
+                "lines": "308-311"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "58-294",
+        "lines": "59-312",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -4819,17 +4910,17 @@
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "142-186"
+                "lines": "140-184"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "192-202"
+                "lines": "190-211"
             },
             "isloaded": {
                 "name": "isLoaded",
                 "args": [],
-                "lines": "204-207"
+                "lines": "213-216"
             },
             "getvalue": {
                 "name": "getValue",
@@ -4837,7 +4928,7 @@
                     "string $varName",
                     "?string $default = ''"
                 ],
-                "lines": "212-215"
+                "lines": "221-224"
             },
             "setvalue": {
                 "name": "setValue",
@@ -4845,12 +4936,12 @@
                     "string $varName",
                     "?string $value"
                 ],
-                "lines": "220-223"
+                "lines": "229-232"
             },
             "gettwigtpl": {
                 "name": "getTwigTpl",
                 "args": [],
-                "lines": "225-231"
+                "lines": "234-240"
             },
             "module": {
                 "name": "module",
@@ -4861,7 +4952,7 @@
                     "array $tplData = []",
                     "?string $templateName = null"
                 ],
-                "lines": "242-289"
+                "lines": "251-298"
             },
             "block": {
                 "name": "block",
@@ -4873,7 +4964,7 @@
                     "?string $tplBase = null",
                     "?string $tplModule = null"
                 ],
-                "lines": "301-326"
+                "lines": "310-335"
             },
             "object": {
                 "name": "object",
@@ -4883,7 +4974,7 @@
                     "string $tplType",
                     "array $tplData = []"
                 ],
-                "lines": "336-371"
+                "lines": "345-380"
             },
             "property": {
                 "name": "property",
@@ -4894,12 +4985,12 @@
                     "array $tplData = []",
                     "?string $tplBase = null"
                 ],
-                "lines": "382-445"
+                "lines": "391-454"
             },
             "getpagetitle": {
                 "name": "getPageTitle",
                 "args": [],
-                "lines": "450-455"
+                "lines": "459-464"
             },
             "setpagetitle": {
                 "name": "setPageTitle",
@@ -4907,88 +4998,88 @@
                     "string $title",
                     "?string $modName = null"
                 ],
-                "lines": "463-505"
+                "lines": "472-514"
             },
             "getpagetemplatename": {
                 "name": "getPageTemplateName",
                 "args": [],
-                "lines": "510-515"
+                "lines": "519-524"
             },
             "setpagetemplatename": {
                 "name": "setPageTemplateName",
                 "args": [
                     "string $templateName"
                 ],
-                "lines": "522-536"
+                "lines": "531-545"
             },
             "setdoctype": {
                 "name": "setDoctype",
                 "args": [
                     "string $doctypeName"
                 ],
-                "lines": "542-553"
+                "lines": "551-562"
             },
             "getdoctype": {
                 "name": "getDoctype",
                 "args": [],
-                "lines": "558-565"
+                "lines": "567-574"
             },
             "setbasedir": {
                 "name": "setBaseDir",
                 "args": [
                     "string $themesDir"
                 ],
-                "lines": "573-591"
+                "lines": "582-600"
             },
             "getbasedir": {
                 "name": "getBaseDir",
                 "args": [],
-                "lines": "596-605"
+                "lines": "605-614"
             },
             "getthemedir": {
                 "name": "getThemeDir",
                 "args": [
                     "?string $theme = null"
                 ],
-                "lines": "610-619"
+                "lines": "619-628"
             },
             "setthemedir": {
                 "name": "setThemeDir",
                 "args": [
                     "string $themeDir"
                 ],
-                "lines": "624-643"
+                "lines": "633-652"
             },
             "getthemename": {
                 "name": "getThemeName",
                 "args": [],
-                "lines": "648-668"
+                "lines": "657-677"
             },
             "setthemename": {
                 "name": "setThemeName",
                 "args": [
                     "string $themeName"
                 ],
-                "lines": "673-687"
+                "lines": "682-696"
             },
             "setthemenameanddir": {
                 "name": "setThemeNameAndDir",
                 "args": [
                     "string $name"
                 ],
-                "lines": "694-703"
+                "lines": "703-712"
             },
             "getthemeurl": {
                 "name": "getThemeUrl",
                 "args": [
                     "?string $theme = null"
                 ],
-                "lines": "708-721"
+                "lines": "717-730"
             },
             "getcodeurl": {
                 "name": "getCodeUrl",
                 "args": [],
-                "lines": "726-739"
+                "lines": "735-748"
             },
             "getimage": {
                 "name": "getImage",
@@ -4997,7 +5088,7 @@
                     "?string $scope = null",
                     "?string $package = null"
                 ],
-                "lines": "748-865"
+                "lines": "757-874"
             },
             "getfile": {
                 "name": "getFile",
@@ -5006,7 +5097,7 @@
                     "?string $scope = null",
                     "?string $package = null"
                 ],
-                "lines": "874-963"
+                "lines": "883-972"
             },
             "string": {
                 "name": "string",
@@ -5014,7 +5105,7 @@
                     "string $templateCode",
                     "array $tplData"
                 ],
-                "lines": "973-988"
+                "lines": "982-997"
             },
             "file": {
                 "name": "file",
@@ -5022,14 +5113,14 @@
                     "string $fileName",
                     "array &$tplData"
                 ],
-                "lines": "996-999"
+                "lines": "1005-1008"
             },
             "compilestring": {
                 "name": "compileString",
                 "args": [
                     "string $templateSource"
                 ],
-                "lines": "1009-1013"
+                "lines": "1018-1022"
             },
             "getpager": {
                 "name": "getPager",
@@ -5042,7 +5133,7 @@
                     "string $template = 'default'",
                     "string $tplmodule = 'base'"
                 ],
-                "lines": "1027-1030",
+                "lines": "1036-1039",
                 "uses": "xarTplPager::getPager()"
             },
             "renderpage": {
@@ -5051,7 +5142,7 @@
                     "string $mainModuleOutput",
                     "?string $pageTemplate = null"
                 ],
-                "lines": "1037-1064"
+                "lines": "1046-1073"
             },
             "renderblockbox": {
                 "name": "renderBlockBox",
@@ -5059,7 +5150,7 @@
                     "array $blockInfo",
                     "?string $templateName = null"
                 ],
-                "lines": "1075-1101"
+                "lines": "1084-1110"
             },
             "includetemplate": {
                 "name": "includeTemplate",
@@ -5072,7 +5163,7 @@
                     "$tplName = null",
                     "$callerMod = null"
                 ],
-                "lines": "1115-1136"
+                "lines": "1124-1145"
             },
             "executefromfile": {
                 "name": "executeFromFile",
@@ -5081,7 +5172,7 @@
                     "array $tplData",
                     "string $tplType = 'module'"
                 ],
-                "lines": "1147-1194"
+                "lines": "1156-1203"
             },
             "outputtemplate": {
                 "name": "outputTemplate",
@@ -5089,17 +5180,17 @@
                     "string $sourceFileName",
                     "string $tplOutput"
                 ],
-                "lines": "1203-1234"
+                "lines": "1212-1243"
             },
             "outputphpcommentblockintemplates": {
                 "name": "outputPHPCommentBlockInTemplates",
                 "args": [],
-                "lines": "1240-1267"
+                "lines": "1249-1276"
             },
             "outputtemplatefilenames": {
                 "name": "outputTemplateFilenames",
                 "args": [],
-                "lines": "1275-1290"
+                "lines": "1284-1299"
             },
             "modifyheadercontent": {
                 "name": "modifyHeaderContent",
@@ -5107,7 +5198,7 @@
                     "string $sourceFileName",
                     "string $tplOutput"
                 ],
-                "lines": "1305-1338"
+                "lines": "1314-1347"
             },
             "exists": {
                 "name": "exists",
@@ -5118,7 +5209,7 @@
                     "?string $tplName = null",
                     "string $tplPart = ''"
                 ],
-                "lines": "1344-1347"
+                "lines": "1353-1356"
             },
             "getscopefilename": {
                 "name": "getScopeFileName",
@@ -5130,7 +5221,7 @@
                     "string $tplPart = ''",
                     "?string $callerMod = null"
                 ],
-                "lines": "1367-1502"
+                "lines": "1376-1511"
             }
         },
         "const": {
@@ -5140,7 +5231,87 @@
             }
         },
         "namespace": "Xaraya\\Services\\",
-        "lines": "118-1503",
+        "lines": "116-1512",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\themestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/themes.php",
+        "name": "Xaraya\\Services\\ThemesTrait",
+        "methods": {
+            "getinfohelper": {
+                "name": "getInfoHelper",
+                "args": [],
+                "lines": "88-92"
+            },
+            "getidfromname": {
+                "name": "getIDFromName",
+                "args": [
+                    "$themeName",
+                    "$id = 'regid'"
+                ],
+                "lines": "97-109"
+            },
+            "getregid": {
+                "name": "getRegID",
+                "args": [
+                    "$themeName"
+                ],
+                "lines": "114-117"
+            },
+            "getinfo": {
+                "name": "getInfo",
+                "args": [
+                    "$regId"
+                ],
+                "lines": "122-125"
+            },
+            "isavailable": {
+                "name": "isAvailable",
+                "args": [
+                    "$themeName"
+                ],
+                "lines": "130-133"
+            },
+            "getfileinfo": {
+                "name": "getFileInfo",
+                "args": [
+                    "$themeOsDir"
+                ],
+                "lines": "138-141"
+            },
+            "getbaseinfo": {
+                "name": "getBaseInfo",
+                "args": [
+                    "$themeName"
+                ],
+                "lines": "146-149"
+            },
+            "getnocache": {
+                "name": "getNoCache",
+                "args": [],
+                "lines": "151-154"
+            },
+            "setnocache": {
+                "name": "setNoCache",
+                "args": [
+                    "$noCache"
+                ],
+                "lines": "161-164"
+            },
+            "getvar": {
+                "name": "getVar",
+                "args": [
+                    "$themeName",
+                    "$varName"
+                ],
+                "lines": "173-182"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "82-183",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -5154,24 +5325,24 @@
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "76-105"
+                "lines": "87-116"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "111-116"
+                "lines": "122-127"
             },
             "isloaded": {
                 "name": "isLoaded",
                 "args": [],
-                "lines": "118-121"
+                "lines": "129-132"
             },
             "getvar": {
                 "name": "getVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "126-264"
+                "lines": "137-278"
             },
             "setvar": {
                 "name": "setVar",
@@ -5179,66 +5350,94 @@
                     "string $varName",
                     "$value"
                 ],
-                "lines": "269-328"
+                "lines": "283-342"
             },
             "getid": {
                 "name": "getId",
                 "args": [],
-                "lines": "333-338"
+                "lines": "347-352"
             },
             "getname": {
                 "name": "getName",
                 "args": [],
-                "lines": "340-343"
+                "lines": "354-357"
             },
             "getuser": {
                 "name": "getUser",
                 "args": [],
-                "lines": "345-348"
+                "lines": "359-362"
             },
             "getemail": {
                 "name": "getEmail",
                 "args": [],
-                "lines": "350-353"
+                "lines": "364-367"
             },
             "isloggedin": {
                 "name": "isLoggedIn",
                 "args": [],
-                "lines": "355-361"
+                "lines": "369-375"
             },
             "isdebugadmin": {
                 "name": "isDebugAdmin",
                 "args": [],
-                "lines": "363-368"
+                "lines": "377-382"
             },
             "issiteadmin": {
                 "name": "isSiteAdmin",
                 "args": [],
-                "lines": "370-375"
+                "lines": "384-389"
+            },
+            "hasparent": {
+                "name": "hasParent",
+                "args": [
+                    "string $parentName"
+                ],
+                "lines": "394-407"
+            },
+            "hasancestor": {
+                "name": "hasAncestor",
+                "args": [
+                    "int $ancestorId"
+                ],
+                "lines": "409-422"
+            },
+            "getrole": {
+                "name": "getRole",
+                "args": [
+                    "string $field = 'id'",
+                    "$value = null",
+                    "int $state = \\xarRoles::ROLES_STATE_ALL"
+                ],
+                "lines": "427-434"
+            },
+            "getgroups": {
+                "name": "getGroups",
+                "args": [],
+                "lines": "440-443"
             },
             "getlocale": {
                 "name": "getLocale",
                 "args": [],
-                "lines": "377-400"
+                "lines": "445-468"
             },
             "setlocale": {
                 "name": "setLocale",
                 "args": [
                     "string $locale"
                 ],
-                "lines": "402-414"
+                "lines": "470-482"
             },
             "getthemename": {
                 "name": "getThemeName",
                 "args": [],
-                "lines": "416-429"
+                "lines": "484-497"
             },
             "setthemename": {
                 "name": "setThemeName",
                 "args": [
                     "string $themeName"
                 ],
-                "lines": "431-437"
+                "lines": "499-505"
             },
             "login": {
                 "name": "logIn",
@@ -5247,12 +5446,12 @@
                     "string $password",
                     "int $rememberMe = 0"
                 ],
-                "lines": "439-543"
+                "lines": "507-611"
             },
             "logout": {
                 "name": "logOut",
                 "args": [],
-                "lines": "545-572"
+                "lines": "613-640"
             },
             "comparepasswords": {
                 "name": "comparePasswords",
@@ -5262,50 +5461,50 @@
                     "string $userName",
                     "string $cryptSalt = ''"
                 ],
-                "lines": "574-584"
+                "lines": "642-652"
             },
             "getauthmodules": {
                 "name": "getAuthModules",
                 "args": [],
-                "lines": "590-593"
+                "lines": "658-661"
             },
             "getauthmodule": {
                 "name": "getAuthModule",
                 "args": [
                     "int $userId"
                 ],
-                "lines": "595-638"
+                "lines": "663-706"
             },
             "isvardefined": {
                 "name": "isVarDefined",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "640-656"
+                "lines": "708-724"
             },
             "getcurrentid": {
                 "name": "getCurrentId",
                 "args": [],
-                "lines": "661-664"
+                "lines": "729-732"
             },
             "setcurrentid": {
                 "name": "setCurrentId",
                 "args": [
                     "int $userId"
                 ],
-                "lines": "671-674"
+                "lines": "739-742"
             },
             "specialize": {
                 "name": "specialize",
                 "args": [
                     "...$args"
                 ],
-                "lines": "681-688"
+                "lines": "749-756"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "63-689",
+        "lines": "70-757",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -5319,12 +5518,12 @@
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "127-145"
+                "lines": "128-146"
             },
             "isloaded": {
                 "name": "isLoaded",
                 "args": [],
-                "lines": "147-150"
+                "lines": "148-151"
             },
             "fetch": {
                 "name": "fetch",
@@ -5334,9 +5533,9 @@
                     "&$variable",
                     "$defaultValue = null",
                     "$flags = \\ixarVar::GET_OR_POST",
-                    "$prep = \\xarVarPrep::NOTHING"
+                    "$prep = \\ixarVarPrep::NOTHING"
                 ],
-                "lines": "199-267"
+                "lines": "200-268"
             },
             "get": {
                 "name": "get",
@@ -5346,7 +5545,7 @@
                     "$validation",
                     "$defaultValue = null"
                 ],
-                "lines": "284-288"
+                "lines": "285-289"
             },
             "check": {
                 "name": "check",
@@ -5356,7 +5555,7 @@
                     "$validation = 'isset'",
                     "$defaultValue = null"
                 ],
-                "lines": "305-321"
+                "lines": "306-322"
             },
             "find": {
                 "name": "find",
@@ -5366,7 +5565,7 @@
                     "$validation = 'isset'",
                     "$defaultValue = null"
                 ],
-                "lines": "339-343"
+                "lines": "340-344"
             },
             "update": {
                 "name": "update",
@@ -5376,7 +5575,7 @@
                     "$validation = 'isset'",
                     "$defaultValue = null"
                 ],
-                "lines": "360-376"
+                "lines": "361-377"
             },
             "validate": {
                 "name": "validate",
@@ -5386,7 +5585,7 @@
                     "$suppress = false",
                     "$name = ''"
                 ],
-                "lines": "389-392"
+                "lines": "390-393"
             },
             "getrequestvar": {
                 "name": "getRequestVar",
@@ -5394,21 +5593,32 @@
                     "string $name",
                     "?string $allowOnlyMethod = null"
                 ],
-                "lines": "400-403"
+                "lines": "401-404"
             },
             "batchfetch": {
                 "name": "batchFetch",
                 "args": [
                     "...$batch"
                 ],
-                "lines": "433-456"
+                "lines": "434-457"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "113-457",
+        "lines": "114-458",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\varpreptrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/varprep.php",
+        "name": "Xaraya\\Services\\VarPrepTrait",
+        "methods": [],
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "32-35",
+        "traits": [
+            "Xaraya\\Services\\WrapperTrait"
         ]
     },
     "xaraya\\services\\withservicesclass": {
@@ -5587,24 +5797,24 @@
             "events": {
                 "name": "events",
                 "args": [],
-                "lines": "529-532"
+                "lines": "536-539"
             },
             "hooked": {
                 "name": "hooked",
                 "args": [],
-                "lines": "534-537"
+                "lines": "548-551"
             },
             "theme": {
                 "name": "theme",
                 "args": [],
-                "lines": "539-542"
+                "lines": "561-564"
             },
             "module": {
                 "name": "module",
                 "args": [
                     "string $modName"
                 ],
-                "lines": "544-547"
+                "lines": "566-569"
             },
             "modclass": {
                 "name": "modclass",
@@ -5612,19 +5822,19 @@
                     "string $modName",
                     "string $modType"
                 ],
-                "lines": "549-552"
+                "lines": "571-574"
             },
             "exit": {
                 "name": "exit",
                 "args": [
                     "int|string $status = 0"
                 ],
-                "lines": "558-562"
+                "lines": "580-584"
             },
             "sys": {
                 "name": "sys",
                 "args": [],
-                "lines": "569-572"
+                "lines": "591-594"
             },
             "ml": {
                 "name": "ml",
@@ -5632,12 +5842,12 @@
                     "$rawstring",
                     "...$args"
                 ],
-                "lines": "580-583"
+                "lines": "602-605"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "42-584"
+        "lines": "42-606"
     },
     "xaraya\\services\\wrappertrait": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/wrapper.php",

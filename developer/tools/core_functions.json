@@ -268,7 +268,7 @@
             "...$args"
         ],
         "namespace": "",
-        "lines": "667-670",
+        "lines": "676-679",
         "docs": {},
         "class": "xarVar",
         "check": "PrepEmailDisplay",
@@ -284,7 +284,7 @@
             "...$args"
         ],
         "namespace": "",
-        "lines": "649-652",
+        "lines": "658-661",
         "docs": {},
         "class": "xarVar",
         "check": "PrepForDisplay",
@@ -300,7 +300,7 @@
             "...$args"
         ],
         "namespace": "",
-        "lines": "676-679",
+        "lines": "685-688",
         "docs": {},
         "class": "xarVar",
         "check": "PrepForOS",
@@ -316,7 +316,7 @@
             "...$args"
         ],
         "namespace": "",
-        "lines": "658-661",
+        "lines": "667-670",
         "docs": {},
         "class": "xarVar",
         "check": "PrepHTMLDisplay",
