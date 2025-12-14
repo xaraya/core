@@ -61,6 +61,8 @@ interface MethodClassInterface extends ParentServicesInterface
     public function usergui(): ?UserGuiInterface;
     public function adminapi(): ?AdminApiInterface;
     public function admingui(): ?AdminGuiInterface;
+    /** @param array<string, mixed> $tplData */
+    public function render(string $funcName, array $tplData = [], ?string $templateName = null): string;
     public function getModName(): string;
     public function setModName(string $modName): void;
     public function getItemType(): int;
@@ -168,6 +170,15 @@ trait MethodClassTrait
     public function admingui(): ?AdminGuiInterface
     {
         return $this->getParent()->admingui();
+    }
+
+    /**
+     * Render output with module template
+     * @param array<string, mixed> $tplData
+     */
+    public function render(string $funcName, array $tplData = [], ?string $templateName = null): string
+    {
+        return $this->getParent()->render($funcName, $tplData, $templateName);
     }
 
     /**

@@ -41,6 +41,8 @@ interface ModuleClassInterface extends ServicesInterface
     public function usergui(): ?UserGuiInterface;
     public function adminapi(): ?AdminApiInterface;
     public function admingui(): ?AdminGuiInterface;
+    /** @param array<string, mixed> $tplData */
+    public function render(string $funcName, array $tplData = [], ?string $templateName = null): string;
 }
 
 /**
@@ -330,6 +332,40 @@ trait ModuleClassTrait
         $component = $this->getModule()?->admingui();
         assert($component instanceof AdminGuiInterface);
         return $component;
+    }
+
+    /**
+     * Render output with module template
+     * @param array<string, mixed> $tplData
+     */
+    public function render(string $funcName, array $tplData = [], ?string $templateName = null): string
+    {
+        // Add standard template variables
+        $tplData['module'] ??= $this->getModName();
+        $tplData['itemtype'] ??= $this->getItemType();
+        // Pass along the context for xar::tpl()->module() if needed
+        $tplData['context'] ??= $this->getContext();
+
+        // See if we have a special template to apply
+        if (!isset($templateName) && isset($tplData['_bl_template'])) {
+            $templateName = (string) $tplData['_bl_template'];
+        }
+
+        $modName = $this->getModName();
+        // @todo Check if we're called from an api $modType and adapt to gui!?
+        $modType = $this->getModType();
+        if (str_ends_with($modType, 'api')) {
+            $modType = substr($modType, 0, -3);
+        }
+
+        // Create the output.
+        return $this->tpl()->module(
+            $modName,
+            $modType,
+            $funcName,
+            $tplData,
+            $templateName,
+        );
     }
 
     /**
