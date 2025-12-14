@@ -207,7 +207,7 @@ trait CoreServicesTrait
      * - notice($message, $var = [])
      * - info($message, $var = [])
      * - debug($message, $var = [])
-     * - log($message, $var = [])
+     * - log($level, $message, $var = [])
      * - message($message, $level = xarLog::LEVEL_DEBUG) - original xarLog::message() using $level param
      * - variable($message, $var, $level = xarLog::LEVEL_DEBUG) - original xarLog::variable() using $level param
      *

@@ -142,7 +142,7 @@ class PDOConnection extends PDO implements ConnectionInterface
         return $this->xarLog;
     }
 
-    public function setLog($xarLog)
+    public function setLogger($xarLog)
     {
         $this->xarLog = $xarLog;
     }

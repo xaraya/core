@@ -92,7 +92,7 @@ abstract class ConnectionCommon
         return $this->xarLog;
     }
 
-    public function setLog($xarLog)
+    public function setLogger($xarLog)
     {
         $this->xarLog = $xarLog;
     }

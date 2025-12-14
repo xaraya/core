@@ -129,7 +129,7 @@ interface ConnectionInterface
 {
     // from Xaraya modifications in ConnectionCommon
     public function log();
-    public function setLog($xarLog);
+    public function setLogger($xarLog);
 
     /**
      * Summary of Execute

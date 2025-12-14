@@ -192,7 +192,7 @@ class xarDB
         // If it is new it will be added to the connectionMap
         try {
             $conn = self::getConnection($dsn, $flags); // cached on dsn hash, so no worries
-            $conn->setLog($xar->log());
+            $conn->setLogger($xar->log());
         } catch (Exception $e) {
             throw $e;
         }
