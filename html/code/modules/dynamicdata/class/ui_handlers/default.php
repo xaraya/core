@@ -152,7 +152,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
      *     $args['method'] the ui method we are handling here
      *     $args['itemid'] item id of the object to call the method for, if the method needs it
      *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList()
-     * @return string|void output of $this->template() using 'ui_default'
+     * @return string|void output of $this->render() using 'ui_default'
      */
     public function run(array $args = [])
     {
@@ -228,7 +228,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
             'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
-        return $this->template(
+        return $this->render(
             'ui_default',
             $data
         );
@@ -291,7 +291,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
      * @param array<mixed> $tplData
      * @return string
      */
-    public function template(string $tplType, array $tplData = []): string
+    public function render(string $tplType, array $tplData = []): string
     {
         // Add standard template variables (context)
         $tplData['context'] ??= $this->getContext();

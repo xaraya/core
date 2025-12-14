@@ -38,7 +38,7 @@ class SearchHandler extends DefaultHandler
      *     $args['q'] optional query string for the search
      *     $args['field'] optional field selection for the search
      *     $args['match'] optional match type for the search
-     * @return string|void output of $this->template() using 'ui_search'
+     * @return string|void output of $this->render() using 'ui_search'
      */
     public function run(array $args = [])
     {
@@ -228,7 +228,7 @@ class SearchHandler extends DefaultHandler
             'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
-        return $this->template(
+        return $this->render(
             'ui_search',
             $data
         );
@@ -404,7 +404,7 @@ class SearchHandler extends DefaultHandler
             'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
-        return $this->template(
+        return $this->render(
             'ui_query',
             $data
         );

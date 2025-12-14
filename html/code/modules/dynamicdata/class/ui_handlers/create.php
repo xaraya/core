@@ -35,7 +35,7 @@ class CreateHandler extends DefaultHandler
      *     $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
      *     $args['confirm'] true if the user confirms
      *     $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string|bool|void output of $this->template() using 'ui_create'
+     * @return string|bool|void output of $this->render() using 'ui_create'
      */
     public function run(array $args = [])
     {
@@ -124,7 +124,7 @@ class CreateHandler extends DefaultHandler
             'return_url' => $args['return_url'],
         ]);
 
-        return $this->template(
+        return $this->render(
             'ui_create',
             $data
         );

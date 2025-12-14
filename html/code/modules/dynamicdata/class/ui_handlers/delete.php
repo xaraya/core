@@ -35,7 +35,7 @@ class DeleteHandler extends DefaultHandler
      *     $args['cancel'] true if the user cancels
      *     $args['confirm'] true if the user confirms
      *     $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string|bool|void output of $this->template() using 'ui_delete'
+     * @return string|bool|void output of $this->render() using 'ui_delete'
      */
     public function run(array $args = [])
     {
@@ -118,7 +118,7 @@ class DeleteHandler extends DefaultHandler
             'return_url' => $args['return_url'],
         ]);
 
-        return $this->template(
+        return $this->render(
             'ui_delete',
             $data
         );
