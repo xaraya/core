@@ -1515,7 +1515,7 @@ trait TemplatingTrait
  * Access xarTpl::* Templating methods (module, setPageTitle, ...)
  *
  * Available methods:
- * - module() - or use mod()->template() for current module
+ * - module() - or use module class render() or hookobserver render()
  * - block()
  * - object()
  * - property()

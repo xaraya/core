@@ -203,8 +203,9 @@ trait ParentServicesTrait
      * - delItemVar()
      * - disableOverview()
      * - getURL() for current module - or use ctl()->getModuleURL() in general with modName
-     * - template() for current module type - or use tpl()->module() in general with modName modType
-     * - prepare() for current module itemtype
+     * - template() for current module type - @deprecated 2.9.3 replaced with render()
+     * - render() for current module type - @deprecated 2.9.3 use module class render() or hookobserver render() instead, or use tpl()->module() in general with modName modType
+     * - prepare() for current module itemtype - @deprecated 2.9.3 prepare tplData in module class render() or hookobserver render() instead
      * - getName()
      * - getID()
      * - getRegID()
@@ -227,7 +228,7 @@ trait ParentServicesTrait
      *
      * Optional methods in parent:
      * - getItemType() for mod()->prepare(), mod()->isHooked() and mod()->callHooks()
-     * - getModType() for mod()->template()
+     * - getModType() for mod()->render() - @deprecated 2.9.3
      *
      */
     public function mod(?string $modName = null): ModulesInterface

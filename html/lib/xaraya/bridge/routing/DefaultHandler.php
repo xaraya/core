@@ -69,11 +69,8 @@ class DefaultHandler extends ModuleHandler
         $xar->setModName($this->getModName());
         // @todo (re-)set request here for MenuBlock::setRequestInfo() in admin menu!?
         $xar->req()->setRequest(['module' => $this->getModName(), 'type' => $this->getModType(), 'func' => $this->funcName]);
-        $result = $xar->mod()->guiMethod($modName, $modType, $funcName, $args);
         // always apply template here
-        if (is_array($result)) {
-            $result = $xar->mod()->render($funcName, $result);
-        }
+        $result = $xar->mod()->guiMethod($modName, $modType, $funcName, $args);
         return $result;
     }
 

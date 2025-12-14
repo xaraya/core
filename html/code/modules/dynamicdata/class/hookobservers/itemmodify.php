@@ -69,7 +69,7 @@ class ItemModify extends DataObjectHookObserver
         }
 
         $properties = $object->getProperties();
-        return $this->mod()->render(
+        return $this->render(
             'modifyhook',
             [
                 'properties' => $properties,

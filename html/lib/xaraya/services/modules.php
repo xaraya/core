@@ -344,6 +344,7 @@ trait ModulesTrait
      * @param array<string, mixed> $tplData
      * @param ?string $templateName
      * @return string
+     * @deprecated 2.9.3 use module class render() or hookobserver render() instead
      */
     public function template(string $funcName, array $tplData = [], ?string $templateName = null): string
     {
@@ -357,6 +358,7 @@ trait ModulesTrait
      * @param array<string, mixed> $tplData
      * @param ?string $templateName
      * @return string
+     * @deprecated 2.9.3 use module class render() or hookobserver render() instead
      */
     public function render(string $funcName, array $tplData = [], ?string $templateName = null): string
     {
@@ -392,6 +394,7 @@ trait ModulesTrait
      * Add standard template variables (module, itemtype and context)
      * @param array<string, mixed> $tplData
      * @return array<string, mixed>
+     * @deprecated 2.9.3 prepare tplData in module class render() or hookobserver render() instead
      */
     public function prepare(array $tplData = []): array
     {
@@ -809,8 +812,9 @@ trait ModulesTrait
  * - delItemVar()
  * - disableOverview()
  * - getURL() for current module - or use ctl()->getModuleURL() in general with modName
- * - template() for current module type - or use tpl()->module() in general with modName modType
- * - prepare() for current module itemtype
+ * - template() for current module type - @deprecated 2.9.3 replaced with render()
+ * - render() for current module type - @deprecated 2.9.3 use module class render() or hookobserver render() instead, or use tpl()->module() in general with modName modType
+ * - prepare() for current module itemtype - @deprecated 2.9.3 prepare tplData in module class render() or hookobserver render() instead
  * - getName()
  * - getID()
  * - getRegID()
@@ -831,7 +835,7 @@ trait ModulesTrait
  * Required methods in parent:
  * - getModName()
  * - getItemType() for mod()->prepare(), mod()->isHooked() and mod()->callHooks()
- * - getModType() for mod()->template()
+ * - getModType() for mod()->render() - @deprecated 2.9.3
  *
  */
 class ModulesService implements ModulesInterface

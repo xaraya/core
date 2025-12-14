@@ -78,7 +78,7 @@ class ModuleHandler implements HandlerInterface
         // @todo do not apply template here (yet)?
         if (is_array($result) && is_subclass_of($handler[0], GuiModuleClassInterface::class)) {
             $this->context?->tracePath(__METHOD__ . ': template', [$handler[0]::class, $this->funcName]);
-            $result = $handler[0]->mod()->render($this->funcName, $result);
+            $result = $handler[0]->render($this->funcName, $result);
         }
         return [$result, $this->getContext()];
     }
@@ -139,7 +139,7 @@ class ModuleHandler implements HandlerInterface
     {
         // @todo apply template here?
         //if (is_array($result) && is_subclass_of($this->instance, GuiModuleClassInterface::class)) {
-        //    $result = $this->instance->mod()->template($this->funcName, $result);
+        //    $result = $this->instance->render($this->funcName, $result);
         //}
         if (is_string($result)) {
             return $result;

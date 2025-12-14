@@ -56,7 +56,7 @@ class ItemDisplay extends DataObjectHookObserver
         } else {
             $template = $object->name;
         }
-        return $this->mod()->render(
+        return $this->render(
             'displayhook',
             [
                 'properties' => & $object->properties,

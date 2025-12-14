@@ -1773,7 +1773,6 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarServer::getVar\(/' => '\$this->req()->getServerVar(',
             '/xarController::getRequest\(\)/' => '\$this->req()->getRequest()',
             '/xarController::getVar\(/' => '\$this->req()->getVar(',
-            // @todo check xarTpl::module() against current modName modType for mod()->template()
             '/xarTpl::module\(/' => '\$this->tpl()->module(',
             '/xarTpl::block\(/' => '\$this->tpl()->block(',
             '/xarTpl::object\(/' => '\$this->tpl()->object(',
