@@ -88,7 +88,7 @@ class ModifyconfigMethod extends MethodClass
             // If this is an AJAX call, send back a message (and end)
             $this->ctl()->getRequest()->msgAjax($data['module_settings']->getInvalids());
             // No AJAX, just send the data to the template for display
-            return $this->tpl()->module('authsystem', 'admin', 'modifyconfig', $data);
+            return $data;
         } else {
             $itemid = $data['module_settings']->updateItem();
         }

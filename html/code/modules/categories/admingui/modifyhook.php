@@ -178,7 +178,7 @@ class ModifyhookMethod extends MethodClass
                 $labels['categories'] = $this->ml('Category');
             }
 
-            return $this->tpl()->module('categories','admin','modifyhook',
+            return $this->render('modifyhook',
                                  array('labels' => $labels,
                                        'numcats' => $numcats,
                                        'items' => $items));

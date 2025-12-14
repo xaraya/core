@@ -291,7 +291,6 @@ class UsermenuMethod extends MethodClass
                     }
                     $data['returnurl'] = $returnurl;
                     $data['submitlabel'] = $this->ml('Update Settings');
-                    $data['context'] ??= $this->getContext();
                     return $this->tpl()->module('roles', 'user', 'account', $data);
                 }
 
@@ -426,7 +425,6 @@ class UsermenuMethod extends MethodClass
                 if (empty($message)) {
                     $data['message'] = '';
                 }
-                $data['context'] ??= $this->getContext();
                 return $this->tpl()->module('roles', 'user', 'account', $data);
 
         }

@@ -62,8 +62,7 @@ class ModifyconfigMethod extends MethodClass
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
                     $this->ctl()->getRequest()->msgAjax($data['module_settings']->getInvalids());
-                    $data['context'] ??= $this->getContext();
-                    return $this->tpl()->module('blocks', 'admin', 'modifyconfig', $data);
+                    return $data;
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                     $this->var()->find('noexceptions', $noexceptions, 'int:0:1', 0);

@@ -58,8 +58,6 @@ class GetcatinfotagMethod extends MethodClass
             // Return the formatted category array.
             // Pass all the arguments in too, allowing for a 'passthrough' from
             // the original theme tag.
-            // @todo Pass along the context for $this->tpl()->module() if needed
-            //$data['context'] ??= $this->getContext();
             return $this->tpl()->module(
                 'categories',
                 'user',

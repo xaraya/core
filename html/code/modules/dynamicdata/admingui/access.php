@@ -274,7 +274,7 @@ class AccessMethod extends MethodClass
             || file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access-' . $data['template'] . '.xt')) {
             return $this->tpl()->module($data['tplmodule'], 'admin', 'access', $data, $data['template']);
         } else {
-            return $this->tpl()->module('dynamicdata', 'admin', 'access', $data, $data['template']);
+            return $this->render('access', $data, $data['template']);
         }
     }
 }

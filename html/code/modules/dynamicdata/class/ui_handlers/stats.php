@@ -311,7 +311,6 @@ class StatsHandler extends DefaultHandler
         // add data to original method args
         $data = array_replace($args, [
             'object' => $this->object,
-            'context' => $this->getContext(),
             'stats'  => $stats,
             'result' => $result,
             'tpltitle' => $this->tpltitle,
@@ -397,7 +396,6 @@ class StatsHandler extends DefaultHandler
         // add data to original method args
         $data = array_replace($args, [
             'object' => $this->object,
-            'context' => $this->getContext(),
             'report' => $report,
             'result' => $result,
             'tpltitle' => $this->tpltitle,

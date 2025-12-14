@@ -76,6 +76,6 @@ class FormMethod extends MethodClass
         $data['context'] ??= $myobject->getContext();
 
         $template = $myobject->name;
-        return $this->tpl()->module('dynamicdata', 'admin', 'form', $data, $template);
+        return $this->render('form', $data, $template);
     }
 }

@@ -80,7 +80,7 @@ class CreateAdministratorMethod extends MethodClass
             // Reset the password property
             $data['properties']['password']->value = '';
             // Something's not right. Redisplay the page
-            return $this->tpl()->module('installer', 'admin', 'create_administrator', $data);
+            return $data;
         }
 
         // Good to go. Save the data

@@ -89,7 +89,6 @@ class ViewerrorMethod extends MethodClass
         }
 
         // Return the template variables to BL
-        $data['context'] ??= $this->getContext();
-        return $this->tpl()->module('modules', 'admin', $template, $data);
+        return $this->render($template, $data);
     }
 }

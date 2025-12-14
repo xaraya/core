@@ -44,8 +44,7 @@ class MainMethod extends MethodClass
         if (!$this->mod()->disableOverview() || $samemodule) {
             $data = [];
             $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1:', '');
-            $data['context'] = $this->getContext();
-            return $this->tpl()->module('blocks', 'admin', 'overview', $data);
+            return $this->render('overview', $data);
         } else {
             $this->ctl()->redirect($this->ctl()->getModuleURL('blocks', 'admin', 'view_instances'));
             return true;

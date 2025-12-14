@@ -63,7 +63,7 @@ class ModifyconfigMethod extends MethodClass
 
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
-                    return $this->tpl()->module('dynamicdata', 'admin', 'modifyconfig', $data);
+                    return $data;
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                 }

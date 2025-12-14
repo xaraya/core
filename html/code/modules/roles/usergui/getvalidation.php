@@ -79,7 +79,7 @@ class GetvalidationMethod extends MethodClass
         // What module are we using for registration?
         $regmodule = $this->mod()->getVar('defaultregmodule');
         if (empty($regmodule) || !$this->mod()->isAvailable($regmodule)) {
-            return $this->tpl()->module('grader', 'user', 'errors', ['layout' => 'no_permission', 'message' => $this->ml('No registration module defined in the roles module')]);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'no_permission', 'message' => $this->ml('No registration module defined in the roles module')]);
         }
         $modinfo = $this->mod()->getInfo($regmodule);
         $regmodule = $modinfo['name'];

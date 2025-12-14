@@ -113,7 +113,6 @@ class DisplayHandler extends DefaultHandler
         // add data to original method args
         $data = array_replace($args, [
             'object' => $this->object,
-            'context' => $this->getContext(),
             'hooks'  => $this->object->hookoutput,
             'tpltitle' => $this->tpltitle,
             'modtitle' => ucwords($this->object->tplmodule),

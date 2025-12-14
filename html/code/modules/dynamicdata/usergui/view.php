@@ -133,7 +133,7 @@ class ViewMethod extends MethodClass
             || file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
             return $this->tpl()->module($data['tplmodule'], 'user', 'view', $data, $data['template']);
         } else {
-            return $this->tpl()->module('dynamicdata', 'user', 'view', $data, $args['template']);
+            return $this->render('view', $data, $args['template']);
         }
     }
 }

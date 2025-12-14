@@ -111,7 +111,6 @@ class DeleteHandler extends DefaultHandler
         // add data to original method args
         $data = array_replace($args, [
             'object' => $this->object,
-            'context' => $this->getContext(),
             'authid' => $this->sec()->genAuthKey(),
             'tpltitle' => $this->tpltitle,
             'modtitle' => ucwords($this->object->tplmodule),

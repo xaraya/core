@@ -56,8 +56,7 @@ class UpdateMethod extends MethodClass
 
         if (!$isvalid) {
             $data['authid'] = $this->sec()->genAuthKey();
-            $data['context'] ??= $this->getContext();
-            return $this->tpl()->module('categories', 'admin', 'modfiy', $data);
+            return $this->render('modfiy', $data);
         }
 
         $itemid = $data['object']->updateItem(['itemid' => $data['itemid']]);

@@ -249,8 +249,7 @@ class ModifyconfigMethod extends MethodClass
         $data['module_settings'] = $this->getModuleSettings();
         $isvalid = $data['module_settings']->checkInput();
         if (!$isvalid) {
-            $data['context'] ??= $this->getContext();
-            return $this->tpl()->module('base', 'admin', 'modifyconfig', $data);
+            return $data;
         }
         $itemid = $data['module_settings']->updateItem();
 

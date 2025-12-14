@@ -156,7 +156,7 @@ class NewhookMethod extends MethodClass
                 $labels['categories'] = $this->ml('Category');
             }
 
-            return $this->tpl()->module('categories','admin','newhook',
+            return $this->render('newhook',
                                  array('labels' => $labels,
                                        'numcats' => $numcats,
                                        'items' => $items));

@@ -34,10 +34,10 @@ class TestServicesMethod extends MethodClass
         $args['method'] = __METHOD__;
         $args['return_url'] = $this->mod()->getURL('test', 'other', $args);
         // Add standard template variables
-        $args['module'] ??= $this->getModName(),
-        $args['itemtype'] ??= $this->getItemType(),
+        $args['module'] ??= $this->getModName();
+        $args['itemtype'] ??= $this->getItemType();
         // Pass along the context for xar::tpl()->module() if needed
-        $args['context'] ??= $this->getContext(),
+        $args['context'] ??= $this->getContext();
         return $args;
     }
 }

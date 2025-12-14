@@ -49,8 +49,7 @@ class UpdateConfigMethod extends MethodClass
 
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                $data['context'] ??= $this->getContext();
-                return $this->tpl()->module('themes', 'admin', 'update_config', $data);
+                return $data;
             } else {
 
                 // Good data: create the item

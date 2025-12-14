@@ -62,11 +62,9 @@ class MainMethod extends MethodClass
         // return ['page' => $page];
         /**
          * if you want to use different user-main-<page> templates,
-         * call $this->tpl()->module() yourself and pass along the context
+         * call $this->render() yourself and pass along the <page>
          */
         $data = [];
-        // Pass along the context for $this->tpl()->module() if needed
-        $data['context'] = $this->getContext();
-        return $this->tpl()->module('base', 'user', 'main', $data, $page);
+        return $this->render('main', $data, $page);
     }
 }

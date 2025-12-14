@@ -98,7 +98,6 @@ class ViewMethod extends MethodClass
         $data['urltemplate'] = $this->ctl()->getModuleURL('roles', 'user', 'view', $pagerfilter);
         $data['urlitemmatch'] = '%%';
 
-        $data['context'] ??= $this->getContext();
         return $this->tpl()->module($args['tplmodule'], 'user', 'view', $data, $args['template']);
     }
 }

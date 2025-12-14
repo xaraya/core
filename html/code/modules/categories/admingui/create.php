@@ -51,8 +51,7 @@ class CreateMethod extends MethodClass
 
         if (!$isvalid) {
             $data['authid'] = $this->sec()->genAuthKey();
-            $data['context'] ??= $this->getContext();
-            return $this->tpl()->module('categories', 'admin', 'new', $data);
+            return $this->render('new', $data);
         }
 
         for ($i = 1;$i <= $data['repeat'];$i++) {

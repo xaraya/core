@@ -93,7 +93,7 @@ class NewMethod extends MethodClass
             || file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xt')) {
             return $this->tpl()->module($args['tplmodule'], 'admin', 'new', $data, $args['template']);
         } else {
-            return $this->tpl()->module('dynamicdata', 'admin', 'new', $data, $args['template']);
+            return $this->render('new', $data, $args['template']);
         }
     }
 }

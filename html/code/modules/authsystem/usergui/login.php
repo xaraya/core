@@ -42,7 +42,7 @@ class LoginMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         if (empty($args) && !$_COOKIE) {
-            return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'no_cookies']);
+            return $this->render('errors', ['layout' => 'no_cookies']);
         }
 
         $unlockTime  = (int) $this->session()->getVar('authsystem.login.lockedout');
@@ -50,18 +50,18 @@ class LoginMethod extends MethodClass
         $lockouttries = $this->mod()->getVar('lockouttries') ? $this->mod()->getVar('lockouttries') : 3;
 
         if ((time() < $unlockTime) && ($this->mod()->getVar('uselockout') == true)) {
-            return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'locked_out', 'lockouttime' => $lockouttime]);
+            return $this->render('errors', ['layout' => 'locked_out', 'lockouttime' => $lockouttime]);
         }
 
         extract($args);
 
         $this->var()->find('uname', $uname, 'str:0:64', '');
         if (empty($uname)) {
-            return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
+            return $this->render('errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
         }
         $this->var()->find('pass', $pass, 'str:0:254', '');
         if (empty($pass)) {
-            return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
+            return $this->render('errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
         }
 
         $redirect = $this->ctl()->getBaseURL();
@@ -129,7 +129,7 @@ class LoginMethod extends MethodClass
 
                     // Make sure we haven't already found authldap module
                     if (empty($user) && ($extAuthentication == false)) {
-                        return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'bad_data']);
+                        return $this->render('errors', ['layout' => 'bad_data']);
                     } elseif (empty($user)) {
                         // Check if user has been deleted.
                         try {
@@ -176,12 +176,12 @@ class LoginMethod extends MethodClass
             case xarRoles::ROLES_STATE_DELETED:
 
                 // User is deleted by all means.  Return a message that says the same.
-                return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'account_deleted']);
+                return $this->render('errors', ['layout' => 'account_deleted']);
 
             case xarRoles::ROLES_STATE_INACTIVE:
 
                 // User is inactive.  Return message stating.
-                return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'account_inactive']);
+                return $this->render('errors', ['layout' => 'account_inactive']);
 
             case xarRoles::ROLES_STATE_NOTVALIDATED:
                 //User still must validate
@@ -223,7 +223,7 @@ class LoginMethod extends MethodClass
                     if (!$letthru) {
                         // If there is a locked.xt page then use that, otherwise show the default.xt page
                         $this->tpl()->setPageTemplateName('locked');
-                        return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'site_locked', 'message'  => $lockvars['message']]);
+                        return $this->render('errors', ['layout' => 'site_locked', 'message'  => $lockvars['message']]);
                     }
                 }
 
@@ -243,11 +243,11 @@ class LoginMethod extends MethodClass
                         // Set the time for fifteen minutes from now
                         $this->session()->setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
                         $this->session()->setVar('authsystem.login.attempts', 0);
-                        return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime]);
+                        return $this->render('errors', ['layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime]);
                     } else {
                         $newattempts = $attempts + 1;
                         $this->session()->setVar('authsystem.login.attempts', $newattempts);
-                        return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'bad_try', 'attempts' => $newattempts]);
+                        return $this->render('errors', ['layout' => 'bad_try', 'attempts' => $newattempts]);
                     }
                 }
                 //FR for last login - first capture the last login for this user
@@ -291,7 +291,7 @@ class LoginMethod extends MethodClass
                     /* Open in IFrame - works if you need it */
                     /* $data['page'] = $redirecturl;
                        $data['title'] = $this->ml('Home Page');
-                       return $this->tpl()->module('roles','user','homedisplay', $data);
+                       return $this->tpl()->module('roles', 'user', 'homedisplay', $data);
                      */
                     $this->ctl()->redirect($redirecturl);
                 } else {
@@ -303,7 +303,7 @@ class LoginMethod extends MethodClass
             case xarRoles::ROLES_STATE_PENDING:
 
                 // User is pending activation
-                return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'account_pending']);
+                return $this->render('errors', ['layout' => 'account_pending']);
         }
 
     }

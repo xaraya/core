@@ -178,7 +178,7 @@ class ModifyMethod extends MethodClass
             || file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
             return $this->tpl()->module($args['tplmodule'], 'admin', 'modify', $data, $args['template']);
         } else {
-            return $this->tpl()->module('dynamicdata', 'admin', 'modify', $data, $args['template']);
+            return $this->render('modify', $data, $args['template']);
         }
     }
 }

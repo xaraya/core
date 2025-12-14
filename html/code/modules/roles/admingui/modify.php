@@ -112,8 +112,7 @@ class ModifyMethod extends MethodClass
 
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                $data['context'] ??= $this->getContext();
-                return $this->tpl()->module('roles', 'admin', 'modify', $data);
+                return $data;
             } else {
                 // Good data: create the item
                 $itemid = $data['object']->updateItem(['itemid' => $data['itemid']]);

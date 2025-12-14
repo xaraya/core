@@ -40,7 +40,7 @@ class MainMethod extends MethodClass
         $samemodule = $this->req()->isSameReferer();
 
         if (!$this->mod()->disableOverview() || $samemodule) {
-            return $this->tpl()->module('dynamicdata', 'admin', 'overview', $args);
+            return $this->render('overview', $args);
         } else {
             $this->ctl()->redirect($this->mod()->getURL('admin', 'view'));
             return true;

@@ -79,7 +79,7 @@ class DisplayMethod extends MethodClass
             || file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xt')) {
             return $this->tpl()->module($args['tplmodule'], 'user', 'display', $data, $args['template']);
         } else {
-            return $this->tpl()->module('dynamicdata', 'user', 'display', $data, $args['template']);
+            return $this->render('display', $data, $args['template']);
         }
     }
 }

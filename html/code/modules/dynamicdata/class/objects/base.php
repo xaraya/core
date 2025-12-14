@@ -126,7 +126,6 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $data = [
             'invalids' => $this->getInvalids($args),
-            'context' => $this->getContext(),
         ];
         return $this->tpl()->module('dynamicdata', 'user', 'displayinvalids', $data);
     }

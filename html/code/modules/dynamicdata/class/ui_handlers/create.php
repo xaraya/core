@@ -115,7 +115,6 @@ class CreateHandler extends DefaultHandler
         // add data to original method args
         $data = array_replace($args, [
             'object'  => $this->object,
-            'context' => $this->getContext(),
             'preview' => $args['preview'],
             'authid'  => $this->sec()->genAuthKey(),
             'hooks'   => $this->object->hookoutput,

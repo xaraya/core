@@ -118,8 +118,7 @@ class ModifyconfigMethod extends MethodClass
                 $andvalid = ($data['enable_user_menu'] != false) ? $data['user_themes']->checkInput('user_themes') : true;
 
                 if (!$isvalid || !$andvalid) {
-                    $data['context'] ??= $this->getContext();
-                    return $this->tpl()->module('themes', 'admin', 'modifyconfig', $data);
+                    return $data;
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                     $this->mod()->setVar('enable_user_menu', $data['enable_user_menu']);

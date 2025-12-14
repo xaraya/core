@@ -106,7 +106,6 @@ class DisplayMethod extends MethodClass
         $data['itemtypename'] = $types[$itemtype]['label'];
         $data['layout'] = $args['layout'];
 
-        $data['context'] ??= $this->getContext();
         return $this->tpl()->module($args['tplmodule'], 'user', 'display', $data, $args['template']);
     }
 }

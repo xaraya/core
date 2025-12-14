@@ -34,7 +34,6 @@ final class UserGuiTest extends TestHelper
         $expected = [
             'startlist' => [],
             'update' => false,
-            'context' => $context,
         ];
         $this->assertEquals(array_keys($expected), array_keys($data));
 

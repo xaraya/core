@@ -339,11 +339,7 @@ trait ModulesTrait
 
     /**
      * Render output with module template
-     * @uses xar::tpl()->module()
-     * @param string $funcName
      * @param array<string, mixed> $tplData
-     * @param ?string $templateName
-     * @return string
      * @deprecated 2.9.3 use module class render() or hookobserver render() instead
      */
     public function template(string $funcName, array $tplData = [], ?string $templateName = null): string

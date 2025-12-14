@@ -110,7 +110,6 @@ class LostpasswordMethod extends MethodClass
                 }
 
                 // Let user know that they have an email on the way.
-                $data['context'] ??= $this->getContext();
                 $data = $this->tpl()->module('roles', 'user', 'requestpwconfirm', $data);
                 break;
         }

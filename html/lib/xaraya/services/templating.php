@@ -1035,6 +1035,8 @@ trait TemplatingTrait
      */
     public function getPager(int $startNum, int $total, string $urltemplate, int $itemsPerPage = 10, int|array $blockOptions = [], string $template = 'default', string $tplmodule = 'base'): string
     {
+        // Pass along the context for $this->tpl()->module() if needed - from pager tag
+        $blockOptions['context'] ??= $this->getContext();
         return xarTplPager::getPager($startNum, $total, $urltemplate, $itemsPerPage, $blockOptions, $template, $tplmodule);
     }
 

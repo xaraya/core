@@ -201,8 +201,7 @@ class ModifyconfigMethod extends MethodClass
 
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
-                            $data['context'] ??= $this->getContext();
-                            return $this->tpl()->module('roles', 'admin', 'modifyconfig', $data);
+                            return $data;
                         } else {
                             $itemid = $data['module_settings']->updateItem();
                         }
@@ -237,8 +236,7 @@ class ModifyconfigMethod extends MethodClass
                     case 'duvs':
                         $isvalid = $data['user_settings']->checkInput();
                         if (!$isvalid) {
-                            $data['context'] ??= $this->getContext();
-                            return $this->tpl()->module('roles', 'admin', 'modifyconfig', $data);
+                            return $data;
                         } else {
                             $itemid = $data['user_settings']->updateItem();
                         }

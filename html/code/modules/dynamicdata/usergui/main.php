@@ -72,7 +72,6 @@ class MainMethod extends MethodClass
         $data = [
             'startlist' => $startlist,
             'update' => $update,
-            'context' => $this->getContext(),
         ];
         return $data;
     }

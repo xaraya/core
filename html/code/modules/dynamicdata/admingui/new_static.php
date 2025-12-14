@@ -58,7 +58,7 @@ class NewStaticMethod extends MethodClass
 
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                return $this->tpl()->module('dynamicdata', 'admin', 'new_static', $data);
+                return $data;
             } else {
                 if (empty($data['table'])) {
                     throw new Exception($this->ml('Table name missing'));

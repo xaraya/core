@@ -221,7 +221,6 @@ class SearchHandler extends DefaultHandler
         // add data to original method args
         $data = array_replace($args, [
             'object' => $this->object,
-            'context' => $this->getContext(),
             'search' => $search,
             'result' => $result,
             'tpltitle' => $this->tpltitle,
@@ -397,7 +396,6 @@ class SearchHandler extends DefaultHandler
         // add data to original method args
         $data = array_replace($args, [
             'object' => $this->object,
-            'context' => $this->getContext(),
             'query'  => $query,
             'result' => $result,
             'tpltitle' => $this->tpltitle,

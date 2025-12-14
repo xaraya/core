@@ -131,7 +131,6 @@ class ModifyconfighookMethod extends MethodClass
         $data['modname'] = $modname;
         $data['itemtype'] = $extrainfo['itemtype'];
 
-        $data['context'] ??= $this->getContext();
         return $this->tpl()->module('categories', 'admin', 'modifyconfighook', $data);
     }
 }

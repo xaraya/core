@@ -72,8 +72,7 @@ class ThemesinfoMethod extends MethodClass
             $isvalid = $data['theme']->properties['configuration']->checkInput();
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                $data['context'] ??= $this->getContext();
-                return $this->tpl()->module('themes', 'admin', 'themesinfo', $data);
+                return $data;
             } else {
                 // Good data: create the item
                 $itemid = $data['theme']->updateItem(['itemid' => $info['systemid']]);

@@ -40,8 +40,8 @@ class MainMethod extends MethodClass
         $samemodule = $this->req()->isSameReferer();
 
         if (!$this->mod()->disableOverview() || $samemodule) {
-            $data = ['context' => $this->getContext()];
-            return $this->tpl()->module('privileges', 'admin', 'overview', $data);
+            $data = [];
+            return $this->render('overview', $data);
         } else {
             $this->ctl()->redirect($this->ctl()->getModuleURL('privileges', 'admin', 'viewprivileges'));
             return true;
