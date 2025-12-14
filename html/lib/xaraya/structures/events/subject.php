@@ -14,9 +14,11 @@
 
 use Xaraya\Context\WithContextInterface;
 use Xaraya\Context\WithContextTrait;
+use Xaraya\Services\ServicesInterface;
+use Xaraya\Services\WithServicesInterface;
 use Xaraya\Services\WithServicesTrait;
 
-interface ixarEventSubject extends WithContextInterface
+interface ixarEventSubject extends WithContextInterface, WithServicesInterface
 {
     /**
      * @return void
@@ -43,10 +45,6 @@ interface ixarEventSubject extends WithContextInterface
      * @return void
      */
     public function setArgs($args);
-    /**
-     * @return \Xaraya\Services\StaticServicesClass
-     */
-    public function getServicesClass();
 }
 
 /**
@@ -72,6 +70,7 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * overloading is optional
      *
      * @param mixed $args determined by the subject, default null
+     * @param ?ServicesInterface $xar
      *
      * $args are passed to EMS notify() method by caller, eg, as, notify('Event', $args)
      * and from notify method to this object in the constructor

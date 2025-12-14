@@ -10,15 +10,15 @@
  * @link http://www.xaraya.info
  */
 
-use Xaraya\Services\ServicesInterface;
-use Xaraya\Services\ServicesTrait;
+use Xaraya\Services\WithServicesInterface;
+use Xaraya\Services\WithServicesTrait;
 
 /**
  * Hook Observer Interface
  *
  * All Hook Observers must implement this
 **/
-interface ixarHookObserver extends ixarEventObserver
+interface ixarHookObserver extends ixarEventObserver, WithServicesInterface
 {
     /**
      * Phpstan complaint about not contravariant
@@ -27,14 +27,15 @@ interface ixarHookObserver extends ixarEventObserver
     public function notify(ixarEventSubject $subject);
 }
 
-class HookObserver extends EventObserver implements ixarHookObserver, ServicesInterface
+class HookObserver extends EventObserver implements ixarHookObserver
 {
-    use ServicesTrait;
+    use WithServicesTrait;
 
     /** @var string */
     public $module = "modules";
     /** @var string */
     public $type = "admin";
+    /** @var ?int */
     public $itemtype = 0;
 
     /**
@@ -54,14 +55,41 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
     }
 
     /**
+     * Get item type from here
+     */
+    public function getItemType(): ?int
+    {
+        return $this->itemtype;
+    }
+
+    /**
+     * @param ixarHookSubject $subject
+     */
+    public function notify(ixarEventSubject $subject)
+    {
+        // make core services available via subject, so that each observer doesn't have to get them
+        $this->setServicesClass($subject->getServicesClass());
+        // observers obtain arguments from the subject
+        $args = $subject->getArgs();
+        // observers may, or may not return a response,
+        // developers writing observers should return whatever the subject expects
+        // get event name from the subject
+        //$eventName = $subject->getSubject();
+        // get event context from the subject
+        //$context = $subject->getContext();
+    }
+
+    /**
      * @param array<string, mixed>|mixed $extrainfo
      * @return array<string, mixed>|bool
+     * @deprecated 2.4.1 not needed - extrainfo is prepared in HookSubject() constructor
      */
     public function validate($extrainfo = [])
     {
+        $xar = $this->getServicesClass();
         // Check whether a valid array was passed
         if (!isset($extrainfo) || !is_array($extrainfo)) {
-            $msg = $this->ml(
+            $msg = $xar->ml(
                 'Invalid #(1) in function #(2)() in module #(3)',
                 'extrainfo',
                 'updatehook',
@@ -72,7 +100,7 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
 
         // We can use hooks via module/itemtype or object
         if (!isset($extrainfo['module']) && !isset($extrainfo['object'])) {
-            $msg = $this->ml(
+            $msg = $xar->ml(
                 'Missing #(1) in function #(2)() in module #(3)',
                 'module or object',
                 'updatehook',
@@ -86,9 +114,9 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
         if (isset($extrainfo['module']) && is_string($extrainfo['module'])) {
             $modname = $extrainfo['module'];
         } else {
-            $modname = $this->mod()->getName();
+            $modname = $xar->mod()->getName();
         }
-        $module_id = $this->mod()->getRegID($modname);
+        $module_id = $xar->mod()->getRegID($modname);
         if (!$module_id) {
             return false; // throw back
         } else {
@@ -97,7 +125,7 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
 
         // If we have an object, we need to get its ID
         if (isset($extrainfo['object']) && is_string($extrainfo['object'])) {
-            $item = $this->data()->getObjectID(['name' => $extrainfo['object']]);
+            $item = $xar->data()->getObjectID(['name' => $extrainfo['object']]);
             $extrainfo['object_id'] = (int) $item['objectid'];
         }
 
@@ -138,8 +166,10 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
         // Add standard template variables
         $tplData['module'] ??= $this->getModName();
         $tplData['itemtype'] ??= $this->getItemType();
+
+        $xar = $this->getServicesClass();
         // Pass along the context for xar::tpl()->module() if needed
-        $tplData['context'] ??= $this->getContext();
+        $tplData['context'] ??= $xar->getContext();
 
         // See if we have a special template to apply
         if (!isset($templateName) && isset($tplData['_bl_template'])) {
@@ -154,7 +184,7 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
         }
 
         // Create the output.
-        return $this->tpl()->module(
+        return $xar->tpl()->module(
             $modName,
             $modType,
             $funcName,

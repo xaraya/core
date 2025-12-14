@@ -26,18 +26,18 @@ class ItemDisplay extends DataObjectHookObserver
      */
     public function run(array $extrainfo = [])
     {
+        $xar = $this->getServicesClass();
         // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
         $modname = $extrainfo['module'];
         $itemtype = $extrainfo['itemtype'];
         $itemid = $extrainfo['itemid'];
         $module_id = $extrainfo['module_id'];
 
-        $descriptorargs = $this->data()->getObjectID([
+        $descriptorargs = $xar->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
-        // set context if available in hook call
-        $object = $this->data()->getObject([
+        $object = $xar->data()->getObject([
             'name' => $descriptorargs['name'],
             'itemid'   => $itemid,
         ]);
@@ -46,7 +46,7 @@ class ItemDisplay extends DataObjectHookObserver
             return;
         }
         if (!$object->checkAccess('display')) {
-            return $this->ml('Display #(1) is forbidden', $object->label);
+            return $xar->ml('Display #(1) is forbidden', $object->label);
         }
 
         $object->getItem();

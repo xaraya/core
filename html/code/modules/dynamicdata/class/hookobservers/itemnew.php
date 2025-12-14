@@ -25,8 +25,9 @@ class ItemNew extends DataObjectHookObserver
      */
     public function run(array $extrainfo = [])
     {
+        $xar = $this->getServicesClass();
         // Security
-        if (!$this->sec()->checkAccess('AddDynamicData')) {
+        if (!$xar->sec()->checkAccess('AddDynamicData')) {
             return;
         }
 
@@ -41,12 +42,11 @@ class ItemNew extends DataObjectHookObserver
             return '';
         }
 
-        $descriptorargs = $this->data()->getObjectID([
+        $descriptorargs = $xar->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
-        // set context if available in hook call
-        $object = $this->data()->getObject([
+        $object = $xar->data()->getObject([
             'name' => $descriptorargs['name'],
         ]);
 
@@ -55,7 +55,7 @@ class ItemNew extends DataObjectHookObserver
         }
 
         // if we are in preview mode, we need to check for any preview values
-        $this->var()->check('preview', $preview);
+        $xar->var()->check('preview', $preview);
         if (!empty($preview)) {
             $object->checkInput();
         }

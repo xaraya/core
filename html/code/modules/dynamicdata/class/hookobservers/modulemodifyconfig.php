@@ -30,8 +30,9 @@ class ModuleModifyconfig extends DataObjectHookObserver
      */
     public function run(array $extrainfo = [])
     {
+        $xar = $this->getServicesClass();
         // Security
-        if (!$this->sec()->checkAccess('AdminDynamicData')) {
+        if (!$xar->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
@@ -45,13 +46,13 @@ class ModuleModifyconfig extends DataObjectHookObserver
             return '';
         }
 
-        $args = $this->data()->getObjectID([
+        $args = $xar->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
 
         // @todo move to object method here too
-        $fields = $this->mod()->apiMethod(
+        $fields = $xar->mod()->apiMethod(
             'dynamicdata',
             'userapi',
             'getprop',
@@ -62,31 +63,32 @@ class ModuleModifyconfig extends DataObjectHookObserver
         }
 
         $labels = [
-            'id' => $this->ml('ID'),
-            'name' => $this->ml('Name'),
-            'label' => $this->ml('Label'),
-            'type' => $this->ml('Field Format'),
-            'defaultvalue' => $this->ml('Default'),
-            'source' => $this->ml('Data Source'),
-            'configuration' => $this->ml('Configuration'),
+            'id' => $xar->ml('ID'),
+            'name' => $xar->ml('Name'),
+            'label' => $xar->ml('Label'),
+            'type' => $xar->ml('Field Format'),
+            'defaultvalue' => $xar->ml('Default'),
+            'source' => $xar->ml('Data Source'),
+            'configuration' => $xar->ml('Configuration'),
         ];
 
-        $labels['dynamicdata'] = $this->ml('Dynamic Data Fields');
-        $labels['config'] = $this->ml('modify');
+        $labels['dynamicdata'] = $xar->ml('Dynamic Data Fields');
+        $labels['config'] = $xar->ml('modify');
 
         $data = [];
         $data['labels'] = $labels;
-        $data['link'] = $this->mod()->getURL(
+        $data['link'] = $xar->ctl()->getModuleURL(
+            'dynamicdata',
             'admin',
             'modifyprop',
             ['module_id' => $module_id,
                 'itemtype' => $itemtype]
         );
         $data['fields'] = $fields;
-        $data['fieldtypeprop'] = $this->prop()->getProperty(['type' => 'fieldtype']);
+        $data['fieldtypeprop'] = $xar->prop()->getProperty(['type' => 'fieldtype']);
 
         // set context if available in hook call
-        $object = $this->data()->getObject([
+        $object = $xar->data()->getObject([
             'name' => $args['name'],
         ]);
 
@@ -99,7 +101,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
             $data['context'] = $object->getContext();
         } else {
             $template = null;
-            $data['context'] = $this->getContext();
+            $data['context'] = $xar->getContext();
         }
         return $this->render(
             'modifyconfighook',

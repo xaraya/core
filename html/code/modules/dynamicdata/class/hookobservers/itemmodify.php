@@ -25,8 +25,9 @@ class ItemModify extends DataObjectHookObserver
      */
     public function run(array $extrainfo = [])
     {
+        $xar = $this->getServicesClass();
         // Security
-        if (!$this->sec()->checkAccess('EditDynamicData')) {
+        if (!$xar->sec()->checkAccess('EditDynamicData')) {
             return;
         }
 
@@ -41,12 +42,12 @@ class ItemModify extends DataObjectHookObserver
             return '';
         }
 
-        $descriptorargs = $this->data()->getObjectID([
+        $descriptorargs = $xar->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
         // set context if available in hook call
-        $object = $this->data()->getObject([
+        $object = $xar->data()->getObject([
             'name' => $descriptorargs['name'],
         ]);
 
@@ -57,7 +58,7 @@ class ItemModify extends DataObjectHookObserver
         $object->getItem(['itemid' => $itemid]);
 
         // if we are in preview mode, we need to check for any preview values
-        $this->var()->check('preview', $preview);
+        $xar->var()->check('preview', $preview);
         if (!empty($preview)) {
             $object->checkInput();
         }

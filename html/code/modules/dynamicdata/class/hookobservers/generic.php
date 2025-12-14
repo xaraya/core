@@ -35,8 +35,7 @@ class DataObjectHookObserver extends HookObserver
     public function notify(ixarEventSubject $subject)
     {
         // this is used in most run methods below, so we import it here
-        $this->setStaticServices($subject->getServicesClass());
-        $this->setContext($subject->getContext());
+        $this->setServicesClass($subject->getServicesClass());
         return $this->run($subject->getExtrainfo());
     }
 

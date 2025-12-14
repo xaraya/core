@@ -40,8 +40,9 @@ class ModuleRemove extends DataObjectHookObserver
         if ($modname == 'dynamicdata') {
             return $extrainfo;
         }
+        $xar = $this->getServicesClass();
 
-        if (!$this->sec()->checkAccess('DeleteDynamicDataItem', 'Item', "$module_id:All:All")) {
+        if (!$xar->sec()->check('DeleteDynamicDataItem', 0, 'Item', "$module_id:All:All")) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
             $vars = ['security check', 'admin', 'moduleremove', 'dynamicdata'];
             throw new BadParameterException($vars, $msg);
@@ -49,8 +50,8 @@ class ModuleRemove extends DataObjectHookObserver
 
         // Get database setup
         /** @var ConnectionInterface $dbconn */
-        $dbconn = $this->db()->getConn();
-        $xartable =  $this->db()->getTables();
+        $dbconn = $xar->db()->getConn();
+        $xartable =  $xar->db()->getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 

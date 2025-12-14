@@ -27,6 +27,7 @@ class ItemDelete extends DataObjectHookObserver
      */
     public function run(array $extrainfo = [])
     {
+        $xar = $this->getServicesClass();
         // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
         $modname = $extrainfo['module'];
         $itemtype = $extrainfo['itemtype'];
@@ -44,12 +45,12 @@ class ItemDelete extends DataObjectHookObserver
             throw new BadParameterException($vars, $msg);
         }
 
-        $descriptorargs = $this->data()->getObjectID([
+        $descriptorargs = $xar->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
         // set context if available in hook call
-        $object = $this->data()->getObject([
+        $object = $xar->data()->getObject([
             'name' => $descriptorargs['name'],
             'itemid'   => $itemid,
         ]);

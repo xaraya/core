@@ -752,7 +752,6 @@ trait ModulesTrait
         $info['itemid'] ??= null;
         $info['module'] ??= $this->getModName();
         $info['itemtype'] ??= $this->getItemType();
-        $info['itemid'] ??= null;
         $xar = $this->getServicesClass();
         return $xar->hooked()->notify($event, $info, $this->getContext());
     }
