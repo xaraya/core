@@ -49,6 +49,8 @@ interface ModulesInterface extends ServiceInterface
     /** @param array<string, mixed> $args */
     public function getURL(string $modType = 'user', string $funcName = 'main', array $args = [], ?string $modName = null): string;
     /** @param array<string, mixed> $tplData */
+    public function render(string $funcName, array $tplData = [], ?string $templateName = null): string;
+    /** @param array<string, mixed> $tplData */
     public function template(string $funcName, array $tplData = [], ?string $templateName = null): string;
     /**
      * @param array<string, mixed> $tplData
@@ -344,6 +346,19 @@ trait ModulesTrait
      * @return string
      */
     public function template(string $funcName, array $tplData = [], ?string $templateName = null): string
+    {
+        return $this->render($funcName, $tplData, $templateName);
+    }
+
+    /**
+     * Render output with module template
+     * @uses xar::tpl()->module()
+     * @param string $funcName
+     * @param array<string, mixed> $tplData
+     * @param ?string $templateName
+     * @return string
+     */
+    public function render(string $funcName, array $tplData = [], ?string $templateName = null): string
     {
         // Add standard template variables (module, itemtype and context)
         $tplData = $this->prepare($tplData);
@@ -659,9 +674,9 @@ trait ModulesTrait
         if (!isset($result)) {
             return '';
         }
-        // always apply template here
+        // always render template here
         if (is_array($result)) {
-            return $this->template($funcName, $result);
+            return $this->render($funcName, $result);
         }
         return $result;
     }

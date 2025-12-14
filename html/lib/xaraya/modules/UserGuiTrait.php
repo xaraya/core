@@ -97,7 +97,12 @@ trait UserGuiTrait
         }
         $output = [
             'args' => $args,
+            // Add standard template variables
+            'module' => $this->getModName(),
+            'itemtype' => $this->getItemType(),
+            // Pass along the context for xar::tpl()->module() if needed
+            'context' => $this->getContext(),
         ];
-        return $this->mod()->prepare($output);
+        return $output;
     }
 }

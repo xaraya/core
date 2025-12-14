@@ -72,7 +72,7 @@ class DefaultHandler extends ModuleHandler
         $result = $xar->mod()->guiMethod($modName, $modType, $funcName, $args);
         // always apply template here
         if (is_array($result)) {
-            $result = $xar->mod()->template($funcName, $result);
+            $result = $xar->mod()->render($funcName, $result);
         }
         return $result;
     }

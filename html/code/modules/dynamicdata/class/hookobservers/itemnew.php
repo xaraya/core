@@ -67,7 +67,7 @@ class ItemNew extends DataObjectHookObserver
         }
 
         $properties = $object->getProperties();
-        return $this->mod()->template(
+        return $this->mod()->render(
             'newhook',
             [
                 'properties' => $properties,

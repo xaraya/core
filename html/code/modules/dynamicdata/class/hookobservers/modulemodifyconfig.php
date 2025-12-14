@@ -101,7 +101,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
             $template = null;
             $data['context'] = $this->getContext();
         }
-        return $this->mod()->template(
+        return $this->mod()->render(
             'modifyconfighook',
             $data,
             $template

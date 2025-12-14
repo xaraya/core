@@ -74,6 +74,11 @@ class TestGui extends AdminGui
     {
         $args['method'] = __METHOD__;
         $args['return_url'] = $this->mod()->getURL('test', 'other', $args);
-        return $this->mod()->prepare($args);
+        // Add standard template variables
+        $args['module'] ??= $this->getModName(),
+        $args['itemtype'] ??= $this->getItemType(),
+        // Pass along the context for xar::tpl()->module() if needed
+        $args['context'] ??= $this->getContext(),
+        return $args;
     }
 }

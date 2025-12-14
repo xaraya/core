@@ -124,4 +124,42 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
 
         return $extrainfo;
     }
+
+    /**
+     * Render output with module template
+     * @uses xar::tpl()->module()
+     * @param string $funcName
+     * @param array<string, mixed> $tplData
+     * @param ?string $templateName
+     * @return string
+     */
+    public function render(string $funcName, array $tplData = [], ?string $templateName = null)
+    {
+        // Add standard template variables
+        $tplData['module'] ??= $this->getModName();
+        $tplData['itemtype'] ??= $this->getItemType();
+        // Pass along the context for xar::tpl()->module() if needed
+        $tplData['context'] ??= $this->getContext();
+
+        // See if we have a special template to apply
+        if (!isset($templateName) && isset($tplData['_bl_template'])) {
+            $templateName = (string) $tplData['_bl_template'];
+        }
+
+        $modName = $this->getModName();
+        // @todo Check if we're called from an api $modType and adapt to gui!?
+        $modType = $this->getModType();
+        if (str_ends_with($modType, 'api')) {
+            $modType = substr($modType, 0, -3);
+        }
+
+        // Create the output.
+        return $this->tpl()->module(
+            $modName,
+            $modType,
+            $funcName,
+            $tplData,
+            $templateName,
+        );
+    }
 }
