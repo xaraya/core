@@ -55,7 +55,7 @@ trait BasicBridgeTrait
         // Note: do this after updating controller entryPoint, so that request entryPoint matches
         $request = $ctl->getRequest();
         $request->setEntryPoint($ctl->getEntryPoint());
-        // set current module to 'module' for Xaraya controller - used e.g. in xar::mod()->getName()
+        // set current module to 'module' for Xaraya controller - used e.g. in xar::req()->getModule()
         $request->setModule($module);
     }
 

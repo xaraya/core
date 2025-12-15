@@ -301,7 +301,7 @@ class CategoriesProperty extends DataProperty
         }
         // No hint at all, take the current module
         if (!isset($this->module_id)) {
-            $this->module_id = $this->mod()->getID($this->mod()->getName());
+            $this->module_id = $this->mod()->getID($this->req()->getModule());
         }
 
         // Do the same for itemtypes
@@ -481,7 +481,7 @@ class CategoriesProperty extends DataProperty
             }
             // No hint at all, take the current module
             if (!isset($this->module_id)) {
-                $this->module_id = $this->mod()->getID($this->mod()->getName());
+                $this->module_id = $this->mod()->getID($this->req()->getModule());
             }
 
             // Do the same for itemtypes

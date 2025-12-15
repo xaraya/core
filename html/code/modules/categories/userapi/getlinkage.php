@@ -39,7 +39,7 @@ class GetlinkageMethod extends MethodClass
             return [];
         }
         if (empty($module)) {
-            $module = $this->mod()->getName();
+            $module = $this->req()->getModule();
         }
 
         $modid = $this->mod()->getID($module);

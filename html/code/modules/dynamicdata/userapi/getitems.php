@@ -53,7 +53,7 @@ class GetitemsMethod extends MethodClass
         $nullreturn = null;
         if (empty($module_id)) {
             if (empty($module)) {
-                $modname = $this->mod()->getName();
+                $modname = $this->req()->getModule();
             } else {
                 $modname = $module;
             }

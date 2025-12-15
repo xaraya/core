@@ -488,7 +488,7 @@ trait TemplatingTrait
             if (empty($modName)) {
                 // FIXME: the ucwords is layout stuff which doesn't belong here
                 // <chris/> Why don't we just use display name then?
-                $modName = ucwords($xar->mod()->getDisplayName($xar->mod()->getName()));
+                $modName = ucwords($xar->mod()->getDisplayName($xar->req()->getModule()));
             }
             switch (strtolower($order)) {
                 case 'default':
@@ -786,7 +786,7 @@ trait TemplatingTrait
                 break;
             case 'module':
                 if (empty($package)) {
-                    $package = $xar->mod()->getName();
+                    $package = $xar->req()->getModule();
                 }
                 // @checkme: modules is a depency of templates, redundant check?
                 if ($xar->mod()->isLoaded()) {
@@ -908,7 +908,7 @@ trait TemplatingTrait
                 break;
             case 'module':
                 if (empty($package)) {
-                    $package = $xar->mod()->getName();
+                    $package = $xar->req()->getModule();
                 }
                 // @checkme: modules is a depency of templates, redundant check?
                 if ($xar->mod()->isLoaded()) {
@@ -1530,7 +1530,7 @@ trait TemplatingTrait
  * - ...
  *
  * Optional methods in parent:
- * - getModName() for tpl()->setPageTitle() - @deprecated 2.9.2 use xar::mod()->getName() instead
+ * - getModName() for tpl()->setPageTitle() - @deprecated 2.9.2 use xar::req()->getModule() instead
  *
  */
 class TemplatingService implements TemplatingInterface
@@ -1539,7 +1539,7 @@ class TemplatingService implements TemplatingInterface
 
     /**
      * Get name of the module from parent
-     * @deprecated 2.9.2 use xar::mod()->getName() instead
+     * @deprecated 2.9.2 use xar::req()->getModule() instead
      */
     public function getModName(): string
     {

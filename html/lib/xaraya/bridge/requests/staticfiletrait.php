@@ -250,7 +250,7 @@ trait StaticFileBridgeTrait
         //$context['mediatype'] = '';
         //static::$baseUri = $this->getBaseUri($request) . static::$prefix;
         //$context['baseuri'] = static::$baseUri;
-        // set current module to 'module' for Xaraya controller - used e.g. in xar::mod()->getName()
+        // set current module to 'module' for Xaraya controller - used e.g. in xar::req()->getModule()
         //$this->prepareController($vars['module'] ?? 'base', static::$baseUri);
         //$context['module'] = $vars['module'] ?? 'base';
         return $context;

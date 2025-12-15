@@ -98,7 +98,7 @@ class CategoryNavigationProperty extends SelectProperty
                 $modname = $this->mem()->get('Blocks.categories', 'module');
             }
             if (empty($modname)) {
-                $modname = $this->mod()->getName();
+                $modname = $this->req()->getModule();
             }
         } else {
             $modname = $data['module'];

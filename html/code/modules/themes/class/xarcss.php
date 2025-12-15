@@ -539,7 +539,7 @@ class xarCSS extends xarObject
                 // no break
             case 'module':
                 if (empty($module)) {
-                    $module = $xar->mod()->getName();
+                    $module = $xar->req()->getModule();
                 }
                 $modInfo = $xar->mod()->getBaseInfo($module);
                 if (empty($modInfo)) {

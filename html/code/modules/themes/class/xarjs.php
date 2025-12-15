@@ -496,7 +496,7 @@ class xarJS extends xarObject
             case 'module':
                 // fall back to current module calling the tag
                 if (empty($module)) {
-                    $module = $xar->mod()->getName();
+                    $module = $xar->req()->getModule();
                 }
                 // got to have a module
                 if (empty($module)) {
@@ -951,7 +951,7 @@ class xarJS extends xarObject
                 break;
             case 'module':
                 if (empty($package)) {
-                    $package = $xar->mod()->getName();
+                    $package = $xar->req()->getModule();
                 }
                 $modInfo = $xar->mod()->getBaseInfo($package);
                 if (empty($modInfo)) {

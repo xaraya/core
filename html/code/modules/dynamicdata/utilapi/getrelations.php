@@ -49,7 +49,7 @@ class GetrelationsMethod extends MethodClass
             $module_id = $this->mod()->getRegID($module);
         }
         if (empty($module_id)) {
-            $module_id = $this->mod()->getRegID($this->mod()->getName());
+            $module_id = $this->mod()->getRegID($this->req()->getModule());
         }
         $modinfo = $this->mod()->getInfo($module_id);
         if (empty($itemtype)) {

@@ -62,11 +62,11 @@ class FileUploadProperty extends DataProperty
             $this->UploadsModule_isHooked = true;
         } else {
             // FIXME: this doesn't take into account the itemtype or non-main module objects
-            if ($this->mod()->isHooked('uploads', $this->mod()->getName())) {
+            if ($this->mod()->isHooked('uploads', $this->req()->getModule())) {
                 $this->UploadsModule_isHooked = true;
             }
             /*
-            $list = $this->hooked()->getSubjectObservers($this->mod()->getName(), 'ItemTransform');
+            $list = $this->hooked()->getSubjectObservers($this->req()->getModule(), 'ItemTransform');
             foreach ($list as $hook) {
                 if ($hook['module'] == 'uploads') {
                     $this->UploadsModule_isHooked = TRUE;

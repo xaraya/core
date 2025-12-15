@@ -49,7 +49,7 @@ class GetimageMethod extends MethodClass
             // @todo: support theme param to specify a theme to look in other than current/common ?
             $package = !empty($theme) ? $theme : null;
         } elseif ($scope == 'module') {
-            $package = empty($module) ? $this->mod()->getName() : $module;
+            $package = empty($module) ? $this->req()->getModule() : $module;
         } elseif ($scope == 'property') {
             if (empty($property)) {
                 return '';

@@ -213,7 +213,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['localmodule'])) {
             $this->localmodule = $data['localmodule'];
         } else {
-            $this->localmodule = $this->mod()->getName();
+            $this->localmodule = $this->req()->getModule();
             $data['localmodule'] = $this->localmodule;
         }
 
@@ -328,7 +328,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['localmodule'])) {
             $this->localmodule = $data['localmodule'];
         } else {
-            $this->localmodule = $this->mod()->getName();
+            $this->localmodule = $this->req()->getModule();
             $data['localmodule'] = $this->localmodule;
         }
 

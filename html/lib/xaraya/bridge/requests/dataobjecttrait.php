@@ -259,7 +259,7 @@ trait DataObjectBridgeTrait
         $context['mediatype'] = '';
         static::$baseUri = $this->getBaseUri($request) . static::$prefix;
         $context['baseuri'] = static::$baseUri;
-        // set current module to 'object' for Xaraya controller - used e.g. in xar::mod()->getName()
+        // set current module to 'object' for Xaraya controller - used e.g. in xar::req()->getModule()
         $this->prepareController('object', static::$baseUri . '/object');
         $context['module'] = 'object';
         // @todo check if we already have a context? (via request or from elsewhere)

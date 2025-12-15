@@ -72,7 +72,7 @@ class GetcatinfotagMethod extends MethodClass
         // Set default module.
         if (empty($args['modid']) || !is_numeric($args['modid'])) {
             if (empty($args['module'])) {
-                $args['module'] = $this->mod()->getName();
+                $args['module'] = $this->req()->getModule();
             }
 
             if (!empty($args['module'])) {

@@ -48,7 +48,7 @@ class EncodeShorturlMethod extends MethodClass
         $path = '';
         // if we want to add some common arguments as URL parameters below
         $join = '?';
-        // we can't rely on $this->mod()->getName() here !
+        // we can't rely on $this->req()->getModule() here !
         $module = 'dynamicdata';
 
         // return immediately when we're dealing with the main function (don't load unnecessary stuff)

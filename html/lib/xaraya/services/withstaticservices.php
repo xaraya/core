@@ -267,7 +267,7 @@ trait WithStaticServices
      * - ...
      *
      * Optional methods in parent:
-     * - getModName() for tpl()->setPageTitle() - @deprecated 2.9.2 use xar::mod()->getName() instead
+     * - getModName() for tpl()->setPageTitle() - @deprecated 2.9.2 use xar::req()->getModule() instead
      *
      */
     public static function tpl(): TemplatingInterface

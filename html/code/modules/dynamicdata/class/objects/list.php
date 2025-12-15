@@ -860,7 +860,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // This should be done in the templates
         // It is creating unnecessary shorturl encodes
         // @todo depending on current module
-        $modname = $this->mod()->getName();
+        $modname = $this->req()->getModule();
         if ($modname == 'dynamicdata' || $modname == 'object') {
             $xar = $this->getStaticServices();
             if ($allow_read) {

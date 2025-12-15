@@ -114,7 +114,7 @@ class HookObserver extends EventObserver implements ixarHookObserver
         if (isset($extrainfo['module']) && is_string($extrainfo['module'])) {
             $modname = $extrainfo['module'];
         } else {
-            $modname = $xar->mod()->getName();
+            $modname = $xar->req()->getModule();
         }
         $module_id = $xar->mod()->getRegID($modname);
         if (!$module_id) {

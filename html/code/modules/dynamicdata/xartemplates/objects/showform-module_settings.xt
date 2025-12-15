@@ -33,7 +33,7 @@
             </div>
             <div class="xar-col">
                 <xar:data-input id="use_module_alias" property="$properties['use_module_alias']" onchange="toggle(\'aliaslink\',\'aliascheckbox\')"/>&#160;
-                <xar:set name="modname">$xar->mod()->getName()</xar:set>
+                <xar:set name="modname">$xar->req()->getModule()</xar:set>
                 <a href="#$xar->ctl()->URL('modules','admin','aliases',['name' => $modname])#">Manage Aliases</a>
             </div>
         </div>
@@ -49,7 +49,7 @@
                 <xar:set name="aliasmap">$xar->config()->getVar('System.ModuleAliases')</xar:set>
                 <xar:set name="options">[]</xar:set>
                 <xar:if condition="!empty($aliasmap)">
-                	<xar:set name="modname">$xar->mod()->getName()</xar:set>
+                	<xar:set name="modname">$xar->req()->getModule()</xar:set>
                     <xar:foreach in="$aliasmap" key="$aliasname" value="$modulename">
                         <xar:if condition="$modulename eq $modname">
                             <xar:set name="dummy">1;$options[$aliasname] = $aliasname</xar:set>

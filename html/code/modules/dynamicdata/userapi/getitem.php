@@ -53,7 +53,7 @@ class GetitemMethod extends MethodClass
         $nullreturn = null;
 
         if (empty($module_id) && empty($moduleid)) {
-            $modname = empty($module) ? $this->mod()->getName() : $module;
+            $modname = empty($module) ? $this->req()->getModule() : $module;
             $module_id   = is_numeric($modname) ? $modname : $this->mod()->getRegID($modname);
         } elseif (empty($module_id)) {
             $module_id = $moduleid;

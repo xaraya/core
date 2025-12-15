@@ -65,7 +65,7 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
             if (!empty($extrainfo['module'])) {
                 $module = $extrainfo['module'];
             } else {
-                $module = $xar->mod()->getName();
+                $module = $xar->req()->getModule();
             }
         }
 

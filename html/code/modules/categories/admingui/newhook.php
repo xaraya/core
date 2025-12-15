@@ -45,7 +45,7 @@ class NewhookMethod extends MethodClass
         // When called via hooks, the module name may be empty, so we get it from
         // the current module
         if (empty($extrainfo['module'])) {
-            $modname = $this->mod()->getName();
+            $modname = $this->req()->getModule();
         } else {
             $modname = $extrainfo['module'];
         }

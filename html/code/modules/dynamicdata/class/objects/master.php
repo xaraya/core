@@ -517,7 +517,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         if (is_array($this->dbConnArgs) && count($this->dbConnArgs) == 2 && is_string($this->dbConnArgs[0] ?? null)) {
             // instantiate UserApi class here!?
             if (class_exists($this->dbConnArgs[0]) && is_subclass_of($this->dbConnArgs[0], \Xaraya\Database\WithDatabaseInterface::class)) {
-                // @todo avoid calling $xar->mod()->getName() with xaraya db connection here - see virtual library offline
+                // @todo avoid calling $xar->mod()->getName(.) with xaraya db connection here - see virtual library offline
                 $modname = $xar->mod()->getName($this->moduleid);
                 if (is_subclass_of($this->dbConnArgs[0], \Xaraya\Modules\ModuleClassInterface::class)) {
                     $module = $xar->module($modname);

@@ -29,7 +29,7 @@ class DataObjectDescriptor extends ObjectDescriptor
         foreach ($args as $key => &$value) {
             if (in_array($key, ['module','modid','module','moduleid'])) {
                 if (empty($value)) {
-                    $value = $xar->mod()->getRegID($xar->mod()->getName());
+                    $value = $xar->mod()->getRegID($xar->req()->getModule());
                 }
                 if (is_numeric($value) || is_integer($value)) {
                     $args['moduleid'] = $value;
@@ -43,7 +43,7 @@ class DataObjectDescriptor extends ObjectDescriptor
         // Still not found?
         if (!isset($args['moduleid'])) {
             if (isset($args['fallbackmodule']) && ($args['fallbackmodule'] == 'current')) {
-                $args['fallbackmodule'] = $xar->mod()->getName();
+                $args['fallbackmodule'] = $xar->req()->getModule();
             } else {
                 $args['fallbackmodule'] = 'dynamicdata';
             }

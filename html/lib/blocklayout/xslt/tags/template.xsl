@@ -132,7 +132,7 @@
                           <xsl:value-of select="substring-before(substring-after($bl_dirname,'modules/'),'/')"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:text>$xar->mod()->getName()</xsl:text>
+                        <xsl:text>$xar->req()->getModule()</xsl:text>
                       </xsl:otherwise>
                     </xsl:choose>
                   </xsl:otherwise>                           

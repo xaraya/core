@@ -75,7 +75,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 $modname = $this->mem()->get('Blocks.categories', 'module');
             }
             if (empty($modname)) {
-                $modname = $this->mod()->getName();
+                $modname = $this->req()->getModule();
             }
         } else {
             $modname = $module;

@@ -50,7 +50,7 @@ class GetitemcatsMethod extends MethodClass
 
         // Default the module name.
         if (empty($modid) && empty($module)) {
-            $module = $this->mod()->getName();
+            $module = $this->req()->getModule();
         }
 
         // Get module ID if only a name provided.
