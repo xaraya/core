@@ -82,13 +82,13 @@ trait SecurityTrait
     protected function callSecurityCheck(string $mask, int $catch = 1): bool
     {
         // @todo handle redirect() + exit() in case of failure
-        return xarSecurity::check($mask, $catch, '', '', '', '', 0, 0, $this->getParent()) ? true : false;
+        return xarSecurity::check($mask, $catch, '', '', '', '', 0, 0, $this->getServicesClass()) ? true : false;
     }
 
     public function check(string $mask, int $catch = 1, string $component = '', string $instance = '', string $module = '', string $rolename = '', int $realm = 0, int $level = 0): bool
     {
         // @todo handle redirect() + exit() in case of failure
-        return xarSecurity::check($mask, $catch, $component, $instance, $module, $rolename, $realm, $level, $this->getParent()) ? true : false;
+        return xarSecurity::check($mask, $catch, $component, $instance, $module, $rolename, $realm, $level, $this->getServicesClass()) ? true : false;
     }
 
     /**

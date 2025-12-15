@@ -57,8 +57,9 @@ trait WrapperTrait
         if (!empty($this->className) && !method_exists($this->className, 'init')) {
             return true;
         }
+        $xar = $this->getServicesClass();
         // override default ServiceInterface here + pass along $xar
-        return $this->__call('init', [$config, $this->getParent()]);
+        return $this->__call('init', [$config, $xar]);
     }
 
     /**

@@ -198,8 +198,9 @@ class UpdatepropMethod extends MethodClass
             $res = $property->addToObject(['object_id' => $objectid]);
         }
 
+        $xar = $this->getStaticServices();
         // CHECKME: flush the variable cache if necessary
-        DataObjectFactory::flushVariableCache(['objectid' => $objectid], $this->getParent());
+        DataObjectFactory::flushVariableCache(['objectid' => $objectid], $xar);
 
         if ($isprimary) {
             $modinfo = $this->mod()->getInfo($module_id);

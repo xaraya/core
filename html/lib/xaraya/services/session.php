@@ -163,7 +163,7 @@ trait SessionTrait
     public function getInstance(): ?SessionFacade
     {
         // moved to static services class
-        $instance = $this->getParent()->getSessionInstance();
+        $instance = $this->getServicesClass()->getSessionInstance();
         if (!isset($instance)) {
             // do *not* initialize session here - depends on the caller
             //$this->init($this->args);
@@ -174,13 +174,14 @@ trait SessionTrait
     public function setInstance(SessionFacade $instance): void
     {
         // moved to static services class
-        $this->getParent()->setSessionInstance($instance);
+        $this->getServicesClass()->setSessionInstance($instance);
     }
 
     public function newInstance(): SessionFacade
     {
+        $xar = $this->getServicesClass();
         // Set up the session instance with current context
-        return new self::$sessionClass($this->args, $this->getContext(), $this->getParent());
+        return new self::$sessionClass($this->args, $this->getContext(), $xar);
     }
 
     public function getId(?string $id = null): mixed

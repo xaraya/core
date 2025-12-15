@@ -122,7 +122,7 @@ class ModuleCache extends ServiceClass
             $params = explode(',', $this->funcParams);
         }
         // add missing function params to $args
-        $var = $this->getParent()->var();
+        $var = $this->getServicesClass()->var();
         foreach ($params as $param) {
             if (!isset($args[$param])) {
                 $var->find($param, $args[$param]);
@@ -307,8 +307,8 @@ class ModuleCache extends ServiceClass
             return;
         }
 
-        $req = $this->getParent()->req();
-        $tpl = $this->getParent()->tpl();
+        $req = $this->getServicesClass()->req();
+        $tpl = $this->getServicesClass()->tpl();
 
         if (// the http request is a GET AND
             $req->getMethod() == 'GET'

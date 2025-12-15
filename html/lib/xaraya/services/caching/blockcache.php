@@ -255,7 +255,7 @@ class BlockCache extends ServiceClass
             $value = 'isEmptyBlock';
         }
 
-        $req = $this->getParent()->req();
+        $req = $this->getServicesClass()->req();
 
         if (// the http request is a GET AND
             $req->getMethod() == 'GET'

@@ -277,7 +277,7 @@ class EventsService implements EventsInterface
         $xar = $this->getServicesClass();
         // Cached event subjects and observers
         $cacheScope = 'Events.Subjects';
-        $cacheName = $subjecttype;
+        $cacheName = (string) $subjecttype;
         if ($xar->mem()->has($cacheScope, $cacheName)) {
             $subjects = $xar->mem()->get($cacheScope, $cacheName);
             assert(is_array($subjects));
@@ -360,7 +360,7 @@ class EventsService implements EventsInterface
         $observertype = $this->getObserverType();
         // Cached event subjects and observers
         $cacheScope = 'Events.Observers';
-        $cacheName = $observertype;
+        $cacheName = (string) $observertype;
         $observers = [];
         if ($xar->mem()->has($cacheScope, $cacheName)) {
             $observers = $xar->mem()->get($cacheScope, $cacheName);

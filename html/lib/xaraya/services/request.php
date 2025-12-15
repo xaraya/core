@@ -147,7 +147,7 @@ trait RequestTrait
     public function getInstance(): RequestFacade
     {
         // moved to static services class
-        $instance = $this->getParent()->getRequestInstance();
+        $instance = $this->getServicesClass()->getRequestInstance();
         if (!isset($instance)) {
             // Set up the request instance with current context
             $instance = $this->newInstance();
@@ -164,7 +164,7 @@ trait RequestTrait
     public function setInstance(RequestFacade $instance): void
     {
         // moved to static services class
-        $this->getParent()->setRequestInstance($instance);
+        $this->getServicesClass()->setRequestInstance($instance);
     }
 
     /**
@@ -416,7 +416,7 @@ trait RequestTrait
         }
 
         // @deprecated 2.4.1 not used
-        //$value = $this->getParent()->mls()->convertFromInput($value, $method);
+        //$value = $this->getServicesClass()->mls()->convertFromInput($value, $method);
 
         // @deprecated 2.4.1 not used
         //if (get_magic_quotes_gpc()) {
@@ -523,7 +523,8 @@ trait RequestTrait
 
     public function setRequest(mixed $url = null): void
     {
-        $this->request = new xarRequest($url, $this->getParent());
+        $xar = $this->getServicesClass();
+        $this->request = new xarRequest($url, $xar);
     }
 
     /**

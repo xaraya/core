@@ -206,7 +206,7 @@ class PageCache extends ServiceClass
             }
         }
         // @todo check if this can be auto-initialized
-        $req = $this->getParent()->req();
+        $req = $this->getServicesClass()->req();
         // doesn't seem to be taken into account ?
         $etag = $this->cacheCode . $modtime;
         $match = $_SERVER['HTTP_IF_NONE_MATCH'] ?? null;
@@ -324,8 +324,9 @@ class PageCache extends ServiceClass
         if (empty($cacheKey) || $cacheKey != $this->cacheKey) {
             return;
         }
+        $xar = $this->getServicesClass();
 
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         // Check if isCached() or xarSecurity or ... has told not to cache this page
         if ($mem->has('Page.Caching', 'nocache')) {
             // reset for next page request when using second-level cache storage
@@ -336,7 +337,7 @@ class PageCache extends ServiceClass
         // We delay checking this extra caching rule until now
         if ($this->cacheHookedOnly) {
             $modName = substr($cacheKey, 0, strpos($cacheKey, '-'));
-            if (!$this->getParent()->hooked()->isAttached('cachemanager', $modName)) {
+            if (!$xar->hooked()->isAttached('cachemanager', $modName)) {
                 return;
             }
         }
@@ -349,7 +350,7 @@ class PageCache extends ServiceClass
             && !($this->cacheStorage->sizeLimitReached())) {
             // if request, modify the end of the file with a time stamp
             if ($this->cacheShowTime == 1) {
-                $now = $this->getParent()->ml(
+                $now = $xar->ml(
                     'Last updated on #(1)',
                     date(DATE_RFC7231),
                 );
@@ -390,7 +391,7 @@ class PageCache extends ServiceClass
 
     public function checkUserCaching($cacheGroups)
     {
-        $user = $this->getParent()->user();
+        $user = $this->getServicesClass()->user();
         if (!$user->isLoggedIn()) {
             // always allow caching for anonymous users
             return true;

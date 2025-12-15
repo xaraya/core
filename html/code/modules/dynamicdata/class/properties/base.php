@@ -1066,7 +1066,8 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     public function getConfigProperties($type = "", $fullname = 0)
     {
-        $allconfigproperties = DataPropertyMaster::getAllConfigProperties($this->getParent());
+        $xar = $this->getStaticServices();
+        $allconfigproperties = DataPropertyMaster::getAllConfigProperties($xar);
         // if no items found, bail
         if (empty($allconfigproperties)) {
             return $allconfigproperties;
@@ -1102,7 +1103,8 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     public function listConfigProperties()
     {
-        $allconfigproperties = DataPropertyMaster::getAllConfigProperties($this->getParent());
+        $xar = $this->getStaticServices();
+        $allconfigproperties = DataPropertyMaster::getAllConfigProperties($xar);
         // if no items found, bail
         if (empty($allconfigproperties)) {
             return $allconfigproperties;

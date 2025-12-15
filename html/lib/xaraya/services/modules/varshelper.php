@@ -45,25 +45,26 @@ class VarsHelper extends ServiceClass
         if (!isset($this->preloaded[$modName])) {
             $this->preload($modName);
         }
+        $xar = $this->getServicesClass();
 
         // Lets first check to see if any of our type vars are already set in the cache.
         $cacheScope = self::SCOPE . '.' . $modName;
 
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         // Try to get it from the cache
         if ($mem->has($cacheScope, $varName)) {
             $value = $mem->get($cacheScope, $varName);
             return $value;
         }
 
-        $mod = $this->getParent()->mod();
+        $mod = $xar->mod();
         // Still no luck, let's do the hard work then
         $modBaseInfo = $mod->getBaseInfo($modName);
         if (empty($modBaseInfo)) {
             return null;
         }
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
 
@@ -98,13 +99,14 @@ class VarsHelper extends ServiceClass
         if (empty($varName)) {
             throw new EmptyParameterException('name');
         }
+        $xar = $this->getServicesClass();
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
         $module_varstable = $tables['module_vars'];
 
-        $mod = $this->getParent()->mod();
+        $mod = $xar->mod();
         $modBaseInfo = $mod->getBaseInfo($modName);
 
         // We need the variable id
@@ -133,7 +135,7 @@ class VarsHelper extends ServiceClass
 
         // Update cache for the variable
         $cacheScope = self::SCOPE . '.' . $modName;
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         $mem->set($cacheScope, $varName, $value);
         return true;
     }
@@ -143,12 +145,13 @@ class VarsHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
+        $xar = $this->getServicesClass();
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
 
-        $mod = $this->getParent()->mod();
+        $mod = $xar->mod();
         $modBaseInfo = $mod->getBaseInfo($modName);
 
         // Delete all the itemvars derived from this var first
@@ -171,7 +174,7 @@ class VarsHelper extends ServiceClass
 
         // Removed it from the cache
         $cacheScope = self::SCOPE . '.' . $modName;
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         $mem->del($cacheScope, $varName);
         return true;
     }
@@ -179,7 +182,7 @@ class VarsHelper extends ServiceClass
     public function cache(string $modName, ?string $source = null): void
     {
         $cacheScope = self::SCOPE . '.' . $modName;
-        $mem = $this->getParent()->mem();
+        $mem = $this->getServicesClass()->mem();
         if ($mem->hasPreload($cacheScope)) {
             $source ??= __METHOD__;
             $mem->save($cacheScope, null, $source);
@@ -199,8 +202,9 @@ class VarsHelper extends ServiceClass
         if (empty($modName) || empty($varName)) {
             throw new EmptyParameterException('modName and/or name');
         }
+        $xar = $this->getServicesClass();
 
-        $mod = $this->getParent()->mod();
+        $mod = $xar->mod();
         // Retrieve module info, so we can decide where to look
         $modBaseInfo = $mod->getBaseInfo($modName);
         if (empty($modBaseInfo)) {
@@ -208,12 +212,12 @@ class VarsHelper extends ServiceClass
         } // throw back
 
         $cacheScope = 'Mod.GetVarID';
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         if ($mem->has($cacheScope, $modBaseInfo['name'] . $varName)) {
             return $mem->get($cacheScope, $modBaseInfo['name'] . $varName);
         }
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
 
@@ -245,16 +249,17 @@ class VarsHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
+        $xar = $this->getServicesClass();
 
         $cacheScope = self::SCOPE . '.' . $modName;
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         if ($mem->hasPreload($cacheScope) && $mem->load($cacheScope)) {
             $this->preloaded[$modName] = true;
             return true;
         }
 
         try {
-            $mod = $this->getParent()->mod();
+            $mod = $xar->mod();
             $modBaseInfo = $mod->getBaseInfo($modName);
             if (empty($modBaseInfo)) {
                 throw new VariableNotFoundException([$modName, 'Invalid module.'], "Module variables of module '#(1)' not found: #(2)");
@@ -263,7 +268,7 @@ class VarsHelper extends ServiceClass
             throw new VariableNotFoundException([$modName, 'No connection available.'], "Module variables of module '#(1)' not found: #(2)");
         }
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
 
@@ -291,11 +296,12 @@ class VarsHelper extends ServiceClass
         if (empty($modName)) {
             throw new EmptyParameterException('modName');
         }
+        $xar = $this->getServicesClass();
 
-        $mod = $this->getParent()->mod();
+        $mod = $xar->mod();
         $modBaseInfo = $mod->getBaseInfo($modName);
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
 

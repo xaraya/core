@@ -27,7 +27,6 @@ use FunctionNotFoundException;
  */
 interface ModuleClassInterface extends ServicesInterface
 {
-    /** @param ?Context<string, mixed> $context */
     public function __construct(string $modName, ?ModuleInterface $parent = null);
     /** @return void */
     public function configure();
@@ -138,8 +137,6 @@ trait ModuleClassTrait
     /**
      * Summary of __construct
      * @param TModule $parent
-     * @param ?Context<string, mixed> $context
-     * @param ?ServicesInterface $xar
      */
     public function __construct(string $modName, ?ModuleInterface $parent = null)
     {

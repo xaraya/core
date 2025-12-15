@@ -55,11 +55,12 @@ trait ConfigTrait
         if (!$this->preloaded) {
             throw new VariableNotFoundException($varName, "Variable #(1) not found");
         }
+        $xar = $this->getServicesClass();
 
         // Configvars which are not in the database (either in config file or in code defines)
         switch ($varName) {
             case 'Site.DB.TablePrefix':
-                $sysConfig = $this->getParent()->sysConfig();
+                $sysConfig = $xar->sysConfig();
                 return $sysConfig->getVar('DB.TablePrefix');
             case 'System.Core.Generation':
                 return xarCore::GENERATION;
@@ -71,10 +72,10 @@ trait ConfigTrait
                 return xarCore::VERSION_SUB;
             case 'prefix':
                 // FIXME: Can we do this another way (dependency)
-                return $this->getParent()->db()->getPrefix();
+                return $xar->db()->getPrefix();
         }
 
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         // From the cache
         if ($mem->has(self::SCOPE, $varName)) {
             $value = $mem->get(self::SCOPE, $varName);
@@ -82,7 +83,7 @@ trait ConfigTrait
         }
         $value = $default;
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         // Need to retrieve it
         // @todo checkme What should we do here? preload again, or just fetch the one?
         $dbconn = $db->getConn();
@@ -124,8 +125,9 @@ trait ConfigTrait
         // 3. inserting it.
         // Question is wether we want to invent new configvars on the fly or not
         $this->delVar($varName);
+        $xar = $this->getServicesClass();
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
         $config_varsTable = $tables['config_vars'];
@@ -142,7 +144,7 @@ trait ConfigTrait
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
 
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         $mem->set(self::SCOPE, $varName, $value);
 
         return true;
@@ -153,7 +155,8 @@ trait ConfigTrait
      */
     public function delVar(string $varName): bool
     {
-        $db = $this->getParent()->db();
+        $xar = $this->getServicesClass();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
         $config_varsTable = $tables['config_vars'];
@@ -163,7 +166,7 @@ trait ConfigTrait
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate([$varName]);
 
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         $mem->del(self::SCOPE, $varName);
 
         return true;
@@ -174,7 +177,7 @@ trait ConfigTrait
      */
     public function cacheVars(?string $source = null): void
     {
-        $mem = $this->getParent()->mem();
+        $mem = $this->getServicesClass()->mem();
         if ($mem->hasPreload(self::SCOPE)) {
             $source ??= __METHOD__;
             $mem->save(self::SCOPE, null, $source);
@@ -185,13 +188,14 @@ trait ConfigTrait
 
     protected function preload()
     {
-        $mem = $this->getParent()->mem();
+        $xar = $this->getServicesClass();
+        $mem = $xar->mem();
         if ($mem->hasPreload(self::SCOPE) && $mem->load(self::SCOPE)) {
             $this->preloaded = true;
             return true;
         }
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         try {
             $dbconn = $db->getConn();
             $tables = $db->getTables();

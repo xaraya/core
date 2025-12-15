@@ -26,7 +26,7 @@ class UserVarsHelper extends ItemVarsHelper
     public function get(string $modName, string $varName, mixed $userId = null): mixed
     {
         // If id not specified take the current user
-        $user = $this->getParent()->user($userId);
+        $user = $this->getServicesClass()->user($userId);
 
         // Anonymous user always uses the module default setting
         if (!$user->isLoggedIn()) {
@@ -40,7 +40,7 @@ class UserVarsHelper extends ItemVarsHelper
     public function set(string $modName, string $varName, mixed $value, mixed $userId = null): bool
     {
         // If no id specified assume current user
-        $user = $this->getParent()->user($userId);
+        $user = $this->getServicesClass()->user($userId);
 
         // For anonymous users no preference can be set
         // MrB: should we raise an exception here?
@@ -55,7 +55,7 @@ class UserVarsHelper extends ItemVarsHelper
     public function delete(string $modName, string $varName, mixed $userId = null): bool
     {
         // If id is not set assume current user
-        $user = $this->getParent()->user($userId);
+        $user = $this->getServicesClass()->user($userId);
 
         // Deleting for anonymous user is useless return true
         // MrB: should we continue, can't harm either and we have

@@ -130,7 +130,8 @@ trait VariablesTrait
         if (empty($config) && $this->initialized) {
             return true;
         }
-        $db = $this->getParent()->db();
+        $xar = $this->getServicesClass();
+        $db = $xar->db();
         // Configuration init needs to be done first
         $tables = [
             'config_vars' => $db->getPrefix() . '_module_vars',
@@ -139,7 +140,7 @@ trait VariablesTrait
         $db->importTables($tables);
 
         // Initialise the variable cache
-        xarVarPrep::init($config, $this->getParent());
+        xarVarPrep::init($config, $xar);
 
         $this->initialized = true;
         return true;
@@ -256,7 +257,8 @@ trait VariablesTrait
 
             // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
             if ($prep & ixarVarPrep::STORE) {
-                $dbconn = $this->getParent()->db()->getConn();
+                $xar = $this->getServicesClass();
+                $dbconn = $xar->db()->getConn();
                 $variable = $dbconn->qstr($variable);
             }
 
@@ -400,7 +402,7 @@ trait VariablesTrait
      */
     protected function getRequestVar(string $name, ?string $allowOnlyMethod = null): mixed
     {
-        return $this->getParent()->req()->getVar($name, $allowOnlyMethod);
+        return $this->getServicesClass()->req()->getVar($name, $allowOnlyMethod);
     }
 
     /**

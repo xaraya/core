@@ -70,7 +70,8 @@ trait DataPropertyTrait
      */
     public function getPropertyTypes(): array
     {
-        return DataPropertyMaster::getPropertyTypes($this->getParent());
+        $xar = $this->getServicesClass();
+        return DataPropertyMaster::getPropertyTypes($xar);
     }
 
     /**
@@ -80,7 +81,8 @@ trait DataPropertyTrait
      */
     public function getProperties(array $args = []): array
     {
-        return DataPropertyMaster::getProperties($args, $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataPropertyMaster::getProperties($args, $xar);
     }
 
     /**
@@ -89,13 +91,14 @@ trait DataPropertyTrait
      */
     public function getProperty(array $args = []): DataProperty
     {
+        $xar = $this->getServicesClass();
         if (!isset($this->dummyObject)) {
-            $property = DataPropertyMaster::getProperty($args, $this->getParent());
+            $property = DataPropertyMaster::getProperty($args, $xar);
             // initialize dummy object with static services class for stand-alone properties
-            $this->dummyObject = $property->getDummyObject($this->getServicesClass());
+            $this->dummyObject = $property->getDummyObject($xar);
             return $property;
         }
-        return DataPropertyMaster::getProperty($args, $this->getParent());
+        return DataPropertyMaster::getProperty($args, $xar);
     }
 
     /**
@@ -106,7 +109,8 @@ trait DataPropertyTrait
      */
     public function importPropertyTypes(bool $flush = true, array $dirs = []): array
     {
-        return PropertyRegistration::importPropertyTypes($flush, $dirs, $this->getParent());
+        $xar = $this->getServicesClass();
+        return PropertyRegistration::importPropertyTypes($flush, $dirs, $xar);
     }
 }
 

@@ -142,8 +142,7 @@ trait DataObjectTrait
     public function getURL(string $methodName = 'view', array $args = [], ?string $objectName = null): string
     {
         $objectName ??= $this->getObjectName();
-        /** @var ControllerInterface $ctl */
-        $ctl = $this->getParent()->ctl();
+        $ctl = $this->getServicesClass()->ctl();
         return $ctl->getObjectURL($objectName, $methodName, $args);
     }
 
@@ -163,8 +162,7 @@ trait DataObjectTrait
         $modName = $this->getModName();
         $objecTemplate = $this->getObjectTemplate();
 
-        /** @var TemplatingInterface $tpl */
-        $tpl = $this->getParent()->tpl();
+        $tpl = $this->getServicesClass()->tpl();
 
         // Create the output.
         return $tpl->object(
@@ -212,7 +210,8 @@ trait DataObjectTrait
      */
     public function getObject(array $args = []): ?DataObject
     {
-        return DataObjectFactory::getObject($args, $this->getContext(), $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectFactory::getObject($args, $this->getContext(), $xar);
     }
 
     /**
@@ -221,7 +220,8 @@ trait DataObjectTrait
      */
     public function getObjectList(array $args = []): ?DataObjectList
     {
-        return DataObjectFactory::getObjectList($args, $this->getContext(), $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectFactory::getObjectList($args, $this->getContext(), $xar);
     }
 
     /**
@@ -230,7 +230,8 @@ trait DataObjectTrait
      */
     public function getObjectLoader(string $objectName, array $fieldlist = ['id', 'name']): ?DataObjectLoader
     {
-        return DataObjectFactory::getObjectLoader($objectName, $fieldlist, $this->getContext(), $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectFactory::getObjectLoader($objectName, $fieldlist, $this->getContext(), $xar);
     }
 
     /**
@@ -240,7 +241,8 @@ trait DataObjectTrait
      */
     public function getObjectInfo(array $args = [])
     {
-        return DataObjectFactory::getObjectInfo($args, $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectFactory::getObjectInfo($args, $xar);
     }
 
     /**
@@ -250,7 +252,8 @@ trait DataObjectTrait
      */
     public function getObjectInterface(array $args = [])
     {
-        return DataObjectFactory::getObjectInterface($args, $this->getContext(), $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectFactory::getObjectInterface($args, $this->getContext(), $xar);
     }
 
     /**
@@ -260,7 +263,8 @@ trait DataObjectTrait
      */
     public function getObjects(array $args = [])
     {
-        return DataObjectFactory::getObjects($args, $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectFactory::getObjects($args, $xar);
     }
 
     /**
@@ -270,7 +274,8 @@ trait DataObjectTrait
      */
     public function createObject(array $args = [])
     {
-        return DataObjectFactory::createObject($args, $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectFactory::createObject($args, $xar);
     }
 
     /**
@@ -280,7 +285,8 @@ trait DataObjectTrait
      */
     public function updateObject(array $args = [])
     {
-        return DataObjectFactory::updateObject($args, $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectFactory::updateObject($args, $xar);
     }
 
     /**
@@ -290,7 +296,8 @@ trait DataObjectTrait
      */
     public function deleteObject(array $args = [])
     {
-        return DataObjectFactory::deleteObject($args, $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectFactory::deleteObject($args, $xar);
     }
 
     /**
@@ -300,7 +307,8 @@ trait DataObjectTrait
      */
     public function getObjectID(array $args = [])
     {
-        return DataObjectDescriptor::getObjectID($args, $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectDescriptor::getObjectID($args, $xar);
     }
 
     /**
@@ -309,17 +317,20 @@ trait DataObjectTrait
      */
     public function getObjectDescriptor(array $args = []): DataObjectDescriptor
     {
-        return new DataObjectDescriptor($args, $this->getParent());
+        $xar = $this->getServicesClass();
+        return new DataObjectDescriptor($args, $xar);
     }
 
     public function export($objectid, $itemid = null, $format = 'xml', $tofile = false)
     {
-        return DataObjectExporter::export($objectid, $itemid, $format, $tofile, $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectExporter::export($objectid, $itemid, $format, $tofile, $xar);
     }
 
     public function import($file = null, $content = null, $format = 'xml', $prefix = null, $overwrite = false, $keepitemid = false)
     {
-        return DataObjectImporter::import($file, $content, $format, $prefix, $overwrite, $keepitemid, $this->getParent());
+        $xar = $this->getServicesClass();
+        return DataObjectImporter::import($file, $content, $format, $prefix, $overwrite, $keepitemid, $xar);
     }
 }
 

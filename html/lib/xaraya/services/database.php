@@ -98,8 +98,9 @@ trait DatabaseTrait
      */
     public function init(array $config = []): bool
     {
+        $xar = $this->getServicesClass();
         // @todo set sysConfig() defines here instead of auto-loaded file?
-        return xarDatabase::init($config, $this->getParent());
+        return xarDatabase::init($config, $xar);
     }
 
     protected function connect(array $config = [])
@@ -114,7 +115,8 @@ trait DatabaseTrait
      */
     public function getConfig(): array
     {
-        return xarDatabase::getConfig($this->getParent());
+        $xar = $this->getServicesClass();
+        return xarDatabase::getConfig($xar);
     }
 
     /**
@@ -122,7 +124,8 @@ trait DatabaseTrait
      */
     public function checkDbConnection(mixed $dbConnIndex = 0, array $dbConnArgs = []): mixed
     {
-        return ExternalDatabase::checkDbConnection($dbConnIndex, $dbConnArgs, $this->getParent());
+        $xar = $this->getServicesClass();
+        return ExternalDatabase::checkDbConnection($dbConnIndex, $dbConnArgs, $xar);
     }
 
     public function isIndexExternal(mixed $index): bool
@@ -227,8 +230,9 @@ trait DatabaseTrait
      */
     public function newConn(?array $args = null): object
     {
+        $xar = $this->getServicesClass();
         // @todo support/combine external database as well
-        return xarDB::newConn($args, $this->getParent());
+        return xarDB::newConn($args, $xar);
     }
 
     /**

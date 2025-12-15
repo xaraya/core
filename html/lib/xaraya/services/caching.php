@@ -290,7 +290,7 @@ trait CachingTrait
 
         // Enable core caching in memory
         // @todo verify with StaticServicesClass::__construct()
-        $this->coreCacheIsEnabled = $this->getParent()->mem()->init($config);
+        $this->coreCacheIsEnabled = $this->getServicesClass()->mem()->init($config);
 
         // Enable template caching ? Too early in the process here, cfr. xaraya/templates.php
 
@@ -749,7 +749,7 @@ trait CachingTrait
         if (!empty($this->pageCache)) {
             // set the current cacheKey to null
             $this->pageCache->cacheKey = null;
-            $this->getParent()->mem()->set('Page.Caching', 'nocache', true);
+            $this->getServicesClass()->mem()->set('Page.Caching', 'nocache', true);
         }
         if (!empty($this->blockCache)) {
             // set the current cacheKey to null
@@ -850,7 +850,8 @@ trait CachingTrait
      */
     public function getStorage(array $args = []): ixarCache_Storage
     {
-        return xarCache_Storage::getCacheStorage($args, $this->getParent());
+        $xar = $this->getServicesClass();
+        return xarCache_Storage::getCacheStorage($args, $xar);
     }
 
     /**
@@ -859,9 +860,10 @@ trait CachingTrait
      */
     public function getParents(?int $currentid = null): array
     {
-        $mem = $this->getParent()->mem();
+        $xar = $this->getServicesClass();
+        $mem = $xar->mem();
         if (empty($currentid)) {
-            $currentid = $this->getParent()->session()->getUserId();
+            $currentid = $xar->session()->getUserId();
         }
         if ($mem->has('User.Variables.' . $currentid, 'parentlist')) {
             return $mem->get('User.Variables.' . $currentid, 'parentlist');
@@ -870,7 +872,7 @@ trait CachingTrait
         // load Database Service on demand here for caching
         try {
             // @todo do we want to call xar::db()->init() here first?
-            $xarDB = $this->getParent()->db();
+            $xarDB = $xar->db();
         } catch (\Throwable $e) {
             error_log('Unable to load database service in xarCache: ' . $e->getMessage());
             $mem->set('User.Variables.' . $currentid, 'parentlist', $gidlist);

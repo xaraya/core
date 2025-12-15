@@ -46,10 +46,11 @@ class CountitemsMethod extends MethodClass
         if (!isset($include_core)) {
             $include_core = true;
         }
+        $xar = $this->getStaticServices();
 
         // Determine the tables we are going to use
-        $tables = $this->db()->getTables();
-        $q = new Query('SELECT', $tables['modules'], '', 0, $this->getParent());
+        $tables = $xar->db()->getTables();
+        $q = new Query('SELECT', $tables['modules'], '', 0, $xar);
 
         if (!empty($regid)) {
             $q->eq('regid', $regid);

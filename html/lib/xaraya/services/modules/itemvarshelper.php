@@ -35,11 +35,12 @@ class ItemVarsHelper extends VarsHelper
         if (empty($varName)) {
             throw new EmptyParameterException('name');
         }
+        $xar = $this->getServicesClass();
 
         // Initialize
         $value = null;
 
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         // Try to get it from the cache
         $cacheCollection = 'ModItem.Variables.' . $modName;
         $cacheName = $itemid . $varName;
@@ -49,7 +50,7 @@ class ItemVarsHelper extends VarsHelper
             return $value;
         }
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         // Not in cache, need to retrieve it
         $dbconn = $db->getConn();
         $tables = $db->getTables();
@@ -89,8 +90,9 @@ class ItemVarsHelper extends VarsHelper
         if (empty($varName)) {
             throw new EmptyParameterException('name');
         }
+        $xar = $this->getServicesClass();
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
 
@@ -126,7 +128,7 @@ class ItemVarsHelper extends VarsHelper
             $stmt->executeUpdate($bindvars);
         }
 
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         $cachename = $itemid . $varName;
         $mem->set('ModItem.Variables.' . $modName, $cachename, $value);
 
@@ -142,8 +144,9 @@ class ItemVarsHelper extends VarsHelper
         if (empty($varName)) {
             throw new EmptyParameterException('name');
         }
+        $xar = $this->getServicesClass();
 
-        $db = $this->getParent()->db();
+        $db = $xar->db();
         $dbconn = $db->getConn();
         $tables = $db->getTables();
 
@@ -159,7 +162,7 @@ class ItemVarsHelper extends VarsHelper
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
 
-        $mem = $this->getParent()->mem();
+        $mem = $xar->mem();
         $cachename = $itemid . $varName;
         $mem->del('ModItem.Variables.' . $modName, $cachename);
         return true;

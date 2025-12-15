@@ -95,11 +95,12 @@ class Role extends DataObject
     public function __construct(DataObjectDescriptor $descriptor, $xar = null)
     {
         parent::__construct($descriptor, $xar);
+        $xar = $this->getStaticServices();
 
-        $this->mod()->loadDbInfo('roles');
-        $this->mod()->loadDbInfo('privileges');
+        $xar->mod()->loadDbInfo('roles');
+        $xar->mod()->loadDbInfo('privileges');
 
-        $xartable = $this->db()->getTables();
+        $xartable = $xar->db()->getTables();
         $this->rolestable = $xartable['roles'];
         $this->rolememberstable = $xartable['rolemembers'];
         $this->privilegestable = $xartable['privileges'];
@@ -138,9 +139,10 @@ class Role extends DataObject
             $query .= " WHERE uname = ? ";
             $bindvars[] = $data['uname'];
         }
-        $dbconn = $this->db()->getConn();
+        $xar = $this->getStaticServices();
+        $dbconn = $xar->db()->getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
         if ($result->first() > 0) {
             $result = $result->getRow();
             throw new DuplicateException(['role',($this->itemtype == xarRoles::ROLES_GROUPTYPE) ? $result['name'] : $result['uname'] ]);
@@ -151,14 +153,14 @@ class Role extends DataObject
         $id = parent::createItem($data);
 
         // Set the email useage for this user to false
-        $this->mod()->setUserVar('allowemail', false, $id);
+        $xar->mod('roles')->setUserVar('allowemail', false, $id);
 
         // Get a value for the parent id
         if (empty($data['parentid'])) {
-            $this->var()->check('parentid', $data['parentid'], 'int');
+            $xar->var()->check('parentid', $data['parentid'], 'int');
         }
         if (empty($data['parentid'])) {
-            $data['parentid'] = (int) $this->mod('roles')->getVar('defaultgroup');
+            $data['parentid'] = (int) $xar->mod('roles')->getVar('defaultgroup');
         }
         if (!empty($data['parentid'])) {
             $parent = xarRoles::get($data['parentid']);
@@ -168,9 +170,9 @@ class Role extends DataObject
         }
 
         // add the duvs
-        $this->var()->find('duvs', $duvs, 'array', []);
+        $xar->var()->find('duvs', $duvs, 'array', []);
         foreach ($duvs as $key => $value) {
-            $this->mod()->setUserVar($key, $value, $id);
+            $xar->mod('roles')->setUserVar($key, $value, $id);
         }
 
         // Let any hooks know that we have created a new user.
@@ -178,22 +180,23 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
         $item['exclude_module'] = ['dynamicdata'];
-        $this->mod()->notifyHooks('ItemCreate', $item);
+        $xar->mod()->notifyHooks('ItemCreate', $item);
         return $id;
     }
 
     public function updateItem(array $data = [])
     {
+        $xar = $this->getStaticServices();
         $id = parent::updateItem($data);
-        $this->var()->find('duvs', $duvs, 'array', []);
+        $xar->var()->find('duvs', $duvs, 'array', []);
         foreach ($duvs as $key => $value) {
-            $this->mod()->setUserVar($key, $value, $id);
+            $xar->mod('roles')->setUserVar($key, $value, $id);
         }
         $item['module'] = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
         $item['exclude_module'] = ['dynamicdata'];
-        $this->mod()->notifyHooks('ItemUpdate', $item);
+        $xar->mod()->notifyHooks('ItemUpdate', $item);
         return $id;
     }
 
@@ -213,6 +216,7 @@ class Role extends DataObject
         if ($this->isUser()) {
             return false;
         }
+        $xar = $this->getStaticServices();
 
         $query = "SELECT * FROM $this->rolememberstable
                  WHERE role_id = ? AND parent_id = ?";
@@ -221,9 +225,9 @@ class Role extends DataObject
         $bindvars[] = $member->getID();
         $bindvars[] = $this->getID();
 
-        $dbconn = $this->db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
 
         // If the relation already exists we are done
         while ($result->next()) {
@@ -238,7 +242,7 @@ class Role extends DataObject
         $bindvars = [];
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
 
         // for children that are users
         // add 1 to the users field of the parent group. This is for display purposes.
@@ -250,7 +254,7 @@ class Role extends DataObject
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
             if (!$result) {
                 return;
             }
@@ -264,7 +268,7 @@ class Role extends DataObject
             $query = "UPDATE  " . $this->rolestable . " SET users = " . $value . " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
 
         }
 
@@ -272,7 +276,7 @@ class Role extends DataObject
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
-        $this->mod()->notifyHooks('ItemLink', $item);
+        $xar->mod()->notifyHooks('ItemLink', $item);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -291,8 +295,9 @@ class Role extends DataObject
      */
     public function removeMember($member)
     {
+        $xar = $this->getStaticServices();
         // Delete the relevant entry from the rolemembers table
-        $xartables = $this->db()->getTables();
+        $xartables = $xar->db()->getTables();
         $q = new Query('DELETE', $xartables['rolemembers']);
         $q->eq('role_id', $member->getID());
         $q->eq('parent_id', $this->getID());
@@ -307,9 +312,9 @@ class Role extends DataObject
                         FROM $this->rolestable";
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
-            $dbconn = $this->db()->getConn();
+            $dbconn = $xar->db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
             if (!$result) {
                 return;
             }
@@ -325,13 +330,13 @@ class Role extends DataObject
             $bindvars[] =  $this->getID();
 
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
         }
         // @todo nice idea, but with this info we're not sure who is unlinking from where
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
-        $this->mod()->notifyHooks('ItemUnlink', $item);
+        $xar->mod()->notifyHooks('ItemUnlink', $item);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -350,21 +355,22 @@ class Role extends DataObject
         if (!empty($data['itemid'])) {
             $this->setID($data['itemid']);
         }
+        $xar = $this->getStaticServices();
 
-        if ($this->getID() == (int) $this->mod('roles')->getVar('defaultgroup')) {
-            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_defaultusergroup', 'group' => $this->getID()]);
+        if ($this->getID() == (int) $xar->mod('roles')->getVar('defaultgroup')) {
+            return $xar->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_defaultusergroup', 'group' => $this->getID()]);
         }
 
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
         $query = "SELECT parent_id FROM $this->rolememberstable WHERE role_id= ?";
         // Execute the query, bail if an exception was thrown
-        $dbconn = $this->db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery([$this->getID()]);
 
         if (count($result->fields) == 1) {
-            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_sole_parent']);
+            return $xar->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_sole_parent']);
         }
 
         // go through the list, retrieving the roles and detaching each one
@@ -380,7 +386,7 @@ class Role extends DataObject
         }
 
         //Let's not remove the role yet. Instead, we want to deactivate it
-        $deleted = xarML('deleted');
+        $deleted = $xar->ml('deleted');
         $args = [
             'itemid' => $this->getID(),
             'user' => "[" . $deleted . "]" . time(),
@@ -405,7 +411,7 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['method'] = 'delete';
         $item['exclude_module'] = ['dynamicdata'];
-        $this->mod()->notifyHooks('ItemDelete', $item);
+        $xar->mod()->notifyHooks('ItemDelete', $item);
 
         // CHECKME: re-assign all privileges to the child roles ? (probably not)
         return true;
@@ -420,10 +426,11 @@ class Role extends DataObject
      */
     public function purge()
     {
+        $xar = $this->getStaticServices();
         // no checks here. just do it
         $this->deleteItem();
         $state = xarRoles::ROLES_STATE_DELETED;
-        $uname = xarML('deleted') . microtime(true) . '.' . $this->properties['id']->value;
+        $uname = $xar->ml('deleted') . microtime(true) . '.' . $this->properties['id']->value;
         $name = '';
         $pass = '';
         $email = '';
@@ -440,14 +447,14 @@ class Role extends DataObject
 
         $query .= " WHERE id = ? ";
         $bindvars[] = $this->getID();
-        $dbconn = $this->db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
         $item['module'] = 'roles';
         $item['itemid'] = $this->getID();
         $item['itemtype'] = $this->getType();
         $item['method'] = 'purge';
-        $this->mod()->notifyHooks('ItemDelete', $item);
+        $xar->mod()->notifyHooks('ItemDelete', $item);
         return true;
     }
 
@@ -461,16 +468,17 @@ class Role extends DataObject
     public function getAssignedPrivileges()
     {
         static $stmt = null;  // For each id, the query is the same, prepare it once.
+        $xar = $this->getStaticServices();
 
-        $mem = $this->mem();
+        $mem = $xar->mem();
         $cacheKey = "Privileges.ById";
         if ($mem->has($cacheKey, $this->properties['id']->value)) {
             return $mem->get($cacheKey, $this->properties['id']->value);
         }
         // We'll have to get it.
-        $this->log()->info("ROLE: getting privileges for id: " . $this->properties['id']->value);
+        $xar->log()->info("ROLE: getting privileges for id: " . $this->properties['id']->value);
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
-        $xartable = $this->db()->getTables();
+        $xartable = $xar->db()->getTables();
         $query = "SELECT  p.id, p.name, r.name AS realm, p.module_id, m.name AS module,
                           component, instance, level, description
                   FROM    $this->acltable acl,
@@ -480,7 +488,7 @@ class Role extends DataObject
                   WHERE   p.id = acl.privilege_id AND
                           acl.role_id = ?";
         if (!isset($stmt)) {
-            $dbconn = $this->db()->getConn();
+            $dbconn = $xar->db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
         $result = $stmt->executeQuery([$this->properties['id']->value]);
@@ -564,10 +572,11 @@ class Role extends DataObject
      */
     public function assignPrivilege($privilege)
     {
+        $xar = $this->getStaticServices();
         // create an entry in the privmembers table
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = [$this->getID(),$privilege->getID()];
-        $dbconn = $this->db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $dbconn->Execute($query, $bindvars);
 
         // Refresh the privileges cached for the current sessions
@@ -584,11 +593,12 @@ class Role extends DataObject
      */
     public function removePrivilege($privilege)
     {
+        $xar = $this->getStaticServices();
         // remove an entry from the privmembers table
         $query = "DELETE FROM $this->acltable
                   WHERE role_id= ? AND privilege_id= ?";
         $bindvars = [$this->properties['id']->value, $privilege->getID()];
-        $dbconn = $this->db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $dbconn->Execute($query, $bindvars);
 
         // Refresh the privileges cached for the current sessions
@@ -637,8 +647,9 @@ class Role extends DataObject
             $query .= $selection;
         }
         $query .= " ORDER BY " . $order;
+        $xar = $this->getStaticServices();
         // Prepare the query
-        $dbconn = $this->db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $stmt = $dbconn->prepareStatement($query);
 
         if ($startnum != 0) {
@@ -674,7 +685,8 @@ class Role extends DataObject
      */
     public function countChildren($state = xarRoles::ROLES_STATE_CURRENT, $selection = null, $itemtype = null)
     {
-        $xartable = $this->db()->getTables();
+        $xar = $this->getStaticServices();
+        $xartable = $xar->db()->getTables();
         $rolesmemobjects = $this->rolememberstable;
         $rolesobjects = $this->rolestable;
         $bindvars = [];
@@ -690,7 +702,7 @@ class Role extends DataObject
             $query .= " AND r.state = ? ";
             $bindvars[] = $state;
         }
-        $dbconn = $this->db()->getConn();
+        $dbconn = $xar->db()->getConn();
         if (isset($itemtype)) {
             $query .= " AND r.itemtype = ? ";
             $bindvars[] = $itemtype;
@@ -698,10 +710,10 @@ class Role extends DataObject
         if (isset($selection)) {
             $query = $selection;
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
         } else {
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
         }
         if ($result) {
             return;
@@ -743,8 +755,9 @@ class Role extends DataObject
         if ($this->getID() == 1) {
             return $parents;
         }
+        $xar = $this->getStaticServices();
 
-        $mem = $this->mem();
+        $mem = $xar->mem();
         // if it's cached, we can return it
         if ($mem->has($cacheKey, $this->properties['id']->value)) {
             return $mem->get($cacheKey, $this->properties['id']->value);
@@ -755,7 +768,7 @@ class Role extends DataObject
                   FROM $this->rolestable r, $this->rolememberstable rm
                   WHERE r.id = rm.parent_id AND rm.role_id = ?";
         if (!isset($stmt)) {
-            $dbconn = $this->db()->getConn();
+            $dbconn = $xar->db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
         $result = $stmt->executeQuery([$this->properties['id']->value]);
@@ -764,7 +777,7 @@ class Role extends DataObject
         while ($result->next()) {
             [$id] = $result->fields;
 
-            $role = $this->data()->getObject(['name' => 'roles_groups']);
+            $role = $xar->data()->getObject(['name' => 'roles_groups']);
             $role->getItem(['itemid' => $id]);
             $parents[] = $role;
         }
@@ -933,7 +946,8 @@ class Role extends DataObject
         $query = "SELECT users AS users FROM $memberobject";
         $query1 = "UPDATE $memberobject ";
 
-        $dbconn = $this->db()->getConn();
+        $xar = $this->getStaticServices();
+        $dbconn = $xar->db()->getConn();
         $parents = $this->getParents();
         foreach ($parents as $parent) {
             $query .= " WHERE id = ? ";
@@ -942,7 +956,7 @@ class Role extends DataObject
             $bindvars[] = $parent->getID();
 
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
             if (!$result) {
                 return;
             }
@@ -955,7 +969,7 @@ class Role extends DataObject
             $value = $row['users'] + $adjust;
             $bindvars[] = $value;
             $stmt = $dbconn->prepareStatement($query1);
-            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
             if (!$result) {
                 return;
             }

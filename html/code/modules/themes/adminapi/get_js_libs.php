@@ -37,7 +37,8 @@ class GetJsLibsMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $instance = xarJS::getInstance($this->getParent());
+        $xar = $this->getStaticServices();
+        $instance = xarJS::getInstance($xar);
         if (empty($args['scope']) || ($args['scope'] == 'local')) {
             $args['scope'] = 'local_libs';
         } else {

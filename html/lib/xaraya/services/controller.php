@@ -206,6 +206,7 @@ trait ControllerTrait
         } elseif (!empty($params['itemid']) && $params['method'] == 'display') {
             unset($params['method']);
         }
+        $xar = $this->getServicesClass();
 
         // TODO: some common code for getCurrentURL, getModuleURL and getObjectURL ?
 
@@ -213,7 +214,7 @@ trait ControllerTrait
         $params['module'] = 'object';
         $params['type'] = $objectName;
         $params['func'] = $methodName;
-        $request = new xarRequest($params, $this->getParent());
+        $request = new xarRequest($params, $xar);
         $router = $this->getRouter();
         $request->setRoute($router->getRoute());
 
@@ -338,7 +339,8 @@ trait ControllerTrait
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseModURL = '' in config.system.php
         try {
-            $sysLayout = $this->getParent()->sysConfig(sys::LAYOUT);
+            $xar = $this->getServicesClass();
+            $sysLayout = $xar->sysConfig(sys::LAYOUT);
             $this->entryPoint = $sysLayout->getVar('BaseModURL');
         } catch (Exception $e) {
             $this->entryPoint = 'index.php';
@@ -435,7 +437,7 @@ trait ControllerTrait
 
     public function setRequest(mixed $url = null): void
     {
-        $this->getParent()->req()->setRequest($url);
+        $this->getServicesClass()->req()->setRequest($url);
     }
 
     public function setResponse(?xarResponse $response = null): void
@@ -453,7 +455,8 @@ trait ControllerTrait
 
     public function setBaseURL(?string $baseurl): void
     {
-        $sysLayout = $this->getParent()->sysConfig(sys::LAYOUT);
+        $xar = $this->getServicesClass();
+        $sysLayout = $xar->sysConfig(sys::LAYOUT);
         // if entry point is specified in baseurl, e.g. http://localhost/xaraya/dispatch.php
         if (!empty($baseurl) && !str_ends_with($baseurl, '/')) {
             $parts = explode('/', $baseurl);
@@ -474,7 +477,7 @@ trait ControllerTrait
 
         $info = parse_url($baseurl);
         // update server vars in request here!
-        $req = $this->getParent()->req();
+        $req = $xar->req();
         $req->setServerVar('SERVER_NAME', $info['host']);
         if ($info['scheme'] === 'https') {
             $req->setServerVar('SERVER_PORT', $info['port'] ?? 443);
@@ -504,8 +507,9 @@ trait ControllerTrait
         if (!isset($generateXMLURL)) {
             $generateXMLURL = $this->generateXMLURLs;
         }
+        $xar = $this->getServicesClass();
 
-        $url = $this->getParent()->req()->getURL($params);
+        $url = $xar->req()->getURL($params);
 
         // Finish up
         if (isset($target)) {
@@ -525,8 +529,9 @@ trait ControllerTrait
         if ($this->baseurl != null) {
             return $this->baseurl;
         }
+        $xar = $this->getServicesClass();
 
-        $req = $this->getParent()->req();
+        $req = $xar->req();
         $server   = $req->getHost();
         $protocol = $req->getProtocol();
         $path     = $req->getBaseURI();
@@ -540,7 +545,7 @@ trait ControllerTrait
      */
     public function getBaseURI(): string
     {
-        return $this->getParent()->req()->getBaseURI();
+        return $this->getServicesClass()->req()->getBaseURI();
     }
 
     /**
@@ -563,7 +568,7 @@ trait ControllerTrait
      */
     public function getServerVar(string $varName): mixed
     {
-        return $this->getParent()->req()->getServerVar($varName);
+        return $this->getServicesClass()->req()->getServerVar($varName);
     }
 
     /**
@@ -573,7 +578,7 @@ trait ControllerTrait
      */
     public function getSystemVar(string $varName): mixed
     {
-        $sysConfig = $this->getParent()->sysConfig();
+        $sysConfig = $this->getServicesClass()->sysConfig();
         return $sysConfig->getVar($varName);
     }
 
@@ -584,7 +589,7 @@ trait ControllerTrait
      */
     public function getRequest(mixed $url = null): xarRequest
     {
-        return $this->getParent()->req()->getRequest($url);
+        return $this->getServicesClass()->req()->getRequest($url);
     }
 
     /**
@@ -594,7 +599,7 @@ trait ControllerTrait
      */
     public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed
     {
-        return $this->getParent()->req()->getVar($varName, $allowOnlyMethod);
+        return $this->getServicesClass()->req()->getVar($varName, $allowOnlyMethod);
     }
 
     /**
@@ -604,7 +609,7 @@ trait ControllerTrait
      */
     public function getRequestMethod(): string
     {
-        return $this->getParent()->req()->getMethod();
+        return $this->getServicesClass()->req()->getMethod();
     }
 
     /**
@@ -641,7 +646,7 @@ trait ControllerTrait
      */
     public function isLocalReferer(): bool
     {
-        return $this->getParent()->req()->isLocalReferer();
+        return $this->getServicesClass()->req()->isLocalReferer();
     }
 
     /**
@@ -651,7 +656,7 @@ trait ControllerTrait
      */
     public function isSameReferer(): bool
     {
-        return $this->getParent()->req()->isSameReferer();
+        return $this->getServicesClass()->req()->isSameReferer();
     }
 
     /**
@@ -660,7 +665,8 @@ trait ControllerTrait
      */
     public function redirect(string $url, ?int $httpResponse = null)
     {
-        $this->getParent()->cache()->noCache();
+        $xar = $this->getServicesClass();
+        $xar->cache()->noCache();
         $redirectURL = urldecode($url); // this is safe if called multiple times.
 
         // Remove &amp; entities to prevent redirect breakage
@@ -699,7 +705,7 @@ trait ControllerTrait
             $redirectURL = $baseurl . $redirectURL;
         }
 
-        $req = $this->getParent()->req();
+        $req = $xar->req();
         if (preg_match('/IIS/', $req->getServerVar('SERVER_SOFTWARE') ?? '') && preg_match('/CGI/', $req->getServerVar('GATEWAY_INTERFACE') ?? '')) {
             $header = "Refresh: 0; URL=$redirectURL";
         } else {
@@ -756,7 +762,8 @@ trait ControllerTrait
         if (!empty($callback) && is_callable($callback)) {
             return call_user_func($callback, $layout, $this->getContext());
         }
-        $this->getParent()->cache()->noCache();
+        $xar = $this->getServicesClass();
+        $xar->cache()->noCache();
         if (!headers_sent()) {
             header('HTTP/1.0 400 Bad Request');
         }
@@ -764,7 +771,7 @@ trait ControllerTrait
             'layout' => $layout,
             'context' => $this->getContext(),
         ];
-        return $this->getParent()->tpl()->module('privileges', 'user', 'errors', $tplData);
+        return $xar->tpl()->module('privileges', 'user', 'errors', $tplData);
     }
 
     /**
@@ -798,13 +805,14 @@ trait ControllerTrait
         } else {
             $entrypoint = $this->entryPoint;
         }
+        $xar = $this->getServicesClass();
 
         // Create a new request and make its route the current route
         $params['module'] = $modName;
         $params['type'] = $modType;
         $params['func'] = $funcName;
         // Note: using default entrypoint to start here
-        $request = new xarRequest($params, $this->getParent());
+        $request = new xarRequest($params, $xar);
         // <chris/> wrt to the problem of xaraya not obeying a particular route
         // when the main entry point, sans params, is accessed...
         // Here's an example using the shorturls setting in base module

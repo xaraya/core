@@ -42,7 +42,8 @@ class ImportpropertytypesMethod extends MethodClass
             $dirs = [];
         }
         try {
-            $proptypes = PropertyRegistration::importPropertyTypes($flush, $dirs, $this->getParent());
+            $xar = $this->getStaticServices();
+            $proptypes = PropertyRegistration::importPropertyTypes($flush, $dirs, $xar);
         } catch (Exception $e) {
             throw $e;
         }

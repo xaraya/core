@@ -37,7 +37,8 @@ class RenderjsMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $javascript = xarJS::getInstance($this->getParent());
+        $xar = $this->getStaticServices();
+        $javascript = xarJS::getInstance($xar);
         return $javascript->render($args);
     }
 }

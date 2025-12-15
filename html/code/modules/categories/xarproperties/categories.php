@@ -543,9 +543,10 @@ class CategoriesProperty extends DataProperty
      */
     public function mountValue($itemid = 0)
     {
-        $this->mod()->loadDbInfo('categories');
+        $xar = $this->getStaticServices();
+        $xar->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
-        $q = new Query('SELECT', '', '', 0, $this->getParent());
+        $q = new Query('SELECT', '', '', 0, $xar);
         $q->addtable($xartable['categories'], 'c');
         $q->addtable($xartable['categories_linkage'], 'cl');
         $q->join('c.id', 'cl.category_id');

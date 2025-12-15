@@ -34,7 +34,8 @@ class RendermetaMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $meta = xarMeta::getInstance($this->getParent());
+        $xar = $this->getStaticServices();
+        $meta = xarMeta::getInstance($xar);
         return $meta->render($args);
     }
 }

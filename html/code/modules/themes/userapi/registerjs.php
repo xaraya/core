@@ -54,7 +54,8 @@ class RegisterjsMethod extends MethodClass
             $args['index'] = null;
         }
 
-        $javascript = xarJS::getInstance($this->getParent());
+        $xar = $this->getStaticServices();
+        $javascript = xarJS::getInstance($xar);
         return $javascript->register($args);
     }
 }

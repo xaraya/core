@@ -209,13 +209,14 @@ class AccessProperty extends DataProperty
      */
     public function getgroupoptions()
     {
-        $anonID = $this->session()->getAnonId();
-        $options = $this->user()->getGroups();
+        $xar = $this->getStaticServices();
+        $anonID = $xar->session()->getAnonId();
+        $options = $xar->user()->getGroups();
         $firstlines = [
-            ['id' => 0, 'name' => $this->ml('No requirement')],
-            ['id' => $this->myself, 'name' => $this->ml('Current User')],
-            ['id' => $anonID, 'name' => $this->ml('Users not logged in')],
-            ['id' => -$anonID, 'name' => $this->ml('Users logged in')],
+            ['id' => 0, 'name' => $xar->ml('No requirement')],
+            ['id' => $this->myself, 'name' => $xar->ml('Current User')],
+            ['id' => $anonID, 'name' => $xar->ml('Users not logged in')],
+            ['id' => -$anonID, 'name' => $xar->ml('Users logged in')],
         ];
         return array_merge($firstlines, $options);
     }
@@ -301,9 +302,10 @@ class AccessProperty extends DataProperty
      */
     public function check(array $data = [], $exclusive = 1)
     {
+        $xar = $this->getStaticServices();
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if ($this->user()->hasParent($allowed)) {
+            if ($xar->user()->hasParent($allowed)) {
                 return true;
             }
         }
@@ -367,9 +369,10 @@ class AccessProperty extends DataProperty
      */
     public function checkAccessTag(array $data = [], $exclusive = 1)
     {
+        $xar = $this->getStaticServices();
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if ($this->user()->hasParent($allowed)) {
+            if ($xar->user()->hasParent($allowed)) {
                 return true;
             }
         }
@@ -384,7 +387,7 @@ class AccessProperty extends DataProperty
             if (isset($data['group'])) {
                 if (!is_array($data['group'])) {
                     $groupsarray = explode(',', $data['group']);
-                    $groupsdata = $this->user()->getGroups();
+                    $groupsdata = $xar->user()->getGroups();
                     foreach ($groupsarray as $group) {
                         $group = trim($group);
                         foreach ($groupsdata as $groupdata) {
@@ -456,9 +459,10 @@ class AccessProperty extends DataProperty
         if (isset($data['instance'])) {
             $this->instance = $data['instance'];
         }
+        $xar = $this->getStaticServices();
 
         $access = false;
-        if ($this->sec()->check(
+        if ($xar->sec()->check(
             '',
             0,
             $this->component,
@@ -496,22 +500,23 @@ class AccessProperty extends DataProperty
      */
     private function checkGroupArray(array $groups = [])
     {
-        $anonID = $this->session()->getAnonId();
+        $xar = $this->getStaticServices();
+        $anonID = $xar->session()->getAnonId();
         $access = false;
         foreach ($groups as $group) {
             $group = (int) $group;
             if ($group == $this->myself) {
                 $access = true;
             } elseif ($group == $anonID) {
-                if (!$this->user()->isLoggedIn()) {
+                if (!$xar->user()->isLoggedIn()) {
                     $access = true;
                 }
             } elseif ($group == -$anonID) {
-                if ($this->user()->isLoggedIn()) {
+                if ($xar->user()->isLoggedIn()) {
                     $access = true;
                 }
             } elseif ($group) {
-                if ($this->user()->hasAncestor($group)) {
+                if ($xar->user()->hasAncestor($group)) {
                     $access = true;
                 }
             }

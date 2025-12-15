@@ -281,8 +281,8 @@ class ObjectCache extends ServiceClass
             return;
         }
 
-        $req = $this->getParent()->req();
-        $tpl = $this->getParent()->tpl();
+        $req = $this->getServicesClass()->req();
+        $tpl = $this->getServicesClass()->tpl();
 
         if (// the http request is a GET AND
             $req->getMethod() == 'GET'

@@ -49,10 +49,11 @@ class GetitemsMethod extends MethodClass
         if (!isset($sort)) {
             $sort = 'name ASC';
         }
+        $xar = $this->getStaticServices();
 
         // Determine the table we are going to use
-        $tables = $this->db()->getTables();
-        $q = new Query('SELECT', $tables['modules'], '', 0, $this->getParent());
+        $tables = $xar->db()->getTables();
+        $q = new Query('SELECT', $tables['modules'], '', 0, $xar);
         $q->addfields("id, regid, name, directory, version, class, category, state, user_capable, admin_capable");
 
         if (!empty($regid)) {

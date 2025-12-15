@@ -86,7 +86,8 @@ trait LoggerTrait
      */
     public function init(array $config = []): bool
     {
-        return xarLog::init($config, $this->getParent());
+        $xar = $this->getServicesClass();
+        return xarLog::init($config, $xar);
     }
 
     /**

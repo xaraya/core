@@ -37,6 +37,7 @@ interface ServiceInterface extends WithContextInterface
     public function isLoaded(): bool;
     public function getParent(): mixed;
     public function setParent(mixed $parent): void;
+    public function getServicesClass(): StaticServicesClass;
     /**
      * Create a specialized version of this service instance.
      * @param mixed ...$args

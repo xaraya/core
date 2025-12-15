@@ -50,7 +50,7 @@ class AliasHelper extends ServiceClass
 
     public function define($alias, $modName): mixed
     {
-        $mod = $this->getParent()->mod();
+        $mod = $this->getServicesClass()->mod();
         if (!$mod->apiLoad('modules', 'admin')) {
             return null;
         }
@@ -60,7 +60,7 @@ class AliasHelper extends ServiceClass
 
     public function remove($alias, $modName): mixed
     {
-        $mod = $this->getParent()->mod();
+        $mod = $this->getServicesClass()->mod();
         if (!$mod->apiLoad('modules', 'admin')) {
             return null;
         }

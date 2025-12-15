@@ -234,7 +234,8 @@ trait TemplatingTrait
     protected function getTwigTpl()
     {
         if (!isset($this->twigTpl)) {
-            $this->twigTpl = new xarTwigTpl($this->getParent());
+            $xar = $this->getServicesClass();
+            $this->twigTpl = new xarTwigTpl($xar);
         }
         return $this->twigTpl;
     }
@@ -1017,7 +1018,8 @@ trait TemplatingTrait
      */
     public function compileString(string $templateSource): string
     {
-        $compiler = XarayaCompiler::instance($this->getParent());
+        $xar = $this->getServicesClass();
+        $compiler = XarayaCompiler::instance($xar);
         return $compiler->compileString($templateSource);
     }
 

@@ -45,7 +45,8 @@ class ViewJslibsMethod extends MethodClass
         }
         $data['properties'] = $data['object']->getProperties();
 
-        $libobject = xarJS::getInstance($this->getParent());
+        $xar = $this->getStaticServices();
+        $libobject = xarJS::getInstance($xar);
         // CHECKME: is this the right place to do it?
         $libobject->refresh();
 

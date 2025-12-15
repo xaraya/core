@@ -140,7 +140,7 @@ trait ParentServicesTrait
      */
     public function ctl(): ControllerInterface
     {
-        return $this->getParent()->ctl();
+        return $this->getStaticServices()->ctl();
     }
 
     /**
@@ -162,7 +162,7 @@ trait ParentServicesTrait
      */
     public function log(): LoggerInterface
     {
-        return $this->getParent()->log();
+        return $this->getStaticServices()->log();
     }
 
     /**
@@ -184,7 +184,7 @@ trait ParentServicesTrait
      */
     public function mls(): MultiLanguageInterface
     {
-        return $this->getParent()->mls();
+        return $this->getStaticServices()->mls();
     }
 
     /**
@@ -274,7 +274,7 @@ trait ParentServicesTrait
      */
     public function tpl(): TemplatingInterface
     {
-        return $this->getParent()->tpl();
+        return $this->getStaticServices()->tpl();
     }
 
     /**
@@ -292,7 +292,7 @@ trait ParentServicesTrait
      */
     public function var(): VariablesInterface
     {
-        return $this->getParent()->var();
+        return $this->getStaticServices()->var();
     }
 
     /**
@@ -309,7 +309,7 @@ trait ParentServicesTrait
      */
     public function block(): BlocksInterface
     {
-        return $this->getParent()->block();
+        return $this->getStaticServices()->block();
     }
 
     /**
@@ -335,7 +335,7 @@ trait ParentServicesTrait
      */
     public function data(): DataObjectInterface
     {
-        return $this->getParent()->data();
+        return $this->getStaticServices()->data();
     }
 
     /**
@@ -350,7 +350,7 @@ trait ParentServicesTrait
      */
     public function prop(): DataPropertyInterface
     {
-        return $this->getParent()->prop();
+        return $this->getStaticServices()->prop();
     }
 
     /**
@@ -384,7 +384,7 @@ trait ParentServicesTrait
      */
     public function cache(): CachingInterface
     {
-        return $this->getParent()->cache();
+        return $this->getStaticServices()->cache();
     }
 
     /**
@@ -403,7 +403,7 @@ trait ParentServicesTrait
      */
     public function mem(): MemoryInterface
     {
-        return $this->getParent()->mem();
+        return $this->getStaticServices()->mem();
     }
 
     /**
@@ -424,7 +424,7 @@ trait ParentServicesTrait
      */
     public function req(): RequestInterface
     {
-        return $this->getParent()->req();
+        return $this->getStaticServices()->req();
     }
 
     /**
@@ -440,7 +440,7 @@ trait ParentServicesTrait
      */
     public function config(): ConfigInterface
     {
-        return $this->getParent()->config();
+        return $this->getStaticServices()->config();
     }
 
     /**
@@ -456,7 +456,7 @@ trait ParentServicesTrait
      */
     public function sysConfig(?string $scope = null): SystemInterface
     {
-        return $this->getParent()->sysConfig($scope);
+        return $this->getStaticServices()->sysConfig($scope);
     }
 
     /**
@@ -473,7 +473,7 @@ trait ParentServicesTrait
      */
     public function session(): SessionInterface
     {
-        return $this->getParent()->session();
+        return $this->getStaticServices()->session();
     }
 
     /**
@@ -491,7 +491,7 @@ trait ParentServicesTrait
      */
     public function user(?int $userId = null): UserInterface
     {
-        return $this->getParent()->user($userId);
+        return $this->getStaticServices()->user($userId);
     }
 
     /**
@@ -509,7 +509,7 @@ trait ParentServicesTrait
      */
     public function db(): DatabaseInterface
     {
-        return $this->getParent()->db();
+        return $this->getStaticServices()->db();
     }
 
     /**
@@ -524,32 +524,32 @@ trait ParentServicesTrait
      */
     public function prep(): VarPrepInterface
     {
-        return $this->getParent()->prep();
+        return $this->getStaticServices()->prep();
     }
 
     public function events(): EventsInterface
     {
-        return $this->getParent()->events();
+        return $this->getStaticServices()->events();
     }
 
     public function hooked(): HookedInterface
     {
-        return $this->getParent()->hooked();
+        return $this->getStaticServices()->hooked();
     }
 
     public function theme(): ThemesInterface
     {
-        return $this->getParent()->theme();
+        return $this->getStaticServices()->theme();
     }
 
     public function module(string $modName): ModuleInterface
     {
-        return $this->getParent()->module($modName);
+        return $this->getStaticServices()->module($modName);
     }
 
     public function modclass(string $modName, string $modType): ?ModuleClassInterface
     {
-        return $this->getParent()->modclass($modName, $modType);
+        return $this->getStaticServices()->modclass($modName, $modType);
     }
 
     /**
@@ -558,7 +558,7 @@ trait ParentServicesTrait
      */
     public function exit(int|string $status = 0)
     {
-        $this->getParent()->exit($status);
+        $this->getStaticServices()->exit($status);
     }
 
     /**
@@ -566,7 +566,7 @@ trait ParentServicesTrait
      */
     public function sys(): sys
     {
-        return $this->getParent()->sys();
+        return $this->getStaticServices()->sys();
     }
 
     /**
@@ -577,7 +577,7 @@ trait ParentServicesTrait
      */
     public function ml($rawstring, ...$args): string
     {
-        return $this->getParent()->ml($rawstring, ...$args);
+        return $this->getStaticServices()->ml($rawstring, ...$args);
     }
 
     public function getParent(): ServicesInterface
