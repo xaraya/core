@@ -42,16 +42,17 @@ class SearchHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        $this->var()->check('catid', $args['catid']);
-        $this->var()->check('sort', $args['sort']);
-        $this->var()->check('where', $args['where']);
-        $this->var()->check('startnum', $args['startnum']);
+        $xar = $this->getStaticServices();
+        $xar->var()->check('catid', $args['catid']);
+        $xar->var()->check('sort', $args['sort']);
+        $xar->var()->check('where', $args['where']);
+        $xar->var()->check('startnum', $args['startnum']);
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        $this->var()->check('q', $args['q']);
-        $this->var()->check('field', $args['field']);
-        $this->var()->check('match', $args['match']);
+        $xar->var()->check('q', $args['q']);
+        $xar->var()->check('field', $args['field']);
+        $xar->var()->check('match', $args['match']);
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
@@ -60,11 +61,11 @@ class SearchHandler extends DefaultHandler
         $cacheKey = null;
         if (!empty($this->args['object']) && !empty($this->args['method'])) {
             // Get a cache key for this object method if it's suitable for object caching
-            $cacheKey = $this->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
+            $cacheKey = $xar->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
             // Check if the object method is cached
-            if ($this->cache()->hasObject($cacheKey)) {
+            if ($xar->cache()->hasObject($cacheKey)) {
                 // Return the cached object method output
-                return $this->cache()->getObject($cacheKey);
+                return $xar->cache()->getObject($cacheKey);
             }
         }
 
@@ -75,7 +76,7 @@ class SearchHandler extends DefaultHandler
         }
 
         // Set the output of the object method in cache
-        $this->cache()->setObject($cacheKey, $output);
+        $xar->cache()->setObject($cacheKey, $output);
         return $output;
     }
 
@@ -86,6 +87,7 @@ class SearchHandler extends DefaultHandler
      */
     public function search(array $args = [])
     {
+        $xar = $this->getStaticServices();
         // set search criteria
         $search = [];
         $criteria = ['q', 'field', 'match'];
@@ -114,10 +116,10 @@ class SearchHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->data()->getObject($this->args);
+            $this->object = $xar->data()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -130,12 +132,12 @@ class SearchHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObject);
 
-        $title = $this->mls()->translate('Search #(1)', $this->object->label);
-        $this->tpl()->setPageTitle($this->prep()->text($title));
+        $title = $xar->mls()->translate('Search #(1)', $this->object->label);
+        $xar->tpl()->setPageTitle($xar->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->mls()->translate('Search #(1) is forbidden', $this->object->label);
-            return $this->ctl()->forbidden($msg);
+            $msg = $xar->mls()->translate('Search #(1) is forbidden', $this->object->label);
+            return $xar->ctl()->forbidden($msg);
         }
 
         if (empty($search['field']) || count($search['field']) < 1) {
@@ -169,10 +171,10 @@ class SearchHandler extends DefaultHandler
         } else {
             // get result list
             // set context if available in handler
-            $result = $this->data()->getObjectList($this->args);
+            $result = $xar->data()->getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
@@ -207,7 +209,7 @@ class SearchHandler extends DefaultHandler
 
         // prepare for output
         if (isset($search['q']) && $search['q'] !== '') {
-            $search['q'] = $this->prep()->text($search['q']);
+            $search['q'] = $xar->prep()->text($search['q']);
         }
         $search['options'] = ['like'  => '',
             'start' => 'starts with',
@@ -240,6 +242,7 @@ class SearchHandler extends DefaultHandler
      */
     public function query(array $args = [])
     {
+        $xar = $this->getStaticServices();
         // set query criteria
         $query = [];
         $criteria = ['field', 'match'];
@@ -266,10 +269,10 @@ class SearchHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->data()->getObject($this->args);
+            $this->object = $xar->data()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -282,12 +285,12 @@ class SearchHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObject);
 
-        $title = $this->mls()->translate('Query #(1)', $this->object->label);
-        $this->tpl()->setPageTitle($this->prep()->text($title));
+        $title = $xar->mls()->translate('Query #(1)', $this->object->label);
+        $xar->tpl()->setPageTitle($xar->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->mls()->translate('Query #(1) is forbidden', $this->object->label);
-            return $this->ctl()->forbidden($msg);
+            $msg = $xar->mls()->translate('Query #(1) is forbidden', $this->object->label);
+            return $xar->ctl()->forbidden($msg);
         }
 
         // get where clauses
@@ -334,10 +337,10 @@ class SearchHandler extends DefaultHandler
         } else {
             // get result list
             // set context if available in handler
-            $result = $this->data()->getObjectList($this->args);
+            $result = $xar->data()->getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
@@ -378,7 +381,7 @@ class SearchHandler extends DefaultHandler
         foreach (array_keys($query['field']) as $field) {
             if (isset($query['field'][$field]) && $query['field'][$field] !== '') {
                 if (!is_array($query['field'][$field])) {
-                    $query['field'][$field] = $this->prep()->text($query['field'][$field]);
+                    $query['field'][$field] = $xar->prep()->text($query['field'][$field]);
                 }
             }
         }
@@ -391,7 +394,7 @@ class SearchHandler extends DefaultHandler
             'lt'    => 'less than',
             'ne'    => 'not equal to'];
         // get the property types in case we want to do more than check the parent class
-        $query['proptypes'] = $this->prop()->getPropertyTypes();
+        $query['proptypes'] = $xar->prop()->getPropertyTypes();
 
         // add data to original method args
         $data = array_replace($args, [

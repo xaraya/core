@@ -39,17 +39,18 @@ class StatsHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        $this->var()->check('catid', $args['catid']);
-        $this->var()->check('sort', $args['sort']);
-        $this->var()->check('where', $args['where']);
-        $this->var()->check('startnum', $args['startnum']);
+        $xar = $this->getStaticServices();
+        $xar->var()->check('catid', $args['catid']);
+        $xar->var()->check('sort', $args['sort']);
+        $xar->var()->check('where', $args['where']);
+        $xar->var()->check('startnum', $args['startnum']);
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        $this->var()->check('group', $args['group']);
-        $this->var()->check('field', $args['field']);
-        $this->var()->check('match', $args['match']);
-        $this->var()->check('report', $args['report']);
+        $xar->var()->check('group', $args['group']);
+        $xar->var()->check('field', $args['field']);
+        $xar->var()->check('match', $args['match']);
+        $xar->var()->check('report', $args['report']);
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
@@ -61,11 +62,11 @@ class StatsHandler extends DefaultHandler
         $cacheKey = null;
         if (!empty($this->args['object']) && !empty($this->args['method'])) {
             // Get a cache key for this object method if it's suitable for object caching
-            $cacheKey = $this->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
+            $cacheKey = $xar->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
             // Check if the object method is cached
-            if ($this->cache()->hasObject($cacheKey)) {
+            if ($xar->cache()->hasObject($cacheKey)) {
                 // Return the cached object method output
-                return $this->cache()->getObject($cacheKey);
+                return $xar->cache()->getObject($cacheKey);
             }
         }
 
@@ -76,7 +77,7 @@ class StatsHandler extends DefaultHandler
         }
 
         // Set the output of the object method in cache
-        $this->cache()->setObject($cacheKey, $output);
+        $xar->cache()->setObject($cacheKey, $output);
         return $output;
     }
 
@@ -87,6 +88,7 @@ class StatsHandler extends DefaultHandler
      */
     public function stats(array $args = [])
     {
+        $xar = $this->getStaticServices();
         // set stats criteria
         $stats = [];
         $criteria = ['group', 'field', 'match', 'report'];
@@ -123,14 +125,14 @@ class StatsHandler extends DefaultHandler
             $stats['report'] = 'Default Report';
         }
         // prepare for output now
-        $stats['report'] = $this->prep()->text($stats['report']);
+        $stats['report'] = $xar->prep()->text($stats['report']);
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->data()->getObjectList($this->args);
+            $this->object = $xar->data()->getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -143,24 +145,27 @@ class StatsHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObjectList);
 
-        $title = $this->mls()->translate('Statistics for #(1)', $this->object->label);
-        $this->tpl()->setPageTitle($this->prep()->text($title));
+        $title = $xar->mls()->translate('Statistics for #(1)', $this->object->label);
+        $xar->tpl()->setPageTitle($xar->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);
-            return $this->ctl()->forbidden($msg);
+            $msg = $xar->mls()->translate('View #(1) is forbidden', $this->object->label);
+            return $xar->ctl()->forbidden($msg);
         }
+
+        $modName = $this->getModName();
+        $reports = new StatsReports($modName, $this->object->name, $xar);
 
         // load previously defined report if available
         if (!empty($stats['report']) && empty($stats['group']) && empty($stats['field']) && empty($stats['match'])) {
-            $info = $this->getReport($stats['report']);
+            $info = $reports->getReport($stats['report']);
             if (!empty($info) && !empty($info['stats'])) {
                 $stats = $info['stats'];
             }
         }
 
         // get the property types in case we want to do more than check the type
-        $proptypes = $this->prop()->getPropertyTypes();
+        $proptypes = $xar->prop()->getPropertyTypes();
 
         $stats['grouplist'] = [];
         foreach ($this->object->properties as $name => $property) {
@@ -224,51 +229,9 @@ class StatsHandler extends DefaultHandler
             }
         }
 
-        foreach ($stats['field'] as $name => $operation) {
-            if (empty($this->object->properties[$name])) {
-                continue;
-            }
-            // fields that are already used for grouping can't be used in other operations
-            if (in_array($name, $groupby)) {
-                continue;
-            }
-            // property operation is used for xar_dynamic_data
-            // @todo check what to do for relational tables
-            switch ($operation) {
-                case 'hide':
-                    break;
-                case 'show':
-                    $fieldlist[] = $name;
-                    break;
-                case 'count':
-                    $fieldlist[] = "COUNT($name)";
-                    $this->object->properties[$name]->operation = 'COUNT';
-                    break;
-                case 'min':
-                    $fieldlist[] = "MIN($name)";
-                    $this->object->properties[$name]->operation = 'MIN';
-                    break;
-                case 'max':
-                    $fieldlist[] = "MAX($name)";
-                    $this->object->properties[$name]->operation = 'MAX';
-                    break;
-                case 'avg':
-                    $fieldlist[] = "AVG($name)";
-                    $this->object->properties[$name]->operation = 'AVG';
-                    break;
-                case 'sum':
-                    $fieldlist[] = "SUM($name)";
-                    $this->object->properties[$name]->operation = 'SUM';
-                    break;
-                    // We use a custom operation here that gets translated to a database-specific one by the datastore
-                case 'distinct':
-                    $fieldlist[] = "COUNT_DISTINCT($name)"; // CHECKME in datastores
-                    $this->object->properties[$name]->operation = 'COUNT_DISTINCT';
-                    break;
-                default:
-                    break;
-            }
-        }
+        // add field operations
+        $operations = $this->setFieldOperations($stats, $groupby);
+        $fieldlist = array_merge($fieldlist, $operations);
 
         $info = ['fieldlist' => $fieldlist,
             'groupby'   => $groupby,
@@ -276,7 +239,7 @@ class StatsHandler extends DefaultHandler
 
         // check if we need to save this report
         $save = null;
-        $this->var()->check('save', $save);
+        $xar->var()->check('save', $save);
 
         // nothing to show here
         if (empty($fieldlist)) {
@@ -284,8 +247,8 @@ class StatsHandler extends DefaultHandler
 
             // save the report and redirect
         } elseif (!empty($save) && !empty($stats['report']) && $this->object->checkAccess('config')) {
-            $this->saveReport($stats['report'], $stats, $info);
-            $this->ctl()->redirect($this->ctl()->getObjectUrl(
+            $reports->saveReport($stats['report'], $stats, $info);
+            $xar->ctl()->redirect($xar->ctl()->getObjectUrl(
                 $this->object->name,
                 'report',
                 ['report' => $stats['report']]
@@ -332,6 +295,7 @@ class StatsHandler extends DefaultHandler
      */
     public function report(array $args = [])
     {
+        $xar = $this->getStaticServices();
         // set report criteria
         $report = [];
         $criteria = ['report'];
@@ -348,14 +312,14 @@ class StatsHandler extends DefaultHandler
             $report['report'] = 'Default Report';
         }
         // prepare for output now
-        $report['report'] = $this->prep()->text($report['report']);
+        $report['report'] = $xar->prep()->text($report['report']);
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->data()->getObjectList($this->args);
+            $this->object = $xar->data()->getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -368,18 +332,24 @@ class StatsHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObjectList);
 
-        $title = $this->mls()->translate('Report for #(1)', $this->object->label);
-        $this->tpl()->setPageTitle($this->prep()->text($title));
+        $title = $xar->mls()->translate('Report for #(1)', $this->object->label);
+        $xar->tpl()->setPageTitle($xar->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);
-            return $this->ctl()->forbidden($msg);
+            $msg = $xar->mls()->translate('View #(1) is forbidden', $this->object->label);
+            return $xar->ctl()->forbidden($msg);
         }
 
-        $report['reportlist'] = $this->getReportList();
+        $modName = $this->getModName();
+        $reports = new StatsReports($modName, $this->object->name, $xar);
+
+        $report['reportlist'] = $reports->getReportList();
 
         if (!empty($report['reportlist']) && in_array($report['report'], $report['reportlist'])) {
-            $info = $this->getReport($report['report']);
+            $info = $reports->getReport($report['report']);
+            if (!empty($info['stats']) && !empty($info['groupby'])) {
+                $this->setFieldOperations($info['stats'], $info['groupby']);
+            }
         }
 
         if (empty($info) || empty($info['fieldlist'])) {
@@ -408,6 +378,63 @@ class StatsHandler extends DefaultHandler
         );
 
         return $output;
+    }
+
+    /**
+     * Summary of setFieldOperations
+     * @param array<string, mixed> $stats
+     * @param list<string> $groupby
+     * @return list<string>
+     */
+    public function setFieldOperations($stats, $groupby)
+    {
+        $fieldlist = [];
+        foreach ($stats['field'] as $name => $operation) {
+            if (empty($this->object->properties[$name])) {
+                continue;
+            }
+            // fields that are already used for grouping can't be used in other operations
+            if (in_array($name, $groupby)) {
+                continue;
+            }
+            // property operation is used for xar_dynamic_data
+            // @todo check what to do for relational tables
+            switch ($operation) {
+                case 'hide':
+                    break;
+                case 'show':
+                    $fieldlist[] = $name;
+                    break;
+                case 'count':
+                    $fieldlist[] = "COUNT($name)";
+                    $this->object->properties[$name]->operation = 'COUNT';
+                    break;
+                case 'min':
+                    $fieldlist[] = "MIN($name)";
+                    $this->object->properties[$name]->operation = 'MIN';
+                    break;
+                case 'max':
+                    $fieldlist[] = "MAX($name)";
+                    $this->object->properties[$name]->operation = 'MAX';
+                    break;
+                case 'avg':
+                    $fieldlist[] = "AVG($name)";
+                    $this->object->properties[$name]->operation = 'AVG';
+                    break;
+                case 'sum':
+                    $fieldlist[] = "SUM($name)";
+                    $this->object->properties[$name]->operation = 'SUM';
+                    break;
+                    // We use a custom operation here that gets translated to a database-specific one by the datastore
+                case 'distinct':
+                    $fieldlist[] = "COUNT_DISTINCT($name)"; // CHECKME in datastores
+                    $this->object->properties[$name]->operation = 'COUNT_DISTINCT';
+                    break;
+                default:
+                    break;
+            }
+        }
+        return $fieldlist;
     }
 
     /**
@@ -446,83 +473,5 @@ class StatsHandler extends DefaultHandler
             $newfield = "DATETIME_BY_DAY($field)";
         }
         return $newfield;
-    }
-
-    /**
-     * Summary of getReportList
-     * @return array<mixed>
-     */
-    public function getReportList()
-    {
-        $serialreports = $this->mod()->getVar('reportlist.' . $this->object->name);
-        if (!empty($serialreports)) {
-            $reportlist = unserialize($serialreports);
-        } else {
-            $reportlist = [];
-        }
-        return $reportlist;
-    }
-
-    /**
-     * Summary of getReport
-     * @param string $report
-     * @return array<mixed>
-     */
-    public function getReport($report)
-    {
-        $key = 'report.' . $this->object->name . '.' . $report;
-        if (strlen($key) > 64) {
-            $key = 'report.' . md5($key);
-        }
-        $serialinfo = $this->mod()->getVar($key);
-        if (!empty($serialinfo)) {
-            $info = unserialize($serialinfo);
-        } else {
-            $info = [];
-        }
-        return $info;
-    }
-
-    /**
-     * Summary of saveReport
-     * @param string $report
-     * @param array<mixed> $stats
-     * @param array<mixed> $info
-     * @return void
-     */
-    public function saveReport($report, $stats, $info)
-    {
-        $reportlist = $this->getReportList();
-        if (empty($reportlist) || !in_array($report, $reportlist)) {
-            // only keep the last 20 reports per object
-            if (count($reportlist) > 20) {
-                $oldreport = array_pop($reportlist);
-                $this->deleteReport($oldreport);
-            }
-            // add the new report at the front of the list
-            array_unshift($reportlist, $report);
-            $this->mod()->setVar('reportlist.' . $this->object->name, serialize($reportlist));
-        }
-        // add stats to info so we can edit it afterwards
-        $info['stats'] = $stats;
-        $key = 'report.' . $this->object->name . '.' . $report;
-        if (strlen($key) > 64) {
-            $key = 'report.' . md5($key);
-        }
-        $this->mod()->setVar($key, serialize($info));
-    }
-
-    /**
-     * Summary of deleteReport
-     * @param string $report
-     * @return void
-     */
-    public function deleteReport($report)
-    {
-        $key = 'report.' . $this->object->name . '.' . $report;
-        if (strlen($key) > 64) {
-            $key = 'report.' . md5($key);
-        }
-        $this->mod()->setVar($key, null);
     }
 }

@@ -66,6 +66,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         if (isset($xar)) {
             $this->setStaticServices($xar->getStaticServices());
         }
+        $xar = $this->getStaticServices();
         // set the context before checking any variables
         $this->setContext($context);
 
@@ -92,21 +93,21 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
             $this->tpltitle = $args['tpltitle'];
         }
         if (empty($this->tpltitle)) {
-            $this->tpltitle = $this->mls()->translate('Dynamic Data Object Interface');
+            $this->tpltitle = $xar->mls()->translate('Dynamic Data Object Interface');
         }
 
         // get some common URL parameters
-        $this->var()->check('object', $args['object']);
-        $this->var()->check('name', $args['name']);
-        $this->var()->check('module', $args['module']);
-        $this->var()->check('itemtype', $args['itemtype']);
-        $this->var()->check('table', $args['table']);
-        $this->var()->check('layout', $args['layout']);
-        $this->var()->check('template', $args['template']);
-        $this->var()->check('startnum', $args['startnum']);
-        $this->var()->check('numitems', $args['numitems']);
+        $xar->var()->check('object', $args['object']);
+        $xar->var()->check('name', $args['name']);
+        $xar->var()->check('module', $args['module']);
+        $xar->var()->check('itemtype', $args['itemtype']);
+        $xar->var()->check('table', $args['table']);
+        $xar->var()->check('layout', $args['layout']);
+        $xar->var()->check('template', $args['template']);
+        $xar->var()->check('startnum', $args['startnum']);
+        $xar->var()->check('numitems', $args['numitems']);
 
-        $this->var()->check('fieldlist', $fieldlist);
+        $xar->var()->check('fieldlist', $fieldlist);
         // make fieldlist an array,
         // @todo should the object class do it?
         if (!empty($fieldlist)) {
@@ -115,6 +116,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
 
         // Default number of items per page in object view
         if (!isset($args['numitems']) && $args['object'] != 'objects') {
+            // @todo depending on current module
             $args['numitems'] = $this->mod()->getVar('items_per_page');
         }
 
@@ -125,7 +127,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
 
         // retrieve the object information for this object
         if (!empty($args['object'])) {
-            $info = $this->data()->getObjectInfo(
+            $info = $xar->data()->getObjectInfo(
                 ['name' => $args['object']]
             );
             if (!empty($info)) {
@@ -133,7 +135,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
             }
         } elseif (!empty($args['module']) && empty($args['moduleid'])) {
             // @todo is this still actually needed here?
-            $args['moduleid'] = $this->mod()->getRegID($args['module']);
+            $args['moduleid'] = $xar->mod()->getRegID($args['module']);
         }
 
         if (empty($args['layout'])) {
@@ -157,6 +159,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
     public function run(array $args = [])
     {
         // This method is overridden in a child class for standard GUI methods
+        $xar = $this->getStaticServices();
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
@@ -167,13 +170,13 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         if (!isset($this->object)) {
             // set context if available in handler
             if (!empty($this->args['itemid'])) {
-                $this->object = $this->data()->getObject($this->args);
+                $this->object = $xar->data()->getObject($this->args);
             } else {
-                $this->object = $this->data()->getObjectList($this->args);
+                $this->object = $xar->data()->getObjectList($this->args);
             }
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -186,33 +189,33 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         }
 
         if (!method_exists($this->object, $this->method)) {
-            return $this->mls()->translate('Unknown method #(1) for #(2)', $this->prep()->text($this->method), $this->object->label);
+            return $xar->mls()->translate('Unknown method #(1) for #(2)', $xar->prep()->text($this->method), $this->object->label);
         }
 
         // Pre-fetch item(s) for some standard dataobject methods
         if (empty($args['itemid']) && $this->method == 'showview' && assert($this->object instanceof DataObjectList)) {
             if (!$this->object->checkAccess('view')) {
-                $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);
-                return $this->ctl()->forbidden($msg);
+                $msg = $xar->mls()->translate('View #(1) is forbidden', $this->object->label);
+                return $xar->ctl()->forbidden($msg);
             }
 
             $this->object->getItems();
         } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform') && assert($this->object instanceof DataObject)) {
             if (!$this->object->checkAccess('display')) {
-                $msg = $this->mls()->translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
-                return $this->ctl()->forbidden($msg);
+                $msg = $xar->mls()->translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
+                return $xar->ctl()->forbidden($msg);
             }
 
             // get the requested item
             $itemid = $this->object->getItem();
             if (empty($itemid) || $itemid != $this->object->itemid) {
-                $msg = $this->mls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
+                return $xar->ctl()->notFound($msg);
             }
         }
 
         $title = $this->object->label;
-        $this->tpl()->setPageTitle($this->prep()->text($title));
+        $xar->tpl()->setPageTitle($xar->prep()->text($title));
 
         // Here we try to run the requested method directly
         $output = $this->object->{$this->method}($this->args);
@@ -274,11 +277,12 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         if (!empty($return_url)) {
             return $return_url;
         }
+        $xar = $this->getStaticServices();
 
         if (isset($this->object->itemid)) {
-            $return_url = $this->ctl()->getObjectURL($this->object->name, $this->nextmethod, ['itemid' => $this->object->itemid]);
+            $return_url = $xar->ctl()->getObjectURL($this->object->name, $this->nextmethod, ['itemid' => $this->object->itemid]);
         } else {
-            $return_url = $this->ctl()->getObjectURL($this->object->name, $this->nextmethod);
+            $return_url = $xar->ctl()->getObjectURL($this->object->name, $this->nextmethod);
         }
 
         return $return_url;
@@ -293,6 +297,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
      */
     public function render(string $tplType, array $tplData = []): string
     {
+        $xar = $this->getStaticServices();
         // Add standard template variables (context)
         $tplData['context'] ??= $this->getContext();
 
@@ -300,7 +305,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         $objecTemplate = $this->object->template;
 
         // Create the output.
-        return $this->tpl()->object(
+        return $xar->tpl()->object(
             $modName,
             $objecTemplate,
             $tplType,

@@ -39,15 +39,16 @@ class DeleteHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        $this->var()->check('cancel', $args['cancel']);
-        $this->var()->check('confirm', $args['confirm']);
-        $this->var()->check('return_url', $args['return_url']);
+        $xar = $this->getStaticServices();
+        $xar->var()->check('cancel', $args['cancel']);
+        $xar->var()->check('confirm', $args['confirm']);
+        $xar->var()->check('return_url', $args['return_url']);
         if (!empty($args['cancel'])) {
             if (empty($args['return_url'])) {
                 $args['return_url'] = $this->getReturnURL();
             }
 
-            $this->ctl()->redirect($args['return_url']);
+            $xar->ctl()->redirect($args['return_url']);
             // Return
             return true;
         }
@@ -58,10 +59,10 @@ class DeleteHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->data()->getObject($this->args);
+            $this->object = $xar->data()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -75,19 +76,20 @@ class DeleteHandler extends DefaultHandler
         assert($this->object instanceof DataObject);
 
         if (!$this->object->checkAccess('delete')) {
-            $msg = $this->mls()->translate('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
-            return $this->ctl()->forbidden($msg);
+            $msg = $xar->mls()->translate('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
+            return $xar->ctl()->forbidden($msg);
         }
 
         $itemid = $this->object->getItem();
         if (empty($itemid) || $itemid != $this->object->itemid) {
-            $msg = $this->mls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
-            return $this->ctl()->notFound($msg);
+            $msg = $xar->mls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
+            return $xar->ctl()->notFound($msg);
         }
+        $modName = $this->getModName();
 
         if (!empty($args['confirm'])) {
-            if (!$this->sec()->confirmAuthKey()) {
-                return $this->ctl()->badRequest('bad_author');
+            if (!$xar->sec()->confirmAuthKey($modName)) {
+                return $xar->ctl()->badRequest('bad_author');
             }
 
             $itemid = $this->object->deleteItem();
@@ -100,18 +102,18 @@ class DeleteHandler extends DefaultHandler
                 $args['return_url'] = $this->getReturnURL();
             }
 
-            $this->ctl()->redirect($args['return_url']);
+            $xar->ctl()->redirect($args['return_url']);
             // Return
             return true;
         }
 
-        $title = $this->mls()->translate('Delete #(1)', $this->object->label);
-        $this->tpl()->setPageTitle($this->prep()->text($title));
+        $title = $xar->mls()->translate('Delete #(1)', $this->object->label);
+        $xar->tpl()->setPageTitle($xar->prep()->text($title));
 
         // add data to original method args
         $data = array_replace($args, [
             'object' => $this->object,
-            'authid' => $this->sec()->genAuthKey(),
+            'authid' => $xar->sec()->genAuthKey($modName),
             'tpltitle' => $this->tpltitle,
             'modtitle' => ucwords($this->object->tplmodule),
             'return_url' => $args['return_url'],

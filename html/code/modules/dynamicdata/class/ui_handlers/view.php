@@ -39,10 +39,11 @@ class ViewHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        $this->var()->check('catid', $args['catid']);
-        $this->var()->check('sort', $args['sort']);
-        $this->var()->check('where', $args['where']);
-        $this->var()->check('startnum', $args['startnum']);
+        $xar = $this->getStaticServices();
+        $xar->var()->check('catid', $args['catid']);
+        $xar->var()->check('sort', $args['sort']);
+        $xar->var()->check('where', $args['where']);
+        $xar->var()->check('startnum', $args['startnum']);
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
         if (!empty($args['where']) && is_array($args['where'])) {
@@ -56,11 +57,11 @@ class ViewHandler extends DefaultHandler
         $cacheKey = null;
         if (!empty($this->args['object']) && !empty($this->args['method'])) {
             // Get a cache key for this object method if it's suitable for object caching
-            $cacheKey = $this->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
+            $cacheKey = $xar->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
             // Check if the object method is cached
-            if ($this->cache()->hasObject($cacheKey)) {
+            if ($xar->cache()->hasObject($cacheKey)) {
                 // Return the cached object method output
-                return $this->cache()->getObject($cacheKey);
+                return $xar->cache()->getObject($cacheKey);
             }
         }
 
@@ -69,10 +70,10 @@ class ViewHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->data()->getObjectList($this->args);
+            $this->object = $xar->data()->getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -85,12 +86,12 @@ class ViewHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObjectList);
 
-        $title = $this->mls()->translate('View #(1)', $this->object->label);
-        $this->tpl()->setPageTitle($this->prep()->text($title));
+        $title = $xar->mls()->translate('View #(1)', $this->object->label);
+        $xar->tpl()->setPageTitle($xar->prep()->text($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);
-            return $this->ctl()->forbidden($msg);
+            $msg = $xar->mls()->translate('View #(1) is forbidden', $this->object->label);
+            return $xar->ctl()->forbidden($msg);
         }
 
         if (!empty($this->args['where']) && is_array($this->args['where']) && is_object($this->object->datastore)) {
@@ -98,7 +99,7 @@ class ViewHandler extends DefaultHandler
             $allowed = array_flip(array_keys($this->object->properties));
             $this->args['where'] = array_intersect_key($this->args['where'], $allowed);
             // Need the database connection for quoting strings.
-            $dbconn = $this->db()->getConn();
+            $dbconn = $xar->db()->getConn();
             if ($this->object->datastore->getClassName() === 'RelationalDataStore') {
                 $wherelist = [];
                 foreach ($this->args['where'] as $key => $value) {
@@ -149,7 +150,7 @@ class ViewHandler extends DefaultHandler
         );
 
         // Set the output of the object method in cache
-        $this->cache()->setObject($cacheKey, $output);
+        $xar->cache()->setObject($cacheKey, $output);
         return $output;
     }
 }

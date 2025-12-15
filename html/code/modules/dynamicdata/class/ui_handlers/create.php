@@ -39,10 +39,11 @@ class CreateHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        $this->var()->check('preview', $args['preview']);
-        $this->var()->check('confirm', $args['confirm']);
-        $this->var()->check('values', $args['values']);
-        $this->var()->check('return_url', $args['return_url']);
+        $xar = $this->getStaticServices();
+        $xar->var()->check('preview', $args['preview']);
+        $xar->var()->check('confirm', $args['confirm']);
+        $xar->var()->check('values', $args['values']);
+        $xar->var()->check('return_url', $args['return_url']);
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
@@ -50,10 +51,10 @@ class CreateHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->data()->getObject($this->args);
+            $this->object = $xar->data()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -67,8 +68,8 @@ class CreateHandler extends DefaultHandler
         assert($this->object instanceof DataObject);
 
         if (!$this->object->checkAccess('create')) {
-            $msg = $this->mls()->translate('Create #(1) is forbidden', $this->object->label);
-            return $this->ctl()->forbidden($msg);
+            $msg = $xar->mls()->translate('Create #(1) is forbidden', $this->object->label);
+            return $xar->ctl()->forbidden($msg);
         }
 
         // there's no item to get here yet
@@ -80,10 +81,11 @@ class CreateHandler extends DefaultHandler
             // check any given input values but suppress errors for now
             $this->object->checkInput($this->args['values'], 1);
         }
+        $modName = $this->getModName();
 
         if (!empty($args['preview']) || !empty($args['confirm'])) {
-            if (!empty($args['confirm']) && !$this->sec()->confirmAuthKey()) {
-                return $this->ctl()->badRequest('bad_author');
+            if (!empty($args['confirm']) && !$xar->sec()->confirmAuthKey($modName)) {
+                return $xar->ctl()->badRequest('bad_author');
             }
 
             $isvalid = $this->object->checkInput($args);
@@ -99,15 +101,15 @@ class CreateHandler extends DefaultHandler
                     $args['return_url'] = $this->getReturnURL();
                 }
 
-                $this->ctl()->redirect($args['return_url']);
+                $xar->ctl()->redirect($args['return_url']);
                 // Return
                 return true;
             }
             $args['preview'] = true;
         }
 
-        $title = $this->mls()->translate('New #(1)', $this->object->label);
-        $this->tpl()->setPageTitle($this->prep()->text($title));
+        $title = $xar->mls()->translate('New #(1)', $this->object->label);
+        $xar->tpl()->setPageTitle($xar->prep()->text($title));
 
         // call item new hooks for this item
         $this->object->callHooks('new');
@@ -116,7 +118,7 @@ class CreateHandler extends DefaultHandler
         $data = array_replace($args, [
             'object'  => $this->object,
             'preview' => $args['preview'],
-            'authid'  => $this->sec()->genAuthKey(),
+            'authid'  => $xar->sec()->genAuthKey($modName),
             'hooks'   => $this->object->hookoutput,
             'tpltitle' => $this->tpltitle,
             'modtitle' => ucwords($this->object->tplmodule),

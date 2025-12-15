@@ -38,9 +38,10 @@ class DisplayHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        $this->var()->check('preview', $args['preview']);
+        $xar = $this->getStaticServices();
+        $xar->var()->check('preview', $args['preview']);
 
-        $this->var()->check('values', $args['values']);
+        $xar->var()->check('values', $args['values']);
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
@@ -49,11 +50,11 @@ class DisplayHandler extends DefaultHandler
         $cacheKey = null;
         if (!empty($this->args['object']) && !empty($this->args['method'])) {
             // Get a cache key for this object method if it's suitable for object caching
-            $cacheKey = $this->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
+            $cacheKey = $xar->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
             // Check if the object method is cached
-            if ($this->cache()->hasObject($cacheKey)) {
+            if ($xar->cache()->hasObject($cacheKey)) {
                 // Return the cached object method output
-                return $this->cache()->getObject($cacheKey);
+                return $xar->cache()->getObject($cacheKey);
             }
         }
 
@@ -62,10 +63,10 @@ class DisplayHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->data()->getObject($this->args);
+            $this->object = $xar->data()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $xar->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -78,28 +79,28 @@ class DisplayHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObject);
 
-        $title = $this->mls()->translate('Display #(1)', $this->object->label);
-        $this->tpl()->setPageTitle($this->prep()->text($title));
+        $title = $xar->mls()->translate('Display #(1)', $this->object->label);
+        $xar->tpl()->setPageTitle($xar->prep()->text($title));
 
         if (!empty($this->args['itemid'])) {
             if (!$this->object->checkAccess('display')) {
-                $msg = $this->mls()->translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
-                return $this->ctl()->forbidden($msg);
+                $msg = $xar->mls()->translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
+                return $xar->ctl()->forbidden($msg);
             }
 
             // get the requested item
             $itemid = $this->object->getItem();
             if (empty($itemid) || $itemid != $this->object->itemid) {
-                $msg = $this->mls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
-                return $this->ctl()->notFound($msg);
+                $msg = $xar->mls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
+                return $xar->ctl()->notFound($msg);
             }
 
             // call item display hooks for this item
             $this->object->callHooks('display');
         } elseif (!empty($this->args['values'])) {
             if (!$this->object->checkAccess('display')) {
-                $msg = $this->mls()->translate('Display #(1) is forbidden', $this->object->label);
-                return $this->ctl()->forbidden($msg);
+                $msg = $xar->mls()->translate('Display #(1) is forbidden', $this->object->label);
+                return $xar->ctl()->forbidden($msg);
             }
 
             // always set the properties based on the given values !?
@@ -124,7 +125,7 @@ class DisplayHandler extends DefaultHandler
         );
 
         // Set the output of the object method in cache
-        $this->cache()->setObject($cacheKey, $output);
+        $xar->cache()->setObject($cacheKey, $output);
         return $output;
     }
 }
