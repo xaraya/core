@@ -93,9 +93,9 @@ class StandarddeinstallMethod extends MethodClass
         #
         // Move the descendants to the Users group
         try {
-            $role = xarRoles::findRole(ucfirst($module) . 'Group');
+            $role = $this->user()->getRole('name', ucfirst($module) . 'Group');
             if (!empty($role)) {
-                $usersgroup = xarRoles::findRole('Users');
+                $usersgroup = $this->user()->getRole('name', 'Users');
                 $descendants = $role->getDescendants();
                 foreach ($descendants as $item) {
                     $parents = $item->getParents();

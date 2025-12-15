@@ -120,7 +120,7 @@ class DummyType extends ObjectType
                     $xar = $context->handler->getServicesClass();
                     $xar->mod()->init();
                     $xar->user()->init();
-                    $role = xarRoles::getRole($userId);
+                    $role = $xar->user()->getRole('id', (int) $userId);
                     $fields = $role->getFieldValues();
                     return ['id' => $fields['id'], 'name' => $fields['name']];
                 },

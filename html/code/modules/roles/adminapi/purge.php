@@ -57,7 +57,7 @@ class PurgeMethod extends MethodClass
             }
 
             // Call the Roles class
-            $role = xarRoles::get($item['id']);
+            $role = $this->user()->getRole('id', (int) $item['id']);
             if (!$role->purge()) {
                 return;
             }

@@ -80,10 +80,10 @@ class PurgeMethod extends MethodClass
                     return;
                 }
                 if ($data['groupid'] != 0) {
-                    $parentgroup = xarRoles::get($data['groupid']);
+                    $parentgroup = $this->user()->getRole('id', (int) $data['groupid']);
                 }
                 foreach ($recallids as $id => $val) {
-                    $role = xarRoles::get($id);
+                    $role = $this->user()->getRole('id', (int) $id);
                     $state = $role->getType() ? xarRoles::ROLES_STATE_ACTIVE : $data['recallstate'];
                     $recalled = $adminapi->recall(['id' => $id,
                         'state' => $state]);
@@ -134,7 +134,7 @@ class PurgeMethod extends MethodClass
                 if ($this->sec()->check('ReadRoles', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
                     $skip = 0;
                     $unique = 1;
-                    $thisrole = xarRoles::get($role['id']);
+                    $thisrole = $this->user()->getRole('id', (int) $role['id']);
                     $existinguser = $userapi->get(['uname' => $role['uname'], 'state' => xarRoles::ROLES_STATE_CURRENT]);
                     if ($thisrole->getType() != xarRoles::ROLES_USERTYPE) {
                         if (is_array($existinguser)) {
@@ -202,7 +202,7 @@ class PurgeMethod extends MethodClass
                     }
                     // --- do this in 2 stages. First, delete the role: this will update the user
                     // --- count on all the role's parents
-                    $role = xarRoles::get($id);
+                    $role = $this->user()->getRole('id', (int) $id);
                     $role->deleteItem();
                     // --- now actually remove the data from the role's entry
                     $query = "UPDATE $rolestable SET name = ?, uname = ?, pass = ?, email = ?, date_reg = ?, state = ? WHERE id = ?" ;

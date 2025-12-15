@@ -431,7 +431,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     {
         /** @var Context $context */
         $xar = $context->handler->getServicesClass();
-        //$role = xarRoles::getRole($userId);
+        //$role = $xar->user()->getRole('id', (int) $userId);
         //$rolename = $role->getName();
         $xar->mod()->init();
         $xar->user()->init();

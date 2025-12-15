@@ -68,7 +68,7 @@ class ShowusersMethod extends MethodClass
 
         if ($id != 0) {
             // Call the Roles class and get the role
-            $role      = xarRoles::get($id);
+            $role      = $this->user()->getRole('id', (int) $id);
             $ancestors = $role->getRoleAncestors();
             $data['groupname'] = $role->getName();
             $data['itemtype'] = $role->getType();

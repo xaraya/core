@@ -59,7 +59,7 @@ class CreatemailMethod extends MethodClass
         if ($id < 1) {
             $type = 'selection';
         } else {
-            $role  = xarRoles::get($id);
+            $role  = $this->user()->getRole('id', (int) $id);
             $type  = ($role->getType() == xarRoles::ROLES_GROUPTYPE) ? 'selection' : 'single';
         }
 
@@ -162,7 +162,7 @@ class CreatemailMethod extends MethodClass
             // Check if we also want to send to subgroups
             // In this case we'll just pick out the descendants in the same state
             if ($id != 0 && ($data['includesubgroups'] == 1)) {
-                $parentgroup = xarRoles::get($id);
+                $parentgroup = $this->user()->getRole('id', (int) $id);
                 $descendants = $parentgroup->getDescendants($state);
 
                 foreach ($descendants as $key => $user) {

@@ -39,7 +39,7 @@ class ModifyMethod extends MethodClass
 
         $this->var()->find('duvs', $data['duvs'], 'array', []);
 
-        $data['object'] = xarRoles::get($id);
+        $data['object'] = $this->user()->getRole('id', (int) $id);
         if (empty($data['object'])) {
             return $this->ctl()->notFound();
         }
@@ -59,7 +59,7 @@ class ModifyMethod extends MethodClass
         }
 
         $groups = [];
-        foreach (xarRoles::getgroups() as $temp) {
+        foreach ($this->user()->getGroups() as $temp) {
             $nam = $temp['name'];
             // TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
             if (!$this->sec()->check('AttachRole', 0, 'Relation', $nam . ":" . $data['object']->getName())) {

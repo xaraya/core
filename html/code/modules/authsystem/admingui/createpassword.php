@@ -54,7 +54,7 @@ class CreatepasswordMethod extends MethodClass
         if (empty($pass)) {
             throw new BadParameterException(null, $this->ml('Problem generating new password'));
         }
-        $role = xarRoles::get($id);
+        $role = $this->user()->getRole('id', (int) $id);
         $modifiedstatus = $role->setPass($pass);
         $modifiedrole = $role->updateItem();
         if (!$modifiedrole) {

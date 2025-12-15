@@ -84,7 +84,7 @@ class TestHelper extends TestCase
             ->willReturnCallback(function ($mask, $catch = 1, $component = '', $instance = '') {
                 $this->callback = xar::ctl()->getCallback('redirectTo');
                 xar::ctl()->setCallback('redirectTo', [$this, 'sendRedirectToCallback']);
-                $result = xarSecurity::check($mask, $catch, $component, $instance) ? true : false;
+                $result = xar::sec()->check($mask, $catch, $component, $instance) ? true : false;
                 xar::ctl()->setCallback('redirectTo', $this->callback);
                 return $result;
             });

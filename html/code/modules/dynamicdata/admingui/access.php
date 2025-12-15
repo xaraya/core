@@ -106,9 +106,9 @@ class AccessMethod extends MethodClass
         // Get list of groups
         $data['grouplist'] = [];
         $anonid = $this->config()->getVar('Site.User.AnonymousUID');
-        $anonrole = xarRoles::get($anonid);
+        $anonrole = $this->user()->getRole('id', (int) $anonid);
         $data['grouplist'][$anonid] = $anonrole->getName();
-        $groups = xarRoles::getgroups();
+        $groups = $this->user()->getGroups();
         foreach ($groups as $group) {
             $data['grouplist'][$group['id']] = $group['name'];
         }

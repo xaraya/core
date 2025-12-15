@@ -103,9 +103,9 @@ class SitelockMethod extends MethodClass
             } elseif ($cmd == 'add') {
                 $this->var()->check('newname', $newname, 'str', null);
                 if (isset($newname)) {
-                    $r = xarRoles::ufindRole($newname);
+                    $r = $this->user()->getRole('uname', $newname);
                     if (!$r) {
-                        $r = xarRoles::findRole($newname);
+                        $r = $this->user()->getRole('name', $newname);
                     }
                     if ($r) {
                         $newid  = $r->getID();
@@ -148,7 +148,7 @@ class SitelockMethod extends MethodClass
                 var_dump($lockdata);
                 $rolesarray = $lockdata['roles'];
                 foreach ($rolesarray as $thisrole) {
-                    $roletoletin = xarRoles::get($thisrole['id']);
+                    $roletoletin = $this->user()->getRole('id', (int) $thisrole['id']);
                     $notify = $thisrole['notify'];
                     var_dump($notify);
                     // If this is a user, add it to the list
@@ -161,13 +161,13 @@ class SitelockMethod extends MethodClass
                         $children = $roletoletin->getUsers();
                         foreach ($children as $thisrole) {
                             $this_id = $thisrole->properties['id']->value;
-                            $roletoletin = xarRoles::get($this_id);
+                            $roletoletin = $this->user()->getRole('id', (int) $this_id);
                             $spared[$this_id] = ['role' => $roletoletin, 'notify' => $notify];
                         }
                     }
                 }
 
-                $admin = xarRoles::get($this->mod()->getVar('admin'));
+                $admin = $this->user()->getRole('id', (int) $this->mod()->getVar('admin'));
                 $mailinfo = ['subject' => 'Site Lock',
                     'from' => $admin->getEmail(),
                 ];

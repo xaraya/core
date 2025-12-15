@@ -781,12 +781,13 @@ trait ModulesTrait
                 throw new BadParameterException('action', "Supported actions on module level are 'view' and 'admin'");
         }
 
+        $xar = $this->getServicesClass();
         if (!empty($roleid)) {
-            $role = xarRoles::get($roleid);
+            $role = $xar->user()->getRole('id', (int) $roleid);
             $rolename = $role->getName();
-            return xarSecurity::check('', 0, 'All', 'All', $modName, $rolename, 0, $seclevel);
+            return $xar->sec()->check('', 0, 'All', 'All', $modName, $rolename, 0, $seclevel);
         } else {
-            return xarSecurity::check('', 0, 'All', 'All', $modName, '', 0, $seclevel);
+            return $xar->sec()->check('', 0, 'All', 'All', $modName, '', 0, $seclevel);
         }
     }
 }

@@ -41,7 +41,7 @@ class GetprimaryparentMethod extends MethodClass
         }
 
         $parentid = $this->mod()->getUserVar('primaryparent', $itemid);
-        $role = xarRoles::get($itemid);
+        $role = $this->user()->getRole('id', (int) $itemid);
         $parents = $role->getParents();
         //CHECKME: the better way would be to have the default primary parent modvar be null, rather than Everybody
         // then this looping would be unnecessary

@@ -65,7 +65,8 @@ class UsernameProperty extends TextBoxProperty
         // We allow the special value [All]
 
         if ($value != '[All]') {
-            $role = xarRoles::ufindRole($value, xarRoles::ROLES_USERTYPE, xarRoles::ROLES_STATE_ALL);
+            $xar = $this->getStaticServices();
+            $role = xarRoles::_lookuprole('uname', $value, xarRoles::ROLES_USERTYPE, xarRoles::ROLES_STATE_ALL, $xar);
             switch ((int) $this->validation_existrule) {
                 case 1:
                     if (!empty($role)) {
@@ -118,7 +119,7 @@ class UsernameProperty extends TextBoxProperty
             // Cater to a common case
             if ($data['user'] == 'myself') {
                 $this->value = $this->user()->getId();
-                $role = xarRoles::get($this->value);
+                $role = $this->user()->getRole('id', (int) $this->value);
                 $data['value'] = $role->getUser();
             } else {
                 $data['value'] = $data['user'];
@@ -239,7 +240,7 @@ class UsernameProperty extends TextBoxProperty
                 if ($value == '[All]') {
                     $this->value = 0;
                 } else {
-                    $role = xarRoles::ufindRole($value);
+                    $role = $this->user()->getRole('uname', $value);
                     if (empty($role)) {
                         $this->value = null;
                     } else {

@@ -378,7 +378,7 @@ class Role extends DataObject
         // a simple SQL DELETE
         while ($result->next()) {
             [$parentid] = $result->fields;
-            $parent = xarRoles::get($parentid);
+            $parent = $xar->user()->getRole('id', (int) $parentid);
             // Check that a parent was returned
             if ($parent) {
                 $parent->removeMember($this);
@@ -847,7 +847,8 @@ class Role extends DataObject
     {
         $users = $this->getUsers($state);
 
-        $groups = xarRoles::getSubGroups($this->getID());
+        $xar = $this->getStaticServices();
+        $groups = xarRoles::getSubGroups($this->getID(), $xar);
         $ua = [];
         foreach ($users as $user) {
             //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)
@@ -855,7 +856,7 @@ class Role extends DataObject
         }
         //Get the sub groups and go for another round
         foreach ($groups as $group) {
-            $role = xarRoles::get($group['id']);
+            $role = $xar->user()->getRole('id', (int) $group['id']);
             if ($grpflag) {
                 $ua[$group['id']] = $role;
             }

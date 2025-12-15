@@ -51,7 +51,7 @@ class RecallMethod extends MethodClass
 
         $deleted = '[' . $this->ml('deleted') . ']';
 
-        $role = xarRoles::get($id);
+        $role = $this->user()->getRole('id', (int) $id);
         $uname = explode($deleted, $role->getUser());
         $email = explode($deleted, $role->getEmail());
 

@@ -45,11 +45,11 @@ class RemovememberMethod extends MethodClass
             throw new EmptyParameterException('id');
         }
 
-        $group = xarRoles::get($gid);
+        $group = $this->user()->getRole('id', (int) $gid);
         if ($group->isUser()) {
             throw new IDNotFoundException($gid);
         }
-        $user = xarRoles::get($id);
+        $user = $this->user()->getRole('id', (int) $id);
 
         // Security Check
         if (!$this->sec()->check('RemoveRole', 1, 'Relation', $group->getName() . ":" . $user->getName())) {

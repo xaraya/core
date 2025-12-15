@@ -98,7 +98,7 @@ class LostpasswordMethod extends MethodClass
                 $this->mem()->set('Hooks.all', 'noupdate', 1);
 
                 //Update user password
-                $role = xarRoles::get($user['id']);
+                $role = $this->user()->getRole('id', (int) $user['id']);
                 $modifiedstatus = $role->setPass($user['pass']);
                 if (!$role->updateItem()) {
                     return;

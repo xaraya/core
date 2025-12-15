@@ -44,7 +44,7 @@ class CheckprivilegeMethod extends MethodClass
         if (empty($id)) {
             $id = $this->user()->getId();
         }
-        $role = xarRoles::get($id);
+        $role = $this->user()->getRole('id', (int) $id);
         return $role->hasPrivilege($privilege);
     }
 }

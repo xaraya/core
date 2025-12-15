@@ -199,7 +199,7 @@ class LoginMethod extends MethodClass
                     $rolesarray = [];
                     $roles = $lockvars['roles'];
                     for ($i = 0, $max = count($roles); $i < $max; $i++) {
-                        $rolesarray[] = xarRoles::get($roles[$i]['id']);
+                        $rolesarray[] = $this->user()->getRole('id', (int) $roles[$i]['id']);
                     }
                     $letin = [];
                     foreach ($rolesarray as $roletoletin) {

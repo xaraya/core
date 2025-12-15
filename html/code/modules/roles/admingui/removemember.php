@@ -41,8 +41,8 @@ class RemovememberMethod extends MethodClass
         $this->var()->find('parentid', $parentid, 'int');
         $this->var()->find('childid', $childid, 'int');
         // call the Roles class and get the parent and child objects
-        $role   = xarRoles::get($parentid);
-        $member = xarRoles::get($childid);
+        $role   = $this->user()->getRole('id', (int) $parentid);
+        $member = $this->user()->getRole('id', (int) $childid);
 
         // Security
         if (empty($role)) {

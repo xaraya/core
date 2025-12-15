@@ -62,7 +62,7 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
                 $data['content_text'] = $this->tpl()->string($tplInputString, $args);
             } catch (Exception $e) {
                 // Show an error message if I am an admin. Otherwise just throw an exception
-                if (xarRoles::isParent("Administrators", $this->user()->getUser())) {
+                if ($this->user()->hasParent("Administrators")) {
                     echo "<pre>";
                     var_dump($e->getMessage());
                     echo "</pre>";

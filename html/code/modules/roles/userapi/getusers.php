@@ -48,7 +48,7 @@ class GetusersMethod extends MethodClass
             return;
         }
 
-        $role = xarRoles::get($id);
+        $role = $this->user()->getRole('id', (int) $id);
 
         $users = $role->getUsers();
 

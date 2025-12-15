@@ -44,7 +44,7 @@ class GetancestorsMethod extends MethodClass
             return;
         }
 
-        $role = xarRoles::get($id);
+        $role = $this->user()->getRole('id', (int) $id);
 
         if (empty($args['parents'])) {
             $ancestors = $role->getRoleAncestors();

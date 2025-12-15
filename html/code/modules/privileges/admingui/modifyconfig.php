@@ -72,7 +72,7 @@ class ModifyconfigMethod extends MethodClass
             case 'testing':
                 $settestergroup = $this->mod()->getVar('testergroup');
                 if (!isset($settestergroupp) || empty($settestergroup)) {
-                    $settestergrouprole = xarRoles::findRole('Administrators');
+                    $settestergrouprole = $this->user()->getRole('name', 'Administrators');
                     $settestergroup = $settestergrouprole->getID();
                 }
                 if (!isset($testergroup) || empty($testergroup)) {
@@ -80,7 +80,7 @@ class ModifyconfigMethod extends MethodClass
                 }
                 $data['testergroup'] = $testergroup;
 
-                $grouplist = xarRoles::getgroups();
+                $grouplist = $this->user()->getGroups();
                 $data['grouplist'] = $grouplist;
 
                 $testusers = $this->mod()->apiFunc('roles', 'user', 'getusers', ['id' => $testergroup]);

@@ -47,8 +47,8 @@ class AddmemberMethod extends MethodClass
             return $this->ctl()->notFound();
         }
         // call the Roles class and get the parent and child objects
-        $role   = xarRoles::get($roleid);
-        $member = xarRoles::get($id);
+        $role   = $this->user()->getRole('id', (int) $roleid);
+        $member = $this->user()->getRole('id', (int) $id);
 
         // Security
         if (!$this->sec()->check('AttachRole', 1, 'Relation', $role->getName() . ":" . $member->getName())) {

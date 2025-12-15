@@ -65,7 +65,7 @@ class GetuserhomeMethod extends MethodClass
             if ($notdone) {
                 // take the first userhome url encountered.
                 // TODO: what would be a more logical choice?
-                $role = xarRoles::get($itemid);
+                $role = $this->user()->getRole('id', (int) $itemid);
                 foreach ($role->getParents() as $parent) {
                     return $userapi->getuserhome(['itemid' => $parent->getID()]);
                 }

@@ -56,7 +56,7 @@ class TestprivilegesMethod extends MethodClass
         $this->var()->find('test', $test, 'str:1:35:', '');
 
         // Call the Roles class and get the role
-        $role = xarRoles::get($id);
+        $role = $this->user()->getRole('id', (int) $id);
 
         $types = $userapi->getitemtypes();
         $thistype = $role->getType();

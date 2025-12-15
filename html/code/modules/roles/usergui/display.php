@@ -49,7 +49,7 @@ class DisplayMethod extends MethodClass
 
         if ($id) {
             // Get role information
-            $role = xarRoles::get($id);
+            $role = $this->user()->getRole('id', (int) $id);
 
             if (!$role) {
                 return;

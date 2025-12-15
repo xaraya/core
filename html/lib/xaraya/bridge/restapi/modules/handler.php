@@ -115,9 +115,9 @@ class ModuleAPIHandler extends RestAPIHandler
             $userId = $this->checkUser();
             // @checkme assume we have a security mask here
             if (is_string($func['security'])) {
-                $role = xarRoles::getRole($userId);
+                $role = $xar->user()->getRole('id', (int) $userId);
                 $rolename = $role->getName();
-                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
+                $pass = $xar->sec()->check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
                 // @todo verify access for user based on what?
             } else {
                 $pass = true;
@@ -184,9 +184,9 @@ class ModuleAPIHandler extends RestAPIHandler
             $userId = $this->checkUser();
             // @checkme assume we have a security mask here
             if (is_string($func['security'])) {
-                $role = xarRoles::getRole($userId);
+                $role = $xar->user()->getRole('id', (int) $userId);
                 $rolename = $role->getName();
-                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
+                $pass = $xar->sec()->check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
                 // @todo verify access for user based on what?
             } else {
                 $pass = true;

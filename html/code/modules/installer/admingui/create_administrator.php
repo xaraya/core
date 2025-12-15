@@ -51,7 +51,8 @@ class CreateAdministratorMethod extends MethodClass
         $data['phase'] = 6;
         $data['phase_label'] = $this->ml('Create Administrator');
 
-        $data['admin'] = xarRoles::getRole((int) $this->mod('roles')->getVar('admin'));
+        $userId = (int) $this->mod('roles')->getVar('admin');
+        $data['admin'] = $this->user()->getRole('id', $userId);
 
         // Set up some custom validation checks and messages
         $data['admin']->properties['name']->display_layout = 'single';

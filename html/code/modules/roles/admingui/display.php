@@ -41,7 +41,7 @@ class DisplayMethod extends MethodClass
 
 
         $data = [];
-        $role = xarRoles::get($id);
+        $role = $this->user()->getRole('id', (int) $id);
 
         $data['itemtype'] = $role->getType();
 

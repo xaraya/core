@@ -42,7 +42,7 @@ class DeleteMethod extends MethodClass
 
         // Call the Roles class
         // get the role to be deleted
-        $role = xarRoles::get($id);
+        $role = $this->user()->getRole('id', (int) $id);
         if (empty($role)) {
             return $this->ctl()->notFound();
         }

@@ -48,7 +48,7 @@ class AddprivilegeMethod extends MethodClass
         }
 
         // Call the Roles class and get the role
-        $role = xarRoles::get($roleid);
+        $role = $this->user()->getRole('id', (int) $roleid);
 
         // Call the Privileges class and get the privilege
         $priv = xarPrivileges::getPrivilege($privid);

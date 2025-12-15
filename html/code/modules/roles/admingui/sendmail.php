@@ -77,7 +77,7 @@ class SendmailMethod extends MethodClass
         // In this case we'll just pick out the descendants in the same state
         // Note the nice use of the array keys to overwrite users we already have
         if ($id != 0 && ($includesubgroups == 1)) {
-            $parentgroup = xarRoles::get($id);
+            $parentgroup = $this->user()->getRole('id', (int) $id);
             $descendants = $parentgroup->getDescendants($state);
 
             foreach ($descendants as $key => $user) {

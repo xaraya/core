@@ -41,7 +41,7 @@ class RemoveprivilegeMethod extends MethodClass
         $this->var()->get('roleid', $roleid, 'int:1:');
         $this->var()->find('confirmation', $confirmation, 'str:1:', '');
         // Call the Roles class and get the role
-        $role  = xarRoles::get($roleid);
+        $role  = $this->user()->getRole('id', (int) $roleid);
 
         // get the array of parents of this role
         // need to display this in the template

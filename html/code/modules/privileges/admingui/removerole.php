@@ -48,7 +48,7 @@ class RemoveroleMethod extends MethodClass
         }
 
         //Call the Roles class and get the role to be removed
-        $role = xarRoles::get($roleid);
+        $role = $this->user()->getRole('id', (int) $roleid);
 
         //Call the Privileges class and get the privilege to be de-assigned
         $priv = xarPrivileges::getPrivilege($id);

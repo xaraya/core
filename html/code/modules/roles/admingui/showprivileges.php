@@ -47,7 +47,7 @@ class ShowprivilegesMethod extends MethodClass
         }
 
         // Call the Roles class and get the role
-        $role = xarRoles::get($id);
+        $role = $this->user()->getRole('id', (int) $id);
 
         // get the array of parents of this role
         // need to display this in the template
@@ -232,7 +232,7 @@ class ShowprivilegesMethod extends MethodClass
         $data['privileges'] = $currentprivileges;
         $data['directassigned'] = $directassigned;
         $data['authid'] = $this->sec()->genAuthKey();
-        $data['groups'] = xarRoles::getgroups();
+        $data['groups'] = $this->user()->getGroups();
         $data['removeurl'] = $this->ctl()->getModuleURL(
             'roles',
             'admin',

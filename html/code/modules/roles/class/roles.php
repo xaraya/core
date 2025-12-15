@@ -136,10 +136,10 @@ class xarRoles extends xarObject
      * @param int $id
      * @return array<mixed> representing the subgroups of a group
      */
-    public static function getsubgroups($id)
+    public static function getsubgroups($id, $xar = null)
     {
         $subgroups = [];
-        $groups = self::getgroups();
+        $groups = self::getgroups($xar);
         foreach ($groups as $subgroup) {
             if ($subgroup['parentid'] == $id) {
                 $subgroups[] = $subgroup;

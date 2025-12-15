@@ -108,7 +108,7 @@ class UpdatestateMethod extends MethodClass
         $idnotify = [];
         foreach ($ids as $id => $val) {
             //check if the user must be updated :
-            $role = xarRoles::get($id);
+            $role = $this->user()->getRole('id', (int) $id);
             if ($role->getState() != $data['status']) {
                 if ($data['status'] == xarRoles::ROLES_STATE_NOTVALIDATED) {
                     $valcode = $userapi->makepass();

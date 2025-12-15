@@ -47,7 +47,7 @@ class ModifyconfigMethod extends MethodClass
         // get a list of everyone with admin privileges
         // TODO: find a more elegant way to do this
         // first find the id of the admin privilege
-        $role  = xarRoles::get($this->mod()->getVar('admin'));
+        $role  = $this->user()->getRole('id', (int) $this->mod()->getVar('admin'));
         $privs = array_merge($role->getInheritedPrivileges(), $role->getAssignedPrivileges());
         foreach ($privs as $priv) {
             if ($priv->getLevel() == 800) {
@@ -74,7 +74,7 @@ class ModifyconfigMethod extends MethodClass
         $admins = [];
         while ($result->next()) {
             [$id] = $result->fields;
-            $role     = xarRoles::get($id);
+            $role     = $this->user()->getRole('id', (int) $id);
             $admins[] = $role;
             $admins   = array_merge($admins, $role->getDescendants());
         }
