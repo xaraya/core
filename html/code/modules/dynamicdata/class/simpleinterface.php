@@ -23,7 +23,8 @@ class SimpleObjectInterface extends DefaultHandler
     public function __construct(array $args = [], ?Context $context = null, $xar = null)
     {
         parent::__construct($args, $context, $xar);
-        $this->var()->check('tplmodule', $args['tplmodule'], 'isset', 'dynamicdata');
+        $xar = $this->getStaticServices();
+        $xar->var()->check('tplmodule', $args['tplmodule'], 'isset', 'dynamicdata');
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
@@ -38,13 +39,14 @@ class SimpleObjectInterface extends DefaultHandler
      */
     public function handle(array $args = [], ?Context $context = null)
     {
+        $xar = $this->getStaticServices();
         // set the context before checking any variables
         $this->setContext($context);
-        $this->var()->check('method', $args['method'], 'str', 'showDisplay');
-        $this->var()->check('itemid', $args['itemid'], 'id', null);
+        $xar->var()->check('method', $args['method'], 'str', 'showDisplay');
+        $xar->var()->check('itemid', $args['itemid'], 'id', null);
         // @todo maybe this should be done somewhere else ?
-        $this->var()->find('qparam', $qparam, 'str', null);
-        $this->var()->find('qstring', $qstring, 'str', null);
+        $xar->var()->find('qparam', $qparam, 'str', null);
+        $xar->var()->find('qstring', $qstring, 'str', null);
 
         if (!empty($qparam) && !empty($qstring)) {
             $args['where'] = "$qparam LIKE '$qstring%'";
@@ -53,11 +55,11 @@ class SimpleObjectInterface extends DefaultHandler
             $this->args = array_merge($this->args, $args);
         }
         // set context if available in handler
-        $this->object = $this->data()->getObjectList($this->args);
+        $this->object = $xar->data()->getObjectList($this->args);
         if (method_exists($this->object, $this->args['method'])) {
             $this->object->getItems();
         } else {
-            $this->object = $this->data()->getObject($this->args);
+            $this->object = $xar->data()->getObject($this->args);
         }
         $this->context?->tracePath(__METHOD__ . ': ' . $this->object->name, $this->args);
 

@@ -147,7 +147,8 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
                         $this->defaultvalue = null;
                     }
                 } catch (Exception $e) {
-                    //$message = $this->ml("Bad default value for property '#(1)'<br/>", $this->name);
+                    //$xar = $this->getStaticServices();
+                    //$message = $xar->ml("Bad default value for property '#(1)'<br/>", $this->name);
                     //echo $message;
                     throw new BadParameterException([$this->name, $e->getMessage()], "Bad default value for property '#(1)': #(2)");
                 }
@@ -243,10 +244,11 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     public function getValue()
     {
+        $xar = $this->getStaticServices();
         // If we are set up to do so, translate this value
-        if ($this->translatable && $this->mod()->isAvailable('translations')) {
-            $this->mls()->loadObjectTranslations($this->objectref->name, $this->name);
-            $value = $this->ml($this->value);
+        if ($this->translatable && $xar->mod()->isAvailable('translations')) {
+            $xar->mls()->loadObjectTranslations($this->objectref->name, $this->name);
+            $value = $xar->ml($this->value);
         } else {
             $value = $this->value;
         }
@@ -285,9 +287,10 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     public function fetchValue($name = '')
     {
+        $xar = $this->getStaticServices();
         $found = false;
         $value = null;
-        $this->var()->check($name, $namevalue);
+        $xar->var()->check($name, $namevalue);
         if (isset($namevalue)) {
             $found = true;
             $value = $namevalue;
@@ -338,7 +341,8 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     public function validateValue($value = null)
     {
-        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         if (!isset($value)) {
             $value = $this->getValue();
@@ -348,29 +352,29 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
 
         if ($this->validation_notequals != null && $value == $this->validation_notequals) {
             if (!empty($this->validation_notequals_invalid)) {
-                $this->invalid = $this->ml($this->validation_notequals_invalid);
+                $this->invalid = $xar->ml($this->validation_notequals_invalid);
             } else {
-                $this->invalid = $this->ml('#(1) cannot have the value #(2)', $this->name, $this->validation_notequals);
+                $this->invalid = $xar->ml('#(1) cannot have the value #(2)', $this->name, $this->validation_notequals);
             }
-            $this->log()->error($this->invalid);
+            $xar->log()->error($this->invalid);
             $this->value = null;
             return false;
         } elseif ($this->validation_equals != null && $value != $this->validation_equals) {
             if (!empty($this->validation_equals_invalid)) {
-                $this->invalid = $this->ml($this->validation_equals_invalid);
+                $this->invalid = $xar->ml($this->validation_equals_invalid);
             } else {
-                $this->invalid = $this->ml('#(1) must have the value #(2)', $this->name, $this->validation_notequals);
+                $this->invalid = $xar->ml('#(1) must have the value #(2)', $this->name, $this->validation_notequals);
             }
-            $this->log()->error($this->invalid);
+            $xar->log()->error($this->invalid);
             $this->value = null;
             return false;
         } elseif ($this->validation_allowempty != null && !$this->validation_allowempty && empty($value)) {
             if (!empty($this->validation_allowempty_invalid)) {
-                $this->invalid = $this->ml($this->validation_allowempty_invalid);
+                $this->invalid = $xar->ml($this->validation_allowempty_invalid);
             } else {
-                $this->invalid = $this->ml('#(1) cannot be empty', $this->name);
+                $this->invalid = $xar->ml('#(1) cannot be empty', $this->name);
             }
-            $this->log()->error($this->invalid);
+            $xar->log()->error($this->invalid);
             $this->value = null;
             return false;
         }
@@ -485,6 +489,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if ($this->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_NOINPUT) {
             return $this->showOutput($data) . $this->showHidden($data);
         }
+        $xar = $this->getStaticServices();
 
         // Display directive for the name
         if ($this->anonymous == true) {
@@ -536,7 +541,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             $data['value']    = $this->value;
         }
         if (!empty($this->invalid)) {
-            $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->ml($this->invalid);
+            $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $xar->ml($this->invalid);
         } else {
             $data['invalid']  = '';
         }
@@ -555,7 +560,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
                 }
             }
         }
-        return $this->tpl()->property($data['tplmodule'], $data['template'], 'showinput', $data);
+        return $xar->tpl()->property($data['tplmodule'], $data['template'], 'showinput', $data);
     }
 
     /**
@@ -581,6 +586,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if ($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
             return $this->showHidden($data);
         }
+        $xar = $this->getStaticServices();
 
         $data['id']   = $this->id;
         $data['name'] = $this->name;
@@ -593,14 +599,14 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         }
 
         // If we are set up to do so, translate this value
-        if ($this->translatable && $this->mod()->isAvailable('translations')) {
-            $this->mls()->loadObjectTranslations($this->objectref->name, $this->name);
-            $data['value'] = $this->ml($data['value']);
+        if ($this->translatable && $xar->mod()->isAvailable('translations')) {
+            $xar->mls()->loadObjectTranslations($this->objectref->name, $this->name);
+            $data['value'] = $xar->ml($data['value']);
         }
 
         // If this is set, pass only allowed HTML tags
         if ($this->display_striptags) {
-            $data['value']    = $this->prep()->html($data['value']);
+            $data['value']    = $xar->prep()->html($data['value']);
         }
 
         // TODO: does this hurt when it is an array?
@@ -628,7 +634,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
                 }
             }
         }
-        return $this->tpl()->property($data['tplmodule'], $data['template'], 'showoutput', $data);
+        return $xar->tpl()->property($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
 
     /**
@@ -653,6 +659,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         } elseif (is_array($data)) {
             extract($data);
         }
+        $xar = $this->getStaticServices();
 
         $data['name']  = $this->name;
         $data['name']     = !empty($data['name']) ? $data['name'] : $this->propertyprefix . $this->id;
@@ -661,7 +668,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             $data['id']   = $data['name'];
         }
 
-        $data['label'] = isset($data['label']) ? $this->prep()->text($data['label']) : $this->prep()->text($this->label);
+        $data['label'] = isset($data['label']) ? $xar->prep()->text($data['label']) : $xar->prep()->text($this->label);
         // Allow 0 as a fieldprefix
         if (!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
             $data['fieldprefix'] = $this->_fieldprefix;
@@ -688,7 +695,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if (!isset($data['title'])) {
             $data['title']   = $this->display_tooltip;
         }
-        return $this->tpl()->property($data['tplmodule'], $data['template'], 'label', $data);
+        return $xar->tpl()->property($data['tplmodule'], $data['template'], 'label', $data);
     }
 
     /**
@@ -716,21 +723,22 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
 
         $data['id']    = $this->id;
         $data['name']  = $this->name;
+        $xar = $this->getStaticServices();
 
         // This is the array of all possible filter options
         $filteroptions = [
-            ''        => ['id' => '', 'name' => $this->ml('not used')],
-            '='       => ['id' => 'eq', 'name' => $this->ml('equals')],
-            '!='      => ['id' => 'ne', 'name' => $this->ml('not equals')],
-            '>'       => ['id' => 'gt', 'name' => $this->ml('greater than')],
-            '>='      => ['id' => 'ge', 'name' => $this->ml('greater than or equal')],
-            '<'       => ['id' => 'lt', 'name' => $this->ml('less than')],
-            '<='      => ['id' => 'le', 'name' => $this->ml('less than or equal')],
-            'like'    => ['id' => 'like', 'name' => $this->ml('like')],
-            'notlike' => ['id' => 'notlike', 'name' => $this->ml('not like')],
-            'null'    => ['id' => 'null', 'name' => $this->ml('is null')],
-            'notnull' => ['id' => 'notnull', 'name' => $this->ml('is not null')],
-            'regex'   => ['id' => 'regex', 'name' => $this->ml('regular expression')],
+            ''        => ['id' => '', 'name' => $xar->ml('not used')],
+            '='       => ['id' => 'eq', 'name' => $xar->ml('equals')],
+            '!='      => ['id' => 'ne', 'name' => $xar->ml('not equals')],
+            '>'       => ['id' => 'gt', 'name' => $xar->ml('greater than')],
+            '>='      => ['id' => 'ge', 'name' => $xar->ml('greater than or equal')],
+            '<'       => ['id' => 'lt', 'name' => $xar->ml('less than')],
+            '<='      => ['id' => 'le', 'name' => $xar->ml('less than or equal')],
+            'like'    => ['id' => 'like', 'name' => $xar->ml('like')],
+            'notlike' => ['id' => 'notlike', 'name' => $xar->ml('not like')],
+            'null'    => ['id' => 'null', 'name' => $xar->ml('is null')],
+            'notnull' => ['id' => 'notnull', 'name' => $xar->ml('is not null')],
+            'regex'   => ['id' => 'regex', 'name' => $xar->ml('regular expression')],
         ];
 
         $data['filters'] ??= [];
@@ -751,7 +759,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         } elseif (in_array($this->basetype, ['dropdown'])) {
             $data['filters'] = ['='];
         } else {
-            $this->exit($this->ml('The property type #(1) is not among those currently supported in filters'));
+            $xar->exit($xar->ml('The property type #(1) is not among those currently supported in filters'));
         }
 
         // Add a blank to any of the arrays to indicate unused operations
@@ -786,7 +794,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if (!isset($data['layout'])) {
             $data['layout']   = $this->layout;
         }
-        return $this->tpl()->property($data['tplmodule'], $data['template'], 'filter', $data);
+        return $xar->tpl()->property($data['tplmodule'], $data['template'], 'filter', $data);
     }
 
     /**
@@ -820,6 +828,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if (!empty($prefix)) {
             $data['id'] = $prefix . $data['id'];
         }
+        $xar = $this->getStaticServices();
 
         $data['value'] ??= $this->value;
 
@@ -827,11 +836,11 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if (is_array($data['value'])) {
             $temp = [];
             foreach ($data['value'] as $key => $tmp) {
-                $temp[$key] = (!is_array($tmp)) ? $this->prep()->text($tmp) : $tmp;
+                $temp[$key] = (!is_array($tmp)) ? $xar->prep()->text($tmp) : $tmp;
             }
             $data['value'] = $temp;
         } else {
-            $data['value'] = $this->prep()->text($data['value']);
+            $data['value'] = $xar->prep()->text($data['value']);
         }
 
         $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->invalid;
@@ -845,7 +854,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             $data['layout']   = $this->layout;
         }
 
-        return $this->tpl()->property($data['tplmodule'], $data['template'], 'showhidden', $data);
+        return $xar->tpl()->property($data['tplmodule'], $data['template'], 'showhidden', $data);
     }
 
     /**
@@ -958,6 +967,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if (!isset($data['configuration'])) {
             $data['configuration'] = $this->configuration;
         }
+        $xar = $this->getStaticServices();
         $fields = $this->parseConfiguration($data['configuration']);
 
         if (!isset($data['name'])) {
@@ -970,7 +980,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             $data['tabindex'] = 0;
         }
         if (!isset($this->invalid)) {
-            $data['invalid'] = $this->ml('Invalid #(1)', $this->invalid);
+            $data['invalid'] = $xar->ml('Invalid #(1)', $this->invalid);
         } else {
             $data['invalid'] = '';
         }
@@ -1008,7 +1018,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
                 $data['validation'][$msgname] = '';
             }
         }
-        return $this->tpl()->property($data['module'], $data['template'], 'configuration', $data);
+        return $xar->tpl()->property($data['module'], $data['template'], 'configuration', $data);
     }
 
     /**
@@ -1268,7 +1278,8 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             return serialize($item[$this->name]);
         }
-        return $this->prep()->text($item[$this->name] ?? '');
+        $xar = $this->getStaticServices();
+        return $xar->prep()->text($item[$this->name] ?? '');
     }
 
     /** @return bool */

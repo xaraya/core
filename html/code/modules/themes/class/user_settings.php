@@ -17,8 +17,9 @@ class ThemesUserSettings extends DataObject
 {
     public function updateItem(array $data = [])
     {
+        $xar = $this->getStaticServices();
         foreach ($this->properties as $name => $setting) {
-            $this->mod('themes')->setUserVar($name, $setting->value);
+            $xar->mod('themes')->setUserVar($name, $setting->value);
         }
     }
 }

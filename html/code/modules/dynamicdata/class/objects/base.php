@@ -48,7 +48,8 @@ class DataObject extends DataObjectMaster implements iDataObject
     **/
     public function getItem(array $args = [])
     {
-        $this->log()->info("DataObject::getItem: Retrieving an item of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObject::getItem: Retrieving an item of object " . $this->name);
 
         if (!empty($args['itemid'])) {
             if ($args['itemid'] != $this->itemid) {
@@ -101,7 +102,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function getInvalids(array $args = [])
     {
-        $this->log()->info("xarLog in getInvalids function");
+        $xar = $this->getStaticServices();
+        $xar->log()->info("xarLog in getInvalids function");
 
         if (!empty($args['fields'])) {
             $fields = $args['fields'];
@@ -115,24 +117,26 @@ class DataObject extends DataObjectMaster implements iDataObject
                 $invalids[$name] = $this->properties[$name]->invalid;
             }
         }
-        $this->log()->debug("printing invalids array in log file: ", $invalids);
+        $xar->log()->debug("printing invalids array in log file: ", $invalids);
 
         return $invalids;
     }
 
     public function displayInvalids(array $args = [])
     {
-        $this->log()->info("xarLog in displayInvalids function");
+        $xar = $this->getStaticServices();
+        $xar->log()->info("xarLog in displayInvalids function");
 
         $data = [
             'invalids' => $this->getInvalids($args),
         ];
-        return $this->tpl()->module('dynamicdata', 'user', 'displayinvalids', $data);
+        return $xar->tpl()->module('dynamicdata', 'user', 'displayinvalids', $data);
     }
 
     public function clearInvalids()
     {
-        $this->log()->info("xarLog in clearInvalids function");
+        $xar = $this->getStaticServices();
+        $xar->log()->info("xarLog in clearInvalids function");
 
         foreach (array_keys($this->properties) as $name) {
             $this->properties[$name]->invalid = '';
@@ -145,7 +149,8 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function checkInput(array $args = [], $suppress = 0, $priority = 'dd')
     {
-        $this->log()->info("DataObject::checkInput: Checking an item of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObject::checkInput: Checking an item of object " . $this->name);
 
         if (!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
             $this->itemid = $args['itemid'];
@@ -225,14 +230,14 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
         }
         if (!empty($this->missingfields)) {
-            $this->log()->error('Missing properties', $this->missingfields);
+            $xar->log()->error('Missing properties', $this->missingfields);
             if (!$suppress) {
                 throw new VariableNotFoundException([$this->name,implode(', ', $this->missingfields)], 'The following fields were not found: #(1): [#(2)]');
             }
         }
         if (!empty($badnames)) {
-            $this->log()->error('Bad properties', $badnames);
-            if ($this->mod('dynamicdata')->getVar('debugmode') && $this->user()->isDebugAdmin()) {
+            $xar->log()->error('Bad properties', $badnames);
+            if ($xar->mod('dynamicdata')->getVar('debugmode') && $xar->user()->isDebugAdmin()) {
                 echo "Bad properties: ";
                 echo $this->name . ": " . implode(', ', $badnames);
                 echo "<br />";
@@ -256,7 +261,8 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function showForm(array $args = [])
     {
-        $this->log()->info("DataObject::showForm: Form for object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObject::showForm: Form for object " . $this->name);
 
         $args = $args + $this->getPublicProperties();
         $this->setFieldPrefix($args['fieldprefix']);
@@ -305,7 +311,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        return $this->tpl()->object($args['tplmodule'], $args['template'], 'showform', $args);
+        return $xar->tpl()->object($args['tplmodule'], $args['template'], 'showform', $args);
     }
 
     /**
@@ -313,7 +319,8 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function showDisplay(array $args = [])
     {
-        $this->log()->info("DataObject::showDisplay: Display an item of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObject::showDisplay: Display an item of object " . $this->name);
 
         $args = $this->toArray($args);
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
@@ -368,7 +375,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        return $this->tpl()->object($args['tplmodule'], $args['template'], 'showdisplay', $args);
+        return $xar->tpl()->object($args['tplmodule'], $args['template'], 'showdisplay', $args);
     }
 
     /**
@@ -398,17 +405,18 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function createItem(array $args = [])
     {
-        $this->log()->info("DataObject::createItem: Creating an item of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObject::createItem: Creating an item of object " . $this->name);
 
-        if ($this->mod()->isLoaded() && $this->mod('dynamicdata')->getVar('suppress_updates')) {
+        if ($xar->mod()->isLoaded() && $xar->mod('dynamicdata')->getVar('suppress_updates')) {
             // We are testing/debugging: return a zero
             return 0;
         }
 
         // Sanity check: do we have a primary field?
         if (empty($this->primary)) {
-            $msg = $this->ml('The object #(1) has no primary key', $this->name);
-            $this->exit($msg);
+            $msg = $xar->ml('The object #(1) has no primary key', $this->name);
+            $xar->exit($msg);
         }
 
         //  The id of the item to be created is
@@ -435,7 +443,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Special case when we try to create a new object handled by dynamicdata
         if (
             $this->objectid == 1
-            && $this->properties['module_id']->value == $this->mod()->getRegID('dynamicdata')
+            && $this->properties['module_id']->value == $xar->mod()->getRegID('dynamicdata')
             //&& $this->properties['itemtype']->value < 2
         ) {
             $this->properties['itemtype']->setValue($this->getNextItemtype($args));
@@ -477,7 +485,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function updateItem(array $args = [])
     {
-        $this->log()->info("DataObject::updateItem: Updating an item of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObject::updateItem: Updating an item of object " . $this->name);
 
         if (count($args) > 0) {
             if (!empty($args['itemid'])) {
@@ -494,7 +503,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->itemid = $this->properties[$this->primary]->getValue();
         }
 
-        if ($this->mod()->isLoaded() && $this->mod('dynamicdata')->getVar('suppress_updates')) {
+        if ($xar->mod()->isLoaded() && $xar->mod('dynamicdata')->getVar('suppress_updates')) {
             // We are testing/debugging: return the ID of this item
             return $this->itemid;
         }
@@ -524,7 +533,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // CHECKME: flush the variable cache if necessary
         if ($this->objectid == 1) {
-            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid], $this->getStaticServices());
+            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid], $xar);
         }
 
         // call update hooks for this item - for stand-alone DD objects and virtual DD objects for now
@@ -537,7 +546,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function deleteItem(array $args = [])
     {
-        $this->log()->info("DataObject::deleteItem: Deleting an item of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObject::deleteItem: Deleting an item of object " . $this->name);
 
         if (!empty($args['itemid'])) {
             $this->itemid = $args['itemid'];
@@ -559,7 +569,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
 
-        if ($this->mod()->isLoaded() && $this->mod('dynamicdata')->getVar('suppress_updates')) {
+        if ($xar->mod()->isLoaded() && $xar->mod('dynamicdata')->getVar('suppress_updates')) {
             // Call delete hooks for this item
             $this->callHooks('delete');
 
@@ -595,7 +605,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // CHECKME: flush the variable cache if necessary
         if ($this->objectid == 1) {
-            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid], $this->getStaticServices());
+            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid], $xar);
         }
 
         // call delete hooks for this item - for stand-alone DD objects and virtual DD objects for now
@@ -621,10 +631,11 @@ class DataObject extends DataObjectMaster implements iDataObject
         if (empty($args['moduleid'])) {
             $args['moduleid'] = $this->moduleid;
         }
+        $xar = $this->getStaticServices();
 
-        $dbconn = $this->db()->getConn();
-        $this->mod()->loadDbInfo('dynamicdata');
-        $xartable =  $this->db()->getTables();
+        $dbconn = $xar->db()->getConn();
+        $xar->mod()->loadDbInfo('dynamicdata');
+        $xartable =  $xar->db()->getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -651,14 +662,15 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function initialize(array $args = [])
     {
+        $xar = $this->getStaticServices();
         foreach ($this->properties as $name => $property) {
             $nameparts = explode(': ', $this->properties[$name]->source);
             if (empty($nameparts[1])) {
-                throw new Exception($this->ml('Incorrect source: #(1)', $this->properties[$name]->source));
+                throw new Exception($xar->ml('Incorrect source: #(1)', $this->properties[$name]->source));
             }
-            $test = $this->mod($nameparts[1])->getVar($this->properties[$name]->name);
+            $test = $xar->mod($nameparts[1])->getVar($this->properties[$name]->name);
             if ($test === null) {
-                $this->mod($nameparts[1])->setVar($this->properties[$name]->name, $this->properties[$name]->defaultvalue);
+                $xar->mod($nameparts[1])->setVar($this->properties[$name]->name, $this->properties[$name]->defaultvalue);
             }
         }
         return true;

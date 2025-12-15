@@ -144,11 +144,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
     public function checkInput(array $args = [], $suppress = 0)
     {
-        $this->log()->info("DataObjectList::checkInput: Checking items of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObjectList::checkInput: Checking items of object " . $this->name);
 
         $data = ['id' => []];  // = $args; // @checkme is that what we want here?
         // First get the itemids
-        $this->var()->find($this->primary, $data['id'], 'array', []);
+        $xar->var()->find($this->primary, $data['id'], 'array', []);
         if (empty($data['id'])) {
             return true;
         }
@@ -181,7 +182,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
     public function updateItems(array $args = [])
     {
-        $this->log()->info("DataObjectList::updateItems: Updating items of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObjectList::updateItems: Updating items of object " . $this->name);
 
         // Get the items to be updated
         if (isset($args['items'])) {
@@ -198,13 +200,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Replace the DB data with the data to be updated
         // @todo do we need to pass along $this->getContext() here?
-        $single_object = $this->data()->getObject(['name' => $this->name]);
+        $single_object = $xar->data()->getObject(['name' => $this->name]);
         foreach ($db_items as $key => $db_item) {
             // Check if the data changed
             $unchanged = true;
             foreach ($items_to_update[$key] as $field_key => $field_value) {
                 if (!isset($db_item[$field_key])) {
-                    $msg = $this->ml("The property '#(1)' could not be updated", $field_key);
+                    $msg = $xar->ml("The property '#(1)' could not be updated", $field_key);
                     throw new Exception($msg);
                 }
                 if ($db_item[$field_key] != $field_value) {
@@ -406,13 +408,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (empty($this->filters)) {
             return;
         }
+        $xar = $this->getStaticServices();
 
-        if (!empty($this->session()->getAnonId()) && $this->user()->isLoggedIn()) {
+        if (!empty($xar->session()->getAnonId()) && $xar->user()->isLoggedIn()) {
             // get the direct parents of the current user (no ancestors)
-            $grouplist = $this->cache()->getParents();
+            $grouplist = $xar->cache()->getParents();
         } else {
             // check anonymous visitors by themselves
-            $anonid = $this->config()->getVar('Site.User.AnonymousUID');
+            $anonid = $xar->config()->getVar('Site.User.AnonymousUID');
             $grouplist = [$anonid];
         }
 
@@ -520,7 +523,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function &getItems(array $args = [])
     {
-        $this->log()->info("DataObjectList::getItems: Retrieving items of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObjectList::getItems: Retrieving items of object " . $this->name);
 
         // Set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
@@ -594,7 +598,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function showView(array $args = [])
     {
-        $this->log()->info("DataObjectList::showView: Listing items of object " . $this->name);
+        $xar = $this->getStaticServices();
+        $xar->log()->info("DataObjectList::showView: Listing items of object " . $this->name);
 
         $args = $this->toArray($args);
         // Note: we do NOT retrieve the items again here
@@ -663,7 +668,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $args['linkfunc'] = $this->linkfunc;
         }
         if (empty($args['linklabel'])) {
-            $args['linklabel'] = $this->ml('Display');
+            $args['linklabel'] = $xar->ml('Display');
         }
         if (empty($args['param'])) {
             $args['param'] = $this->urlparam;
@@ -675,7 +680,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // pass some extra template variables for use in BL tags, API calls etc.
         $args['moduleid'] = $this->moduleid;
 
-        $modname = $this->mod()->getName($this->moduleid);
+        $modname = $xar->mod()->getName($this->moduleid);
         $itemtype = $this->itemtype;
 
         // override for viewing dynamic objects
@@ -779,13 +784,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         $args['object'] = $this;
-        return $this->tpl()->object($args['tplmodule'], $args['template'], 'showview', $args);
+        return $xar->tpl()->object($args['tplmodule'], $args['template'], 'showview', $args);
     }
 
     public function getSortURL($currenturl = null)
     {
         if (empty($currenturl)) {
-            $currenturl = $this->ctl()->getCurrentURL(['startnum' => null, 'sort' => null]);
+            $xar = $this->getStaticServices();
+            $currenturl = $xar->ctl()->getCurrentURL(['startnum' => null, 'sort' => null]);
         } else {
             $currenturl = preg_replace('/&amp;(startnum|sort)=(.*)?(&amp;|$)/', '$3', $currenturl);
             $currenturl = preg_replace('/\?(startnum|sort)=(.*)?&amp;/', '?', $currenturl);
@@ -853,17 +859,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // Limit this to the dynamicdata module and maybe remove it altogether
         // This should be done in the templates
         // It is creating unnecessary shorturl encodes
+        // @todo depending on current module
         $modname = $this->mod()->getName();
         if ($modname == 'dynamicdata' || $modname == 'object') {
+            $xar = $this->getStaticServices();
             if ($allow_read) {
                 // @todo override getDisplayLink() to do something with $item, e.g. include title in links
-                $options['display'] = ['otitle' => $this->ml('Display'),
+                $options['display'] = ['otitle' => $xar->ml('Display'),
                     'oicon'  => 'display.png',
                     'olink'  => $this->getDisplayLink($itemid, $item),
                     'ojoin'  => ''];
             }
             if ($allow_edit) {
-                $options['modify'] = ['otitle' => $this->ml('Edit'),
+                $options['modify'] = ['otitle' => $xar->ml('Edit'),
                     'oicon'  => 'modify.png',
                     'olink'  => $this->getActionURL('modify', $itemid),
                     'ojoin'  => '|'];
@@ -871,15 +879,15 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // extra options when showing the dynamic objects themselves
             if ($allow_edit && $this->objectid == 1) {
                 // CHECKME: access should be based on the objects themselves here (but probably too heavy) ?
-                $options['modifyprops'] = ['otitle' => $this->ml('Properties'),
+                $options['modifyprops'] = ['otitle' => $xar->ml('Properties'),
                     'oicon'  => 'modify-config.png',
                     'olink'  => $this->getActionURL('modifyprop', $itemid),
                     'ojoin'  => '|'];
-                $options['access'] = ['otitle' => $this->ml('Access'),
+                $options['access'] = ['otitle' => $xar->ml('Access'),
                     'oicon'  => 'privileges.png',
                     'olink'  => $this->getActionURL('access', $itemid),
                     'ojoin'  => '|'];
-                $options['viewitems'] = ['otitle' => $this->ml('Items'),
+                $options['viewitems'] = ['otitle' => $xar->ml('Items'),
                     'oicon'  => 'item-list.png',
                     'olink'  => $this->getActionURL('viewitems', $itemid),
                     'ojoin'  => '|',
@@ -891,13 +899,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // CHECKME: allow cloning only for the dynamic objects themselves ?
             if ($allow_add && $this->objectid == 1) {
                 // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
-                $options['clone'] = ['otitle' => $this->ml('Clone'),
+                $options['clone'] = ['otitle' => $xar->ml('Clone'),
                     'oicon'  => 'add.png',
                     'olink'  => $this->getActionURL('modify', $itemid, ['tab' => 'clone']),
                     'ojoin'  => '|'];
             }
             if ($allow_delete) {
-                $options['delete'] = ['otitle' => $this->ml('Delete'),
+                $options['delete'] = ['otitle' => $xar->ml('Delete'),
                     'oicon'  => 'delete.png',
                     'olink'  => $this->getActionURL('delete', $itemid),
                     'ojoin'  => '|'];
@@ -922,6 +930,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 throw new Exception('Badly formed fieldlist attribute');
             }
         }
+        $xar = $this->getStaticServices();
 
         if (count($args['fieldlist']) == 0 && empty($this->status)) {
             $args['fieldlist'] = $this->getFieldList();
@@ -931,7 +940,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $viewvalues[$itemid] = [];
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    $label = $this->prep()->text($this->properties[$name]->label);
+                    $label = $xar->prep()->text($this->properties[$name]->label);
                     if (isset($this->items[$itemid][$name])) {
                         $value = $this->properties[$name]->showOutput(['value' => $this->items[$itemid][$name]]);
                     } else {
@@ -997,35 +1006,36 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 }
             }
         }
+        $xar = $this->getStaticServices();
 
         // fill in the summary item
         $item = [];
-        $label = $this->ml('Summary');
+        $label = $xar->ml('Summary');
         foreach ($this->fieldsummary as $field => $operation) {
             switch ($operation) {
                 case 'AVG':
                     if (isset($fieldvalues[$field]) && !empty($fieldcount[$field])) {
                         $item[$field] = $fieldvalues[$field] / $fieldcount[$field];
                     }
-                    $label = $this->ml('Current Average');
+                    $label = $xar->ml('Current Average');
                     break;
                 case 'SUM':
                     if (isset($fieldvalues[$field])) {
                         $item[$field] = $fieldvalues[$field];
                     }
-                    $label = $this->ml('Current Total');
+                    $label = $xar->ml('Current Total');
                     break;
                 case 'MAX':
                     if (isset($fieldvalues[$field])) {
                         $item[$field] = $fieldvalues[$field];
                     }
-                    $label = $this->ml('Current Maximum');
+                    $label = $xar->ml('Current Maximum');
                     break;
                 case 'MIN':
                     if (isset($fieldvalues[$field])) {
                         $item[$field] = $fieldvalues[$field];
                     }
-                    $label = $this->ml('Current Minimum');
+                    $label = $xar->ml('Current Minimum');
                     break;
             }
         }

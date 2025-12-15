@@ -140,7 +140,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         }
         //FIXME where do we need to define the modname best?
         if (!empty($args['moduleid'])) {
-            $args['modname'] = $this->mod()->getName($args['moduleid']);
+            $xar = $this->getStaticServices();
+            $args['modname'] = $xar->mod()->getName($args['moduleid']);
         }
         return $args;
     }
@@ -155,8 +156,9 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
 
         $this->descriptor = $descriptor;
         $descriptor->refresh($this);
+        $xar = $this->getStaticServices();
 
-        $this->mod()->loadDbInfo('dynamicdata');
+        $xar->mod()->loadDbInfo('dynamicdata');
 
         // use the object name as default template override (*-*-[template].x*)
         if (empty($this->template) && !empty($this->name)) {
@@ -194,7 +196,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             }
         }
 
-        $this->dataquery = new Query('SELECT', '', '', 0, $this->getStaticServices());
+        $this->dataquery = new Query('SELECT', '', '', 0, $xar);
         if ($descriptor->exists('datastore')) {
             $this->datastore = $descriptor->get('datastore');
             if ($this->datastore == 'relational' || $this->datastore == 'external') {
@@ -259,9 +261,10 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
 
     private function propertysource($sourcestring, $object, $prefix = false)
     {
+        $xar = $this->getStaticServices();
         $parts = explode('.', $sourcestring);
         if (!isset($parts[1])) {
-            throw new Exception($this->ml('Bad property definition'));
+            throw new Exception($xar->ml('Bad property definition'));
         }
         $parts[0] = trim($parts[0]);
         if ($parts[0] == 'this' || $parts[0] == $object->name) {
@@ -271,12 +274,12 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
                 return $object->properties[$parts[1]]->source;
             }
         } else {
-            $foreignobject = $this->data()->getObject(['name' => $parts[0]]);
+            $foreignobject = $xar->data()->getObject(['name' => $parts[0]]);
             $foreignstore = $foreignobject->properties[$parts[1]]->source;
             $foreignparts = explode('.', $foreignstore);
             $foreignconfiguration = $foreignobject->datasources;
             if (!isset($foreignconfiguration[$foreignparts[0]])) {
-                throw new Exception($this->ml('Bad foreign datasource'));
+                throw new Exception($xar->ml('Bad foreign datasource'));
             }
             $foreigntable = $foreignconfiguration[$foreignparts[0]];
             // Support simple array form
@@ -317,6 +320,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         } else {
             $fields = array_keys($this->properties);
         }
+        $xar = $this->getStaticServices();
 
         $args['properties'] = [];
         foreach ($fields as $name) {
@@ -338,7 +342,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        return $this->tpl()->object($args['tplmodule'], $args['template'], 'showfilterform', $args);
+        return $xar->tpl()->object($args['tplmodule'], $args['template'], 'showfilterform', $args);
     }
 
     /**
@@ -367,7 +371,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             try {
                 $fieldlist = explode(',', $fieldlist);
             } catch (Exception) {
-                throw new Exception($this->ml('Badly formed fieldlist attribute'));
+                $xar = $this->getStaticServices();
+                throw new Exception($xar->ml('Badly formed fieldlist attribute'));
             }
         }
         $this->fieldlist = [];
@@ -475,8 +480,9 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
      */
     public function checkDbConnection()
     {
+        $xar = $this->getStaticServices();
         // we already have a valid db connection index (internal)
-        if (empty($this->dbConnIndex) || $this->db()->hasConn($this->dbConnIndex)) {
+        if (empty($this->dbConnIndex) || $xar->db()->hasConn($this->dbConnIndex)) {
             return;
         }
         // we have no db connection arguments to use
@@ -484,8 +490,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             return;
         }
         // create a new db connection and get its index
-        $this->db()->newConn($this->dbConnArgs);
-        $this->dbConnIndex = $this->db()->getConnIndex();
+        $xar->db()->newConn($this->dbConnArgs);
+        $this->dbConnIndex = $xar->db()->getConnIndex();
     }
 
     /**
@@ -507,13 +513,14 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         if (is_string($this->dbConnArgs)) {
             $this->dbConnArgs = json_decode($this->dbConnArgs, true);
         }
+        $xar = $this->getStaticServices();
         if (is_array($this->dbConnArgs) && count($this->dbConnArgs) == 2 && is_string($this->dbConnArgs[0] ?? null)) {
             // instantiate UserApi class here!?
             if (class_exists($this->dbConnArgs[0]) && is_subclass_of($this->dbConnArgs[0], \Xaraya\Database\WithDatabaseInterface::class)) {
-                // @todo avoid calling $this->mod()->getName() with xaraya db connection here - see virtual library offline
-                $modname = $this->mod()->getName($this->moduleid);
+                // @todo avoid calling $xar->mod()->getName() with xaraya db connection here - see virtual library offline
+                $modname = $xar->mod()->getName($this->moduleid);
                 if (is_subclass_of($this->dbConnArgs[0], \Xaraya\Modules\ModuleClassInterface::class)) {
-                    $module = $this->module($modname);
+                    $module = $xar->module($modname);
                     $this->dbConnArgs[0] = new $this->dbConnArgs[0]($modname, $module);
                 } else {
                     $this->dbConnArgs[0] = new $this->dbConnArgs[0]($modname);
@@ -534,14 +541,14 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
                 $this->dbConnArgs = $args;
             } catch (Exception) {
                 // allow database connection failure later on when it's actually needed
-                $this->log()->warning("DataObjectMaster::parseDbConnArgs: Invalid dbConnArgs - unable to create new db connection");
+                $xar->log()->warning("DataObjectMaster::parseDbConnArgs: Invalid dbConnArgs - unable to create new db connection");
                 return null;
             }
         } elseif (array_key_exists('databaseType', $this->dbConnArgs) || array_key_exists('external', $this->dbConnArgs)) {
             $args = $this->dbConnArgs;
         } else {
             // allow database connection failure later on when it's actually needed
-            $this->log()->warning("DataObjectMaster::checkDbConnection: Invalid dbConnArgs - unable to create new db connection");
+            $xar->log()->warning("DataObjectMaster::checkDbConnection: Invalid dbConnArgs - unable to create new db connection");
             return null;
         }
         // if we have an external db connection argument, the datastore is external
@@ -567,7 +574,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
                     $name = trim(substr($firstproperty->source, 17));
                     $this->addDataStore($name, 'modulevars');
                 } catch (Exception) {
-                    throw new Exception($this->ml('Did not find a first property for module variable datastore'));
+                    $xar = $this->getStaticServices();
+                    throw new Exception($xar->ml('Did not find a first property for module variable datastore'));
                 }
                 break;
                 /**
@@ -699,13 +707,15 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             if (isset($this->properties[$property])) {
                 $property = & $this->properties[$property];
             } else {
-                $msg = $this->ml('Bad property name parameter for modifyProperty');
+                $xar = $this->getStaticServices();
+                $msg = $xar->ml('Bad property name parameter for modifyProperty');
                 throw new Exception($msg);
             }
         } else {
             // Check if this object is a property of this dataobject
             if (!isset($this->properties[$property->name])) {
-                $msg = $this->ml('Bad property object parameter for modifyProperty');
+                $xar = $this->getStaticServices();
+                $msg = $xar->ml('Bad property object parameter for modifyProperty');
                 throw new Exception($msg);
             }
         }
@@ -773,10 +783,11 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
      */
     public function getDisplayValues(array $args = [])
     {
+        $xar = $this->getStaticServices();
         $displayvalues = [];
         $properties = $this->getProperties($args);
         foreach ($properties as $property) {
-            $label = $this->prep()->text($property->label);
+            $label = $xar->prep()->text($property->label);
             $displayvalues[$label] = $property->showOutput();
         }
         return $displayvalues;
@@ -798,9 +809,10 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             $url = str_replace('=<itemid>', '=' . $itemid, $this->cached_urls[$action]);
             return $url;
         }
+        $xar = $this->getStaticServices();
 
         // get URL for this object and action
-        $url = $this->ctl()->getActionURL($this, $action, $itemid, $extra);
+        $url = $xar->ctl()->getActionURL($this, $action, $itemid, $extra);
 
         // cache the URL if the itemid is in there
         if (!empty($itemid) && empty($extra) && str_contains($url, $this->urlparam . '=' . $itemid)) {
@@ -822,7 +834,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     {
         // do something with item here, e.g. add title to extra params for nicer links
         //if (!empty($item) && !empty($item[$this->titlefield])) {
-        //    $slug = $this->mls()->slug($item[$this->titlefield]);
+        //    $slug = $xar->mls()->slug($item[$this->titlefield]);
         //    $extra = array_merge($extra, ['title' => $slug]);
         //}
         return $this->getActionURL('display', $itemid, $extra);
@@ -837,6 +849,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
      */
     public function callHooks($action = '', $context = null)
     {
+        $xar = $this->getStaticServices();
         // if we have no action
         if (empty($action)) {
             return;
@@ -844,7 +857,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         } elseif (empty($this->primary)) {
             return;
             // if we already have some hook call in progress
-        } elseif ($this->mem()->has('DynamicData', 'HookAction')) {
+        } elseif ($xar->mem()->has('DynamicData', 'HookAction')) {
             return;
         }
 
@@ -852,14 +865,14 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             $modname = 'dynamicdata';
         } else {
             // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
-            $modname = $this->mod()->getName($this->moduleid);
+            $modname = $xar->mod()->getName($this->moduleid);
             if ($modname == 'articles' || $modname == 'roles') {
                 return;
             }
         }
 
         // CHECKME: prevent recursive hook calls in general
-        $this->mem()->set('DynamicData', 'HookAction', $action);
+        $xar->mem()->set('DynamicData', 'HookAction', $action);
 
         // initialize hookvalues
         $this->hookvalues = [];
@@ -904,17 +917,17 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
 
         // add extra info for traditional hook modules
         // FIXME: This causes problems if you have a property named "module", "itemtype" etc.
-        //        $this->hookvalues['module'] = $this->mod()->getName($this->moduleid);
+        //        $this->hookvalues['module'] = $xar->mod()->getName($this->moduleid);
         //        $this->hookvalues['itemtype'] = $this->itemtype;
         //        $this->hookvalues['itemid'] = $this->itemid;
-        // CHECKME: is this sufficient in most cases, or do we need an explicit $this->ctl()->getActionURL() ?
-        $this->hookvalues['returnurl'] = $this->ctl()->getCurrentURL();
+        // CHECKME: is this sufficient in most cases, or do we need an explicit $xar->ctl()->getActionURL() ?
+        $this->hookvalues['returnurl'] = $xar->ctl()->getCurrentURL();
 
         // Use the standard method to call hooks + pass context
         if ($this instanceof DataObject) {
-            $hooks = $this->mod()->callHooks('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype);
+            $hooks = $xar->mod()->callHooks('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype);
         } else {
-            $hooks = $this->mod()->callHooks('item', $action, null, $this->hookvalues, $modname, $this->itemtype);
+            $hooks = $xar->mod()->callHooks('item', $action, null, $this->hookvalues, $modname, $this->itemtype);
         }
         // FIXME: we don't need two distinct properties to store gui and api hook responses
         // A response is a response, it's up to the caller to decide if it's appropriate
@@ -925,7 +938,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         // the result of GUI actions will be in $this->hookoutput
 
         // CHECKME: prevent recursive hook calls in general
-        $this->mem()->del('DynamicData', 'HookAction');
+        $xar->mem()->del('DynamicData', 'HookAction');
     }
 
     /**
@@ -936,7 +949,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
      */
     public function getLinkedObjects($linktype = '', $itemid = null)
     {
-        $objectLinks = new DataObjectLinks($this->getStaticServices());
+        $xar = $this->getStaticServices();
+        $objectLinks = new DataObjectLinks($xar);
         // we'll skip the 'info' here, unless explicitly asked for 'all'
         return $objectLinks->getLinkedObjects($this, $linktype, $itemid);
     }
@@ -985,9 +999,10 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
                     }
                 }
             } catch (Exception) {
-                echo $this->ml('Found sources: ');
+                $xar = $this->getStaticServices();
+                echo $xar->ml('Found sources: ');
                 var_dump($sources);
-                echo $this->ml('<br/>Error reading object sources');
+                echo $xar->ml('<br/>Error reading object sources');
             }
         }
 
@@ -1058,7 +1073,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
                     }
                 }
             } catch (Exception) {
-                throw new Exception($this->ml('Error reading object relations'));
+                $xar = $this->getStaticServices();
+                throw new Exception($xar->ml('Error reading object relations'));
             }
         }
 
@@ -1151,12 +1167,13 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         if (!empty($this->table)) {
             $action = 'admin';
         }
+        $xar = $this->getStaticServices();
 
         // default actions supported by dynamic objects
         switch ($action) {
             case 'admin':
                 // require admin access to the module here
-                return $this->sec()->checkAccess('AdminDynamicData', 0);
+                return $xar->sec()->checkAccess('AdminDynamicData', 0);
 
             case 'config':
             case 'access':
@@ -1210,19 +1227,19 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         }
         // use context to get roleid if needed
         if (empty($roleid) && !empty($this->context)) {
-            $roleid = $this->context->getUserId($this->getStaticServices());
+            $roleid = $this->context->getUserId($xar);
         }
 
         // DD specific access scheme
         // check if we have specific access rules for this level
         if (!empty($access_rules) && is_array($access_rules) && !empty($access_rules[$level])) {
-            $anonid = $this->config()->getVar('Site.User.AnonymousUID');
-            if (empty($roleid) && !empty($this->session()->getAnonId()) && $this->user()->isLoggedIn()) {
+            $anonid = $xar->config()->getVar('Site.User.AnonymousUID');
+            if (empty($roleid) && !empty($xar->session()->getAnonId()) && $xar->user()->isLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
-                $grouplist = $this->cache()->getParents();
+                $grouplist = $xar->cache()->getParents();
             } elseif (!empty($roleid) && $roleid != $anonid) {
                 // get the direct parents of the specified user (no ancestors)
-                $grouplist = $this->cache()->getParents($roleid);
+                $grouplist = $xar->cache()->getParents($roleid);
             } else {
                 // check anonymous visitors by themselves
                 $grouplist = [$anonid];
@@ -1250,11 +1267,11 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         }
 
         if (!empty($roleid)) {
-            $role = $this->user()->getRole('id', (int) $roleid);
+            $role = $xar->user()->getRole('id', (int) $roleid);
             $rolename = $role->getName();
-            return $this->sec()->check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid, '', $rolename);
+            return $xar->sec()->check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid, '', $rolename);
         } else {
-            return $this->sec()->check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid);
+            return $xar->sec()->check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid);
         }
     }
 
@@ -1266,8 +1283,9 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
      */
     public function setWhere($where, $transform = 1)
     {
+        $xar = $this->getStaticServices();
         // Note this helper property is only defined in this method and the methods called from here
-        $this->conditions = new Query('SELECT', '', '', 0, $this->getStaticServices());
+        $this->conditions = new Query('SELECT', '', '', 0, $xar);
 
         if ($transform) {
             $wherestring = $this->transformClause($where);
@@ -1406,7 +1424,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
                         }
                     }
                     if (!$consistent) {
-                        throw new Exception($this->ml('Inconsistent conjunctions in a clause'));
+                        $xar = $this->getStaticServices();
+                        throw new Exception($xar->ml('Inconsistent conjunctions in a clause'));
                     }
                     if ($this_conjunction == 'or') {
                         $clause = $this->conditions->qor($values);
@@ -1435,7 +1454,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         $parts = explode(' ', $string);
         // Make sure we have enough arguments. We need to have something like "foo = 17" or "foo = 'bar'"
         if (count($parts) < 3) {
-            throw new Exception($this->ml('Incorrect relation "#(1)"', $string));
+            $xar = $this->getStaticServices();
+            throw new Exception($xar->ml('Incorrect relation "#(1)"', $string));
         }
 
         // Remove any parens from strings here. They will be added automatically if needed
