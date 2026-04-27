@@ -59,7 +59,7 @@
     We want our output as compact as possible, so we start by stripping
     all non-significant whitespace (which will also collapse empty tags)
     and then correct for the elements which cause us trouble. In theory
-    there shouldnt be any, but alas.
+    there shouldn't be any, but alas.
   -->
   <xsl:compresswhitespace />
 
